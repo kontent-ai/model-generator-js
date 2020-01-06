@@ -7,12 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Kentico/kontent-model-generator-js/tree/master"
+    "url": "https://github.com/Kentico/kontent-model-generator-js"
   },
   "author": "richard sustek",
   "main": "./_commonjs/src/app.js",
   "directories": {},
   "scripts": {
+    "release": "standard-version",
+    "standard-version": "7.0.0",
     "tsc-local": "./node_modules/.bin/tsc",
     "ts-node-local": "./node_modules/.bin/ts-node",
     "prepublishOnly": "npm run ts-lint:check && npm run build:all",
@@ -42,6 +44,7 @@
     "yargs": "15.1.0"
   },
   "devDependencies": {
+    "standard-version": "7.0.1",
     "typescript": "3.7.4",
     "@types/node": "13.1.4",
     "tslint": "5.20.1",
