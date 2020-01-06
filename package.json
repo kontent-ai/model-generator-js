@@ -1,6 +1,6 @@
 {
   "name": "@kentico/kontent-model-generator",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "This utility generates strongly-typed models based on Content Types in a Kentico Kontent project. The models are supposed to be used together with the Kentico Kontent Typescript SDK.",
   "bin": {
     "kontent-generate": "./_commonjs/src/app.js"
