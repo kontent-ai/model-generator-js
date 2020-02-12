@@ -25,8 +25,9 @@ To generate models with e.g. `ES2015` and `TypeScript` navigate to folder where 
 - `codeType` - available options are `TypeScript` and `JavaScript`
 - `moduleResolution` - available options are `CommonJs` and `ES2015`
 - `projectId` - represents the Kentico Kontent Project Id from which models will be generated
-- `secureAccessKey`- Secure access key required to authenticate requests with enabled secure access in Kentico Kontent project.
-- `strictPropertyInitalization`- Marks typescript properties with `!`. This is useful if you know all your properties are required. [strictPropertyInitalization in Typesript](https://mariusschulz.com/blog/strict-property-initialization-in-typescript)
+- `secureAccessKey`- secure access key required to authenticate requests with enabled secure access in Kentico Kontent project.
+- `addTimestamp`- indicates if timestamp is added to generated models
+- `strictPropertyInitalization`- marks typescript properties with `!`. This is useful if you know all your properties are required. [strictPropertyInitalization in Typesript](https://mariusschulz.com/blog/strict-property-initialization-in-typescript)
 
 ## Strongly typed linked item elements
 
