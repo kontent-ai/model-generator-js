@@ -1,12 +1,11 @@
-import * as fs from 'fs';
 import { ContentType, DeliveryClient } from '@kentico/kontent-delivery';
+import * as fs from 'fs';
 import { finalize, map } from 'rxjs/operators';
 
+import { CodeType, ModuleResolution } from './enums';
 import { modelHelper } from './model-helper';
-import { ModuleResolution, CodeType } from './enums';
 
 export class Generator {
-
     private readonly deliveryClient: DeliveryClient;
 
     public readonly projectId!: string;
@@ -15,17 +14,17 @@ export class Generator {
     public readonly codeType!: CodeType;
     public readonly secureAccessKey?: string;
     public readonly strictPropertyInitalization!: boolean;
+    public readonly addTimestamp!: boolean;
 
-    constructor(
-        config: {
-            projectId: string,
-            type: string,
-            moduleResolution: ModuleResolution,
-            codeType: CodeType,
-            strictPropertyInitalization: boolean,
-            secureAccessKey?: string
-        }) {
-
+    constructor(config: {
+        projectId: string;
+        type: string;
+        moduleResolution: ModuleResolution;
+        codeType: CodeType;
+        strictPropertyInitalization: boolean;
+        addTimestamp: boolean,
+        secureAccessKey?: string;
+    }) {
         (<any>Object).assign(this, config);
 
         // init delivery client
@@ -42,7 +41,8 @@ export class Generator {
         console.log('Kontent generator started ...');
 
         // get data from Kentico Kontent and generate classes out of given project
-        this.deliveryClient.types()
+        this.deliveryClient
+            .types()
             .toObservable()
             .pipe(
                 map(typesResponse => {
@@ -55,22 +55,31 @@ export class Generator {
                     console.log('Generator finished');
                 })
             )
-            .subscribe(() => undefined, (err: any) => {
-                console.log(`Generator failed with error:`);
-                console.log(err);
-                throw Error(err);
-            });
+            .subscribe(
+                () => undefined,
+                (err: any) => {
+                    console.log(`Generator failed with error:`);
+                    console.log(err);
+                    throw Error(err);
+                }
+            );
     }
 
     private generateClass(type: ContentType): void {
         if (!type) {
             throw Error('Invalid type');
         }
-        const classFileName = modelHelper.getFullClassFileName(type, this.codeType);
-        const classContent = modelHelper.getClassDefinition(type, this.moduleResolution, this.codeType, this.strictPropertyInitalization);
+        const classFileName = modelHelper.getFullClassFileName({ type: type, codeType: this.codeType });
+        const classContent = modelHelper.getClassDefinition({
+            type: type,
+            moduleResolution: this.moduleResolution,
+            codeType: this.codeType,
+            strictPropertyInitalization: this.strictPropertyInitalization,
+            addTimestamp: this.addTimestamp
+        });
 
         // create class file
-        fs.writeFile('./' + classFileName, classContent, (error) => {
+        fs.writeFile('./' + classFileName, classContent, error => {
             if (error) {
                 throw Error(`Could not create class file '${classFileName}'`);
             }
@@ -78,7 +87,3 @@ export class Generator {
         });
     }
 }
-
-
-
-

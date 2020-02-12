@@ -6,31 +6,40 @@ import { utilities } from './utilities';
 
 export class ModelHelper {
 
-    getFullClassFileName(type: ContentType, codeType: CodeType): string {
-        if (codeType === CodeType.JavaScript) {
-            return this.getClassFilename(type) + '.js';
-        } else if (codeType === CodeType.TypeScript) {
-            return this.getClassFilename(type) + '.ts';
+    getFullClassFileName(opts: {
+        type: ContentType,
+        codeType: CodeType
+    }): string {
+        if (opts.codeType === CodeType.JavaScript) {
+            return this.getClassFilename(opts.type) + '.js';
+        } else if (opts.codeType === CodeType.TypeScript) {
+            return this.getClassFilename(opts.type) + '.ts';
         }
 
-        throw Error(`Unsupported code type '${codeType}'`);
+        throw Error(`Unsupported code type '${opts.codeType}'`);
     }
 
-    getClassDefinition(type: ContentType, moduleResolution: ModuleResolution, codeType: CodeType, strictPropertyInitalization: boolean): string {
+    getClassDefinition(opts: {
+        type: ContentType,
+        moduleResolution: ModuleResolution,
+        codeType: CodeType,
+        strictPropertyInitalization: boolean,
+        addTimestamp: boolean
+    }): string {
         let definition = `
-${this.getImports(type, moduleResolution, codeType).join('\n')}
-${codeType === CodeType.TypeScript ? generatorConfig.tsNotice : generatorConfig.jsNotice}
-${this.getExportClass(type, moduleResolution)}
+${this.getImports(opts.type, opts.moduleResolution, opts.codeType).join('\n')}
+${opts.codeType === CodeType.TypeScript ? generatorConfig.getNotice('ts', opts.addTimestamp) : generatorConfig.getNotice('js', opts.addTimestamp)}
+${this.getExportClass(opts.type, opts.moduleResolution)}
     `;
 
 // include fields only for ts
-if (codeType === CodeType.TypeScript) {
-    definition += `${this.getContentTypeElements(type, moduleResolution, strictPropertyInitalization).join(`
+if (opts.codeType === CodeType.TypeScript) {
+    definition += `${this.getContentTypeElements(opts.type, opts.moduleResolution, opts.strictPropertyInitalization).join(`
     `).trim()}
 `;
 }
 
-        const constructor = this.getConstructor(type, codeType);
+        const constructor = this.getConstructor(opts.type, opts.codeType);
 
         if (constructor) {
             definition += constructor;

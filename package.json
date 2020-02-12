@@ -23,7 +23,7 @@
     "build:all": "npm run build:commonjs",
     "test:all": "npm run build:all && npm run test:generate-models",
     "test:travis": "npm run build:all",
-    "test:generate-models": "npm run build:commonjs && cd test && node ../_commonjs/src/app --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --moduleResolution=ES2015 --codeType=typescript --strictPropertyInitalization=true",
+    "test:generate-models": "npm run build:commonjs && cd test && node ../_commonjs/src/app --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --moduleResolution=ES2015 --codeType=typescript --strictPropertyInitalization=true --addTimestamp=true",
     "ts-lint-local": "./node_modules/.bin/tslint",
     "ts-lint:fix": "npm run ts-lint:check -- --fix",
     "ts-lint:check": "npm run ts-lint-local -- --project ./tsconfig.json"
