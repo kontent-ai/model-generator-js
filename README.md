@@ -1,5 +1,5 @@
 [![npm version](https://badge.fury.io/js/%40kentico%2Fkontent-model-generator.svg)](https://badge.fury.io/js/%40kentico%2Fkontent-model-generator)
-[![Build Status](https://api.travis-ci.com/Kentico/kontent-model-generator-js.svg?branch=master)](https://travis-ci.com/Kentico/kontent-model-generator-js)
+[![Build](https://github.com/Kentico/kontent-model-generator-js/actions/workflows/test.yml/badge.svg)](https://github.com/Kentico/kontent-model-generator-js/actions/workflows/test.yml)
 [![CircleCI](https://circleci.com/gh/Kentico/kontent-model-generator-js/tree/master.svg?style=svg)](https://circleci.com/gh/Kentico/kontent-model-generator-js/tree/master)
 [![npm](https://img.shields.io/npm/dt/@kentico/kontent-core.svg)](https://www.npmjs.com/package/@kentico/kontent-core)
 [![GitHub license](https://img.shields.io/github/license/Kentico/kontent-model-generator-js.svg)](https://github.com/Kentico/kontent-model-generator-js)
