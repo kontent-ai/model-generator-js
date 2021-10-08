@@ -14,7 +14,7 @@ import { IContentItem, Elements } from '@kentico/kontent-delivery';
 /**
  * ${this.getAutogenerateNote(data.addTimestamp)}
 */
-export type ${data.type.system.codename} = IContentItem<{
+export type ${this.capitalize(data.type.system.codename)} = IContentItem<{
     ${this.getElementsCode({
         type: data.type
     })}
@@ -79,6 +79,14 @@ export type ${data.type.system.codename} = IContentItem<{
             console.warn(`Unsupported element type '${elementType}'`);
         }
         return result;
+    }
+
+    private capitalize(text: string): string {
+        if (!text || text.length === 0) {
+            return text;
+        }
+
+        return text.charAt(0).toUpperCase() + text.slice(1);
     }
 }
 
