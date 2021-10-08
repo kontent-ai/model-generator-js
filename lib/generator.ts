@@ -4,18 +4,28 @@ import * as fs from 'fs';
 import { modelHelper } from './model-helper';
 import { Options } from 'prettier';
 import { green, red, yellow } from 'colors';
+import { PropertyNameResolverType } from './models';
 
 export class Generator {
     private readonly deliveryClient: DeliveryClient;
 
     public readonly projectId: string;
-    public readonly secureAccessKey?: string;
     public readonly addTimestamp: boolean;
 
-    constructor(config: { projectId: string; addTimestamp: boolean; secureAccessKey?: string }) {
+    public readonly secureAccessKey?: string;
+    public readonly nameResolver?: PropertyNameResolverType;
+
+    constructor(config: {
+        projectId: string;
+        addTimestamp: boolean;
+        secureAccessKey?: string;
+        nameResolver?: PropertyNameResolverType;
+    }) {
         this.projectId = config.projectId;
         this.secureAccessKey = config.secureAccessKey;
         this.addTimestamp = config.addTimestamp;
+        this.addTimestamp = config.addTimestamp;
+        this.nameResolver = config.nameResolver;
 
         // init delivery client
         this.deliveryClient = new DeliveryClient({
@@ -33,7 +43,11 @@ export class Generator {
         try {
             const types = (await this.deliveryClient.types().toAllPromise()).data.items;
 
-            console.log(`Found '${types.length}' content types: \n`);
+            console.log(`Found '${yellow(types.length.toString())}' content types \n`);
+
+            if (this.nameResolver) {
+                console.log(`Using '${yellow(this.nameResolver)}' name resolver\n`);
+            }
 
             for (const type of types) {
                 this.generateClass({
@@ -56,7 +70,8 @@ export class Generator {
         const code = modelHelper.getClassDefinition({
             type: config.type,
             addTimestamp: this.addTimestamp,
-            formatOptions: config.formatOptions
+            formatOptions: config.formatOptions,
+            nameResolver: this.nameResolver
         });
 
         // create file

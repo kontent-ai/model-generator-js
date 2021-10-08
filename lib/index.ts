@@ -9,6 +9,7 @@ const argv = yargs['argv'];
 const projectId = argv.projectId;
 const secureAccessKey = argv.secureAccessKey;
 const addTimestamp = argv.addTimestamp;
+const nameResolver = argv.nameResolver;
 
 if (!projectId) {
     throw Error(`Please provide project id using 'projectId' argument`);
@@ -18,7 +19,8 @@ if (!projectId) {
 const generator = new Generator({
     projectId: projectId,
     secureAccessKey: secureAccessKey,
-    addTimestamp: addTimestamp === 'true' ? true : false
+    addTimestamp: addTimestamp === 'true' ? true : false,
+    nameResolver: nameResolver
 });
 
 const run = async () => {
