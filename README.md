@@ -125,4 +125,3 @@ export class Actor extends KontentDelivery.ContentItem {
 
 Contributions are welcomed. Simply make a pull request.
 
-![Analytics](https://kentico-ga-beacon.azurewebsites.net/api/UA-69014260-4/Kentico/kentico-kontent-js/master/packages/model-generator/README.md?pixel)
