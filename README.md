@@ -1,6 +1,5 @@
 [![npm version](https://badge.fury.io/js/%40kentico%2Fkontent-model-generator.svg)](https://badge.fury.io/js/%40kentico%2Fkontent-model-generator)
-[![Build Status](https://api.travis-ci.com/Kentico/kontent-model-generator-js.svg?branch=master)](https://travis-ci.com/Kentico/kontent-model-generator-js)
-[![npm](https://img.shields.io/npm/dt/@kentico/kontent-core.svg)](https://www.npmjs.com/package/@kentico/kontent-core)
+[![Build](https://github.com/Kentico/kontent-model-generator-js/actions/workflows/main.yml/badge.svg)](https://github.com/Kentico/kontent-model-generator-js/actions/workflows/main.yml)
 [![GitHub license](https://img.shields.io/github/license/Kentico/kontent-model-generator-js.svg)](https://github.com/Kentico/kontent-model-generator-js)
 
 # Kontent Model Generator
