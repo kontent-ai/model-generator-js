@@ -1,85 +1,56 @@
-import { ContentType, DeliveryClient } from '@kentico/kontent-delivery';
+import { IContentType, DeliveryClient } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
-import { finalize, map } from 'rxjs/operators';
+import { name } from '../package.json';
 
-import { CodeType, ModuleResolution } from './enums';
 import { modelHelper } from './model-helper';
 
 export class Generator {
     private readonly deliveryClient: DeliveryClient;
 
-    public readonly projectId!: string;
-    public readonly type!: string;
-    public readonly moduleResolution!: ModuleResolution;
-    public readonly codeType!: CodeType;
+    public readonly projectId: string;
     public readonly secureAccessKey?: string;
-    public readonly strictPropertyInitalization!: boolean;
-    public readonly addTimestamp!: boolean;
+    public readonly addTimestamp: boolean;
 
-    constructor(config: {
-        projectId: string;
-        type: string;
-        moduleResolution: ModuleResolution;
-        codeType: CodeType;
-        strictPropertyInitalization: boolean;
-        addTimestamp: boolean,
-        secureAccessKey?: string;
-    }) {
-        (<any>Object).assign(this, config);
+    constructor(config: { projectId: string; addTimestamp: boolean; secureAccessKey?: string }) {
+        this.projectId = config.projectId;
+        this.secureAccessKey = config.secureAccessKey;
+        this.addTimestamp = config.addTimestamp;
 
         // init delivery client
         this.deliveryClient = new DeliveryClient({
             projectId: this.projectId,
             secureApiKey: config.secureAccessKey,
-            globalQueryConfig: {
+            defaultQueryConfig: {
                 useSecuredMode: config.secureAccessKey ? true : false
             }
         });
     }
 
-    startModelGenerator(): void {
-        console.log('Kontent generator started ...');
+    async generateModelsAsync(): Promise<void> {
+        console.log(`${name} started`);
 
-        // get data from Kentico Kontent and generate classes out of given project
-        this.deliveryClient
-            .types()
-            .toObservable()
-            .pipe(
-                map(typesResponse => {
-                    typesResponse.types.forEach(type => {
-                        // generate class
-                        this.generateClass(type);
-                    });
-                }),
-                finalize(() => {
-                    console.log('Generator finished');
-                })
-            )
-            .subscribe(
-                () => undefined,
-                (err: any) => {
-                    console.log(`Generator failed with error:`);
-                    console.log(err);
-                    throw Error(err);
-                }
-            );
+        try {
+            const types = (await this.deliveryClient.types().toAllPromise()).data.items;
+
+            for (const type of types) {
+                this.generateClass(type);
+            }
+        } catch (error) {
+            console.log(`${name} failed with error:`);
+            console.log(error);
+            throw error;
+        }
     }
 
-    private generateClass(type: ContentType): void {
-        if (!type) {
-            throw Error('Invalid type');
-        }
-        const classFileName = modelHelper.getFullClassFileName({ type: type, codeType: this.codeType });
+    private generateClass(type: IContentType): void {
+        const classFileName = modelHelper.getFilename({ type: type });
         const classContent = modelHelper.getClassDefinition({
             type: type,
-            moduleResolution: this.moduleResolution,
-            codeType: this.codeType,
-            strictPropertyInitalization: this.strictPropertyInitalization,
             addTimestamp: this.addTimestamp
         });
 
         // create class file
-        fs.writeFile('./' + classFileName, classContent, error => {
+        fs.writeFile('./' + classFileName, classContent, (error) => {
             if (error) {
                 throw Error(`Could not create class file '${classFileName}'`);
             }

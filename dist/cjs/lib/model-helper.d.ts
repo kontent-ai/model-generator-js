@@ -1,27 +1,13 @@
-import { ContentType } from '@kentico/kontent-delivery';
-import { CodeType, ModuleResolution } from './enums';
+import { IContentType } from '@kentico/kontent-delivery';
 export declare class ModelHelper {
-    getFullClassFileName(opts: {
-        type: ContentType;
-        codeType: CodeType;
+    getFilename(data: {
+        type: IContentType;
     }): string;
-    getClassDefinition(opts: {
-        type: ContentType;
-        moduleResolution: ModuleResolution;
-        codeType: CodeType;
-        strictPropertyInitalization: boolean;
+    getClassDefinition(data: {
+        type: IContentType;
         addTimestamp: boolean;
     }): string;
-    private getExportClass;
-    private getImports;
-    private getContentTypeElements;
-    private getModuleResolution;
-    private getStrictInitialization;
-    private getConstructor;
-    private propertyRequiresCapitalization;
-    private getPropertyName;
-    private getClassName;
-    private getClassFilename;
+    private getElementsCode;
     private mapElementTypeToName;
 }
 export declare const modelHelper: ModelHelper;
