@@ -2,79 +2,55 @@ import { IContentType, DeliveryClient } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
 
 import { modelHelper } from './model-helper';
-import { Options } from 'prettier';
 import { green, red, yellow } from 'colors';
-import { PropertyNameResolverType } from './models';
+import { IGenerateModelsConfig } from './models';
 
-export class Generator {
-    private readonly deliveryClient: DeliveryClient;
+export async function generateModelsAsync(config: IGenerateModelsConfig): Promise<void> {
+    console.log(green(`Model generator started \n`));
 
-    public readonly projectId: string;
-    public readonly addTimestamp: boolean;
-
-    public readonly secureAccessKey?: string;
-    public readonly nameResolver?: PropertyNameResolverType;
-
-    constructor(config: {
-        projectId: string;
-        addTimestamp: boolean;
-        secureAccessKey?: string;
-        nameResolver?: PropertyNameResolverType;
-    }) {
-        this.projectId = config.projectId;
-        this.secureAccessKey = config.secureAccessKey;
-        this.addTimestamp = config.addTimestamp;
-        this.addTimestamp = config.addTimestamp;
-        this.nameResolver = config.nameResolver;
-
-        // init delivery client
-        this.deliveryClient = new DeliveryClient({
-            projectId: this.projectId,
+    try {
+        const deliveryClient = new DeliveryClient({
+            projectId: config.projectId,
             secureApiKey: config.secureAccessKey,
             defaultQueryConfig: {
                 useSecuredMode: config.secureAccessKey ? true : false
             }
         });
-    }
+        const types = (await deliveryClient.types().toAllPromise()).data.items;
 
-    async generateModelsAsync(config?: { formatOptions: Options }): Promise<void> {
-        console.log(green(`Model generator started \n`));
+        console.log(`Found '${yellow(types.length.toString())}' content types \n`);
 
-        try {
-            const types = (await this.deliveryClient.types().toAllPromise()).data.items;
-
-            console.log(`Found '${yellow(types.length.toString())}' content types \n`);
-
-            if (this.nameResolver) {
-                console.log(`Using '${yellow(this.nameResolver)}' name resolver\n`);
-            }
-
-            for (const type of types) {
-                this.generateClass({
-                    type: type,
-                    formatOptions: config?.formatOptions
-                });
-                console.log(`${yellow(modelHelper.getFilename({ type: type }))} (${type.system.name})`);
-            }
-
-            console.log(green(`\nModel generator completed`));
-        } catch (error) {
-            console.log(red(`Failed with error:`));
-            console.log(error);
-            throw error;
+        if (config.nameResolver) {
+            console.log(`Using '${yellow(config.nameResolver)}' name resolver\n`);
         }
-    }
 
-    private generateClass(config: { formatOptions?: Options; type: IContentType }): void {
-        const classFileName = modelHelper.getFilename({ type: config.type });
-        const code = modelHelper.getClassDefinition({
-            type: config.type,
-            addTimestamp: this.addTimestamp,
-            formatOptions: config.formatOptions,
-            nameResolver: this.nameResolver
-        });
+        if (config.customNameResolver) {
+            console.log(`Using '${yellow('custom')}' name resolver\n`);
+        }
 
-        // create file
-        fs.writeFileSync('./' + classFileName, code);
+        for (const type of types) {
+            generateClass(type, config);
+            console.log(`${yellow(modelHelper.getFilename({ type: type }))} (${type.system.name})`);
+        }
+
+        console.log(green(`\nModel generator completed`));
+    } catch (error) {
+        console.log(red(`Failed with error:`));
+        console.log(error);
+        throw error;
     }
+}
+
+function generateClass(type: IContentType, config: IGenerateModelsConfig): void {
+    const classFileName = modelHelper.getFilename({ type: type });
+    const code = modelHelper.getClassDefinition({
+        type: type,
+        addTimestamp: config.addTimestamp,
+        formatOptions: config.formatOptions,
+        nameResolver: config.nameResolver,
+        customNameResolver: config.customNameResolver
+    });
+
+    // create file
+    fs.writeFileSync('./' + classFileName, code);
 }

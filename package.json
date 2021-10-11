@@ -3,7 +3,7 @@
   "version": "3.2.0",
   "description": "This utility generates strongly-typed models based on Content Types in a Kentico Kontent project. The models are supposed to be used together with the Kentico Kontent Typescript SDK.",
   "bin": {
-    "kontent-generate": "./dist/cjs/index.js"
+    "kontent-generate": "./dist/cjs/lib/cli/cli.js"
   },
   "repository": {
     "type": "git",
@@ -23,10 +23,10 @@
     "Kentico models",
     "Kontent model"
   ],
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm5/index.js",
-  "es2015": "./dist/esm/index.js",
-  "types": "./dist/cjs/index.d.ts",
+  "main": "./dist/cjs/lib/index.js",
+  "module": "./dist/esm5/lib/index.js",
+  "es2015": "./dist/esm/lib/index.js",
+  "types": "./dist/cjs/lib/index.d.ts",
   "scripts": {
     "release": "standard-version",
     "prerelease": "standard-version --prerelease",
