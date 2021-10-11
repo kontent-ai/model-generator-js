@@ -12,7 +12,7 @@ Install package globally so you can use it anywhere:
 
 `npm i @kentico/kontent-model-generator -g`
 
-## Generating models
+## Generate models with CLI
 
 Go to folder where you want to create models and run:
 
@@ -22,6 +22,20 @@ You may specify other options like:
 
 `kontent-generate --projectId=xxx --addTimestamp=false --nameResolver=camelCase`
 
+## Generate models in code
+
+Apart from generating models via CLI, you may also generate models in code which also gives you some additional configuration options (such as using custom name resolver).
+
+```typescript
+import { generateModelsAsync } from '@kentico/kontent-model-generator';
+
+await generateModelsAsync({
+    projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+    addTimestamp: true,
+    nameResolver: 'camelCase',
+})
+```
+
 ## Configuration
 
 - `projectId` - Id of the Kontent project
@@ -29,7 +43,7 @@ You may specify other options like:
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `nameResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 
-## Example
+## Example models
 
 Generator creates file for each content type in your project. For example:
 
