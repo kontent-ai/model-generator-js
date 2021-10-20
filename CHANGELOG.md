@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-0](https://github.com/Kentico/kontent-model-generator-js/compare/v3.3.0-0...v4.0.0-0) (2021-10-20)
+
+
+### Features
+
+* use peer deps for kontent delivery, updates all deps ([9b02551](https://github.com/Kentico/kontent-model-generator-js/commit/9b0255126ebd69594c74cfb9dc5a0c047f4871ef))
+
 ## [3.3.0-0](https://github.com/Kentico/kontent-model-generator-js/compare/v3.2.0...v3.3.0-0) (2021-10-11)
 
 
