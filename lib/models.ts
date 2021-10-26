@@ -8,6 +8,7 @@ export interface IGenerateModelsConfig {
     addTimestamp: boolean;
     secureAccessKey?: string;
     nameResolver?: PropertyNameResolverType;
+    includeCodename: boolean;
     formatOptions?: Options;
     customNameResolver?: PropertyNameResolver;
 }

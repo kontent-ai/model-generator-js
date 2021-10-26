@@ -10,6 +10,7 @@ const projectId = argv.projectId;
 const secureAccessKey = argv.secureAccessKey;
 const addTimestamp = argv.addTimestamp;
 const nameResolver = argv.nameResolver;
+const includeCodename = argv.includeCodename;
 
 if (!projectId) {
     throw Error(`Please provide project id using 'projectId' argument`);
@@ -21,6 +22,7 @@ const run = async () => {
         secureAccessKey: secureAccessKey,
         addTimestamp: addTimestamp === 'true' ? true : false,
         nameResolver: nameResolver,
+        includeCodename: includeCodename === 'true' ? true : false,
         formatOptions: undefined
     });
 };

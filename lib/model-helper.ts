@@ -20,9 +20,10 @@ export class ModelHelper {
         addTimestamp: boolean;
         formatOptions?: Options;
         nameResolver?: PropertyNameResolverType;
+        includeCodename: boolean;
         customNameResolver?: PropertyNameResolver;
     }): string {
-        const code = `
+        let code = `
 import { IContentItem, Elements } from '@kentico/kontent-delivery';
 
 /**
@@ -36,6 +37,13 @@ export type ${this.capitalize(data.type.system.codename)} = IContentItem<{
     })}
 }>;
 `;
+
+        if (data.includeCodename) {
+            code += `
+export const ${this.capitalize(data.type.system.codename)}_CODENAME: string = "${data.type.system.codename}";
+`;
+        }
+
         const formatOptions: Options = data.formatOptions
             ? data.formatOptions
             : {

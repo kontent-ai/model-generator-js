@@ -20,7 +20,7 @@ Go to folder where you want to create models and run:
 
 You may specify other options like:
 
-`kontent-generate --projectId=xxx --addTimestamp=false --nameResolver=camelCase`
+`kontent-generate --projectId=xxx --addTimestamp=false --nameResolver=camelCase --includeCodename=true`
 
 ## Generate models in code
 
@@ -33,6 +33,7 @@ await generateModelsAsync({
     projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     addTimestamp: true,
     nameResolver: 'camelCase',
+    includeCodename: true,
 })
 ```
 
@@ -42,6 +43,7 @@ await generateModelsAsync({
 - `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `nameResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `includeCodename` - If true, the generated classes will also contain constant with type codename
 
 ## Example models
 
@@ -81,6 +83,8 @@ export type Actor = IContentItem<{
   lastName: Elements.TextElement;
   photo: Elements.AssetsElement;
 }>;
+
+export const Actor_CODENAME: string = "actor";
 
 ```
 

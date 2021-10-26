@@ -48,6 +48,7 @@ function generateClass(type: IContentType, config: IGenerateModelsConfig): void 
         addTimestamp: config.addTimestamp,
         formatOptions: config.formatOptions,
         nameResolver: config.nameResolver,
+        includeCodename: config.includeCodename,
         customNameResolver: config.customNameResolver
     });
 
