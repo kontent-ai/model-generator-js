@@ -43,7 +43,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
 function generateClass(type: IContentType, config: IGenerateModelsConfig): void {
     const classFileName = modelHelper.getFilename({ type: type });
-    const code = modelHelper.getClassDefinition({
+    const code = modelHelper.getModelCode({
         type: type,
         addTimestamp: config.addTimestamp,
         formatOptions: config.formatOptions,

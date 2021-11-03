@@ -15,7 +15,7 @@ export class ModelHelper {
         return `${data.type.system.codename}.ts`;
     }
 
-    getClassDefinition(data: {
+    getModelCode(data: {
         type: IContentType;
         addTimestamp: boolean;
         formatOptions?: Options;
