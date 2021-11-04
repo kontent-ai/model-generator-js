@@ -102,7 +102,7 @@ import { IContentItem, Elements } from '@kentico/kontent-delivery';
 /**
  * ${this.getAutogenerateNote(data.addTimestamp)}
 */
-export type ${this.capitalize(data.type.system.codename)} = IContentItem<{
+export type ${this.toPascalCase(data.type.system.codename)} = IContentItem<{
     ${this.getElementsCode({
         type: data.type,
         nameResolver: data.nameResolver,
@@ -288,12 +288,9 @@ export type ${this.capitalize(data.type.system.codename)} = IContentItem<{
         );
     }
 
-    private capitalize(text: string): string {
-        if (!text || text.length === 0) {
-            return text;
-        }
-
-        return text.charAt(0).toUpperCase() + text.slice(1);
+    private toPascalCase(text: string): string {
+        // use element resolver from SDK as it provides required functionality
+        return pascalCasePropertyNameResolver('', text);
     }
 }
 
