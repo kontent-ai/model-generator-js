@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-1](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-0...v4.0.0-1) (2021-11-04)
+
+
+### Features
+
+* adds support for generating project structure for content types, languages & taxonomies ([7dfdab9](https://github.com/Kentico/kontent-model-generator-js/commit/7dfdab9fecd171e6f57a4b1f22b6fc9075a60908))
+* use pascal case for type class names ([322888e](https://github.com/Kentico/kontent-model-generator-js/commit/322888e6290fcfcc5f710d9e6000ffe69dac6a93))
+
 ## [4.0.0-0](https://github.com/Kentico/kontent-model-generator-js/compare/v3.3.0-0...v4.0.0-0) (2021-10-20)
 
 
