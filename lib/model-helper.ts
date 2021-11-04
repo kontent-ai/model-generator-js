@@ -4,15 +4,89 @@ import {
     camelCasePropertyNameResolver,
     pascalCasePropertyNameResolver,
     snakeCasePropertyNameResolver,
-    PropertyNameResolver
+    PropertyNameResolver,
+    ITaxonomyGroup,
+    ILanguage,
+    ITaxonomyTerms
 } from '@kentico/kontent-delivery';
 import { name, version } from '../package.json';
 import { format, Options } from 'prettier';
 import { PropertyNameResolverType } from './models';
 
+export const kontentProject = {
+    contentTypes: {
+        article: {
+            codename: 'article',
+            name: 'Article',
+            elements: {
+                title: {
+                    codename: 'title',
+                    name
+                }
+            }
+        }
+    },
+    languages: {
+        cz: {
+            codename: 'cz',
+            name: 'czech'
+        }
+    },
+    taxonomies: {
+        movieType: {
+            codename: 'movieType',
+            terms: {
+                javascript: {
+                    codename: 'js',
+                    name: 'JavaScript'
+                }
+            }
+        }
+    }
+};
+
 export class ModelHelper {
-    getFilename(data: { type: IContentType }): string {
+    getProjectModelFilename(): string {
+        return `_project.ts`;
+    }
+
+    getModelFilename(data: { type: IContentType }): string {
         return `${data.type.system.codename}.ts`;
+    }
+
+    getProjectModelCode(data: {
+        types: IContentType[];
+        taxonomies: ITaxonomyGroup[];
+        languages: ILanguage[];
+        addTimestamp: boolean;
+        formatOptions?: Options;
+    }): string {
+        const code = `
+/**
+* ${this.getAutogenerateNote(data.addTimestamp)}
+*/
+export const projectModel = {
+    languages: {
+        ${this.getProjectLanguages(data.languages)}
+    },
+    contentTypes: {
+        ${this.getProjectContentTypes(data.types)}
+    },
+    taxonomies: {
+        ${this.getProjectTaxonomies(data.taxonomies)}
+    }
+};
+`;
+
+        const formatOptions: Options = data.formatOptions
+            ? data.formatOptions
+            : {
+                  parser: 'typescript',
+                  singleQuote: true
+              };
+
+        // beautify code
+        return format(code, formatOptions);
     }
 
     getModelCode(data: {
@@ -45,6 +119,85 @@ export type ${this.capitalize(data.type.system.codename)} = IContentItem<{
 
         // beautify code
         return format(code, formatOptions);
+    }
+
+    private getProjectLanguages(languages: ILanguage[]): string {
+        let code: string = ``;
+        for (let i = 0; i < languages.length; i++) {
+            const language = languages[i];
+            const isLast = i === languages.length - 1;
+            code += `${language.system.codename}: {
+                codename: '${language.system.codename}',
+                name: '${language.system.name}'}
+            ${!isLast ? ',' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getProjectContentTypes(contentTypes: IContentType[]): string {
+        let code: string = ``;
+        for (let i = 0; i < contentTypes.length; i++) {
+            const contentType = contentTypes[i];
+            const isLast = i === contentTypes.length - 1;
+            code += `${contentType.system.codename}: {
+                codename: '${contentType.system.codename}',
+                name: '${contentType.system.name}',
+                elements: {${this.getProjectElements(contentType)}}
+            }${!isLast ? ',' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getProjectElements(contentType: IContentType): string {
+        let code: string = '';
+        for (let i = 0; i < contentType.elements.length; i++) {
+            const element = contentType.elements[i];
+            const isLast = i === contentType.elements.length - 1;
+
+            code += `${element.codename}: {
+                codename: '${element.codename}',
+                name: '${element.name}'
+            }${!isLast ? ',' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getProjectTaxonomies(taxonomies: ITaxonomyGroup[]): string {
+        let code: string = ``;
+        for (let i = 0; i < taxonomies.length; i++) {
+            const taxonomy = taxonomies[i];
+            const isLast = i === taxonomies.length - 1;
+            code += `${taxonomy.system.codename}: {
+                codename: '${taxonomy.system.codename}',
+                name: '${taxonomy.system.name}',
+                ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
+            }${!isLast ? ',' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getProjectTaxonomiesTerms(terms: ITaxonomyTerms[]): string {
+        if (terms.length === 0) {
+            return `terms: {}`;
+        }
+
+        let code: string = `terms: {`;
+        for (let i = 0; i < terms.length; i++) {
+            const term = terms[i];
+            const isLast = i === terms.length - 1;
+            code += `${term.codename}: {
+                codename: '${term.codename}',
+                name: '${term.name}',
+                ${this.getProjectTaxonomiesTerms(term.terms)}
+            }${!isLast ? ',' : ''}`;
+        }
+        code += '}';
+
+        return code;
     }
 
     private getAutogenerateNote(addTimestamp: boolean): string {

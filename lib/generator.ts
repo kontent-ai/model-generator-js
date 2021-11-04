@@ -1,4 +1,4 @@
-import { IContentType, DeliveryClient } from '@kentico/kontent-delivery';
+import { IContentType, DeliveryClient, ILanguage, ITaxonomyGroup } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
 
 import { modelHelper } from './model-helper';
@@ -17,21 +17,28 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             }
         });
         const types = (await deliveryClient.types().toAllPromise()).data.items;
+        const languages = (await deliveryClient.languages().toAllPromise()).data.items;
+        const taxonomies = (await deliveryClient.taxonomies().toAllPromise()).data.items;
 
-        console.log(`Found '${yellow(types.length.toString())}' content types \n`);
+        console.log(`Found '${yellow(types.length.toString())}' languages`);
+        console.log(`Found '${yellow(languages.length.toString())}' content types`);
+        console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies \n`);
 
         if (config.nameResolver) {
-            console.log(`Using '${yellow(config.nameResolver)}' name resolver\n`);
+            console.log(`Using '${yellow(config.nameResolver)}' name resolver for content type elements\n`);
         }
 
         if (config.customNameResolver) {
-            console.log(`Using '${yellow('custom')}' name resolver\n`);
+            console.log(`Using '${yellow('custom')}' name resolver for content type elements\n`);
         }
 
         for (const type of types) {
-            generateClass(type, config);
-            console.log(`${yellow(modelHelper.getFilename({ type: type }))} (${type.system.name})`);
+            generateModels(type, config);
+            console.log(`${yellow(modelHelper.getModelFilename({ type: type }))} (${type.system.name})`);
         }
+
+        generateProjectModel(types, languages, taxonomies, config);
+        console.log(`\nProject structure '${yellow(modelHelper.getProjectModelFilename())}'`);
 
         console.log(green(`\nModel generator completed`));
     } catch (error) {
@@ -41,8 +48,21 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
     }
 }
 
-function generateClass(type: IContentType, config: IGenerateModelsConfig): void {
-    const classFileName = modelHelper.getFilename({ type: type });
+function generateProjectModel(types: IContentType[], languages: ILanguage[], taxonomies: ITaxonomyGroup[], config: IGenerateModelsConfig): void {
+    const classFileName = modelHelper.getProjectModelFilename();
+    const code = modelHelper.getProjectModelCode({
+        types: types,
+        addTimestamp: config.addTimestamp,
+        formatOptions: config.formatOptions,
+        languages: languages,
+        taxonomies: taxonomies
+    });
+
+    fs.writeFileSync('./' + classFileName, code);
+}
+
+function generateModels(type: IContentType, config: IGenerateModelsConfig): void {
+    const classFileName = modelHelper.getModelFilename({ type: type });
     const code = modelHelper.getModelCode({
         type: type,
         addTimestamp: config.addTimestamp,
@@ -51,6 +71,5 @@ function generateClass(type: IContentType, config: IGenerateModelsConfig): void 
         customNameResolver: config.customNameResolver
     });
 
-    // create file
     fs.writeFileSync('./' + classFileName, code);
 }
