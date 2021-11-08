@@ -40,7 +40,7 @@
     "build:commonjs": "tsc -m commonjs --outDir dist/cjs --p tsconfig.prod.json",
     "build:all": "npm run build:es6 && npm run build:es2020 && npm run build:esnext && npm run build:commonjs",
     "test:all": "npm run build:commonjs && npm run test:generate-models",
-    "test:generate-models": "npm run build:commonjs && cd test && node ../dist/cjs/lib/cli/cli --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --addTimestamp=true --nameResolver=camelCase",
+    "test:delivery-models": "npm run build:commonjs && cd test && node ../dist/cjs/lib/cli/cli --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --sdkType=delivery --addTimestamp=true --nameResolver=camelCase",
     "ts-lint-local": "./node_modules/.bin/tslint",
     "ts-lint:fix": "npm run ts-lint:check -- --fix",
     "ts-lint:check": "npm run ts-lint-local -- --project ./tsconfig.json"
@@ -51,15 +51,15 @@
     "colors": "1.4.0"
   },
   "peerDependencies": {
-    "@kentico/kontent-delivery": "^11.0.0-5"
+    "@kentico/kontent-delivery": "^11.0.0-11"
   },
   "devDependencies": {
-    "@kentico/kontent-delivery": "11.0.0-5",
+    "@kentico/kontent-delivery": "11.0.0-11",
     "standard-version": "9.3.2",
     "typescript": "4.4.4",
-    "@types/node": "16.11.1",
+    "@types/node": "16.11.6",
     "@types/prettier": "2.4.1",
     "tslint": "6.1.3",
-    "ts-node": "10.3.0"
+    "ts-node": "10.4.0"
   }
 }
