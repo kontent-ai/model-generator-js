@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-3](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-2...v4.0.0-3) (2021-11-08)
+
+
+### Features
+
+* refactors generator code to prepare for separate delivery / management models ([3127473](https://github.com/Kentico/kontent-model-generator-js/commit/31274730278e67e65a94ca7f510e52401e8ee3da))
+
 ## [4.0.0-2](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-1...v4.0.0-2) (2021-11-04)
 
 ## [4.0.0-1](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-0...v4.0.0-1) (2021-11-04)
