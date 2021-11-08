@@ -42,6 +42,7 @@ await generateModelsAsync({
 - `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `nameResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
 
 ## Example models
 
@@ -86,6 +87,7 @@ export type Actor = IContentItem<{
 
 Generator also creates `_project.ts` file with strongly typed definitions for `languages`, `content types` and `taxonomies`. You can use these in your poject to easily access codenames / names of these objects instead of using strings as identifiers. 
 
+## Example project structure
 
 Example `_project.ts` output: 
 
