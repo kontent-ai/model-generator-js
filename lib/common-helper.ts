@@ -15,6 +15,10 @@ export class CommonHelper {
         // use element resolver from SDK as it provides required functionality
         return pascalCasePropertyNameResolver('', text);
     }
+
+    escapeNameValue(value: string): string {
+       return value.replace('\'', '\\\'');
+    }
 }
 
 export const commonHelper = new CommonHelper();

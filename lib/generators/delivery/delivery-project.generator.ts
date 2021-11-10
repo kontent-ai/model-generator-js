@@ -65,7 +65,7 @@ export const projectModel = {
             const isLast = i === languages.length - 1;
             code += `${language.system.codename}: {
                 codename: '${language.system.codename}',
-                name: '${language.system.name}'}
+                name: '${commonHelper.escapeNameValue(language.system.name)}'}
             ${!isLast ? ',' : ''}`;
         }
 
@@ -79,7 +79,7 @@ export const projectModel = {
             const isLast = i === contentTypes.length - 1;
             code += `${contentType.system.codename}: {
                 codename: '${contentType.system.codename}',
-                name: '${contentType.system.name}',
+                name: '${commonHelper.escapeNameValue(contentType.system.name)}',
                 elements: {${this.getProjectElements(contentType)}}
             }${!isLast ? ',' : ''}`;
         }
@@ -95,7 +95,7 @@ export const projectModel = {
 
             code += `${element.codename}: {
                 codename: '${element.codename}',
-                name: '${element.name}'
+                name: '${commonHelper.escapeNameValue(element.name)}'
             }${!isLast ? ',' : ''}`;
         }
 
@@ -109,7 +109,7 @@ export const projectModel = {
             const isLast = i === taxonomies.length - 1;
             code += `${taxonomy.system.codename}: {
                 codename: '${taxonomy.system.codename}',
-                name: '${taxonomy.system.name}',
+                name: '${commonHelper.escapeNameValue(taxonomy.system.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',' : ''}`;
         }
@@ -128,7 +128,7 @@ export const projectModel = {
             const isLast = i === terms.length - 1;
             code += `${term.codename}: {
                 codename: '${term.codename}',
-                name: '${term.name}',
+                name: '${commonHelper.escapeNameValue(term.name)}',
                 ${this.getProjectTaxonomiesTerms(term.terms)}
             }${!isLast ? ',' : ''}`;
         }
