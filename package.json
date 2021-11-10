@@ -48,13 +48,10 @@
   "dependencies": {
     "yargs": "17.2.1",
     "prettier": "2.4.1",
-    "colors": "1.4.0"
-  },
-  "peerDependencies": {
-    "@kentico/kontent-delivery": "^11.0.0-11"
+    "colors": "1.4.0",
+    "@kentico/kontent-delivery": "11.0.0-11"
   },
   "devDependencies": {
-    "@kentico/kontent-delivery": "11.0.0-11",
     "standard-version": "9.3.2",
     "typescript": "4.4.4",
     "@types/node": "16.11.6",
