@@ -35,9 +35,9 @@ export class DeliveryProjectGenerator {
 * ${commonHelper.getAutogenerateNote(data.addTimestamp)}
 */
 export const projectModel = {
-    languages: {
+    languages: [
         ${this.getProjectLanguages(data.languages)}
-    },
+    ],
     contentTypes: {
         ${this.getProjectContentTypes(data.types)}
     },
@@ -63,7 +63,7 @@ export const projectModel = {
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
             const isLast = i === languages.length - 1;
-            code += `${language.system.codename}: {
+            code += `{
                 codename: '${language.system.codename}',
                 name: '${commonHelper.escapeNameValue(language.system.name)}'}
             ${!isLast ? ',' : ''}`;
