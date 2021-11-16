@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-6](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-5...v4.0.0-6) (2021-11-16)
+
+
+### Bug Fixes
+
+* use camel case codename for language property name (in case there are unsupported object property chars in codename) ([fc9d8e0](https://github.com/Kentico/kontent-model-generator-js/commit/fc9d8e0b5a68c5845e9d26b3d11d63f657c6d647))
+
 ## [4.0.0-5](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-4...v4.0.0-5) (2021-11-10)
 
 
