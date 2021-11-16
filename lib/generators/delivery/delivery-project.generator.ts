@@ -63,7 +63,7 @@ export const projectModel = {
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
             const isLast = i === languages.length - 1;
-            code += `${commonHelper.toCamelCaseCodename(language.system.codename)}: {
+            code += `${commonHelper.toAlphanumeric(language.system.codename)}: {
                 codename: '${language.system.codename}',
                 name: '${commonHelper.escapeNameValue(language.system.name)}'}
             ${!isLast ? ',' : ''}`;
