@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0-7](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-6...v4.0.0-7) (2021-11-16)
+
+
+### Bug Fixes
+
+* converts language property name to alphanumeric string ([68272a2](https://github.com/Kentico/kontent-model-generator-js/commit/68272a2d7002204e1e43c1c50960e4c4f0b5ce73))
+
 ## [4.0.0-6](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-5...v4.0.0-6) (2021-11-16)
 
 
