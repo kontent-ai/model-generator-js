@@ -1,4 +1,5 @@
 import {
+    camelCasePropertyNameResolver,
     pascalCasePropertyNameResolver} from '@kentico/kontent-delivery';
 import { name, version } from '../package.json';
 
@@ -18,6 +19,10 @@ export class CommonHelper {
 
     escapeNameValue(value: string): string {
        return value.replace('\'', '\\\'');
+    }
+
+    toCamelCaseCodename(value: string): string {
+        return camelCasePropertyNameResolver('', value);
     }
 }
 
