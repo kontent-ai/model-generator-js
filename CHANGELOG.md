@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-7...v4.0.0) (2021-11-16)
+
 ## [4.0.0-7](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-6...v4.0.0-7) (2021-11-16)
 
 
