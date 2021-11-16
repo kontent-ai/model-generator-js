@@ -29,6 +29,7 @@
   "types": "./dist/cjs/lib/index.d.ts",
   "scripts": {
     "release": "standard-version",
+    "release:major": "standard-version --release-as major",
     "prerelease": "standard-version --prerelease",
     "tsc-local": "./node_modules/.bin/tsc",
     "ts-node-local": "./node_modules/.bin/ts-node",
