@@ -43,7 +43,7 @@ await generateModelsAsync({
 - `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `nameResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
-- `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
+- `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`, `management`
 
 ## Example models
 
