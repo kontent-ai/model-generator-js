@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
 import { format, Options } from 'prettier';
-import { ElementResolver } from '../../models';
+import { DefaultResolverType, ElementResolver, FileNameResolver } from '../../models';
 
 export class DeliveryModelGenerator {
     async generateModelsAsync(config: {
@@ -17,14 +17,27 @@ export class DeliveryModelGenerator {
         addTimestamp: boolean;
         secureAccessKey?: string;
         elementResolver?: ElementResolver;
+        fileResolver?: FileNameResolver;
         formatOptions?: Options;
     }): Promise<void> {
         if (config.elementResolver) {
             console.log(
                 `Using '${yellow(
                     config.elementResolver instanceof Function ? 'custom' : config.elementResolver
-                )}' name resolver for content type elements\n`
+                )}' name resolver for content type elements`
             );
+        }
+
+        if (config.fileResolver) {
+            console.log(
+                `Using '${yellow(
+                    config.fileResolver instanceof Function ? 'custom' : config.fileResolver
+                )}' name resolver for filenames`
+            );
+        }
+
+        if (config.fileResolver || config.elementResolver) {
+            console.log('\n');
         }
 
         for (const type of config.types) {
@@ -33,9 +46,10 @@ export class DeliveryModelGenerator {
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
-                secureAccessKey: config.secureAccessKey
+                secureAccessKey: config.secureAccessKey,
+                fileResolver: config.fileResolver
             });
-            console.log(`${yellow(this.getModelFilename({ type: type }))} (${type.system.name})`);
+            console.log(`${yellow(this.getModelFilename({ type: type, fileResolver: config.fileResolver }))} (${type.system.name})`);
         }
     }
 
@@ -75,8 +89,9 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
         secureAccessKey?: string;
         elementResolver?: ElementResolver;
         formatOptions?: Options;
+        fileResolver?: FileNameResolver;
     }): void {
-        const classFileName = this.getModelFilename({ type: data.type });
+        const classFileName = this.getModelFilename({ type: data.type, fileResolver: data.fileResolver });
         const code = this.getModelCode({
             type: data.type,
             addTimestamp: data.addTimestamp,
@@ -87,8 +102,16 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
         fs.writeFileSync('./' + classFileName, code);
     }
 
-    private getModelFilename(data: { type: IContentType }): string {
-        return `${data.type.system.codename}.ts`;
+    private getModelFilename(data: { type: IContentType; fileResolver?: FileNameResolver }): string {
+        if (!data.fileResolver) {
+            return `${data.type.system.codename}.ts`;
+        }
+
+        if (data.fileResolver instanceof Function) {
+            return `${data.fileResolver(data.type)}.ts`;
+        }
+
+        return `${this.resolveNameWithDefaultResolvers(data.type.system.codename, data.fileResolver)}.ts`;
     }
 
     private getElementsCode(data: { type: IContentType; elementResolver?: ElementResolver }): string {
@@ -146,21 +169,23 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
             return config.elementResolver(config.type, config.elementName);
         }
 
-        if (config.elementResolver === 'camelCase') {
-            return camelCasePropertyNameResolver(config.type, config.elementName);
+        return this.resolveNameWithDefaultResolvers(config.elementName, config.elementResolver);
+    }
+
+    private resolveNameWithDefaultResolvers(text: string, resolverType: DefaultResolverType): string {
+        if (resolverType === 'camelCase') {
+            return camelCasePropertyNameResolver('', text);
         }
 
-        if (config.elementResolver === 'pascalCase') {
-            return pascalCasePropertyNameResolver(config.type, config.elementName);
+        if (resolverType === 'pascalCase') {
+            return pascalCasePropertyNameResolver('', text);
         }
 
-        if (config.elementResolver === 'snakeCase') {
-            return snakeCasePropertyNameResolver(config.type, config.elementName);
+        if (resolverType === 'snakeCase') {
+            return snakeCasePropertyNameResolver('', text);
         }
 
-        throw Error(
-            `Invalid name resolver '${config.elementResolver}'. Available options are: camelCase, pascalCase, snakeCase`
-        );
+        throw Error(`Invalid name resolver '${resolverType}'. Available options are: camelCase, pascalCase, snakeCase`);
     }
 }
 

@@ -37,12 +37,27 @@ await generateModelsAsync({
 })
 ```
 
+### Customizing generated file names
+
+You may customize the way filenames are stored on file system using the `fileResolver` configuration option:
+
+```typescript
+await generateModelsAsync({
+  sdkType: 'delivery',
+  projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  addTimestamp: true,
+  elementResolver: 'camelCase',
+  fileResolver: (type) => `model_${type.system.codename}`
+});
+```
+
 ## Configuration
 
 - `projectId` - Id of the Kontent project
 - `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `fileResolver`- Name resolver for filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`, `management`
 
 ## Example models

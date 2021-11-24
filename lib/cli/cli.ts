@@ -10,6 +10,7 @@ const projectId = argv.projectId;
 const secureAccessKey = argv.secureAccessKey;
 const addTimestamp = argv.addTimestamp;
 const elementResolver = argv.elementResolver;
+const fileResolver = argv.fileResolver;
 const sdkType = argv.sdkType;
 
 if (!projectId) {
@@ -22,6 +23,7 @@ const run = async () => {
         secureAccessKey: secureAccessKey,
         addTimestamp: addTimestamp === 'true' ? true : false,
         elementResolver: elementResolver,
+        fileResolver: fileResolver,
         formatOptions: undefined,
         sdkType: sdkType ?? 'delivery'
     });

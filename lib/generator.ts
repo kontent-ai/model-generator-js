@@ -33,7 +33,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
-                secureAccessKey: config.secureAccessKey
+                secureAccessKey: config.secureAccessKey,
+                fileResolver: config.fileResolver
             });
 
             // create project structure
