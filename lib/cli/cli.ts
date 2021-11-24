@@ -9,7 +9,7 @@ const argv = yargs['argv'];
 const projectId = argv.projectId;
 const secureAccessKey = argv.secureAccessKey;
 const addTimestamp = argv.addTimestamp;
-const nameResolver = argv.nameResolver;
+const elementResolver = argv.elementResolver;
 const sdkType = argv.sdkType;
 
 if (!projectId) {
@@ -21,7 +21,7 @@ const run = async () => {
         projectId: projectId,
         secureAccessKey: secureAccessKey,
         addTimestamp: addTimestamp === 'true' ? true : false,
-        nameResolver: nameResolver,
+        elementResolver: elementResolver,
         formatOptions: undefined,
         sdkType: sdkType ?? 'delivery'
     });

@@ -5,13 +5,14 @@ export type PropertyNameResolverType = 'camelCase' | 'pascalCase' | 'snakeCase';
 
 export type SdkType = 'delivery' | 'management';
 
+export type ElementResolver = PropertyNameResolverType | PropertyNameResolver;
+
 export interface IGenerateModelsConfig {
     projectId: string;
     addTimestamp: boolean;
     sdkType: SdkType;
 
     secureAccessKey?: string;
-    nameResolver?: PropertyNameResolverType;
+    elementResolver?: ElementResolver;
     formatOptions?: Options;
-    customNameResolver?: PropertyNameResolver;
 }

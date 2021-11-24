@@ -31,9 +31,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             await deliveryModelGenerator.generateModelsAsync({
                 types: types,
                 addTimestamp: config.addTimestamp,
-                customNameResolver: config.customNameResolver,
                 formatOptions: config.formatOptions,
-                nameResolver: config.nameResolver,
+                elementResolver: config.elementResolver,
                 secureAccessKey: config.secureAccessKey
             });
 

@@ -20,7 +20,7 @@ Go to folder where you want to create models and run:
 
 You may specify other options like:
 
-`kontent-generate --projectId=xxx --addTimestamp=false --nameResolver=camelCase`
+`kontent-generate --projectId=xxx --addTimestamp=false --elementResolver=camelCase`
 
 ## Generate models in code
 
@@ -32,7 +32,7 @@ import { generateModelsAsync } from '@kentico/kontent-model-generator';
 await generateModelsAsync({
     projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     addTimestamp: true,
-    nameResolver: 'camelCase',
+    elementResolver: 'camelCase',
 })
 ```
 
@@ -41,7 +41,7 @@ await generateModelsAsync({
 - `projectId` - Id of the Kontent project
 - `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
 - `addTimestamp`- Indicates if timestamp is added to generated models
-- `nameResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
 
 ## Example models

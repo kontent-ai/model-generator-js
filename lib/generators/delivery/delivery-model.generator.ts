@@ -3,39 +3,36 @@ import {
     ElementType,
     IContentType,
     pascalCasePropertyNameResolver,
-    PropertyNameResolver,
     snakeCasePropertyNameResolver
 } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
 import { format, Options } from 'prettier';
-import { PropertyNameResolverType } from '../../models';
+import { ElementResolver } from '../../models';
 
 export class DeliveryModelGenerator {
     async generateModelsAsync(config: {
         types: IContentType[];
         addTimestamp: boolean;
         secureAccessKey?: string;
-        nameResolver?: PropertyNameResolverType;
+        elementResolver?: ElementResolver;
         formatOptions?: Options;
-        customNameResolver?: PropertyNameResolver;
     }): Promise<void> {
-        if (config.nameResolver) {
-            console.log(`Using '${yellow(config.nameResolver)}' name resolver for content type elements\n`);
-        }
-
-        if (config.customNameResolver) {
-            console.log(`Using '${yellow('custom')}' name resolver for content type elements\n`);
+        if (config.elementResolver) {
+            console.log(
+                `Using '${yellow(
+                    config.elementResolver instanceof Function ? 'custom' : config.elementResolver
+                )}' name resolver for content type elements\n`
+            );
         }
 
         for (const type of config.types) {
             this.generateModels({
                 type: type,
                 addTimestamp: config.addTimestamp,
-                customNameResolver: config.customNameResolver,
                 formatOptions: config.formatOptions,
-                nameResolver: config.nameResolver,
+                elementResolver: config.elementResolver,
                 secureAccessKey: config.secureAccessKey
             });
             console.log(`${yellow(this.getModelFilename({ type: type }))} (${type.system.name})`);
@@ -46,8 +43,7 @@ export class DeliveryModelGenerator {
         type: IContentType;
         addTimestamp: boolean;
         formatOptions?: Options;
-        nameResolver?: PropertyNameResolverType;
-        customNameResolver?: PropertyNameResolver;
+        elementResolver?: ElementResolver;
     }): string {
         const code = `
 import { IContentItem, Elements } from '@kentico/kontent-delivery';
@@ -58,8 +54,7 @@ import { IContentItem, Elements } from '@kentico/kontent-delivery';
 export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContentItem<{
     ${this.getElementsCode({
         type: config.type,
-        nameResolver: config.nameResolver,
-        customNameResolver: config.customNameResolver
+        elementResolver: config.elementResolver
     })}
 }>;
 `;
@@ -78,17 +73,15 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
         type: IContentType;
         addTimestamp: boolean;
         secureAccessKey?: string;
-        nameResolver?: PropertyNameResolverType;
+        elementResolver?: ElementResolver;
         formatOptions?: Options;
-        customNameResolver?: PropertyNameResolver;
     }): void {
         const classFileName = this.getModelFilename({ type: data.type });
         const code = this.getModelCode({
             type: data.type,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
-            nameResolver: data.nameResolver,
-            customNameResolver: data.customNameResolver
+            elementResolver: data.elementResolver
         });
 
         fs.writeFileSync('./' + classFileName, code);
@@ -98,19 +91,14 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
         return `${data.type.system.codename}.ts`;
     }
 
-    private getElementsCode(data: {
-        type: IContentType;
-        nameResolver?: PropertyNameResolverType;
-        customNameResolver?: PropertyNameResolver;
-    }): string {
+    private getElementsCode(data: { type: IContentType; elementResolver?: ElementResolver }): string {
         let code = '';
         for (let i = 0; i < data.type.elements.length; i++) {
             const element = data.type.elements[i];
             code += `${this.getElementName({
                 elementName: element.codename,
                 type: data.type.system.codename,
-                nameResolver: data.nameResolver,
-                customNameResolver: data.customNameResolver
+                elementResolver: data.elementResolver
             })}: Elements.${this.mapElementTypeToName(element.type)};`;
 
             if (i !== data.type.elements.length - 1) {
@@ -149,32 +137,29 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
         return result;
     }
 
-    private getElementName(config: {
-        type: string;
-        elementName: string;
-        nameResolver?: PropertyNameResolverType;
-        customNameResolver?: PropertyNameResolver;
-    }): string {
-        if (config.customNameResolver) {
-            return config.customNameResolver(config.type, config.elementName);
-        }
-        if (!config.nameResolver) {
+    private getElementName(config: { type: string; elementName: string; elementResolver?: ElementResolver }): string {
+        if (!config.elementResolver) {
             return config.elementName;
         }
-        if (config.nameResolver === 'camelCase') {
+
+        if (config.elementResolver instanceof Function) {
+            return config.elementResolver(config.type, config.elementName);
+        }
+
+        if (config.elementResolver === 'camelCase') {
             return camelCasePropertyNameResolver(config.type, config.elementName);
         }
 
-        if (config.nameResolver === 'pascalCase') {
+        if (config.elementResolver === 'pascalCase') {
             return pascalCasePropertyNameResolver(config.type, config.elementName);
         }
 
-        if (config.nameResolver === 'snakeCase') {
+        if (config.elementResolver === 'snakeCase') {
             return snakeCasePropertyNameResolver(config.type, config.elementName);
         }
 
         throw Error(
-            `Invalid name resolver '${config.nameResolver}'. Available options are: camelCase, pascalCase, snakeCase`
+            `Invalid name resolver '${config.elementResolver}'. Available options are: camelCase, pascalCase, snakeCase`
         );
     }
 }
