@@ -1,15 +1,10 @@
-import {
-    camelCasePropertyNameResolver,
-    ElementType,
-    IContentType,
-    pascalCasePropertyNameResolver,
-    snakeCasePropertyNameResolver
-} from '@kentico/kontent-delivery';
+import { ElementType, IContentType } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
+import { textHelper } from '../../text-helper';
 import { format, Options } from 'prettier';
-import { DefaultResolverType, ElementResolver, FileNameResolver } from '../../models';
+import { ContentTypeResolver, ElementResolver, FileNameResolver } from '../../models';
 
 export class DeliveryModelGenerator {
     async generateModelsAsync(config: {
@@ -18,6 +13,7 @@ export class DeliveryModelGenerator {
         secureAccessKey?: string;
         elementResolver?: ElementResolver;
         fileResolver?: FileNameResolver;
+        contentTypeResolver?: ContentTypeResolver;
         formatOptions?: Options;
     }): Promise<void> {
         if (config.elementResolver) {
@@ -36,7 +32,15 @@ export class DeliveryModelGenerator {
             );
         }
 
-        if (config.fileResolver || config.elementResolver) {
+        if (config.contentTypeResolver) {
+            console.log(
+                `Using '${yellow(
+                    config.contentTypeResolver instanceof Function ? 'custom' : config.contentTypeResolver
+                )}' name resolver for content types`
+            );
+        }
+
+        if (config.fileResolver || config.elementResolver || config.contentTypeResolver) {
             console.log('\n');
         }
 
@@ -47,9 +51,14 @@ export class DeliveryModelGenerator {
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
                 secureAccessKey: config.secureAccessKey,
-                fileResolver: config.fileResolver
+                fileResolver: config.fileResolver,
+                contentTypeResolver: config.contentTypeResolver
             });
-            console.log(`${yellow(this.getModelFilename({ type: type, fileResolver: config.fileResolver }))} (${type.system.name})`);
+            console.log(
+                `${yellow(this.getModelFilename({ type: type, fileResolver: config.fileResolver }))} (${
+                    type.system.name
+                })`
+            );
         }
     }
 
@@ -58,6 +67,7 @@ export class DeliveryModelGenerator {
         addTimestamp: boolean;
         formatOptions?: Options;
         elementResolver?: ElementResolver;
+        contentTypeResolver?: ContentTypeResolver;
     }): string {
         const code = `
 import { IContentItem, Elements } from '@kentico/kontent-delivery';
@@ -65,7 +75,10 @@ import { IContentItem, Elements } from '@kentico/kontent-delivery';
 /**
  * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
 */
-export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContentItem<{
+export type ${this.getContentTypeName({
+            type: config.type,
+            contentTypeResolver: config.contentTypeResolver
+        })} = IContentItem<{
     ${this.getElementsCode({
         type: config.type,
         elementResolver: config.elementResolver
@@ -90,16 +103,30 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
         elementResolver?: ElementResolver;
         formatOptions?: Options;
         fileResolver?: FileNameResolver;
+        contentTypeResolver?: ContentTypeResolver;
     }): void {
         const classFileName = this.getModelFilename({ type: data.type, fileResolver: data.fileResolver });
         const code = this.getModelCode({
             type: data.type,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
-            elementResolver: data.elementResolver
+            elementResolver: data.elementResolver,
+            contentTypeResolver: data.contentTypeResolver
         });
 
         fs.writeFileSync('./' + classFileName, code);
+    }
+
+    private getContentTypeName(data: { type: IContentType; contentTypeResolver?: ContentTypeResolver }): string {
+        if (!data.contentTypeResolver) {
+            return textHelper.toPascalCase(data.type.system.codename);
+        }
+
+        if (data.contentTypeResolver instanceof Function) {
+            return `${data.contentTypeResolver(data.type)}`;
+        }
+
+        return `${textHelper.resolveTextWithDefaultResolver(data.type.system.codename, data.contentTypeResolver)}`;
     }
 
     private getModelFilename(data: { type: IContentType; fileResolver?: FileNameResolver }): string {
@@ -111,7 +138,7 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
             return `${data.fileResolver(data.type)}.ts`;
         }
 
-        return `${this.resolveNameWithDefaultResolvers(data.type.system.codename, data.fileResolver)}.ts`;
+        return `${textHelper.resolveTextWithDefaultResolver(data.type.system.codename, data.fileResolver)}.ts`;
     }
 
     private getElementsCode(data: { type: IContentType; elementResolver?: ElementResolver }): string {
@@ -169,23 +196,7 @@ export type ${commonHelper.toPascalCase(config.type.system.codename)} = IContent
             return config.elementResolver(config.type, config.elementName);
         }
 
-        return this.resolveNameWithDefaultResolvers(config.elementName, config.elementResolver);
-    }
-
-    private resolveNameWithDefaultResolvers(text: string, resolverType: DefaultResolverType): string {
-        if (resolverType === 'camelCase') {
-            return camelCasePropertyNameResolver('', text);
-        }
-
-        if (resolverType === 'pascalCase') {
-            return pascalCasePropertyNameResolver('', text);
-        }
-
-        if (resolverType === 'snakeCase') {
-            return snakeCasePropertyNameResolver('', text);
-        }
-
-        throw Error(`Invalid name resolver '${resolverType}'. Available options are: camelCase, pascalCase, snakeCase`);
+        return textHelper.resolveTextWithDefaultResolver(config.elementName, config.elementResolver);
     }
 }
 

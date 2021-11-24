@@ -51,6 +51,20 @@ await generateModelsAsync({
 });
 ```
 
+### Customizing generated content type names
+
+You may customize name of content types using the `contentTypeResolver` configuration option:
+
+```typescript
+await generateModelsAsync({
+  sdkType: 'delivery',
+  projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  addTimestamp: true,
+  elementResolver: 'camelCase',
+  contentTypeResolver: (type) => `${textHelper.toPascalCase(type.system.codename)}Model`,
+});
+```
+
 ## Configuration
 
 - `projectId` - Id of the Kontent project

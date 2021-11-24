@@ -34,7 +34,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
                 secureAccessKey: config.secureAccessKey,
-                fileResolver: config.fileResolver
+                fileResolver: config.fileResolver,
+                contentTypeResolver: config.contentTypeResolver
             });
 
             // create project structure

@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { yellow } from 'colors';
 import { format, Options } from 'prettier';
 import { commonHelper } from '../../common-helper';
+import { textHelper } from '../../text-helper';
 
 export class DeliveryProjectGenerator {
     generateProjectModel(data: {
@@ -63,7 +64,7 @@ export const projectModel = {
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
             const isLast = i === languages.length - 1;
-            code += `${commonHelper.toAlphanumeric(language.system.codename)}: {
+            code += `${textHelper.toAlphanumeric(language.system.codename)}: {
                 codename: '${language.system.codename}',
                 name: '${commonHelper.escapeNameValue(language.system.name)}'}
             ${!isLast ? ',' : ''}`;

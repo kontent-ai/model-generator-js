@@ -9,6 +9,8 @@ export type ElementResolver = DefaultResolverType | PropertyNameResolver;
 
 export type FileNameResolver = DefaultResolverType | ((contentType: IContentType) => string);
 
+export type ContentTypeResolver = DefaultResolverType | ((contentType: IContentType) => string);
+
 export interface IGenerateModelsConfig {
     projectId: string;
     addTimestamp: boolean;
@@ -16,6 +18,7 @@ export interface IGenerateModelsConfig {
 
     secureAccessKey?: string;
     fileResolver?: FileNameResolver;
+    contentTypeResolver?: ContentTypeResolver;
     elementResolver?: ElementResolver;
     formatOptions?: Options;
 }
