@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0-0](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0...v4.1.0-0) (2021-11-24)
+
+
+### Features
+
+* adds support for customizing content type names ([d63e007](https://github.com/Kentico/kontent-model-generator-js/commit/d63e00786eee94bde7fbdeede5c9e19250ee19b4))
+* adds support for generating custom filenames ([d4e638b](https://github.com/Kentico/kontent-model-generator-js/commit/d4e638bad4d7cc28eb23f62c59bc00ea545aae51))
+* renames 'nameResolver' to 'elementResolver' and unifies it with customElementResolver option ([a18fd00](https://github.com/Kentico/kontent-model-generator-js/commit/a18fd003e9507b487135d27ef6dcb5a748907b26))
+
 ## [4.0.0](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-7...v4.0.0) (2021-11-16)
 
 ## [4.0.0-7](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0-6...v4.0.0-7) (2021-11-16)
