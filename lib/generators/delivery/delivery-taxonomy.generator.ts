@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { nameHelper } from '../../name-helper';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
-import { commonHelper } from '../../common-helper';
+import { commonHelper, IGenerateResult } from '../../common-helper';
 import { TaxonomyModels } from '@kentico/kontent-management';
 
 export class DeliveryTaxonomyGenerator {
@@ -13,7 +13,9 @@ export class DeliveryTaxonomyGenerator {
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): Promise<void> {
+    }): Promise<IGenerateResult> {
+        const filenames: string[] = [];
+
         if (config.taxonomyResolver) {
             console.log(
                 `Using '${yellow(
@@ -35,19 +37,24 @@ export class DeliveryTaxonomyGenerator {
         }
 
         for (const taxonomy of config.taxonomies) {
-            this.generateModels({
+            const filename = this.generateModels({
                 taxonomy: taxonomy,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 taxonomyResolver: config.taxonomyResolver,
                 fileResolver: config.fileResolver
             });
+            filenames.push(filename);
             console.log(
                 `${yellow(
                     nameHelper.getDeliveryTaxonomyFilename({ taxonomy: taxonomy, fileResolver: config.fileResolver })
                 )} (${taxonomy.name})`
             );
         }
+
+        return {
+            filenames: filenames
+        };
     }
 
     private generateModels(data: {
@@ -56,11 +63,12 @@ export class DeliveryTaxonomyGenerator {
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): void {
+    }): string {
         const classFileName = nameHelper.getDeliveryTaxonomyFilename({
             taxonomy: data.taxonomy,
             fileResolver: data.fileResolver
         });
+        const filename = './' + classFileName;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
@@ -68,7 +76,8 @@ export class DeliveryTaxonomyGenerator {
             taxonomyResolver: data.taxonomyResolver
         });
 
-        fs.writeFileSync('./' + classFileName, code);
+        fs.writeFileSync(filename, code);
+        return filename;
     }
 
     private getModelCode(config: {

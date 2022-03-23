@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { yellow } from 'colors';
-import { commonHelper } from '../../common-helper';
+import { commonHelper, IGenerateResult } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import { nameHelper } from '../../name-helper';
 import { format, Options } from 'prettier';
@@ -16,7 +16,9 @@ export class DeliveryModelGenerator {
         fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
         formatOptions?: Options;
-    }): Promise<void> {
+    }): Promise<IGenerateResult> {
+        const filenames: string[] = [];
+
         if (config.elementResolver) {
             console.log(
                 `Using '${yellow(
@@ -46,7 +48,7 @@ export class DeliveryModelGenerator {
         }
 
         for (const type of config.types) {
-            this.generateModels({
+            const filename = this.generateModels({
                 type: type,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
@@ -55,12 +57,17 @@ export class DeliveryModelGenerator {
                 fileResolver: config.fileResolver,
                 contentTypeResolver: config.contentTypeResolver
             });
+            filenames.push(filename);
             console.log(
                 `${yellow(
                     nameHelper.getDeliveryContentTypeFilename({ type: type, fileResolver: config.fileResolver })
                 )} (${type.name})`
             );
         }
+
+        return {
+            filenames: filenames
+        };
     }
 
     private getModelCode(config: {
@@ -105,11 +112,12 @@ export type ${nameHelper.getDeliveryContentTypeName({
         formatOptions?: Options;
         fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
-    }): void {
+    }): string {
         const classFileName = nameHelper.getDeliveryContentTypeFilename({
             type: data.type,
             fileResolver: data.fileResolver
         });
+        const filename: string = './' + classFileName;
         const code = this.getModelCode({
             type: data.type,
             addTimestamp: data.addTimestamp,
@@ -118,7 +126,8 @@ export type ${nameHelper.getDeliveryContentTypeName({
             contentTypeResolver: data.contentTypeResolver
         });
 
-        fs.writeFileSync('./' + classFileName, code);
+        fs.writeFileSync(filename, code);
+        return filename;
     }
 
     private getElementsCode(data: { type: ContentTypeModels.ContentType; elementResolver?: ElementResolver }): string {

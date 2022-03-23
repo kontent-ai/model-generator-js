@@ -4,6 +4,7 @@ import { format, Options } from 'prettier';
 import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import { ContentTypeModels, LanguageModels, TaxonomyModels } from '@kentico/kontent-management';
+import { IGenerateResult } from '../../common-helper';
 
 export class DeliveryProjectGenerator {
     generateProjectModel(data: {
@@ -12,7 +13,7 @@ export class DeliveryProjectGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         addTimestamp: boolean;
         formatOptions?: Options;
-    }): void {
+    }): IGenerateResult {
         const code = this.getProjectModelCode({
             types: data.types,
             addTimestamp: data.addTimestamp,
@@ -22,6 +23,10 @@ export class DeliveryProjectGenerator {
         });
 
         this.createFileOnFs(code);
+
+        return {
+            filenames: [`./${this.getProjectModelFilename()}`]
+        };
     }
 
     private getProjectModelCode(data: {

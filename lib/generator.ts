@@ -1,9 +1,11 @@
 import { green, red, yellow } from 'colors';
+import * as fs from 'fs';
 import { IGenerateModelsConfig } from './models';
 import { deliveryModelGenerator } from './generators/delivery/delivery-model.generator';
 import { deliveryProjectGenerator } from './generators';
 import { createManagementClient } from '@kentico/kontent-management';
 import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
+import { commonHelper } from './common-helper';
 
 export async function generateModelsAsync(config: IGenerateModelsConfig): Promise<void> {
     console.log(green(`Model generator started \n`));
@@ -26,7 +28,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies \n`);
 
             // create content type models
-            await deliveryModelGenerator.generateModelsAsync({
+            const contentTypesResult = await deliveryModelGenerator.generateModelsAsync({
                 types: types,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
@@ -37,7 +39,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             });
 
             // create taxonomy types
-            await deliveryTaxonomyGenerator.generateTaxonomyTypesAsync({
+            const taxonomiesResult = await deliveryTaxonomyGenerator.generateTaxonomyTypesAsync({
                 taxonomies: taxonomies,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
@@ -46,13 +48,27 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             });
 
             // create project structure
-            await deliveryProjectGenerator.generateProjectModel({
+            const projectModelResult = await deliveryProjectGenerator.generateProjectModel({
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 languages: languages,
                 taxonomies: taxonomies,
                 types: types
             });
+
+            // create barrel export
+            const barrelExportCode = commonHelper.getBarrelExportCode({
+                filenames: [
+                    ...projectModelResult.filenames,
+                    ...contentTypesResult.filenames,
+                    ...taxonomiesResult.filenames
+                ],
+                formatOptions: config.formatOptions
+            });
+            const barrelExportFilename: string = 'index.ts';
+            fs.writeFileSync(`./${barrelExportFilename}`, barrelExportCode);
+            console.log(`\nBarrel export '${yellow(barrelExportFilename)}' created`);
+
         } else if (config.sdkType === 'management') {
             console.log('Not available yet');
         } else {
