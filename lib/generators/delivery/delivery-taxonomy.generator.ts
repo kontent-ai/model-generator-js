@@ -1,7 +1,7 @@
 import { ITaxonomyGroup, ITaxonomyTerms } from '@kentico/kontent-delivery';
 import { format, Options } from 'prettier';
 import * as fs from 'fs';
-import { textHelper } from '../../text-helper';
+import { nameHelper } from '../../name-helper';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
@@ -43,9 +43,9 @@ export class DeliveryTaxonomyGenerator {
                 fileResolver: config.fileResolver
             });
             console.log(
-                `${yellow(this.getModelFilename({ taxonomy: taxonomy, fileResolver: config.fileResolver }))} (${
-                    taxonomy.system.name
-                })`
+                `${yellow(
+                    nameHelper.getDeliveryTaxonomyFilename({ taxonomy: taxonomy, fileResolver: config.fileResolver })
+                )} (${taxonomy.system.name})`
             );
         }
     }
@@ -57,7 +57,10 @@ export class DeliveryTaxonomyGenerator {
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
     }): void {
-        const classFileName = this.getModelFilename({ taxonomy: data.taxonomy, fileResolver: data.fileResolver });
+        const classFileName = nameHelper.getDeliveryTaxonomyFilename({
+            taxonomy: data.taxonomy,
+            fileResolver: data.fileResolver
+        });
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
@@ -66,25 +69,6 @@ export class DeliveryTaxonomyGenerator {
         });
 
         fs.writeFileSync('./' + classFileName, code);
-    }
-
-    private getModelFilename(data: { taxonomy: ITaxonomyGroup; fileResolver?: TaxonomyTypeFileNameResolver }): string {
-        if (data.fileResolver instanceof Function) {
-            return `${data.fileResolver(data.taxonomy)}.ts`;
-        }
-
-        let filename: string;
-
-        if (!data.fileResolver) {
-            filename = `${data.taxonomy.system.codename}`;
-        } else {
-            filename = `${textHelper.resolveTextWithDefaultResolver(
-                data.taxonomy.system.codename,
-                data.fileResolver
-            )}`;
-        }
-
-        return `${filename}.taxonomy.ts`;
     }
 
     private getModelCode(config: {
@@ -97,7 +81,7 @@ export class DeliveryTaxonomyGenerator {
 /**
  * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
 */
-export type ${this.getTaxonomyTypeName({
+export type ${nameHelper.getDeliveryTaxonomyTypeName({
             taxonomy: config.taxonomy,
             taxonomyResolver: config.taxonomyResolver
         })} = ${this.getTaxonomyTermsCode(config.taxonomy)};
@@ -147,18 +131,6 @@ export type ${this.getTaxonomyTypeName({
                 this.getTaxonomyTermCodenames(taxonomyTerm.terms, resolvedCodenames);
             }
         }
-    }
-
-    private getTaxonomyTypeName(data: { taxonomy: ITaxonomyGroup; taxonomyResolver?: TaxonomyTypeResolver }): string {
-        if (!data.taxonomyResolver) {
-            return textHelper.toPascalCase(data.taxonomy.system.name);
-        }
-
-        if (data.taxonomyResolver instanceof Function) {
-            return `${data.taxonomyResolver(data.taxonomy)}`;
-        }
-
-        return `${textHelper.resolveTextWithDefaultResolver(data.taxonomy.system.name, data.taxonomyResolver)}`;
     }
 }
 

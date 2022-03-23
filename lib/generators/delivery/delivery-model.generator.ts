@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
+import { nameHelper } from '../../name-helper';
 import { format, Options } from 'prettier';
 import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
 
@@ -55,9 +56,9 @@ export class DeliveryModelGenerator {
                 contentTypeResolver: config.contentTypeResolver
             });
             console.log(
-                `${yellow(this.getModelFilename({ type: type, fileResolver: config.fileResolver }))} (${
-                    type.system.name
-                })`
+                `${yellow(
+                    nameHelper.getDeliveryContentTypeFilename({ type: type, fileResolver: config.fileResolver })
+                )} (${type.system.name})`
             );
         }
     }
@@ -75,7 +76,7 @@ import { IContentItem, Elements } from '@kentico/kontent-delivery';
 /**
  * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
 */
-export type ${this.getContentTypeName({
+export type ${nameHelper.getDeliveryContentTypeName({
             type: config.type,
             contentTypeResolver: config.contentTypeResolver
         })} = IContentItem<{
@@ -105,7 +106,10 @@ export type ${this.getContentTypeName({
         fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
     }): void {
-        const classFileName = this.getModelFilename({ type: data.type, fileResolver: data.fileResolver });
+        const classFileName = nameHelper.getDeliveryContentTypeFilename({
+            type: data.type,
+            fileResolver: data.fileResolver
+        });
         const code = this.getModelCode({
             type: data.type,
             addTimestamp: data.addTimestamp,
@@ -115,34 +119,6 @@ export type ${this.getContentTypeName({
         });
 
         fs.writeFileSync('./' + classFileName, code);
-    }
-
-    private getContentTypeName(data: { type: IContentType; contentTypeResolver?: ContentTypeResolver }): string {
-        if (!data.contentTypeResolver) {
-            return textHelper.toPascalCase(data.type.system.name);
-        }
-
-        if (data.contentTypeResolver instanceof Function) {
-            return `${data.contentTypeResolver(data.type)}`;
-        }
-
-        return `${textHelper.resolveTextWithDefaultResolver(data.type.system.name, data.contentTypeResolver)}`;
-    }
-
-    private getModelFilename(data: { type: IContentType; fileResolver?: ContentTypeFileNameResolver }): string {
-        if (data.fileResolver instanceof Function) {
-            return `${data.fileResolver(data.type)}.ts`;
-        }
-
-        let filename: string;
-
-        if (!data.fileResolver) {
-            filename = `${data.type.system.codename}`;
-        } else {
-            filename = `${textHelper.resolveTextWithDefaultResolver(data.type.system.codename, data.fileResolver)}`;
-        }
-
-        return `${filename}.content-type.ts`
     }
 
     private getElementsCode(data: { type: IContentType; elementResolver?: ElementResolver }): string {
