@@ -39,7 +39,7 @@ await generateModelsAsync({
 
 ### Customizing generated file names
 
-You may customize the way filenames are stored on file system using the `fileResolver` configuration option:
+You may customize the way filenames are stored on file system using the `contentTypeFileResolver` and / or `taxonomyTypeFileResolver` configuration option:
 
 ```typescript
 await generateModelsAsync({
@@ -47,13 +47,14 @@ await generateModelsAsync({
   projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
   addTimestamp: true,
   elementResolver: 'camelCase',
-  fileResolver: (type) => `model_${type.system.codename}`
+  contentTypeFileResolver: (type) => `content_type_${type.system.codename}`,
+  taxonomyTypeFileResolver: (type) => `taxonomy_${type.system.codename}`,
 });
 ```
 
 ### Customizing generated content type names
 
-You may customize name of content types using the `contentTypeResolver` configuration option:
+You may customize name of content types using the `contentTypeResolver` configuration option and taxonomy types with the `taxonomyTypeResolver` option:
 
 ```typescript
 await generateModelsAsync({
@@ -62,6 +63,7 @@ await generateModelsAsync({
   addTimestamp: true,
   elementResolver: 'camelCase',
   contentTypeResolver: (type) => `${textHelper.toPascalCase(type.system.codename)}Model`,
+  taxonomyTypeResolver: (type) => `${textHelper.toPascalCase(type.system.codename)}Taxonomy`,
 });
 ```
 
@@ -71,8 +73,10 @@ await generateModelsAsync({
 - `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
-- `fileResolver`- Name resolver for filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
-- `contentTypeResolver`- Name resolver for type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `taxonomyTypeFileResolver`- Name resolver for taxonomy filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `contentTypeResolver`- Name resolver for content type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`, `management`
 
 ## Example models

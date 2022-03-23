@@ -4,7 +4,7 @@ import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import { format, Options } from 'prettier';
-import { ContentTypeResolver, ElementResolver, FileNameResolver } from '../../models';
+import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
 
 export class DeliveryModelGenerator {
     async generateModelsAsync(config: {
@@ -12,7 +12,7 @@ export class DeliveryModelGenerator {
         addTimestamp: boolean;
         secureAccessKey?: string;
         elementResolver?: ElementResolver;
-        fileResolver?: FileNameResolver;
+        fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
         formatOptions?: Options;
     }): Promise<void> {
@@ -28,7 +28,7 @@ export class DeliveryModelGenerator {
             console.log(
                 `Using '${yellow(
                     config.fileResolver instanceof Function ? 'custom' : config.fileResolver
-                )}' name resolver for filenames`
+                )}' name resolver for content type filename`
             );
         }
 
@@ -102,7 +102,7 @@ export type ${this.getContentTypeName({
         secureAccessKey?: string;
         elementResolver?: ElementResolver;
         formatOptions?: Options;
-        fileResolver?: FileNameResolver;
+        fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
     }): void {
         const classFileName = this.getModelFilename({ type: data.type, fileResolver: data.fileResolver });
@@ -119,26 +119,30 @@ export type ${this.getContentTypeName({
 
     private getContentTypeName(data: { type: IContentType; contentTypeResolver?: ContentTypeResolver }): string {
         if (!data.contentTypeResolver) {
-            return textHelper.toPascalCase(data.type.system.codename);
+            return textHelper.toPascalCase(data.type.system.name);
         }
 
         if (data.contentTypeResolver instanceof Function) {
             return `${data.contentTypeResolver(data.type)}`;
         }
 
-        return `${textHelper.resolveTextWithDefaultResolver(data.type.system.codename, data.contentTypeResolver)}`;
+        return `${textHelper.resolveTextWithDefaultResolver(data.type.system.name, data.contentTypeResolver)}`;
     }
 
-    private getModelFilename(data: { type: IContentType; fileResolver?: FileNameResolver }): string {
-        if (!data.fileResolver) {
-            return `${data.type.system.codename}.ts`;
-        }
-
+    private getModelFilename(data: { type: IContentType; fileResolver?: ContentTypeFileNameResolver }): string {
         if (data.fileResolver instanceof Function) {
             return `${data.fileResolver(data.type)}.ts`;
         }
 
-        return `${textHelper.resolveTextWithDefaultResolver(data.type.system.codename, data.fileResolver)}.ts`;
+        let filename: string;
+
+        if (!data.fileResolver) {
+            filename = `${data.type.system.codename}`;
+        } else {
+            filename = `${textHelper.resolveTextWithDefaultResolver(data.type.system.codename, data.fileResolver)}`;
+        }
+
+        return `${filename}.content-type.ts`
     }
 
     private getElementsCode(data: { type: IContentType; elementResolver?: ElementResolver }): string {

@@ -10,8 +10,10 @@ const projectId = argv.projectId;
 const secureAccessKey = argv.secureAccessKey;
 const addTimestamp = argv.addTimestamp;
 const elementResolver = argv.elementResolver;
-const fileResolver = argv.fileResolver;
+const contentTypeFileResolver = argv.contentTypeFileResolver;
+const taxonomyTypeFileResolver = argv.taxonomyTypeFileResolver;
 const contentTypeResolver = argv.contentTypeResolver;
+const taxonomyTypeResolver = argv.taxonomyTypeResolver;
 const sdkType = argv.sdkType;
 
 if (!projectId) {
@@ -24,8 +26,10 @@ const run = async () => {
         secureAccessKey: secureAccessKey,
         addTimestamp: addTimestamp === 'true' ? true : false,
         elementResolver: elementResolver,
-        fileResolver: fileResolver,
+        contentTypeFileResolver: contentTypeFileResolver,
         contentTypeResolver: contentTypeResolver,
+        taxonomyTypeFileResolver: taxonomyTypeFileResolver,
+        taxonomyTypeResolver: taxonomyTypeResolver,
         formatOptions: undefined,
         sdkType: sdkType ?? 'delivery'
     });

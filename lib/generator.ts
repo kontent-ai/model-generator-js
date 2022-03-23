@@ -3,6 +3,7 @@ import { IGenerateModelsConfig } from './models';
 import { deliveryModelGenerator } from './generators/delivery/delivery-model.generator';
 import { deliveryProjectGenerator } from './generators';
 import { createDeliveryClient } from '@kentico/kontent-delivery';
+import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
 
 export async function generateModelsAsync(config: IGenerateModelsConfig): Promise<void> {
     console.log(green(`Model generator started \n`));
@@ -27,15 +28,24 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(languages.length.toString())}' languages`);
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies \n`);
 
-            // create models
+            // create content type models
             await deliveryModelGenerator.generateModelsAsync({
                 types: types,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
                 secureAccessKey: config.secureAccessKey,
-                fileResolver: config.fileResolver,
+                fileResolver: config.contentTypeFileResolver,
                 contentTypeResolver: config.contentTypeResolver
+            });
+
+            // create taxonomy types
+            await deliveryTaxonomyGenerator.generateTaxonomyTypesAsync({
+                taxonomies: taxonomies,
+                addTimestamp: config.addTimestamp,
+                formatOptions: config.formatOptions,
+                fileResolver: config.taxonomyTypeFileResolver,
+                taxonomyResolver: config.taxonomyTypeResolver,
             });
 
             // create project structure

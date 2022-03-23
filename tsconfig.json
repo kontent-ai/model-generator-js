@@ -32,7 +32,7 @@
   },
   "include": [
     "lib/**/*",
-    "test/**/*",
+    "sample/**/*",
   ],
   "exclude": [
     "node_modules"
