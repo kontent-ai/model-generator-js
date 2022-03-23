@@ -40,7 +40,7 @@
         "build:commonjs": "tsc -m commonjs --outDir dist/cjs --p tsconfig.prod.json",
         "build:all": "npm run build:es6 && npm run build:esnext && npm run build:commonjs",
         "test:all": "npm run build:commonjs && npm run test:delivery-models",
-        "test:delivery-models": "npm run build:commonjs && cd sample && node ../dist/cjs/lib/cli/cli --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --sdkType=delivery --addTimestamp=true --contentTypeResolver=camelCase --elementResolver=camelCase --fileResolver=snakeCase",
+        "test:delivery-models": "npm run build:commonjs && cd sample && node ../dist/cjs/lib/cli/cli --apiKey=xxx --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --sdkType=delivery --addTimestamp=true --contentTypeResolver=pascalCase --elementResolver=camelCase --fileResolver=snakeCase",
         "ts-lint-local": "./node_modules/.bin/tslint",
         "ts-lint:fix": "npm run ts-lint:check -- --fix",
         "ts-lint:check": "npm run ts-lint-local -- --project ./tsconfig.json"
@@ -49,7 +49,8 @@
         "yargs": "17.4.0",
         "prettier": "2.6.0",
         "colors": "1.4.0",
-        "@kentico/kontent-delivery": "11.6.0"
+        "@kentico/kontent-delivery": "11.6.0",
+        "@kentico/kontent-management": "2.3.0"
     },
     "devDependencies": {
         "standard-version": "9.3.2",

@@ -2,7 +2,7 @@ import { green, red, yellow } from 'colors';
 import { IGenerateModelsConfig } from './models';
 import { deliveryModelGenerator } from './generators/delivery/delivery-model.generator';
 import { deliveryProjectGenerator } from './generators';
-import { createDeliveryClient } from '@kentico/kontent-delivery';
+import { createManagementClient } from '@kentico/kontent-management';
 import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
 
 export async function generateModelsAsync(config: IGenerateModelsConfig): Promise<void> {
@@ -12,17 +12,14 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
         if (config.sdkType === 'delivery') {
             console.log(`Generating '${yellow('delivery')}' models\n`);
 
-            const deliveryClient = createDeliveryClient({
+            const deliveryClient = createManagementClient({
                 projectId: config.projectId,
-                secureApiKey: config.secureAccessKey,
-                defaultQueryConfig: {
-                    useSecuredMode: config.secureAccessKey ? true : false
-                }
+                apiKey: config.apiKey
             });
 
-            const types = (await deliveryClient.types().toAllPromise()).data.items;
-            const languages = (await deliveryClient.languages().toAllPromise()).data.items;
-            const taxonomies = (await deliveryClient.taxonomies().toAllPromise()).data.items;
+            const types = (await deliveryClient.listContentTypes().toAllPromise()).data.items;
+            const languages = (await deliveryClient.listLanguages().toAllPromise()).data.items;
+            const taxonomies = (await deliveryClient.listTaxonomies().toAllPromise()).data.items;
 
             console.log(`Found '${yellow(types.length.toString())}' types`);
             console.log(`Found '${yellow(languages.length.toString())}' languages`);
@@ -34,7 +31,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
-                secureAccessKey: config.secureAccessKey,
+                managementApiKey: config.apiKey,
                 fileResolver: config.contentTypeFileResolver,
                 contentTypeResolver: config.contentTypeResolver
             });
@@ -45,7 +42,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 fileResolver: config.taxonomyTypeFileResolver,
-                taxonomyResolver: config.taxonomyTypeResolver,
+                taxonomyResolver: config.taxonomyTypeResolver
             });
 
             // create project structure

@@ -1,14 +1,14 @@
-import { ITaxonomyGroup, ITaxonomyTerms } from '@kentico/kontent-delivery';
 import { format, Options } from 'prettier';
 import * as fs from 'fs';
 import { nameHelper } from '../../name-helper';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
+import { TaxonomyModels } from '@kentico/kontent-management';
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
-        taxonomies: ITaxonomyGroup[];
+        taxonomies: TaxonomyModels.Taxonomy[];
         addTimestamp: boolean;
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
@@ -45,13 +45,13 @@ export class DeliveryTaxonomyGenerator {
             console.log(
                 `${yellow(
                     nameHelper.getDeliveryTaxonomyFilename({ taxonomy: taxonomy, fileResolver: config.fileResolver })
-                )} (${taxonomy.system.name})`
+                )} (${taxonomy.name})`
             );
         }
     }
 
     private generateModels(data: {
-        taxonomy: ITaxonomyGroup;
+        taxonomy: TaxonomyModels.Taxonomy;
         addTimestamp: boolean;
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
@@ -72,7 +72,7 @@ export class DeliveryTaxonomyGenerator {
     }
 
     private getModelCode(config: {
-        taxonomy: ITaxonomyGroup;
+        taxonomy: TaxonomyModels.Taxonomy;
         addTimestamp: boolean;
         formatOptions?: Options;
         taxonomyResolver?: TaxonomyTypeResolver;
@@ -97,7 +97,7 @@ export type ${nameHelper.getDeliveryTaxonomyTypeName({
         return format(code, formatOptions);
     }
 
-    private getTaxonomyTermsCode(taxonomy: ITaxonomyGroup): string {
+    private getTaxonomyTermsCode(taxonomy: TaxonomyModels.Taxonomy): string {
         const taxonomyTermCodenames: string[] = [];
         this.getTaxonomyTermCodenames(taxonomy.terms, taxonomyTermCodenames);
 
@@ -121,7 +121,7 @@ export type ${nameHelper.getDeliveryTaxonomyTypeName({
         return code;
     }
 
-    private getTaxonomyTermCodenames(taxonomyTerms: ITaxonomyTerms[], resolvedCodenames: string[]): void {
+    private getTaxonomyTermCodenames(taxonomyTerms: TaxonomyModels.Taxonomy[], resolvedCodenames: string[]): void {
         for (const taxonomyTerm of taxonomyTerms) {
             if (!resolvedCodenames.includes(taxonomyTerm.codename)) {
                 resolvedCodenames.push(taxonomyTerm.codename);

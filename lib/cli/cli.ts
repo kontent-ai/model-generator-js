@@ -7,7 +7,7 @@ const argv = yargs['argv'];
 
 // user config
 const projectId = argv.projectId;
-const secureAccessKey = argv.secureAccessKey;
+const apiKey = argv.apiKey;
 const addTimestamp = argv.addTimestamp;
 const elementResolver = argv.elementResolver;
 const contentTypeFileResolver = argv.contentTypeFileResolver;
@@ -23,7 +23,7 @@ if (!projectId) {
 const run = async () => {
     await generateModelsAsync({
         projectId: projectId,
-        secureAccessKey: secureAccessKey,
+        apiKey: apiKey,
         addTimestamp: addTimestamp === 'true' ? true : false,
         elementResolver: elementResolver,
         contentTypeFileResolver: contentTypeFileResolver,

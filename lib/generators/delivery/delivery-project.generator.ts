@@ -1,15 +1,15 @@
-import { IContentType, ILanguage, ITaxonomyGroup, ITaxonomyTerms } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { format, Options } from 'prettier';
 import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
+import { ContentTypeModels, LanguageModels, TaxonomyModels } from '@kentico/kontent-management';
 
 export class DeliveryProjectGenerator {
     generateProjectModel(data: {
-        types: IContentType[];
-        languages: ILanguage[];
-        taxonomies: ITaxonomyGroup[];
+        types: ContentTypeModels.ContentType[];
+        languages: LanguageModels.LanguageModel[];
+        taxonomies: TaxonomyModels.Taxonomy[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): void {
@@ -25,9 +25,9 @@ export class DeliveryProjectGenerator {
     }
 
     private getProjectModelCode(data: {
-        types: IContentType[];
-        taxonomies: ITaxonomyGroup[];
-        languages: ILanguage[];
+        types: ContentTypeModels.ContentType[];
+        languages: LanguageModels.LanguageModel[];
+        taxonomies: TaxonomyModels.Taxonomy[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -59,28 +59,28 @@ export const projectModel = {
         return format(code, formatOptions);
     }
 
-    private getProjectLanguages(languages: ILanguage[]): string {
+    private getProjectLanguages(languages: LanguageModels.LanguageModel[]): string {
         let code: string = ``;
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
             const isLast = i === languages.length - 1;
-            code += `${textHelper.toAlphanumeric(language.system.codename)}: {
-                codename: '${language.system.codename}',
-                name: '${commonHelper.escapeNameValue(language.system.name)}'}
+            code += `${textHelper.toAlphanumeric(language.codename)}: {
+                codename: '${language.codename}',
+                name: '${commonHelper.escapeNameValue(language.name)}'}
             ${!isLast ? ',' : ''}`;
         }
 
         return code;
     }
 
-    private getProjectContentTypes(contentTypes: IContentType[]): string {
+    private getProjectContentTypes(contentTypes: ContentTypeModels.ContentType[]): string {
         let code: string = ``;
         for (let i = 0; i < contentTypes.length; i++) {
             const contentType = contentTypes[i];
             const isLast = i === contentTypes.length - 1;
-            code += `${contentType.system.codename}: {
-                codename: '${contentType.system.codename}',
-                name: '${commonHelper.escapeNameValue(contentType.system.name)}',
+            code += `${contentType.codename}: {
+                codename: '${contentType.codename}',
+                name: '${commonHelper.escapeNameValue(contentType.name)}',
                 elements: {${this.getProjectElements(contentType)}}
             }${!isLast ? ',' : ''}`;
         }
@@ -88,29 +88,35 @@ export const projectModel = {
         return code;
     }
 
-    private getProjectElements(contentType: IContentType): string {
+    private getProjectElements(contentType: ContentTypeModels.ContentType): string {
         let code: string = '';
-        for (let i = 0; i < contentType.elements.length; i++) {
-            const element = contentType.elements[i];
-            const isLast = i === contentType.elements.length - 1;
+        const elementsWithName = contentType.elements.filter((m) => (m as any)['name']);
+        for (let i = 0; i < elementsWithName.length; i++) {
+            const element = elementsWithName[i];
+            const isLast = i === elementsWithName.length - 1;
+            const name = (element as any)['name'];
+
+            if (!name) {
+                throw Error(`Element '${element.codename}' needs to have a name property`);
+            }
 
             code += `${element.codename}: {
                 codename: '${element.codename}',
-                name: '${commonHelper.escapeNameValue(element.name)}'
+                name: '${commonHelper.escapeNameValue(name)}'
             }${!isLast ? ',' : ''}`;
         }
 
         return code;
     }
 
-    private getProjectTaxonomies(taxonomies: ITaxonomyGroup[]): string {
+    private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[]): string {
         let code: string = ``;
         for (let i = 0; i < taxonomies.length; i++) {
             const taxonomy = taxonomies[i];
             const isLast = i === taxonomies.length - 1;
-            code += `${taxonomy.system.codename}: {
-                codename: '${taxonomy.system.codename}',
-                name: '${commonHelper.escapeNameValue(taxonomy.system.name)}',
+            code += `${taxonomy.codename}: {
+                codename: '${taxonomy.codename}',
+                name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',' : ''}`;
         }
@@ -118,7 +124,7 @@ export const projectModel = {
         return code;
     }
 
-    private getProjectTaxonomiesTerms(terms: ITaxonomyTerms[]): string {
+    private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[]): string {
         if (terms.length === 0) {
             return `terms: {}`;
         }

@@ -16,11 +16,11 @@ Install package globally so you can use it anywhere:
 
 Go to folder where you want to create models and run:
 
-`kontent-generate --projectId=xxx`
+`kontent-generate --projectId=xxx --apiKey=yyy`
 
 You may specify other options like:
 
-`kontent-generate --projectId=xxx --addTimestamp=false --elementResolver=camelCase`
+`kontent-generate --projectId=xxx --apiKey=yyy --addTimestamp=false --elementResolver=camelCase`
 
 ## Generate models in code
 
@@ -32,6 +32,7 @@ import { generateModelsAsync } from '@kentico/kontent-model-generator';
 await generateModelsAsync({
     sdkType: 'delivery',
     projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+    apiKey: 'yyy',
     addTimestamp: true,
     elementResolver: 'camelCase',
 })
@@ -45,6 +46,7 @@ You may customize the way filenames are stored on file system using the `content
 await generateModelsAsync({
   sdkType: 'delivery',
   projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
   contentTypeFileResolver: (type) => `content_type_${type.system.codename}`,
@@ -60,6 +62,7 @@ You may customize name of content types using the `contentTypeResolver` configur
 await generateModelsAsync({
   sdkType: 'delivery',
   projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
   contentTypeResolver: (type) => `${textHelper.toPascalCase(type.system.codename)}Model`,
@@ -70,7 +73,7 @@ await generateModelsAsync({
 ## CLI Configuration
 
 - `projectId` - Id of the Kontent project
-- `secureAccessKey`- Secure API Key if your Kontent project has secure mode enabled
+- `apiKey`- Management API Key
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`

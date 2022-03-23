@@ -1,4 +1,3 @@
-import { ElementType, IContentType } from '@kentico/kontent-delivery';
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper } from '../../common-helper';
@@ -6,12 +5,13 @@ import { textHelper } from '../../text-helper';
 import { nameHelper } from '../../name-helper';
 import { format, Options } from 'prettier';
 import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
+import { ContentTypeModels, ElementModels } from '@kentico/kontent-management';
 
 export class DeliveryModelGenerator {
     async generateModelsAsync(config: {
-        types: IContentType[];
+        types: ContentTypeModels.ContentType[];
         addTimestamp: boolean;
-        secureAccessKey?: string;
+        managementApiKey?: string;
         elementResolver?: ElementResolver;
         fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
@@ -51,20 +51,20 @@ export class DeliveryModelGenerator {
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
-                secureAccessKey: config.secureAccessKey,
+                managementApiKey: config.managementApiKey,
                 fileResolver: config.fileResolver,
                 contentTypeResolver: config.contentTypeResolver
             });
             console.log(
                 `${yellow(
                     nameHelper.getDeliveryContentTypeFilename({ type: type, fileResolver: config.fileResolver })
-                )} (${type.system.name})`
+                )} (${type.name})`
             );
         }
     }
 
     private getModelCode(config: {
-        type: IContentType;
+        type: ContentTypeModels.ContentType;
         addTimestamp: boolean;
         formatOptions?: Options;
         elementResolver?: ElementResolver;
@@ -98,9 +98,9 @@ export type ${nameHelper.getDeliveryContentTypeName({
     }
 
     private generateModels(data: {
-        type: IContentType;
+        type: ContentTypeModels.ContentType;
         addTimestamp: boolean;
-        secureAccessKey?: string;
+        managementApiKey?: string;
         elementResolver?: ElementResolver;
         formatOptions?: Options;
         fileResolver?: ContentTypeFileNameResolver;
@@ -121,15 +121,26 @@ export type ${nameHelper.getDeliveryContentTypeName({
         fs.writeFileSync('./' + classFileName, code);
     }
 
-    private getElementsCode(data: { type: IContentType; elementResolver?: ElementResolver }): string {
+    private getElementsCode(data: { type: ContentTypeModels.ContentType; elementResolver?: ElementResolver }): string {
         let code = '';
         for (let i = 0; i < data.type.elements.length; i++) {
             const element = data.type.elements[i];
-            code += `${this.getElementName({
+            if (!element.codename) {
+                throw Error(`Invalid codename for element '${element.id}' in type '${data.type.codename}'`);
+            }
+
+            const elementName = this.getElementName({
                 elementName: element.codename,
-                type: data.type.system.codename,
+                type: data.type.codename,
                 elementResolver: data.elementResolver
-            })}: Elements.${this.mapElementTypeToName(element.type)};`;
+            });
+
+            if (!elementName) {
+                // skip element if its not resolver
+                continue;
+            }
+
+            code += `${elementName}: Elements.${this.mapElementTypeToName(element.type)};`;
 
             if (i !== data.type.elements.length - 1) {
                 code += '\n';
@@ -139,30 +150,30 @@ export type ${nameHelper.getDeliveryContentTypeName({
         return code;
     }
 
-    private mapElementTypeToName(elementType: string): string {
-        let result: string = '';
-        if (elementType.toLowerCase() === ElementType.Text.toLowerCase()) {
+    private mapElementTypeToName(elementType: ElementModels.ElementType): string | undefined {
+        let result: string | undefined;
+        if (elementType === 'text') {
             result = 'TextElement';
-        } else if (elementType.toLowerCase() === ElementType.Number.toLowerCase()) {
+        } else if (elementType === 'number') {
             result = 'NumberElement';
-        } else if (elementType.toLowerCase() === ElementType.ModularContent.toLowerCase()) {
+        } else if (elementType === 'modular_content') {
             result = `LinkedItemsElement<IContentItem>`;
-        } else if (elementType.toLowerCase() === ElementType.Asset.toLowerCase()) {
+        } else if (elementType === 'asset') {
             result = 'AssetsElement';
-        } else if (elementType.toLowerCase() === ElementType.DateTime.toLowerCase()) {
+        } else if (elementType === 'date_time') {
             result = 'DateTimeElement';
-        } else if (elementType.toLowerCase() === ElementType.RichText.toLowerCase()) {
+        } else if (elementType === 'rich_text') {
             result = 'RichTextElement';
-        } else if (elementType.toLowerCase() === ElementType.MultipleChoice.toLowerCase()) {
+        } else if (elementType === 'multiple_choice') {
             result = 'MultipleChoiceElement';
-        } else if (elementType.toLowerCase() === ElementType.UrlSlug.toLowerCase()) {
+        } else if (elementType === 'url_slug') {
             result = 'UrlSlugElement';
-        } else if (elementType.toLowerCase() === ElementType.Taxonomy.toLowerCase()) {
+        } else if (elementType === 'taxonomy') {
             result = 'TaxonomyElement';
-        } else if (elementType.toLowerCase() === ElementType.Custom.toLowerCase()) {
+        } else if (elementType === 'custom') {
             result = 'CustomElement';
         } else {
-            console.warn(`Unsupported element type '${elementType}'`);
+            result = undefined;
         }
         return result;
     }
