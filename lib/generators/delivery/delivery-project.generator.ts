@@ -158,7 +158,7 @@ export const projectModel = {
             code += `${textHelper.toAlphanumeric(language.codename)}: {
                 codename: '${language.codename}',
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
-            code += `${!isLast ? ',' : ''}`;
+            code += `${!isLast ? ',\n' : ''}`;
 
         }
 
@@ -170,14 +170,14 @@ export const projectModel = {
         for (let i = 0; i < contentTypes.length; i++) {
             const contentType = contentTypes[i];
             const isLast = i === contentTypes.length - 1;
-            
+
             code += `\n`
             code += `${this.getContentTypeComment(contentType)}\n`;
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
                 name: '${commonHelper.escapeNameValue(contentType.name)}',
                 elements: {${this.getProjectElements(contentType)}}
-            }${!isLast ? ',' : ''}`;
+            }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
@@ -200,7 +200,7 @@ export const projectModel = {
             code += `${element.codename}: {
                 codename: '${element.codename}',
                 name: '${commonHelper.escapeNameValue(name)}'
-            }${!isLast ? ',' : ''}`;
+            }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
@@ -218,7 +218,7 @@ export const projectModel = {
                 codename: '${taxonomy.codename}',
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
-            }${!isLast ? ',' : ''}`;
+            }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
@@ -237,7 +237,7 @@ export const projectModel = {
                 codename: '${term.codename}',
                 name: '${commonHelper.escapeNameValue(term.name)}',
                 ${this.getProjectTaxonomiesTerms(term.terms)}
-            }${!isLast ? ',' : ''}`;
+            }${!isLast ? ',\n' : ''}`;
         }
         code += '}';
 
