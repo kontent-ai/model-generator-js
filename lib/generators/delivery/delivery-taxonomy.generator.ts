@@ -57,6 +57,15 @@ export class DeliveryTaxonomyGenerator {
         };
     }
 
+    private getTaxonomyComment(taxonomy: TaxonomyModels.Taxonomy): string {
+        let comment: string = `${taxonomy.name}`;
+
+        comment += `\n* Id: ${taxonomy.id}`;
+        comment += `\n* Codename: ${taxonomy.codename}`;
+
+        return comment;
+    }
+
     private generateModels(data: {
         taxonomy: TaxonomyModels.Taxonomy;
         addTimestamp: boolean;
@@ -88,7 +97,9 @@ export class DeliveryTaxonomyGenerator {
     }): string {
         const code = `
 /**
- * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
+* ${commonHelper.getAutogenerateNote(config.addTimestamp)}
+*
+* ${this.getTaxonomyComment(config.taxonomy)}
 */
 export type ${nameHelper.getDeliveryTaxonomyTypeName({
             taxonomy: config.taxonomy,

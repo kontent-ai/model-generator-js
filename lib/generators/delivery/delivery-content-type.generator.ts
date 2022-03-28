@@ -5,7 +5,7 @@ import { textHelper } from '../../text-helper';
 import { nameHelper } from '../../name-helper';
 import { format, Options } from 'prettier';
 import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
-import { ContentTypeModels, ElementModels } from '@kentico/kontent-management';
+import { ContentTypeElements, ContentTypeModels, ElementModels } from '@kentico/kontent-management';
 
 export class DeliveryContentTypeGenerator {
     async generateModelsAsync(config: {
@@ -81,7 +81,9 @@ export class DeliveryContentTypeGenerator {
 import { IContentItem, Elements } from '@kentico/kontent-delivery';
 
 /**
- * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
+* ${commonHelper.getAutogenerateNote(config.addTimestamp)}
+* 
+* ${this.getContentTypeComment(config.type)}
 */
 export type ${nameHelper.getDeliveryContentTypeName({
             type: config.type,
@@ -130,6 +132,57 @@ export type ${nameHelper.getDeliveryContentTypeName({
         return filename;
     }
 
+    private getContentTypeComment(contentType: ContentTypeModels.ContentType): string {
+        let comment: string = `${contentType.name}`;
+
+        comment += `\n* Id: ${contentType.id}`;
+        comment += `\n* Codename: ${contentType.codename}`;
+
+        return comment;
+    }
+
+    private isElementRequired(element: ContentTypeElements.ContentTypeElementModel): boolean {
+        const isRequired = (<any>element)['is_required'];
+
+        return isRequired === true;
+    }
+
+    private getElementGuidelines(element: ContentTypeElements.ContentTypeElementModel): string | null {
+        return (<any>element)['guidelines'];
+    }
+
+    private getElementTitle(element: ContentTypeElements.ContentTypeElementModel): string | null {
+        return (<any>element)['name'];
+    }
+
+    private getElementComment(element: ContentTypeElements.ContentTypeElementModel): string {
+        const isRequired = this.isElementRequired(element);
+        const guidelines = this.getElementGuidelines(element);
+        const name = this.getElementTitle(element);
+
+        let comment: string = '/**';
+
+        if (name) {
+            comment += `\n* ${name} (${element.type})`;
+        }
+
+        comment += `\n* Required: ${isRequired ? 'true' : 'false'}`;
+        comment += `\n* Id: ${element.id}`;
+
+        if (name) {
+            comment += `\n* Codename: ${element.codename}`;
+        }
+
+        if (guidelines) {
+            comment += `\n*`;
+            comment += `\n* ${guidelines}`;
+        }
+
+        comment += '\n*/';
+
+        return comment;
+    }
+
     private getElementsCode(data: { type: ContentTypeModels.ContentType; elementResolver?: ElementResolver }): string {
         let code = '';
         for (let i = 0; i < data.type.elements.length; i++) {
@@ -149,10 +202,11 @@ export type ${nameHelper.getDeliveryContentTypeName({
                 continue;
             }
 
+            code += `${this.getElementComment(element)}\n`;
             code += `${elementName}: Elements.${this.mapElementTypeToName(element.type)};`;
 
             if (i !== data.type.elements.length - 1) {
-                code += '\n';
+                code += '\n\n';
             }
         }
 
