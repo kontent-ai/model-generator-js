@@ -37,7 +37,7 @@ export class CommonHelper {
             const isLast = i === data.filenames.length - 1;
             const filename = data.filenames[i];
             const path = parse(filename);
-            code += `export * from './${path.name}'`;
+            code += `export * from '${path.dir}/${path.name}'`;
 
             if (!isLast) {
                 code += `\n`;

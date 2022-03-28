@@ -25,7 +25,7 @@ export class NameHelper {
             filename = `${textHelper.resolveTextWithDefaultResolver(data.type.codename, data.fileResolver)}`;
         }
 
-        return `${filename}.content-type${data.addExtension ? '.ts' : ''}`;
+        return `${filename}${data.addExtension ? '.ts' : ''}`;
     }
 
     getDeliveryContentTypeName(data: {
@@ -60,7 +60,7 @@ export class NameHelper {
             filename = `${textHelper.resolveTextWithDefaultResolver(data.taxonomy.codename, data.fileResolver)}`;
         }
 
-        return `${filename}.taxonomy${data.addExtension ? '.ts' : ''}`;
+        return `${filename}${data.addExtension ? '.ts' : ''}`;
     }
 
     getDeliveryTaxonomyTypeName(data: {

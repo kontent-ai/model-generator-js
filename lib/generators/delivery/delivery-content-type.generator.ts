@@ -25,12 +25,14 @@ import {
     getMapTaxonomyToFileName,
     MapTaxonomyIdTobject,
     getMapTaxonomyIdTobject
-} from './delivery-name-mappers';
+} from './delivery-mappers';
 
 export class DeliveryContentTypeGenerator {
     private readonly deliveryNpmPackageName: string = '@kentico/kontent-delivery';
 
     async generateModelsAsync(config: {
+        typeFolderPath: string;
+        taxonomyFolderPath: string;
         types: ContentTypeModels.ContentType[];
         taxonomies: TaxonomyModels.Taxonomy[];
         addTimestamp: boolean;
@@ -76,6 +78,8 @@ export class DeliveryContentTypeGenerator {
         for (const type of config.types) {
             const filename = this.generateModels({
                 type: type,
+                typeFolderPath: config.typeFolderPath,
+                taxonomyFolderPath: config.taxonomyFolderPath,
                 contentTypeNameMap: getMapContentTypeToDeliveryTypeName(config.contentTypeResolver),
                 contentTypeObjectMap: getMapContentTypeIdToObject(config.types),
                 contentTypeFileNameMap: getMapContentTypeToFileName(config.contentTypeFileNameResolver),
@@ -87,9 +91,6 @@ export class DeliveryContentTypeGenerator {
                 formatOptions: config.formatOptions
             });
             filenames.push(filename);
-            console.log(
-                `${yellow(getMapContentTypeToFileName(config.contentTypeFileNameResolver)(type, true))} (${type.name})`
-            );
         }
 
         return {
@@ -105,6 +106,8 @@ export class DeliveryContentTypeGenerator {
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         type: ContentTypeModels.ContentType;
+        typeFolderPath: string;
+        taxonomyFolderPath: string;
     }): string[] {
         const imports: string[] = [];
         const processedTypeIds: string[] = [];
@@ -125,7 +128,10 @@ export class DeliveryContentTypeGenerator {
                 processedTaxonomyIds.push(taxonomy.id);
 
                 const taxonomyName: string = config.taxonomyNameMap(taxonomy);
-                const fileName: string = `./${config.taxonomyFileNameMap(taxonomy, false)}`;
+                const fileName: string = `../${config.taxonomyFolderPath}${config.taxonomyFileNameMap(
+                    taxonomy,
+                    false
+                )}`;
 
                 imports.push(`import { ${taxonomyName} } from '${fileName}';`);
             } else if (element.type === 'modular_content') {
@@ -165,6 +171,8 @@ export class DeliveryContentTypeGenerator {
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         type: ContentTypeModels.ContentType;
+        typeFolderPath: string;
+        taxonomyFolderPath: string;
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -177,7 +185,9 @@ export class DeliveryContentTypeGenerator {
             taxonomyFileNameMap: config.taxonomyFileNameMap,
             taxonomyNameMap: config.taxonomyNameMap,
             taxonomyObjectMap: config.taxonomyObjectMap,
-            type: config.type
+            type: config.type,
+            typeFolderPath: config.typeFolderPath,
+            taxonomyFolderPath: config.taxonomyFolderPath
         });
 
         if (contentTypeImports.length) {
@@ -218,6 +228,8 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
 
     private generateModels(data: {
         type: ContentTypeModels.ContentType;
+        typeFolderPath: string;
+        taxonomyFolderPath: string;
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
@@ -228,12 +240,14 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
-        const filename: string = `./${data.contentTypeFileNameMap(data.type, true)}`;
+        const filename: string = `./${data.typeFolderPath}${data.contentTypeFileNameMap(data.type, true)}`;
         const code = this.getModelCode({
             contentTypeFileNameMap: data.contentTypeFileNameMap,
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
             type: data.type,
+            typeFolderPath: data.typeFolderPath,
+            taxonomyFolderPath: data.taxonomyFolderPath,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
             elementNameMap: data.elementNameMap,
@@ -243,6 +257,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         });
 
         fs.writeFileSync(filename, code);
+        console.log(`Created '${yellow(filename)}'`);
         return filename;
     }
 

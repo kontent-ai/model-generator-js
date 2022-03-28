@@ -9,11 +9,12 @@ import {
     MapTaxonomyName,
     getMapTaxonomyToFileName,
     getMapTaxonomyName
-} from './delivery-name-mappers';
+} from './delivery-mappers';
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
         taxonomies: TaxonomyModels.Taxonomy[];
+        taxonomyFolderPath: string;
         addTimestamp: boolean;
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
@@ -44,13 +45,13 @@ export class DeliveryTaxonomyGenerator {
         for (const taxonomy of config.taxonomies) {
             const filename = this.generateModels({
                 taxonomy: taxonomy,
+                taxonomyFolderPath: config.taxonomyFolderPath,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 taxonomyNameMap: getMapTaxonomyName(config.taxonomyResolver),
                 taxonomyFileNameMap: getMapTaxonomyToFileName(config.fileResolver)
             });
             filenames.push(filename);
-            console.log(`${yellow(getMapTaxonomyToFileName(config.fileResolver)(taxonomy, true))} (${taxonomy.name})`);
         }
 
         return {
@@ -69,13 +70,13 @@ export class DeliveryTaxonomyGenerator {
 
     private generateModels(data: {
         taxonomy: TaxonomyModels.Taxonomy;
+        taxonomyFolderPath: string;
         addTimestamp: boolean;
         formatOptions?: Options;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         taxonomyNameMap: MapTaxonomyName;
     }): string {
-        const classFileName = data.taxonomyFileNameMap(data.taxonomy, true);
-        const filename = './' + classFileName;
+        const filename = `./${data.taxonomyFolderPath}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
@@ -84,6 +85,8 @@ export class DeliveryTaxonomyGenerator {
         });
 
         fs.writeFileSync(filename, code);
+        console.log(`Created '${yellow(filename)}'`);
+
         return filename;
     }
 

@@ -30,9 +30,7 @@ export function getMapContentTypeToDeliveryTypeName(resolver?: ContentTypeResolv
     };
 }
 
-export function getMapContentTypeIdToObject(
-    types: ContentTypeModels.ContentType[]
-): MapContentTypeIdToObject {
+export function getMapContentTypeIdToObject(types: ContentTypeModels.ContentType[]): MapContentTypeIdToObject {
     return (id) => {
         const contentType = types.find((m) => m.id === id);
 
@@ -46,11 +44,12 @@ export function getMapContentTypeIdToObject(
 
 export function getMapContentTypeToFileName(resolver?: ContentTypeFileNameResolver): MapContentTypeToFileName {
     return (contentType, addExtension) => {
-        return nameHelper.getDeliveryContentTypeFilename({
+        const fileName = nameHelper.getDeliveryContentTypeFilename({
             type: contentType,
             addExtension: addExtension,
             fileResolver: resolver
         });
+        return `${fileName}`;
     };
 }
 
@@ -80,17 +79,16 @@ export function getMapTaxonomyName(resolver?: TaxonomyTypeResolver): MapTaxonomy
 
 export function getMapTaxonomyToFileName(resolver?: TaxonomyTypeFileNameResolver): MapTaxonomyToFileName {
     return (taxonomy, addExtension) => {
-        return nameHelper.getDeliveryTaxonomyFilename({
+        const fileName = nameHelper.getDeliveryTaxonomyFilename({
             taxonomy: taxonomy,
             addExtension: addExtension,
             fileResolver: resolver
         });
+        return `${fileName}`;
     };
 }
 
-export function getMapTaxonomyIdTobject(
-    taxonomies: TaxonomyModels.Taxonomy[]
-): MapTaxonomyIdTobject {
+export function getMapTaxonomyIdTobject(taxonomies: TaxonomyModels.Taxonomy[]): MapTaxonomyIdTobject {
     return (id) => {
         const taxonomy = taxonomies.find((m) => m.id === id);
 
