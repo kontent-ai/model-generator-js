@@ -46,6 +46,7 @@ export class NameHelper {
     getDeliveryTaxonomyFilename(data: {
         taxonomy: TaxonomyModels.Taxonomy;
         fileResolver?: TaxonomyTypeFileNameResolver;
+        addExtension: boolean;
     }): string {
         if (data.fileResolver instanceof Function) {
             return `${data.fileResolver(data.taxonomy)}.ts`;
@@ -59,7 +60,7 @@ export class NameHelper {
             filename = `${textHelper.resolveTextWithDefaultResolver(data.taxonomy.codename, data.fileResolver)}`;
         }
 
-        return `${filename}.taxonomy.ts`;
+        return `${filename}.taxonomy${data.addExtension ? '.ts' : ''}`;
     }
 
     getDeliveryTaxonomyTypeName(data: {

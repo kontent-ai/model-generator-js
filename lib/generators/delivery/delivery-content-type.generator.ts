@@ -1,29 +1,44 @@
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper, IGenerateResult } from '../../common-helper';
-import { textHelper } from '../../text-helper';
-import { nameHelper } from '../../name-helper';
 import { format, Options } from 'prettier';
-import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
-import { ContentTypeElements, ContentTypeModels } from '@kentico/kontent-management';
-
-type MapContentTypeToDeliveryTypeName = (contentType: ContentTypeModels.ContentType) => string;
-type MapContentTypeIdToContentTypeObject = (id: string) => ContentTypeModels.ContentType;
-type MapContentTypeToFileName = (contentType: ContentTypeModels.ContentType, addExtension: boolean) => string;
-type MapElementToName = (
-    element: ContentTypeElements.ContentTypeElementModel,
-    contentType: ContentTypeModels.ContentType
-) => string | undefined;
+import {
+    ContentTypeResolver,
+    ElementResolver,
+    ContentTypeFileNameResolver,
+    TaxonomyTypeFileNameResolver,
+    TaxonomyTypeResolver
+} from '../../models';
+import { ContentTypeElements, ContentTypeModels, TaxonomyModels } from '@kentico/kontent-management';
+import {
+    MapContentTypeToDeliveryTypeName,
+    MapContentTypeIdToObject,
+    MapContentTypeToFileName,
+    MapElementToName,
+    getMapContentTypeToDeliveryTypeName,
+    getMapContentTypeIdToObject,
+    getMapContentTypeToFileName,
+    getMapElementToName,
+    MapTaxonomyToFileName,
+    MapTaxonomyName,
+    getMapTaxonomyName,
+    getMapTaxonomyToFileName,
+    MapTaxonomyIdTobject,
+    getMapTaxonomyIdTobject
+} from './delivery-name-mappers';
 
 export class DeliveryContentTypeGenerator {
     private readonly deliveryNpmPackageName: string = '@kentico/kontent-delivery';
 
     async generateModelsAsync(config: {
         types: ContentTypeModels.ContentType[];
+        taxonomies: TaxonomyModels.Taxonomy[];
         addTimestamp: boolean;
         elementResolver?: ElementResolver;
-        fileResolver?: ContentTypeFileNameResolver;
+        contentTypeFileNameResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
+        taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
+        taxonomyResolver?: TaxonomyTypeResolver;
         formatOptions?: Options;
     }): Promise<IGenerateResult> {
         const filenames: string[] = [];
@@ -36,10 +51,12 @@ export class DeliveryContentTypeGenerator {
             );
         }
 
-        if (config.fileResolver) {
+        if (config.contentTypeFileNameResolver) {
             console.log(
                 `Using '${yellow(
-                    config.fileResolver instanceof Function ? 'custom' : config.fileResolver
+                    config.contentTypeFileNameResolver instanceof Function
+                        ? 'custom'
+                        : config.contentTypeFileNameResolver
                 )}' name resolver for content type filename`
             );
         }
@@ -52,58 +69,27 @@ export class DeliveryContentTypeGenerator {
             );
         }
 
-        if (config.fileResolver || config.elementResolver || config.contentTypeResolver) {
+        if (config.contentTypeFileNameResolver || config.elementResolver || config.contentTypeResolver) {
             console.log('\n');
         }
-
-        const contentTypeNameMap: MapContentTypeToDeliveryTypeName = (contentType) => {
-            return nameHelper.getDeliveryContentTypeName({
-                type: contentType,
-                contentTypeResolver: config.contentTypeResolver
-            });
-        };
-
-        const contentTypeObjectMap: MapContentTypeIdToContentTypeObject = (id) => {
-            const allowedType = config.types.find((m) => m.id === id);
-
-            if (!allowedType) {
-                throw Error(`Could not find content type with id '${id}'`);
-            }
-
-            return allowedType;
-        };
-
-        const contentTypeFileNameMap: MapContentTypeToFileName = (contentType, addExtension) => {
-            return nameHelper.getDeliveryContentTypeFilename({
-                type: contentType,
-                addExtension: addExtension,
-                fileResolver: config.fileResolver
-            });
-        };
 
         for (const type of config.types) {
             const filename = this.generateModels({
                 type: type,
-                contentTypeNameMap: contentTypeNameMap,
-                contentTypeObjectMap: contentTypeObjectMap,
-                contentTypeFileNameMap: contentTypeFileNameMap,
-                elementNameMap: (element, contentType) => {
-                    if (!element.codename) {
-                        return undefined;
-                    }
-                    const elementName = this.getElementName({
-                        elementCodename: element.codename,
-                        type: contentType.codename,
-                        elementResolver: config.elementResolver
-                    });
-
-                    return elementName;
-                },
+                contentTypeNameMap: getMapContentTypeToDeliveryTypeName(config.contentTypeResolver),
+                contentTypeObjectMap: getMapContentTypeIdToObject(config.types),
+                contentTypeFileNameMap: getMapContentTypeToFileName(config.contentTypeFileNameResolver),
+                elementNameMap: getMapElementToName(config.elementResolver),
+                taxonomyNameMap: getMapTaxonomyName(config.taxonomyResolver),
+                taxonomyFileNameMap: getMapTaxonomyToFileName(config.taxonomyFileResolver),
+                taxonomyObjectMap: getMapTaxonomyIdTobject(config.taxonomies),
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions
             });
             filenames.push(filename);
-            console.log(`${yellow(contentTypeFileNameMap(type, true))} (${type.name})`);
+            console.log(
+                `${yellow(getMapContentTypeToFileName(config.contentTypeFileNameResolver)(type, true))} (${type.name})`
+            );
         }
 
         return {
@@ -113,15 +99,36 @@ export class DeliveryContentTypeGenerator {
 
     private getContentTypeImports(config: {
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
+        taxonomyObjectMap: MapTaxonomyIdTobject;
+        taxonomyNameMap: MapTaxonomyName;
+        taxonomyFileNameMap: MapTaxonomyToFileName;
         type: ContentTypeModels.ContentType;
     }): string[] {
         const imports: string[] = [];
         const processedTypeIds: string[] = [];
+        const processedTaxonomyIds: string[] = [];
 
         for (const element of config.type.elements) {
-            if (element.type === 'modular_content') {
+            if (element.type === 'taxonomy') {
+                const taxonomy = this.extractUsedTaxonomy(element, config.taxonomyObjectMap);
+
+                if (!taxonomy) {
+                    continue;
+                }
+
+                if (processedTaxonomyIds.includes(taxonomy.id)) {
+                    continue;
+                }
+
+                processedTaxonomyIds.push(taxonomy.id);
+
+                const taxonomyName: string = config.taxonomyNameMap(taxonomy);
+                const fileName: string = `./${config.taxonomyFileNameMap(taxonomy, false)}`;
+
+                imports.push(`import { ${taxonomyName} } from '${fileName}';`);
+            } else if (element.type === 'modular_content') {
                 // extract referenced types
                 const referencedTypes = this.extractLinkedItemsAllowedTypes(element, config.contentTypeObjectMap);
 
@@ -151,9 +158,12 @@ export class DeliveryContentTypeGenerator {
 
     private getModelCode(config: {
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
         elementNameMap: MapElementToName;
+        taxonomyObjectMap: MapTaxonomyIdTobject;
+        taxonomyNameMap: MapTaxonomyName;
+        taxonomyFileNameMap: MapTaxonomyToFileName;
         type: ContentTypeModels.ContentType;
         addTimestamp: boolean;
         formatOptions?: Options;
@@ -164,6 +174,9 @@ export class DeliveryContentTypeGenerator {
             contentTypeNameMap: config.contentTypeNameMap,
             contentTypeObjectMap: config.contentTypeObjectMap,
             contentTypeFileNameMap: config.contentTypeFileNameMap,
+            taxonomyFileNameMap: config.taxonomyFileNameMap,
+            taxonomyNameMap: config.taxonomyNameMap,
+            taxonomyObjectMap: config.taxonomyObjectMap,
             type: config.type
         });
 
@@ -186,7 +199,9 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         contentTypeObjectMap: config.contentTypeObjectMap,
         contentTypeNameMap: config.contentTypeNameMap,
         type: config.type,
-        elementNameMap: config.elementNameMap
+        elementNameMap: config.elementNameMap,
+        taxonomyNameMap: config.taxonomyNameMap,
+        taxonomyObjectMap: config.taxonomyObjectMap
     })}
 }>;
 `;
@@ -204,9 +219,12 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
     private generateModels(data: {
         type: ContentTypeModels.ContentType;
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
         elementNameMap: MapElementToName;
+        taxonomyObjectMap: MapTaxonomyIdTobject;
+        taxonomyNameMap: MapTaxonomyName;
+        taxonomyFileNameMap: MapTaxonomyToFileName;
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -218,7 +236,10 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
             type: data.type,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
-            elementNameMap: data.elementNameMap
+            elementNameMap: data.elementNameMap,
+            taxonomyFileNameMap: data.taxonomyFileNameMap,
+            taxonomyNameMap: data.taxonomyNameMap,
+            taxonomyObjectMap: data.taxonomyObjectMap
         });
 
         fs.writeFileSync(filename, code);
@@ -264,9 +285,11 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
 
     private getElementsCode(data: {
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeObjectMap: MapContentTypeIdToObject;
         elementNameMap: MapElementToName;
         type: ContentTypeModels.ContentType;
+        taxonomyObjectMap: MapTaxonomyIdTobject;
+        taxonomyNameMap: MapTaxonomyName;
     }): string {
         let code = '';
         for (let i = 0; i < data.type.elements.length; i++) {
@@ -286,7 +309,9 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
             code += `${elementName}: Elements.${this.mapElementType(
                 element,
                 data.contentTypeNameMap,
-                data.contentTypeObjectMap
+                data.contentTypeObjectMap,
+                data.taxonomyObjectMap,
+                data.taxonomyNameMap
             )};`;
 
             if (i !== data.type.elements.length - 1) {
@@ -300,7 +325,9 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
     private mapElementType(
         element: ContentTypeElements.ContentTypeElementModel,
         contentTypeNameMap: MapContentTypeToDeliveryTypeName,
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject
+        contentTypeObjectMap: MapContentTypeIdToObject,
+        taxonomyObjectMap: MapTaxonomyIdTobject,
+        taxonomyNameMap: MapTaxonomyName
     ): string | undefined {
         const elementType = element.type;
         let result: string | undefined;
@@ -326,7 +353,13 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         } else if (elementType === 'url_slug') {
             result = 'UrlSlugElement';
         } else if (elementType === 'taxonomy') {
-            result = 'TaxonomyElement';
+            const taxonomyName = this.getTaxonomyTypeName(element, taxonomyNameMap, taxonomyObjectMap);
+
+            if (taxonomyName) {
+                result = `TaxonomyElement<${taxonomyName}>`;
+            } else {
+                result = `TaxonomyElement`;
+            }
         } else if (elementType === 'custom') {
             result = 'CustomElement';
         } else {
@@ -335,10 +368,24 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         return result;
     }
 
+    private getTaxonomyTypeName(
+        element: ContentTypeElements.ContentTypeElementModel,
+        taxonomyNameMap: MapTaxonomyName,
+        taxonomyObjectMap: MapTaxonomyIdTobject
+    ): string | undefined {
+        const taxonomy = this.extractUsedTaxonomy(element, taxonomyObjectMap);
+
+        if (!taxonomy) {
+            return undefined;
+        }
+
+        return taxonomyNameMap(taxonomy);
+    }
+
     private getLinkedItemsAllowedTypes(
         element: ContentTypeElements.ContentTypeElementModel,
         contentTypeNameMap: MapContentTypeToDeliveryTypeName,
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject
+        contentTypeObjectMap: MapContentTypeIdToObject
     ): string[] {
         const allowedTypes = this.extractLinkedItemsAllowedTypes(element, contentTypeObjectMap);
 
@@ -353,7 +400,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
 
     private extractLinkedItemsAllowedTypes(
         element: ContentTypeElements.ContentTypeElementModel,
-        contentTypeObjectMap: MapContentTypeIdToContentTypeObject
+        contentTypeObjectMap: MapContentTypeIdToObject
     ): ContentTypeModels.ContentType[] {
         if (element.type !== 'modular_content') {
             throw Error(`Expected 'modular_content' but got '${element.type}' for element '${element.codename}'`);
@@ -370,20 +417,22 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         return allowedTypeIds.map((id) => contentTypeObjectMap(id));
     }
 
-    private getElementName(config: {
-        type: string;
-        elementCodename: string;
-        elementResolver?: ElementResolver;
-    }): string {
-        if (!config.elementResolver) {
-            return config.elementCodename;
+    private extractUsedTaxonomy(
+        element: ContentTypeElements.ContentTypeElementModel,
+        taxonomyObjectMap: MapTaxonomyIdTobject
+    ): TaxonomyModels.Taxonomy | undefined {
+        if (element.type !== 'taxonomy') {
+            throw Error(`Expected 'taxonomy' but got '${element.type}' for element '${element.codename}'`);
         }
 
-        if (config.elementResolver instanceof Function) {
-            return config.elementResolver(config.type, config.elementCodename);
+        const taxonomyElement: ContentTypeElements.ITaxonomyElement = element;
+
+        const taxonomyGroupId = taxonomyElement.taxonomy_group.id;
+        if (!taxonomyGroupId) {
+            throw Error(`Invalid taxonomy group id for taxonomy element '${element.id}'`);
         }
 
-        return textHelper.resolveTextWithDefaultResolver(config.elementCodename, config.elementResolver);
+        return taxonomyObjectMap(taxonomyGroupId);
     }
 }
 

@@ -1,10 +1,15 @@
 import { format, Options } from 'prettier';
 import * as fs from 'fs';
-import { nameHelper } from '../../name-helper';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
 import { commonHelper, IGenerateResult } from '../../common-helper';
 import { TaxonomyModels } from '@kentico/kontent-management';
+import {
+    MapTaxonomyToFileName,
+    MapTaxonomyName,
+    getMapTaxonomyToFileName,
+    getMapTaxonomyName
+} from './delivery-name-mappers';
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
@@ -41,15 +46,11 @@ export class DeliveryTaxonomyGenerator {
                 taxonomy: taxonomy,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
-                taxonomyResolver: config.taxonomyResolver,
-                fileResolver: config.fileResolver
+                taxonomyNameMap: getMapTaxonomyName(config.taxonomyResolver),
+                taxonomyFileNameMap: getMapTaxonomyToFileName(config.fileResolver)
             });
             filenames.push(filename);
-            console.log(
-                `${yellow(
-                    nameHelper.getDeliveryTaxonomyFilename({ taxonomy: taxonomy, fileResolver: config.fileResolver })
-                )} (${taxonomy.name})`
-            );
+            console.log(`${yellow(getMapTaxonomyToFileName(config.fileResolver)(taxonomy, true))} (${taxonomy.name})`);
         }
 
         return {
@@ -70,19 +71,16 @@ export class DeliveryTaxonomyGenerator {
         taxonomy: TaxonomyModels.Taxonomy;
         addTimestamp: boolean;
         formatOptions?: Options;
-        fileResolver?: TaxonomyTypeFileNameResolver;
-        taxonomyResolver?: TaxonomyTypeResolver;
+        taxonomyFileNameMap: MapTaxonomyToFileName;
+        taxonomyNameMap: MapTaxonomyName;
     }): string {
-        const classFileName = nameHelper.getDeliveryTaxonomyFilename({
-            taxonomy: data.taxonomy,
-            fileResolver: data.fileResolver
-        });
+        const classFileName = data.taxonomyFileNameMap(data.taxonomy, true);
         const filename = './' + classFileName;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
-            taxonomyResolver: data.taxonomyResolver
+            taxonomyNameMap: data.taxonomyNameMap
         });
 
         fs.writeFileSync(filename, code);
@@ -90,10 +88,10 @@ export class DeliveryTaxonomyGenerator {
     }
 
     private getModelCode(config: {
+        taxonomyNameMap: MapTaxonomyName;
         taxonomy: TaxonomyModels.Taxonomy;
         addTimestamp: boolean;
         formatOptions?: Options;
-        taxonomyResolver?: TaxonomyTypeResolver;
     }): string {
         const code = `
 /**
@@ -101,10 +99,7 @@ export class DeliveryTaxonomyGenerator {
 *
 * ${this.getTaxonomyComment(config.taxonomy)}
 */
-export type ${nameHelper.getDeliveryTaxonomyTypeName({
-            taxonomy: config.taxonomy,
-            taxonomyResolver: config.taxonomyResolver
-        })} = ${this.getTaxonomyTermsCode(config.taxonomy)};
+export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTermsCode(config.taxonomy)};
 `;
         const formatOptions: Options = config.formatOptions
             ? config.formatOptions

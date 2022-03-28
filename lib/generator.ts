@@ -34,11 +34,14 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             // create content type models
             const contentTypesResult = await deliveryContentTypeGenerator.generateModelsAsync({
                 types: types,
+                taxonomies: taxonomies,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
-                fileResolver: config.contentTypeFileResolver,
-                contentTypeResolver: config.contentTypeResolver
+                contentTypeFileNameResolver: config.contentTypeFileResolver,
+                contentTypeResolver: config.contentTypeResolver,
+                taxonomyFileResolver: config.taxonomyTypeFileResolver,
+                taxonomyResolver: config.taxonomyTypeResolver
             });
 
             // create taxonomy types
