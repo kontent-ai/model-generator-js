@@ -3,11 +3,12 @@ import { yellow } from 'colors';
 import { format, Options } from 'prettier';
 import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
-import { ContentTypeModels, LanguageModels, TaxonomyModels } from '@kentico/kontent-management';
+import { ContentTypeModels, LanguageModels, ProjectModels, TaxonomyModels } from '@kentico/kontent-management';
 import { IGenerateResult } from '../../common-helper';
 
 export class DeliveryProjectGenerator {
     generateProjectModel(data: {
+        projectInformation: ProjectModels.ProjectInformationModel,
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
@@ -15,6 +16,7 @@ export class DeliveryProjectGenerator {
         formatOptions?: Options;
     }): IGenerateResult {
         const code = this.getProjectModelCode({
+            projectInformation: data.projectInformation,
             types: data.types,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
@@ -29,7 +31,17 @@ export class DeliveryProjectGenerator {
         };
     }
 
+    private getProjectComment(projectInformation: ProjectModels.ProjectInformationModel): string {
+        let comment: string = `${projectInformation.name}`;
+
+        comment += `\n* Id: ${projectInformation.id}`;
+        comment += `\n* Environment: ${projectInformation.environment}`;
+
+        return comment;
+    }
+
     private getProjectModelCode(data: {
+        projectInformation: ProjectModels.ProjectInformationModel,
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
@@ -39,6 +51,8 @@ export class DeliveryProjectGenerator {
         const code = `
 /**
 * ${commonHelper.getAutogenerateNote(data.addTimestamp)}
+*
+* ${this.getProjectComment(data.projectInformation)}
 */
 export const projectModel = {
     languages: {

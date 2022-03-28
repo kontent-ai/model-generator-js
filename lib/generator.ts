@@ -22,6 +22,10 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const types = (await deliveryClient.listContentTypes().toAllPromise()).data.items;
             const languages = (await deliveryClient.listLanguages().toAllPromise()).data.items;
             const taxonomies = (await deliveryClient.listTaxonomies().toAllPromise()).data.items;
+            const projectInformation = (await deliveryClient.projectInformation().toPromise()).data;
+
+            console.log(`Project '${yellow(projectInformation.project.name)}'`);
+            console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
 
             console.log(`Found '${yellow(types.length.toString())}' types`);
             console.log(`Found '${yellow(languages.length.toString())}' languages`);
@@ -49,6 +53,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             // create project structure
             const projectModelResult = await deliveryProjectGenerator.generateProjectModel({
+                projectInformation: projectInformation.project,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 languages: languages,
@@ -68,7 +73,6 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const barrelExportFilename: string = 'index.ts';
             fs.writeFileSync(`./${barrelExportFilename}`, barrelExportCode);
             console.log(`\nBarrel export '${yellow(barrelExportFilename)}' created`);
-
         } else if (config.sdkType === 'management') {
             console.log('Not available yet');
         } else {
