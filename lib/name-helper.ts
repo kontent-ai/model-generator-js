@@ -8,7 +8,11 @@ import {
 import { textHelper } from './text-helper';
 
 export class NameHelper {
-    getDeliveryContentTypeFilename(data: { type: ContentTypeModels.ContentType; fileResolver?: ContentTypeFileNameResolver }): string {
+    getDeliveryContentTypeFilename(data: {
+        type: ContentTypeModels.ContentType;
+        addExtension: boolean;
+        fileResolver?: ContentTypeFileNameResolver;
+    }): string {
         if (data.fileResolver instanceof Function) {
             return `${data.fileResolver(data.type)}.ts`;
         }
@@ -21,10 +25,13 @@ export class NameHelper {
             filename = `${textHelper.resolveTextWithDefaultResolver(data.type.codename, data.fileResolver)}`;
         }
 
-        return `${filename}.content-type.ts`;
+        return `${filename}.content-type${data.addExtension ? '.ts' : ''}`;
     }
 
-    getDeliveryContentTypeName(data: { type: ContentTypeModels.ContentType; contentTypeResolver?: ContentTypeResolver }): string {
+    getDeliveryContentTypeName(data: {
+        type: ContentTypeModels.ContentType;
+        contentTypeResolver?: ContentTypeResolver;
+    }): string {
         if (!data.contentTypeResolver) {
             return textHelper.toPascalCase(data.type.name);
         }
@@ -55,7 +62,10 @@ export class NameHelper {
         return `${filename}.taxonomy.ts`;
     }
 
-    getDeliveryTaxonomyTypeName(data: { taxonomy: TaxonomyModels.Taxonomy; taxonomyResolver?: TaxonomyTypeResolver }): string {
+    getDeliveryTaxonomyTypeName(data: {
+        taxonomy: TaxonomyModels.Taxonomy;
+        taxonomyResolver?: TaxonomyTypeResolver;
+    }): string {
         if (!data.taxonomyResolver) {
             return textHelper.toPascalCase(data.taxonomy.name);
         }

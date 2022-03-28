@@ -37,7 +37,6 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
-                managementApiKey: config.apiKey,
                 fileResolver: config.contentTypeFileResolver,
                 contentTypeResolver: config.contentTypeResolver
             });

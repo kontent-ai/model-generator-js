@@ -5,13 +5,22 @@ import { textHelper } from '../../text-helper';
 import { nameHelper } from '../../name-helper';
 import { format, Options } from 'prettier';
 import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
-import { ContentTypeElements, ContentTypeModels, ElementModels } from '@kentico/kontent-management';
+import { ContentTypeElements, ContentTypeModels } from '@kentico/kontent-management';
+
+type MapContentTypeToDeliveryTypeName = (contentType: ContentTypeModels.ContentType) => string;
+type MapContentTypeIdToContentTypeObject = (id: string) => ContentTypeModels.ContentType;
+type MapContentTypeToFileName = (contentType: ContentTypeModels.ContentType, addExtension: boolean) => string;
+type MapElementToName = (
+    element: ContentTypeElements.ContentTypeElementModel,
+    contentType: ContentTypeModels.ContentType
+) => string | undefined;
 
 export class DeliveryContentTypeGenerator {
+    private readonly deliveryNpmPackageName: string = '@kentico/kontent-delivery';
+
     async generateModelsAsync(config: {
         types: ContentTypeModels.ContentType[];
         addTimestamp: boolean;
-        managementApiKey?: string;
         elementResolver?: ElementResolver;
         fileResolver?: ContentTypeFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
@@ -47,22 +56,54 @@ export class DeliveryContentTypeGenerator {
             console.log('\n');
         }
 
+        const contentTypeNameMap: MapContentTypeToDeliveryTypeName = (contentType) => {
+            return nameHelper.getDeliveryContentTypeName({
+                type: contentType,
+                contentTypeResolver: config.contentTypeResolver
+            });
+        };
+
+        const contentTypeObjectMap: MapContentTypeIdToContentTypeObject = (id) => {
+            const allowedType = config.types.find((m) => m.id === id);
+
+            if (!allowedType) {
+                throw Error(`Could not find content type with id '${id}'`);
+            }
+
+            return allowedType;
+        };
+
+        const contentTypeFileNameMap: MapContentTypeToFileName = (contentType, addExtension) => {
+            return nameHelper.getDeliveryContentTypeFilename({
+                type: contentType,
+                addExtension: addExtension,
+                fileResolver: config.fileResolver
+            });
+        };
+
         for (const type of config.types) {
             const filename = this.generateModels({
                 type: type,
+                contentTypeNameMap: contentTypeNameMap,
+                contentTypeObjectMap: contentTypeObjectMap,
+                contentTypeFileNameMap: contentTypeFileNameMap,
+                elementNameMap: (element, contentType) => {
+                    if (!element.codename) {
+                        return undefined;
+                    }
+                    const elementName = this.getElementName({
+                        elementCodename: element.codename,
+                        type: contentType.codename,
+                        elementResolver: config.elementResolver
+                    });
+
+                    return elementName;
+                },
                 addTimestamp: config.addTimestamp,
-                formatOptions: config.formatOptions,
-                elementResolver: config.elementResolver,
-                managementApiKey: config.managementApiKey,
-                fileResolver: config.fileResolver,
-                contentTypeResolver: config.contentTypeResolver
+                formatOptions: config.formatOptions
             });
             filenames.push(filename);
-            console.log(
-                `${yellow(
-                    nameHelper.getDeliveryContentTypeFilename({ type: type, fileResolver: config.fileResolver })
-                )} (${type.name})`
-            );
+            console.log(`${yellow(contentTypeFileNameMap(type, true))} (${type.name})`);
         }
 
         return {
@@ -70,28 +111,82 @@ export class DeliveryContentTypeGenerator {
         };
     }
 
+    private getContentTypeImports(config: {
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeFileNameMap: MapContentTypeToFileName;
+        type: ContentTypeModels.ContentType;
+    }): string[] {
+        const imports: string[] = [];
+        const processedTypeIds: string[] = [];
+
+        for (const element of config.type.elements) {
+            if (element.type === 'modular_content') {
+                // extract referenced types
+                const referencedTypes = this.extractLinkedItemsAllowedTypes(element, config.contentTypeObjectMap);
+
+                for (const referencedType of referencedTypes) {
+                    if (processedTypeIds.includes(referencedType.id)) {
+                        // type was already processed, no need to import it multiple times
+                        continue;
+                    }
+
+                    // filter 'self referencing' types as they don't need to be imported
+                    if (config.type.id === referencedType.id) {
+                        continue;
+                    }
+
+                    processedTypeIds.push(referencedType.id);
+
+                    const typeName: string = config.contentTypeNameMap(referencedType);
+                    const fileName: string = `./${config.contentTypeFileNameMap(referencedType, false)}`;
+
+                    imports.push(`import { ${typeName} } from '${fileName}';`);
+                }
+            }
+        }
+
+        return imports;
+    }
+
     private getModelCode(config: {
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeFileNameMap: MapContentTypeToFileName;
+        elementNameMap: MapElementToName;
         type: ContentTypeModels.ContentType;
         addTimestamp: boolean;
         formatOptions?: Options;
-        elementResolver?: ElementResolver;
-        contentTypeResolver?: ContentTypeResolver;
     }): string {
-        const code = `
-import { IContentItem, Elements } from '@kentico/kontent-delivery';
+        let code = `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`;
 
+        const contentTypeImports: string[] = this.getContentTypeImports({
+            contentTypeNameMap: config.contentTypeNameMap,
+            contentTypeObjectMap: config.contentTypeObjectMap,
+            contentTypeFileNameMap: config.contentTypeFileNameMap,
+            type: config.type
+        });
+
+        if (contentTypeImports.length) {
+            for (const importItem of contentTypeImports) {
+                code += `${importItem}`;
+            }
+
+            code += `\n`;
+        }
+
+        code += `
 /**
 * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
 * 
 * ${this.getContentTypeComment(config.type)}
 */
-export type ${nameHelper.getDeliveryContentTypeName({
-            type: config.type,
-            contentTypeResolver: config.contentTypeResolver
-        })} = IContentItem<{
+export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
     ${this.getElementsCode({
+        contentTypeObjectMap: config.contentTypeObjectMap,
+        contentTypeNameMap: config.contentTypeNameMap,
         type: config.type,
-        elementResolver: config.elementResolver
+        elementNameMap: config.elementNameMap
     })}
 }>;
 `;
@@ -108,24 +203,22 @@ export type ${nameHelper.getDeliveryContentTypeName({
 
     private generateModels(data: {
         type: ContentTypeModels.ContentType;
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        contentTypeFileNameMap: MapContentTypeToFileName;
+        elementNameMap: MapElementToName;
         addTimestamp: boolean;
-        managementApiKey?: string;
-        elementResolver?: ElementResolver;
         formatOptions?: Options;
-        fileResolver?: ContentTypeFileNameResolver;
-        contentTypeResolver?: ContentTypeResolver;
     }): string {
-        const classFileName = nameHelper.getDeliveryContentTypeFilename({
-            type: data.type,
-            fileResolver: data.fileResolver
-        });
-        const filename: string = './' + classFileName;
+        const filename: string = `./${data.contentTypeFileNameMap(data.type, true)}`;
         const code = this.getModelCode({
+            contentTypeFileNameMap: data.contentTypeFileNameMap,
+            contentTypeNameMap: data.contentTypeNameMap,
+            contentTypeObjectMap: data.contentTypeObjectMap,
             type: data.type,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
-            elementResolver: data.elementResolver,
-            contentTypeResolver: data.contentTypeResolver
+            elementNameMap: data.elementNameMap
         });
 
         fs.writeFileSync(filename, code);
@@ -140,8 +233,6 @@ export type ${nameHelper.getDeliveryContentTypeName({
 
         return comment;
     }
-
-
 
     private getElementComment(element: ContentTypeElements.ContentTypeElementModel): string {
         const isRequired = commonHelper.isElementRequired(element);
@@ -171,7 +262,12 @@ export type ${nameHelper.getDeliveryContentTypeName({
         return comment;
     }
 
-    private getElementsCode(data: { type: ContentTypeModels.ContentType; elementResolver?: ElementResolver }): string {
+    private getElementsCode(data: {
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject;
+        elementNameMap: MapElementToName;
+        type: ContentTypeModels.ContentType;
+    }): string {
         let code = '';
         for (let i = 0; i < data.type.elements.length; i++) {
             const element = data.type.elements[i];
@@ -179,11 +275,7 @@ export type ${nameHelper.getDeliveryContentTypeName({
                 throw Error(`Invalid codename for element '${element.id}' in type '${data.type.codename}'`);
             }
 
-            const elementName = this.getElementName({
-                elementName: element.codename,
-                type: data.type.codename,
-                elementResolver: data.elementResolver
-            });
+            const elementName = data.elementNameMap(element, data.type);
 
             if (!elementName) {
                 // skip element if its not resolver
@@ -191,7 +283,11 @@ export type ${nameHelper.getDeliveryContentTypeName({
             }
 
             code += `${this.getElementComment(element)}\n`;
-            code += `${elementName}: Elements.${this.mapElementTypeToName(element.type)};`;
+            code += `${elementName}: Elements.${this.mapElementType(
+                element,
+                data.contentTypeNameMap,
+                data.contentTypeObjectMap
+            )};`;
 
             if (i !== data.type.elements.length - 1) {
                 code += '\n\n';
@@ -201,14 +297,24 @@ export type ${nameHelper.getDeliveryContentTypeName({
         return code;
     }
 
-    private mapElementTypeToName(elementType: ElementModels.ElementType): string | undefined {
+    private mapElementType(
+        element: ContentTypeElements.ContentTypeElementModel,
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName,
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject
+    ): string | undefined {
+        const elementType = element.type;
         let result: string | undefined;
+
         if (elementType === 'text') {
             result = 'TextElement';
         } else if (elementType === 'number') {
             result = 'NumberElement';
         } else if (elementType === 'modular_content') {
-            result = `LinkedItemsElement<IContentItem>`;
+            result = `LinkedItemsElement<${this.getLinkedItemsAllowedTypes(
+                element,
+                contentTypeNameMap,
+                contentTypeObjectMap
+            ).join(' | ')}>`;
         } else if (elementType === 'asset') {
             result = 'AssetsElement';
         } else if (elementType === 'date_time') {
@@ -229,16 +335,55 @@ export type ${nameHelper.getDeliveryContentTypeName({
         return result;
     }
 
-    private getElementName(config: { type: string; elementName: string; elementResolver?: ElementResolver }): string {
+    private getLinkedItemsAllowedTypes(
+        element: ContentTypeElements.ContentTypeElementModel,
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName,
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject
+    ): string[] {
+        const allowedTypes = this.extractLinkedItemsAllowedTypes(element, contentTypeObjectMap);
+
+        if (!allowedTypes.length) {
+            return ['IContentItem'];
+        }
+
+        const allowedTypeNames: string[] = allowedTypes.map((m) => contentTypeNameMap(m)) ?? [];
+
+        return allowedTypeNames;
+    }
+
+    private extractLinkedItemsAllowedTypes(
+        element: ContentTypeElements.ContentTypeElementModel,
+        contentTypeObjectMap: MapContentTypeIdToContentTypeObject
+    ): ContentTypeModels.ContentType[] {
+        if (element.type !== 'modular_content') {
+            throw Error(`Expected 'modular_content' but got '${element.type}' for element '${element.codename}'`);
+        }
+
+        const linkedItemsElement: ContentTypeElements.ILinkedItemsElement = element;
+
+        if (!linkedItemsElement.allowed_content_types?.length) {
+            return [];
+        }
+
+        const allowedTypeIds: string[] = linkedItemsElement.allowed_content_types?.map((m) => m.id as string) ?? [];
+
+        return allowedTypeIds.map((id) => contentTypeObjectMap(id));
+    }
+
+    private getElementName(config: {
+        type: string;
+        elementCodename: string;
+        elementResolver?: ElementResolver;
+    }): string {
         if (!config.elementResolver) {
-            return config.elementName;
+            return config.elementCodename;
         }
 
         if (config.elementResolver instanceof Function) {
-            return config.elementResolver(config.type, config.elementName);
+            return config.elementResolver(config.type, config.elementCodename);
         }
 
-        return textHelper.resolveTextWithDefaultResolver(config.elementName, config.elementResolver);
+        return textHelper.resolveTextWithDefaultResolver(config.elementCodename, config.elementResolver);
     }
 }
 
