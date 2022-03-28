@@ -153,11 +153,13 @@ export const projectModel = {
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
             const isLast = i === languages.length - 1;
+            code += `\n`
             code += `${this.getLanguageComment(language)}\n`;
             code += `${textHelper.toAlphanumeric(language.codename)}: {
                 codename: '${language.codename}',
-                name: '${commonHelper.escapeNameValue(language.name)}'}
-            ${!isLast ? ',' : ''}`;
+                name: '${commonHelper.escapeNameValue(language.name)}'}`;
+            code += `${!isLast ? ',' : ''}`;
+
         }
 
         return code;
@@ -168,6 +170,8 @@ export const projectModel = {
         for (let i = 0; i < contentTypes.length; i++) {
             const contentType = contentTypes[i];
             const isLast = i === contentTypes.length - 1;
+            
+            code += `\n`
             code += `${this.getContentTypeComment(contentType)}\n`;
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
@@ -191,6 +195,7 @@ export const projectModel = {
                 throw Error(`Element '${element.codename}' needs to have a name property`);
             }
 
+            code += `\n`
             code += `${this.getElementComment(element)}\n`;
             code += `${element.codename}: {
                 codename: '${element.codename}',
@@ -206,6 +211,8 @@ export const projectModel = {
         for (let i = 0; i < taxonomies.length; i++) {
             const taxonomy = taxonomies[i];
             const isLast = i === taxonomies.length - 1;
+
+            code += `\n`
             code += `${this.getTaxonomyComment(taxonomy)}\n`;
             code += `${taxonomy.codename}: {
                 codename: '${taxonomy.codename}',
