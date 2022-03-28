@@ -141,24 +141,12 @@ export type ${nameHelper.getDeliveryContentTypeName({
         return comment;
     }
 
-    private isElementRequired(element: ContentTypeElements.ContentTypeElementModel): boolean {
-        const isRequired = (<any>element)['is_required'];
 
-        return isRequired === true;
-    }
-
-    private getElementGuidelines(element: ContentTypeElements.ContentTypeElementModel): string | null {
-        return (<any>element)['guidelines'];
-    }
-
-    private getElementTitle(element: ContentTypeElements.ContentTypeElementModel): string | null {
-        return (<any>element)['name'];
-    }
 
     private getElementComment(element: ContentTypeElements.ContentTypeElementModel): string {
-        const isRequired = this.isElementRequired(element);
-        const guidelines = this.getElementGuidelines(element);
-        const name = this.getElementTitle(element);
+        const isRequired = commonHelper.isElementRequired(element);
+        const guidelines = commonHelper.getElementGuidelines(element);
+        const name = commonHelper.getElementTitle(element);
 
         let comment: string = '/**';
 
