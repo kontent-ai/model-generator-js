@@ -1,7 +1,7 @@
 import { green, red, yellow } from 'colors';
 import * as fs from 'fs';
 import { IGenerateModelsConfig } from './models';
-import { deliveryModelGenerator } from './generators/delivery/delivery-model.generator';
+import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator';
 import { deliveryProjectGenerator } from './generators';
 import { createManagementClient } from '@kentico/kontent-management';
 import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
@@ -28,7 +28,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies \n`);
 
             // create content type models
-            const contentTypesResult = await deliveryModelGenerator.generateModelsAsync({
+            const contentTypesResult = await deliveryContentTypeGenerator.generateModelsAsync({
                 types: types,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,

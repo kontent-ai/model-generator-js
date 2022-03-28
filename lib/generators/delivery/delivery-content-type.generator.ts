@@ -7,7 +7,7 @@ import { format, Options } from 'prettier';
 import { ContentTypeResolver, ElementResolver, ContentTypeFileNameResolver } from '../../models';
 import { ContentTypeModels, ElementModels } from '@kentico/kontent-management';
 
-export class DeliveryModelGenerator {
+export class DeliveryContentTypeGenerator {
     async generateModelsAsync(config: {
         types: ContentTypeModels.ContentType[];
         addTimestamp: boolean;
@@ -200,4 +200,4 @@ export type ${nameHelper.getDeliveryContentTypeName({
     }
 }
 
-export const deliveryModelGenerator = new DeliveryModelGenerator();
+export const deliveryContentTypeGenerator = new DeliveryContentTypeGenerator();
