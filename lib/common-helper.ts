@@ -1,7 +1,7 @@
 import { name, version } from '../package.json';
 import { format, Options } from 'prettier';
 import { parse } from 'path';
-import { ContentTypeElements } from '@kentico/kontent-management';
+import { ContentTypeElements, TaxonomyModels } from '@kentico/kontent-management';
 
 export interface IGenerateResult {
     filenames: string[];
@@ -26,7 +26,23 @@ export class CommonHelper {
         return (<any>element)['guidelines'];
     }
 
-    getElementTitle(element: ContentTypeElements.ContentTypeElementModel): string | null {
+    getElementTitle(element: ContentTypeElements.ContentTypeElementModel, taxonomies: TaxonomyModels.Taxonomy[]): string | null {
+        if (element.type === 'taxonomy') {
+            const taxonomyElement = element as ContentTypeElements.ITaxonomyElement;
+            const taxonomyGroupId = taxonomyElement?.taxonomy_group?.id;
+
+            if (!taxonomyGroupId) {
+                return element.type;
+            }
+
+            const taxonomy = taxonomies.find(m => m.id === taxonomyGroupId);
+
+            if (!taxonomy) {
+                return element.type;
+            }
+
+            return taxonomy.name;
+        }
         return (<any>element)['name'];
     }
 

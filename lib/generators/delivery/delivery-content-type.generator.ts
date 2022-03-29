@@ -78,6 +78,7 @@ export class DeliveryContentTypeGenerator {
         for (const type of config.types) {
             const filename = this.generateModels({
                 type: type,
+                taxonomies: config.taxonomies,
                 typeFolderPath: config.typeFolderPath,
                 taxonomyFolderPath: config.taxonomyFolderPath,
                 contentTypeNameMap: getMapContentTypeToDeliveryTypeName(config.contentTypeResolver),
@@ -171,6 +172,7 @@ export class DeliveryContentTypeGenerator {
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         type: ContentTypeModels.ContentType;
+        taxonomies: TaxonomyModels.Taxonomy[];
         typeFolderPath: string;
         taxonomyFolderPath: string;
         addTimestamp: boolean;
@@ -211,7 +213,8 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         type: config.type,
         elementNameMap: config.elementNameMap,
         taxonomyNameMap: config.taxonomyNameMap,
-        taxonomyObjectMap: config.taxonomyObjectMap
+        taxonomyObjectMap: config.taxonomyObjectMap,
+        taxonomies: config.taxonomies
     })}
 }>;
 `;
@@ -230,6 +233,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         type: ContentTypeModels.ContentType;
         typeFolderPath: string;
         taxonomyFolderPath: string;
+        taxonomies: TaxonomyModels.Taxonomy[];
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
@@ -246,6 +250,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
             type: data.type,
+            taxonomies: data.taxonomies,
             typeFolderPath: data.typeFolderPath,
             taxonomyFolderPath: data.taxonomyFolderPath,
             addTimestamp: data.addTimestamp,
@@ -270,10 +275,13 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         return comment;
     }
 
-    private getElementComment(element: ContentTypeElements.ContentTypeElementModel): string {
+    private getElementComment(
+        element: ContentTypeElements.ContentTypeElementModel,
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string {
         const isRequired = commonHelper.isElementRequired(element);
         const guidelines = commonHelper.getElementGuidelines(element);
-        const name = commonHelper.getElementTitle(element);
+        const name = commonHelper.getElementTitle(element, taxonomies);
 
         let comment: string = '/**';
 
@@ -305,6 +313,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         type: ContentTypeModels.ContentType;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
+        taxonomies: TaxonomyModels.Taxonomy[];
     }): string {
         let code = '';
         for (let i = 0; i < data.type.elements.length; i++) {
@@ -320,7 +329,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
                 continue;
             }
 
-            code += `${this.getElementComment(element)}\n`;
+            code += `${this.getElementComment(element, data.taxonomies)}\n`;
             code += `${elementName}: Elements.${this.mapElementType(
                 element,
                 data.contentTypeNameMap,

@@ -71,12 +71,15 @@ export class DeliveryProjectGenerator {
         return comment;
     }
 
-    private getElementComment(element: ContentTypeElements.ContentTypeElementModel): string {
+    private getElementComment(
+        element: ContentTypeElements.ContentTypeElementModel,
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string {
         let comment: string = `/**`;
 
         const isRequired = commonHelper.isElementRequired(element);
         const guidelines = commonHelper.getElementGuidelines(element);
-        const name = commonHelper.getElementTitle(element);
+        const name = commonHelper.getElementTitle(element, taxonomies);
 
         if (name) {
             comment += `\n* ${name} (${element.type})`;
@@ -129,7 +132,7 @@ export const projectModel = {
         ${this.getProjectLanguages(data.languages)}
     },
     contentTypes: {
-        ${this.getProjectContentTypes(data.types)}
+        ${this.getProjectContentTypes(data.types, data.taxonomies)}
     },
     taxonomies: {
         ${this.getProjectTaxonomies(data.taxonomies)}
@@ -153,37 +156,42 @@ export const projectModel = {
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
             const isLast = i === languages.length - 1;
-            code += `\n`
+            code += `\n`;
             code += `${this.getLanguageComment(language)}\n`;
             code += `${textHelper.toAlphanumeric(language.codename)}: {
                 codename: '${language.codename}',
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
-
         }
 
         return code;
     }
 
-    private getProjectContentTypes(contentTypes: ContentTypeModels.ContentType[]): string {
+    private getProjectContentTypes(
+        contentTypes: ContentTypeModels.ContentType[],
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string {
         let code: string = ``;
         for (let i = 0; i < contentTypes.length; i++) {
             const contentType = contentTypes[i];
             const isLast = i === contentTypes.length - 1;
 
-            code += `\n`
+            code += `\n`;
             code += `${this.getContentTypeComment(contentType)}\n`;
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
                 name: '${commonHelper.escapeNameValue(contentType.name)}',
-                elements: {${this.getProjectElements(contentType)}}
+                elements: {${this.getProjectElements(contentType, taxonomies)}}
             }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
     }
 
-    private getProjectElements(contentType: ContentTypeModels.ContentType): string {
+    private getProjectElements(
+        contentType: ContentTypeModels.ContentType,
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string {
         let code: string = '';
         const elementsWithName = contentType.elements.filter((m) => (m as any)['name']);
         for (let i = 0; i < elementsWithName.length; i++) {
@@ -195,8 +203,8 @@ export const projectModel = {
                 throw Error(`Element '${element.codename}' needs to have a name property`);
             }
 
-            code += `\n`
-            code += `${this.getElementComment(element)}\n`;
+            code += `\n`;
+            code += `${this.getElementComment(element, taxonomies)}\n`;
             code += `${element.codename}: {
                 codename: '${element.codename}',
                 name: '${commonHelper.escapeNameValue(name)}'
@@ -212,7 +220,7 @@ export const projectModel = {
             const taxonomy = taxonomies[i];
             const isLast = i === taxonomies.length - 1;
 
-            code += `\n`
+            code += `\n`;
             code += `${this.getTaxonomyComment(taxonomy)}\n`;
             code += `${taxonomy.codename}: {
                 codename: '${taxonomy.codename}',
