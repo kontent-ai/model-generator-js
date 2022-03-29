@@ -155,7 +155,7 @@ export type Movie = IContentItem<{
    * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
    * Codename: stars
    */
-  stars: Elements.LinkedItemsElement<Actor | Movie>;
+  stars: Elements.LinkedItemsElement<Actor>;
 
   /**
    * SeoName (url_slug)
