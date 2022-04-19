@@ -40,7 +40,7 @@
         "build:commonjs": "tsc -m commonjs --outDir dist/cjs --p tsconfig.prod.json",
         "build:all": "npm run build:es6 && npm run build:esnext && npm run build:commonjs",
         "test:all": "npm run build:commonjs && npm run test:delivery-models",
-        "test:delivery-models": "npm run build:commonjs && cd sample && node ../dist/cjs/lib/cli/cli --apiKey=xxx --projectId=da5abe9f-fdad-4168-97cd-b3464be2ccb9 --sdkType=delivery --addTimestamp=true --contentTypeResolver=pascalCase --elementResolver=camelCase --fileResolver=snakeCase",
+        "test:delivery-models": "cd sample && dotenv -e ../.env cross-var -- node ../dist/cjs/lib/cli/cli --apiKey=%API_KEY% --projectId=%PROJECT_ID% --sdkType=delivery --addTimestamp=%ADD_TIMESTAMP% --contentTypeResolver=pascalCase --elementResolver=camelCase --fileResolver=snakeCase",
         "ts-lint-local": "./node_modules/.bin/tslint",
         "ts-lint:fix": "npm run ts-lint:check -- --fix",
         "ts-lint:check": "npm run ts-lint-local -- --project ./tsconfig.json"
@@ -53,6 +53,8 @@
         "@kentico/kontent-management": "2.5.0"
     },
     "devDependencies": {
+        "cross-var": "1.1.0",
+        "dotenv-cli": "5.1.0",
         "standard-version": "9.3.2",
         "typescript": "4.6.3",
         "@types/node": "17.0.25",
