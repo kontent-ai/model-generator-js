@@ -178,6 +178,7 @@ export const projectModel = {
             code += `${this.getLanguageComment(language)}\n`;
             code += `${textHelper.toAlphanumeric(language.codename)}: {
                 codename: '${language.codename}',
+                id: '${language.id}',
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
         }
@@ -198,6 +199,7 @@ export const projectModel = {
             code += `${this.getWorkflowComment(workflow)}\n`;
             code += `${workflow.codename}: {
                 codename: '${workflow.codename}',
+                id: '${workflow.id}',
                 name: '${commonHelper.escapeNameValue(workflow.name)}'
             }${!isLast ? ',\n' : ''}`;
         }
@@ -218,6 +220,7 @@ export const projectModel = {
             code += `${this.getContentTypeComment(contentType)}\n`;
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
+                id: '${contentType.id}',
                 name: '${commonHelper.escapeNameValue(contentType.name)}',
                 elements: {${this.getProjectElements(contentType, taxonomies)}}
             }${!isLast ? ',\n' : ''}`;
@@ -245,6 +248,7 @@ export const projectModel = {
             code += `${this.getElementComment(element, taxonomies)}\n`;
             code += `${element.codename}: {
                 codename: '${element.codename}',
+                id: '${element.id}',
                 name: '${commonHelper.escapeNameValue(name)}'
             }${!isLast ? ',\n' : ''}`;
         }
@@ -262,6 +266,7 @@ export const projectModel = {
             code += `${this.getTaxonomyComment(taxonomy)}\n`;
             code += `${taxonomy.codename}: {
                 codename: '${taxonomy.codename}',
+                id: '${taxonomy.id}',
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
@@ -281,6 +286,7 @@ export const projectModel = {
             const isLast = i === terms.length - 1;
             code += `${term.codename}: {
                 codename: '${term.codename}',
+                id: '${term.id}',
                 name: '${commonHelper.escapeNameValue(term.name)}',
                 ${this.getProjectTaxonomiesTerms(term.terms)}
             }${!isLast ? ',\n' : ''}`;
