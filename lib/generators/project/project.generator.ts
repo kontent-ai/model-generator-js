@@ -62,6 +62,8 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${workflow.name}`;
+        comment += `\n* Archived step Id: ${workflow.archivedStep.id}`;
+        comment += `\n* Published step Id: ${workflow.publishedStep.id}`;
         comment += `\n*/`;
 
         return comment;
@@ -170,10 +172,7 @@ export const projectModel = {
         return code;
     }
 
-    
-    private getProjectWorkflows(
-        workflows: WorkflowModels.Workflow[]
-    ): string {
+    private getProjectWorkflows(workflows: WorkflowModels.Workflow[]): string {
         let code: string = ``;
         for (let i = 0; i < workflows.length; i++) {
             const workflow = workflows[i];
