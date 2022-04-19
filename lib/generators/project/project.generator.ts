@@ -8,16 +8,18 @@ import {
     ContentTypeModels,
     LanguageModels,
     ProjectModels,
-    TaxonomyModels
+    TaxonomyModels,
+    WorkflowModels
 } from '@kentico/kontent-management';
 import { IGenerateResult } from '../../common-helper';
 
-export class DeliveryProjectGenerator {
+export class ProjectGenerator {
     generateProjectModel(data: {
         projectInformation: ProjectModels.ProjectInformationModel;
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
+        workflows: WorkflowModels.Workflow[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): IGenerateResult {
@@ -27,7 +29,8 @@ export class DeliveryProjectGenerator {
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
             languages: data.languages,
-            taxonomies: data.taxonomies
+            taxonomies: data.taxonomies,
+            workflows: data.workflows
         });
 
         this.createFileOnFs(code);
@@ -52,6 +55,17 @@ export class DeliveryProjectGenerator {
         comment += `\n* ${contentType.name}`;
         comment += `\n* Id: ${contentType.id}`;
         comment += `\n* Codename: ${contentType.codename}`;
+        comment += `\n*/`;
+
+        return comment;
+    }
+
+    private getWorkflowComment(workflow: WorkflowModels.Workflow): string {
+        let comment: string = `/**`;
+
+        comment += `\n* ${workflow.name}`;
+        comment += `\n* Id: ${workflow.id}`;
+        comment += `\n* Codename: ${workflow.codename}`;
         comment += `\n*/`;
 
         return comment;
@@ -118,6 +132,7 @@ export class DeliveryProjectGenerator {
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
+        workflows: WorkflowModels.Workflow[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -136,6 +151,9 @@ export const projectModel = {
     },
     taxonomies: {
         ${this.getProjectTaxonomies(data.taxonomies)}
+    },
+    workflows: {
+        ${this.getProjectWorkflows(data.workflows)}
     }
 };
 `;
@@ -162,6 +180,26 @@ export const projectModel = {
                 codename: '${language.codename}',
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
+        }
+
+        return code;
+    }
+
+    
+    private getProjectWorkflows(
+        workflows: WorkflowModels.Workflow[]
+    ): string {
+        let code: string = ``;
+        for (let i = 0; i < workflows.length; i++) {
+            const workflow = workflows[i];
+            const isLast = i === workflows.length - 1;
+
+            code += `\n`;
+            code += `${this.getWorkflowComment(workflow)}\n`;
+            code += `${workflow.codename}: {
+                codename: '${workflow.codename}',
+                name: '${commonHelper.escapeNameValue(workflow.name)}'
+            }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
@@ -265,4 +303,4 @@ export const projectModel = {
     }
 }
 
-export const deliveryProjectGenerator = new DeliveryProjectGenerator();
+export const projectGenerator = new ProjectGenerator();

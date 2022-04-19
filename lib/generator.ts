@@ -2,7 +2,7 @@ import { green, red, yellow } from 'colors';
 import * as fs from 'fs';
 import { IGenerateModelsConfig } from './models';
 import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator';
-import { deliveryProjectGenerator } from './generators';
+import { projectGenerator } from './generators';
 import { createManagementClient } from '@kentico/kontent-management';
 import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
 import { commonHelper } from './common-helper';
@@ -30,6 +30,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const types = (await deliveryClient.listContentTypes().toAllPromise()).data.items;
             const languages = (await deliveryClient.listLanguages().toAllPromise()).data.items;
             const taxonomies = (await deliveryClient.listTaxonomies().toAllPromise()).data.items;
+            const workflows = (await deliveryClient.listWorkflows().toPromise()).data;
             const projectInformation = (await deliveryClient.projectInformation().toPromise()).data;
 
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
@@ -37,7 +38,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             console.log(`Found '${yellow(types.length.toString())}' types`);
             console.log(`Found '${yellow(languages.length.toString())}' languages`);
-            console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies \n`);
+            console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
+            console.log(`Found '${yellow(workflows.length.toString())}' workflows \n`);
 
             // create content type models
             const contentTypesResult = await deliveryContentTypeGenerator.generateModelsAsync({
@@ -65,17 +67,17 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             });
 
             // create project structure
-            const projectModelResult = await deliveryProjectGenerator.generateProjectModel({
+            const projectModelResult = await projectGenerator.generateProjectModel({
                 projectInformation: projectInformation.project,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 languages: languages,
                 taxonomies: taxonomies,
-                types: types
+                types: types,
+                workflows: workflows
             });
 
             // create barrel export
-
             const barrelExportFilename: string = 'index.ts';
 
             // content types barrel
