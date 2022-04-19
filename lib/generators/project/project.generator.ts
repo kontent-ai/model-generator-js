@@ -41,9 +41,10 @@ export class ProjectGenerator {
     }
 
     private getProjectComment(projectInformation: ProjectModels.ProjectInformationModel): string {
-        let comment: string = `${projectInformation.name}`;
+        let comment: string = `Project: ${projectInformation.name}`;
 
         comment += `\n* Environment: ${projectInformation.environment}`;
+        comment += `\n* Project Id: ${projectInformation.id}`;
 
         return comment;
     }
