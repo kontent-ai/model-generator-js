@@ -4,6 +4,7 @@ import { format, Options } from 'prettier';
 import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import {
+    AssetFolderModels,
     ContentTypeElements,
     ContentTypeModels,
     LanguageModels,
@@ -20,6 +21,7 @@ export class ProjectGenerator {
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
         workflows: WorkflowModels.Workflow[];
+        assetFolders: AssetFolderModels.AssetFolder[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): IGenerateResult {
@@ -30,7 +32,8 @@ export class ProjectGenerator {
             formatOptions: data.formatOptions,
             languages: data.languages,
             taxonomies: data.taxonomies,
-            workflows: data.workflows
+            workflows: data.workflows,
+            assetFolders: data.assetFolders
         });
 
         this.createFileOnFs(code);
@@ -38,6 +41,18 @@ export class ProjectGenerator {
         return {
             filenames: [`./${this.getProjectModelFilename()}`]
         };
+    }
+
+    getAssetFoldersCount(folders: AssetFolderModels.AssetFolder[], count: number = 0): number {
+        count += folders.length;
+
+        for (const folder of folders) {
+            if (folder.folders) {
+                count = this.getAssetFoldersCount(folder.folders, count);
+            }
+        }
+
+        return count;
     }
 
     private getProjectComment(projectInformation: ProjectModels.ProjectInformationModel): string {
@@ -65,6 +80,15 @@ export class ProjectGenerator {
         comment += `\n* ${workflow.name}`;
         comment += `\n* Archived step Id: ${workflow.archivedStep.id}`;
         comment += `\n* Published step Id: ${workflow.publishedStep.id}`;
+        comment += `\n*/`;
+
+        return comment;
+    }
+
+    private getAssetFolderComment(assetFolder: AssetFolderModels.AssetFolder): string {
+        let comment: string = `/**`;
+
+        comment += `\n* ${assetFolder.name}`;
         comment += `\n*/`;
 
         return comment;
@@ -119,6 +143,7 @@ export class ProjectGenerator {
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
         workflows: WorkflowModels.Workflow[];
+        assetFolders: AssetFolderModels.AssetFolder[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -140,7 +165,8 @@ export const projectModel = {
     },
     workflows: {
         ${this.getProjectWorkflows(data.workflows)}
-    }
+    },
+    assetFolders: ${this.getAssetFolders(data.assetFolders)}
 };
 `;
 
@@ -187,6 +213,25 @@ export const projectModel = {
                 name: '${commonHelper.escapeNameValue(workflow.name)}'
             }${!isLast ? ',\n' : ''}`;
         }
+
+        return code;
+    }
+
+    private getAssetFolders(assetFolders: AssetFolderModels.AssetFolder[]): string {
+        let code: string = `{`;
+        for (let i = 0; i < assetFolders.length; i++) {
+            const assetFolder = assetFolders[i];
+            const isLast = i === assetFolders.length - 1;
+
+            code += `\n`;
+            code += `${this.getAssetFolderComment(assetFolder)}\n`;
+            code += `${textHelper.toAlphanumeric(assetFolder.name)}: {
+                id: '${assetFolder.id}',
+                externalId: ${assetFolder.externalId},
+                folders: ${this.getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
+        }
+
+        code += '}';
 
         return code;
     }

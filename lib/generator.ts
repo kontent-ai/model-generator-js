@@ -32,6 +32,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const taxonomies = (await deliveryClient.listTaxonomies().toAllPromise()).data.items;
             const workflows = (await deliveryClient.listWorkflows().toPromise()).data;
             const projectInformation = (await deliveryClient.projectInformation().toPromise()).data;
+            const assetFolders = (await deliveryClient.listAssetFolders().toPromise()).data;
 
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
@@ -39,6 +40,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(types.length.toString())}' types`);
             console.log(`Found '${yellow(languages.length.toString())}' languages`);
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
+            console.log(`Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders.items).toString())}' asset folders`);
             console.log(`Found '${yellow(workflows.length.toString())}' workflows \n`);
 
             // create content type models
@@ -74,7 +76,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 languages: languages,
                 taxonomies: taxonomies,
                 types: types,
-                workflows: workflows
+                workflows: workflows,
+                assetFolders: assetFolders.items
             });
 
             // create barrel export
