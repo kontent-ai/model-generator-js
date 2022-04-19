@@ -80,7 +80,7 @@ await generateModelsAsync({
 - `taxonomyTypeFileResolver`- Name resolver for taxonomy filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeResolver`- Name resolver for content type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
-- `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`, `management`
+- `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
 
 ## Example models
 
