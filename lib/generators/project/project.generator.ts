@@ -43,7 +43,6 @@ export class ProjectGenerator {
     private getProjectComment(projectInformation: ProjectModels.ProjectInformationModel): string {
         let comment: string = `${projectInformation.name}`;
 
-        comment += `\n* Id: ${projectInformation.id}`;
         comment += `\n* Environment: ${projectInformation.environment}`;
 
         return comment;
@@ -53,8 +52,7 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${contentType.name}`;
-        comment += `\n* Id: ${contentType.id}`;
-        comment += `\n* Codename: ${contentType.codename}`;
+        comment += `\n* Last modified: ${contentType.lastModified}`;
         comment += `\n*/`;
 
         return comment;
@@ -64,8 +62,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${workflow.name}`;
-        comment += `\n* Id: ${workflow.id}`;
-        comment += `\n* Codename: ${workflow.codename}`;
         comment += `\n*/`;
 
         return comment;
@@ -75,8 +71,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${language.name}`;
-        comment += `\n* Id: ${language.id}`;
-        comment += `\n* Codename: ${language.codename}`;
         comment += `\n* Is Active: ${language.isActive ? 'true' : 'false'}`;
         comment += `\n* Is Default: ${language.isDefault}`;
         comment += `\n* Fallback language Id: ${language.fallbackLanguage?.id}`;
@@ -90,20 +84,11 @@ export class ProjectGenerator {
         taxonomies: TaxonomyModels.Taxonomy[]
     ): string {
         let comment: string = `/**`;
-
-        const isRequired = commonHelper.isElementRequired(element);
         const guidelines = commonHelper.getElementGuidelines(element);
         const name = commonHelper.getElementTitle(element, taxonomies);
 
         if (name) {
             comment += `\n* ${name} (${element.type})`;
-        }
-
-        comment += `\n* Required: ${isRequired ? 'true' : 'false'}`;
-        comment += `\n* Id: ${element.id}`;
-
-        if (name) {
-            comment += `\n* Codename: ${element.codename}`;
         }
 
         if (guidelines) {
@@ -120,8 +105,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${taxonomy.name}`;
-        comment += `\n* Id: ${taxonomy.id}`;
-        comment += `\n* Codename: ${taxonomy.codename}`;
         comment += `\n*/`;
 
         return comment;
@@ -179,6 +162,7 @@ export const projectModel = {
             code += `${textHelper.toAlphanumeric(language.codename)}: {
                 codename: '${language.codename}',
                 id: '${language.id}',
+                externalId: ${language.externalId},
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
         }
@@ -221,6 +205,7 @@ export const projectModel = {
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
                 id: '${contentType.id}',
+                externalId: ${contentType.externalId},
                 name: '${commonHelper.escapeNameValue(contentType.name)}',
                 elements: {${this.getProjectElements(contentType, taxonomies)}}
             }${!isLast ? ',\n' : ''}`;
@@ -244,12 +229,17 @@ export const projectModel = {
                 throw Error(`Element '${element.codename}' needs to have a name property`);
             }
 
+            const isRequired = commonHelper.isElementRequired(element);
+
             code += `\n`;
             code += `${this.getElementComment(element, taxonomies)}\n`;
             code += `${element.codename}: {
                 codename: '${element.codename}',
                 id: '${element.id}',
-                name: '${commonHelper.escapeNameValue(name)}'
+                externalId: ${element.external_id},
+                name: '${commonHelper.escapeNameValue(name)}',
+                required: ${isRequired},
+                type: '${element.type}'
             }${!isLast ? ',\n' : ''}`;
         }
 
@@ -267,6 +257,7 @@ export const projectModel = {
             code += `${taxonomy.codename}: {
                 codename: '${taxonomy.codename}',
                 id: '${taxonomy.id}',
+                externalId: ${taxonomy.externalId},
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
@@ -287,6 +278,7 @@ export const projectModel = {
             code += `${term.codename}: {
                 codename: '${term.codename}',
                 id: '${term.id}',
+                externalId: ${term.externalId},
                 name: '${commonHelper.escapeNameValue(term.name)}',
                 ${this.getProjectTaxonomiesTerms(term.terms)}
             }${!isLast ? ',\n' : ''}`;
