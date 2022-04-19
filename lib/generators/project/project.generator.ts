@@ -5,6 +5,7 @@ import { commonHelper } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import {
     AssetFolderModels,
+    CollectionModels,
     ContentTypeElements,
     ContentTypeModels,
     LanguageModels,
@@ -22,6 +23,7 @@ export class ProjectGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         workflows: WorkflowModels.Workflow[];
         assetFolders: AssetFolderModels.AssetFolder[];
+        collections: CollectionModels.Collection[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): IGenerateResult {
@@ -33,7 +35,8 @@ export class ProjectGenerator {
             languages: data.languages,
             taxonomies: data.taxonomies,
             workflows: data.workflows,
-            assetFolders: data.assetFolders
+            assetFolders: data.assetFolders,
+            collections: data.collections
         });
 
         this.createFileOnFs(code);
@@ -137,6 +140,15 @@ export class ProjectGenerator {
         return comment;
     }
 
+    private getCollectionComment(collection: CollectionModels.Collection): string {
+        let comment: string = `/**`;
+
+        comment += `\n* ${collection.name}`;
+        comment += `\n*/`;
+
+        return comment;
+    }
+
     private getProjectModelCode(data: {
         projectInformation: ProjectModels.ProjectInformationModel;
         types: ContentTypeModels.ContentType[];
@@ -144,6 +156,7 @@ export class ProjectGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         workflows: WorkflowModels.Workflow[];
         assetFolders: AssetFolderModels.AssetFolder[];
+        collections: CollectionModels.Collection[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -156,6 +169,9 @@ export class ProjectGenerator {
 export const projectModel = {
     languages: {
         ${this.getProjectLanguages(data.languages)}
+    },
+    collections: {
+        ${this.getCollections(data.collections)}
     },
     contentTypes: {
         ${this.getProjectContentTypes(data.types, data.taxonomies)}
@@ -305,6 +321,24 @@ export const projectModel = {
                 externalId: ${taxonomy.externalId},
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
+            }${!isLast ? ',\n' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getCollections(collections: CollectionModels.Collection[]): string {
+        let code: string = ``;
+        for (let i = 0; i < collections.length; i++) {
+            const collection = collections[i];
+            const isLast = i === collections.length - 1;
+
+            code += `\n`;
+            code += `${this.getCollectionComment(collection)}\n`;
+            code += `${collection.codename}: {
+                codename: '${collection.codename}',
+                id: '${collection.id}',
+                name: '${commonHelper.escapeNameValue(collection.name)}'
             }${!isLast ? ',\n' : ''}`;
         }
 
