@@ -329,14 +329,21 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
                 continue;
             }
 
-            code += `${this.getElementComment(element, data.taxonomies)}\n`;
-            code += `${elementName}: Elements.${this.mapElementType(
+            const mappedElementType = this.mapElementType(
                 element,
                 data.contentTypeNameMap,
                 data.contentTypeObjectMap,
                 data.taxonomyObjectMap,
                 data.taxonomyNameMap
-            )};`;
+            );
+
+            if (!mappedElementType) {
+                // element type not supported
+                continue;
+            }
+
+            code += `${this.getElementComment(element, data.taxonomies)}\n`;
+            code += `${elementName}: Elements.${mappedElementType};`;
 
             if (i !== data.type.elements.length - 1) {
                 code += '\n\n';
