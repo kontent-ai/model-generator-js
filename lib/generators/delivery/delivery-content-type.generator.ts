@@ -9,7 +9,7 @@ import {
     TaxonomyTypeFileNameResolver,
     TaxonomyTypeResolver
 } from '../../models';
-import { ContentTypeElements, ContentTypeModels, TaxonomyModels } from '@kentico/kontent-management';
+import { ContentTypeElements, ContentTypeModels, ElementModels, TaxonomyModels } from '@kentico/kontent-management';
 import {
     MapContentTypeToDeliveryTypeName,
     MapContentTypeIdToObject,
@@ -330,7 +330,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
                 continue;
             }
 
-            const mappedElementType = this.mapElementType(
+            const mappedElementResult = this.mapElementType(
                 element,
                 data.contentTypeNameMap,
                 data.contentTypeObjectMap,
@@ -338,13 +338,13 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
                 data.taxonomyNameMap
             );
 
-            if (!mappedElementType) {
+            if (!mappedElementResult.mappedType) {
                 // element type not supported
                 continue;
             }
 
             code += `${this.getElementComment(element, data.taxonomies)}\n`;
-            code += `${elementName}: Elements.${mappedElementType};`;
+            code += `${elementName}: Elements.${mappedElementResult.mappedType};`;
 
             if (i !== data.type.elements.length - 1) {
                 code += '\n\n';
@@ -360,44 +360,47 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
         contentTypeObjectMap: MapContentTypeIdToObject,
         taxonomyObjectMap: MapTaxonomyIdTobject,
         taxonomyNameMap: MapTaxonomyName
-    ): string | undefined {
+    ): { type: ElementModels.ElementType; mappedType: string | undefined } {
         const elementType = element.type;
-        let result: string | undefined;
+        let mappedType: string | undefined;
 
         if (elementType === 'text') {
-            result = 'TextElement';
+            mappedType = 'TextElement';
         } else if (elementType === 'number') {
-            result = 'NumberElement';
+            mappedType = 'NumberElement';
         } else if (elementType === 'modular_content') {
-            result = `LinkedItemsElement<${this.getLinkedItemsAllowedTypes(
+            mappedType = `LinkedItemsElement<${this.getLinkedItemsAllowedTypes(
                 element,
                 contentTypeNameMap,
                 contentTypeObjectMap
             ).join(' | ')}>`;
         } else if (elementType === 'asset') {
-            result = 'AssetsElement';
+            mappedType = 'AssetsElement';
         } else if (elementType === 'date_time') {
-            result = 'DateTimeElement';
+            mappedType = 'DateTimeElement';
         } else if (elementType === 'rich_text') {
-            result = 'RichTextElement';
+            mappedType = 'RichTextElement';
         } else if (elementType === 'multiple_choice') {
-            result = 'MultipleChoiceElement';
+            mappedType = 'MultipleChoiceElement';
         } else if (elementType === 'url_slug') {
-            result = 'UrlSlugElement';
+            mappedType = 'UrlSlugElement';
         } else if (elementType === 'taxonomy') {
             const taxonomyName = this.getTaxonomyTypeName(element, taxonomyNameMap, taxonomyObjectMap);
 
             if (taxonomyName) {
-                result = `TaxonomyElement<${taxonomyName}>`;
+                mappedType = `TaxonomyElement<${taxonomyName}>`;
             } else {
-                result = `TaxonomyElement`;
+                mappedType = `TaxonomyElement`;
             }
         } else if (elementType === 'custom') {
-            result = 'CustomElement';
+            mappedType = 'CustomElement';
         } else {
-            result = undefined;
+            mappedType = undefined;
         }
-        return result;
+        return {
+            mappedType: mappedType,
+            type: elementType
+        };
     }
 
     private getTaxonomyTypeName(
