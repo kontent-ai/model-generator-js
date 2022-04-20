@@ -124,7 +124,7 @@ export class ProjectGenerator {
 
         if (guidelines) {
             comment += `\n*`;
-            comment += `\n* ${guidelines}`;
+            comment += `\n* ${textHelper.removeLineEndings(guidelines)}`;
         }
 
         comment += `\n*/`;
@@ -191,7 +191,7 @@ export const projectModel = {
             ? data.formatOptions
             : {
                   parser: 'typescript',
-                  singleQuote: true
+                  singleQuote: true,
               };
 
         // beautify code

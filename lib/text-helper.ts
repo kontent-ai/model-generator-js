@@ -40,6 +40,10 @@ export class TextHelper {
     toAlphanumeric(value: string): string {
         return value.replace(/\W/g, '');
     }
+
+    removeLineEndings(value: string): string {
+        return value.replace(/(\r\n|\n|\r)/gm, '');
+    }
 }
 
 export const textHelper = new TextHelper();

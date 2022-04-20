@@ -26,6 +26,7 @@ import {
     MapTaxonomyIdTobject,
     getMapTaxonomyIdTobject
 } from './delivery-mappers';
+import { textHelper } from '../../text-helper';
 
 export class DeliveryContentTypeGenerator {
     private readonly deliveryNpmPackageName: string = '@kentico/kontent-delivery';
@@ -298,7 +299,7 @@ export type ${config.contentTypeNameMap(config.type)} = IContentItem<{
 
         if (guidelines) {
             comment += `\n*`;
-            comment += `\n* ${guidelines}`;
+            comment += `\n* ${textHelper.removeLineEndings(guidelines)}`;
         }
 
         comment += '\n*/';

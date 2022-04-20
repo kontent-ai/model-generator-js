@@ -23,7 +23,13 @@ export class CommonHelper {
     }
 
     getElementGuidelines(element: ContentTypeElements.ContentTypeElementModel): string | null {
-        return (<any>element)['guidelines'];
+        const guidelines = (<any>element)['guidelines'];
+
+        if (!guidelines) {
+            return null;
+        }
+
+        return guidelines;
     }
 
     getElementTitle(element: ContentTypeElements.ContentTypeElementModel, taxonomies: TaxonomyModels.Taxonomy[]): string | null {
