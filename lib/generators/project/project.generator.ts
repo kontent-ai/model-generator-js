@@ -14,6 +14,7 @@ import {
     WorkflowModels
 } from '@kentico/kontent-management';
 import { IGenerateResult } from '../../common-helper';
+import { camelCasePropertyNameResolver } from '@kentico/kontent-delivery';
 
 export class ProjectGenerator {
     generateProjectModel(data: {
@@ -207,12 +208,19 @@ export const projectModel = {
             code += `${textHelper.toAlphanumeric(language.codename)}: {
                 codename: '${language.codename}',
                 id: '${language.id}',
-                externalId: ${language.externalId},
+                externalId: ${this.getExternalIdValue(language.externalId)},
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
         }
 
         return code;
+    }
+
+    private getExternalIdValue(externalId?: string): string {
+        if (!externalId) {
+            return 'undefined';
+        }
+        return `'${externalId}'`;
     }
 
     private getProjectWorkflows(workflows: WorkflowModels.Workflow[]): string {
@@ -241,9 +249,9 @@ export const projectModel = {
 
             code += `\n`;
             code += `${this.getAssetFolderComment(assetFolder)}\n`;
-            code += `${textHelper.toAlphanumeric(assetFolder.name)}: {
+            code += `${camelCasePropertyNameResolver('', assetFolder.name)}: {
                 id: '${assetFolder.id}',
-                externalId: ${assetFolder.externalId},
+                externalId: ${this.getExternalIdValue(assetFolder.externalId)},
                 folders: ${this.getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
         }
 
@@ -266,7 +274,7 @@ export const projectModel = {
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
                 id: '${contentType.id}',
-                externalId: ${contentType.externalId},
+                externalId: ${this.getExternalIdValue(contentType.externalId)},
                 name: '${commonHelper.escapeNameValue(contentType.name)}',
                 elements: {${this.getProjectElements(contentType, taxonomies)}}
             }${!isLast ? ',\n' : ''}`;
@@ -297,7 +305,7 @@ export const projectModel = {
             code += `${element.codename}: {
                 codename: '${element.codename}',
                 id: '${element.id}',
-                externalId: ${element.external_id},
+                externalId: ${this.getExternalIdValue(element.external_id)},
                 name: '${commonHelper.escapeNameValue(name)}',
                 required: ${isRequired},
                 type: '${element.type}'
@@ -318,7 +326,7 @@ export const projectModel = {
             code += `${taxonomy.codename}: {
                 codename: '${taxonomy.codename}',
                 id: '${taxonomy.id}',
-                externalId: ${taxonomy.externalId},
+                externalId: ${this.getExternalIdValue(taxonomy.externalId)},
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
@@ -357,7 +365,7 @@ export const projectModel = {
             code += `${term.codename}: {
                 codename: '${term.codename}',
                 id: '${term.id}',
-                externalId: ${term.externalId},
+                externalId: ${this.getExternalIdValue(term.externalId)},
                 name: '${commonHelper.escapeNameValue(term.name)}',
                 ${this.getProjectTaxonomiesTerms(term.terms)}
             }${!isLast ? ',\n' : ''}`;
