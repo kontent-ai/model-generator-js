@@ -49,7 +49,7 @@
         "yargs": "17.4.1",
         "prettier": "2.6.2",
         "colors": "1.4.0",
-        "@kentico/kontent-delivery": "11.7.0",
+        "@kentico/kontent-delivery": "11.12.0",
         "@kentico/kontent-management": "2.5.0"
     },
     "devDependencies": {
