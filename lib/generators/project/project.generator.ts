@@ -10,6 +10,7 @@ import {
     ContentTypeModels,
     LanguageModels,
     ProjectModels,
+    RoleModels,
     TaxonomyModels,
     WorkflowModels
 } from '@kentico/kontent-management';
@@ -25,6 +26,7 @@ export class ProjectGenerator {
         workflows: WorkflowModels.Workflow[];
         assetFolders: AssetFolderModels.AssetFolder[];
         collections: CollectionModels.Collection[];
+        roles: RoleModels.Role[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): IGenerateResult {
@@ -37,7 +39,8 @@ export class ProjectGenerator {
             taxonomies: data.taxonomies,
             workflows: data.workflows,
             assetFolders: data.assetFolders,
-            collections: data.collections
+            collections: data.collections,
+            roles: data.roles
         });
 
         this.createFileOnFs(code);
@@ -150,6 +153,15 @@ export class ProjectGenerator {
         return comment;
     }
 
+    private getRoleComment(role: RoleModels.Role): string {
+        let comment: string = `/**`;
+
+        comment += `\n* ${role.name}`;
+        comment += `\n*/`;
+
+        return comment;
+    }
+
     private getProjectModelCode(data: {
         projectInformation: ProjectModels.ProjectInformationModel;
         types: ContentTypeModels.ContentType[];
@@ -158,6 +170,7 @@ export class ProjectGenerator {
         workflows: WorkflowModels.Workflow[];
         assetFolders: AssetFolderModels.AssetFolder[];
         collections: CollectionModels.Collection[];
+        roles: RoleModels.Role[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
@@ -183,6 +196,9 @@ export const projectModel = {
     workflows: {
         ${this.getProjectWorkflows(data.workflows)}
     },
+    roles: {
+        ${this.getRoles(data.roles)}
+    },
     assetFolders: ${this.getAssetFolders(data.assetFolders)}
 };
 `;
@@ -191,7 +207,7 @@ export const projectModel = {
             ? data.formatOptions
             : {
                   parser: 'typescript',
-                  singleQuote: true,
+                  singleQuote: true
               };
 
         // beautify code
@@ -205,7 +221,7 @@ export const projectModel = {
             const isLast = i === languages.length - 1;
             code += `\n`;
             code += `${this.getLanguageComment(language)}\n`;
-            code += `${textHelper.toAlphanumeric(language.codename)}: {
+            code += `${camelCasePropertyNameResolver('', language.codename)}: {
                 codename: '${language.codename}',
                 id: '${language.id}',
                 externalId: ${this.getExternalIdValue(language.externalId)},
@@ -347,6 +363,24 @@ export const projectModel = {
                 codename: '${collection.codename}',
                 id: '${collection.id}',
                 name: '${commonHelper.escapeNameValue(collection.name)}'
+            }${!isLast ? ',\n' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getRoles(roles: RoleModels.Role[]): string {
+        let code: string = ``;
+        for (let i = 0; i < roles.length; i++) {
+            const role = roles[i];
+            const isLast = i === roles.length - 1;
+
+            code += `\n`;
+            code += `${this.getRoleComment(role)}\n`;
+            code += `${camelCasePropertyNameResolver('', role.name)}: {
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
+                id: '${role.id}',
+                name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
         }
 

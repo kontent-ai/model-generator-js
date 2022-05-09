@@ -34,6 +34,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const projectInformation = (await managementClient.projectInformation().toPromise()).data;
             const assetFolders = (await managementClient.listAssetFolders().toPromise()).data;
             const collections = (await managementClient.listCollections().toPromise()).data.collections;
+            const roles = (await managementClient.listRoles().toPromise()).data.roles;
 
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
@@ -42,6 +43,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(languages.length.toString())}' languages`);
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
             console.log(`Found '${yellow(collections.length.toString())}' collections`);
+            console.log(`Found '${yellow(roles.length.toString())}' roles`);
             console.log(`Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders.items).toString())}' asset folders`);
             console.log(`Found '${yellow(workflows.length.toString())}' workflows \n`);
 
@@ -80,7 +82,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 types: types,
                 workflows: workflows,
                 assetFolders: assetFolders.items,
-                collections: collections
+                collections: collections,
+                roles: roles
             });
 
             // create barrel export
