@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-0](https://github.com/Kentico/kontent-model-generator-js/compare/v4.1.0...v5.0.0-0) (2022-05-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* Refactors generator to use Management API for fetching source data. This change now requires you to use 'apiKey' option when calling the generator.
+* changes the default generator file names, renames fileResolver to contentTypeFileResolver, adds support for generating taxonomy types
+
+### Features
+
+* Adds 'help' cli command with options list and descriptions ([f67916b](https://github.com/Kentico/kontent-model-generator-js/commit/f67916b33285cb581d4d5ad314d95a97558473d2))
+* adds 'id' to all objects within project structure ([7123509](https://github.com/Kentico/kontent-model-generator-js/commit/712350942c6d0f3aee79d8825db2f609ed3122ab))
+* Adds comments to all generated _project items ([fba932b](https://github.com/Kentico/kontent-model-generator-js/commit/fba932bc0b9e65245d87a56418b7f6712d0fc539))
+* Adds comments to each element / content type / taxonomy with extra metadata information ([1b6a6f1](https://github.com/Kentico/kontent-model-generator-js/commit/1b6a6f1905723a8b15cd7869b5434fcbe25c81ba))
+* Adds metadata to generated project model, logs project information including environment to console ([ae9d4de](https://github.com/Kentico/kontent-model-generator-js/commit/ae9d4de07d238a7727b020ccee50c7ae43e80340))
+* Adds more properties to selected project objects and adjust comments to prevent data duplication ([23ffc62](https://github.com/Kentico/kontent-model-generator-js/commit/23ffc62b270cc75fc658ee1dc12688b5984bc0e2))
+* Adds support for asset folders in project structure ([e73fd46](https://github.com/Kentico/kontent-model-generator-js/commit/e73fd46f02b580121a5e2eb091eda9bf86166695))
+* adds support for collections in project model ([8404230](https://github.com/Kentico/kontent-model-generator-js/commit/840423006508494acff786d02e1c59f439fd2fbd))
+* adds support for disabled export of certain project objects, updates readme and samples ([b376564](https://github.com/Kentico/kontent-model-generator-js/commit/b37656433e9123a3479979dd91604820d16fb8b6))
+* adds support for project roles, use camelCase for language property identifier ([022f7c7](https://github.com/Kentico/kontent-model-generator-js/commit/022f7c7e835ab10657b64a60c62608d28818ca93))
+* adds support for project webhooks ([4c2a99f](https://github.com/Kentico/kontent-model-generator-js/commit/4c2a99fa57228e2902813db4c38a49c41bd7dca6))
+* Adds support for strongly typed taxonomy elements ([cab91bf](https://github.com/Kentico/kontent-model-generator-js/commit/cab91bfaddfe645c7c55aff7dbcbb1f2b5cbbd32))
+* Generates barrel export from all created files ([915d149](https://github.com/Kentico/kontent-model-generator-js/commit/915d149f31ad7714aed450f5b57a8538e1c2e19c))
+* changes the default generator file names, renames fileResolver to contentTypeFileResolver, adds support for generating taxonomy types ([011ffa8](https://github.com/Kentico/kontent-model-generator-js/commit/011ffa8d78efad60c94fa5175565d157a468a127))
+* Refactors generator to use Management API for fetching source data. This change now requires you to use 'apiKey' option when calling the generator. ([47270b1](https://github.com/Kentico/kontent-model-generator-js/commit/47270b17d4ab88a99f6679f0ed991539c9a10906))
+* Refactors internal generator and adds support for content type restrictions in linked items element ([d6afc18](https://github.com/Kentico/kontent-model-generator-js/commit/d6afc1850faba2e8127ca7d94cdd052f33b3346f))
+* Separates content type / taxonomy barrel export ([d346533](https://github.com/Kentico/kontent-model-generator-js/commit/d346533e126174b541f8ef37c6f9681f29358e3f))
+* separates project model into distinct files & properties, uses barrel export for project files ([06067c0](https://github.com/Kentico/kontent-model-generator-js/commit/06067c0aa3fe44662999f05d3220d50746e3495b))
+* updates deps ([abaa4f6](https://github.com/Kentico/kontent-model-generator-js/commit/abaa4f655c4b1a152a89c778c2ade9a3b26a464e))
+* updates deps & entry modules ([a9582b8](https://github.com/Kentico/kontent-model-generator-js/commit/a9582b8b1c1a304e272cd37dc6d85e13c9fe833c))
+
 ## [4.1.0](https://github.com/Kentico/kontent-model-generator-js/compare/v4.1.0-0...v4.1.0) (2021-11-24)
 
 ## [4.1.0-0](https://github.com/Kentico/kontent-model-generator-js/compare/v4.0.0...v4.1.0-0) (2021-11-24)
