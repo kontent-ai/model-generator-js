@@ -448,7 +448,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getWebhookComment(webhook)}\n`;
             code += `${camelCasePropertyNameResolver('', webhook.name)}: {
-                url: ${webhook.url},
+                url: '${webhook.url}',
                 id: '${webhook.id}',
                 name: '${commonHelper.escapeNameValue(webhook.name)}'
             }${!isLast ? ',\n' : ''}`;
