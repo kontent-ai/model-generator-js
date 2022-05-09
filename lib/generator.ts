@@ -3,7 +3,15 @@ import * as fs from 'fs';
 import { IGenerateModelsConfig } from './models';
 import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator';
 import { projectGenerator } from './generators';
-import { createManagementClient } from '@kentico/kontent-management';
+import {
+    AssetFolderModels,
+    CollectionModels,
+    createManagementClient,
+    LanguageModels,
+    RoleModels,
+    WebhookModels,
+    WorkflowModels
+} from '@kentico/kontent-management';
 import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
 import { commonHelper } from './common-helper';
 import { parse } from 'path';
@@ -29,29 +37,66 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 apiKey: config.apiKey
             });
 
-            const types = (await managementClient.listContentTypes().toAllPromise()).data.items;
-            const languages = (await managementClient.listLanguages().toAllPromise()).data.items;
-            const taxonomies = (await managementClient.listTaxonomies().toAllPromise()).data.items;
-            const workflows = (await managementClient.listWorkflows().toPromise()).data;
             const projectInformation = (await managementClient.projectInformation().toPromise()).data;
-            const assetFolders = (await managementClient.listAssetFolders().toPromise()).data;
-            const collections = (await managementClient.listCollections().toPromise()).data.collections;
-            const roles = (await managementClient.listRoles().toPromise()).data.roles;
-            const webhooks = (await managementClient.listWebhooks().toPromise()).data.webhooks;
-
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
 
+            const types = (await managementClient.listContentTypes().toAllPromise()).data.items;
+            const taxonomies = (await managementClient.listTaxonomies().toAllPromise()).data.items;
+
             console.log(`Found '${yellow(types.length.toString())}' types`);
-            console.log(`Found '${yellow(languages.length.toString())}' languages`);
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
-            console.log(`Found '${yellow(collections.length.toString())}' collections`);
-            console.log(`Found '${yellow(roles.length.toString())}' roles`);
-            console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
-            console.log(
-                `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders.items).toString())}' asset folders`
-            );
-            console.log(`Found '${yellow(workflows.length.toString())}' workflows \n`);
+
+            const workflows: WorkflowModels.Workflow[] = [];
+            const roles: RoleModels.Role[] = [];
+            const assetFolders: AssetFolderModels.AssetFolder[] = [];
+            const collections: CollectionModels.Collection[] = [];
+            const webhooks: WebhookModels.Webhook[] = [];
+            const languages: LanguageModels.LanguageModel[] = [];
+
+            if (config.exportProjectSettings.exportWorkflows) {
+                workflows.push(...(await managementClient.listWorkflows().toPromise()).data);
+                console.log(`Found '${yellow(workflows.length.toString())}' workflows`);
+            } else {
+                console.log(`Skipping '${red('workflows')}' export`);
+            }
+
+            if (config.exportProjectSettings.exportRoles) {
+                roles.push(...(await managementClient.listRoles().toPromise()).data.roles);
+                console.log(`Found '${yellow(roles.length.toString())}' roles`);
+            } else {
+                console.log(`Skipping '${red('roles')}' export`);
+            }
+
+            if (config.exportProjectSettings.exportAssetFolders) {
+                assetFolders.push(...(await managementClient.listAssetFolders().toPromise()).data.items);
+                console.log(
+                    `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders).toString())}' asset folders`
+                );
+            } else {
+                console.log(`Skipping '${red('asset folders')}' export`);
+            }
+
+            if (config.exportProjectSettings.exportCollections) {
+                collections.push(...(await managementClient.listCollections().toPromise()).data.collections);
+                console.log(`Found '${yellow(collections.length.toString())}' collections`);
+            } else {
+                console.log(`Skipping '${red('collections')}' export`);
+            }
+
+            if (config.exportProjectSettings.exportWebhooks) {
+                webhooks.push(...(await managementClient.listWebhooks().toPromise()).data.webhooks);
+                console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
+            } else {
+                console.log(`Skipping '${red('webhooks')}' export`);
+            }
+
+            if (config.exportProjectSettings.exportLanguages) {
+                languages.push(...(await managementClient.listLanguages().toAllPromise()).data.items);
+                console.log(`Found '${yellow(languages.length.toString())}' languages`);
+            } else {
+                console.log(`Skipping '${red('languages')}' export`);
+            }
 
             // create content type models
             const contentTypesResult = await deliveryContentTypeGenerator.generateModelsAsync({
@@ -87,7 +132,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 taxonomies: taxonomies,
                 types: types,
                 workflows: workflows,
-                assetFolders: assetFolders.items,
+                assetFolders: assetFolders,
                 collections: collections,
                 roles: roles,
                 webhooks: webhooks,
@@ -141,11 +186,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             // main barrel
             const mainBarrelCode = commonHelper.getBarrelExportCode({
-                filenames: [
-                    `./${projectFolderPath}`,
-                    `./${contentTypesFolderPath}`,
-                    `./${taxonomiesFolderPath}`
-                ],
+                filenames: [`./${projectFolderPath}`, `./${contentTypesFolderPath}`, `./${taxonomiesFolderPath}`],
                 formatOptions: config.formatOptions
             });
             const mainBarrelExportPath: string = `./${barrelExportFilename}`;

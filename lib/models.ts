@@ -14,11 +14,22 @@ export type TaxonomyTypeFileNameResolver = DefaultResolverType | ((taxonomy: Tax
 export type ContentTypeResolver = DefaultResolverType | ((contentType: ContentTypeModels.ContentType) => string);
 export type TaxonomyTypeResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
 
+export interface IExportProjectSettings {
+    exportWebhooks: boolean;
+    exportWorkflows: boolean;
+    exportRoles: boolean;
+    exportAssetFolders: boolean;
+    exportCollections: boolean;
+    exportLanguages: boolean;
+}
+
 export interface IGenerateModelsConfig {
     projectId: string;
     addTimestamp: boolean;
     sdkType: SdkType;
     apiKey: string;
+
+    exportProjectSettings: IExportProjectSettings;
 
     contentTypeFileResolver?: ContentTypeFileNameResolver;
     taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
