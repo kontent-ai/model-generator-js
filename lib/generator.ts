@@ -22,18 +22,18 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             fs.mkdirSync(contentTypesFolderPath, { recursive: true });
             fs.mkdirSync(taxonomiesFolderPath, { recursive: true });
 
-            const deliveryClient = createManagementClient({
+            const managementClient = createManagementClient({
                 projectId: config.projectId,
                 apiKey: config.apiKey
             });
 
-            const types = (await deliveryClient.listContentTypes().toAllPromise()).data.items;
-            const languages = (await deliveryClient.listLanguages().toAllPromise()).data.items;
-            const taxonomies = (await deliveryClient.listTaxonomies().toAllPromise()).data.items;
-            const workflows = (await deliveryClient.listWorkflows().toPromise()).data;
-            const projectInformation = (await deliveryClient.projectInformation().toPromise()).data;
-            const assetFolders = (await deliveryClient.listAssetFolders().toPromise()).data;
-            const collections = (await deliveryClient.listCollections().toPromise()).data.collections;
+            const types = (await managementClient.listContentTypes().toAllPromise()).data.items;
+            const languages = (await managementClient.listLanguages().toAllPromise()).data.items;
+            const taxonomies = (await managementClient.listTaxonomies().toAllPromise()).data.items;
+            const workflows = (await managementClient.listWorkflows().toPromise()).data;
+            const projectInformation = (await managementClient.projectInformation().toPromise()).data;
+            const assetFolders = (await managementClient.listAssetFolders().toPromise()).data;
+            const collections = (await managementClient.listCollections().toPromise()).data.collections;
 
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
