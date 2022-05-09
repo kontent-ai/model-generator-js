@@ -17,6 +17,11 @@ import {
 import { IGenerateResult } from '../../common-helper';
 import { camelCasePropertyNameResolver } from '@kentico/kontent-delivery';
 
+interface IProjectCodeResult {
+    filename: string;
+    code: string;
+}
+
 export class ProjectGenerator {
     generateProjectModel(data: {
         projectInformation: ProjectModels.ProjectInformationModel;
@@ -28,9 +33,10 @@ export class ProjectGenerator {
         collections: CollectionModels.Collection[];
         roles: RoleModels.Role[];
         addTimestamp: boolean;
+        folderPath: string;
         formatOptions?: Options;
     }): IGenerateResult {
-        const code = this.getProjectModelCode({
+        const projectCodes = this.getProjectModelCode({
             projectInformation: data.projectInformation,
             types: data.types,
             addTimestamp: data.addTimestamp,
@@ -43,10 +49,30 @@ export class ProjectGenerator {
             roles: data.roles
         });
 
-        this.createFileOnFs(code);
+        const headerCode = `
+        /**
+        * ${commonHelper.getAutogenerateNote(data.addTimestamp)}
+        *
+        * ${this.getProjectComment(data.projectInformation)}
+        */`;
+
+        const filePaths: string[] = [];
+
+        const formatOptions: Options = data.formatOptions
+            ? data.formatOptions
+            : {
+                  parser: 'typescript',
+                  singleQuote: true
+              };
+
+        for (const projectCode of projectCodes) {
+            const filePath = `${data.folderPath}${projectCode.filename}`;
+            this.createFileOnFs(format(headerCode + '\n' + projectCode.code, formatOptions), `./${filePath}`);
+            filePaths.push(filePath);
+        }
 
         return {
-            filenames: [`./${this.getProjectModelFilename()}`]
+            filenames: filePaths
         };
     }
 
@@ -173,45 +199,51 @@ export class ProjectGenerator {
         roles: RoleModels.Role[];
         addTimestamp: boolean;
         formatOptions?: Options;
-    }): string {
-        const code = `
-/**
-* ${commonHelper.getAutogenerateNote(data.addTimestamp)}
-*
-* ${this.getProjectComment(data.projectInformation)}
-*/
-export const projectModel = {
-    languages: {
-        ${this.getProjectLanguages(data.languages)}
-    },
-    collections: {
-        ${this.getCollections(data.collections)}
-    },
-    contentTypes: {
-        ${this.getProjectContentTypes(data.types, data.taxonomies)}
-    },
-    taxonomies: {
-        ${this.getProjectTaxonomies(data.taxonomies)}
-    },
-    workflows: {
-        ${this.getProjectWorkflows(data.workflows)}
-    },
-    roles: {
-        ${this.getRoles(data.roles)}
-    },
-    assetFolders: ${this.getAssetFolders(data.assetFolders)}
-};
-`;
+    }): IProjectCodeResult[] {
+        const result: IProjectCodeResult[] = [
+            {
+                code: `export const languages = {
+                    ${this.getProjectLanguages(data.languages)}
+                };`,
+                filename: 'languages.ts'
+            },
+            {
+                code: `export const collections = {
+                    ${this.getCollections(data.collections)}
+                };`,
+                filename: 'collections.ts'
+            },
+            {
+                code: `export const contentTypes = {
+                    ${this.getProjectContentTypes(data.types, data.taxonomies)}
+                };`,
+                filename: 'contentTypes.ts'
+            },
+            {
+                code: `export const taxonomies = {
+                    ${this.getProjectTaxonomies(data.taxonomies)}
+                };`,
+                filename: 'taxonomies.ts'
+            },
+            {
+                code: `export const workflows = {
+                    ${this.getProjectWorkflows(data.workflows)}
+                };`,
+                filename: 'workflows.ts'
+            },
+            {
+                code: `export const roles = {
+                    ${this.getRoles(data.roles)}
+                };`,
+                filename: 'roles.ts'
+            },
+            {
+                code: `export const assetFolders = ${this.getAssetFolders(data.assetFolders)};`,
+                filename: 'assetFolders.ts'
+            }
+        ];
 
-        const formatOptions: Options = data.formatOptions
-            ? data.formatOptions
-            : {
-                  parser: 'typescript',
-                  singleQuote: true
-              };
-
-        // beautify code
-        return format(code, formatOptions);
+        return result;
     }
 
     private getProjectLanguages(languages: LanguageModels.LanguageModel[]): string {
@@ -409,16 +441,12 @@ export const projectModel = {
         return code;
     }
 
-    private createFileOnFs(code: string): void {
-        const classFileName = this.getProjectModelFilename();
+    private createFileOnFs(code: string, filename: string): void {
+        const finalFilename = `${filename}`;
 
-        fs.writeFileSync('./' + classFileName, code);
+        fs.writeFileSync('./' + finalFilename, code);
 
-        console.log(`\nProject structure '${yellow(classFileName)}'`);
-    }
-
-    private getProjectModelFilename(): string {
-        return `_project.ts`;
+        console.log(`Created '${yellow(finalFilename)}'`);
     }
 }
 

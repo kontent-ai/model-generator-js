@@ -13,6 +13,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
     const contentTypesFolderPath: string = 'content-types/';
     const taxonomiesFolderPath: string = 'taxonomies/';
+    const projectFolderPath: string = 'project/';
 
     try {
         if (config.sdkType === 'delivery') {
@@ -21,6 +22,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             // prepare directories
             fs.mkdirSync(contentTypesFolderPath, { recursive: true });
             fs.mkdirSync(taxonomiesFolderPath, { recursive: true });
+            fs.mkdirSync(projectFolderPath, { recursive: true });
 
             const managementClient = createManagementClient({
                 projectId: config.projectId,
@@ -44,7 +46,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
             console.log(`Found '${yellow(collections.length.toString())}' collections`);
             console.log(`Found '${yellow(roles.length.toString())}' roles`);
-            console.log(`Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders.items).toString())}' asset folders`);
+            console.log(
+                `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders.items).toString())}' asset folders`
+            );
             console.log(`Found '${yellow(workflows.length.toString())}' workflows \n`);
 
             // create content type models
@@ -83,7 +87,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 workflows: workflows,
                 assetFolders: assetFolders.items,
                 collections: collections,
-                roles: roles
+                roles: roles,
+                folderPath: projectFolderPath
             });
 
             // create barrel export
@@ -117,10 +122,24 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             fs.writeFileSync(taxonomiesBarrelExportPath, taxonomiesBarrelCode);
             console.log(`Barrel export '${yellow(taxonomiesBarrelExportPath)}' created`);
 
+            // project barrel
+            const projectBarrelCode = commonHelper.getBarrelExportCode({
+                filenames: [
+                    ...projectModelResult.filenames.map((m) => {
+                        const path = parse(m);
+                        return `./${path.name}`;
+                    })
+                ],
+                formatOptions: config.formatOptions
+            });
+            const projectBarrelExportPath: string = `./${projectFolderPath}${barrelExportFilename}`;
+            fs.writeFileSync(projectBarrelExportPath, projectBarrelCode);
+            console.log(`Barrel export '${yellow(projectBarrelExportPath)}' created`);
+
             // main barrel
             const mainBarrelCode = commonHelper.getBarrelExportCode({
                 filenames: [
-                    ...projectModelResult.filenames,
+                    `./${projectFolderPath}`,
                     `./${contentTypesFolderPath}`,
                     `./${taxonomiesFolderPath}`
                 ],
