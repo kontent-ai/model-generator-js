@@ -32,7 +32,10 @@ export class CommonHelper {
         return guidelines;
     }
 
-    getElementTitle(element: ContentTypeElements.ContentTypeElementModel, taxonomies: TaxonomyModels.Taxonomy[]): string | null {
+    getElementTitle(
+        element: ContentTypeElements.ContentTypeElementModel,
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string | null {
         if (element.type === 'taxonomy') {
             const taxonomyElement = element as ContentTypeElements.ITaxonomyElement;
             const taxonomyGroupId = taxonomyElement?.taxonomy_group?.id;
@@ -41,7 +44,7 @@ export class CommonHelper {
                 return element.type;
             }
 
-            const taxonomy = taxonomies.find(m => m.id === taxonomyGroupId);
+            const taxonomy = taxonomies.find((m) => m.id === taxonomyGroupId);
 
             if (!taxonomy) {
                 return element.type;
@@ -78,7 +81,7 @@ export class CommonHelper {
     }
 
     escapeNameValue(value: string): string {
-        return value.replace("'", "\\'");
+        return value.replace('\'', '\\\'');
     }
 }
 

@@ -204,7 +204,7 @@ export class DeliveryContentTypeGenerator {
         code += `
 /**
 * ${commonHelper.getAutogenerateNote(config.addTimestamp)}
-* 
+*
 * ${this.getContentTypeComment(config.type)}
 */
 export type ${config.contentTypeNameMap(config.type)} = IContentItem<{

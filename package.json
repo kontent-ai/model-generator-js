@@ -42,9 +42,8 @@
         "test:all": "npm run build:commonjs && npm run test:delivery-models",
         "test:delivery-models": "cd sample && dotenv -e ../.env cross-var -- node ../dist/cjs/lib/cli/cli --apiKey=%API_KEY% --projectId=%PROJECT_ID% --sdkType=delivery --addTimestamp=%ADD_TIMESTAMP% --contentTypeResolver=pascalCase --elementResolver=camelCase --fileResolver=snakeCase",
         "test:help": "npm run build:all && cd sample && dotenv -e ../.env cross-var -- node ../dist/cjs/lib/cli/cli -h",
-        "ts-lint-local": "./node_modules/.bin/tslint",
-        "ts-lint:fix": "npm run ts-lint:check -- --fix",
-        "ts-lint:check": "npm run ts-lint-local -- --project ./tsconfig.json"
+        "ts-lint:fix": "tslint --project ./tsconfig.json --fix",
+        "ts-lint:check": "tslint --project ./tsconfig.json"
     },
     "dependencies": {
         "yargs": "17.4.1",
