@@ -12,6 +12,7 @@ import {
     ProjectModels,
     RoleModels,
     TaxonomyModels,
+    WebhookModels,
     WorkflowModels
 } from '@kentico/kontent-management';
 import { IGenerateResult } from '../../common-helper';
@@ -32,6 +33,7 @@ export class ProjectGenerator {
         assetFolders: AssetFolderModels.AssetFolder[];
         collections: CollectionModels.Collection[];
         roles: RoleModels.Role[];
+        webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
         folderPath: string;
         formatOptions?: Options;
@@ -46,7 +48,8 @@ export class ProjectGenerator {
             workflows: data.workflows,
             assetFolders: data.assetFolders,
             collections: data.collections,
-            roles: data.roles
+            roles: data.roles,
+            webhooks: data.webhooks
         });
 
         const headerCode = `
@@ -188,6 +191,16 @@ export class ProjectGenerator {
         return comment;
     }
 
+    private getWebhookComment(webhook: WebhookModels.Webhook): string {
+        let comment: string = `/**`;
+
+        comment += `\n* ${webhook.name}`;
+        comment += `\n* Last modified: ${webhook.lastModified}`;
+        comment += `\n*/`;
+
+        return comment;
+    }
+
     private getProjectModelCode(data: {
         projectInformation: ProjectModels.ProjectInformationModel;
         types: ContentTypeModels.ContentType[];
@@ -197,6 +210,7 @@ export class ProjectGenerator {
         assetFolders: AssetFolderModels.AssetFolder[];
         collections: CollectionModels.Collection[];
         roles: RoleModels.Role[];
+        webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
         formatOptions?: Options;
     }): IProjectCodeResult[] {
@@ -240,7 +254,13 @@ export class ProjectGenerator {
             {
                 code: `export const assetFolders = ${this.getAssetFolders(data.assetFolders)};`,
                 filename: 'assetFolders.ts'
-            }
+            },
+            {
+                code: `export const webhooks = {
+                    ${this.getWebhooks(data.webhooks)}
+                };`,
+                filename: 'webhooks.ts'
+            },
         ];
 
         return result;
@@ -418,6 +438,25 @@ export class ProjectGenerator {
 
         return code;
     }
+
+    private getWebhooks(webhooks: WebhookModels.Webhook[]): string {
+        let code: string = ``;
+        for (let i = 0; i < webhooks.length; i++) {
+            const webhook = webhooks[i];
+            const isLast = i === webhooks.length - 1;
+
+            code += `\n`;
+            code += `${this.getWebhookComment(webhook)}\n`;
+            code += `${camelCasePropertyNameResolver('', webhook.name)}: {
+                url: ${webhook.url},
+                id: '${webhook.id}',
+                name: '${commonHelper.escapeNameValue(webhook.name)}'
+            }${!isLast ? ',\n' : ''}`;
+        }
+
+        return code;
+    }
+
 
     private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[]): string {
         if (terms.length === 0) {

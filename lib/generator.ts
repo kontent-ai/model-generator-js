@@ -37,6 +37,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const assetFolders = (await managementClient.listAssetFolders().toPromise()).data;
             const collections = (await managementClient.listCollections().toPromise()).data.collections;
             const roles = (await managementClient.listRoles().toPromise()).data.roles;
+            const webhooks = (await managementClient.listWebhooks().toPromise()).data.webhooks;
 
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
@@ -46,6 +47,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
             console.log(`Found '${yellow(collections.length.toString())}' collections`);
             console.log(`Found '${yellow(roles.length.toString())}' roles`);
+            console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
             console.log(
                 `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders.items).toString())}' asset folders`
             );
@@ -88,6 +90,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 assetFolders: assetFolders.items,
                 collections: collections,
                 roles: roles,
+                webhooks: webhooks,
                 folderPath: projectFolderPath
             });
 
