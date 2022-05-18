@@ -260,7 +260,7 @@ export class ProjectGenerator {
                     ${this.getWebhooks(data.webhooks)}
                 };`,
                 filename: 'webhooks.ts'
-            },
+            }
         ];
 
         return result;
@@ -319,6 +319,7 @@ export class ProjectGenerator {
             code += `${this.getAssetFolderComment(assetFolder)}\n`;
             code += `${camelCasePropertyNameResolver('', assetFolder.name)}: {
                 id: '${assetFolder.id}',
+                name: '${assetFolder.name}',
                 externalId: ${this.getExternalIdValue(assetFolder.externalId)},
                 folders: ${this.getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
         }
@@ -430,7 +431,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
@@ -456,7 +457,6 @@ export class ProjectGenerator {
 
         return code;
     }
-
 
     private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[]): string {
         if (terms.length === 0) {
