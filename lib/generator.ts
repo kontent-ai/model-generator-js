@@ -198,7 +198,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             throw Error(`Unsupported 'sdkType'. Supported values are: delivery, management`);
         }
 
-        console.log(green(`\nModel generator completed`));
+        console.log(green(`\nCompleted`));
     } catch (error) {
         console.log(red(`Failed with error:`));
         console.log(error);
