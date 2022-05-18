@@ -134,9 +134,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${language.name}`;
-        comment += `\n* Is Active: ${language.isActive ? 'true' : 'false'}`;
-        comment += `\n* Is Default: ${language.isDefault}`;
-        comment += `\n* Fallback language Id: ${language.fallbackLanguage?.id}`;
         comment += `\n*/`;
 
         return comment;
@@ -276,6 +273,9 @@ export class ProjectGenerator {
             code += `${camelCasePropertyNameResolver('', language.codename)}: {
                 codename: '${language.codename}',
                 id: '${language.id}',
+                isActive: ${language.isActive ? 'true' : 'false'},
+                isDefault: ${language.isDefault ? 'true' : 'false'},
+                fallbackLanguageId: ${this.getExternalIdValue(language.fallbackLanguage?.id)},
                 externalId: ${this.getExternalIdValue(language.externalId)},
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
