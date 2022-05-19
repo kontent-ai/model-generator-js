@@ -30,7 +30,8 @@
     "scripts": {
         "release": "standard-version",
         "release:major": "standard-version --release-as major",
-        "prerelease": "standard-version --prerelease --release-as major",
+        "prerelease:standard": "standard-version --prerelease",
+        "prerelease:major": "standard-version --prerelease --release-as major",
         "tsc-local": "./node_modules/.bin/tsc",
         "ts-node-local": "./node_modules/.bin/ts-node",
         "prepublishOnly": "npm run ts-lint:check && npm run build:all",
