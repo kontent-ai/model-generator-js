@@ -407,7 +407,7 @@ export class ProjectGenerator {
         contentType: ContentTypeModels.ContentType,
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[]
     ): IExtendedContentTypeElement[] {
-        let extendedElements: IExtendedContentTypeElement[] = [];
+        const extendedElements: IExtendedContentTypeElement[] = [];
         for (const element of contentType.elements) {
             if (element.type === 'snippet') {
                 // get snippet elements
@@ -420,9 +420,9 @@ export class ProjectGenerator {
                     );
                 }
                 extendedElements.push(
-                    ...snippet.elements.map((snippetElement) => {
+                    ...snippet.elements.map((mElement) => {
                         const extendedElement: IExtendedContentTypeElement = {
-                            element: snippetElement,
+                            element: mElement,
                             snippet: snippet
                         };
 
@@ -487,7 +487,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
+                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;

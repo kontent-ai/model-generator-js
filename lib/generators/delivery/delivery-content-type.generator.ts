@@ -456,9 +456,9 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
                     );
                 }
                 extendedElements.push(
-                    ...snippet.elements.map((snippetElement) =>
+                    ...snippet.elements.map((mElement) =>
                         this.mapElementType({
-                            element: snippetElement,
+                            element: mElement,
                             contentTypeNameMap: data.contentTypeNameMap,
                             contentTypeObjectMap: data.contentTypeObjectMap,
                             taxonomyNameMap: data.taxonomyNameMap,
