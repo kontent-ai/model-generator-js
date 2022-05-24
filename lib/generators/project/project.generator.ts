@@ -8,6 +8,7 @@ import {
     CollectionModels,
     ContentTypeElements,
     ContentTypeModels,
+    ContentTypeSnippetModels,
     LanguageModels,
     ProjectModels,
     RoleModels,
@@ -23,6 +24,11 @@ interface IProjectCodeResult {
     code: string;
 }
 
+interface IExtendedContentTypeElement {
+    element: ContentTypeElements.ContentTypeElementModel;
+    snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
+}
+
 export class ProjectGenerator {
     generateProjectModel(data: {
         projectInformation: ProjectModels.ProjectInformationModel;
@@ -33,6 +39,7 @@ export class ProjectGenerator {
         assetFolders: AssetFolderModels.AssetFolder[];
         collections: CollectionModels.Collection[];
         roles: RoleModels.Role[];
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
         folderPath: string;
@@ -49,6 +56,7 @@ export class ProjectGenerator {
             assetFolders: data.assetFolders,
             collections: data.collections,
             roles: data.roles,
+            snippets: data.snippets,
             webhooks: data.webhooks
         });
 
@@ -204,6 +212,7 @@ export class ProjectGenerator {
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
         workflows: WorkflowModels.Workflow[];
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         assetFolders: AssetFolderModels.AssetFolder[];
         collections: CollectionModels.Collection[];
         roles: RoleModels.Role[];
@@ -226,7 +235,7 @@ export class ProjectGenerator {
             },
             {
                 code: `export const contentTypes = {
-                    ${this.getProjectContentTypes(data.types, data.taxonomies)}
+                    ${this.getProjectContentTypes(data.types, data.snippets, data.taxonomies)}
                 };`,
                 filename: 'contentTypes.ts'
             },
@@ -275,8 +284,8 @@ export class ProjectGenerator {
                 id: '${language.id}',
                 isActive: ${language.isActive ? 'true' : 'false'},
                 isDefault: ${language.isDefault ? 'true' : 'false'},
-                fallbackLanguageId: ${this.getExternalIdValue(language.fallbackLanguage?.id)},
-                externalId: ${this.getExternalIdValue(language.externalId)},
+                fallbackLanguageId: ${this.getStringOrUndefined(language.fallbackLanguage?.id)},
+                externalId: ${this.getStringOrUndefined(language.externalId)},
                 name: '${commonHelper.escapeNameValue(language.name)}'}`;
             code += `${!isLast ? ',\n' : ''}`;
         }
@@ -284,11 +293,11 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getExternalIdValue(externalId?: string): string {
-        if (!externalId) {
+    private getStringOrUndefined(text?: string): string {
+        if (!text) {
             return 'undefined';
         }
-        return `'${externalId}'`;
+        return `'${text}'`;
     }
 
     private getProjectWorkflows(workflows: WorkflowModels.Workflow[]): string {
@@ -320,7 +329,7 @@ export class ProjectGenerator {
             code += `${camelCasePropertyNameResolver('', assetFolder.name)}: {
                 id: '${assetFolder.id}',
                 name: '${assetFolder.name}',
-                externalId: ${this.getExternalIdValue(assetFolder.externalId)},
+                externalId: ${this.getStringOrUndefined(assetFolder.externalId)},
                 folders: ${this.getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
         }
 
@@ -331,6 +340,7 @@ export class ProjectGenerator {
 
     private getProjectContentTypes(
         contentTypes: ContentTypeModels.ContentType[],
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
         taxonomies: TaxonomyModels.Taxonomy[]
     ): string {
         let code: string = ``;
@@ -343,25 +353,33 @@ export class ProjectGenerator {
             code += `${contentType.codename}: {
                 codename: '${contentType.codename}',
                 id: '${contentType.id}',
-                externalId: ${this.getExternalIdValue(contentType.externalId)},
+                externalId: ${this.getStringOrUndefined(contentType.externalId)},
                 name: '${commonHelper.escapeNameValue(contentType.name)}',
-                elements: {${this.getProjectElements(contentType, taxonomies)}}
+                elements: {${this.getContentTypeElements(contentType, snippets, taxonomies)}}
             }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
     }
 
-    private getProjectElements(
+    private getContentTypeElements(
         contentType: ContentTypeModels.ContentType,
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
         taxonomies: TaxonomyModels.Taxonomy[]
     ): string {
         let code: string = '';
-        const elementsWithName = contentType.elements.filter((m) => (m as any)['name']);
-        for (let i = 0; i < elementsWithName.length; i++) {
-            const element = elementsWithName[i];
-            const isLast = i === elementsWithName.length - 1;
+
+        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements(contentType, snippets);
+
+        // filter elements without name
+        const extendedElementsWithName = extendedElements.filter((m) => (m.element as any)['name']);
+
+        for (let i = 0; i < extendedElementsWithName.length; i++) {
+            const extendedElement = extendedElementsWithName[i];
+            const element = extendedElement.element;
             const name = (element as any)['name'];
+
+            const isLast = i === extendedElementsWithName.length - 1;
 
             if (!name) {
                 throw Error(`Element '${element.codename}' needs to have a name property`);
@@ -374,14 +392,52 @@ export class ProjectGenerator {
             code += `${element.codename}: {
                 codename: '${element.codename}',
                 id: '${element.id}',
-                externalId: ${this.getExternalIdValue(element.external_id)},
+                externalId: ${this.getStringOrUndefined(element.external_id)},
                 name: '${commonHelper.escapeNameValue(name)}',
                 required: ${isRequired},
-                type: '${element.type}'
+                type: '${element.type}',
+                snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}
             }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
+    }
+
+    private getExtendedElements(
+        contentType: ContentTypeModels.ContentType,
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[]
+    ): IExtendedContentTypeElement[] {
+        let extendedElements: IExtendedContentTypeElement[] = [];
+        for (const element of contentType.elements) {
+            if (element.type === 'snippet') {
+                // get snippet elements
+                const snippetElement: ContentTypeElements.ISnippetElement = element;
+                const snippet = snippets.find((m) => m.id === snippetElement.snippet.id);
+
+                if (!snippet) {
+                    throw Error(
+                        `Could not find content type snippet with id '${snippetElement.snippet.id}'. This snippet is used in type '${contentType.codename}'`
+                    );
+                }
+                extendedElements.push(
+                    ...snippet.elements.map((snippetElement) => {
+                        const extendedElement: IExtendedContentTypeElement = {
+                            element: snippetElement,
+                            snippet: snippet
+                        };
+
+                        return extendedElement;
+                    })
+                );
+            } else {
+                extendedElements.push({
+                    element: element,
+                    snippet: undefined
+                });
+            }
+        }
+
+        return extendedElements;
     }
 
     private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[]): string {
@@ -395,7 +451,7 @@ export class ProjectGenerator {
             code += `${taxonomy.codename}: {
                 codename: '${taxonomy.codename}',
                 id: '${taxonomy.id}',
-                externalId: ${this.getExternalIdValue(taxonomy.externalId)},
+                externalId: ${this.getStringOrUndefined(taxonomy.externalId)},
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
                 ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
@@ -431,7 +487,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
@@ -470,7 +526,7 @@ export class ProjectGenerator {
             code += `${term.codename}: {
                 codename: '${term.codename}',
                 id: '${term.id}',
-                externalId: ${this.getExternalIdValue(term.externalId)},
+                externalId: ${this.getStringOrUndefined(term.externalId)},
                 name: '${commonHelper.escapeNameValue(term.name)}',
                 ${this.getProjectTaxonomiesTerms(term.terms)}
             }${!isLast ? ',\n' : ''}`;

@@ -42,9 +42,11 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
 
             const types = (await managementClient.listContentTypes().toAllPromise()).data.items;
+            const snippets = (await managementClient.listContentTypeSnippets().toAllPromise()).data.items;
             const taxonomies = (await managementClient.listTaxonomies().toAllPromise()).data.items;
 
             console.log(`Found '${yellow(types.length.toString())}' types`);
+            console.log(`Found '${yellow(snippets.length.toString())}' content type snippets`);
             console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
 
             const workflows: WorkflowModels.Workflow[] = [];
@@ -104,6 +106,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 typeFolderPath: contentTypesFolderPath,
                 taxonomyFolderPath: taxonomiesFolderPath,
                 taxonomies: taxonomies,
+                snippets: snippets,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 elementResolver: config.elementResolver,
@@ -135,6 +138,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 assetFolders: assetFolders,
                 collections: collections,
                 roles: roles,
+                snippets: snippets,
                 webhooks: webhooks,
                 folderPath: projectFolderPath
             });
