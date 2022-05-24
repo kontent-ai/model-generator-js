@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0-2](https://github.com/Kentico/kontent-model-generator-js/compare/v5.0.0-1...v5.0.0-2) (2022-05-24)
+
+
+### Features
+
+* Adds support for elements placed in content type snippets (fixes https://github.com/Kentico/kontent-model-generator-js/issues/24) ([320c607](https://github.com/Kentico/kontent-model-generator-js/commit/320c607f9e72961fddc936ad907355ac28639869))
+
 ## [5.0.0-1](https://github.com/Kentico/kontent-model-generator-js/compare/v4.1.0...v5.0.0-1) (2022-05-19)
 
 
