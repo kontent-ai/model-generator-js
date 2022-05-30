@@ -85,7 +85,7 @@ export class DeliveryContentTypeGenerator {
         }
 
         if (data.contentTypeFileNameResolver || data.elementResolver || data.contentTypeResolver) {
-            console.log('\n');
+            console.log('');
         }
 
         for (const type of data.types) {

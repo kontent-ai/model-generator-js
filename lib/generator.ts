@@ -100,6 +100,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 console.log(`Skipping '${red('languages')}' export`);
             }
 
+            console.log('');
+
             // create content type models
             const contentTypesResult = await deliveryContentTypeGenerator.generateModelsAsync({
                 types: types,
