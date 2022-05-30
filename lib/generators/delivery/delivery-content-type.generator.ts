@@ -113,13 +113,14 @@ export class DeliveryContentTypeGenerator {
         };
     }
 
-    private getContentTypeImports(config: {
+    private getContentTypeImports(data: {
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         type: ContentTypeModels.ContentType;
         typeFolderPath: string;
         taxonomyFolderPath: string;
@@ -128,9 +129,20 @@ export class DeliveryContentTypeGenerator {
         const processedTypeIds: string[] = [];
         const processedTaxonomyIds: string[] = [];
 
-        for (const element of config.type.elements) {
+        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
+            contentType: data.type,
+            snippets: data.snippets,
+            contentTypeNameMap: data.contentTypeNameMap,
+            contentTypeObjectMap: data.contentTypeObjectMap,
+            taxonomyNameMap: data.taxonomyNameMap,
+            taxonomyObjectMap: data.taxonomyObjectMap
+        });
+
+        for (const extendedElement of extendedElements) {
+            const element = extendedElement.element;
+
             if (element.type === 'taxonomy') {
-                const taxonomy = this.extractUsedTaxonomy(element, config.taxonomyObjectMap);
+                const taxonomy = this.extractUsedTaxonomy(element, data.taxonomyObjectMap);
 
                 if (!taxonomy) {
                     continue;
@@ -142,8 +154,8 @@ export class DeliveryContentTypeGenerator {
 
                 processedTaxonomyIds.push(taxonomy.id);
 
-                const taxonomyName: string = config.taxonomyNameMap(taxonomy);
-                const fileName: string = `../${config.taxonomyFolderPath}${config.taxonomyFileNameMap(
+                const taxonomyName: string = data.taxonomyNameMap(taxonomy);
+                const fileName: string = `../${data.taxonomyFolderPath}${data.taxonomyFileNameMap(
                     taxonomy,
                     false
                 )}`;
@@ -151,7 +163,7 @@ export class DeliveryContentTypeGenerator {
                 imports.push(`import { ${taxonomyName} } from '${fileName}';`);
             } else if (element.type === 'modular_content') {
                 // extract referenced types
-                const referencedTypes = this.extractLinkedItemsAllowedTypes(element, config.contentTypeObjectMap);
+                const referencedTypes = this.extractLinkedItemsAllowedTypes(element, data.contentTypeObjectMap);
 
                 for (const referencedType of referencedTypes) {
                     if (processedTypeIds.includes(referencedType.id)) {
@@ -160,14 +172,14 @@ export class DeliveryContentTypeGenerator {
                     }
 
                     // filter 'self referencing' types as they don't need to be imported
-                    if (config.type.id === referencedType.id) {
+                    if (data.type.id === referencedType.id) {
                         continue;
                     }
 
                     processedTypeIds.push(referencedType.id);
 
-                    const typeName: string = config.contentTypeNameMap(referencedType);
-                    const fileName: string = `./${config.contentTypeFileNameMap(referencedType, false)}`;
+                    const typeName: string = data.contentTypeNameMap(referencedType);
+                    const fileName: string = `./${data.contentTypeFileNameMap(referencedType, false)}`;
 
                     imports.push(`import { ${typeName} } from '${fileName}';`);
                 }
@@ -202,6 +214,7 @@ export class DeliveryContentTypeGenerator {
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
             taxonomyObjectMap: data.taxonomyObjectMap,
+            snippets: data.snippets,
             type: data.type,
             typeFolderPath: data.typeFolderPath,
             taxonomyFolderPath: data.taxonomyFolderPath
