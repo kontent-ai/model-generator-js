@@ -39,7 +39,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             const projectInformation = (await managementClient.projectInformation().toPromise()).data;
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
-            console.log(`Environment '${yellow(projectInformation.project.environment)}\n`);
+            console.log(`Environment '${yellow(projectInformation.project.environment)}'\n`);
 
             const types = (await managementClient.listContentTypes().toAllPromise()).data.items;
             const snippets = (await managementClient.listContentTypeSnippets().toAllPromise()).data.items;
