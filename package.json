@@ -1,13 +1,13 @@
 {
-    "name": "@kentico/kontent-model-generator",
-    "version": "5.0.0-3",
-    "description": "This utility generates strongly-typed models based on Content Types in a Kentico Kontent project. The models are supposed to be used together with the Kentico Kontent Typescript SDK.",
+    "name": "@kontent-ai/model-generator",
+    "version": "5.0.0-4",
+    "description": "This utility generates strongly-typed models based on Content Types in a Kontent.ai project. These models can be used with SDKs",
     "bin": {
         "kontent-generate": "./dist/cjs/lib/cli/cli.js"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Kentico/kontent-model-generator-js"
+        "url": "https://github.com/kontent-ai/model-generator-js"
     },
     "author": "richard sustek",
     "license": "MIT",
@@ -15,21 +15,19 @@
         "node": ">= 8"
     },
     "keywords": [
-        "Kentico",
         "Kontent",
-        "Kentico Kontent",
-        "Kentico utility",
-        "Kentico generator",
-        "Kentico models",
-        "Kontent model"
+        "Kontent.ai",
+        "Kontent Model Generator"
     ],
     "main": "./dist/cjs/lib/index.js",
     "module": "./dist/es6/lib/index.js",
     "es2015": "./dist/es6/lib/index.js",
     "types": "./dist/cjs/lib/index.d.ts",
     "scripts": {
-        "release": "standard-version",
-        "release:major": "standard-version --release-as major",
+        "release": "npm run ts-lint:check && standard-version",
+        "release:major": "npm run ts-lint:check && standard-version --release-as major",
+        "release:major:beta": "npm run ts-lint:check && standard-version --prerelease --release-as major",
+        "release:beta": "standard-version --prerelease",
         "prerelease:standard": "standard-version --prerelease",
         "prerelease:major": "standard-version --prerelease --release-as major",
         "tsc-local": "./node_modules/.bin/tsc",
@@ -50,8 +48,8 @@
         "yargs": "17.5.1",
         "prettier": "2.6.2",
         "colors": "1.4.0",
-        "@kentico/kontent-delivery": "11.13.0",
-        "@kentico/kontent-management": "2.7.0"
+        "@kontent-ai/delivery-sdk": "12.0.0",
+        "@kontent-ai/management-sdk": "3.0.0"
     },
     "devDependencies": {
         "@types/yargs": "17.0.10",
