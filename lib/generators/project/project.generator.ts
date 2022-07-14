@@ -15,9 +15,9 @@ import {
     TaxonomyModels,
     WebhookModels,
     WorkflowModels
-} from '@kentico/kontent-management';
+} from '@kontent-ai/management-sdk';
 import { IGenerateResult } from '../../common-helper';
-import { camelCasePropertyNameResolver } from '@kentico/kontent-delivery';
+import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 
 interface IProjectCodeResult {
     filename: string;

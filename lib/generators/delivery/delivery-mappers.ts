@@ -1,4 +1,4 @@
-import { ContentTypeElements, ContentTypeModels, TaxonomyModels } from '@kentico/kontent-management';
+import { ContentTypeElements, ContentTypeModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { textHelper } from '../../text-helper';
 import {
     ContentTypeFileNameResolver,

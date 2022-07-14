@@ -2,7 +2,7 @@ import {
     camelCasePropertyNameResolver,
     pascalCasePropertyNameResolver,
     snakeCasePropertyNameResolver
-} from '@kentico/kontent-delivery';
+} from '@kontent-ai/delivery-sdk';
 import { DefaultResolverType } from './models';
 
 export class TextHelper {

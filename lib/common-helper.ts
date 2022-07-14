@@ -1,7 +1,7 @@
 import { name, version } from '../package.json';
 import { format, Options } from 'prettier';
 import { parse } from 'path';
-import { ContentTypeElements, TaxonomyModels } from '@kentico/kontent-management';
+import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
 
 export interface IGenerateResult {
     filenames: string[];

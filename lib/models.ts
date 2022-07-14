@@ -1,5 +1,5 @@
-import { PropertyNameResolver } from '@kentico/kontent-delivery';
-import { ContentTypeModels, TaxonomyModels } from '@kentico/kontent-management';
+import { PropertyNameResolver } from '@kontent-ai/delivery-sdk';
+import { ContentTypeModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { Options } from 'prettier';
 
 export type DefaultResolverType = 'camelCase' | 'pascalCase' | 'snakeCase';

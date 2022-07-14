@@ -1,4 +1,4 @@
-import { ContentTypeModels, TaxonomyModels } from '@kentico/kontent-management';
+import { ContentTypeModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     ContentTypeFileNameResolver,
     ContentTypeResolver,

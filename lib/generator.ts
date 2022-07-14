@@ -11,7 +11,7 @@ import {
     RoleModels,
     WebhookModels,
     WorkflowModels
-} from '@kentico/kontent-management';
+} from '@kontent-ai/management-sdk';
 import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
 import { commonHelper } from './common-helper';
 import { parse } from 'path';

@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
 import { commonHelper, IGenerateResult } from '../../common-helper';
-import { TaxonomyModels } from '@kentico/kontent-management';
+import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     MapTaxonomyToFileName,
     MapTaxonomyName,

@@ -15,7 +15,7 @@ import {
     ContentTypeSnippetModels,
     ElementModels,
     TaxonomyModels
-} from '@kentico/kontent-management';
+} from '@kontent-ai/management-sdk';
 import {
     MapContentTypeToDeliveryTypeName,
     MapContentTypeIdToObject,
@@ -42,7 +42,7 @@ interface IExtendedContentTypeElement {
 }
 
 export class DeliveryContentTypeGenerator {
-    private readonly deliveryNpmPackageName: string = '@kentico/kontent-delivery';
+    private readonly deliveryNpmPackageName: string = '@kontent-ai/delivery-sdk';
 
     async generateModelsAsync(data: {
         typeFolderPath: string;
