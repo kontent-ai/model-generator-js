@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0](https://github.com/kontent-ai/model-generator-js/compare/v5.0.0...v5.1.0) (2022-07-21)
+
+
+### Features
+
+* updates dependencies & readme, makes 'exportProjectSettings' property optional and exports all objects by default ([e1c50fa](https://github.com/kontent-ai/model-generator-js/commit/e1c50faf9df0b526edbec5312967fb2728ffc4b2))
+
 ## [5.0.0](https://github.com/kontent-ai/model-generator-js/compare/v5.0.0-4...v5.0.0) (2022-07-14)
 
 ## [5.0.0-4](https://github.com/kontent-ai/model-generator-js/compare/v5.0.0-3...v5.0.0-4) (2022-07-14)
