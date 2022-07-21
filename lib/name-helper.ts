@@ -14,7 +14,7 @@ export class NameHelper {
         fileResolver?: ContentTypeFileNameResolver;
     }): string {
         if (data.fileResolver instanceof Function) {
-            return `${data.fileResolver(data.type)}.ts`;
+            return `${data.fileResolver(data.type)}${data.addExtension ? '.ts' : ''}`;
         }
 
         let filename: string;
@@ -49,7 +49,7 @@ export class NameHelper {
         addExtension: boolean;
     }): string {
         if (data.fileResolver instanceof Function) {
-            return `${data.fileResolver(data.taxonomy)}.ts`;
+            return `${data.fileResolver(data.taxonomy)}${data.addExtension ? '.ts' : ''}`;
         }
 
         let filename: string;
