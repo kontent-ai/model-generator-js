@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.1.1](https://github.com/kontent-ai/model-generator-js/compare/v5.1.0...v5.1.1) (2022-07-21)
+
+
+### Bug Fixes
+
+* Adds missing 'taxonomy' element to project's content type structure ([8a165a3](https://github.com/kontent-ai/model-generator-js/commit/8a165a35d062cc438ffa47ccff22b8191dc958e5))
+* fixes missing usage of 'addExtension' ([b99dcd7](https://github.com/kontent-ai/model-generator-js/commit/b99dcd74c9b4232ebe1d43c793ac2b1c67579cdd))
+
 ## [5.1.0](https://github.com/kontent-ai/model-generator-js/compare/v5.0.0...v5.1.0) (2022-07-21)
 
 
