@@ -29,7 +29,11 @@ export interface IGenerateModelsConfig {
     sdkType: SdkType;
     apiKey: string;
 
-    exportProjectSettings: IExportProjectSettings;
+    /**
+     * Determines what content structure objects are exported.
+     * If not set, all objects are exported
+     */
+    exportProjectSettings?: IExportProjectSettings;
 
     contentTypeFileResolver?: ContentTypeFileNameResolver;
     taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;

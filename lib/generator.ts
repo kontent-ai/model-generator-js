@@ -56,21 +56,23 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const webhooks: WebhookModels.Webhook[] = [];
             const languages: LanguageModels.LanguageModel[] = [];
 
-            if (config.exportProjectSettings.exportWorkflows) {
+            const exportAllProjectSettings = config.exportProjectSettings ? false : true;
+
+            if (config.exportProjectSettings?.exportWorkflows || exportAllProjectSettings) {
                 workflows.push(...(await managementClient.listWorkflows().toPromise()).data);
                 console.log(`Found '${yellow(workflows.length.toString())}' workflows`);
             } else {
                 console.log(`Skipping '${red('workflows')}' export`);
             }
 
-            if (config.exportProjectSettings.exportRoles) {
+            if (config.exportProjectSettings?.exportRoles || exportAllProjectSettings) {
                 roles.push(...(await managementClient.listRoles().toPromise()).data.roles);
                 console.log(`Found '${yellow(roles.length.toString())}' roles`);
             } else {
                 console.log(`Skipping '${red('roles')}' export`);
             }
 
-            if (config.exportProjectSettings.exportAssetFolders) {
+            if (config.exportProjectSettings?.exportAssetFolders || exportAllProjectSettings) {
                 assetFolders.push(...(await managementClient.listAssetFolders().toPromise()).data.items);
                 console.log(
                     `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders).toString())}' asset folders`
@@ -79,21 +81,21 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 console.log(`Skipping '${red('asset folders')}' export`);
             }
 
-            if (config.exportProjectSettings.exportCollections) {
+            if (config.exportProjectSettings?.exportCollections || exportAllProjectSettings) {
                 collections.push(...(await managementClient.listCollections().toPromise()).data.collections);
                 console.log(`Found '${yellow(collections.length.toString())}' collections`);
             } else {
                 console.log(`Skipping '${red('collections')}' export`);
             }
 
-            if (config.exportProjectSettings.exportWebhooks) {
+            if (config.exportProjectSettings?.exportWebhooks || exportAllProjectSettings) {
                 webhooks.push(...(await managementClient.listWebhooks().toPromise()).data.webhooks);
                 console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
             } else {
                 console.log(`Skipping '${red('webhooks')}' export`);
             }
 
-            if (config.exportProjectSettings.exportLanguages) {
+            if (config.exportProjectSettings?.exportLanguages || exportAllProjectSettings) {
                 languages.push(...(await managementClient.listLanguages().toAllPromise()).data.items);
                 console.log(`Found '${yellow(languages.length.toString())}' languages`);
             } else {
