@@ -24,17 +24,17 @@ export class TextHelper {
 
     toPascalCase(text: string): string {
         // use element resolver from SDK as it provides required functionality
-        return pascalCasePropertyNameResolver('', text)
+        return pascalCasePropertyNameResolver('', text);
     }
 
     toCamelCase(text: string): string {
         // use element resolver from SDK as it provides required functionality
-        return camelCasePropertyNameResolver('', text)
+        return camelCasePropertyNameResolver('', text);
     }
 
     toSnakeCase(text: string): string {
         // use element resolver from SDK as it provides required functionality
-        return snakeCasePropertyNameResolver('', text)
+        return snakeCasePropertyNameResolver('', text);
     }
 
     toAlphanumeric(value: string): string {
