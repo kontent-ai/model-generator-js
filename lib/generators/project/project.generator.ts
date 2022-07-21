@@ -147,6 +147,29 @@ export class ProjectGenerator {
         return comment;
     }
 
+    private getElementName(
+        element: ContentTypeElements.ContentTypeElementModel,
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string | undefined {
+        if ((element as any)['name']) {
+            return (element as any)['name'];
+        }
+
+        if (element.type === 'taxonomy') {
+            const taxonomy = taxonomies.find(
+                (m) => m.id.toLowerCase() === element.taxonomy_group.id?.toLocaleLowerCase()
+            );
+
+            if (!taxonomy) {
+                throw Error(`Invalid taxonomy with id '${element.taxonomy_group.id}'`);
+            }
+
+            return taxonomy.name;
+        }
+
+        return undefined;
+    }
+
     private getElementComment(
         element: ContentTypeElements.ContentTypeElementModel,
         taxonomies: TaxonomyModels.Taxonomy[]
@@ -371,19 +394,18 @@ export class ProjectGenerator {
 
         const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements(contentType, snippets);
 
-        // filter elements without name
-        const extendedElementsWithName = extendedElements.filter((m) => (m.element as any)['name']);
-
-        for (let i = 0; i < extendedElementsWithName.length; i++) {
-            const extendedElement = extendedElementsWithName[i];
+        for (let i = 0; i < extendedElements.length; i++) {
+            const extendedElement = extendedElements[i];
             const element = extendedElement.element;
-            const name = (element as any)['name'];
 
-            const isLast = i === extendedElementsWithName.length - 1;
+            const name = this.getElementName(element, taxonomies);
 
             if (!name) {
-                throw Error(`Element '${element.codename}' needs to have a name property`);
+                // element does not have a name (e.g. guidelines)
+                continue;
             }
+
+            const isLast = i === extendedElements.length - 1;
 
             const isRequired = commonHelper.isElementRequired(element);
 
@@ -487,7 +509,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
