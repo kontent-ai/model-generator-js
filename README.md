@@ -32,6 +32,7 @@ import { generateModelsAsync } from '@kontent-ai/model-generator';
 await generateModelsAsync({
     sdkType: 'delivery',
     projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+    isEnterpriseSubscription: true,
     apiKey: 'yyy',
     addTimestamp: true,
     elementResolver: 'camelCase',
@@ -46,6 +47,7 @@ You may customize the way filenames are stored on file system using the `content
 await generateModelsAsync({
   sdkType: 'delivery',
   projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  isEnterpriseSubscription: true,
   apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
@@ -62,6 +64,7 @@ You may customize name of content types using the `contentTypeResolver` configur
 await generateModelsAsync({
   sdkType: 'delivery',
   projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  isEnterpriseSubscription: true,
   apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
@@ -70,10 +73,15 @@ await generateModelsAsync({
 });
 ```
 
+## FAQ
+
+- If you are getting the `The Subscription API is not supported in your plan` error, set the `isEnterpriseSubscription` option to false
+
 ## CLI Configuration
 
 - `projectId` - Id of the Kontent project
 - `apiKey`- Management API Key
+- `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
@@ -86,7 +94,7 @@ await generateModelsAsync({
 - `exportAssetFolders` - Indicates if asset folders are exported
 - `exportCollections` - Indicates if collections are exported
 - `exportLanguages` - Indicates if languages are exported
-- `exportRoles` - Indicates if roles are exported
+- `exportRoles` - Indicates if roles are exported. * Only available for Enterprise subscription plans
 
 ## Example models
 

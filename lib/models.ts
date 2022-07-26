@@ -26,6 +26,7 @@ export interface IExportProjectSettings {
 export interface IGenerateModelsConfig {
     projectId: string;
     addTimestamp: boolean;
+    isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;
 

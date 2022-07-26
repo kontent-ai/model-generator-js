@@ -40,7 +40,10 @@ const argv = yargs(process.argv.slice(2))
         description: 'Name resolver for content type filenames. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('exportRoles', {
-        description: 'Indicates if roles are exported'
+        description: 'Indicates if roles are exported. Only available for Enterprise subscription plans'
+    })
+    .option('isEnterpriseSubscription', {
+        description: 'Indicates if enterprise subscription endpoint can be used to export data.'
     })
     .help('h')
     .alias('h', 'help').argv;
@@ -64,6 +67,7 @@ const run = async () => {
     const exportCollections = !resolvedArgs.exportCollections ? true :  resolvedArgs.exportCollections === 'true';
     const exportLanguages =  !resolvedArgs.exportLanguages ? true :  resolvedArgs.exportLanguages === 'true';
     const exportRoles = !resolvedArgs.exportRoles ? true :  resolvedArgs.exportRoles === 'true';
+    const isEnterpriseSubscription = !resolvedArgs.isEnterpriseSubscription ? true :  resolvedArgs.isEnterpriseSubscription === 'true';
 
     if (!projectId) {
         throw Error(`Please provide project id using 'projectId' argument`);
@@ -72,6 +76,7 @@ const run = async () => {
     await generateModelsAsync({
         projectId: projectId,
         apiKey: apiKey,
+        isEnterpriseSubscription: isEnterpriseSubscription,
         addTimestamp: addTimestamp === 'true' ? true : false,
         elementResolver: elementResolver,
         contentTypeFileResolver: contentTypeFileResolver,

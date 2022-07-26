@@ -65,11 +65,15 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 console.log(`Skipping '${red('workflows')}' export`);
             }
 
-            if (config.exportProjectSettings?.exportRoles || exportAllProjectSettings) {
-                roles.push(...(await managementClient.listRoles().toPromise()).data.roles);
-                console.log(`Found '${yellow(roles.length.toString())}' roles`);
+            if (config.isEnterpriseSubscription) {
+                if (config.exportProjectSettings?.exportRoles || exportAllProjectSettings) {
+                    roles.push(...(await managementClient.listRoles().toPromise()).data.roles);
+                    console.log(`Found '${yellow(roles.length.toString())}' roles`);
+                } else {
+                    console.log(`Skipping '${red('roles')}' export`);
+                }
             } else {
-                console.log(`Skipping '${red('roles')}' export`);
+                console.log(`Skipping '${red('roles')}' export because enterprise subscription is disabled`);
             }
 
             if (config.exportProjectSettings?.exportAssetFolders || exportAllProjectSettings) {
