@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.2.0](https://github.com/kontent-ai/model-generator-js/compare/v5.1.1...v5.2.0) (2022-07-26)
+
+
+### Features
+
+* Adds new 'isEnterpriseSubscription' option which disables endpoint that required Enterprise subscription plans ([76e9784](https://github.com/kontent-ai/model-generator-js/commit/76e97849e2ca99a3986c163d447bb08b6773f84f))
+
 ### [5.1.1](https://github.com/kontent-ai/model-generator-js/compare/v5.1.0...v5.1.1) (2022-07-21)
 
 
