@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.3.0](https://github.com/kontent-ai/model-generator-js/compare/v5.2.0...v5.3.0) (2022-07-28)
+
+
+### Features
+
+* Splits Content type snippets from the types they are used in favor of using intersection (fixes https://github.com/kontent-ai/model-generator-js/issues/25) ([6ea944a](https://github.com/kontent-ai/model-generator-js/commit/6ea944a88048b4acbdabaf8a3ab65ae8d0ce75bf))
+* updates dependencies ([e4b3b90](https://github.com/kontent-ai/model-generator-js/commit/e4b3b90cec95a7c0ade58dd003d2d99c30ee9fdf))
+
+
+### Bug Fixes
+
+* Adds default import to barrel files in case there are no files to import ([2020022](https://github.com/kontent-ai/model-generator-js/commit/2020022e509dad7afcf67b2b8bb87314aeef9b18))
+
 ## [5.2.0](https://github.com/kontent-ai/model-generator-js/compare/v5.1.1...v5.2.0) (2022-07-26)
 
 
