@@ -94,7 +94,7 @@ export class CommonHelper {
     }
 
     escapeNameValue(value: string): string {
-        return value.replace("'", "\\'");
+        return value.replace('\'', '\\\'');
     }
 }
 
