@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { format, Options } from 'prettier';
-import { commonHelper } from '../../common-helper';
+import { commonHelper, IGenerateProjectResult } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import {
     AssetFolderModels,
@@ -16,7 +16,6 @@ import {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { IGenerateResult } from '../../common-helper';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 
 interface IProjectCodeResult {
@@ -44,7 +43,7 @@ export class ProjectGenerator {
         addTimestamp: boolean;
         folderPath: string;
         formatOptions?: Options;
-    }): IGenerateResult {
+    }): IGenerateProjectResult {
         const projectCodes = this.getProjectModelCode({
             projectInformation: data.projectInformation,
             types: data.types,

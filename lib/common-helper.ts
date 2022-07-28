@@ -3,9 +3,19 @@ import { format, Options } from 'prettier';
 import { parse } from 'path';
 import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
 
-export interface IGenerateResult {
+export interface IGenerateContentTypesResult {
+    contentTypeFilenames: string[];
+    contentTypeSnippetFilenames: string[];
+}
+
+export interface IGenerateTaxonomiesResult {
+    taxonomyFilenames: string[];
+}
+
+export interface IGenerateProjectResult {
     filenames: string[];
 }
+
 
 export class CommonHelper {
     getAutogenerateNote(addTimestamp: boolean): string {

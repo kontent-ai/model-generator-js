@@ -1,4 +1,4 @@
-import { ContentTypeModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     ContentTypeFileNameResolver,
     ContentTypeResolver,
@@ -28,6 +28,26 @@ export class NameHelper {
         return `${filename}${data.addExtension ? '.ts' : ''}`;
     }
 
+    getDeliveryContentTypeSnippetFilename(data: {
+        snippet: ContentTypeSnippetModels.ContentTypeSnippet;
+        addExtension: boolean;
+        fileResolver?: ContentTypeFileNameResolver;
+    }): string {
+        if (data.fileResolver instanceof Function) {
+            return `${data.fileResolver(data.snippet)}${data.addExtension ? '.ts' : ''}`;
+        }
+
+        let filename: string;
+
+        if (!data.fileResolver) {
+            filename = `${data.snippet.codename}`;
+        } else {
+            filename = `${textHelper.resolveTextWithDefaultResolver(data.snippet.codename, data.fileResolver)}`;
+        }
+
+        return `${filename}${data.addExtension ? '.ts' : ''}`;
+    }
+
     getDeliveryContentTypeName(data: {
         type: ContentTypeModels.ContentType;
         contentTypeResolver?: ContentTypeResolver;
@@ -41,6 +61,21 @@ export class NameHelper {
         }
 
         return `${textHelper.resolveTextWithDefaultResolver(data.type.name, data.contentTypeResolver)}`;
+    }
+
+    getDeliveryContentTypeSnippetName(data: {
+        snippet: ContentTypeSnippetModels.ContentTypeSnippet;
+        contentTypeResolver?: ContentTypeResolver;
+    }): string {
+        if (!data.contentTypeResolver) {
+            return textHelper.toPascalCase(data.snippet.name);
+        }
+
+        if (data.contentTypeResolver instanceof Function) {
+            return `${data.contentTypeResolver(data.snippet)}`;
+        }
+
+        return `${textHelper.resolveTextWithDefaultResolver(data.snippet.name, data.contentTypeResolver)}`;
     }
 
     getDeliveryTaxonomyFilename(data: {

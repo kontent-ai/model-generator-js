@@ -1,8 +1,15 @@
-import { ContentTypeElements, ContentTypeModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import {
+    ContentTypeElements,
+    ContentTypeModels,
+    ContentTypeSnippetModels,
+    TaxonomyModels
+} from '@kontent-ai/management-sdk';
 import { textHelper } from '../../text-helper';
 import {
     ContentTypeFileNameResolver,
     ContentTypeResolver,
+    ContentTypeSnippetFileNameResolver,
+    ContentTypeSnippetResolver,
     ElementResolver,
     TaxonomyTypeFileNameResolver,
     TaxonomyTypeResolver
@@ -10,12 +17,17 @@ import {
 import { nameHelper } from '../../name-helper';
 
 export type MapContentTypeToDeliveryTypeName = (contentType: ContentTypeModels.ContentType) => string;
+export type MapContentTypeSnippetToDeliveryTypeName = (
+    contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet
+) => string;
 export type MapContentTypeIdToObject = (id: string) => ContentTypeModels.ContentType;
+export type MapContentTypeSnippetIdToObject = (id: string) => ContentTypeSnippetModels.ContentTypeSnippet;
 export type MapContentTypeToFileName = (contentType: ContentTypeModels.ContentType, addExtension: boolean) => string;
-export type MapElementToName = (
-    element: ContentTypeElements.ContentTypeElementModel,
-    contentType: ContentTypeModels.ContentType
-) => string | undefined;
+export type MapContentTypeSnippetToFileName = (
+    contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet,
+    addExtension: boolean
+) => string;
+export type MapElementToName = (element: ContentTypeElements.ContentTypeElementModel) => string | undefined;
 
 export type MapTaxonomyName = (taxonomy: TaxonomyModels.Taxonomy) => string;
 export type MapTaxonomyIdTobject = (id: string) => TaxonomyModels.Taxonomy;
@@ -25,6 +37,17 @@ export function getMapContentTypeToDeliveryTypeName(resolver?: ContentTypeResolv
     return (contentType) => {
         return nameHelper.getDeliveryContentTypeName({
             type: contentType,
+            contentTypeResolver: resolver
+        });
+    };
+}
+
+export function getMapContentTypeSnippetToDeliveryTypeName(
+    resolver?: ContentTypeSnippetResolver
+): MapContentTypeSnippetToDeliveryTypeName {
+    return (contentTypeSnippet) => {
+        return nameHelper.getDeliveryContentTypeSnippetName({
+            snippet: contentTypeSnippet,
             contentTypeResolver: resolver
         });
     };
@@ -42,6 +65,18 @@ export function getMapContentTypeIdToObject(types: ContentTypeModels.ContentType
     };
 }
 
+export function getMapContentTypeSnippetIdToObject(snippets: ContentTypeSnippetModels.ContentTypeSnippet[]): MapContentTypeSnippetIdToObject {
+    return (id) => {
+        const snippet = snippets.find((m) => m.id === id);
+
+        if (!snippet) {
+            throw Error(`Could not find content type snippet with id '${id}'`);
+        }
+
+        return snippet;
+    };
+}
+
 export function getMapContentTypeToFileName(resolver?: ContentTypeFileNameResolver): MapContentTypeToFileName {
     return (contentType, addExtension) => {
         const fileName = nameHelper.getDeliveryContentTypeFilename({
@@ -53,14 +88,26 @@ export function getMapContentTypeToFileName(resolver?: ContentTypeFileNameResolv
     };
 }
 
+export function getMapContentTypeSnippetToFileName(
+    resolver?: ContentTypeSnippetFileNameResolver
+): MapContentTypeSnippetToFileName {
+    return (snippet, addExtension) => {
+        const fileName = nameHelper.getDeliveryContentTypeSnippetFilename({
+            snippet: snippet,
+            addExtension: addExtension,
+            fileResolver: resolver
+        });
+        return `${fileName}`;
+    };
+}
+
 export function getMapElementToName(resolver?: ElementResolver): MapElementToName {
-    return (element, contentType) => {
+    return (element) => {
         if (!element.codename) {
             return undefined;
         }
         const elementName = getElementName({
             elementCodename: element.codename,
-            type: contentType.codename,
             elementResolver: resolver
         });
 
@@ -100,13 +147,13 @@ export function getMapTaxonomyIdTobject(taxonomies: TaxonomyModels.Taxonomy[]): 
     };
 }
 
-function getElementName(config: { type: string; elementCodename: string; elementResolver?: ElementResolver }): string {
+function getElementName(config: { elementCodename: string; elementResolver?: ElementResolver }): string {
     if (!config.elementResolver) {
         return config.elementCodename;
     }
 
     if (config.elementResolver instanceof Function) {
-        return config.elementResolver(config.type, config.elementCodename);
+        return config.elementResolver('', config.elementCodename);
     }
 
     return textHelper.resolveTextWithDefaultResolver(config.elementCodename, config.elementResolver);

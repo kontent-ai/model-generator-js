@@ -85,8 +85,10 @@ await generateModelsAsync({
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `contentTypeSnippetFileResolver`- Name resolver for content type snippet filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `taxonomyTypeFileResolver`- Name resolver for taxonomy filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeResolver`- Name resolver for content type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+- `contentTypeSnippetResolver`- Name resolver for content type snippet names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
 - `exportWebhooks` - Indicates if webhooks are exported

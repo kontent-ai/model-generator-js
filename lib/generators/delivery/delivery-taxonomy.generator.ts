@@ -2,7 +2,7 @@ import { format, Options } from 'prettier';
 import * as fs from 'fs';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
-import { commonHelper, IGenerateResult } from '../../common-helper';
+import { commonHelper, IGenerateTaxonomiesResult } from '../../common-helper';
 import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     MapTaxonomyToFileName,
@@ -19,7 +19,7 @@ export class DeliveryTaxonomyGenerator {
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): Promise<IGenerateResult> {
+    }): Promise<IGenerateTaxonomiesResult> {
         const filenames: string[] = [];
 
         if (config.taxonomyResolver) {
@@ -55,7 +55,7 @@ export class DeliveryTaxonomyGenerator {
         }
 
         return {
-            filenames: filenames
+            taxonomyFilenames: filenames
         };
     }
 

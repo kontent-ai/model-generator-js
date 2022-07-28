@@ -33,11 +33,17 @@ const argv = yargs(process.argv.slice(2))
     .option('contentTypeResolver', {
         description: 'Name resolver for content type names. Available options are: camelCase, pascalCase, snakeCase'
     })
+    .option('contentTypeSnippetResolver', {
+        description: 'Name resolver for content type snippet names. Available options are: camelCase, pascalCase, snakeCase'
+    })
     .option('taxonomyTypeFileResolver', {
         description: 'Name resolver for taxonomy filenames. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('contentTypeFileResolver', {
         description: 'Name resolver for content type filenames. Available options are: camelCase, pascalCase, snakeCase'
+    })
+    .option('contentTypeSnippetFileResolver', {
+        description: 'Name resolver for content type snippet filenames. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('exportRoles', {
         description: 'Indicates if roles are exported. Only available for Enterprise subscription plans'
@@ -57,9 +63,11 @@ const run = async () => {
     const addTimestamp = resolvedArgs.addTimestamp;
     const elementResolver = resolvedArgs.elementResolver;
     const contentTypeFileResolver = resolvedArgs.contentTypeFileResolver;
+    const contentTypeSnippetFileResolver = resolvedArgs.contentTypeSnippetFileResolver;
     const taxonomyTypeFileResolver = resolvedArgs.taxonomyTypeFileResolver;
     const contentTypeResolver = resolvedArgs.contentTypeResolver;
     const taxonomyTypeResolver = resolvedArgs.taxonomyTypeResolver;
+    const contentTypeSnippetResolver = resolvedArgs.contentTypeSnippetResolver;
     const sdkType = resolvedArgs.sdkType;
     const exportWebhooks = !resolvedArgs.exportWebhooks ? true :  resolvedArgs.exportWebhooks === 'true';
     const exportWorkflows =  !resolvedArgs.exportWorkflows ? true :  resolvedArgs.exportWorkflows === 'true';
@@ -83,6 +91,8 @@ const run = async () => {
         contentTypeResolver: contentTypeResolver,
         taxonomyTypeFileResolver: taxonomyTypeFileResolver,
         taxonomyTypeResolver: taxonomyTypeResolver,
+        contentTypeSnippetFileResolver: contentTypeSnippetFileResolver,
+        contentTypeSnippetResolver: contentTypeSnippetResolver,
         formatOptions: undefined,
         sdkType: sdkType ?? 'delivery',
         exportProjectSettings: {

@@ -1,13 +1,15 @@
 import * as fs from 'fs';
 import { yellow } from 'colors';
-import { commonHelper, IGenerateResult } from '../../common-helper';
+import { commonHelper, IGenerateContentTypesResult } from '../../common-helper';
 import { format, Options } from 'prettier';
 import {
     ContentTypeResolver,
     ElementResolver,
     ContentTypeFileNameResolver,
     TaxonomyTypeFileNameResolver,
-    TaxonomyTypeResolver
+    TaxonomyTypeResolver,
+    ContentTypeSnippetResolver,
+    ContentTypeSnippetFileNameResolver
 } from '../../models';
 import {
     ContentTypeElements,
@@ -30,7 +32,13 @@ import {
     getMapTaxonomyName,
     getMapTaxonomyToFileName,
     MapTaxonomyIdTobject,
-    getMapTaxonomyIdTobject
+    getMapTaxonomyIdTobject,
+    MapContentTypeSnippetToFileName,
+    MapContentTypeSnippetToDeliveryTypeName,
+    getMapContentTypeSnippetToDeliveryTypeName,
+    getMapContentTypeSnippetToFileName,
+    MapContentTypeSnippetIdToObject,
+    getMapContentTypeSnippetIdToObject
 } from './delivery-mappers';
 import { textHelper } from '../../text-helper';
 
@@ -41,11 +49,17 @@ interface IExtendedContentTypeElement {
     snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
 }
 
+interface IExtractImportsResult {
+    imports: string[];
+    contentTypeSnippetExtensions: string[];
+}
+
 export class DeliveryContentTypeGenerator {
     private readonly deliveryNpmPackageName: string = '@kontent-ai/delivery-sdk';
 
     async generateModelsAsync(data: {
         typeFolderPath: string;
+        typeSnippetsFolderPath: string;
         taxonomyFolderPath: string;
         types: ContentTypeModels.ContentType[];
         taxonomies: TaxonomyModels.Taxonomy[];
@@ -53,14 +67,20 @@ export class DeliveryContentTypeGenerator {
         addTimestamp: boolean;
         elementResolver?: ElementResolver;
         contentTypeFileNameResolver?: ContentTypeFileNameResolver;
+        contentTypeSnippetFileNameResolver?: ContentTypeSnippetFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
+        contentTypeSnippetResolver?: ContentTypeSnippetResolver;
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
         formatOptions?: Options;
-    }): Promise<IGenerateResult> {
-        const filenames: string[] = [];
+    }): Promise<IGenerateContentTypesResult> {
+        const contentTypeFilenames: string[] = [];
+        const contentTypeSnippetFilenames: string[] = [];
+
+        let addNewLineAfterResolvers: boolean = false;
 
         if (data.elementResolver) {
+            addNewLineAfterResolvers = true;
             console.log(
                 `Using '${yellow(
                     data.elementResolver instanceof Function ? 'custom' : data.elementResolver
@@ -69,14 +89,27 @@ export class DeliveryContentTypeGenerator {
         }
 
         if (data.contentTypeFileNameResolver) {
+            addNewLineAfterResolvers = true;
             console.log(
                 `Using '${yellow(
                     data.contentTypeFileNameResolver instanceof Function ? 'custom' : data.contentTypeFileNameResolver
-                )}' name resolver for content type filename`
+                )}' name resolver for content type filenames`
+            );
+        }
+
+        if (data.contentTypeSnippetFileNameResolver) {
+            addNewLineAfterResolvers = true;
+            console.log(
+                `Using '${yellow(
+                    data.contentTypeSnippetFileNameResolver instanceof Function
+                        ? 'custom'
+                        : data.contentTypeSnippetFileNameResolver
+                )}' name resolver for content type snippet filenames`
             );
         }
 
         if (data.contentTypeResolver) {
+            addNewLineAfterResolvers = true;
             console.log(
                 `Using '${yellow(
                     data.contentTypeResolver instanceof Function ? 'custom' : data.contentTypeResolver
@@ -84,19 +117,34 @@ export class DeliveryContentTypeGenerator {
             );
         }
 
-        if (data.contentTypeFileNameResolver || data.elementResolver || data.contentTypeResolver) {
+        if (data.contentTypeSnippetResolver) {
+            addNewLineAfterResolvers = true;
+            console.log(
+                `Using '${yellow(
+                    data.contentTypeSnippetResolver instanceof Function ? 'custom' : data.contentTypeSnippetResolver
+                )}' name resolver for content type snippets`
+            );
+        }
+
+        if (addNewLineAfterResolvers) {
             console.log('');
         }
 
-        for (const type of data.types) {
-            const filename = this.generateModels({
-                type: type,
+        for (const contentTypeSnippet of data.snippets) {
+            const filename = this.createContentTypeSnippetModel({
+                snippet: contentTypeSnippet,
                 snippets: data.snippets,
                 taxonomies: data.taxonomies,
                 typeFolderPath: data.typeFolderPath,
+                typeSnippetsFolderPath: data.typeSnippetsFolderPath,
                 taxonomyFolderPath: data.taxonomyFolderPath,
+                contentTypeSnippetNameMap: getMapContentTypeSnippetToDeliveryTypeName(data.contentTypeSnippetResolver),
+                contentTypeSnippetFileNameMap: getMapContentTypeSnippetToFileName(
+                    data.contentTypeSnippetFileNameResolver
+                ),
                 contentTypeNameMap: getMapContentTypeToDeliveryTypeName(data.contentTypeResolver),
                 contentTypeObjectMap: getMapContentTypeIdToObject(data.types),
+                contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
                 contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
                 elementNameMap: getMapElementToName(data.elementResolver),
                 taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
@@ -105,33 +153,66 @@ export class DeliveryContentTypeGenerator {
                 addTimestamp: data.addTimestamp,
                 formatOptions: data.formatOptions
             });
-            filenames.push(filename);
+            contentTypeSnippetFilenames.push(filename);
+        }
+
+        for (const type of data.types) {
+            const filename = this.createContentTypeModel({
+                type: type,
+                snippets: data.snippets,
+                taxonomies: data.taxonomies,
+                typeFolderPath: data.typeFolderPath,
+                typeSnippetsFolderPath: data.typeSnippetsFolderPath,
+                taxonomyFolderPath: data.taxonomyFolderPath,
+                contentTypeSnippetNameMap: getMapContentTypeSnippetToDeliveryTypeName(data.contentTypeSnippetResolver),
+                contentTypeSnippetFileNameMap: getMapContentTypeSnippetToFileName(
+                    data.contentTypeSnippetFileNameResolver
+                ),
+                contentTypeNameMap: getMapContentTypeToDeliveryTypeName(data.contentTypeResolver),
+                contentTypeObjectMap: getMapContentTypeIdToObject(data.types),
+                contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
+                contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
+                elementNameMap: getMapElementToName(data.elementResolver),
+                taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
+                taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
+                taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
+                addTimestamp: data.addTimestamp,
+                formatOptions: data.formatOptions
+            });
+            contentTypeFilenames.push(filename);
         }
 
         return {
-            filenames: filenames
+            contentTypeFilenames: contentTypeFilenames,
+            contentTypeSnippetFilenames: contentTypeSnippetFilenames
         };
     }
 
     private getContentTypeImports(data: {
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeSnippetNameMap: MapContentTypeSnippetToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
+        contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
+        contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
-        type: ContentTypeModels.ContentType;
+        contentType?: ContentTypeModels.ContentType;
+        contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         typeFolderPath: string;
+        typeSnippetsFolderPath: string;
         taxonomyFolderPath: string;
-    }): string[] {
+    }): IExtractImportsResult {
         const imports: string[] = [];
+        const contentTypeSnippetExtensions: string[] = [];
         const processedTypeIds: string[] = [];
         const processedTaxonomyIds: string[] = [];
 
         const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
-            contentType: data.type,
-            snippets: data.snippets,
+            contentType: data.contentType,
+            contentTypeSnippet: data.contentTypeSnippet,
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
             taxonomyNameMap: data.taxonomyNameMap,
@@ -155,10 +236,7 @@ export class DeliveryContentTypeGenerator {
                 processedTaxonomyIds.push(taxonomy.id);
 
                 const taxonomyName: string = data.taxonomyNameMap(taxonomy);
-                const fileName: string = `../${data.taxonomyFolderPath}${data.taxonomyFileNameMap(
-                    taxonomy,
-                    false
-                )}`;
+                const fileName: string = `../${data.taxonomyFolderPath}${data.taxonomyFileNameMap(taxonomy, false)}`;
 
                 imports.push(`import { ${taxonomyName} } from '${fileName}';`);
             } else if (element.type === 'modular_content') {
@@ -172,7 +250,7 @@ export class DeliveryContentTypeGenerator {
                     }
 
                     // filter 'self referencing' types as they don't need to be imported
-                    if (data.type.id === referencedType.id) {
+                    if (data.contentType?.id === referencedType.id) {
                         continue;
                     }
 
@@ -183,69 +261,110 @@ export class DeliveryContentTypeGenerator {
 
                     imports.push(`import { ${typeName} } from '${fileName}';`);
                 }
+            } else if (element.type === 'snippet') {
+                const contentTypeSnipped = this.extractUsedSnippet(element, data.contentTypeSnippetObjectMap);
+
+                const typeName: string = data.contentTypeSnippetNameMap(contentTypeSnipped);
+                const fileName: string = `../${data.typeSnippetsFolderPath}${data.contentTypeSnippetFileNameMap(
+                    contentTypeSnipped,
+                    false
+                )}`;
+
+                imports.push(`import { ${typeName} } from '${fileName}';`);
+                contentTypeSnippetExtensions.push(typeName);
             }
         }
 
-        return imports;
+        return {
+            imports: imports,
+            contentTypeSnippetExtensions: contentTypeSnippetExtensions
+        };
     }
 
     private getModelCode(data: {
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeSnippetNameMap: MapContentTypeSnippetToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
+        contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
+        contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
         elementNameMap: MapElementToName;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
-        type: ContentTypeModels.ContentType;
+        contentType?: ContentTypeModels.ContentType;
+        contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         taxonomies: TaxonomyModels.Taxonomy[];
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         typeFolderPath: string;
+        typeSnippetsFolderPath: string;
         taxonomyFolderPath: string;
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
         let code = `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`;
 
-        const contentTypeImports: string[] = this.getContentTypeImports({
+        const importResult = this.getContentTypeImports({
             contentTypeNameMap: data.contentTypeNameMap,
+            contentTypeSnippetNameMap: data.contentTypeSnippetNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
             contentTypeFileNameMap: data.contentTypeFileNameMap,
+            contentTypeSnippetFileNameMap: data.contentTypeSnippetFileNameMap,
+            contentTypeSnippetObjectMap: data.contentTypeSnippetObjectMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
             taxonomyObjectMap: data.taxonomyObjectMap,
             snippets: data.snippets,
-            type: data.type,
+            contentType: data.contentType,
+            contentTypeSnippet: data.contentTypeSnippet,
             typeFolderPath: data.typeFolderPath,
+            typeSnippetsFolderPath: data.typeSnippetsFolderPath,
             taxonomyFolderPath: data.taxonomyFolderPath
         });
 
-        if (contentTypeImports.length) {
-            for (const importItem of contentTypeImports) {
+        if (importResult.imports.length) {
+            for (const importItem of importResult.imports) {
                 code += `${importItem}`;
             }
 
             code += `\n`;
         }
 
+        let comment: string = '';
+        let typeName: string = '';
+        let typeExtends: string = '';
+
+        if (data.contentType) {
+            comment = this.getContentTypeComment(data.contentType);
+            typeName = data.contentTypeNameMap(data.contentType);
+
+            if (importResult.contentTypeSnippetExtensions.length) {
+                typeExtends = `& ${importResult.contentTypeSnippetExtensions.join(' & ')}`;
+            }
+        } else if (data.contentTypeSnippet) {
+            comment = this.getContentTypeSnippetComment(data.contentTypeSnippet);
+            typeName = data.contentTypeSnippetNameMap(data.contentTypeSnippet);
+        }
+
         code += `
 /**
 * ${commonHelper.getAutogenerateNote(data.addTimestamp)}
 *
-* ${this.getContentTypeComment(data.type)}
+* ${comment}
 */
-export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
+export type ${typeName} = IContentItem<{
     ${this.getElementsCode({
         contentTypeObjectMap: data.contentTypeObjectMap,
         contentTypeNameMap: data.contentTypeNameMap,
-        type: data.type,
+        contentType: data.contentType,
+        contentTypeSnippet: data.contentTypeSnippet,
         snippets: data.snippets,
         elementNameMap: data.elementNameMap,
         taxonomyNameMap: data.taxonomyNameMap,
         taxonomyObjectMap: data.taxonomyObjectMap,
         taxonomies: data.taxonomies
     })}
-}>;
+}>${typeExtends};
 `;
         const formatOptions: Options = data.formatOptions
             ? data.formatOptions
@@ -258,14 +377,18 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
         return format(code, formatOptions);
     }
 
-    private generateModels(data: {
+    private createContentTypeModel(data: {
         type: ContentTypeModels.ContentType;
         typeFolderPath: string;
+        typeSnippetsFolderPath: string;
         taxonomyFolderPath: string;
         taxonomies: TaxonomyModels.Taxonomy[];
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeSnippetNameMap: MapContentTypeSnippetToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
+        contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
+        contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         elementNameMap: MapElementToName;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
@@ -277,12 +400,68 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
         const filename: string = `./${data.typeFolderPath}${data.contentTypeFileNameMap(data.type, true)}`;
         const code = this.getModelCode({
             contentTypeFileNameMap: data.contentTypeFileNameMap,
+            contentTypeSnippetFileNameMap: data.contentTypeSnippetFileNameMap,
+            contentTypeSnippetNameMap: data.contentTypeSnippetNameMap,
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
-            type: data.type,
+            contentTypeSnippetObjectMap: data.contentTypeSnippetObjectMap,
+            contentType: data.type,
+            contentTypeSnippet: undefined,
             snippets: data.snippets,
             taxonomies: data.taxonomies,
             typeFolderPath: data.typeFolderPath,
+            typeSnippetsFolderPath: data.typeSnippetsFolderPath,
+            taxonomyFolderPath: data.taxonomyFolderPath,
+            addTimestamp: data.addTimestamp,
+            formatOptions: data.formatOptions,
+            elementNameMap: data.elementNameMap,
+            taxonomyFileNameMap: data.taxonomyFileNameMap,
+            taxonomyNameMap: data.taxonomyNameMap,
+            taxonomyObjectMap: data.taxonomyObjectMap
+        });
+
+        fs.writeFileSync(filename, code);
+        console.log(`Created '${yellow(filename)}'`);
+        return filename;
+    }
+
+    private createContentTypeSnippetModel(data: {
+        snippet: ContentTypeSnippetModels.ContentTypeSnippet;
+        typeSnippetsFolderPath: string;
+        taxonomyFolderPath: string;
+        typeFolderPath: string;
+        taxonomies: TaxonomyModels.Taxonomy[];
+        contentTypeSnippetNameMap: MapContentTypeSnippetToDeliveryTypeName;
+        contentTypeNameMap: MapContentTypeToDeliveryTypeName;
+        contentTypeFileNameMap: MapContentTypeToFileName;
+        contentTypeObjectMap: MapContentTypeIdToObject;
+        contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
+        contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
+        elementNameMap: MapElementToName;
+        taxonomyObjectMap: MapTaxonomyIdTobject;
+        taxonomyNameMap: MapTaxonomyName;
+        taxonomyFileNameMap: MapTaxonomyToFileName;
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
+        addTimestamp: boolean;
+        formatOptions?: Options;
+    }): string {
+        const filename: string = `./${data.typeSnippetsFolderPath}${data.contentTypeSnippetFileNameMap(
+            data.snippet,
+            true
+        )}`;
+        const code = this.getModelCode({
+            contentTypeFileNameMap: data.contentTypeFileNameMap,
+            contentTypeSnippetFileNameMap: data.contentTypeSnippetFileNameMap,
+            contentTypeSnippetNameMap: data.contentTypeSnippetNameMap,
+            contentTypeNameMap: data.contentTypeNameMap,
+            contentTypeObjectMap: data.contentTypeObjectMap,
+            contentTypeSnippetObjectMap: data.contentTypeSnippetObjectMap,
+            contentType: undefined,
+            contentTypeSnippet: data.snippet,
+            snippets: data.snippets,
+            taxonomies: data.taxonomies,
+            typeFolderPath: data.typeFolderPath,
+            typeSnippetsFolderPath: data.typeSnippetsFolderPath,
             taxonomyFolderPath: data.taxonomyFolderPath,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
@@ -302,6 +481,15 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
 
         comment += `\n* Id: ${contentType.id}`;
         comment += `\n* Codename: ${contentType.codename}`;
+
+        return comment;
+    }
+
+    private getContentTypeSnippetComment(contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet): string {
+        let comment: string = `${contentTypeSnippet.name}`;
+
+        comment += `\n* Id: ${contentTypeSnippet.id}`;
+        comment += `\n* Codename: ${contentTypeSnippet.codename}`;
 
         return comment;
     }
@@ -347,15 +535,16 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         elementNameMap: MapElementToName;
-        type: ContentTypeModels.ContentType;
+        contentType?: ContentTypeModels.ContentType;
+        contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomies: TaxonomyModels.Taxonomy[];
     }): string {
         const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
-            contentType: data.type,
-            snippets: data.snippets,
+            contentType: data.contentType,
+            contentTypeSnippet: data.contentTypeSnippet,
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
             taxonomyNameMap: data.taxonomyNameMap,
@@ -367,10 +556,10 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
             const extendedElement = extendedElements[i];
             const element = extendedElement.element;
             if (!element.codename) {
-                throw Error(`Invalid codename for element '${element.id}' in type '${data.type.codename}'`);
+                throw Error(`Invalid codename for element '${element.id}'`);
             }
 
-            const elementName = data.elementNameMap(element, data.type);
+            const elementName = data.elementNameMap(element);
 
             if (!elementName) {
                 // skip element if its not resolver
@@ -385,7 +574,7 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
             code += `${this.getElementComment(extendedElement, data.taxonomies)}\n`;
             code += `${elementName}: Elements.${extendedElement.mappedType};`;
 
-            if (i !== data.type.elements.length - 1) {
+            if (i !== extendedElements.length - 1) {
                 code += '\n\n';
             }
         }
@@ -448,8 +637,8 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
     }
 
     private getExtendedElements(data: {
-        contentType: ContentTypeModels.ContentType;
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
+        contentType?: ContentTypeModels.ContentType;
+        contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         taxonomyObjectMap: MapTaxonomyIdTobject;
@@ -457,41 +646,19 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
     }): IExtendedContentTypeElement[] {
         const extendedElements: IExtendedContentTypeElement[] = [];
 
-        for (const element of data.contentType.elements) {
-            if (element.type === 'snippet') {
-                // get snippet elements
-                const snippetElement: ContentTypeElements.ISnippetElement = element;
-                const snippet = data.snippets.find((m) => m.id === snippetElement.snippet.id);
+        const elements = data.contentType ? data.contentType.elements : data.contentTypeSnippet?.elements ?? [];
 
-                if (!snippet) {
-                    throw Error(
-                        `Could not find content type snippet with id '${snippetElement.snippet.id}'. This snippet is used in type '${data.contentType.codename}'`
-                    );
-                }
-                extendedElements.push(
-                    ...snippet.elements.map((mElement) =>
-                        this.mapElementType({
-                            element: mElement,
-                            contentTypeNameMap: data.contentTypeNameMap,
-                            contentTypeObjectMap: data.contentTypeObjectMap,
-                            taxonomyNameMap: data.taxonomyNameMap,
-                            taxonomyObjectMap: data.taxonomyObjectMap,
-                            snippet: snippet
-                        })
-                    )
-                );
-            } else {
-                extendedElements.push(
-                    this.mapElementType({
-                        element: element,
-                        contentTypeNameMap: data.contentTypeNameMap,
-                        contentTypeObjectMap: data.contentTypeObjectMap,
-                        taxonomyNameMap: data.taxonomyNameMap,
-                        taxonomyObjectMap: data.taxonomyObjectMap,
-                        snippet: undefined
-                    })
-                );
-            }
+        for (const element of elements) {
+            extendedElements.push(
+                this.mapElementType({
+                    element: element,
+                    contentTypeNameMap: data.contentTypeNameMap,
+                    contentTypeObjectMap: data.contentTypeObjectMap,
+                    taxonomyNameMap: data.taxonomyNameMap,
+                    taxonomyObjectMap: data.taxonomyObjectMap,
+                    snippet: undefined
+                })
+            );
         }
 
         return extendedElements;
@@ -544,6 +711,24 @@ export type ${data.contentTypeNameMap(data.type)} = IContentItem<{
         const allowedTypeIds: string[] = linkedItemsElement.allowed_content_types?.map((m) => m.id as string) ?? [];
 
         return allowedTypeIds.map((id) => contentTypeObjectMap(id));
+    }
+
+    private extractUsedSnippet(
+        element: ContentTypeElements.ContentTypeElementModel,
+        contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject
+    ): ContentTypeSnippetModels.ContentTypeSnippet {
+        if (element.type !== 'snippet') {
+            throw Error(`Expected 'snippet' but got '${element.type}' for element '${element.codename}'`);
+        }
+
+        const snippetElement: ContentTypeElements.ISnippetElement = element;
+
+        const snippedId = snippetElement.snippet.id;
+        if (!snippedId) {
+            throw Error(`Invalid snippet id for taxonomy element '${element.id}'`);
+        }
+
+        return contentTypeSnippetObjectMap(snippedId);
     }
 
     private extractUsedTaxonomy(
