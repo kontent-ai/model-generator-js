@@ -16,7 +16,6 @@ export interface IGenerateProjectResult {
     filenames: string[];
 }
 
-
 export class CommonHelper {
     getAutogenerateNote(addTimestamp: boolean): string {
         if (addTimestamp) {
@@ -68,15 +67,19 @@ export class CommonHelper {
     getBarrelExportCode(data: { filenames: string[]; formatOptions?: Options }): string {
         let code = '';
 
-        for (let i = 0; i < data.filenames.length; i++) {
-            const isLast = i === data.filenames.length - 1;
-            const filename = data.filenames[i];
-            const path = parse(filename);
-            code += `export * from '${path.dir}/${path.name}'`;
+        if (data.filenames.length) {
+            for (let i = 0; i < data.filenames.length; i++) {
+                const isLast = i === data.filenames.length - 1;
+                const filename = data.filenames[i];
+                const path = parse(filename);
+                code += `export * from '${path.dir}/${path.name}'`;
 
-            if (!isLast) {
-                code += `\n`;
+                if (!isLast) {
+                    code += `\n`;
+                }
             }
+        } else {
+            code = `export {}`;
         }
 
         const formatOptions: Options = data.formatOptions
@@ -91,7 +94,7 @@ export class CommonHelper {
     }
 
     escapeNameValue(value: string): string {
-        return value.replace('\'', '\\\'');
+        return value.replace("'", "\\'");
     }
 }
 
