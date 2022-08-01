@@ -597,7 +597,7 @@ export type ${typeName} = IContentItem<{
             mappedType = 'TextElement';
         } else if (elementType === 'number') {
             mappedType = 'NumberElement';
-        } else if (elementType === 'modular_content') {
+        } else if (elementType === 'modular_content' || elementType === 'subpages') {
             mappedType = `LinkedItemsElement<${this.getLinkedItemsAllowedTypes(
                 data.element,
                 data.contentTypeNameMap,
@@ -698,17 +698,25 @@ export type ${typeName} = IContentItem<{
         element: ContentTypeElements.ContentTypeElementModel,
         contentTypeObjectMap: MapContentTypeIdToObject
     ): ContentTypeModels.ContentType[] {
-        if (element.type !== 'modular_content') {
-            throw Error(`Expected 'modular_content' but got '${element.type}' for element '${element.codename}'`);
+        const allowedTypeIds: string[] = [];
+
+        if (element.type === 'modular_content') {
+            const linkedItemsElement: ContentTypeElements.ILinkedItemsElement = element;
+
+            if (linkedItemsElement?.allowed_content_types?.length) {
+                allowedTypeIds.push(...(linkedItemsElement.allowed_content_types?.map((m) => m.id as string) ?? []));
+            }
+        } else if (element.type === 'subpages') {
+            const subpagesItemsElement: ContentTypeElements.ISubpagesElement = element;
+
+            if (subpagesItemsElement?.allowed_content_types?.length) {
+                allowedTypeIds.push(...(subpagesItemsElement.allowed_content_types?.map((m) => m.id as string) ?? []));
+            }
+        } else {
+            throw Error(
+                `Expected 'modular_content' or 'subpages' but got '${element.type}' for element '${element.codename}'`
+            );
         }
-
-        const linkedItemsElement: ContentTypeElements.ILinkedItemsElement = element;
-
-        if (!linkedItemsElement.allowed_content_types?.length) {
-            return [];
-        }
-
-        const allowedTypeIds: string[] = linkedItemsElement.allowed_content_types?.map((m) => m.id as string) ?? [];
 
         return allowedTypeIds.map((id) => contentTypeObjectMap(id));
     }
