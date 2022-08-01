@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.4.0](https://github.com/kontent-ai/model-generator-js/compare/v5.3.0...v5.4.0) (2022-08-01)
+
+
+### Features
+
+* Adds support for Delivery 'subpages' elements (fixes https://github.com/kontent-ai/model-generator-js/issues/27) ([9750120](https://github.com/kontent-ai/model-generator-js/commit/97501208eb0e4e63bdfaff2af89ed6a953131aea))
+
 ## [5.3.0](https://github.com/kontent-ai/model-generator-js/compare/v5.2.0...v5.3.0) (2022-07-28)
 
 
