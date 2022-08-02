@@ -239,7 +239,7 @@ export class DeliveryContentTypeGenerator {
                 const fileName: string = `../${data.taxonomyFolderPath}${data.taxonomyFileNameMap(taxonomy, false)}`;
 
                 imports.push(`import { ${taxonomyName} } from '${fileName}';`);
-            } else if (element.type === 'modular_content') {
+            } else if (element.type === 'modular_content' || element.type === 'subpages') {
                 // extract referenced types
                 const referencedTypes = this.extractLinkedItemsAllowedTypes(element, data.contentTypeObjectMap);
 
