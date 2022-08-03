@@ -2,7 +2,7 @@
 [![Build](https://github.com/kontent-ai/model-generator-js/actions/workflows/main.yml/badge.svg)](https://github.com/kontent-ai/model-generator-js/actions/workflows/main.yml)
 [![GitHub license](https://img.shields.io/github/license/kontent-ai/model-generator-js.svg)](https://github.com/kontent-ai/model-generator-js)
 
-# Kontent Model Generator
+# Kontent.ai Model Generator
 
 The purpose of this project is to help you generate `Typescript models` based on [Kontent.ai](https://kontent.ai) item types. These models can be used with the [Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk) and enhances your experience by providing strongly typed models.
 
@@ -79,7 +79,7 @@ await generateModelsAsync({
 
 ## CLI Configuration
 
-- `projectId` - Id of the Kontent project
+- `projectId` - Id of the Kontent.ai project
 - `apiKey`- Management API Key
 - `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.
 - `addTimestamp`- Indicates if timestamp is added to generated models
