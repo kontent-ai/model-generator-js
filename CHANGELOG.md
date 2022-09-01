@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.5.0](https://github.com/kontent-ai/model-generator-js/compare/v5.4.1...v5.5.0) (2022-09-01)
+
+
+### Features
+
+* updates deps ([67d8f81](https://github.com/kontent-ai/model-generator-js/commit/67d8f811989c366f6dc5e60aa488c4db51ac1b95))
+
 ### [5.4.1](https://github.com/kontent-ai/model-generator-js/compare/v5.4.0...v5.4.1) (2022-08-02)
 
 
