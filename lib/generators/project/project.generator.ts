@@ -396,11 +396,16 @@ export class ProjectGenerator {
         for (let i = 0; i < extendedElements.length; i++) {
             const extendedElement = extendedElements[i];
             const element = extendedElement.element;
-
+            const codename = commonHelper.getElementCodename(element);
             const name = this.getElementName(element, taxonomies);
 
             if (!name) {
                 // element does not have a name (e.g. guidelines)
+                continue;
+            }
+
+            if (!codename) {
+                // element does not have codename
                 continue;
             }
 
@@ -410,8 +415,8 @@ export class ProjectGenerator {
 
             code += `\n`;
             code += `${this.getElementComment(element, taxonomies)}\n`;
-            code += `${element.codename}: {
-                codename: '${element.codename}',
+            code += `${codename}: {
+                codename: '${codename}',
                 id: '${element.id}',
                 externalId: ${this.getStringOrUndefined(element.external_id)},
                 name: '${commonHelper.escapeNameValue(name)}',
@@ -508,7 +513,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;

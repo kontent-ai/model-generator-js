@@ -502,8 +502,10 @@ export type ${typeName} = IContentItem<{
         const isRequired = commonHelper.isElementRequired(element);
         const guidelines = commonHelper.getElementGuidelines(element);
         const name = commonHelper.getElementTitle(element, taxonomies);
+        const codename = commonHelper.getElementCodename(element);
 
         let comment: string = '/**';
+
 
         if (name) {
             comment += `\n* ${name} (${element.type})`;
@@ -512,8 +514,8 @@ export type ${typeName} = IContentItem<{
         comment += `\n* Required: ${isRequired ? 'true' : 'false'}`;
         comment += `\n* Id: ${element.id}`;
 
-        if (name) {
-            comment += `\n* Codename: ${element.codename}`;
+        if (codename) {
+            comment += `\n* Codename: ${codename}`;
         }
 
         if (extendedElement.snippet) {
@@ -555,7 +557,10 @@ export type ${typeName} = IContentItem<{
         for (let i = 0; i < extendedElements.length; i++) {
             const extendedElement = extendedElements[i];
             const element = extendedElement.element;
-            if (!element.codename) {
+
+            const codename = commonHelper.getElementCodename(element);
+
+            if (!codename) {
                 throw Error(`Invalid codename for element '${element.id}'`);
             }
 
@@ -700,6 +705,8 @@ export type ${typeName} = IContentItem<{
     ): ContentTypeModels.ContentType[] {
         const allowedTypeIds: string[] = [];
 
+        const codename = commonHelper.getElementCodename(element);
+
         if (element.type === 'modular_content') {
             const linkedItemsElement: ContentTypeElements.ILinkedItemsElement = element;
 
@@ -714,7 +721,7 @@ export type ${typeName} = IContentItem<{
             }
         } else {
             throw Error(
-                `Expected 'modular_content' or 'subpages' but got '${element.type}' for element '${element.codename}'`
+                `Expected 'modular_content' or 'subpages' but got '${element.type}' for element '${codename}' with id '${element.id}'`
             );
         }
 
@@ -743,8 +750,12 @@ export type ${typeName} = IContentItem<{
         element: ContentTypeElements.ContentTypeElementModel,
         taxonomyObjectMap: MapTaxonomyIdTobject
     ): TaxonomyModels.Taxonomy | undefined {
+        const codename = commonHelper.getElementCodename(element);
+
         if (element.type !== 'taxonomy') {
-            throw Error(`Expected 'taxonomy' but got '${element.type}' for element '${element.codename}'`);
+            throw Error(
+                `Expected 'taxonomy' but got '${element.type}' for element '${codename}' with id '${element.id}'`
+            );
         }
 
         const taxonomyElement: ContentTypeElements.ITaxonomyElement = element;

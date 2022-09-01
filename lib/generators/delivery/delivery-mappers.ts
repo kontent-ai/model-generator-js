@@ -15,6 +15,7 @@ import {
     TaxonomyTypeResolver
 } from '../../models';
 import { nameHelper } from '../../name-helper';
+import { commonHelper } from '../../common-helper';
 
 export type MapContentTypeToDeliveryTypeName = (contentType: ContentTypeModels.ContentType) => string;
 export type MapContentTypeSnippetToDeliveryTypeName = (
@@ -65,7 +66,9 @@ export function getMapContentTypeIdToObject(types: ContentTypeModels.ContentType
     };
 }
 
-export function getMapContentTypeSnippetIdToObject(snippets: ContentTypeSnippetModels.ContentTypeSnippet[]): MapContentTypeSnippetIdToObject {
+export function getMapContentTypeSnippetIdToObject(
+    snippets: ContentTypeSnippetModels.ContentTypeSnippet[]
+): MapContentTypeSnippetIdToObject {
     return (id) => {
         const snippet = snippets.find((m) => m.id === id);
 
@@ -103,11 +106,17 @@ export function getMapContentTypeSnippetToFileName(
 
 export function getMapElementToName(resolver?: ElementResolver): MapElementToName {
     return (element) => {
-        if (!element.codename) {
+        if (!element) {
+            return undefined;
+        }
+
+        const codename = commonHelper.getElementCodename(element);
+
+        if (!codename) {
             return undefined;
         }
         const elementName = getElementName({
-            elementCodename: element.codename,
+            elementCodename: codename,
             elementResolver: resolver
         });
 
