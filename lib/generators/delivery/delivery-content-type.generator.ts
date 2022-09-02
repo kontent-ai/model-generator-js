@@ -257,20 +257,24 @@ export class DeliveryContentTypeGenerator {
                     processedTypeIds.push(referencedType.id);
 
                     const typeName: string = data.contentTypeNameMap(referencedType);
-                    const fileName: string = `./${data.contentTypeFileNameMap(referencedType, false)}`;
+                    const fileName: string = `${data.contentTypeFileNameMap(referencedType, false)}`;
 
-                    imports.push(`import { ${typeName} } from '${fileName}';`);
+                    const filePath: string = data.contentTypeSnippet
+                        ? `../${data.typeFolderPath}${fileName}`
+                        : `./${fileName}`;
+
+                    imports.push(`import { ${typeName} } from '${filePath}';`);
                 }
             } else if (element.type === 'snippet') {
                 const contentTypeSnipped = this.extractUsedSnippet(element, data.contentTypeSnippetObjectMap);
 
                 const typeName: string = data.contentTypeSnippetNameMap(contentTypeSnipped);
-                const fileName: string = `../${data.typeSnippetsFolderPath}${data.contentTypeSnippetFileNameMap(
+                const filePath: string = `../${data.typeSnippetsFolderPath}${data.contentTypeSnippetFileNameMap(
                     contentTypeSnipped,
                     false
                 )}`;
 
-                imports.push(`import { ${typeName} } from '${fileName}';`);
+                imports.push(`import { ${typeName} } from '${filePath}';`);
                 contentTypeSnippetExtensions.push(typeName);
             }
         }
@@ -505,7 +509,6 @@ export type ${typeName} = IContentItem<{
         const codename = commonHelper.getElementCodename(element);
 
         let comment: string = '/**';
-
 
         if (name) {
             comment += `\n* ${name} (${element.type})`;
