@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.5.1](https://github.com/kontent-ai/model-generator-js/compare/v5.5.0...v5.5.1) (2022-09-02)
+
+
+### Bug Fixes
+
+* Fixes import path from content type snippet to content type model ([4707a05](https://github.com/kontent-ai/model-generator-js/commit/4707a0594a66b42f64408f0a4e99da0cfc5c7ebf))
+
 ## [5.5.0](https://github.com/kontent-ai/model-generator-js/compare/v5.4.1...v5.5.0) (2022-09-01)
 
 
