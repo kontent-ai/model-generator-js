@@ -308,7 +308,7 @@ export class DeliveryContentTypeGenerator {
     }): string {
         let code = '';   
         
-        const elements = this.getElementsCode({
+        const elementsCode = this.getElementsCode({
             contentTypeObjectMap: data.contentTypeObjectMap,
             contentTypeNameMap: data.contentTypeNameMap,
             contentType: data.contentType,
@@ -320,7 +320,7 @@ export class DeliveryContentTypeGenerator {
             taxonomies: data.taxonomies
         })
 
-        if(elements) { code += `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`; }
+        if(elementsCode) { code += `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`; }
 
         const importResult = this.getContentTypeImports({
             contentTypeNameMap: data.contentTypeNameMap,
@@ -357,12 +357,27 @@ export class DeliveryContentTypeGenerator {
             typeName = data.contentTypeNameMap(data.contentType);
 
             if (importResult.contentTypeSnippetExtensions.length) {
-                typeExtends = `& ${importResult.contentTypeSnippetExtensions.join(' & ')}`;
+                typeExtends = importResult.contentTypeSnippetExtensions.join(' & ');
             }
         } else if (data.contentTypeSnippet) {
             comment = this.getContentTypeSnippetComment(data.contentTypeSnippet);
             typeName = data.contentTypeSnippetNameMap(data.contentTypeSnippet);
         }
+
+        let typeElements: string = '';
+        if(elementsCode) {
+            typeElements += `IContentItem<{
+  ${elementsCode}
+}>`
+        }
+        if(elementsCode && typeExtends) {
+            typeElements += ' & '
+        }
+        if(typeExtends) {
+            typeElements += typeExtends
+        }
+
+        if(!elementsCode && !typeExtends) { typeElements = '{}'}
 
         code += `
 /**
@@ -370,7 +385,7 @@ export class DeliveryContentTypeGenerator {
 *
 * ${comment}
 */
-export type ${typeName} = ${elements && `IContentItem<{${elements}}>`}${typeExtends};
+export type ${typeName} = ${typeElements};
 `;
         const formatOptions: Options = data.formatOptions
             ? data.formatOptions
