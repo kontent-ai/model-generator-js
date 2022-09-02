@@ -306,7 +306,21 @@ export class DeliveryContentTypeGenerator {
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
-        let code = `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`;
+        let code = '';   
+        
+        const elements = this.getElementsCode({
+            contentTypeObjectMap: data.contentTypeObjectMap,
+            contentTypeNameMap: data.contentTypeNameMap,
+            contentType: data.contentType,
+            contentTypeSnippet: data.contentTypeSnippet,
+            snippets: data.snippets,
+            elementNameMap: data.elementNameMap,
+            taxonomyNameMap: data.taxonomyNameMap,
+            taxonomyObjectMap: data.taxonomyObjectMap,
+            taxonomies: data.taxonomies
+        })
+
+        if(elements) { code += `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`; }
 
         const importResult = this.getContentTypeImports({
             contentTypeNameMap: data.contentTypeNameMap,
@@ -356,19 +370,7 @@ export class DeliveryContentTypeGenerator {
 *
 * ${comment}
 */
-export type ${typeName} = IContentItem<{
-    ${this.getElementsCode({
-        contentTypeObjectMap: data.contentTypeObjectMap,
-        contentTypeNameMap: data.contentTypeNameMap,
-        contentType: data.contentType,
-        contentTypeSnippet: data.contentTypeSnippet,
-        snippets: data.snippets,
-        elementNameMap: data.elementNameMap,
-        taxonomyNameMap: data.taxonomyNameMap,
-        taxonomyObjectMap: data.taxonomyObjectMap,
-        taxonomies: data.taxonomies
-    })}
-}>${typeExtends};
+export type ${typeName} = ${elements && `IContentItem<{${elements}}>`}${typeExtends};
 `;
         const formatOptions: Options = data.formatOptions
             ? data.formatOptions
