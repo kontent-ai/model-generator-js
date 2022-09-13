@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.6.0](https://github.com/kontent-ai/model-generator-js/compare/v5.5.1...v5.6.0) (2022-09-13)
+
+
+### Features
+
+* Removes 'Elements' from import if content type has 0 elements (fixes https://github.com/kontent-ai/model-generator-js/issues/30) ([0ec69ff](https://github.com/kontent-ai/model-generator-js/commit/0ec69ffc2106b2bf0c586d96d61f7f934eb29d04))
+
 ### [5.5.1](https://github.com/kontent-ai/model-generator-js/compare/v5.5.0...v5.5.1) (2022-09-02)
 
 
