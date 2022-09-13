@@ -328,7 +328,7 @@ export class DeliveryContentTypeGenerator {
 
         const topLevelImports: string[] = ['IContentItem'];
 
-        if (importResult.processedElements.length) {
+        if (importResult.processedElements.filter((m) => m.type !== 'snippet' && m.type !== 'guidelines').length) {
             // add 'Elements' import only if there is > 1 elements in content type
             topLevelImports.push('Elements');
         }
