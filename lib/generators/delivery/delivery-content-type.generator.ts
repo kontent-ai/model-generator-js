@@ -52,6 +52,7 @@ interface IExtendedContentTypeElement {
 interface IExtractImportsResult {
     imports: string[];
     contentTypeSnippetExtensions: string[];
+    processedElements: IExtendedContentTypeElement[];
 }
 
 export class DeliveryContentTypeGenerator {
@@ -281,7 +282,8 @@ export class DeliveryContentTypeGenerator {
 
         return {
             imports: imports,
-            contentTypeSnippetExtensions: contentTypeSnippetExtensions
+            contentTypeSnippetExtensions: contentTypeSnippetExtensions,
+            processedElements: extendedElements
         };
     }
 
@@ -306,8 +308,6 @@ export class DeliveryContentTypeGenerator {
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
-        let code = `import { IContentItem, Elements } from '${this.deliveryNpmPackageName}';`;
-
         const importResult = this.getContentTypeImports({
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeSnippetNameMap: data.contentTypeSnippetNameMap,
@@ -325,6 +325,15 @@ export class DeliveryContentTypeGenerator {
             typeSnippetsFolderPath: data.typeSnippetsFolderPath,
             taxonomyFolderPath: data.taxonomyFolderPath
         });
+
+        const topLevelImports: string[] = ['IContentItem'];
+
+        if (importResult.processedElements.length) {
+            // add 'Elements' import only if there is > 1 elements in content type
+            topLevelImports.push('Elements');
+        }
+
+        let code = `import { ${topLevelImports.join(', ')} } from '${this.deliveryNpmPackageName}';`;
 
         if (importResult.imports.length) {
             for (const importItem of importResult.imports) {
