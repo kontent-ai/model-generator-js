@@ -117,6 +117,16 @@ export class ProjectGenerator {
         return comment;
     }
 
+    private getContentTypeSnippetComment(snippet: ContentTypeSnippetModels.ContentTypeSnippet): string {
+        let comment: string = `/**`;
+
+        comment += `\n* ${snippet.name}`;
+        comment += `\n* Last modified: ${snippet.lastModified}`;
+        comment += `\n*/`;
+
+        return comment;
+    }
+
     private getWorkflowComment(workflow: WorkflowModels.Workflow): string {
         let comment: string = `/**`;
 
@@ -262,6 +272,12 @@ export class ProjectGenerator {
                 filename: 'contentTypes.ts'
             },
             {
+                code: `export const contentTypeSnippets = {
+                    ${this.getProjectContentTypeSnippets(data.snippets, data.taxonomies)}
+                };`,
+                filename: 'contentTypeSnippets.ts'
+            },
+            {
                 code: `export const taxonomies = {
                     ${this.getProjectTaxonomies(data.taxonomies)}
                 };`,
@@ -360,6 +376,29 @@ export class ProjectGenerator {
         return code;
     }
 
+    private getProjectContentTypeSnippets(
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string {
+        let code: string = ``;
+        for (let i = 0; i < snippets.length; i++) {
+            const snippet = snippets[i];
+            const isLast = i === snippets.length - 1;
+
+            code += `\n`;
+            code += `${this.getContentTypeSnippetComment(snippet)}\n`;
+            code += `${snippet.codename}: {
+                codename: '${snippet.codename}',
+                id: '${snippet.id}',
+                externalId: ${this.getStringOrUndefined(snippet.externalId)},
+                name: '${commonHelper.escapeNameValue(snippet.name)}',
+                elements: {${this.getContentTypeSnippetElements(snippet, taxonomies)}}
+            }${!isLast ? ',\n' : ''}`;
+        }
+
+        return code;
+    }
+
     private getProjectContentTypes(
         contentTypes: ContentTypeModels.ContentType[],
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
@@ -423,6 +462,46 @@ export class ProjectGenerator {
                 required: ${isRequired},
                 type: '${element.type}',
                 snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}
+            }${!isLast ? ',\n' : ''}`;
+        }
+
+        return code;
+    }
+
+    private getContentTypeSnippetElements(
+        snippet: ContentTypeSnippetModels.ContentTypeSnippet,
+        taxonomies: TaxonomyModels.Taxonomy[]
+    ): string {
+        let code: string = '';
+
+        for (let i = 0; i < snippet.elements.length; i++) {
+            const element = snippet.elements[i];
+            const codename = commonHelper.getElementCodename(element);
+            const name = this.getElementName(element, taxonomies);
+
+            if (!name) {
+                // element does not have a name (e.g. guidelines)
+                continue;
+            }
+
+            if (!codename) {
+                // element does not have codename
+                continue;
+            }
+
+            const isLast = i === snippet.elements.length - 1;
+
+            const isRequired = commonHelper.isElementRequired(element);
+
+            code += `\n`;
+            code += `${this.getElementComment(element, taxonomies)}\n`;
+            code += `${codename}: {
+                codename: '${codename}',
+                id: '${element.id}',
+                externalId: ${this.getStringOrUndefined(element.external_id)},
+                name: '${commonHelper.escapeNameValue(name)}',
+                required: ${isRequired},
+                type: '${element.type}',
             }${!isLast ? ',\n' : ''}`;
         }
 
@@ -513,7 +592,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;

@@ -1,6 +1,7 @@
 export * from './languages';
 export * from './collections';
 export * from './contentTypes';
+export * from './contentTypeSnippets';
 export * from './taxonomies';
 export * from './workflows';
 export * from './roles';
