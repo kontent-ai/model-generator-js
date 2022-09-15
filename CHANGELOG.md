@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.7.0](https://github.com/kontent-ai/model-generator-js/compare/v5.6.0...v5.7.0) (2022-09-15)
+
+
+### Features
+
+* adds support for generating content type snippet project model (generates contentTypeSnippets.ts) ([259d969](https://github.com/kontent-ai/model-generator-js/commit/259d9696f7f7c9db4567b03548c0e5caca419298))
+
 ## [5.6.0](https://github.com/kontent-ai/model-generator-js/compare/v5.5.1...v5.6.0) (2022-09-13)
 
 
