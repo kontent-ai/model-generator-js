@@ -242,7 +242,7 @@ export class DeliveryContentTypeGenerator {
                 const taxonomyName: string = data.taxonomyNameMap(taxonomy);
                 const fileName: string = `../${data.taxonomyFolderPath}${data.taxonomyFileNameMap(taxonomy, false)}`;
 
-                imports.push(`import { ${taxonomyName} } from '${fileName}';`);
+                imports.push(`import { type ${taxonomyName} } from '${fileName}';`);
             } else if (element.type === 'modular_content' || element.type === 'subpages') {
                 // extract referenced types
                 const referencedTypes = this.extractLinkedItemsAllowedTypes(element, data.contentTypeObjectMap);
@@ -267,7 +267,7 @@ export class DeliveryContentTypeGenerator {
                         ? `../${data.typeFolderPath}${fileName}`
                         : `./${fileName}`;
 
-                    imports.push(`import { ${typeName} } from '${filePath}';`);
+                    imports.push(`import { type ${typeName} } from '${filePath}';`);
                 }
             } else if (element.type === 'snippet') {
                 const contentTypeSnipped = this.extractUsedSnippet(element, data.contentTypeSnippetObjectMap);
@@ -278,7 +278,7 @@ export class DeliveryContentTypeGenerator {
                     false
                 )}`;
 
-                imports.push(`import { ${typeName} } from '${filePath}';`);
+                imports.push(`import { type ${typeName} } from '${filePath}';`);
                 contentTypeSnippetExtensions.push(typeName);
             }
         }
@@ -330,11 +330,11 @@ export class DeliveryContentTypeGenerator {
             taxonomyFolderPath: data.taxonomyFolderPath
         });
 
-        const topLevelImports: string[] = ['IContentItem'];
+        const topLevelImports: string[] = ['type IContentItem'];
 
         if (importResult.processedElements.filter((m) => m.type !== 'snippet' && m.type !== 'guidelines').length) {
             // add 'Elements' import only if there is > 1 elements in content type
-            topLevelImports.push('Elements');
+            topLevelImports.push('type Elements');
         }
 
         let code = `import { ${topLevelImports.join(', ')} } from '${this.deliveryNpmPackageName}';`;
