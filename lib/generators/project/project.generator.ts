@@ -257,53 +257,53 @@ export class ProjectGenerator {
             {
                 code: `export const languages = {
                     ${this.getProjectLanguages(data.languages)}
-                };`,
+                } as const;`,
                 filename: 'languages.ts'
             },
             {
                 code: `export const collections = {
                     ${this.getCollections(data.collections)}
-                };`,
+                } as const;`,
                 filename: 'collections.ts'
             },
             {
                 code: `export const contentTypes = {
                     ${this.getProjectContentTypes(data.types, data.snippets, data.taxonomies)}
-                };`,
+                } as const;`,
                 filename: 'contentTypes.ts'
             },
             {
                 code: `export const contentTypeSnippets = {
                     ${this.getProjectContentTypeSnippets(data.snippets, data.taxonomies)}
-                };`,
+                } as const;`,
                 filename: 'contentTypeSnippets.ts'
             },
             {
                 code: `export const taxonomies = {
                     ${this.getProjectTaxonomies(data.taxonomies)}
-                };`,
+                } as const;`,
                 filename: 'taxonomies.ts'
             },
             {
                 code: `export const workflows = {
                     ${this.getProjectWorkflows(data.workflows)}
-                };`,
+                } as const;`,
                 filename: 'workflows.ts'
             },
             {
                 code: `export const roles = {
                     ${this.getRoles(data.roles)}
-                };`,
+                } as const;`,
                 filename: 'roles.ts'
             },
             {
-                code: `export const assetFolders = ${this.getAssetFolders(data.assetFolders)};`,
+                code: `export const assetFolders = ${this.getAssetFolders(data.assetFolders)} as const;`,
                 filename: 'assetFolders.ts'
             },
             {
                 code: `export const webhooks = {
                     ${this.getWebhooks(data.webhooks)}
-                };`,
+                } as const;`,
                 filename: 'webhooks.ts'
             }
         ];
