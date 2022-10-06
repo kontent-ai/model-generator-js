@@ -1,2 +1,2 @@
-export * from './releasecategory';
 export * from './movietype';
+export * from './releasecategory';

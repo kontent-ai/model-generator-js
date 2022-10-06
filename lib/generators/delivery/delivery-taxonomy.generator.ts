@@ -125,9 +125,11 @@ export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTerms
 
         let code: string = '';
 
-        for (let i = 0; i < taxonomyTermCodenames.length; i++) {
-            const term = taxonomyTermCodenames[i];
-            const isLast = i === taxonomyTermCodenames.length - 1;
+        const sortedTaxonomyTerms: string[] = commonHelper.sortAlphabetically(taxonomyTermCodenames, item => item);
+
+        for (let i = 0; i < sortedTaxonomyTerms.length; i++) {
+            const term = sortedTaxonomyTerms[i];
+            const isLast = i === sortedTaxonomyTerms.length - 1;
 
             code += `'${term}'`;
 

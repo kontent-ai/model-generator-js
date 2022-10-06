@@ -26,6 +26,7 @@ interface IProjectCodeResult {
 interface IExtendedContentTypeElement {
     element: ContentTypeElements.ContentTypeElementModel;
     snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
+    mappedName: string | undefined;
 }
 
 export class ProjectGenerator {
@@ -430,7 +431,11 @@ export class ProjectGenerator {
     ): string {
         let code: string = '';
 
-        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements(contentType, snippets);
+        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements(
+            contentType,
+            snippets,
+            taxonomies
+        );
 
         for (let i = 0; i < extendedElements.length; i++) {
             const extendedElement = extendedElements[i];
@@ -510,7 +515,8 @@ export class ProjectGenerator {
 
     private getExtendedElements(
         contentType: ContentTypeModels.ContentType,
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[]
+        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
+        taxonomies: TaxonomyModels.Taxonomy[]
     ): IExtendedContentTypeElement[] {
         const extendedElements: IExtendedContentTypeElement[] = [];
         for (const element of contentType.elements) {
@@ -528,7 +534,8 @@ export class ProjectGenerator {
                     ...snippet.elements.map((mElement) => {
                         const extendedElement: IExtendedContentTypeElement = {
                             element: mElement,
-                            snippet: snippet
+                            snippet: snippet,
+                            mappedName: this.getElementName(mElement, taxonomies)
                         };
 
                         return extendedElement;
@@ -537,12 +544,13 @@ export class ProjectGenerator {
             } else {
                 extendedElements.push({
                     element: element,
-                    snippet: undefined
+                    snippet: undefined,
+                    mappedName: this.getElementName(element, taxonomies)
                 });
             }
         }
 
-        return extendedElements;
+        return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
     }
 
     private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[]): string {
@@ -592,7 +600,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
@@ -624,10 +632,12 @@ export class ProjectGenerator {
             return `terms: {}`;
         }
 
+        const sortedTerms: TaxonomyModels.Taxonomy[] = commonHelper.sortAlphabetically(terms, (item) => item.name);
+
         let code: string = `terms: {`;
-        for (let i = 0; i < terms.length; i++) {
-            const term = terms[i];
-            const isLast = i === terms.length - 1;
+        for (let i = 0; i < sortedTerms.length; i++) {
+            const term = sortedTerms[i];
+            const isLast = i === sortedTerms.length - 1;
             code += `${term.codename}: {
                 codename: '${term.codename}',
                 id: '${term.id}',

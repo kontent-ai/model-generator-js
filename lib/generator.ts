@@ -43,9 +43,18 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}'\n`);
 
-            const types = (await managementClient.listContentTypes().toAllPromise()).data.items;
-            const snippets = (await managementClient.listContentTypeSnippets().toAllPromise()).data.items;
-            const taxonomies = (await managementClient.listTaxonomies().toAllPromise()).data.items;
+            const types = commonHelper.sortAlphabetically(
+                (await managementClient.listContentTypes().toAllPromise()).data.items,
+                (item) => item.name
+            );
+            const snippets = commonHelper.sortAlphabetically(
+                (await managementClient.listContentTypeSnippets().toAllPromise()).data.items,
+                (item) => item.name
+            );
+            const taxonomies = commonHelper.sortAlphabetically(
+                (await managementClient.listTaxonomies().toAllPromise()).data.items,
+                (item) => item.name
+            );
 
             console.log(`Found '${yellow(types.length.toString())}' types`);
             console.log(`Found '${yellow(snippets.length.toString())}' content type snippets`);
@@ -61,7 +70,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const exportAllProjectSettings = config.exportProjectSettings ? false : true;
 
             if (config.exportProjectSettings?.exportWorkflows || exportAllProjectSettings) {
-                workflows.push(...(await managementClient.listWorkflows().toPromise()).data);
+                workflows.push(...commonHelper.sortAlphabetically((await managementClient.listWorkflows().toPromise()).data, item => item.name));
                 console.log(`Found '${yellow(workflows.length.toString())}' workflows`);
             } else {
                 console.log(`Skipping '${red('workflows')}' export`);
@@ -69,7 +78,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             if (config.isEnterpriseSubscription) {
                 if (config.exportProjectSettings?.exportRoles || exportAllProjectSettings) {
-                    roles.push(...(await managementClient.listRoles().toPromise()).data.roles);
+                    roles.push(...commonHelper.sortAlphabetically((await managementClient.listRoles().toPromise()).data.roles, item => item.name));
                     console.log(`Found '${yellow(roles.length.toString())}' roles`);
                 } else {
                     console.log(`Skipping '${red('roles')}' export`);
@@ -79,7 +88,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             }
 
             if (config.exportProjectSettings?.exportAssetFolders || exportAllProjectSettings) {
-                assetFolders.push(...(await managementClient.listAssetFolders().toPromise()).data.items);
+                assetFolders.push(...commonHelper.sortAlphabetically((await managementClient.listAssetFolders().toPromise()).data.items, (item => item.name)));
                 console.log(
                     `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders).toString())}' asset folders`
                 );
@@ -88,21 +97,21 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             }
 
             if (config.exportProjectSettings?.exportCollections || exportAllProjectSettings) {
-                collections.push(...(await managementClient.listCollections().toPromise()).data.collections);
+                collections.push(...commonHelper.sortAlphabetically((await managementClient.listCollections().toPromise()).data.collections, item => item.name));
                 console.log(`Found '${yellow(collections.length.toString())}' collections`);
             } else {
                 console.log(`Skipping '${red('collections')}' export`);
             }
 
             if (config.exportProjectSettings?.exportWebhooks || exportAllProjectSettings) {
-                webhooks.push(...(await managementClient.listWebhooks().toPromise()).data.webhooks);
+                webhooks.push(...commonHelper.sortAlphabetically((await managementClient.listWebhooks().toPromise()).data.webhooks, item => item.name));
                 console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
             } else {
                 console.log(`Skipping '${red('webhooks')}' export`);
             }
 
             if (config.exportProjectSettings?.exportLanguages || exportAllProjectSettings) {
-                languages.push(...(await managementClient.listLanguages().toAllPromise()).data.items);
+                languages.push(...commonHelper.sortAlphabetically((await managementClient.listLanguages().toAllPromise()).data.items, item => item.name));
                 console.log(`Found '${yellow(languages.length.toString())}' languages`);
             } else {
                 console.log(`Skipping '${red('languages')}' export`);

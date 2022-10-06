@@ -46,6 +46,7 @@ interface IExtendedContentTypeElement {
     type: ElementModels.ElementType;
     element: ContentTypeElements.ContentTypeElementModel;
     mappedType: string | undefined;
+    mappedName: string | undefined;
     snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
 }
 
@@ -199,6 +200,7 @@ export class DeliveryContentTypeGenerator {
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
+        elementNameMap: MapElementToName;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         contentType?: ContentTypeModels.ContentType;
         contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
@@ -212,6 +214,7 @@ export class DeliveryContentTypeGenerator {
         const processedTaxonomyIds: string[] = [];
 
         const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
+            elementNameMap: data.elementNameMap,
             contentType: data.contentType,
             contentTypeSnippet: data.contentTypeSnippet,
             contentTypeNameMap: data.contentTypeNameMap,
@@ -281,7 +284,7 @@ export class DeliveryContentTypeGenerator {
         }
 
         return {
-            imports: imports,
+            imports: commonHelper.sortAlphabetically(imports, (item) => item),
             contentTypeSnippetExtensions: contentTypeSnippetExtensions,
             processedElements: extendedElements
         };
@@ -309,6 +312,7 @@ export class DeliveryContentTypeGenerator {
         formatOptions?: Options;
     }): string {
         const importResult = this.getContentTypeImports({
+            elementNameMap: data.elementNameMap,
             contentTypeNameMap: data.contentTypeNameMap,
             contentTypeSnippetNameMap: data.contentTypeSnippetNameMap,
             contentTypeObjectMap: data.contentTypeObjectMap,
@@ -557,6 +561,7 @@ export type ${typeName} = IContentItem<{
         taxonomies: TaxonomyModels.Taxonomy[];
     }): string {
         const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
+            elementNameMap: data.elementNameMap,
             contentType: data.contentType,
             contentTypeSnippet: data.contentTypeSnippet,
             contentTypeNameMap: data.contentTypeNameMap,
@@ -576,7 +581,7 @@ export type ${typeName} = IContentItem<{
                 throw Error(`Invalid codename for element '${element.id}'`);
             }
 
-            const elementName = data.elementNameMap(element);
+            const elementName = extendedElement.mappedName;
 
             if (!elementName) {
                 // skip element if its not resolver
@@ -602,6 +607,7 @@ export type ${typeName} = IContentItem<{
     private mapElementType(data: {
         snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         element: ContentTypeElements.ContentTypeElementModel;
+        elementNameMap: MapElementToName,
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         taxonomyObjectMap: MapTaxonomyIdTobject;
@@ -649,13 +655,15 @@ export type ${typeName} = IContentItem<{
             mappedType: mappedType,
             type: elementType,
             snippet: data.snippet,
-            element: data.element
+            element: data.element,
+            mappedName: data.elementNameMap(data.element)
         };
     }
 
     private getExtendedElements(data: {
         contentType?: ContentTypeModels.ContentType;
         contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
+        elementNameMap: MapElementToName;
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         taxonomyObjectMap: MapTaxonomyIdTobject;
@@ -669,6 +677,7 @@ export type ${typeName} = IContentItem<{
             extendedElements.push(
                 this.mapElementType({
                     element: element,
+                    elementNameMap: data.elementNameMap,
                     contentTypeNameMap: data.contentTypeNameMap,
                     contentTypeObjectMap: data.contentTypeObjectMap,
                     taxonomyNameMap: data.taxonomyNameMap,
@@ -678,7 +687,7 @@ export type ${typeName} = IContentItem<{
             );
         }
 
-        return extendedElements;
+        return commonHelper.sortAlphabetically(extendedElements, item => item.mappedName ?? '');
     }
 
     private getTaxonomyTypeName(
