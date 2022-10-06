@@ -17,7 +17,6 @@ export interface IGenerateProjectResult {
 }
 
 export class CommonHelper {
-    
     sortAlphabetically<T>(arrayToSort: T[], propertySelector: (item: T) => string): T[] {
         return arrayToSort.sort((a, b) =>
             propertySelector(a).toLowerCase().localeCompare(propertySelector(b).toLowerCase())
@@ -107,7 +106,7 @@ export class CommonHelper {
     }
 
     escapeNameValue(value: string): string {
-        return value.replace("'", "\\'");
+        return value.replace(`'`, `\\'`);
     }
 }
 
