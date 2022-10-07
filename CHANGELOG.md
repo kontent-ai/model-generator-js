@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.8.0](https://github.com/kontent-ai/model-generator-js/compare/v5.7.0...v5.8.0) (2022-10-07)
+
+
+### Features
+
+* Adds 'type' keyword to type imports (TS Import Elision) ([f2d3afc](https://github.com/kontent-ai/model-generator-js/commit/f2d3afc0b20902d12fcba1d44967378910fe168b))
+* Adds const assertion to project generated files (fixes https://github.com/kontent-ai/model-generator-js/issues/31) ([823628c](https://github.com/kontent-ai/model-generator-js/commit/823628c32b7f86f09af4453dd041d3cc0ad3ce6c))
+* Adds new config option 'outputDir' for specifying target directory where files will be created (fixes https://github.com/kontent-ai/model-generator-js/issues/26) ([dff641e](https://github.com/kontent-ai/model-generator-js/commit/dff641e162ce8064c5c84488d149a13a0b41585a))
+* sorts various objects alphabetically ([a080f36](https://github.com/kontent-ai/model-generator-js/commit/a080f36a29ee6abacba0c6789e80bf387457d256))
+* updates dependencies ([4526cf4](https://github.com/kontent-ai/model-generator-js/commit/4526cf445d36276119efc4347b381c54d89dc998))
+
 ## [5.7.0](https://github.com/kontent-ai/model-generator-js/compare/v5.6.0...v5.7.0) (2022-09-15)
 
 
