@@ -81,6 +81,7 @@ await generateModelsAsync({
 
 - `projectId` - Id of the Kontent.ai project
 - `apiKey`- Management API Key
+- `outputDir`- Directory where files will be created. Defaults to current directory - `--outputDir=./`. Some other examples: `--outputDir=./sample`
 - `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.
 - `addTimestamp`- Indicates if timestamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`

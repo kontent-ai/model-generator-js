@@ -13,8 +13,9 @@ import {
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
+        outputDir: string;
         taxonomies: TaxonomyModels.Taxonomy[];
-        taxonomyFolderPath: string;
+        taxonomyFolderName: string;
         addTimestamp: boolean;
         formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
@@ -44,8 +45,9 @@ export class DeliveryTaxonomyGenerator {
 
         for (const taxonomy of config.taxonomies) {
             const filename = this.generateModels({
+                outputDir: config.outputDir,
                 taxonomy: taxonomy,
-                taxonomyFolderPath: config.taxonomyFolderPath,
+                taxonomyFolderName: config.taxonomyFolderName,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 taxonomyNameMap: getMapTaxonomyName(config.taxonomyResolver),
@@ -69,14 +71,15 @@ export class DeliveryTaxonomyGenerator {
     }
 
     private generateModels(data: {
+        outputDir: string;
         taxonomy: TaxonomyModels.Taxonomy;
-        taxonomyFolderPath: string;
+        taxonomyFolderName: string;
         addTimestamp: boolean;
         formatOptions?: Options;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         taxonomyNameMap: MapTaxonomyName;
     }): string {
-        const filename = `./${data.taxonomyFolderPath}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
+        const filename = `${data.outputDir}${data.taxonomyFolderName}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
@@ -125,7 +128,7 @@ export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTerms
 
         let code: string = '';
 
-        const sortedTaxonomyTerms: string[] = commonHelper.sortAlphabetically(taxonomyTermCodenames, item => item);
+        const sortedTaxonomyTerms: string[] = commonHelper.sortAlphabetically(taxonomyTermCodenames, (item) => item);
 
         for (let i = 0; i < sortedTaxonomyTerms.length; i++) {
             const term = sortedTaxonomyTerms[i];

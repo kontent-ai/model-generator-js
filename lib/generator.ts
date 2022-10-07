@@ -19,10 +19,17 @@ import { parse } from 'path';
 export async function generateModelsAsync(config: IGenerateModelsConfig): Promise<void> {
     console.log(green(`Model generator started \n`));
 
-    const contentTypesFolderPath: string = 'content-types/';
-    const contentTypeSnippetsFolderPath: string = 'content-type-snippets/';
-    const taxonomiesFolderPath: string = 'taxonomies/';
-    const projectFolderPath: string = 'project/';
+    const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
+
+    const contentTypesFolderName: string = `content-types/`;
+    const contentTypeSnippetsFolderName: string = `content-type-snippets/`;
+    const taxonomiesFolderName: string = `taxonomies/`;
+    const projectFolderName: string = `project/`;
+
+    const contentTypesFolderPath: string = `${outputDir}${contentTypesFolderName}`;
+    const contentTypeSnippetsFolderPath: string = `${outputDir}${contentTypeSnippetsFolderName}`;
+    const taxonomiesFolderPath: string = `${outputDir}${taxonomiesFolderName}`;
+    const projectFolderPath: string = `${outputDir}${projectFolderName}`;
 
     try {
         if (config.sdkType === 'delivery') {
@@ -121,10 +128,11 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             // create content type models
             const contentTypesResult = await deliveryContentTypeGenerator.generateModelsAsync({
+                outputDir: outputDir,
                 types: types,
-                typeFolderPath: contentTypesFolderPath,
-                taxonomyFolderPath: taxonomiesFolderPath,
-                typeSnippetsFolderPath: contentTypeSnippetsFolderPath,
+                typeFolderName: contentTypesFolderName,
+                taxonomyFolderName: taxonomiesFolderName,
+                typeSnippetsFolderName: contentTypeSnippetsFolderName,
                 taxonomies: taxonomies,
                 snippets: snippets,
                 addTimestamp: config.addTimestamp,
@@ -141,7 +149,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             // create taxonomy types
             const taxonomiesResult = await deliveryTaxonomyGenerator.generateTaxonomyTypesAsync({
                 taxonomies: taxonomies,
-                taxonomyFolderPath: taxonomiesFolderPath,
+                outputDir: outputDir,
+                taxonomyFolderName: taxonomiesFolderName,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 fileResolver: config.taxonomyTypeFileResolver,
@@ -150,6 +159,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             // create project structure
             const projectModelResult = await projectGenerator.generateProjectModel({
+                outputDir: outputDir,
                 projectInformation: projectInformation.project,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
@@ -162,7 +172,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 roles: roles,
                 snippets: snippets,
                 webhooks: webhooks,
-                folderPath: projectFolderPath
+                projectFolderName: projectFolderName
             });
 
             // create barrel export
@@ -178,7 +188,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 ],
                 formatOptions: config.formatOptions
             });
-            const contentTypeBarrelExportPath: string = `./${contentTypesFolderPath}${barrelExportFilename}`;
+            const contentTypeBarrelExportPath: string = `${contentTypesFolderPath}${barrelExportFilename}`;
             fs.writeFileSync(contentTypeBarrelExportPath, contentTypeBarrelCode);
             console.log(`\nBarrel export '${yellow(contentTypeBarrelExportPath)}' created`);
 
@@ -192,7 +202,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 ],
                 formatOptions: config.formatOptions
             });
-            const contentTypeSnippetsBarrelExportPath: string = `./${contentTypeSnippetsFolderPath}${barrelExportFilename}`;
+            const contentTypeSnippetsBarrelExportPath: string = `${contentTypeSnippetsFolderPath}${barrelExportFilename}`;
             fs.writeFileSync(contentTypeSnippetsBarrelExportPath, contentTypeSnippetsBarrelCode);
             console.log(`Barrel export '${yellow(contentTypeSnippetsBarrelExportPath)}' created`);
 
@@ -206,7 +216,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 ],
                 formatOptions: config.formatOptions
             });
-            const taxonomiesBarrelExportPath: string = `./${taxonomiesFolderPath}${barrelExportFilename}`;
+            const taxonomiesBarrelExportPath: string = `${taxonomiesFolderPath}${barrelExportFilename}`;
             fs.writeFileSync(taxonomiesBarrelExportPath, taxonomiesBarrelCode);
             console.log(`Barrel export '${yellow(taxonomiesBarrelExportPath)}' created`);
 
@@ -220,21 +230,21 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 ],
                 formatOptions: config.formatOptions
             });
-            const projectBarrelExportPath: string = `./${projectFolderPath}${barrelExportFilename}`;
+            const projectBarrelExportPath: string = `${projectFolderPath}${barrelExportFilename}`;
             fs.writeFileSync(projectBarrelExportPath, projectBarrelCode);
             console.log(`Barrel export '${yellow(projectBarrelExportPath)}' created`);
 
             // main barrel
             const mainBarrelCode = commonHelper.getBarrelExportCode({
                 filenames: [
-                    `./${projectFolderPath}`,
-                    `./${contentTypesFolderPath}`,
-                    `./${contentTypeSnippetsFolderPath}`,
-                    `./${taxonomiesFolderPath}`
+                    `./${projectFolderName}`,
+                    `./${contentTypesFolderName}`,
+                    `./${contentTypeSnippetsFolderName}`,
+                    `./${taxonomiesFolderName}`
                 ],
                 formatOptions: config.formatOptions
             });
-            const mainBarrelExportPath: string = `./${barrelExportFilename}`;
+            const mainBarrelExportPath: string = `${outputDir}${barrelExportFilename}`;
             fs.writeFileSync(mainBarrelExportPath, mainBarrelCode);
             console.log(`Barrel export '${yellow(mainBarrelExportPath)}' created`);
         } else if (config.sdkType === 'management') {

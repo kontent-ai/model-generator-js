@@ -31,6 +31,7 @@ interface IExtendedContentTypeElement {
 
 export class ProjectGenerator {
     generateProjectModel(data: {
+        outputDir: string;
         projectInformation: ProjectModels.ProjectInformationModel;
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
@@ -42,7 +43,7 @@ export class ProjectGenerator {
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
-        folderPath: string;
+        projectFolderName: string;
         formatOptions?: Options;
     }): IGenerateProjectResult {
         const projectCodes = this.getProjectModelCode({
@@ -77,8 +78,8 @@ export class ProjectGenerator {
               };
 
         for (const projectCode of projectCodes) {
-            const filePath = `${data.folderPath}${projectCode.filename}`;
-            this.createFileOnFs(format(headerCode + '\n' + projectCode.code, formatOptions), `./${filePath}`);
+            const filePath = `${data.outputDir}${data.projectFolderName}${projectCode.filename}`;
+            this.createFileOnFs(format(headerCode + '\n' + projectCode.code, formatOptions), `${filePath}`);
             filePaths.push(filePath);
         }
 

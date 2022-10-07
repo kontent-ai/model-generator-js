@@ -8,6 +8,8 @@ const argv = yargs(process.argv.slice(2))
     .describe('p', 'ProjectId')
     .alias('k', 'apiKey')
     .describe('k', 'Management API Key')
+    .alias('o', 'outputDir')
+    .describe('o', 'Directory where generated files will be created')
     .alias('a', 'addTimestamp')
     .describe('a', 'Indicates if timestamp should be generated')
     .alias('t', 'sdkType')
@@ -60,6 +62,7 @@ const run = async () => {
     // user config
     const projectId = resolvedArgs.projectId;
     const apiKey = resolvedArgs.apiKey;
+    const outputDir = resolvedArgs.outputDir;
     const addTimestamp = resolvedArgs.addTimestamp;
     const elementResolver = resolvedArgs.elementResolver;
     const contentTypeFileResolver = resolvedArgs.contentTypeFileResolver;
@@ -84,6 +87,7 @@ const run = async () => {
     await generateModelsAsync({
         projectId: projectId,
         apiKey: apiKey,
+        outputDir: outputDir,
         isEnterpriseSubscription: isEnterpriseSubscription,
         addTimestamp: addTimestamp === 'true' ? true : false,
         elementResolver: elementResolver,
