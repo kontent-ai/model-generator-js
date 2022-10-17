@@ -51,8 +51,8 @@ await generateModelsAsync({
   apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
-  contentTypeFileResolver: (type) => `content_type_${type.system.codename}`,
-  taxonomyTypeFileResolver: (type) => `taxonomy_${type.system.codename}`,
+  contentTypeFileResolver: (type) => `content_type_${type.codename}`,
+  taxonomyTypeFileResolver: (taxonomy) => `taxonomy_${taxonomy.codename}`,
 });
 ```
 
@@ -68,8 +68,8 @@ await generateModelsAsync({
   apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
-  contentTypeResolver: (type) => `${textHelper.toPascalCase(type.system.codename)}Model`,
-  taxonomyTypeResolver: (type) => `${textHelper.toPascalCase(type.system.codename)}Taxonomy`,
+  contentTypeResolver: (type) => `${textHelper.toPascalCase(type.codename)}Model`,
+  taxonomyTypeResolver: (taxonomy) => `${textHelper.toPascalCase(taxonomy.codename)}Taxonomy`,
 });
 ```
 
