@@ -1,6 +1,6 @@
 {
     "name": "@kontent-ai/model-generator",
-    "version": "5.8.0",
+    "version": "5.9.0",
     "description": "This utility generates strongly-typed models based on Content Types in a Kontent.ai project. These models can be used with SDKs",
     "bin": {
         "kontent-generate": "./dist/cjs/lib/cli/cli.js"

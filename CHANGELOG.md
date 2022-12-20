@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.9.0](https://github.com/kontent-ai/model-generator-js/compare/v5.8.0...v5.9.0) (2022-12-20)
+
+
+### Features
+
+* removes 'last modified' info from generated models (fixes https://github.com/kontent-ai/model-generator-js/issues/35#issuecomment-1359017033) ([05c9ee9](https://github.com/kontent-ai/model-generator-js/commit/05c9ee98b16034f585b7a1d9aeaa0ef829b813d1)), closes [/github.com/kontent-ai/model-generator-js/issues/35#issuecomment-1359017033](https://github.com/kontent-ai//github.com/kontent-ai/model-generator-js/issues/35/issues/issuecomment-1359017033)
+* updates dependencies ([6a3768d](https://github.com/kontent-ai/model-generator-js/commit/6a3768db58adc8580474dc97784f66e822f2bc4a))
+
 ## [5.8.0](https://github.com/kontent-ai/model-generator-js/compare/v5.7.0...v5.8.0) (2022-10-07)
 
 
