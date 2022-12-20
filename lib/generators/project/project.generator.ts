@@ -113,7 +113,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${contentType.name}`;
-        comment += `\n* Last modified: ${contentType.lastModified}`;
         comment += `\n*/`;
 
         return comment;
@@ -123,7 +122,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${snippet.name}`;
-        comment += `\n* Last modified: ${snippet.lastModified}`;
         comment += `\n*/`;
 
         return comment;
@@ -234,7 +232,6 @@ export class ProjectGenerator {
         let comment: string = `/**`;
 
         comment += `\n* ${webhook.name}`;
-        comment += `\n* Last modified: ${webhook.lastModified}`;
         comment += `\n*/`;
 
         return comment;
