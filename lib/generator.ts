@@ -256,7 +256,6 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
         console.log(green(`\nCompleted`));
     } catch (error) {
         console.log(red(`Failed with error:`));
-        console.log(error);
         throw error;
     }
 }

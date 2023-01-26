@@ -134,57 +134,73 @@ export class DeliveryContentTypeGenerator {
         }
 
         for (const contentTypeSnippet of data.snippets) {
-            const filename = this.createContentTypeSnippetModel({
-                outputDir: data.outputDir,
-                snippet: contentTypeSnippet,
-                snippets: data.snippets,
-                taxonomies: data.taxonomies,
-                typeFolderName: data.typeFolderName,
-                typeSnippetsFolderName: data.typeSnippetsFolderName,
-                taxonomyFolderName: data.taxonomyFolderName,
-                contentTypeSnippetNameMap: getMapContentTypeSnippetToDeliveryTypeName(data.contentTypeSnippetResolver),
-                contentTypeSnippetFileNameMap: getMapContentTypeSnippetToFileName(
-                    data.contentTypeSnippetFileNameResolver
-                ),
-                contentTypeNameMap: getMapContentTypeToDeliveryTypeName(data.contentTypeResolver),
-                contentTypeObjectMap: getMapContentTypeIdToObject(data.types),
-                contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
-                contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
-                elementNameMap: getMapElementToName(data.elementResolver),
-                taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
-                taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
-                taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
-                addTimestamp: data.addTimestamp,
-                formatOptions: data.formatOptions
-            });
-            contentTypeSnippetFilenames.push(filename);
+            try {
+                const filename = this.createContentTypeSnippetModel({
+                    outputDir: data.outputDir,
+                    snippet: contentTypeSnippet,
+                    snippets: data.snippets,
+                    taxonomies: data.taxonomies,
+                    typeFolderName: data.typeFolderName,
+                    typeSnippetsFolderName: data.typeSnippetsFolderName,
+                    taxonomyFolderName: data.taxonomyFolderName,
+                    contentTypeSnippetNameMap: getMapContentTypeSnippetToDeliveryTypeName(
+                        data.contentTypeSnippetResolver
+                    ),
+                    contentTypeSnippetFileNameMap: getMapContentTypeSnippetToFileName(
+                        data.contentTypeSnippetFileNameResolver
+                    ),
+                    contentTypeNameMap: getMapContentTypeToDeliveryTypeName(data.contentTypeResolver),
+                    contentTypeObjectMap: getMapContentTypeIdToObject(data.types),
+                    contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
+                    contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
+                    elementNameMap: getMapElementToName(data.elementResolver),
+                    taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
+                    taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
+                    taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
+                    addTimestamp: data.addTimestamp,
+                    formatOptions: data.formatOptions
+                });
+                contentTypeSnippetFilenames.push(filename);
+            } catch (error) {
+                console.error(error);
+                throw Error(
+                    `Failed to process content type snippet '${contentTypeSnippet.codename}' (${contentTypeSnippet.name})`
+                );
+            }
         }
 
         for (const type of data.types) {
-            const filename = this.createContentTypeModel({
-                outputDir: data.outputDir,
-                type: type,
-                snippets: data.snippets,
-                taxonomies: data.taxonomies,
-                typeFolderName: data.typeFolderName,
-                typeSnippetsFolderName: data.typeSnippetsFolderName,
-                taxonomyFolderName: data.taxonomyFolderName,
-                contentTypeSnippetNameMap: getMapContentTypeSnippetToDeliveryTypeName(data.contentTypeSnippetResolver),
-                contentTypeSnippetFileNameMap: getMapContentTypeSnippetToFileName(
-                    data.contentTypeSnippetFileNameResolver
-                ),
-                contentTypeNameMap: getMapContentTypeToDeliveryTypeName(data.contentTypeResolver),
-                contentTypeObjectMap: getMapContentTypeIdToObject(data.types),
-                contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
-                contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
-                elementNameMap: getMapElementToName(data.elementResolver),
-                taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
-                taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
-                taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
-                addTimestamp: data.addTimestamp,
-                formatOptions: data.formatOptions
-            });
-            contentTypeFilenames.push(filename);
+            try {
+                const filename = this.createContentTypeModel({
+                    outputDir: data.outputDir,
+                    type: type,
+                    snippets: data.snippets,
+                    taxonomies: data.taxonomies,
+                    typeFolderName: data.typeFolderName,
+                    typeSnippetsFolderName: data.typeSnippetsFolderName,
+                    taxonomyFolderName: data.taxonomyFolderName,
+                    contentTypeSnippetNameMap: getMapContentTypeSnippetToDeliveryTypeName(
+                        data.contentTypeSnippetResolver
+                    ),
+                    contentTypeSnippetFileNameMap: getMapContentTypeSnippetToFileName(
+                        data.contentTypeSnippetFileNameResolver
+                    ),
+                    contentTypeNameMap: getMapContentTypeToDeliveryTypeName(data.contentTypeResolver),
+                    contentTypeObjectMap: getMapContentTypeIdToObject(data.types),
+                    contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
+                    contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
+                    elementNameMap: getMapElementToName(data.elementResolver),
+                    taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
+                    taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
+                    taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
+                    addTimestamp: data.addTimestamp,
+                    formatOptions: data.formatOptions
+                });
+                contentTypeFilenames.push(filename);
+            } catch (error) {
+                console.error(error);
+                throw Error(`Failed to process content type '${type.codename}' (${type.name})`);
+            }
         }
 
         return {
@@ -418,7 +434,10 @@ export type ${typeName} = IContentItem<{
         addTimestamp: boolean;
         formatOptions?: Options;
     }): string {
-        const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(data.type, true)}`;
+        const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(
+            data.type,
+            true
+        )}`;
         const code = this.getModelCode({
             contentTypeFileNameMap: data.contentTypeFileNameMap,
             contentTypeSnippetFileNameMap: data.contentTypeSnippetFileNameMap,
@@ -611,7 +630,7 @@ export type ${typeName} = IContentItem<{
     private mapElementType(data: {
         snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         element: ContentTypeElements.ContentTypeElementModel;
-        elementNameMap: MapElementToName,
+        elementNameMap: MapElementToName;
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         taxonomyObjectMap: MapTaxonomyIdTobject;
@@ -691,7 +710,7 @@ export type ${typeName} = IContentItem<{
             );
         }
 
-        return commonHelper.sortAlphabetically(extendedElements, item => item.mappedName ?? '');
+        return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
     }
 
     private getTaxonomyTypeName(

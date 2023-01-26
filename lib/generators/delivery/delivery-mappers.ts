@@ -59,7 +59,9 @@ export function getMapContentTypeIdToObject(types: ContentTypeModels.ContentType
         const contentType = types.find((m) => m.id === id);
 
         if (!contentType) {
-            throw Error(`Could not find content type with id '${id}'`);
+            throw Error(
+                `Could not find content type with id '${id}'. This may be caused by references to deleted types and can be fixed within Kontent.ai app.`
+            );
         }
 
         return contentType;
@@ -73,7 +75,9 @@ export function getMapContentTypeSnippetIdToObject(
         const snippet = snippets.find((m) => m.id === id);
 
         if (!snippet) {
-            throw Error(`Could not find content type snippet with id '${id}'`);
+            throw Error(
+                `Could not find content type snippet with id '${id}'. This may be caused by references to deleted snippets and can be fixed within Kontent.ai app.`
+            );
         }
 
         return snippet;
