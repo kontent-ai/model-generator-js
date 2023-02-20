@@ -108,7 +108,6 @@ export class CommonHelper {
     escapeNameValue(value: string): string {
         return value.replace(`'`, `\\'`);
     }
-   
 }
 
 export const commonHelper = new CommonHelper();
