@@ -365,7 +365,7 @@ export class ProjectGenerator {
             code += `${this.getAssetFolderComment(assetFolder)}\n`;
             code += `${camelCasePropertyNameResolver('', assetFolder.name)}: {
                 id: '${assetFolder.id}',
-                name: '${assetFolder.name}',
+                name: '${commonHelper.escapeNameValue(assetFolder.name)}',
                 externalId: ${this.getStringOrUndefined(assetFolder.externalId)},
                 folders: ${this.getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
         }
