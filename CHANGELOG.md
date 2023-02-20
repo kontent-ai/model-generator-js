@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.10.0](https://github.com/kontent-ai/model-generator-js/compare/v5.9.0...v5.10.0) (2023-02-20)
+
+
+### Features
+
+* improves error logging for failed content types & snippets ([786e076](https://github.com/kontent-ai/model-generator-js/commit/786e076aabe12770bd6ce967525a94abbbc66dac))
+* updates dependencies ([3926a5b](https://github.com/kontent-ai/model-generator-js/commit/3926a5bb4888f8a20de0a53590f0609fc6eb9457))
+* updates deps ([da5d171](https://github.com/kontent-ai/model-generator-js/commit/da5d171c3bed89725c9920347d981d606be1c61e))
+
+
+### Bug Fixes
+
+* escapes asset folder name value ([2b0708e](https://github.com/kontent-ai/model-generator-js/commit/2b0708e5c71a36bd5c28e04989e9383ec75a6907))
+
 ## [5.9.0](https://github.com/kontent-ai/model-generator-js/compare/v5.8.0...v5.9.0) (2022-12-20)
 
 
