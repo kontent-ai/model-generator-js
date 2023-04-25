@@ -43,7 +43,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             const managementClient = createManagementClient({
                 environmentId: config.environmentId,
-                apiKey: config.apiKey
+                apiKey: config.apiKey,
+                baseUrl: config.managementApiUrl,
             });
 
             const projectInformation = (await managementClient.environmentInformation().toPromise()).data;
@@ -299,7 +300,6 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
         } else {
             throw Error(`Unsupported 'sdkType'. Supported values are: delivery, management`);
         }
-
         console.log(green(`\nCompleted`));
     } catch (error) {
         console.log(red(`Failed with error:`));

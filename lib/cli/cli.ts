@@ -65,6 +65,9 @@ const argv = yargs(process.argv.slice(2))
     .option('sortTaxonomyTerms', {
         description: 'Indicates if taxonomy terms are sorted alphabetically.'
     })
+    .option('managementApiUrl', {
+        description: 'Sets the url of Management API.'
+    })
     .help('h')
     .alias('h', 'help').argv;
 
@@ -102,6 +105,7 @@ const run = async () => {
 
     await generateModelsAsync({
         environmentId: environmentId,
+        managementApiUrl: resolvedArgs.managementApiUrl,
         apiKey: apiKey,
         outputDir: outputDir,
         isEnterpriseSubscription: isEnterpriseSubscription,

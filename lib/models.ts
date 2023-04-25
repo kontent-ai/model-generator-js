@@ -38,6 +38,7 @@ export interface IGenerateModelsConfig {
     isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;
+    managementApiUrl?: string;
 
     /**
      * Determines what content structure objects are exported.
