@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/kontent-ai/model-generator-js/compare/v5.10.0...v6.0.0) (2023-05-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* Uses 'environment' naming as used with latest version of SDKs, updates all dependencies
+
+### Features
+
+* Uses 'environment' naming as used with latest version of SDKs, updates all dependencies ([131b798](https://github.com/kontent-ai/model-generator-js/commit/131b7985622f922962db63b66c5e1113a22b7684))
+
 ## [5.10.0](https://github.com/kontent-ai/model-generator-js/compare/v5.9.0...v5.10.0) (2023-02-20)
 
 
