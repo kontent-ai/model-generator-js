@@ -16,11 +16,11 @@ Install package globally so you can use it anywhere:
 
 Go to folder where you want to create models and run:
 
-`kontent-generate --projectId=xxx --apiKey=yyy`
+`kontent-generate --environmentId=xxx --apiKey=yyy`
 
 You may specify other options like:
 
-`kontent-generate --projectId=xxx --apiKey=yyy --addTimestamp=false --elementResolver=camelCase`
+`kontent-generate --environmentId=xxx --apiKey=yyy --addTimestamp=false --elementResolver=camelCase`
 
 ## Generate models in code
 
@@ -31,7 +31,7 @@ import { generateModelsAsync } from '@kontent-ai/model-generator';
 
 await generateModelsAsync({
     sdkType: 'delivery',
-    projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+    environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     isEnterpriseSubscription: true,
     apiKey: 'yyy',
     addTimestamp: true,
@@ -46,7 +46,7 @@ You may customize the way filenames are stored on file system using the `content
 ```typescript
 await generateModelsAsync({
   sdkType: 'delivery',
-  projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
   isEnterpriseSubscription: true,
   apiKey: 'yyy',
   addTimestamp: true,
@@ -63,7 +63,7 @@ You may customize name of content types using the `contentTypeResolver` configur
 ```typescript
 await generateModelsAsync({
   sdkType: 'delivery',
-  projectId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
+  environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
   isEnterpriseSubscription: true,
   apiKey: 'yyy',
   addTimestamp: true,
@@ -79,7 +79,7 @@ await generateModelsAsync({
 
 ## CLI Configuration
 
-- `projectId` - Id of the Kontent.ai project
+- `environmentId` - Id of the Kontent.ai environment
 - `apiKey`- Management API Key
 - `outputDir`- Directory where files will be created. Defaults to current directory - `--outputDir=./`. Some other examples: `--outputDir=./sample`
 - `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.

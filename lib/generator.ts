@@ -42,11 +42,11 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             fs.mkdirSync(projectFolderPath, { recursive: true });
 
             const managementClient = createManagementClient({
-                projectId: config.projectId,
+                environmentId: config.environmentId,
                 apiKey: config.apiKey
             });
 
-            const projectInformation = (await managementClient.projectInformation().toPromise()).data;
+            const projectInformation = (await managementClient.environmentInformation().toPromise()).data;
             console.log(`Project '${yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${yellow(projectInformation.project.environment)}'\n`);
 
@@ -160,7 +160,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             // create project structure
             const projectModelResult = await projectGenerator.generateProjectModel({
                 outputDir: outputDir,
-                projectInformation: projectInformation.project,
+                environmentInfo: projectInformation.project,
                 addTimestamp: config.addTimestamp,
                 formatOptions: config.formatOptions,
                 languages: languages,

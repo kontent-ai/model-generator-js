@@ -10,7 +10,7 @@ import {
     ContentTypeModels,
     ContentTypeSnippetModels,
     LanguageModels,
-    ProjectModels,
+    EnvironmentModels,
     RoleModels,
     TaxonomyModels,
     WebhookModels,
@@ -32,7 +32,7 @@ interface IExtendedContentTypeElement {
 export class ProjectGenerator {
     generateProjectModel(data: {
         outputDir: string;
-        projectInformation: ProjectModels.ProjectInformationModel;
+        environmentInfo: EnvironmentModels.EnvironmentInformationModel;
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
@@ -47,7 +47,7 @@ export class ProjectGenerator {
         formatOptions?: Options;
     }): IGenerateProjectResult {
         const projectCodes = this.getProjectModelCode({
-            projectInformation: data.projectInformation,
+            environmentInfo: data.environmentInfo,
             types: data.types,
             addTimestamp: data.addTimestamp,
             formatOptions: data.formatOptions,
@@ -65,7 +65,7 @@ export class ProjectGenerator {
         /**
         * ${commonHelper.getAutogenerateNote(data.addTimestamp)}
         *
-        * ${this.getProjectComment(data.projectInformation)}
+        * ${this.getEnvironmentComment(data.environmentInfo)}
         */`;
 
         const filePaths: string[] = [];
@@ -100,11 +100,11 @@ export class ProjectGenerator {
         return count;
     }
 
-    private getProjectComment(projectInformation: ProjectModels.ProjectInformationModel): string {
-        let comment: string = `Project name: ${projectInformation.name}`;
+    private getEnvironmentComment(environmentInfo: EnvironmentModels.EnvironmentInformationModel): string {
+        let comment: string = `Project name: ${environmentInfo.name}`;
 
-        comment += `\n* Environment: ${projectInformation.environment}`;
-        comment += `\n* Project Id: ${projectInformation.id}`;
+        comment += `\n* Environment: ${environmentInfo.environment}`;
+        comment += `\n* Environment Id: ${environmentInfo.id}`;
 
         return comment;
     }
@@ -238,7 +238,7 @@ export class ProjectGenerator {
     }
 
     private getProjectModelCode(data: {
-        projectInformation: ProjectModels.ProjectInformationModel;
+        environmentInfo: EnvironmentModels.EnvironmentInformationModel;
         types: ContentTypeModels.ContentType[];
         languages: LanguageModels.LanguageModel[];
         taxonomies: TaxonomyModels.Taxonomy[];
@@ -598,7 +598,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;

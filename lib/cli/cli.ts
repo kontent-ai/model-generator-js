@@ -3,9 +3,14 @@ import * as yargs from 'yargs';
 import { generateModelsAsync } from '../generator';
 
 const argv = yargs(process.argv.slice(2))
-    .example('kontent-generate --projectId=xxx --apiKey=yyy', 'Basic configuration to generate strongly typed models')
-    .alias('p', 'projectId')
-    .describe('p', 'ProjectId')
+    .example(
+        'kontent-generate --environmentId=xxx --apiKey=yyy',
+        'Basic configuration to generate strongly typed models'
+    )
+    .alias('p', 'environmentId')
+    .describe('p', 'environmentId')
+    .alias('i', 'environmentId')
+    .describe('i', 'environmentId')
     .alias('k', 'apiKey')
     .describe('k', 'Management API Key')
     .alias('o', 'outputDir')
@@ -36,7 +41,8 @@ const argv = yargs(process.argv.slice(2))
         description: 'Name resolver for content type names. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('contentTypeSnippetResolver', {
-        description: 'Name resolver for content type snippet names. Available options are: camelCase, pascalCase, snakeCase'
+        description:
+            'Name resolver for content type snippet names. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('taxonomyTypeFileResolver', {
         description: 'Name resolver for taxonomy filenames. Available options are: camelCase, pascalCase, snakeCase'
@@ -45,7 +51,8 @@ const argv = yargs(process.argv.slice(2))
         description: 'Name resolver for content type filenames. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('contentTypeSnippetFileResolver', {
-        description: 'Name resolver for content type snippet filenames. Available options are: camelCase, pascalCase, snakeCase'
+        description:
+            'Name resolver for content type snippet filenames. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('exportRoles', {
         description: 'Indicates if roles are exported. Only available for Enterprise subscription plans'
@@ -60,7 +67,7 @@ const run = async () => {
     const resolvedArgs = (await argv) as any;
 
     // user config
-    const projectId = resolvedArgs.projectId;
+    const environmentId = resolvedArgs.environmentId;
     const apiKey = resolvedArgs.apiKey;
     const outputDir = resolvedArgs.outputDir;
     const addTimestamp = resolvedArgs.addTimestamp;
@@ -80,12 +87,12 @@ const run = async () => {
     const exportRoles = !resolvedArgs.exportRoles ? true :  resolvedArgs.exportRoles === 'true';
     const isEnterpriseSubscription = !resolvedArgs.isEnterpriseSubscription ? true :  resolvedArgs.isEnterpriseSubscription === 'true';
 
-    if (!projectId) {
-        throw Error(`Please provide project id using 'projectId' argument`);
+    if (!environmentId) {
+        throw Error(`Please provide environment id using 'environmentId' argument`);
     }
 
     await generateModelsAsync({
-        projectId: projectId,
+        environmentId: environmentId,
         apiKey: apiKey,
         outputDir: outputDir,
         isEnterpriseSubscription: isEnterpriseSubscription,

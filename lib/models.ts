@@ -26,7 +26,7 @@ export interface IExportProjectSettings {
 }
 
 export interface IGenerateModelsConfig {
-    projectId: string;
+    environmentId: string;
     addTimestamp: boolean;
     outputDir?: string;
     isEnterpriseSubscription: boolean;
