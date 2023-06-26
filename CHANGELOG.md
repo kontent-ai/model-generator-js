@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/kontent-ai/model-generator-js/compare/v6.0.0...v6.1.0) (2023-06-26)
+
+
+### Features
+
+* generates strongly typed multiple choice options, convert object names to safe variants in comments, updates dependencies, updates default code formatting ([7119a94](https://github.com/kontent-ai/model-generator-js/commit/7119a94db7b0c87c2c24b011d656cd8f67d944f7))
+
 ## [6.0.0](https://github.com/kontent-ai/model-generator-js/compare/v5.10.0...v6.0.0) (2023-05-31)
 
 
