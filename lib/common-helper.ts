@@ -1,7 +1,8 @@
 import { name, version } from '../package.json';
-import { format, Options } from 'prettier';
+import { Options } from 'prettier';
 import { parse } from 'path';
 import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
+import { formatHelper } from './format-helper';
 
 export interface IGenerateContentTypesResult {
     contentTypeFilenames: string[];
@@ -102,7 +103,7 @@ export class CommonHelper {
               };
 
         // beautify code
-        return format(code, formatOptions);
+        return formatHelper.formatCode(code, formatOptions);
     }
 
     escapeNameValue(value: string): string {

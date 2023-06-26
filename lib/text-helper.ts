@@ -44,6 +44,10 @@ export class TextHelper {
     removeLineEndings(value: string): string {
         return value.replace(/(\r\n|\n|\r)/gm, '');
     }
+
+    toSafeName(text: string): string {
+        return text.replace(/[\s-]/g, ' ').replace(/[^a-zA-Z0-9_]/g, ' ');
+    }
 }
 
 export const textHelper = new TextHelper();

@@ -1,4 +1,4 @@
-import { format, Options } from 'prettier';
+import { Options } from 'prettier';
 import * as fs from 'fs';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
@@ -10,6 +10,7 @@ import {
     getMapTaxonomyToFileName,
     getMapTaxonomyName
 } from './delivery-mappers';
+import { formatHelper } from '../../format-helper';
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
@@ -115,7 +116,7 @@ export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTerms
               };
 
         // beautify code
-        return format(code, formatOptions);
+        return formatHelper.formatCode(code, formatOptions);
     }
 
     private getTaxonomyTermsCode(taxonomy: TaxonomyModels.Taxonomy): string {

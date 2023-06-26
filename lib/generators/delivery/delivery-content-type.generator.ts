@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { yellow } from 'colors';
 import { commonHelper, IGenerateContentTypesResult } from '../../common-helper';
-import { format, Options } from 'prettier';
+import { Options } from 'prettier';
 import {
     ContentTypeResolver,
     ElementResolver,
@@ -41,6 +41,7 @@ import {
     getMapContentTypeSnippetIdToObject
 } from './delivery-mappers';
 import { textHelper } from '../../text-helper';
+import { formatHelper } from '../../format-helper';
 
 interface IExtendedContentTypeElement {
     type: ElementModels.ElementType;
@@ -410,7 +411,7 @@ export type ${typeName} = IContentItem<{
               };
 
         // beautify code
-        return format(code, formatOptions);
+        return formatHelper.formatCode(code, formatOptions);
     }
 
     private createContentTypeModel(data: {

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { yellow } from 'colors';
-import { format, Options } from 'prettier';
+import { Options } from 'prettier';
 import { commonHelper, IGenerateProjectResult } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import {
@@ -17,6 +17,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
+import { formatHelper } from '../../format-helper';
 
 interface IProjectCodeResult {
     filename: string;
@@ -70,16 +71,12 @@ export class ProjectGenerator {
 
         const filePaths: string[] = [];
 
-        const formatOptions: Options = data.formatOptions
-            ? data.formatOptions
-            : {
-                  parser: 'typescript',
-                  singleQuote: true
-              };
-
         for (const projectCode of projectCodes) {
             const filePath = `${data.outputDir}${data.projectFolderName}${projectCode.filename}`;
-            this.createFileOnFs(format(headerCode + '\n' + projectCode.code, formatOptions), `${filePath}`);
+            this.createFileOnFs(
+                formatHelper.formatCode(headerCode + '\n' + projectCode.code, data.formatOptions),
+                `${filePath}`
+            );
             filePaths.push(filePath);
         }
 
@@ -101,7 +98,7 @@ export class ProjectGenerator {
     }
 
     private getEnvironmentComment(environmentInfo: EnvironmentModels.EnvironmentInformationModel): string {
-        let comment: string = `Project name: ${environmentInfo.name}`;
+        let comment: string = `Project name: ${textHelper.toSafeName(environmentInfo.name)}`;
 
         comment += `\n* Environment: ${environmentInfo.environment}`;
         comment += `\n* Environment Id: ${environmentInfo.id}`;
@@ -112,7 +109,7 @@ export class ProjectGenerator {
     private getContentTypeComment(contentType: ContentTypeModels.ContentType): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${contentType.name}`;
+        comment += `\n* ${textHelper.toSafeName(contentType.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -121,7 +118,7 @@ export class ProjectGenerator {
     private getContentTypeSnippetComment(snippet: ContentTypeSnippetModels.ContentTypeSnippet): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${snippet.name}`;
+        comment += `\n* ${textHelper.toSafeName(snippet.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -130,7 +127,7 @@ export class ProjectGenerator {
     private getWorkflowComment(workflow: WorkflowModels.Workflow): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${workflow.name}`;
+        comment += `\n* ${textHelper.toSafeName(workflow.name)}`;
         comment += `\n* Archived step Id: ${workflow.archivedStep.id}`;
         comment += `\n* Published step Id: ${workflow.publishedStep.id}`;
         comment += `\n*/`;
@@ -141,7 +138,7 @@ export class ProjectGenerator {
     private getAssetFolderComment(assetFolder: AssetFolderModels.AssetFolder): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${assetFolder.name}`;
+        comment += `\n* ${textHelper.toSafeName(assetFolder.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -150,7 +147,7 @@ export class ProjectGenerator {
     private getLanguageComment(language: LanguageModels.LanguageModel): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${language.name}`;
+        comment += `\n* ${textHelper.toSafeName(language.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -188,7 +185,7 @@ export class ProjectGenerator {
         const name = commonHelper.getElementTitle(element, taxonomies);
 
         if (name) {
-            comment += `\n* ${name} (${element.type})`;
+            comment += `\n* ${textHelper.toSafeName(name)} (${element.type})`;
         }
 
         if (guidelines) {
@@ -204,7 +201,7 @@ export class ProjectGenerator {
     private getTaxonomyComment(taxonomy: TaxonomyModels.Taxonomy): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${taxonomy.name}`;
+        comment += `\n* ${textHelper.toSafeName(taxonomy.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -213,7 +210,7 @@ export class ProjectGenerator {
     private getCollectionComment(collection: CollectionModels.Collection): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${collection.name}`;
+        comment += `\n* ${textHelper.toSafeName(collection.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -222,7 +219,7 @@ export class ProjectGenerator {
     private getRoleComment(role: RoleModels.Role): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${role.name}`;
+        comment += `\n* ${textHelper.toSafeName(role.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -231,7 +228,7 @@ export class ProjectGenerator {
     private getWebhookComment(webhook: WebhookModels.Webhook): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${webhook.name}`;
+        comment += `\n* ${textHelper.toSafeName(webhook.name)}`;
         comment += `\n*/`;
 
         return comment;
@@ -455,6 +452,8 @@ export class ProjectGenerator {
 
             const isRequired = commonHelper.isElementRequired(element);
 
+            const elementOptions = this.getElementOptions(element);
+
             code += `\n`;
             code += `${this.getElementComment(element, taxonomies)}\n`;
             code += `${codename}: {
@@ -463,12 +462,44 @@ export class ProjectGenerator {
                 externalId: ${this.getStringOrUndefined(element.external_id)},
                 name: '${commonHelper.escapeNameValue(name)}',
                 required: ${isRequired},
-                type: '${element.type}',
-                snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}
+                type: '${element.type}'
+                ${elementOptions ? `, options: ${elementOptions}` : ''}
+                ${
+                    extendedElement.snippet
+                        ? `, snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}`
+                        : ''
+                }
+                
             }${!isLast ? ',\n' : ''}`;
         }
 
         return code;
+    }
+
+    private getElementOptions(element: ContentTypeElements.ContentTypeElementModel): string | undefined {
+        if (element.type === 'multiple_choice') {
+            let stronglyTypedOptions: string = `{`;
+
+            for (let i = 0; i < element.options.length; i++) {
+                const isLast = i === element.options.length - 1;
+                const option = element.options[i];
+
+                stronglyTypedOptions += `${option.codename}: {
+                    name: '${textHelper.toSafeName(option.name)}',
+                    id: '${option.id}',
+                    codename: '${option.codename}',
+                    externalId: ${this.getStringOrUndefined(option.external_id)}
+                }`;
+
+                stronglyTypedOptions += !isLast ? ',\n' : '';
+            }
+
+            stronglyTypedOptions += `}`;
+
+            return stronglyTypedOptions;
+        }
+
+        return undefined;
     }
 
     private getContentTypeSnippetElements(
@@ -598,7 +629,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
