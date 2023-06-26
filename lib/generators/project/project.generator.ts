@@ -469,7 +469,7 @@ export class ProjectGenerator {
                         ? `, snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}`
                         : ''
                 }
-                
+
             }${!isLast ? ',\n' : ''}`;
         }
 
@@ -629,7 +629,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
+                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
