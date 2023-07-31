@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/kontent-ai/model-generator-js/compare/v6.1.0...v6.2.0) (2023-07-31)
+
+
+### Features
+
+* updates deps, improves test generator script, migrates to eslint, refactors file creation (internal) ([fe15ddc](https://github.com/kontent-ai/model-generator-js/commit/fe15ddc3fd08e3539c4c59ec0c17f2c64cf10421))
+
 ## [6.1.0](https://github.com/kontent-ai/model-generator-js/compare/v6.0.0...v6.1.0) (2023-06-26)
 
 
