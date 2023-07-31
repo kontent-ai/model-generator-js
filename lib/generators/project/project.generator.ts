@@ -1,7 +1,5 @@
-import * as fs from 'fs';
-import { yellow } from 'colors';
 import { Options } from 'prettier';
-import { commonHelper, IGenerateProjectResult } from '../../common-helper';
+import { commonHelper, IGeneratedFile } from '../../common-helper';
 import { textHelper } from '../../text-helper';
 import {
     AssetFolderModels,
@@ -17,7 +15,6 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
-import { formatHelper } from '../../format-helper';
 
 interface IProjectCodeResult {
     filename: string;
@@ -46,7 +43,7 @@ export class ProjectGenerator {
         addTimestamp: boolean;
         projectFolderName: string;
         formatOptions?: Options;
-    }): IGenerateProjectResult {
+    }): IGeneratedFile[] {
         const projectCodes = this.getProjectModelCode({
             environmentInfo: data.environmentInfo,
             types: data.types,
@@ -69,20 +66,18 @@ export class ProjectGenerator {
         * ${this.getEnvironmentComment(data.environmentInfo)}
         */`;
 
-        const filePaths: string[] = [];
+        const generatedFiles: IGeneratedFile[] = [];
 
         for (const projectCode of projectCodes) {
             const filePath = `${data.outputDir}${data.projectFolderName}${projectCode.filename}`;
-            this.createFileOnFs(
-                formatHelper.formatCode(headerCode + '\n' + projectCode.code, data.formatOptions),
-                `${filePath}`
-            );
-            filePaths.push(filePath);
+            
+            generatedFiles.push({
+                filename: filePath,
+                text: headerCode + '\n' + projectCode.code
+            })
         }
 
-        return {
-            filenames: filePaths
-        };
+        return generatedFiles;
     }
 
     getAssetFoldersCount(folders: AssetFolderModels.AssetFolder[], count: number = 0): number {
@@ -680,13 +675,7 @@ export class ProjectGenerator {
         return code;
     }
 
-    private createFileOnFs(code: string, filename: string): void {
-        const finalFilename = `${filename}`;
-
-        fs.writeFileSync('./' + finalFilename, code);
-
-        console.log(`Created '${yellow(finalFilename)}'`);
-    }
+    
 }
 
 export const projectGenerator = new ProjectGenerator();

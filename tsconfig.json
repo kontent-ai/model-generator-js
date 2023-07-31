@@ -28,11 +28,14 @@
     "lib": [
       "ESNext",
       "dom"
+    ],
+    "types": [
+      "node"
     ]
   },
   "include": [
     "lib/**/*",
-    "sample/**/*",
+    "sample/**/*"
   ],
   "exclude": [
     "node_modules"

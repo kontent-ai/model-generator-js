@@ -1,7 +1,7 @@
 import { Options, format } from 'prettier';
 
 export class FormatHelper {
-    formatCode(code: string, options?: Options): string {
+    async formatCodeAsync(code: string, options?: Options): Promise<string> {
         const formatOptions: Options = options
             ? options
             : {
@@ -15,7 +15,7 @@ export class FormatHelper {
                   semi: true
               };
 
-        return format(code, formatOptions);
+        return await format(code, formatOptions);
     }
 }
 

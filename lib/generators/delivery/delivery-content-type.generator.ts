@@ -1,7 +1,5 @@
-import * as fs from 'fs';
 import { yellow } from 'colors';
-import { commonHelper, IGenerateContentTypesResult } from '../../common-helper';
-import { Options } from 'prettier';
+import { commonHelper, IGeneratedFile } from '../../common-helper';
 import {
     ContentTypeResolver,
     ElementResolver,
@@ -41,7 +39,6 @@ import {
     getMapContentTypeSnippetIdToObject
 } from './delivery-mappers';
 import { textHelper } from '../../text-helper';
-import { formatHelper } from '../../format-helper';
 
 interface IExtendedContentTypeElement {
     type: ElementModels.ElementType;
@@ -76,10 +73,9 @@ export class DeliveryContentTypeGenerator {
         contentTypeSnippetResolver?: ContentTypeSnippetResolver;
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-        formatOptions?: Options;
-    }): Promise<IGenerateContentTypesResult> {
-        const contentTypeFilenames: string[] = [];
-        const contentTypeSnippetFilenames: string[] = [];
+    }): Promise<{contentTypeFiles: IGeneratedFile[], snippetFiles: IGeneratedFile[]}> {
+        const typeFiles: IGeneratedFile[] = [];
+        const snippetFiles: IGeneratedFile[] = [];
 
         let addNewLineAfterResolvers: boolean = false;
 
@@ -136,7 +132,7 @@ export class DeliveryContentTypeGenerator {
 
         for (const contentTypeSnippet of data.snippets) {
             try {
-                const filename = this.createContentTypeSnippetModel({
+                const file = this.createContentTypeSnippetModel({
                     outputDir: data.outputDir,
                     snippet: contentTypeSnippet,
                     snippets: data.snippets,
@@ -159,9 +155,8 @@ export class DeliveryContentTypeGenerator {
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
                     addTimestamp: data.addTimestamp,
-                    formatOptions: data.formatOptions
                 });
-                contentTypeSnippetFilenames.push(filename);
+                snippetFiles.push(file);
             } catch (error) {
                 console.error(error);
                 throw Error(
@@ -172,7 +167,7 @@ export class DeliveryContentTypeGenerator {
 
         for (const type of data.types) {
             try {
-                const filename = this.createContentTypeModel({
+                const file = this.createContentTypeModel({
                     outputDir: data.outputDir,
                     type: type,
                     snippets: data.snippets,
@@ -195,9 +190,8 @@ export class DeliveryContentTypeGenerator {
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
                     addTimestamp: data.addTimestamp,
-                    formatOptions: data.formatOptions
                 });
-                contentTypeFilenames.push(filename);
+                typeFiles.push(file);
             } catch (error) {
                 console.error(error);
                 throw Error(`Failed to process content type '${type.codename}' (${type.name})`);
@@ -205,8 +199,8 @@ export class DeliveryContentTypeGenerator {
         }
 
         return {
-            contentTypeFilenames: contentTypeFilenames,
-            contentTypeSnippetFilenames: contentTypeSnippetFilenames
+            contentTypeFiles: typeFiles,
+            snippetFiles: snippetFiles
         };
     }
 
@@ -329,7 +323,6 @@ export class DeliveryContentTypeGenerator {
         typeSnippetsFolderName: string;
         taxonomyFolderName: string;
         addTimestamp: boolean;
-        formatOptions?: Options;
     }): string {
         const importResult = this.getContentTypeImports({
             elementNameMap: data.elementNameMap,
@@ -403,15 +396,7 @@ export type ${typeName} = IContentItem<{
     })}
 }>${typeExtends};
 `;
-        const formatOptions: Options = data.formatOptions
-            ? data.formatOptions
-            : {
-                  parser: 'typescript',
-                  singleQuote: true
-              };
-
-        // beautify code
-        return formatHelper.formatCode(code, formatOptions);
+       return code;
     }
 
     private createContentTypeModel(data: {
@@ -433,8 +418,7 @@ export type ${typeName} = IContentItem<{
         taxonomyFileNameMap: MapTaxonomyToFileName;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
-        formatOptions?: Options;
-    }): string {
+    }): IGeneratedFile {
         const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(
             data.type,
             true
@@ -454,15 +438,16 @@ export type ${typeName} = IContentItem<{
             typeSnippetsFolderName: data.typeSnippetsFolderName,
             taxonomyFolderName: data.taxonomyFolderName,
             addTimestamp: data.addTimestamp,
-            formatOptions: data.formatOptions,
             elementNameMap: data.elementNameMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
             taxonomyObjectMap: data.taxonomyObjectMap
         });
-        fs.writeFileSync(filename, code);
-        console.log(`Created '${yellow(filename)}'`);
-        return filename;
+
+        return {
+            filename: filename,
+            text: code
+        }
     }
 
     private createContentTypeSnippetModel(data: {
@@ -484,8 +469,7 @@ export type ${typeName} = IContentItem<{
         taxonomyFileNameMap: MapTaxonomyToFileName;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
-        formatOptions?: Options;
-    }): string {
+    }): IGeneratedFile {
         const filename: string = `${data.outputDir}${data.typeSnippetsFolderName}${data.contentTypeSnippetFileNameMap(
             data.snippet,
             true
@@ -505,16 +489,16 @@ export type ${typeName} = IContentItem<{
             typeSnippetsFolderName: data.typeSnippetsFolderName,
             taxonomyFolderName: data.taxonomyFolderName,
             addTimestamp: data.addTimestamp,
-            formatOptions: data.formatOptions,
             elementNameMap: data.elementNameMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
             taxonomyObjectMap: data.taxonomyObjectMap
         });
 
-        fs.writeFileSync(filename, code);
-        console.log(`Created '${yellow(filename)}'`);
-        return filename;
+        return {
+            filename: filename,
+            text: code
+        }
     }
 
     private getContentTypeComment(contentType: ContentTypeModels.ContentType): string {

@@ -1,20 +1,10 @@
 import { name, version } from '../package.json';
-import { Options } from 'prettier';
 import { parse } from 'path';
 import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
-import { formatHelper } from './format-helper';
 
-export interface IGenerateContentTypesResult {
-    contentTypeFilenames: string[];
-    contentTypeSnippetFilenames: string[];
-}
-
-export interface IGenerateTaxonomiesResult {
-    taxonomyFilenames: string[];
-}
-
-export interface IGenerateProjectResult {
-    filenames: string[];
+export interface IGeneratedFile {
+    filename: string;
+    text: string;
 }
 
 export class CommonHelper {
@@ -77,7 +67,7 @@ export class CommonHelper {
         return (<any>element)['name'];
     }
 
-    getBarrelExportCode(data: { filenames: string[]; formatOptions?: Options }): string {
+    getBarrelExportCode(data: { filenames: string[] }): string {
         let code = '';
 
         if (data.filenames.length) {
@@ -95,15 +85,7 @@ export class CommonHelper {
             code = `export {}`;
         }
 
-        const formatOptions: Options = data.formatOptions
-            ? data.formatOptions
-            : {
-                  parser: 'typescript',
-                  singleQuote: true
-              };
-
-        // beautify code
-        return formatHelper.formatCode(code, formatOptions);
+     return code;
     }
 
     escapeNameValue(value: string): string {

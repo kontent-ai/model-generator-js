@@ -24,43 +24,42 @@
     "es2015": "./dist/es6/lib/index.js",
     "types": "./dist/cjs/lib/index.d.ts",
     "scripts": {
-        "release": "npm run ts-lint:check && standard-version",
-        "release:major": "npm run ts-lint:check && standard-version --release-as major",
-        "release:major:beta": "npm run ts-lint:check && standard-version --prerelease --release-as major",
+        "release": "npm run lint:check && standard-version",
+        "release:major": "npm run lint:check && standard-version --release-as major",
+        "release:major:beta": "npm run lint:check && standard-version --prerelease --release-as major",
         "release:beta": "standard-version --prerelease",
         "prerelease:standard": "standard-version --prerelease",
         "prerelease:major": "standard-version --prerelease --release-as major",
         "tsc-local": "./node_modules/.bin/tsc",
         "ts-node-local": "./node_modules/.bin/ts-node",
-        "prepublishOnly": "npm run ts-lint:check && npm run build:all",
+        "prepublishOnly": "npm run lint:check && npm run build:all",
         "publish:beta": "npm publish --tag=next",
         "build:es6": "tsc -m es6 --outDir dist/es6 --p tsconfig.prod.json",
         "build:esnext": "tsc -m esnext --outDir dist/esnext --p tsconfig.prod.json",
         "build:commonjs": "tsc -m commonjs --outDir dist/cjs --p tsconfig.prod.json",
         "build:all": "npm run build:es6 && npm run build:esnext && npm run build:commonjs",
         "test:all": "npm run build:commonjs && npm run test:delivery-models",
-        "test:delivery-models": "npm run clean-sample-directory && npm run build:commonjs && dotenv -e ./.env cross-var -- node dist/cjs/lib/cli/cli --outputDir=./sample --isEnterpriseSubscription=true --apiKey=%API_KEY% --environmentId=%ENVIRONMENT_ID% --sdkType=delivery --addTimestamp=%ADD_TIMESTAMP% --contentTypeResolver=pascalCase --elementResolver=camelCase --fileResolver=snakeCase",
-        "test:help": "npm run build:all && cd sample && dotenv -e ../.env cross-var -- node ../dist/cjs/lib/cli/cli -h",
-        "ts-lint:fix": "tslint --project ./tsconfig.json --fix",
-        "ts-lint:check": "tslint --project ./tsconfig.json",
-        "clean-sample-directory": "ts-node clean-sample-dir"
+        "test:delivery-models": "npm run build:commonjs && ts-node scripts/generate-delivery-models",
+        "test:help": "npm run build:commonjs && cd sample && node ../dist/cjs/lib/cli/cli -h",
+        "lint:check": "npx eslint lib"
     },
     "dependencies": {
         "yargs": "17.7.2",
-        "prettier": "2.8.8",
+        "prettier": "3.0.0",
         "colors": "1.4.0",
-        "@kontent-ai/delivery-sdk": "14.2.0",
-        "@kontent-ai/management-sdk": "5.0.0"
+        "@kontent-ai/delivery-sdk": "14.3.0",
+        "@kontent-ai/management-sdk": "5.1.0"
     },
     "devDependencies": {
         "@types/yargs": "17.0.24",
-        "cross-var": "1.1.0",
-        "dotenv-cli": "7.2.1",
         "standard-version": "9.5.0",
-        "typescript": "5.1.3",
-        "@types/node": "20.3.1",
-        "@types/prettier": "2.7.3",
-        "tslint": "6.1.3",
-        "ts-node": "10.9.1"
+        "typescript": "5.1.6",
+        "@types/node": "20.4.5",
+        "@types/prettier": "3.0.0",
+        "@typescript-eslint/eslint-plugin": "6.2.0",
+        "@typescript-eslint/parser": "6.2.0",
+        "eslint": "8.46.0",
+        "ts-node": "10.9.1",
+        "dotenv-cli": "7.2.1"
     }
 }

@@ -1,8 +1,6 @@
-import { Options } from 'prettier';
-import * as fs from 'fs';
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
 import { yellow } from 'colors';
-import { commonHelper, IGenerateTaxonomiesResult } from '../../common-helper';
+import { commonHelper, IGeneratedFile } from '../../common-helper';
 import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     MapTaxonomyToFileName,
@@ -10,7 +8,6 @@ import {
     getMapTaxonomyToFileName,
     getMapTaxonomyName
 } from './delivery-mappers';
-import { formatHelper } from '../../format-helper';
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
@@ -18,11 +15,10 @@ export class DeliveryTaxonomyGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         taxonomyFolderName: string;
         addTimestamp: boolean;
-        formatOptions?: Options;
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): Promise<IGenerateTaxonomiesResult> {
-        const filenames: string[] = [];
+    }): Promise<IGeneratedFile[]> {
+        const files: IGeneratedFile[] = [];
 
         if (config.taxonomyResolver) {
             console.log(
@@ -45,21 +41,19 @@ export class DeliveryTaxonomyGenerator {
         }
 
         for (const taxonomy of config.taxonomies) {
-            const filename = this.generateModels({
+            const file = this.generateModels({
                 outputDir: config.outputDir,
                 taxonomy: taxonomy,
                 taxonomyFolderName: config.taxonomyFolderName,
                 addTimestamp: config.addTimestamp,
-                formatOptions: config.formatOptions,
                 taxonomyNameMap: getMapTaxonomyName(config.taxonomyResolver),
                 taxonomyFileNameMap: getMapTaxonomyToFileName(config.fileResolver)
             });
-            filenames.push(filename);
+
+            files.push(file);
         }
 
-        return {
-            taxonomyFilenames: filenames
-        };
+        return files;
     }
 
     private getTaxonomyComment(taxonomy: TaxonomyModels.Taxonomy): string {
@@ -76,29 +70,26 @@ export class DeliveryTaxonomyGenerator {
         taxonomy: TaxonomyModels.Taxonomy;
         taxonomyFolderName: string;
         addTimestamp: boolean;
-        formatOptions?: Options;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         taxonomyNameMap: MapTaxonomyName;
-    }): string {
+    }): IGeneratedFile {
         const filename = `${data.outputDir}${data.taxonomyFolderName}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
-            formatOptions: data.formatOptions,
             taxonomyNameMap: data.taxonomyNameMap
         });
 
-        fs.writeFileSync(filename, code);
-        console.log(`Created '${yellow(filename)}'`);
-
-        return filename;
+        return {
+            filename: filename,
+            text: code
+        };
     }
 
     private getModelCode(config: {
         taxonomyNameMap: MapTaxonomyName;
         taxonomy: TaxonomyModels.Taxonomy;
         addTimestamp: boolean;
-        formatOptions?: Options;
     }): string {
         const code = `
 /**
@@ -108,15 +99,7 @@ export class DeliveryTaxonomyGenerator {
 */
 export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTermsCode(config.taxonomy)};
 `;
-        const formatOptions: Options = config.formatOptions
-            ? config.formatOptions
-            : {
-                  parser: 'typescript',
-                  singleQuote: true
-              };
-
-        // beautify code
-        return formatHelper.formatCode(code, formatOptions);
+        return code;
     }
 
     private getTaxonomyTermsCode(taxonomy: TaxonomyModels.Taxonomy): string {
