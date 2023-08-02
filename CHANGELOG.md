@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/kontent-ai/model-generator-js/compare/v6.2.0...v6.3.0) (2023-08-02)
+
+
+### Features
+
+*  adds option to disable sorting on taxonomy terms ([6707d4b](https://github.com/kontent-ai/model-generator-js/commit/6707d4b15ce1155b17054f4fc17167a16d35d933))
+
 ## [6.2.0](https://github.com/kontent-ai/model-generator-js/compare/v6.1.0...v6.2.0) (2023-07-31)
 
 
