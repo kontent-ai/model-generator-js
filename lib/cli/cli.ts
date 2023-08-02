@@ -60,6 +60,9 @@ const argv = yargs(process.argv.slice(2))
     .option('isEnterpriseSubscription', {
         description: 'Indicates if enterprise subscription endpoint can be used to export data.'
     })
+    .option('sortTaxonomyTerms', {
+        description: 'Indicates if taxonomy terms are sorted alphabetically.'
+    })
     .help('h')
     .alias('h', 'help').argv;
 
@@ -79,13 +82,16 @@ const run = async () => {
     const taxonomyTypeResolver = resolvedArgs.taxonomyTypeResolver;
     const contentTypeSnippetResolver = resolvedArgs.contentTypeSnippetResolver;
     const sdkType = resolvedArgs.sdkType;
-    const exportWebhooks = !resolvedArgs.exportWebhooks ? true :  resolvedArgs.exportWebhooks === 'true';
-    const exportWorkflows =  !resolvedArgs.exportWorkflows ? true :  resolvedArgs.exportWorkflows === 'true';
-    const exportAssetFolders =  !resolvedArgs.exportAssetFolders ? true :  resolvedArgs.exportAssetFolders === 'true';
-    const exportCollections = !resolvedArgs.exportCollections ? true :  resolvedArgs.exportCollections === 'true';
-    const exportLanguages =  !resolvedArgs.exportLanguages ? true :  resolvedArgs.exportLanguages === 'true';
-    const exportRoles = !resolvedArgs.exportRoles ? true :  resolvedArgs.exportRoles === 'true';
-    const isEnterpriseSubscription = !resolvedArgs.isEnterpriseSubscription ? true :  resolvedArgs.isEnterpriseSubscription === 'true';
+    const exportWebhooks = !resolvedArgs.exportWebhooks ? true : resolvedArgs.exportWebhooks === 'true';
+    const sortTaxonomyTerms = !resolvedArgs.sortTaxonomyTerms ? true : resolvedArgs.sortTaxonomyTerms === 'true';
+    const exportWorkflows = !resolvedArgs.exportWorkflows ? true : resolvedArgs.exportWorkflows === 'true';
+    const exportAssetFolders = !resolvedArgs.exportAssetFolders ? true : resolvedArgs.exportAssetFolders === 'true';
+    const exportCollections = !resolvedArgs.exportCollections ? true : resolvedArgs.exportCollections === 'true';
+    const exportLanguages = !resolvedArgs.exportLanguages ? true : resolvedArgs.exportLanguages === 'true';
+    const exportRoles = !resolvedArgs.exportRoles ? true : resolvedArgs.exportRoles === 'true';
+    const isEnterpriseSubscription = !resolvedArgs.isEnterpriseSubscription
+        ? true
+        : resolvedArgs.isEnterpriseSubscription === 'true';
 
     if (!environmentId) {
         throw Error(`Please provide environment id using 'environmentId' argument`);
@@ -106,6 +112,9 @@ const run = async () => {
         contentTypeSnippetResolver: contentTypeSnippetResolver,
         formatOptions: undefined,
         sdkType: sdkType ?? 'delivery',
+        sortConfig: {
+            sortTaxonomyTerms: sortTaxonomyTerms
+        },
         exportProjectSettings: {
             exportWebhooks: exportWebhooks ?? true,
             exportWorkflows: exportWorkflows ?? true,

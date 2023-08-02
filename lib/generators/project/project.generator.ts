@@ -15,6 +15,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
+import { ISortConfig } from 'lib/models';
 
 interface IProjectCodeResult {
     filename: string;
@@ -42,6 +43,7 @@ export class ProjectGenerator {
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
         projectFolderName: string;
+        sortConfig: ISortConfig;
         formatOptions?: Options;
     }): IGeneratedFile[] {
         const projectCodes = this.getProjectModelCode({
@@ -56,7 +58,8 @@ export class ProjectGenerator {
             collections: data.collections,
             roles: data.roles,
             snippets: data.snippets,
-            webhooks: data.webhooks
+            webhooks: data.webhooks,
+            sortConfig: data.sortConfig
         });
 
         const headerCode = `
@@ -70,11 +73,11 @@ export class ProjectGenerator {
 
         for (const projectCode of projectCodes) {
             const filePath = `${data.outputDir}${data.projectFolderName}${projectCode.filename}`;
-            
+
             generatedFiles.push({
                 filename: filePath,
                 text: headerCode + '\n' + projectCode.code
-            })
+            });
         }
 
         return generatedFiles;
@@ -241,6 +244,7 @@ export class ProjectGenerator {
         roles: RoleModels.Role[];
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
+        sortConfig: ISortConfig;
         formatOptions?: Options;
     }): IProjectCodeResult[] {
         const result: IProjectCodeResult[] = [
@@ -270,7 +274,7 @@ export class ProjectGenerator {
             },
             {
                 code: `export const taxonomies = {
-                    ${this.getProjectTaxonomies(data.taxonomies)}
+                    ${this.getProjectTaxonomies(data.taxonomies, data.sortConfig)}
                 } as const;`,
                 filename: 'taxonomies.ts'
             },
@@ -577,7 +581,7 @@ export class ProjectGenerator {
         return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
     }
 
-    private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[]): string {
+    private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[], sortConfig: ISortConfig): string {
         let code: string = ``;
         for (let i = 0; i < taxonomies.length; i++) {
             const taxonomy = taxonomies[i];
@@ -590,7 +594,7 @@ export class ProjectGenerator {
                 id: '${taxonomy.id}',
                 externalId: ${this.getStringOrUndefined(taxonomy.externalId)},
                 name: '${commonHelper.escapeNameValue(taxonomy.name)}',
-                ${this.getProjectTaxonomiesTerms(taxonomy.terms)}
+                ${this.getProjectTaxonomiesTerms(taxonomy.terms, sortConfig)}
             }${!isLast ? ',\n' : ''}`;
         }
 
@@ -624,7 +628,7 @@ export class ProjectGenerator {
             code += `\n`;
             code += `${this.getRoleComment(role)}\n`;
             code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? '\'' + role.codename + '\'' : undefined},
+                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
                 id: '${role.id}',
                 name: '${commonHelper.escapeNameValue(role.name)}'
             }${!isLast ? ',\n' : ''}`;
@@ -651,12 +655,14 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[]): string {
+    private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[], sortConfig: ISortConfig): string {
         if (terms.length === 0) {
             return `terms: {}`;
         }
 
-        const sortedTerms: TaxonomyModels.Taxonomy[] = commonHelper.sortAlphabetically(terms, (item) => item.name);
+        const sortedTerms: TaxonomyModels.Taxonomy[] = sortConfig.sortTaxonomyTerms
+            ? commonHelper.sortAlphabetically(terms, (item) => item.name)
+            : terms;
 
         let code: string = `terms: {`;
         for (let i = 0; i < sortedTerms.length; i++) {
@@ -667,15 +673,13 @@ export class ProjectGenerator {
                 id: '${term.id}',
                 externalId: ${this.getStringOrUndefined(term.externalId)},
                 name: '${commonHelper.escapeNameValue(term.name)}',
-                ${this.getProjectTaxonomiesTerms(term.terms)}
+                ${this.getProjectTaxonomiesTerms(term.terms, sortConfig)}
             }${!isLast ? ',\n' : ''}`;
         }
         code += '}';
 
         return code;
     }
-
-    
 }
 
 export const projectGenerator = new ProjectGenerator();

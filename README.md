@@ -36,6 +36,9 @@ await generateModelsAsync({
     apiKey: 'yyy',
     addTimestamp: true,
     elementResolver: 'camelCase',
+    sortConfig: {
+      sortTaxonomyTerms: true
+    }
 })
 ```
 

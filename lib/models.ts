@@ -32,6 +32,7 @@ export interface IGenerateModelsConfig {
     isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;
+    sortConfig: ISortConfig;
 
     /**
      * Determines what content structure objects are exported.
@@ -47,4 +48,8 @@ export interface IGenerateModelsConfig {
     taxonomyTypeResolver?: TaxonomyTypeResolver;
     elementResolver?: ElementResolver;
     formatOptions?: Options;
+}
+
+export interface ISortConfig {
+    sortTaxonomyTerms: boolean;
 }

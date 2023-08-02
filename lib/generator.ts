@@ -77,7 +77,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const exportAllProjectSettings = config.exportProjectSettings ? false : true;
 
             if (config.exportProjectSettings?.exportWorkflows || exportAllProjectSettings) {
-                workflows.push(...commonHelper.sortAlphabetically((await managementClient.listWorkflows().toPromise()).data, item => item.name));
+                workflows.push(
+                    ...commonHelper.sortAlphabetically(
+                        (await managementClient.listWorkflows().toPromise()).data,
+                        (item) => item.name
+                    )
+                );
                 console.log(`Found '${yellow(workflows.length.toString())}' workflows`);
             } else {
                 console.log(`Skipping '${red('workflows')}' export`);
@@ -85,7 +90,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             if (config.isEnterpriseSubscription) {
                 if (config.exportProjectSettings?.exportRoles || exportAllProjectSettings) {
-                    roles.push(...commonHelper.sortAlphabetically((await managementClient.listRoles().toPromise()).data.roles, item => item.name));
+                    roles.push(
+                        ...commonHelper.sortAlphabetically(
+                            (await managementClient.listRoles().toPromise()).data.roles,
+                            (item) => item.name
+                        )
+                    );
                     console.log(`Found '${yellow(roles.length.toString())}' roles`);
                 } else {
                     console.log(`Skipping '${red('roles')}' export`);
@@ -95,7 +105,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             }
 
             if (config.exportProjectSettings?.exportAssetFolders || exportAllProjectSettings) {
-                assetFolders.push(...commonHelper.sortAlphabetically((await managementClient.listAssetFolders().toPromise()).data.items, (item => item.name)));
+                assetFolders.push(
+                    ...commonHelper.sortAlphabetically(
+                        (await managementClient.listAssetFolders().toPromise()).data.items,
+                        (item) => item.name
+                    )
+                );
                 console.log(
                     `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders).toString())}' asset folders`
                 );
@@ -104,21 +119,36 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             }
 
             if (config.exportProjectSettings?.exportCollections || exportAllProjectSettings) {
-                collections.push(...commonHelper.sortAlphabetically((await managementClient.listCollections().toPromise()).data.collections, item => item.name));
+                collections.push(
+                    ...commonHelper.sortAlphabetically(
+                        (await managementClient.listCollections().toPromise()).data.collections,
+                        (item) => item.name
+                    )
+                );
                 console.log(`Found '${yellow(collections.length.toString())}' collections`);
             } else {
                 console.log(`Skipping '${red('collections')}' export`);
             }
 
             if (config.exportProjectSettings?.exportWebhooks || exportAllProjectSettings) {
-                webhooks.push(...commonHelper.sortAlphabetically((await managementClient.listWebhooks().toPromise()).data.webhooks, item => item.name));
+                webhooks.push(
+                    ...commonHelper.sortAlphabetically(
+                        (await managementClient.listWebhooks().toPromise()).data.webhooks,
+                        (item) => item.name
+                    )
+                );
                 console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
             } else {
                 console.log(`Skipping '${red('webhooks')}' export`);
             }
 
             if (config.exportProjectSettings?.exportLanguages || exportAllProjectSettings) {
-                languages.push(...commonHelper.sortAlphabetically((await managementClient.listLanguages().toAllPromise()).data.items, item => item.name));
+                languages.push(
+                    ...commonHelper.sortAlphabetically(
+                        (await managementClient.listLanguages().toAllPromise()).data.items,
+                        (item) => item.name
+                    )
+                );
                 console.log(`Found '${yellow(languages.length.toString())}' languages`);
             } else {
                 console.log(`Skipping '${red('languages')}' export`);
@@ -170,7 +200,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 roles: roles,
                 snippets: snippets,
                 webhooks: webhooks,
-                projectFolderName: projectFolderName
+                projectFolderName: projectFolderName,
+                sortConfig: config.sortConfig
             });
 
             // create barrel export
@@ -186,10 +217,14 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         const path = parse(m.filename);
                         return `./${path.name}`;
                     })
-                ],
+                ]
             });
             const contentTypeBarrelExportPath: string = `${contentTypesFolderPath}${barrelExportFilename}`;
-            await fileHelper.createFileOnFsAsync(contentTypeBarrelCode, contentTypeBarrelExportPath, config.formatOptions);
+            await fileHelper.createFileOnFsAsync(
+                contentTypeBarrelCode,
+                contentTypeBarrelExportPath,
+                config.formatOptions
+            );
 
             // content type snippets
             for (const file of deliveryModels.snippetFiles) {
@@ -201,10 +236,14 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         const path = parse(m.filename);
                         return `./${path.name}`;
                     })
-                ],
+                ]
             });
             const contentTypeSnippetsBarrelExportPath: string = `${contentTypeSnippetsFolderPath}${barrelExportFilename}`;
-            await fileHelper.createFileOnFsAsync(contentTypeSnippetsBarrelCode, contentTypeSnippetsBarrelExportPath, config.formatOptions);
+            await fileHelper.createFileOnFsAsync(
+                contentTypeSnippetsBarrelCode,
+                contentTypeSnippetsBarrelExportPath,
+                config.formatOptions
+            );
 
             // taxonomies
             for (const file of taxonomyFiles) {
@@ -216,10 +255,14 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         const path = parse(m.filename);
                         return `./${path.name}`;
                     })
-                ],
+                ]
             });
             const taxonomiesBarrelExportPath: string = `${taxonomiesFolderPath}${barrelExportFilename}`;
-            await fileHelper.createFileOnFsAsync(taxonomiesBarrelCode, taxonomiesBarrelExportPath, config.formatOptions);
+            await fileHelper.createFileOnFsAsync(
+                taxonomiesBarrelCode,
+                taxonomiesBarrelExportPath,
+                config.formatOptions
+            );
 
             // project barrel
             for (const file of projectFiles) {
@@ -231,10 +274,10 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         const path = parse(m.filename);
                         return `./${path.name}`;
                     })
-                ],
+                ]
             });
             const projectBarrelExportPath: string = `${projectFolderPath}${barrelExportFilename}`;
-            await fileHelper.createFileOnFsAsync(projectBarrelCode, projectBarrelExportPath, config.formatOptions)
+            await fileHelper.createFileOnFsAsync(projectBarrelCode, projectBarrelExportPath, config.formatOptions);
 
             // main barrel
             const mainBarrelCode = commonHelper.getBarrelExportCode({
@@ -243,7 +286,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                     `./${contentTypesFolderName}`,
                     `./${contentTypeSnippetsFolderName}`,
                     `./${taxonomiesFolderName}`
-                ],
+                ]
             });
             const mainBarrelExportPath: string = `${outputDir}${barrelExportFilename}`;
             await fileHelper.createFileOnFsAsync(mainBarrelCode, mainBarrelExportPath, config.formatOptions);

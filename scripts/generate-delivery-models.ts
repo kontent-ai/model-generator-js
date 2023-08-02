@@ -39,6 +39,9 @@ const run = async () => {
         sdkType: 'delivery',
         isEnterpriseSubscription: true,
         outputDir: outputDir,
+        sortConfig: {
+            sortTaxonomyTerms: true
+        }
     });
 };
 
