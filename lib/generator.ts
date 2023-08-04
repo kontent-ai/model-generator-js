@@ -201,7 +201,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 snippets: snippets,
                 webhooks: webhooks,
                 projectFolderName: projectFolderName,
-                sortConfig: config.sortConfig
+                sortConfig: config.sortConfig ?? {
+                    sortTaxonomyTerms: true
+                }
             });
 
             // create barrel export

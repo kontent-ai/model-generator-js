@@ -8,12 +8,18 @@ export type SdkType = 'delivery' | 'management';
 
 export type ElementResolver = DefaultResolverType | PropertyNameResolver;
 
-export type ContentTypeFileNameResolver = DefaultResolverType | ((contentType: ContentTypeModels.ContentType) => string);
-export type ContentTypeSnippetFileNameResolver = DefaultResolverType | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
+export type ContentTypeFileNameResolver =
+    | DefaultResolverType
+    | ((contentType: ContentTypeModels.ContentType) => string);
+export type ContentTypeSnippetFileNameResolver =
+    | DefaultResolverType
+    | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
 export type TaxonomyTypeFileNameResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
 
 export type ContentTypeResolver = DefaultResolverType | ((contentType: ContentTypeModels.ContentType) => string);
-export type ContentTypeSnippetResolver = DefaultResolverType | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
+export type ContentTypeSnippetResolver =
+    | DefaultResolverType
+    | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
 export type TaxonomyTypeResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
 
 export interface IExportProjectSettings {
@@ -28,18 +34,17 @@ export interface IExportProjectSettings {
 export interface IGenerateModelsConfig {
     environmentId: string;
     addTimestamp: boolean;
-    outputDir?: string;
     isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;
-    sortConfig: ISortConfig;
 
     /**
      * Determines what content structure objects are exported.
      * If not set, all objects are exported
      */
     exportProjectSettings?: IExportProjectSettings;
-
+    outputDir?: string;
+    sortConfig?: ISortConfig;
     contentTypeFileResolver?: ContentTypeFileNameResolver;
     contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
     taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
