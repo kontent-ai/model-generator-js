@@ -22,6 +22,12 @@ interface IProjectCodeResult {
     code: string;
 }
 
+interface IWorkflowStep {
+    name: string;
+    codename: string;
+    id: string;
+}
+
 interface IExtendedContentTypeElement {
     element: ContentTypeElements.ContentTypeElementModel;
     snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
@@ -344,7 +350,8 @@ export class ProjectGenerator {
             code += `${workflow.codename}: {
                 codename: '${workflow.codename}',
                 id: '${workflow.id}',
-                name: '${commonHelper.escapeNameValue(workflow.name)}'
+                name: '${commonHelper.escapeNameValue(workflow.name)}',
+                steps: ${this.getProjectWorkflowSteps(workflow)}
             }${!isLast ? ',\n' : ''}`;
         }
 
@@ -677,6 +684,50 @@ export class ProjectGenerator {
             }${!isLast ? ',\n' : ''}`;
         }
         code += '}';
+
+        return code;
+    }
+
+    private getProjectWorkflowSteps(workflow: WorkflowModels.Workflow): string {
+        const steps: IWorkflowStep[] = [
+            {
+                codename: workflow.archivedStep.codename,
+                id: workflow.archivedStep.id,
+                name: workflow.archivedStep.name
+            },
+            {
+                codename: workflow.publishedStep.codename,
+                id: workflow.publishedStep.id,
+                name: workflow.publishedStep.name
+            },
+            {
+                codename: workflow.scheduledStep.codename,
+                id: workflow.scheduledStep.id,
+                name: workflow.scheduledStep.name
+            }
+        ];
+
+        for (const step of workflow.steps) {
+            steps.push({
+                codename: step.codename,
+                id: step.id,
+                name: step.name
+            });
+        }
+
+        const code: string = `
+        {
+            ${steps.map((step) => {
+                return `
+                    ${step.codename}: {
+                        name: '${commonHelper.escapeNameValue(step.name)}',
+                        codename: '${step.codename}',
+                        id: '${step.id}'
+                    }
+                `;
+            })}
+        }
+        `;
 
         return code;
     }
