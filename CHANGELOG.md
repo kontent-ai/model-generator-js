@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0](https://github.com/kontent-ai/model-generator-js/compare/v6.3.1...v6.4.0) (2023-08-14)
+
+
+### Features
+
+* Adds ability to skip environment info generation (fixes https://github.com/kontent-ai/model-generator-js/issues/43) ([d89badd](https://github.com/kontent-ai/model-generator-js/commit/d89baddb1165c55d1bcad45b06e07b54039de9ec))
+* Adds strongly typed workflow steps to project export ([1cdeb93](https://github.com/kontent-ai/model-generator-js/commit/1cdeb93161ada7d9d44fba1d7b4635c155aa093f))
+* updates deps ([7895e32](https://github.com/kontent-ai/model-generator-js/commit/7895e32988134755671ed6d0c9351384c16b5c15))
+
 ### [6.3.1](https://github.com/kontent-ai/model-generator-js/compare/v6.3.0...v6.3.1) (2023-08-04)
 
 
