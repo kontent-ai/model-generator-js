@@ -48,6 +48,7 @@ export class ProjectGenerator {
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
+        addEnvironmentInfo: boolean;
         projectFolderName: string;
         sortConfig: ISortConfig;
         formatOptions?: Options;
@@ -68,12 +69,18 @@ export class ProjectGenerator {
             sortConfig: data.sortConfig
         });
 
-        const headerCode = `
-        /**
-        * ${commonHelper.getAutogenerateNote(data.addTimestamp)}
-        *
-        * ${this.getEnvironmentComment(data.environmentInfo)}
-        */`;
+        let headerCode = `
+/**
+* ${commonHelper.getAutogenerateNote(data.addTimestamp)}`;
+
+        if (data.addEnvironmentInfo) {
+            headerCode += `
+* 
+* ${this.getEnvironmentComment(data.environmentInfo)}`;
+        }
+
+        headerCode += `
+*/`;
 
         const generatedFiles: IGeneratedFile[] = [];
 

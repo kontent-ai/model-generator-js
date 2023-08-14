@@ -17,6 +17,8 @@ const argv = yargs(process.argv.slice(2))
     .describe('o', 'Directory where generated files will be created')
     .alias('a', 'addTimestamp')
     .describe('a', 'Indicates if timestamp should be generated')
+    .alias('e', 'addEnvironmentInfo')
+    .describe('e', 'Indicates if environment info stamp should be generated')
     .alias('t', 'sdkType')
     .describe('t', 'Type of sdk for which models are generated. Available options are: delivery')
     .option('exportLanguages', {
@@ -74,6 +76,7 @@ const run = async () => {
     const apiKey = resolvedArgs.apiKey;
     const outputDir = resolvedArgs.outputDir;
     const addTimestamp = resolvedArgs.addTimestamp;
+    const addEnvironmentInfo = resolvedArgs.addEnvironmentInfo;
     const elementResolver = resolvedArgs.elementResolver;
     const contentTypeFileResolver = resolvedArgs.contentTypeFileResolver;
     const contentTypeSnippetFileResolver = resolvedArgs.contentTypeSnippetFileResolver;
@@ -103,6 +106,7 @@ const run = async () => {
         outputDir: outputDir,
         isEnterpriseSubscription: isEnterpriseSubscription,
         addTimestamp: addTimestamp === 'true' ? true : false,
+        addEnvironmentInfo: addEnvironmentInfo === 'true' ? true : false,
         elementResolver: elementResolver,
         contentTypeFileResolver: contentTypeFileResolver,
         contentTypeResolver: contentTypeResolver,

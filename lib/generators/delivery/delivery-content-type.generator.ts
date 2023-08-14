@@ -66,6 +66,7 @@ export class DeliveryContentTypeGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
+        addEnvironmentInfo: boolean;
         elementResolver?: ElementResolver;
         contentTypeFileNameResolver?: ContentTypeFileNameResolver;
         contentTypeSnippetFileNameResolver?: ContentTypeSnippetFileNameResolver;
@@ -155,6 +156,7 @@ export class DeliveryContentTypeGenerator {
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
                     addTimestamp: data.addTimestamp,
+                    addEnvironmentInfo: data.addEnvironmentInfo
                 });
                 snippetFiles.push(file);
             } catch (error) {
@@ -190,6 +192,7 @@ export class DeliveryContentTypeGenerator {
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
                     addTimestamp: data.addTimestamp,
+                    addEnvironmentInfo: data.addEnvironmentInfo
                 });
                 typeFiles.push(file);
             } catch (error) {
@@ -323,6 +326,7 @@ export class DeliveryContentTypeGenerator {
         typeSnippetsFolderName: string;
         taxonomyFolderName: string;
         addTimestamp: boolean;
+        addEnvironmentInfo: boolean;
     }): string {
         const importResult = this.getContentTypeImports({
             elementNameMap: data.elementNameMap,
@@ -418,6 +422,7 @@ export type ${typeName} = IContentItem<{
         taxonomyFileNameMap: MapTaxonomyToFileName;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
+        addEnvironmentInfo: boolean;
     }): IGeneratedFile {
         const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(
             data.type,
@@ -438,6 +443,7 @@ export type ${typeName} = IContentItem<{
             typeSnippetsFolderName: data.typeSnippetsFolderName,
             taxonomyFolderName: data.taxonomyFolderName,
             addTimestamp: data.addTimestamp,
+            addEnvironmentInfo: data.addEnvironmentInfo,
             elementNameMap: data.elementNameMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
@@ -469,6 +475,7 @@ export type ${typeName} = IContentItem<{
         taxonomyFileNameMap: MapTaxonomyToFileName;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
+        addEnvironmentInfo: boolean;
     }): IGeneratedFile {
         const filename: string = `${data.outputDir}${data.typeSnippetsFolderName}${data.contentTypeSnippetFileNameMap(
             data.snippet,
@@ -489,6 +496,7 @@ export type ${typeName} = IContentItem<{
             typeSnippetsFolderName: data.typeSnippetsFolderName,
             taxonomyFolderName: data.taxonomyFolderName,
             addTimestamp: data.addTimestamp,
+            addEnvironmentInfo: data.addEnvironmentInfo,
             elementNameMap: data.elementNameMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,

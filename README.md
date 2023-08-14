@@ -35,6 +35,7 @@ await generateModelsAsync({
     isEnterpriseSubscription: true,
     apiKey: 'yyy',
     addTimestamp: true,
+    addEnvironmentInfo: true,
     elementResolver: 'camelCase',
     sortConfig: {
       sortTaxonomyTerms: true
@@ -51,6 +52,7 @@ await generateModelsAsync({
   sdkType: 'delivery',
   environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
   isEnterpriseSubscription: true,
+  addEnvironmentInfo: true,
   apiKey: 'yyy',
   addTimestamp: true,
   elementResolver: 'camelCase',
@@ -70,6 +72,7 @@ await generateModelsAsync({
   isEnterpriseSubscription: true,
   apiKey: 'yyy',
   addTimestamp: true,
+  addEnvironmentInfo: true,
   elementResolver: 'camelCase',
   contentTypeResolver: (type) => `${textHelper.toPascalCase(type.codename)}Model`,
   taxonomyTypeResolver: (taxonomy) => `${textHelper.toPascalCase(taxonomy.codename)}Taxonomy`,
@@ -87,6 +90,7 @@ await generateModelsAsync({
 - `outputDir`- Directory where files will be created. Defaults to current directory - `--outputDir=./`. Some other examples: `--outputDir=./sample`
 - `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.
 - `addTimestamp`- Indicates if timestamp is added to generated models
+- `addEnvironmentInfo`- Indicates if environment info stamp is added to generated models
 - `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 - `contentTypeSnippetFileResolver`- Name resolver for content type snippet filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`

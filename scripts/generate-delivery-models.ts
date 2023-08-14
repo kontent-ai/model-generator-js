@@ -38,6 +38,7 @@ const run = async () => {
         apiKey: apiKey,
         sdkType: 'delivery',
         isEnterpriseSubscription: true,
+        addEnvironmentInfo: true,
         outputDir: outputDir,
         sortConfig: {
             sortTaxonomyTerms: true
