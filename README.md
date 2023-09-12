@@ -105,6 +105,7 @@ await generateModelsAsync({
 - `exportCollections` - Indicates if collections are exported
 - `exportLanguages` - Indicates if languages are exported
 - `exportRoles` - Indicates if roles are exported. * Only available for Enterprise subscription plans
+- `managementApiUrl` - Sets the url of Management API.
 
 ## Example models
 
