@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.5.0](https://github.com/kontent-ai/model-generator-js/compare/v6.4.0...v6.5.0) (2023-09-12)
+
+
+### Features
+
+* Add managementApiUrl option ([#45](https://github.com/kontent-ai/model-generator-js/issues/45)) ([9c38937](https://github.com/kontent-ai/model-generator-js/commit/9c38937cfd452015ff3d9b2e9c0d717dd20e6e73))
+
 ## [6.4.0](https://github.com/kontent-ai/model-generator-js/compare/v6.3.1...v6.4.0) (2023-08-14)
 
 
