@@ -30,6 +30,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
     const contentTypeSnippetsFolderPath: string = `${outputDir}${contentTypeSnippetsFolderName}`;
     const taxonomiesFolderPath: string = `${outputDir}${taxonomiesFolderName}`;
     const projectFolderPath: string = `${outputDir}${projectFolderName}`;
+    const projectTypesFolderPath: string = `${outputDir}${projectFolderName}${contentTypesFolderName}`;
 
     try {
         if (config.sdkType === 'delivery') {
@@ -40,6 +41,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             fileHelper.createDir(contentTypeSnippetsFolderPath);
             fileHelper.createDir(taxonomiesFolderPath);
             fileHelper.createDir(projectFolderPath);
+            fileHelper.createDir(projectTypesFolderPath);
 
             const managementClient = createManagementClient({
                 environmentId: config.environmentId,

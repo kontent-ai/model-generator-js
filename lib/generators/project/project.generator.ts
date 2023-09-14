@@ -273,10 +273,9 @@ export class ProjectGenerator {
                 } as const;`,
                 filename: 'collections.ts'
             },
+            ...data.types.map(type => this.getProjectContentTypeFile(type, data.snippets, data.taxonomies)),
             {
-                code: `export const contentTypes = {
-                    ${this.getProjectContentTypes(data.types, data.snippets, data.taxonomies)}
-                } as const;`,
+                code: this.getProjectContentTypes(data.types),
                 filename: 'contentTypes.ts'
             },
             {
@@ -408,26 +407,47 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getProjectContentTypes(
-        contentTypes: ContentTypeModels.ContentType[],
+    private getProjectContentTypeFile(
+        contentType: ContentTypeModels.ContentType,
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
         taxonomies: TaxonomyModels.Taxonomy[]
+    ): IProjectCodeResult {
+        const code =
+            `
+        ${this.getContentTypeComment(contentType)}\n
+        export const ${contentType.codename} = {
+            codename: '${contentType.codename}',
+            id: '${contentType.id}',
+            externalId: ${this.getStringOrUndefined(contentType.externalId)},
+            name: '${commonHelper.escapeNameValue(contentType.name)}',
+            elements: {${this.getContentTypeElements(contentType, snippets, taxonomies)}}
+        }
+        `;
+
+        return {
+            code,
+            filename: 'content-types/' + contentType.codename + '.ts'
+        }
+    }
+
+    private getProjectContentTypes(
+        contentTypes: ContentTypeModels.ContentType[]
     ): string {
-        let code: string = ``;
+        let code = contentTypes.map(type => `import { ${type.codename} } from './content-types/${type.codename}';`).join('\n') + '\n';
+
+        code += 'export const contentTypes = {\n';
+
         for (let i = 0; i < contentTypes.length; i++) {
             const contentType = contentTypes[i];
             const isLast = i === contentTypes.length - 1;
 
             code += `\n`;
             code += `${this.getContentTypeComment(contentType)}\n`;
-            code += `${contentType.codename}: {
-                codename: '${contentType.codename}',
-                id: '${contentType.id}',
-                externalId: ${this.getStringOrUndefined(contentType.externalId)},
-                name: '${commonHelper.escapeNameValue(contentType.name)}',
-                elements: {${this.getContentTypeElements(contentType, snippets, taxonomies)}}
-            }${!isLast ? ',\n' : ''}`;
+            code += `${contentType.codename}
+            ${!isLast ? ',\n' : ''}`;
         }
+
+        code += '}\n';
 
         return code;
     }
@@ -477,10 +497,9 @@ export class ProjectGenerator {
                 required: ${isRequired},
                 type: '${element.type}'
                 ${elementOptions ? `, options: ${elementOptions}` : ''}
-                ${
-                    extendedElement.snippet
-                        ? `, snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}`
-                        : ''
+                ${extendedElement.snippet
+                    ? `, snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}`
+                    : ''
                 }
 
             }${!isLast ? ',\n' : ''}`;
@@ -725,14 +744,14 @@ export class ProjectGenerator {
         const code: string = `
         {
             ${steps.map((step) => {
-                return `
+            return `
                     ${step.codename}: {
                         name: '${commonHelper.escapeNameValue(step.name)}',
                         codename: '${step.codename}',
                         id: '${step.id}'
                     }
                 `;
-            })}
+        })}
         }
         `;
 
