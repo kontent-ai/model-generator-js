@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import * as yargs from 'yargs';
-import { generateModelsAsync } from '../generator';
+import yargs from 'yargs';
+import { generateModelsAsync } from '../generator.js';
 
 const argv = yargs(process.argv.slice(2))
     .example(

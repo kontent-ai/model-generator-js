@@ -1,13 +1,13 @@
-import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models';
-import { yellow } from 'colors';
-import { commonHelper, IGeneratedFile } from '../../common-helper';
+import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models.js';
+import Colors from 'colors';
+import { commonHelper, IGeneratedFile } from '../../common-helper.js';
 import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     MapTaxonomyToFileName,
     MapTaxonomyName,
     getMapTaxonomyToFileName,
     getMapTaxonomyName
-} from './delivery-mappers';
+} from './delivery-mappers.js';
 
 export class DeliveryTaxonomyGenerator {
     async generateTaxonomyTypesAsync(config: {
@@ -22,7 +22,7 @@ export class DeliveryTaxonomyGenerator {
 
         if (config.taxonomyResolver) {
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     config.taxonomyResolver instanceof Function ? 'custom' : config.taxonomyResolver
                 )}' name resolver for taxonomy type`
             );
@@ -30,7 +30,7 @@ export class DeliveryTaxonomyGenerator {
 
         if (config.fileResolver) {
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     config.fileResolver instanceof Function ? 'custom' : config.fileResolver
                 )}' name resolver for taxonomy filename`
             );

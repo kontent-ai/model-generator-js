@@ -1,5 +1,5 @@
-import { yellow } from 'colors';
-import { commonHelper, IGeneratedFile } from '../../common-helper';
+import Colors from 'colors';
+import { commonHelper, IGeneratedFile } from '../../common-helper.js';
 import {
     ContentTypeResolver,
     ElementResolver,
@@ -8,7 +8,7 @@ import {
     TaxonomyTypeResolver,
     ContentTypeSnippetResolver,
     ContentTypeSnippetFileNameResolver
-} from '../../models';
+} from '../../models.js';
 import {
     ContentTypeElements,
     ContentTypeModels,
@@ -37,8 +37,8 @@ import {
     getMapContentTypeSnippetToFileName,
     MapContentTypeSnippetIdToObject,
     getMapContentTypeSnippetIdToObject
-} from './delivery-mappers';
-import { textHelper } from '../../text-helper';
+} from './delivery-mappers.js';
+import { textHelper } from '../../text-helper.js';
 
 interface IExtendedContentTypeElement {
     type: ElementModels.ElementType;
@@ -74,7 +74,7 @@ export class DeliveryContentTypeGenerator {
         contentTypeSnippetResolver?: ContentTypeSnippetResolver;
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): Promise<{contentTypeFiles: IGeneratedFile[], snippetFiles: IGeneratedFile[]}> {
+    }): Promise<{ contentTypeFiles: IGeneratedFile[]; snippetFiles: IGeneratedFile[] }> {
         const typeFiles: IGeneratedFile[] = [];
         const snippetFiles: IGeneratedFile[] = [];
 
@@ -83,7 +83,7 @@ export class DeliveryContentTypeGenerator {
         if (data.elementResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     data.elementResolver instanceof Function ? 'custom' : data.elementResolver
                 )}' name resolver for content type elements`
             );
@@ -92,7 +92,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeFileNameResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     data.contentTypeFileNameResolver instanceof Function ? 'custom' : data.contentTypeFileNameResolver
                 )}' name resolver for content type filenames`
             );
@@ -101,7 +101,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeSnippetFileNameResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     data.contentTypeSnippetFileNameResolver instanceof Function
                         ? 'custom'
                         : data.contentTypeSnippetFileNameResolver
@@ -112,7 +112,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     data.contentTypeResolver instanceof Function ? 'custom' : data.contentTypeResolver
                 )}' name resolver for content types`
             );
@@ -121,7 +121,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeSnippetResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${yellow(
+                `Using '${Colors.yellow(
                     data.contentTypeSnippetResolver instanceof Function ? 'custom' : data.contentTypeSnippetResolver
                 )}' name resolver for content type snippets`
             );
@@ -400,7 +400,7 @@ export type ${typeName} = IContentItem<{
     })}
 }>${typeExtends};
 `;
-       return code;
+        return code;
     }
 
     private createContentTypeModel(data: {
@@ -453,7 +453,7 @@ export type ${typeName} = IContentItem<{
         return {
             filename: filename,
             text: code
-        }
+        };
     }
 
     private createContentTypeSnippetModel(data: {
@@ -506,7 +506,7 @@ export type ${typeName} = IContentItem<{
         return {
             filename: filename,
             text: code
-        }
+        };
     }
 
     private getContentTypeComment(contentType: ContentTypeModels.ContentType): string {

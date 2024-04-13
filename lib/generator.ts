@@ -1,7 +1,7 @@
-import { green, red, yellow } from 'colors';
-import { IGenerateModelsConfig } from './models';
-import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator';
-import { projectGenerator } from './generators';
+import Colors from 'colors';
+import { IGenerateModelsConfig } from './models.js';
+import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator.js';
+import { projectGenerator } from './generators/index.js';
 import {
     AssetFolderModels,
     CollectionModels,
@@ -11,13 +11,13 @@ import {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator';
-import { commonHelper } from './common-helper';
+import { deliveryTaxonomylGenerator as deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator.js';
+import { commonHelper } from './common-helper.js';
 import { parse } from 'path';
-import { fileHelper } from './file-helper';
+import { fileHelper } from './file-helper.js';
 
 export async function generateModelsAsync(config: IGenerateModelsConfig): Promise<void> {
-    console.log(green(`Model generator started \n`));
+    console.log(Colors.green(`Model generator started \n`));
 
     const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
 
@@ -33,7 +33,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
     try {
         if (config.sdkType === 'delivery') {
-            console.log(`Generating '${yellow('delivery')}' models\n`);
+            console.log(`Generating '${Colors.yellow('delivery')}' models\n`);
 
             // prepare directories
             fileHelper.createDir(contentTypesFolderPath);
@@ -44,12 +44,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
             const managementClient = createManagementClient({
                 environmentId: config.environmentId,
                 apiKey: config.apiKey,
-                baseUrl: config.managementApiUrl,
+                baseUrl: config.managementApiUrl
             });
 
             const projectInformation = (await managementClient.environmentInformation().toPromise()).data;
-            console.log(`Project '${yellow(projectInformation.project.name)}'`);
-            console.log(`Environment '${yellow(projectInformation.project.environment)}'\n`);
+            console.log(`Project '${Colors.yellow(projectInformation.project.name)}'`);
+            console.log(`Environment '${Colors.yellow(projectInformation.project.environment)}'\n`);
 
             const types = commonHelper.sortAlphabetically(
                 (await managementClient.listContentTypes().toAllPromise()).data.items,
@@ -64,9 +64,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 (item) => item.name
             );
 
-            console.log(`Found '${yellow(types.length.toString())}' types`);
-            console.log(`Found '${yellow(snippets.length.toString())}' content type snippets`);
-            console.log(`Found '${yellow(taxonomies.length.toString())}' taxonomies`);
+            console.log(`Found '${Colors.yellow(types.length.toString())}' types`);
+            console.log(`Found '${Colors.yellow(snippets.length.toString())}' content type snippets`);
+            console.log(`Found '${Colors.yellow(taxonomies.length.toString())}' taxonomies`);
 
             const workflows: WorkflowModels.Workflow[] = [];
             const roles: RoleModels.Role[] = [];
@@ -84,9 +84,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         (item) => item.name
                     )
                 );
-                console.log(`Found '${yellow(workflows.length.toString())}' workflows`);
+                console.log(`Found '${Colors.yellow(workflows.length.toString())}' workflows`);
             } else {
-                console.log(`Skipping '${red('workflows')}' export`);
+                console.log(`Skipping '${Colors.red('workflows')}' export`);
             }
 
             if (config.isEnterpriseSubscription) {
@@ -97,12 +97,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                             (item) => item.name
                         )
                     );
-                    console.log(`Found '${yellow(roles.length.toString())}' roles`);
+                    console.log(`Found '${Colors.yellow(roles.length.toString())}' roles`);
                 } else {
-                    console.log(`Skipping '${red('roles')}' export`);
+                    console.log(`Skipping '${Colors.red('roles')}' export`);
                 }
             } else {
-                console.log(`Skipping '${red('roles')}' export because enterprise subscription is disabled`);
+                console.log(`Skipping '${Colors.red('roles')}' export because enterprise subscription is disabled`);
             }
 
             if (config.exportProjectSettings?.exportAssetFolders || exportAllProjectSettings) {
@@ -113,10 +113,10 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                     )
                 );
                 console.log(
-                    `Found '${yellow(projectGenerator.getAssetFoldersCount(assetFolders).toString())}' asset folders`
+                    `Found '${Colors.yellow(projectGenerator.getAssetFoldersCount(assetFolders).toString())}' asset folders`
                 );
             } else {
-                console.log(`Skipping '${red('asset folders')}' export`);
+                console.log(`Skipping '${Colors.red('asset folders')}' export`);
             }
 
             if (config.exportProjectSettings?.exportCollections || exportAllProjectSettings) {
@@ -126,9 +126,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         (item) => item.name
                     )
                 );
-                console.log(`Found '${yellow(collections.length.toString())}' collections`);
+                console.log(`Found '${Colors.yellow(collections.length.toString())}' collections`);
             } else {
-                console.log(`Skipping '${red('collections')}' export`);
+                console.log(`Skipping '${Colors.red('collections')}' export`);
             }
 
             if (config.exportProjectSettings?.exportWebhooks || exportAllProjectSettings) {
@@ -138,9 +138,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         (item) => item.name
                     )
                 );
-                console.log(`Found '${yellow(webhooks.length.toString())}' webhooks`);
+                console.log(`Found '${Colors.yellow(webhooks.length.toString())}' webhooks`);
             } else {
-                console.log(`Skipping '${red('webhooks')}' export`);
+                console.log(`Skipping '${Colors.red('webhooks')}' export`);
             }
 
             if (config.exportProjectSettings?.exportLanguages || exportAllProjectSettings) {
@@ -150,9 +150,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                         (item) => item.name
                     )
                 );
-                console.log(`Found '${yellow(languages.length.toString())}' languages`);
+                console.log(`Found '${Colors.yellow(languages.length.toString())}' languages`);
             } else {
-                console.log(`Skipping '${red('languages')}' export`);
+                console.log(`Skipping '${Colors.red('languages')}' export`);
             }
 
             console.log('');
@@ -300,9 +300,9 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
         } else {
             throw Error(`Unsupported 'sdkType'. Supported values are: delivery, management`);
         }
-        console.log(green(`\nCompleted`));
+        console.log(Colors.green(`\nCompleted`));
     } catch (error) {
-        console.log(red(`Failed with error:`));
+        console.log(Colors.red(`Failed with error:`));
         throw error;
     }
 }

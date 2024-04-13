@@ -1,6 +1,6 @@
 import { Options } from 'prettier';
-import { commonHelper, IGeneratedFile } from '../../common-helper';
-import { textHelper } from '../../text-helper';
+import { commonHelper, IGeneratedFile } from '../../common-helper.js';
+import { textHelper } from '../../text-helper.js';
 import {
     AssetFolderModels,
     CollectionModels,
@@ -15,7 +15,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
-import { ISortConfig } from 'lib/models';
+import { ISortConfig } from '../../models.js';
 
 interface IProjectCodeResult {
     filename: string;

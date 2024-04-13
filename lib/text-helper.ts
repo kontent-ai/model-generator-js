@@ -3,7 +3,7 @@ import {
     pascalCasePropertyNameResolver,
     snakeCasePropertyNameResolver
 } from '@kontent-ai/delivery-sdk';
-import { DefaultResolverType } from './models';
+import { DefaultResolverType } from './models.js';
 
 export class TextHelper {
     resolveTextWithDefaultResolver(text: string, resolverType: DefaultResolverType): string {

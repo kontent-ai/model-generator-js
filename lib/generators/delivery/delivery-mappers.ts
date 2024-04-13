@@ -4,7 +4,7 @@ import {
     ContentTypeSnippetModels,
     TaxonomyModels
 } from '@kontent-ai/management-sdk';
-import { textHelper } from '../../text-helper';
+import { textHelper } from '../../text-helper.js';
 import {
     ContentTypeFileNameResolver,
     ContentTypeResolver,
@@ -13,9 +13,9 @@ import {
     ElementResolver,
     TaxonomyTypeFileNameResolver,
     TaxonomyTypeResolver
-} from '../../models';
-import { nameHelper } from '../../name-helper';
-import { commonHelper } from '../../common-helper';
+} from '../../models.js';
+import { nameHelper } from '../../name-helper.js';
+import { commonHelper } from '../../common-helper.js';
 
 export type MapContentTypeToDeliveryTypeName = (contentType: ContentTypeModels.ContentType) => string;
 export type MapContentTypeSnippetToDeliveryTypeName = (

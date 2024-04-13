@@ -4,8 +4,8 @@ import {
     ContentTypeResolver,
     TaxonomyTypeFileNameResolver,
     TaxonomyTypeResolver
-} from './models';
-import { textHelper } from './text-helper';
+} from './models.js';
+import { textHelper } from './text-helper.js';
 
 export class NameHelper {
     getDeliveryContentTypeFilename(data: {

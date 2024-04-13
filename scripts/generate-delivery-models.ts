@@ -1,6 +1,7 @@
-import { generateModelsAsync } from '../dist/cjs/lib';
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
+import { generateModelsAsync } from '../lib/index.js';
+import Colors from 'colors';
 
 const outputDir: string = './sample';
 
@@ -11,13 +12,13 @@ const run = async () => {
     });
 
     // delete existing models
-    console.log(`Deleting existing folder '${outputDir}'`)
+    console.log(`Deleting existing folder '${Colors.yellow(outputDir)}'`);
     rmSync(outputDir, {
         recursive: true,
         force: true
     });
 
-    console.log(`Folder '${outputDir}' deleted successfully`);
+    console.log(`Folder '${Colors.yellow(outputDir)}' deleted successfully`);
 
     const environmentVar = 'ENVIRONMENT_ID';
     const apiKeyVar = 'API_KEY';
@@ -26,10 +27,10 @@ const run = async () => {
     const apiKey = process.env[apiKeyVar];
 
     if (!environmentId) {
-        throw Error(`Missing '${environmentVar}' env variable`);
+        throw Error(`Missing '${Colors.red(environmentVar)}' env variable`);
     }
-      if (!apiKey) {
-          throw Error(`Missing '${apiKeyVar}' env variable`);
+    if (!apiKey) {
+        throw Error(`Missing '${Colors.red(apiKeyVar)}' env variable`);
     }
 
     await generateModelsAsync({

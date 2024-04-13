@@ -3,7 +3,7 @@
     "version": "6.5.1",
     "description": "This utility generates strongly-typed models based on Content Types in a Kontent.ai project. These models can be used with SDKs",
     "bin": {
-        "kontent-generate": "./dist/cjs/lib/cli/cli.js"
+        "kontent-generate": "./dist/es2022/lib/cli/cli.js"
     },
     "repository": {
         "type": "git",
@@ -12,17 +12,20 @@
     "author": "richard sustek",
     "license": "MIT",
     "engines": {
-        "node": ">= 8"
+        "node": ">= 18"
     },
     "keywords": [
         "Kontent",
         "Kontent.ai",
-        "Kontent Model Generator"
+        "Kontent.ai typings",
+        "Kontent.ai models",
+        "Kontent Model Generator",
+        "Kontent.ai strongly typed models"
     ],
-    "main": "./dist/cjs/lib/index.js",
-    "module": "./dist/es6/lib/index.js",
-    "es2015": "./dist/es6/lib/index.js",
-    "types": "./dist/cjs/lib/index.d.ts",
+    "preferGlobal": true,
+    "exports": "./dist/es2022/index.js",
+    "types": "./dist/es2022/index.d.ts",
+    "type": "module",
     "scripts": {
         "release": "npm run lint:check && standard-version",
         "release:major": "npm run lint:check && standard-version --release-as major",
@@ -30,36 +33,33 @@
         "release:beta": "standard-version --prerelease",
         "prerelease:standard": "standard-version --prerelease",
         "prerelease:major": "standard-version --prerelease --release-as major",
-        "tsc-local": "./node_modules/.bin/tsc",
-        "ts-node-local": "./node_modules/.bin/ts-node",
-        "prepublishOnly": "npm run lint:check && npm run build:all",
+        "prepublishOnly": "npm run lint:check && npm run build",
         "publish:beta": "npm publish --tag=next",
-        "build:es6": "tsc -m es6 --outDir dist/es6 --p tsconfig.prod.json",
-        "build:esnext": "tsc -m esnext --outDir dist/esnext --p tsconfig.prod.json",
-        "build:commonjs": "tsc -m commonjs --outDir dist/cjs --p tsconfig.prod.json",
-        "build:all": "npm run build:es6 && npm run build:esnext && npm run build:commonjs",
-        "test:all": "npm run build:commonjs && npm run test:delivery-models",
-        "test:delivery-models": "npm run build:commonjs && ts-node scripts/generate-delivery-models",
-        "test:help": "npm run build:commonjs && cd sample && node ../dist/cjs/lib/cli/cli -h",
-        "lint:check": "npx eslint lib"
+        "build:es2022": "tsc --p tsconfig.es2022.json",
+        "build": "npm run clean && npm run build:es2022",
+        "test:all": "npm run build && npm run test:delivery-models",
+        "test:delivery-models": "tsx scripts/generate-delivery-models",
+        "test:help": "npm run build && cd sample && node ../dist/cjs/lib/cli/cli -h",
+        "lint:check": "npx eslint lib",
+        "clean": "tsx clean.ts"
     },
     "dependencies": {
         "yargs": "17.7.2",
-        "prettier": "3.0.1",
+        "prettier": "3.2.5",
         "colors": "1.4.0",
-        "@kontent-ai/delivery-sdk": "14.6.0",
-        "@kontent-ai/management-sdk": "5.8.2"
+        "@kontent-ai/delivery-sdk": "14.8.0",
+        "@kontent-ai/management-sdk": "6.1.0"
     },
     "devDependencies": {
-        "@types/yargs": "17.0.24",
+        "@types/yargs": "17.0.32",
         "standard-version": "9.5.0",
-        "typescript": "5.1.6",
-        "@types/node": "20.5.0",
+        "typescript": "5.4.5",
+        "@types/node": "20.12.7",
         "@types/prettier": "3.0.0",
-        "@typescript-eslint/eslint-plugin": "6.3.0",
-        "@typescript-eslint/parser": "6.3.0",
-        "eslint": "8.47.0",
-        "ts-node": "10.9.1",
-        "dotenv-cli": "7.2.1"
+        "@typescript-eslint/eslint-plugin": "7.6.0",
+        "@typescript-eslint/parser": "7.6.0",
+        "eslint": "8.57.0",
+        "tsx": "4.7.2",
+        "dotenv-cli": "7.4.1"
     }
 }
