@@ -109,7 +109,7 @@ export class ProjectGenerator {
     }
 
     private getEnvironmentComment(environmentInfo: EnvironmentModels.EnvironmentInformationModel): string {
-        let comment: string = `Project name: ${textHelper.toSafeName(environmentInfo.name)}`;
+        let comment: string = `Project name: ${textHelper.toSafeName(environmentInfo.name, 'space')}`;
 
         comment += `\n* Environment: ${environmentInfo.environment}`;
         comment += `\n* Environment Id: ${environmentInfo.id}`;
@@ -120,7 +120,7 @@ export class ProjectGenerator {
     private getContentTypeComment(contentType: ContentTypeModels.ContentType): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(contentType.name)}`;
+        comment += `\n* ${textHelper.toSafeName(contentType.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -129,7 +129,7 @@ export class ProjectGenerator {
     private getContentTypeSnippetComment(snippet: ContentTypeSnippetModels.ContentTypeSnippet): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(snippet.name)}`;
+        comment += `\n* ${textHelper.toSafeName(snippet.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -138,7 +138,7 @@ export class ProjectGenerator {
     private getWorkflowComment(workflow: WorkflowModels.Workflow): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(workflow.name)}`;
+        comment += `\n* ${textHelper.toSafeName(workflow.name, 'space')}`;
         comment += `\n* Archived step Id: ${workflow.archivedStep.id}`;
         comment += `\n* Published step Id: ${workflow.publishedStep.id}`;
         comment += `\n*/`;
@@ -149,7 +149,7 @@ export class ProjectGenerator {
     private getAssetFolderComment(assetFolder: AssetFolderModels.AssetFolder): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(assetFolder.name)}`;
+        comment += `\n* ${textHelper.toSafeName(assetFolder.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -158,7 +158,7 @@ export class ProjectGenerator {
     private getLanguageComment(language: LanguageModels.LanguageModel): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(language.name)}`;
+        comment += `\n* ${textHelper.toSafeName(language.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -196,7 +196,7 @@ export class ProjectGenerator {
         const name = commonHelper.getElementTitle(element, taxonomies);
 
         if (name) {
-            comment += `\n* ${textHelper.toSafeName(name)} (${element.type})`;
+            comment += `\n* ${textHelper.toSafeName(name, 'space')} (${element.type})`;
         }
 
         if (guidelines) {
@@ -212,7 +212,7 @@ export class ProjectGenerator {
     private getTaxonomyComment(taxonomy: TaxonomyModels.Taxonomy): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(taxonomy.name)}`;
+        comment += `\n* ${textHelper.toSafeName(taxonomy.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -221,7 +221,7 @@ export class ProjectGenerator {
     private getCollectionComment(collection: CollectionModels.Collection): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(collection.name)}`;
+        comment += `\n* ${textHelper.toSafeName(collection.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -230,7 +230,7 @@ export class ProjectGenerator {
     private getRoleComment(role: RoleModels.Role): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(role.name)}`;
+        comment += `\n* ${textHelper.toSafeName(role.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -239,7 +239,7 @@ export class ProjectGenerator {
     private getWebhookComment(webhook: WebhookModels.Webhook): string {
         let comment: string = `/**`;
 
-        comment += `\n* ${textHelper.toSafeName(webhook.name)}`;
+        comment += `\n* ${textHelper.toSafeName(webhook.name, 'space')}`;
         comment += `\n*/`;
 
         return comment;
@@ -498,7 +498,7 @@ export class ProjectGenerator {
                 const option = element.options[i];
 
                 stronglyTypedOptions += `${option.codename}: {
-                    name: '${textHelper.toSafeName(option.name)}',
+                    name: '${textHelper.toSafeName(option.name, 'space')}',
                     id: '${option.id}',
                     codename: '${option.codename}',
                     externalId: ${this.getStringOrUndefined(option.external_id)}

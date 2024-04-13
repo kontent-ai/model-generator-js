@@ -24,17 +24,17 @@ export class TextHelper {
 
     toPascalCase(text: string): string {
         // use element resolver from SDK as it provides required functionality
-        return pascalCasePropertyNameResolver('', text);
+        return this.toSafeName(pascalCasePropertyNameResolver('', text), 'nothing');
     }
 
     toCamelCase(text: string): string {
         // use element resolver from SDK as it provides required functionality
-        return camelCasePropertyNameResolver('', text);
+        return this.toSafeName(camelCasePropertyNameResolver('', text), 'nothing');
     }
 
     toSnakeCase(text: string): string {
         // use element resolver from SDK as it provides required functionality
-        return snakeCasePropertyNameResolver('', text);
+        return this.toSafeName(snakeCasePropertyNameResolver('', text), 'nothing');
     }
 
     toAlphanumeric(value: string): string {
@@ -45,8 +45,9 @@ export class TextHelper {
         return value.replace(/(\r\n|\n|\r)/gm, '');
     }
 
-    toSafeName(text: string): string {
-        return text.replace(/[\s-]/g, ' ').replace(/[^a-zA-Z0-9_]/g, ' ');
+    toSafeName(text: string, replaceWith: 'space' | 'nothing'): string {
+        const replaceContent = replaceWith === 'space' ? ' ' : '';
+        return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
     }
 }
 
