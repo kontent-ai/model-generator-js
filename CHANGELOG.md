@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/kontent-ai/model-generator-js/compare/v6.5.1...v7.0.0) (2024-04-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* Removes CommonJs export in favor of ES2022. Also reworks scripts / package.json and tsconfig
+
+### Features
+
+* Handle errors in file formatting with prettier, display better info message and store unformatted file ([c2e1265](https://github.com/kontent-ai/model-generator-js/commit/c2e12658c2fbdfca0d82a98bb0156f1121fc4095))
+* Removes CommonJs export in favor of ES2022. Also reworks scripts / package.json and tsconfig ([29dfa39](https://github.com/kontent-ai/model-generator-js/commit/29dfa391b901c230b0de2797873b79339ef1fd1e))
+
+
+### Bug Fixes
+
+* Removes unsupported characters in object names ([e606f39](https://github.com/kontent-ai/model-generator-js/commit/e606f395e790073765ffe1c1d1a9cf7eb29f90ec))
+
 ### [6.5.1](https://github.com/kontent-ai/model-generator-js/compare/v6.5.0...v6.5.1) (2024-02-27)
 
 ## [6.5.0](https://github.com/kontent-ai/model-generator-js/compare/v6.4.0...v6.5.0) (2023-09-12)
