@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.1](https://github.com/kontent-ai/model-generator-js/compare/v7.0.0...v7.0.1) (2024-04-13)
+
+
+### Bug Fixes
+
+* Fixes export / types path ([558fec7](https://github.com/kontent-ai/model-generator-js/commit/558fec7e13f44ac6740c1d67c7ccd07678502434))
+
 ## [7.0.0](https://github.com/kontent-ai/model-generator-js/compare/v6.5.1...v7.0.0) (2024-04-13)
 
 
