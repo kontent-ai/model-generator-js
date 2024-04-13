@@ -27,9 +27,9 @@
     "types": "./dist/es2022/lib/index.d.ts",
     "type": "module",
     "scripts": {
-        "release": "npm run lint:check && standard-version",
-        "release:major": "npm run lint:check && standard-version --release-as major",
-        "release:major:beta": "npm run lint:check && standard-version --prerelease --release-as major",
+        "release": "npm run lint:check && standard-version && npm run update:version",
+        "release:major": "npm run lint:check && standard-version --release-as major && npm run update:version",
+        "release:major:beta": "npm run lint:check && standard-version --prerelease --release-as major && npm run update:version",
         "release:beta": "standard-version --prerelease",
         "prerelease:standard": "standard-version --prerelease",
         "prerelease:major": "standard-version --prerelease --release-as major",
@@ -39,9 +39,10 @@
         "build": "npm run clean && npm run build:es2022",
         "test:all": "npm run build && npm run test:delivery-models",
         "test:delivery-models": "tsx scripts/generate-delivery-models",
-        "test:help": "npm run build && cd sample && node ../dist/cjs/lib/cli/cli -h",
+        "test:help": "npm run build && cd sample && node ../dist/es2022/lib/cli/cli -h",
         "lint:check": "npx eslint lib",
-        "clean": "tsx clean.ts"
+        "clean": "tsx clean.ts",
+        "update:version": "tsx ./scripts/update-version.ts"
     },
     "dependencies": {
         "yargs": "17.7.2",
