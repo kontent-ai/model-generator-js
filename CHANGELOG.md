@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.2](https://github.com/kontent-ai/model-generator-js/compare/v7.0.1...v7.0.2) (2024-04-13)
+
+
+### Bug Fixes
+
+* Fixes runtime by avoiding direct package.json imports, instead use version script with metadata file ([f212f71](https://github.com/kontent-ai/model-generator-js/commit/f212f718eedfe59e623f38ea1c8ac6972ad266b0))
+
 ### [7.0.1](https://github.com/kontent-ai/model-generator-js/compare/v7.0.0...v7.0.1) (2024-04-13)
 
 
