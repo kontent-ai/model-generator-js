@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.1.0](https://github.com/kontent-ai/model-generator-js/compare/v7.0.3...v7.1.0) (2024-04-29)
+
+
+### Features
+
+* updates deps ([f178319](https://github.com/kontent-ai/model-generator-js/commit/f1783199b31ca792c7e87b928914638cf357023d))
+
+
+### Bug Fixes
+
+* replaces all apostrophes in name values ([636d772](https://github.com/kontent-ai/model-generator-js/commit/636d772f178da4f0ab2fd9931e1cf7d0e955fd78))
+
 ### [7.0.3](https://github.com/kontent-ai/model-generator-js/compare/v7.0.2...v7.0.3) (2024-04-15)
 
 
