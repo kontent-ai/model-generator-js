@@ -33,7 +33,7 @@
         "release:beta": "standard-version --prerelease",
         "prerelease:standard": "standard-version --prerelease",
         "prerelease:major": "standard-version --prerelease --release-as major",
-        "prepublishOnly": "npm run lint:check && npm run build",
+        "prepublishOnly": "npm run lint:check && npm run build && npm run push:tags",
         "publish:beta": "npm publish --tag=next",
         "build:es2022": "tsc --p tsconfig.es2022.json",
         "build": "npm run clean && npm run build:es2022",
@@ -42,6 +42,7 @@
         "test:help": "npm run build && cd sample && node ../dist/es2022/lib/cli/cli -h",
         "lint:check": "npx eslint lib",
         "clean": "tsx clean.ts",
+        "push:tags": "git push --tags",
         "update:version": "tsx ./scripts/update-version.ts"
     },
     "dependencies": {
