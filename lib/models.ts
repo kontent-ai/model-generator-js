@@ -2,10 +2,10 @@ import { PropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { Options } from 'prettier';
 
+
+export type ModuleResolution = 'nodeNext' | 'node';
 export type DefaultResolverType = 'camelCase' | 'pascalCase' | 'snakeCase';
-
 export type SdkType = 'delivery' | 'management';
-
 export type ElementResolver = DefaultResolverType | PropertyNameResolver;
 
 export type ContentTypeFileNameResolver =
@@ -38,6 +38,7 @@ export interface IGenerateModelsConfig {
     isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;
+    moduleResolution?: ModuleResolution;
     managementApiUrl?: string;
 
     /**

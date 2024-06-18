@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import yargs from 'yargs';
 import { generateModelsAsync } from '../generator.js';
+import { ModuleResolution } from '../models.js';
 
 const argv = yargs(process.argv.slice(2))
     .example(
@@ -21,6 +22,8 @@ const argv = yargs(process.argv.slice(2))
     .describe('e', 'Indicates if environment info stamp should be generated')
     .alias('t', 'sdkType')
     .describe('t', 'Type of sdk for which models are generated. Available options are: delivery')
+    .alias('m', 'moduleResolution')
+    .describe('m', 'Module resolution for imports. Available options are: node, nodeNext')
     .option('exportLanguages', {
         description: 'Indicates if languages are exported'
     })
@@ -86,6 +89,7 @@ const run = async () => {
     const taxonomyTypeFileResolver = resolvedArgs.taxonomyTypeFileResolver;
     const contentTypeResolver = resolvedArgs.contentTypeResolver;
     const taxonomyTypeResolver = resolvedArgs.taxonomyTypeResolver;
+    const moduleResolution = resolvedArgs.moduleResolution;
     const contentTypeSnippetResolver = resolvedArgs.contentTypeSnippetResolver;
     const sdkType = resolvedArgs.sdkType;
     const exportWebhooks = !resolvedArgs.exportWebhooks ? true : resolvedArgs.exportWebhooks === 'true';
@@ -123,6 +127,7 @@ const run = async () => {
         sortConfig: {
             sortTaxonomyTerms: sortTaxonomyTerms
         },
+        moduleResolution: moduleResolution?.toString() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
         exportProjectSettings: {
             exportWebhooks: exportWebhooks ?? true,
             exportWorkflows: exportWorkflows ?? true,

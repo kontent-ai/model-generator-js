@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { generateModelsAsync } from '../lib/index.js';
+import { ModuleResolution, generateModelsAsync } from '../lib/index.js';
 import Colors from 'colors';
 
 const outputDir: string = './sample';
@@ -21,10 +21,16 @@ const run = async () => {
     console.log(`Folder '${Colors.yellow(outputDir)}' deleted successfully`);
 
     const environmentVar = 'ENVIRONMENT_ID';
+    const moduleResolutionVar = 'MODULE_RESOLUTION';
     const apiKeyVar = 'API_KEY';
 
     const environmentId = process.env[environmentVar];
     const apiKey = process.env[apiKeyVar];
+    const moduleResolution = process.env[moduleResolutionVar];
+
+    if (!moduleResolutionVar) {
+        throw Error(`Missing '${Colors.red(moduleResolutionVar)}' env variable`);
+    }
 
     if (!environmentId) {
         throw Error(`Missing '${Colors.red(environmentVar)}' env variable`);
@@ -37,6 +43,7 @@ const run = async () => {
         addTimestamp: false,
         environmentId: environmentId,
         apiKey: apiKey,
+        moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
         sdkType: 'delivery',
         isEnterpriseSubscription: true,
         addEnvironmentInfo: true,

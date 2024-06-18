@@ -7,7 +7,8 @@ import {
     TaxonomyTypeFileNameResolver,
     TaxonomyTypeResolver,
     ContentTypeSnippetResolver,
-    ContentTypeSnippetFileNameResolver
+    ContentTypeSnippetFileNameResolver,
+    ModuleResolution
 } from '../../models.js';
 import {
     ContentTypeElements,
@@ -74,6 +75,7 @@ export class DeliveryContentTypeGenerator {
         contentTypeSnippetResolver?: ContentTypeSnippetResolver;
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
+        moduleResolution: ModuleResolution;
     }): Promise<{ contentTypeFiles: IGeneratedFile[]; snippetFiles: IGeneratedFile[] }> {
         const typeFiles: IGeneratedFile[] = [];
         const snippetFiles: IGeneratedFile[] = [];
@@ -156,7 +158,8 @@ export class DeliveryContentTypeGenerator {
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
                     addTimestamp: data.addTimestamp,
-                    addEnvironmentInfo: data.addEnvironmentInfo
+                    addEnvironmentInfo: data.addEnvironmentInfo,
+                    moduleResolution: data.moduleResolution
                 });
                 snippetFiles.push(file);
             } catch (error) {
@@ -170,6 +173,7 @@ export class DeliveryContentTypeGenerator {
         for (const type of data.types) {
             try {
                 const file = this.createContentTypeModel({
+                    moduleResolution: data.moduleResolution,
                     outputDir: data.outputDir,
                     type: type,
                     snippets: data.snippets,
@@ -224,6 +228,7 @@ export class DeliveryContentTypeGenerator {
         typeFolderName: string;
         typeSnippetsFolderName: string;
         taxonomyFolderName: string;
+        moduleResolution: ModuleResolution;
     }): IExtractImportsResult {
         const imports: string[] = [];
         const contentTypeSnippetExtensions: string[] = [];
@@ -259,7 +264,14 @@ export class DeliveryContentTypeGenerator {
                 const taxonomyName: string = data.taxonomyNameMap(taxonomy);
                 const fileName: string = `../${data.taxonomyFolderName}${data.taxonomyFileNameMap(taxonomy, false)}`;
 
-                imports.push(`import { type ${taxonomyName} } from '${fileName}';`);
+                imports.push(
+                    commonHelper.getImportStatement({
+                        moduleResolution: data.moduleResolution,
+                        filePath: fileName,
+                        importValue: `type ${taxonomyName}`,
+                        isExternalLib: false
+                    })
+                );
             } else if (element.type === 'modular_content' || element.type === 'subpages') {
                 // extract referenced types
                 const referencedTypes = this.extractLinkedItemsAllowedTypes(element, data.contentTypeObjectMap);
@@ -284,7 +296,14 @@ export class DeliveryContentTypeGenerator {
                         ? `../${data.typeFolderName}${fileName}`
                         : `./${fileName}`;
 
-                    imports.push(`import { type ${typeName} } from '${filePath}';`);
+                    imports.push(
+                        commonHelper.getImportStatement({
+                            moduleResolution: data.moduleResolution,
+                            filePath: filePath,
+                            importValue: `type ${typeName}`,
+                            isExternalLib: false
+                        })
+                    );
                 }
             } else if (element.type === 'snippet') {
                 const contentTypeSnipped = this.extractUsedSnippet(element, data.contentTypeSnippetObjectMap);
@@ -295,7 +314,15 @@ export class DeliveryContentTypeGenerator {
                     false
                 )}`;
 
-                imports.push(`import { type ${typeName} } from '${filePath}';`);
+                imports.push(
+                    commonHelper.getImportStatement({
+                        moduleResolution: data.moduleResolution,
+                        filePath: filePath,
+                        importValue: `type ${typeName}`,
+                        isExternalLib: false
+                    })
+                );
+
                 contentTypeSnippetExtensions.push(typeName);
             }
         }
@@ -327,6 +354,7 @@ export class DeliveryContentTypeGenerator {
         taxonomyFolderName: string;
         addTimestamp: boolean;
         addEnvironmentInfo: boolean;
+        moduleResolution: ModuleResolution;
     }): string {
         const importResult = this.getContentTypeImports({
             elementNameMap: data.elementNameMap,
@@ -344,7 +372,8 @@ export class DeliveryContentTypeGenerator {
             contentTypeSnippet: data.contentTypeSnippet,
             typeFolderName: data.typeFolderName,
             typeSnippetsFolderName: data.typeSnippetsFolderName,
-            taxonomyFolderName: data.taxonomyFolderName
+            taxonomyFolderName: data.taxonomyFolderName,
+            moduleResolution: data.moduleResolution
         });
 
         const topLevelImports: string[] = ['type IContentItem'];
@@ -354,7 +383,12 @@ export class DeliveryContentTypeGenerator {
             topLevelImports.push('type Elements');
         }
 
-        let code = `import { ${topLevelImports.join(', ')} } from '${this.deliveryNpmPackageName}';`;
+        let code = commonHelper.getImportStatement({
+            moduleResolution: data.moduleResolution,
+            filePath: this.deliveryNpmPackageName,
+            importValue: `${topLevelImports.join(', ')}`,
+            isExternalLib: true
+        });
 
         if (importResult.imports.length) {
             for (const importItem of importResult.imports) {
@@ -423,6 +457,7 @@ export type ${typeName} = IContentItem<{
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
         addEnvironmentInfo: boolean;
+        moduleResolution: ModuleResolution;
     }): IGeneratedFile {
         const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(
             data.type,
@@ -447,7 +482,8 @@ export type ${typeName} = IContentItem<{
             elementNameMap: data.elementNameMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
-            taxonomyObjectMap: data.taxonomyObjectMap
+            taxonomyObjectMap: data.taxonomyObjectMap,
+            moduleResolution: data.moduleResolution
         });
 
         return {
@@ -476,6 +512,7 @@ export type ${typeName} = IContentItem<{
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
         addEnvironmentInfo: boolean;
+        moduleResolution: ModuleResolution;
     }): IGeneratedFile {
         const filename: string = `${data.outputDir}${data.typeSnippetsFolderName}${data.contentTypeSnippetFileNameMap(
             data.snippet,
@@ -500,7 +537,8 @@ export type ${typeName} = IContentItem<{
             elementNameMap: data.elementNameMap,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
-            taxonomyObjectMap: data.taxonomyObjectMap
+            taxonomyObjectMap: data.taxonomyObjectMap,
+            moduleResolution: data.moduleResolution
         });
 
         return {

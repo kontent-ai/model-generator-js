@@ -1,6 +1,7 @@
 import { parse } from 'path';
 import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { libMetadata } from './meta/index.js';
+import { ModuleResolution } from './models.js';
 
 export interface IGeneratedFile {
     filename: string;
@@ -44,6 +45,23 @@ export class CommonHelper {
         return guidelines;
     }
 
+    getImportStatement(data: {
+        filePath: string;
+        importValue: string;
+        moduleResolution: ModuleResolution;
+        isExternalLib: boolean;
+    }): string {
+        let resolvedFilePath: string;
+
+        if (data.moduleResolution === 'nodeNext' && !data.isExternalLib) {
+            resolvedFilePath = `${data.filePath}.js`;
+        } else {
+            resolvedFilePath = data.filePath;
+        }
+
+        return `import { ${data.importValue} } from '${resolvedFilePath}';`;
+    }
+
     getElementTitle(
         element: ContentTypeElements.ContentTypeElementModel,
         taxonomies: TaxonomyModels.Taxonomy[]
@@ -67,7 +85,7 @@ export class CommonHelper {
         return (<any>element)['name'];
     }
 
-    getBarrelExportCode(data: { filenames: string[] }): string {
+    getBarrelExportCode(data: { filenames: string[]; moduleResolution: ModuleResolution }): string {
         let code = '';
 
         if (data.filenames.length) {
@@ -75,7 +93,8 @@ export class CommonHelper {
                 const isLast = i === data.filenames.length - 1;
                 const filename = data.filenames[i];
                 const path = parse(filename);
-                code += `export * from '${path.dir}/${path.name}'`;
+                const extension = data.moduleResolution === 'nodeNext' ? '.js' : '';
+                code += `export * from '${path.dir}/${path.name}${extension}'`;
 
                 if (!isLast) {
                     code += `\n`;
@@ -85,7 +104,7 @@ export class CommonHelper {
             code = `export {}`;
         }
 
-     return code;
+        return code;
     }
 
     escapeNameValue(value: string): string {

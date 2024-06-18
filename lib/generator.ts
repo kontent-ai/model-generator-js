@@ -1,5 +1,5 @@
 import Colors from 'colors';
-import { IGenerateModelsConfig } from './models.js';
+import { IGenerateModelsConfig, ModuleResolution } from './models.js';
 import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator.js';
 import { projectGenerator } from './generators/index.js';
 import {
@@ -47,9 +47,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 baseUrl: config.managementApiUrl
             });
 
+            const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
+
             const projectInformation = (await managementClient.environmentInformation().toPromise()).data;
             console.log(`Project '${Colors.yellow(projectInformation.project.name)}'`);
             console.log(`Environment '${Colors.yellow(projectInformation.project.environment)}'\n`);
+            console.log(`Module resolution '${Colors.yellow(moduleResolution)}'\n`);
 
             const types = commonHelper.sortAlphabetically(
                 (await managementClient.listContentTypes().toAllPromise()).data.items,
@@ -174,7 +177,8 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 taxonomyFileResolver: config.taxonomyTypeFileResolver,
                 taxonomyResolver: config.taxonomyTypeResolver,
                 contentTypeSnippetFileNameResolver: config.contentTypeSnippetFileResolver,
-                contentTypeSnippetResolver: config.contentTypeSnippetResolver
+                contentTypeSnippetResolver: config.contentTypeSnippetResolver,
+                moduleResolution: moduleResolution
             });
 
             // create taxonomy types
@@ -217,6 +221,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
             }
             const contentTypeBarrelCode = commonHelper.getBarrelExportCode({
+                moduleResolution: moduleResolution,
                 filenames: [
                     ...deliveryModels.contentTypeFiles.map((m) => {
                         const path = parse(m.filename);
@@ -236,6 +241,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
             }
             const contentTypeSnippetsBarrelCode = commonHelper.getBarrelExportCode({
+                moduleResolution: moduleResolution,
                 filenames: [
                     ...deliveryModels.snippetFiles.map((m) => {
                         const path = parse(m.filename);
@@ -255,6 +261,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
             }
             const taxonomiesBarrelCode = commonHelper.getBarrelExportCode({
+                moduleResolution: moduleResolution,
                 filenames: [
                     ...taxonomyFiles.map((m) => {
                         const path = parse(m.filename);
@@ -274,6 +281,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
             }
             const projectBarrelCode = commonHelper.getBarrelExportCode({
+                moduleResolution: moduleResolution,
                 filenames: [
                     ...projectFiles.map((m) => {
                         const path = parse(m.filename);
@@ -286,11 +294,12 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
 
             // main barrel
             const mainBarrelCode = commonHelper.getBarrelExportCode({
+                moduleResolution: moduleResolution,
                 filenames: [
-                    `./${projectFolderName}`,
-                    `./${contentTypesFolderName}`,
-                    `./${contentTypeSnippetsFolderName}`,
-                    `./${taxonomiesFolderName}`
+                    `./${projectFolderName}index`,
+                    `./${contentTypesFolderName}index`,
+                    `./${contentTypeSnippetsFolderName}index`,
+                    `./${taxonomiesFolderName}index`
                 ]
             });
             const mainBarrelExportPath: string = `${outputDir}${barrelExportFilename}`;

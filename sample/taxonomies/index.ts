@@ -1,2 +1,2 @@
-export * from './movietype';
-export * from './releasecategory';
+export * from './movietype.js';
+export * from './releasecategory.js';
