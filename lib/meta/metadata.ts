@@ -1,6 +1,6 @@
 
 export const libMetadata = {
 	name: '@kontent-ai/model-generator',
-    timestamp: 'Mon, 29 Apr 2024 11:26:39 GMT',
-    version: '7.1.0'
+    timestamp: 'Tue, 18 Jun 2024 06:30:41 GMT',
+    version: '7.2.0'
 };
