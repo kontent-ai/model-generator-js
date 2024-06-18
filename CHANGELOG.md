@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.2.0](https://github.com/kontent-ai/model-generator-js/compare/v7.1.0...v7.2.0) (2024-06-18)
+
+
+### Features
+
+* adds support for 'nodeNext' module resolution imports ([bd222e4](https://github.com/kontent-ai/model-generator-js/commit/bd222e426688c4ccbc0267d0fac19a747553d64a))
+* updates deps ([300131f](https://github.com/kontent-ai/model-generator-js/commit/300131facbb1725ff099aa895604638229208389))
+
 ## [7.1.0](https://github.com/kontent-ai/model-generator-js/compare/v7.0.3...v7.1.0) (2024-04-29)
 
 
