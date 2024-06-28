@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.3.0](https://github.com/kontent-ai/model-generator-js/compare/v7.2.0...v7.3.0) (2024-06-28)
+
+
+### Features
+
+* updates deps ([df4413c](https://github.com/kontent-ai/model-generator-js/commit/df4413cfb3af81b41c95ac76a47d784e5337235b))
+
 ## [7.2.0](https://github.com/kontent-ai/model-generator-js/compare/v7.1.0...v7.2.0) (2024-06-18)
 
 
