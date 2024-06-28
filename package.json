@@ -49,19 +49,19 @@
         "yargs": "17.7.2",
         "prettier": "3.3.2",
         "colors": "1.4.0",
-        "@kontent-ai/delivery-sdk": "14.9.0",
-        "@kontent-ai/management-sdk": "6.3.0"
+        "@kontent-ai/delivery-sdk": "14.10.0",
+        "@kontent-ai/management-sdk": "6.4.0"
     },
     "devDependencies": {
         "@types/yargs": "17.0.32",
         "standard-version": "9.5.0",
-        "typescript": "5.4.5",
-        "@types/node": "20.14.4",
+        "typescript": "5.5.2",
+        "@types/node": "20.14.9",
         "@types/prettier": "3.0.0",
-        "@typescript-eslint/eslint-plugin": "7.13.1",
-        "@typescript-eslint/parser": "7.13.1",
+        "@typescript-eslint/eslint-plugin": "7.14.1",
+        "@typescript-eslint/parser": "7.14.1",
         "eslint": "8.57.0",
-        "tsx": "4.15.6",
+        "tsx": "4.15.7",
         "dotenv-cli": "7.4.2"
     }
 }
