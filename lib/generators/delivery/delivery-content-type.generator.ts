@@ -1,4 +1,4 @@
-import Colors from 'colors';
+import chalk from 'chalk';
 import { commonHelper, IGeneratedFile } from '../../common-helper.js';
 import {
     ContentTypeResolver,
@@ -58,7 +58,7 @@ interface IExtractImportsResult {
 export class DeliveryContentTypeGenerator {
     private readonly deliveryNpmPackageName: string = '@kontent-ai/delivery-sdk';
 
-    async generateModelsAsync(data: {
+    generateModels(data: {
         outputDir: string;
         typeFolderName: string;
         typeSnippetsFolderName: string;
@@ -76,7 +76,7 @@ export class DeliveryContentTypeGenerator {
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
         moduleResolution: ModuleResolution;
-    }): Promise<{ contentTypeFiles: IGeneratedFile[]; snippetFiles: IGeneratedFile[] }> {
+    }): { contentTypeFiles: IGeneratedFile[]; snippetFiles: IGeneratedFile[] } {
         const typeFiles: IGeneratedFile[] = [];
         const snippetFiles: IGeneratedFile[] = [];
 
@@ -85,7 +85,7 @@ export class DeliveryContentTypeGenerator {
         if (data.elementResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     data.elementResolver instanceof Function ? 'custom' : data.elementResolver
                 )}' name resolver for content type elements`
             );
@@ -94,7 +94,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeFileNameResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     data.contentTypeFileNameResolver instanceof Function ? 'custom' : data.contentTypeFileNameResolver
                 )}' name resolver for content type filenames`
             );
@@ -103,7 +103,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeSnippetFileNameResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     data.contentTypeSnippetFileNameResolver instanceof Function
                         ? 'custom'
                         : data.contentTypeSnippetFileNameResolver
@@ -114,7 +114,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     data.contentTypeResolver instanceof Function ? 'custom' : data.contentTypeResolver
                 )}' name resolver for content types`
             );
@@ -123,7 +123,7 @@ export class DeliveryContentTypeGenerator {
         if (data.contentTypeSnippetResolver) {
             addNewLineAfterResolvers = true;
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     data.contentTypeSnippetResolver instanceof Function ? 'custom' : data.contentTypeSnippetResolver
                 )}' name resolver for content type snippets`
             );
@@ -725,7 +725,7 @@ export type ${typeName} = IContentItem<{
     }): IExtendedContentTypeElement[] {
         const extendedElements: IExtendedContentTypeElement[] = [];
 
-        const elements = data.contentType ? data.contentType.elements : data.contentTypeSnippet?.elements ?? [];
+        const elements = data.contentType ? data.contentType.elements : (data.contentTypeSnippet?.elements ?? []);
 
         for (const element of elements) {
             extendedElements.push(

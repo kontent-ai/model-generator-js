@@ -114,7 +114,7 @@ await generateModelsAsync({
     `pascalCase`, `snakeCase`
 -   `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`,
     `snakeCase`
--   `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
+-   `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`, `migration`
 -   `exportWebhooks` - Indicates if webhooks are exported
 -   `exportWorkflows` - Indicates if workflows are exported
 -   `exportAssetFolders` - Indicates if asset folders are exported

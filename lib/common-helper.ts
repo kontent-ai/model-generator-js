@@ -24,19 +24,17 @@ export class CommonHelper {
     }
 
     getElementCodename(element: ContentTypeElements.ContentTypeElementModel): string | undefined {
-        const codename = (<any>element)['codename'];
-
-        return codename ?? undefined;
+        return element.codename;
     }
 
     isElementRequired(element: ContentTypeElements.ContentTypeElementModel): boolean {
-        const isRequired = (<any>element)['is_required'];
+        const isRequired = (<{ is_required?: boolean }>element)['is_required'];
 
         return isRequired === true;
     }
 
     getElementGuidelines(element: ContentTypeElements.ContentTypeElementModel): string | null {
-        const guidelines = (<any>element)['guidelines'];
+        const guidelines = (<{ guidelines?: string }>element)['guidelines'];
 
         if (!guidelines) {
             return null;
@@ -67,8 +65,7 @@ export class CommonHelper {
         taxonomies: TaxonomyModels.Taxonomy[]
     ): string | null {
         if (element.type === 'taxonomy') {
-            const taxonomyElement = element as ContentTypeElements.ITaxonomyElement;
-            const taxonomyGroupId = taxonomyElement?.taxonomy_group?.id;
+            const taxonomyGroupId = element.taxonomy_group?.id;
 
             if (!taxonomyGroupId) {
                 return element.type;
@@ -82,7 +79,7 @@ export class CommonHelper {
 
             return taxonomy.name;
         }
-        return (<any>element)['name'];
+        return (<{ name?: string }>element).name ?? null;
     }
 
     getBarrelExportCode(data: { filenames: string[]; moduleResolution: ModuleResolution }): string {

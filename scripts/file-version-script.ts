@@ -1,9 +1,9 @@
 import fs from 'fs';
-import Colors from 'colors';
+import chalk from 'chalk';
 import PackageJson from '../package.json' assert { type: 'json' };
 
 export const createVersionFile = (date: Date, versionPath: string, propertyName: string) => {
-    console.log(Colors.cyan(`\nCreating version file at '${versionPath}' with prop '${propertyName}'`));
+    console.log(chalk.cyan(`\nCreating version file at '${versionPath}' with prop '${propertyName}'`));
     createFile(date, versionPath, propertyName);
 };
 
@@ -20,10 +20,10 @@ export const ${propName} = {
 
     fs.writeFile(filePath, src, { flag: 'w' }, (err) => {
         if (err) {
-            return console.log(Colors.red(err.message));
+            return console.log(chalk.red(err.message));
         }
 
-        console.log(Colors.green(`Updating version ${Colors.yellow(PackageJson.version)}`));
-        console.log(`${Colors.green('Writing version to ')}${Colors.yellow(filePath)}\n`);
+        console.log(chalk.green(`Updating version ${chalk.yellow(PackageJson.version)}`));
+        console.log(`${chalk.green('Writing version to ')}${chalk.yellow(filePath)}\n`);
     });
 }

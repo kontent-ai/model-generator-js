@@ -1,5 +1,5 @@
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models.js';
-import Colors from 'colors';
+import chalk from 'chalk';
 import { commonHelper, IGeneratedFile } from '../../common-helper.js';
 import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
@@ -10,19 +10,19 @@ import {
 } from './delivery-mappers.js';
 
 export class DeliveryTaxonomyGenerator {
-    async generateTaxonomyTypesAsync(config: {
+    generateTaxonomyTypes(config: {
         outputDir: string;
         taxonomies: TaxonomyModels.Taxonomy[];
         taxonomyFolderName: string;
         addTimestamp: boolean;
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): Promise<IGeneratedFile[]> {
+    }): IGeneratedFile[] {
         const files: IGeneratedFile[] = [];
 
         if (config.taxonomyResolver) {
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     config.taxonomyResolver instanceof Function ? 'custom' : config.taxonomyResolver
                 )}' name resolver for taxonomy type`
             );
@@ -30,7 +30,7 @@ export class DeliveryTaxonomyGenerator {
 
         if (config.fileResolver) {
             console.log(
-                `Using '${Colors.yellow(
+                `Using '${chalk.yellow(
                     config.fileResolver instanceof Function ? 'custom' : config.fileResolver
                 )}' name resolver for taxonomy filename`
             );
@@ -141,4 +141,4 @@ export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTerms
     }
 }
 
-export const deliveryTaxonomylGenerator = new DeliveryTaxonomyGenerator();
+export const deliveryTaxonomyGenerator = new DeliveryTaxonomyGenerator();

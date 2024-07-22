@@ -168,8 +168,8 @@ export class ProjectGenerator {
         element: ContentTypeElements.ContentTypeElementModel,
         taxonomies: TaxonomyModels.Taxonomy[]
     ): string | undefined {
-        if ((element as any)['name']) {
-            return (element as any)['name'];
+        if ((element as { name?: string })['name']) {
+            return (element as { name: string })['name'];
         }
 
         if (element.type === 'taxonomy') {
@@ -722,19 +722,17 @@ export class ProjectGenerator {
             });
         }
 
-        const code: string = `
-        {
-            ${steps.map((step) => {
-                return `
-                    ${step.codename}: {
-                        name: '${commonHelper.escapeNameValue(step.name)}',
-                        codename: '${step.codename}',
-                        id: '${step.id}'
-                    }
-                `;
-            })}
-        }
-        `;
+        const code = `{${steps.reduce((code, step) => {
+            return (
+                code +
+                `
+                ${step.codename}: {
+                    name: '${commonHelper.escapeNameValue(step.name)}',
+                    codename: '${step.codename}',
+                    id: '${step.id}'
+                },`
+            );
+        }, ``)}}`;
 
         return code;
     }

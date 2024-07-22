@@ -1,24 +1,32 @@
 {
+    "compileOnSave": true,
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "ESNext",
+        "baseUrl": ".",
         "outDir": "dist",
-        "rootDir": ".",
         "sourceMap": true,
         "declaration": true,
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "allowSyntheticDefaultImports": true,
+        "target": "es2022",
         "strict": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
         "resolveJsonModule": true,
+        "noImplicitReturns": true,
+        "allowUnreachableCode": false,
+        "skipLibCheck": true,
         "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
         "noUnusedParameters": false,
         "noUnusedLocals": true,
         "strictFunctionTypes": true,
         "noImplicitAny": true,
-        "strictNullChecks": true,
-        "strictPropertyInitialization": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true
+        "typeRoots": ["./node_modules/@types"],
+        "lib": ["esnext"]
     },
-    "include": ["**/*.ts"]
+    "include": ["lib/**/*", "sample/**/*", "scripts/**/*", "eslint.config.js"],
+    "exclude": ["node_modules"]
 }

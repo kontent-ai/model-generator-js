@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { ModuleResolution, generateModelsAsync } from '../lib/index.js';
-import Colors from 'colors';
+import { ModuleResolution, generateModelsAsync, handleError } from '../lib/index.js';
+import chalk from 'chalk';
 
 const outputDir: string = './sample';
 
@@ -12,13 +12,13 @@ const run = async () => {
     });
 
     // delete existing models
-    console.log(`Deleting existing folder '${Colors.yellow(outputDir)}'`);
+    console.log(`Deleting existing folder '${chalk.yellow(outputDir)}'`);
     rmSync(outputDir, {
         recursive: true,
         force: true
     });
 
-    console.log(`Folder '${Colors.yellow(outputDir)}' deleted successfully`);
+    console.log(`Folder '${chalk.yellow(outputDir)}' deleted successfully`);
 
     const environmentVar = 'ENVIRONMENT_ID';
     const moduleResolutionVar = 'MODULE_RESOLUTION';
@@ -29,14 +29,14 @@ const run = async () => {
     const moduleResolution = process.env[moduleResolutionVar];
 
     if (!moduleResolutionVar) {
-        throw Error(`Missing '${Colors.red(moduleResolutionVar)}' env variable`);
+        throw Error(`Missing '${chalk.red(moduleResolutionVar)}' env variable`);
     }
 
     if (!environmentId) {
-        throw Error(`Missing '${Colors.red(environmentVar)}' env variable`);
+        throw Error(`Missing '${chalk.red(environmentVar)}' env variable`);
     }
     if (!apiKey) {
-        throw Error(`Missing '${Colors.red(apiKeyVar)}' env variable`);
+        throw Error(`Missing '${chalk.red(apiKeyVar)}' env variable`);
     }
 
     await generateModelsAsync({
@@ -54,4 +54,6 @@ const run = async () => {
     });
 };
 
-run();
+run().catch((err) => {
+    handleError(err);
+});

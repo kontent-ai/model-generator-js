@@ -1,4 +1,4 @@
-import Colors from 'colors';
+import chalk from 'chalk';
 import { Options } from 'prettier';
 import { formatHelper } from './format-helper.js';
 import * as fs from 'fs';
@@ -10,14 +10,14 @@ export class FileHelper {
             const contentToStore = await formatHelper.formatCodeAsync(text, formatOptions);
 
             fs.writeFileSync('./' + finalFilename, contentToStore);
-            console.log(`Created '${Colors.yellow(finalFilename)}'`);
+            console.log(`Created '${chalk.yellow(finalFilename)}'`);
         } catch (error) {
-            console.log(`Failed to format file '${Colors.red(filename)}'. Skipping prettier for this file.`);
+            console.log(`Failed to format file '${chalk.red(filename)}'. Skipping prettier for this file.`);
 
             const contentToStore = text;
 
             fs.writeFileSync('./' + finalFilename, contentToStore);
-            console.log(`Created '${Colors.yellow(finalFilename)}'`);
+            console.log(`Created '${chalk.yellow(finalFilename)}'`);
         }
     }
 

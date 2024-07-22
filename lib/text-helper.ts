@@ -7,19 +7,16 @@ import { DefaultResolverType } from './models.js';
 
 export class TextHelper {
     resolveTextWithDefaultResolver(text: string, resolverType: DefaultResolverType): string {
-        if (resolverType === 'camelCase') {
-            return this.toCamelCase(text);
+        switch (resolverType) {
+            case 'camelCase':
+                return this.toCamelCase(text);
+            case 'pascalCase':
+                return this.toPascalCase(text);
+            case 'snakeCase':
+                return this.toSnakeCase(text);
+            default:
+                throw Error(`Invalid name resolver. Available options are: camelCase, pascalCase, snakeCase`);
         }
-
-        if (resolverType === 'pascalCase') {
-            return this.toPascalCase(text);
-        }
-
-        if (resolverType === 'snakeCase') {
-            return this.toSnakeCase(text);
-        }
-
-        throw Error(`Invalid name resolver '${resolverType}'. Available options are: camelCase, pascalCase, snakeCase`);
     }
 
     toPascalCase(text: string): string {
