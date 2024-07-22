@@ -12,7 +12,7 @@
     "author": "richard sustek",
     "license": "MIT",
     "engines": {
-        "node": ">= 18"
+        "node": ">= 20"
     },
     "keywords": [
         "Kontent",
@@ -47,21 +47,21 @@
     },
     "dependencies": {
         "yargs": "17.7.2",
-        "prettier": "3.3.2",
+        "prettier": "3.3.3",
         "colors": "1.4.0",
         "@kontent-ai/delivery-sdk": "14.10.0",
-        "@kontent-ai/management-sdk": "6.4.0"
+        "@kontent-ai/management-sdk": "6.5.0"
     },
     "devDependencies": {
         "@types/yargs": "17.0.32",
         "standard-version": "9.5.0",
-        "typescript": "5.5.2",
-        "@types/node": "20.14.9",
+        "typescript": "5.5.3",
+        "@types/node": "20.14.11",
         "@types/prettier": "3.0.0",
-        "@typescript-eslint/eslint-plugin": "7.14.1",
-        "@typescript-eslint/parser": "7.14.1",
+        "@typescript-eslint/eslint-plugin": "7.16.1",
+        "@typescript-eslint/parser": "7.16.1",
         "eslint": "8.57.0",
-        "tsx": "4.15.7",
+        "tsx": "4.16.2",
         "dotenv-cli": "7.4.2"
     }
 }
