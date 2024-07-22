@@ -1,9 +1,10 @@
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { ModuleResolution, generateModelsAsync, handleError } from '../lib/index.js';
+import { ModuleResolution, generateDeliveryModelsAsync, handleError } from '../../lib/index.js';
 import chalk from 'chalk';
+import { getEnvironmentRequiredValue } from 'scripts/utils/test.utils.js';
 
-const outputDir: string = './sample';
+const outputDir: string = './sample/delivery';
 
 const run = async () => {
     // needed to load .env environment to current process when run via package.json script
@@ -20,31 +21,16 @@ const run = async () => {
 
     console.log(`Folder '${chalk.yellow(outputDir)}' deleted successfully`);
 
-    const environmentVar = 'ENVIRONMENT_ID';
-    const moduleResolutionVar = 'MODULE_RESOLUTION';
-    const apiKeyVar = 'API_KEY';
+    const environmentId = getEnvironmentRequiredValue('ENVIRONMENT_ID');
+    const apiKey = getEnvironmentRequiredValue('API_KEY');
+    const moduleResolution = getEnvironmentRequiredValue('MODULE_RESOLUTION');
 
-    const environmentId = process.env[environmentVar];
-    const apiKey = process.env[apiKeyVar];
-    const moduleResolution = process.env[moduleResolutionVar];
-
-    if (!moduleResolutionVar) {
-        throw Error(`Missing '${chalk.red(moduleResolutionVar)}' env variable`);
-    }
-
-    if (!environmentId) {
-        throw Error(`Missing '${chalk.red(environmentVar)}' env variable`);
-    }
-    if (!apiKey) {
-        throw Error(`Missing '${chalk.red(apiKeyVar)}' env variable`);
-    }
-
-    await generateModelsAsync({
+    await generateDeliveryModelsAsync({
         addTimestamp: false,
         environmentId: environmentId,
         apiKey: apiKey,
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
-        sdkType: 'delivery',
+        modelType: 'delivery',
         isEnterpriseSubscription: true,
         addEnvironmentInfo: true,
         outputDir: outputDir,

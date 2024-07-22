@@ -30,9 +30,9 @@ Apart from generating models via CLI, you may also generate models in code which
 configuration options (such as using custom name resolver).
 
 ```typescript
-import { generateModelsAsync } from '@kontent-ai/model-generator';
+import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
 
-await generateModelsAsync({
+await generateDeliveryModelsAsync({
     sdkType: 'delivery',
     environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     isEnterpriseSubscription: true,
@@ -53,7 +53,7 @@ You may customize the way filenames are stored on file system using the `content
 `taxonomyTypeFileResolver` configuration option:
 
 ```typescript
-await generateModelsAsync({
+await generateDeliveryModelsAsync({
     sdkType: 'delivery',
     environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     isEnterpriseSubscription: true,
@@ -73,7 +73,7 @@ You may customize name of content types using the `contentTypeResolver` configur
 `taxonomyTypeResolver` option:
 
 ```typescript
-await generateModelsAsync({
+await generateDeliveryModelsAsync({
     sdkType: 'delivery',
     environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     isEnterpriseSubscription: true,

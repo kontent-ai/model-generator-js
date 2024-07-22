@@ -4,7 +4,7 @@ import { Options } from 'prettier';
 
 export type ModuleResolution = 'nodeNext' | 'node';
 export type DefaultResolverType = 'camelCase' | 'pascalCase' | 'snakeCase';
-export type SdkType = 'delivery' | 'migration';
+export type ModelType = 'delivery' | 'migration';
 export type ElementResolver = DefaultResolverType | PropertyNameResolver;
 
 export type ContentTypeFileNameResolver =
@@ -21,30 +21,16 @@ export type ContentTypeSnippetResolver =
     | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
 export type TaxonomyTypeResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
 
-export interface IExportProjectSettings {
-    exportWebhooks: boolean;
-    exportWorkflows: boolean;
-    exportRoles: boolean;
-    exportAssetFolders: boolean;
-    exportCollections: boolean;
-    exportLanguages: boolean;
-}
-
-export interface IGenerateModelsConfig {
+export interface IGenerateDeliveryModelsConfig {
     environmentId: string;
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
     isEnterpriseSubscription: boolean;
-    sdkType: SdkType;
+    modelType: ModelType;
     apiKey: string;
     moduleResolution?: ModuleResolution;
     managementApiUrl?: string;
 
-    /**
-     * Determines what content structure objects are exported.
-     * If not set, all objects are exported
-     */
-    exportProjectSettings?: IExportProjectSettings;
     outputDir?: string;
     sortConfig?: ISortConfig;
     contentTypeFileResolver?: ContentTypeFileNameResolver;
@@ -59,4 +45,14 @@ export interface IGenerateModelsConfig {
 
 export interface ISortConfig {
     sortTaxonomyTerms: boolean;
+}
+
+export interface GenerateMigrationModelsConfig {
+    addEnvironmentInfo: boolean;
+    environmentId: string;
+    addTimestamp: boolean;
+    apiKey: string;
+    moduleResolution: ModuleResolution;
+    outputDir: string;
+    managementApiUrl?: string;
 }

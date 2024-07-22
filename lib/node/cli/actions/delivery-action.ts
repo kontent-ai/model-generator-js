@@ -1,9 +1,9 @@
 import { ModuleResolution } from '../../../models.js';
-import { generateModelsAsync } from '../../../generator.js';
+import { generateDeliveryModelsAsync } from '../../../generator.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
-    await generateModelsAsync({
+    await generateDeliveryModelsAsync({
         environmentId: cliFetcher.getRequiredArgumentValue('environmentId'),
         managementApiUrl: cliFetcher.getRequiredArgumentValue('managementApiUrl'),
         apiKey: cliFetcher.getRequiredArgumentValue('apiKey'),
@@ -19,19 +19,11 @@ export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Prom
         contentTypeSnippetFileResolver: undefined,
         contentTypeSnippetResolver: undefined,
         formatOptions: undefined,
-        sdkType: 'delivery',
+        modelType: 'delivery',
         sortConfig: {
             sortTaxonomyTerms: cliFetcher.getBooleanArgumentValue('sortTaxonomyTerms', true)
         },
         moduleResolution:
-            cliFetcher.getRequiredArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext',
-        exportProjectSettings: {
-            exportWebhooks: true,
-            exportWorkflows: true,
-            exportAssetFolders: true,
-            exportCollections: true,
-            exportLanguages: true,
-            exportRoles: true
-        }
+            cliFetcher.getRequiredArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });
 }
