@@ -19,7 +19,7 @@ import {
 import { deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator.js';
 import { commonHelper } from './common-helper.js';
 import { parse } from 'path';
-import { fileHelper } from './file-helper.js';
+import { fileHelper, fileProcessor } from './file-helper.js';
 import { migrationGenerator } from './generators/migration/migration-generator.js';
 
 export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModelsConfig): Promise<void> {
@@ -214,9 +214,9 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     });
 
     const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
+    const migrationFileProcessor = fileProcessor(outputDir);
     const barrelExportFilename: string = 'index.ts';
-    const migrationItemsFolderName: string = `items/`;
-    const migrationItemsFolderPath: string = `${outputDir}${migrationItemsFolderName}`;
+    const migrationItemsFolderName: string = `items`;
 
     const projectInformation = await getEnvironmentInfoAsync(client);
     console.log(`Project '${chalk.yellow(projectInformation.name)}'`);
@@ -225,7 +225,6 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     console.log(`Module resolution '${chalk.yellow(moduleResolution)}'\n`);
     const migrationGeneratorObj = migrationGenerator({
-        outputDir: outputDir,
         addTimestamp: config.addTimestamp,
         addEnvironmentInfo: config.addEnvironmentInfo,
         environmentData: {
@@ -237,39 +236,36 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         }
     });
 
-    // prepare directories
-    fileHelper.createDir(migrationItemsFolderPath);
-
     const migrationTypeFile = migrationGeneratorObj.getMigrationTypesFile(`migration-types.ts`);
-    const migrationItemFiles = migrationGeneratorObj.getmigrationItemFiles();
+    const migrationItemFiles = migrationGeneratorObj.getMigrationItemFiles(migrationItemsFolderName);
     const allFiles = [migrationTypeFile, ...migrationItemFiles];
 
     // create all files on FS
     for (const file of allFiles) {
-        await fileHelper.createFileOnFsAsync(file.text, file.filepath, config.formatOptions);
+        await migrationFileProcessor.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
     }
 
     // migration items barrel
-    await fileHelper.createFileOnFsAsync(
+    await migrationFileProcessor.createFileOnFsAsync(
         commonHelper.getBarrelExportCode({
             moduleResolution: moduleResolution,
             filenames: [
                 ...migrationItemFiles.map((m) => {
-                    return `./${parse(m.filepath).name}`;
+                    return `./${parse(m.filename).name}`;
                 })
             ]
         }),
-        `${migrationItemsFolderPath}${barrelExportFilename}`,
+        `${migrationItemsFolderName}/${barrelExportFilename}`,
         config.formatOptions
     );
 
     // main barrel
-    await fileHelper.createFileOnFsAsync(
+    await migrationFileProcessor.createFileOnFsAsync(
         commonHelper.getBarrelExportCode({
             moduleResolution: moduleResolution,
-            filenames: [`./${migrationItemsFolderName}index`, `./${migrationTypeFile.filename}`]
+            filenames: [`./${migrationItemsFolderName}/index`, `./${migrationTypeFile.filename}`]
         }),
-        `${outputDir}${barrelExportFilename}`,
+        `${barrelExportFilename}`,
         config.formatOptions
     );
 

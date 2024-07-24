@@ -11,7 +11,6 @@ import { uniqueFilter } from '../../core/index.js';
 export interface MigrationGeneratorConfig {
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
-    outputDir: string;
 
     environmentData: {
         types: ContentTypeModels.ContentType[];
@@ -23,10 +22,16 @@ export interface MigrationGeneratorConfig {
 }
 
 export function migrationGenerator(config: MigrationGeneratorConfig) {
+    const getMigrationItemType = (type: ContentTypeModels.ContentType, folderName: string): GeneratedFile => {
+        return {
+            filename: `${folderName}/${type.codename}.ts`,
+            text: 'todo'
+        };
+    };
+
     return {
         getMigrationTypesFile(filename: string): GeneratedFile {
             return {
-                filepath: config.outputDir + filename,
                 filename: filename,
                 text: `
                 ${getLanguageCodenamesType(config.environmentData.languages)}
@@ -38,8 +43,8 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             `
             };
         },
-        getmigrationItemFiles(): GeneratedFile[] {
-            return [];
+        getMigrationItemFiles(folderName: string): GeneratedFile[] {
+            return config.environmentData.types.map((type) => getMigrationItemType(type, folderName));
         }
     };
 }

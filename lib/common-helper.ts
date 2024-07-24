@@ -10,7 +10,6 @@ export interface IGeneratedFile {
 
 export interface GeneratedFile {
     filename: string;
-    filepath: string;
     text: string;
 }
 
