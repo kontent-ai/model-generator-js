@@ -19,7 +19,6 @@ export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Prom
         contentTypeSnippetFileResolver: undefined,
         contentTypeSnippetResolver: undefined,
         formatOptions: undefined,
-        modelType: 'delivery',
         sortConfig: {
             sortTaxonomyTerms: cliFetcher.getBooleanArgumentValue('sortTaxonomyTerms', true)
         },

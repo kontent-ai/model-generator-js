@@ -57,12 +57,12 @@ export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModel
     const snippets = await getSnippetsAsync(client);
     const taxonomies = await getTaxonomiesAsync(client);
 
-    const workflows: WorkflowModels.Workflow[] = await getWorkflowsAsync(client);
-    const roles: RoleModels.Role[] = config.isEnterpriseSubscription ? await getRolesAsync(client) : [];
-    const assetFolders: AssetFolderModels.AssetFolder[] = await getAssetFoldersAsync(client);
-    const collections: CollectionModels.Collection[] = await getCollectionsAsync(client);
-    const webhooks: WebhookModels.Webhook[] = await getWebhooksAsync(client);
-    const languages: LanguageModels.LanguageModel[] = await getLanguagesAsync(client);
+    const workflows = await getWorkflowsAsync(client);
+    const roles = config.isEnterpriseSubscription ? await getRolesAsync(client) : [];
+    const assetFolders = await getAssetFoldersAsync(client);
+    const collections = await getCollectionsAsync(client);
+    const webhooks = await getWebhooksAsync(client);
+    const languages = await getLanguagesAsync(client);
 
     console.log('');
 
@@ -213,22 +213,67 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         baseUrl: config.managementApiUrl
     });
 
+    const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
+    const barrelExportFilename: string = 'index.ts';
+    const migrationItemsFolderName: string = `items/`;
+    const migrationItemsFolderPath: string = `${outputDir}${migrationItemsFolderName}`;
+
     const projectInformation = await getEnvironmentInfoAsync(client);
     console.log(`Project '${chalk.yellow(projectInformation.name)}'`);
     console.log(`Environment '${chalk.yellow(projectInformation.environment)}'\n`);
 
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     console.log(`Module resolution '${chalk.yellow(moduleResolution)}'\n`);
-
-    migrationGenerator({
+    const migrationGeneratorObj = migrationGenerator({
+        outputDir: outputDir,
         addTimestamp: config.addTimestamp,
         addEnvironmentInfo: config.addEnvironmentInfo,
-        languages: await getLanguagesAsync(client),
-        workflows: await getWorkflowsAsync(client),
-        types: await getTypesAsync(client),
-        snippets: await getSnippetsAsync(client),
-        collections: await getCollectionsAsync(client)
-    }).generate();
+        environmentData: {
+            languages: await getLanguagesAsync(client),
+            workflows: await getWorkflowsAsync(client),
+            types: await getTypesAsync(client),
+            snippets: await getSnippetsAsync(client),
+            collections: await getCollectionsAsync(client)
+        }
+    });
+
+    // prepare directories
+    fileHelper.createDir(migrationItemsFolderPath);
+
+    const migrationTypeFile = migrationGeneratorObj.getMigrationTypesFile(`migration-types.ts`);
+    const migrationItemFiles = migrationGeneratorObj.getmigrationItemFiles();
+    const allFiles = [migrationTypeFile, ...migrationItemFiles];
+
+    // create all files on FS
+    for (const file of allFiles) {
+        await fileHelper.createFileOnFsAsync(file.text, file.filepath, config.formatOptions);
+    }
+
+    // migration items barrel
+    await fileHelper.createFileOnFsAsync(
+        commonHelper.getBarrelExportCode({
+            moduleResolution: moduleResolution,
+            filenames: [
+                ...migrationItemFiles.map((m) => {
+                    return `./${parse(m.filepath).name}`;
+                })
+            ]
+        }),
+        `${migrationItemsFolderPath}${barrelExportFilename}`,
+        config.formatOptions
+    );
+
+    // main barrel
+    await fileHelper.createFileOnFsAsync(
+        commonHelper.getBarrelExportCode({
+            moduleResolution: moduleResolution,
+            filenames: [`./${migrationItemsFolderName}index`, `./${migrationTypeFile.filename}`]
+        }),
+        `${outputDir}${barrelExportFilename}`,
+        config.formatOptions
+    );
+
+    console.log(chalk.green(`\nCompleted`));
 }
 
 async function getEnvironmentInfoAsync(

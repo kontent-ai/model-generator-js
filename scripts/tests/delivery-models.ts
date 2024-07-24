@@ -30,7 +30,6 @@ const run = async () => {
         environmentId: environmentId,
         apiKey: apiKey,
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
-        modelType: 'delivery',
         isEnterpriseSubscription: true,
         addEnvironmentInfo: true,
         outputDir: outputDir,

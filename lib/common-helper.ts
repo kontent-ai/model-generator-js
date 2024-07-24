@@ -8,6 +8,12 @@ export interface IGeneratedFile {
     text: string;
 }
 
+export interface GeneratedFile {
+    filename: string;
+    filepath: string;
+    text: string;
+}
+
 export class CommonHelper {
     sortAlphabetically<T>(arrayToSort: T[], propertySelector: (item: T) => string): T[] {
         return arrayToSort.sort((a, b) =>

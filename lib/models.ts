@@ -26,7 +26,6 @@ export interface IGenerateDeliveryModelsConfig {
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
     isEnterpriseSubscription: boolean;
-    modelType: ModelType;
     apiKey: string;
     moduleResolution?: ModuleResolution;
     managementApiUrl?: string;
@@ -55,4 +54,5 @@ export interface GenerateMigrationModelsConfig {
     moduleResolution: ModuleResolution;
     outputDir: string;
     managementApiUrl?: string;
+    formatOptions?: Options;
 }
