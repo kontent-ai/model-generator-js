@@ -1,4 +1,4 @@
-import { MigrationItemSystem } from '@kontent-ai/migration-toolkit';
+import { MigrationItemSystem, MigrationItem, MigrationElements } from '@kontent-ai/migration-toolkit';
 
 export type LanguageCodenames = 'cz' | 'en' | 'German';
 export type ContentTypeCodenames = 'actor' | 'movie';
@@ -11,3 +11,7 @@ export type System<Codename extends ContentTypeCodenames> = MigrationItemSystem<
     CollectionCodenames,
     WorkflowCodenames
 >;
+export type Item<
+    Codename extends ContentTypeCodenames,
+    TElements extends MigrationElements = MigrationElements
+> = MigrationItem<TElements, System<Codename>, WorkflowStepCodenames>;

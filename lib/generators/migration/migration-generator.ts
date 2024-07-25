@@ -29,14 +29,12 @@ const migrationTypeNames = {
     workflowCodenames: 'WorkflowCodenames',
     workflowStepCodenames: 'WorkflowStepCodenames',
     contentTypeCodenames: 'ContentTypeCodenames',
-    contentTypeCodename: 'ContentTypeCodename'
-};
-
-const migrationImportTypes = {
     migrationItemSystem: 'MigrationItemSystem',
     migrationElementModels: 'MigrationElementModels',
     migrationItem: 'MigrationItem',
+    migrationElements: 'MigrationElements',
     system: 'System',
+    item: 'Item',
     codename: 'Codename'
 };
 
@@ -51,17 +49,16 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
         return {
             filename: `${folderName}/${type.codename}.ts`,
             text: `
-            import {${migrationImportTypes.migrationItem}, ${migrationImportTypes.migrationElementModels}} from '${migrationToolkitNpmPackage}';
-            import {${migrationImportTypes.system}, ${migrationTypeNames.workflowStepCodenames}} from '../${replaceTsExtensionWithJs(migrationTypesFilename)}';
+            import {${migrationTypeNames.migrationElementModels}} from '${migrationToolkitNpmPackage}';
+            import {${migrationTypeNames.item}} from '../${replaceTsExtensionWithJs(migrationTypesFilename)}';
 
-            export type ${textHelper.toPascalCase(type.name)}Item = ${migrationImportTypes.migrationItem}<
+            export type ${textHelper.toPascalCase(type.name)}Item = ${migrationTypeNames.item}<
+            '${type.codename}',
             {
                 ${getFlattenedElements(type, config.environmentData.snippets)
                     .map((element) => `${element.codename}: ${getElementPropType(element)}`)
                     .join(',\n')},
-            },
-            ${migrationImportTypes.system}<'${type.codename}'>,
-            ${migrationTypeNames.workflowStepCodenames}
+            }
             >;`
         };
     };
@@ -71,7 +68,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             return {
                 filename: filename,
                 text: `
-                  import {${migrationImportTypes.migrationItemSystem}} from '${migrationToolkitNpmPackage}';
+                  import {${migrationTypeNames.migrationItemSystem}, ${migrationTypeNames.migrationItem}, ${migrationTypeNames.migrationElements}} from '${migrationToolkitNpmPackage}';
 
                 ${getLanguageCodenamesType(config.environmentData.languages)}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
@@ -79,6 +76,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
                 ${getSystemType()}
+                ${getItemType()}
             `
             };
         },
@@ -118,45 +116,52 @@ function getFlattenedElements(
 
 function getElementPropType(element: ContentTypeElements.ContentTypeElementModel): string {
     if (element.type === 'text') {
-        return `${migrationImportTypes.migrationElementModels}.TextElement`;
+        return `${migrationTypeNames.migrationElementModels}.TextElement`;
     }
     if (element.type === 'asset') {
-        return `${migrationImportTypes.migrationElementModels}.AssetElement`;
+        return `${migrationTypeNames.migrationElementModels}.AssetElement`;
     }
     if (element.type === 'custom') {
-        return `${migrationImportTypes.migrationElementModels}.CustomElement`;
+        return `${migrationTypeNames.migrationElementModels}.CustomElement`;
     }
     if (element.type === 'date_time') {
-        return `${migrationImportTypes.migrationElementModels}.DateTimeElement`;
+        return `${migrationTypeNames.migrationElementModels}.DateTimeElement`;
     }
     if (element.type === 'rich_text') {
-        return `${migrationImportTypes.migrationElementModels}.RichTextElement`;
+        return `${migrationTypeNames.migrationElementModels}.RichTextElement`;
     }
     if (element.type === 'number') {
-        return `${migrationImportTypes.migrationElementModels}.NumberElement`;
+        return `${migrationTypeNames.migrationElementModels}.NumberElement`;
     }
     if (element.type === 'multiple_choice') {
-        return `${migrationImportTypes.migrationElementModels}.MultipleChoiceElement`;
+        return `${migrationTypeNames.migrationElementModels}.MultipleChoiceElement`;
     }
     if (element.type === 'subpages') {
-        return `${migrationImportTypes.migrationElementModels}.SubpagesElement`;
+        return `${migrationTypeNames.migrationElementModels}.SubpagesElement`;
     }
     if (element.type === 'taxonomy') {
-        return `${migrationImportTypes.migrationElementModels}.TaxonomyElement`;
+        return `${migrationTypeNames.migrationElementModels}.TaxonomyElement`;
     }
     if (element.type === 'url_slug') {
-        return `${migrationImportTypes.migrationElementModels}.UrlSlugElement`;
+        return `${migrationTypeNames.migrationElementModels}.UrlSlugElement`;
     }
     if (element.type === 'modular_content') {
-        return `${migrationImportTypes.migrationElementModels}.LinkedItemsElement`;
+        return `${migrationTypeNames.migrationElementModels}.LinkedItemsElement`;
     }
 
     throw Error(`Element type '${element.type}' is not supported.`);
 }
 
+function getItemType(): string {
+    return `export type ${migrationTypeNames.item}<
+        ${migrationTypeNames.codename} extends ${migrationTypeNames.contentTypeCodenames},
+        TElements extends ${migrationTypeNames.migrationElements} = ${migrationTypeNames.migrationElements},
+    > = ${migrationTypeNames.migrationItem}<TElements, ${migrationTypeNames.system}<${migrationTypeNames.codename}>, ${migrationTypeNames.workflowStepCodenames}>;`;
+}
+
 function getSystemType(): string {
-    return `export type ${migrationImportTypes.system}<${migrationImportTypes.codename} extends ${migrationTypeNames.contentTypeCodenames}> = ${migrationImportTypes.migrationItemSystem}<
-    ${migrationImportTypes.codename},
+    return `export type ${migrationTypeNames.system}<${migrationTypeNames.codename} extends ${migrationTypeNames.contentTypeCodenames}> = ${migrationTypeNames.migrationItemSystem}<
+    ${migrationTypeNames.codename},
     ${migrationTypeNames.languageCodenames},
     ${migrationTypeNames.collectionCodenames},
     ${migrationTypeNames.workflowCodenames}

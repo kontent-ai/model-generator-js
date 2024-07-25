@@ -1,7 +1,8 @@
-import { MigrationItem, MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import { System, WorkflowStepCodenames } from '../migration-types.js';
+import { MigrationElementModels } from '@kontent-ai/migration-toolkit';
+import { Item } from '../migration-types.js';
 
-export type MovieItem = MigrationItem<
+export type MovieItem = Item<
+    'movie',
     {
         title: MigrationElementModels.TextElement;
         plot: MigrationElementModels.RichTextElement;
@@ -12,7 +13,5 @@ export type MovieItem = MigrationItem<
         stars: MigrationElementModels.LinkedItemsElement;
         seoname: MigrationElementModels.UrlSlugElement;
         releasecategory: MigrationElementModels.TaxonomyElement;
-    },
-    System<'movie'>,
-    WorkflowStepCodenames
+    }
 >;
