@@ -32,5 +32,5 @@ export function getImportStatement(data: {
             ? `${getFileNameWithoutExtension(data.filePathOrPackage)}.js`
             : data.filePathOrPackage;
 
-    return `import { ${data.importValue} } from '${resolvedFilePath}';`;
+    return `import type { ${data.importValue} } from '${resolvedFilePath}';`;
 }
