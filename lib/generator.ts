@@ -7,20 +7,20 @@ import {
     CollectionModels,
     ContentTypeModels,
     ContentTypeSnippetModels,
-    createManagementClient,
     EnvironmentModels,
     LanguageModels,
-    ManagementClient,
     RoleModels,
     TaxonomyModels,
     WebhookModels,
-    WorkflowModels
+    WorkflowModels,
+    createManagementClient
 } from '@kontent-ai/management-sdk';
 import { deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator.js';
 import { commonHelper } from './common-helper.js';
 import { parse } from 'path';
 import { fileHelper, fileProcessor } from './file-helper.js';
 import { migrationGenerator } from './generators/migration/migration-generator.js';
+import { GeneratorManagementClient } from './core/index.js';
 
 export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
@@ -278,21 +278,21 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 }
 
 async function getEnvironmentInfoAsync(
-    client: ManagementClient
-): Promise<EnvironmentModels.EnvironmentInformationModel> {
+    client: GeneratorManagementClient
+): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
     const projectInformation = (await client.environmentInformation().toPromise()).data;
     console.log(`Project '${chalk.yellow(projectInformation.project.name)}'`);
     console.log(`Environment '${chalk.yellow(projectInformation.project.environment)}'\n`);
     return projectInformation.project;
 }
 
-async function getWorkflowsAsync(client: ManagementClient): Promise<WorkflowModels.Workflow[]> {
+async function getWorkflowsAsync(client: GeneratorManagementClient): Promise<readonly WorkflowModels.Workflow[]> {
     const items = commonHelper.sortAlphabetically((await client.listWorkflows().toPromise()).data, (item) => item.name);
     console.log(`Fetched '${chalk.yellow(items.length.toString())}' workflows`);
     return items;
 }
 
-async function getRolesAsync(client: ManagementClient): Promise<RoleModels.Role[]> {
+async function getRolesAsync(client: GeneratorManagementClient): Promise<readonly RoleModels.Role[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listRoles().toPromise()).data.roles,
         (item) => item.name
@@ -301,7 +301,9 @@ async function getRolesAsync(client: ManagementClient): Promise<RoleModels.Role[
     return items;
 }
 
-async function getAssetFoldersAsync(client: ManagementClient): Promise<AssetFolderModels.AssetFolder[]> {
+async function getAssetFoldersAsync(
+    client: GeneratorManagementClient
+): Promise<readonly AssetFolderModels.AssetFolder[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listAssetFolders().toPromise()).data.items,
         (item) => item.name
@@ -310,7 +312,7 @@ async function getAssetFoldersAsync(client: ManagementClient): Promise<AssetFold
     return items;
 }
 
-async function getCollectionsAsync(client: ManagementClient): Promise<CollectionModels.Collection[]> {
+async function getCollectionsAsync(client: GeneratorManagementClient): Promise<readonly CollectionModels.Collection[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listCollections().toPromise()).data.collections,
         (item) => item.name
@@ -319,7 +321,7 @@ async function getCollectionsAsync(client: ManagementClient): Promise<Collection
     return items;
 }
 
-async function getWebhooksAsync(client: ManagementClient): Promise<WebhookModels.Webhook[]> {
+async function getWebhooksAsync(client: GeneratorManagementClient): Promise<readonly WebhookModels.Webhook[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listWebhooks().toPromise()).data.webhooks,
         (item) => item.name
@@ -328,7 +330,7 @@ async function getWebhooksAsync(client: ManagementClient): Promise<WebhookModels
     return items;
 }
 
-async function getLanguagesAsync(client: ManagementClient): Promise<LanguageModels.LanguageModel[]> {
+async function getLanguagesAsync(client: GeneratorManagementClient): Promise<readonly LanguageModels.LanguageModel[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listLanguages().toAllPromise()).data.items,
         (item) => item.name
@@ -337,7 +339,7 @@ async function getLanguagesAsync(client: ManagementClient): Promise<LanguageMode
     return items;
 }
 
-async function getTypesAsync(client: ManagementClient): Promise<ContentTypeModels.ContentType[]> {
+async function getTypesAsync(client: GeneratorManagementClient): Promise<readonly ContentTypeModels.ContentType[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listContentTypes().toAllPromise()).data.items,
         (item) => item.name
@@ -346,7 +348,9 @@ async function getTypesAsync(client: ManagementClient): Promise<ContentTypeModel
     return items;
 }
 
-async function getSnippetsAsync(client: ManagementClient): Promise<ContentTypeSnippetModels.ContentTypeSnippet[]> {
+async function getSnippetsAsync(
+    client: GeneratorManagementClient
+): Promise<readonly ContentTypeSnippetModels.ContentTypeSnippet[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listContentTypeSnippets().toAllPromise()).data.items,
         (item) => item.name
@@ -355,7 +359,7 @@ async function getSnippetsAsync(client: ManagementClient): Promise<ContentTypeSn
     return items;
 }
 
-async function getTaxonomiesAsync(client: ManagementClient): Promise<TaxonomyModels.Taxonomy[]> {
+async function getTaxonomiesAsync(client: GeneratorManagementClient): Promise<readonly TaxonomyModels.Taxonomy[]> {
     const items = commonHelper.sortAlphabetically(
         (await client.listTaxonomies().toAllPromise()).data.items,
         (item) => item.name

@@ -9,8 +9,8 @@ export interface IGeneratedFile {
 }
 
 export interface GeneratedFile {
-    filename: string;
-    text: string;
+    readonly filename: string;
+    readonly text: string;
 }
 
 export class CommonHelper {

@@ -12,16 +12,16 @@ import { textHelper } from '../../text-helper.js';
 import { ModuleResolution } from '../../models.js';
 
 export interface MigrationGeneratorConfig {
-    addTimestamp: boolean;
-    addEnvironmentInfo: boolean;
-    moduleResolution: ModuleResolution;
+    readonly addTimestamp: boolean;
+    readonly addEnvironmentInfo: boolean;
+    readonly moduleResolution: ModuleResolution;
 
-    environmentData: {
-        types: ContentTypeModels.ContentType[];
-        workflows: WorkflowModels.Workflow[];
-        languages: LanguageModels.LanguageModel[];
-        collections: CollectionModels.Collection[];
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
+    readonly environmentData: {
+        readonly types: readonly ContentTypeModels.ContentType[];
+        readonly workflows: readonly WorkflowModels.Workflow[];
+        readonly languages: readonly LanguageModels.LanguageModel[];
+        readonly collections: readonly CollectionModels.Collection[];
+        readonly snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[];
     };
 }
 
@@ -38,13 +38,13 @@ const migrationTypeNames = {
     system: 'System',
     item: 'Item',
     codename: 'Codename'
-};
+} as const;
 
 const migrationToolkitNpmPackage = '@kontent-ai/migration-toolkit';
 
 export function migrationGenerator(config: MigrationGeneratorConfig) {
     const getMigrationItemType = (
-        type: ContentTypeModels.ContentType,
+        type: Readonly<ContentTypeModels.ContentType>,
         migrationTypesFilename: string,
         folderName: string
     ): GeneratedFile => {
@@ -103,9 +103,9 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
 }
 
 function getFlattenedElements(
-    type: ContentTypeModels.ContentType,
-    snippets: ContentTypeSnippetModels.ContentTypeSnippet[]
-): ContentTypeElements.ContentTypeElementModel[] {
+    type: Readonly<ContentTypeModels.ContentType>,
+    snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[]
+): readonly ContentTypeElements.ContentTypeElementModel[] {
     return type.elements
         .filter((element) => {
             if (element.type === 'guidelines') {
@@ -128,7 +128,7 @@ function getFlattenedElements(
         });
 }
 
-function getElementPropType(element: ContentTypeElements.ContentTypeElementModel): string {
+function getElementPropType(element: Readonly<ContentTypeElements.ContentTypeElementModel>): string {
     if (element.type === 'text') {
         return `${migrationTypeNames.migrationElementModels}.TextElement`;
     }
@@ -182,23 +182,23 @@ function getSystemType(): string {
 >;`;
 }
 
-function getLanguageCodenamesType(languages: LanguageModels.LanguageModel[]): string {
+function getLanguageCodenamesType(languages: readonly LanguageModels.LanguageModel[]): string {
     return `export type ${migrationTypeNames.languageCodenames} = ${languages.map((language) => `'${language.codename}'`).join(' | ')};`;
 }
 
-function getContentTypeCodenamesType(types: ContentTypeModels.ContentType[]): string {
+function getContentTypeCodenamesType(types: readonly ContentTypeModels.ContentType[]): string {
     return `export type ${migrationTypeNames.contentTypeCodenames} = ${types.map((type) => `'${type.codename}'`).join(' | ')};`;
 }
 
-function getWorkflowCodenamesType(workflows: WorkflowModels.Workflow[]): string {
+function getWorkflowCodenamesType(workflows: readonly WorkflowModels.Workflow[]): string {
     return `export type ${migrationTypeNames.workflowCodenames} = ${workflows.map((workflow) => `'${workflow.codename}'`).join(' | ')};`;
 }
 
-function getCollectionCodenamesType(collections: CollectionModels.Collection[]): string {
+function getCollectionCodenamesType(collections: readonly CollectionModels.Collection[]): string {
     return `export type ${migrationTypeNames.collectionCodenames} = ${collections.map((collection) => `'${collection.codename}'`).join(' | ')};`;
 }
 
-function getWorkflowStepCodenamesType(workflows: WorkflowModels.Workflow[]): string {
+function getWorkflowStepCodenamesType(workflows: readonly WorkflowModels.Workflow[]): string {
     return `export type ${migrationTypeNames.workflowStepCodenames} = ${workflows
         .flatMap((workflow) => [
             ...workflow.steps,

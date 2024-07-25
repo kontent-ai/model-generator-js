@@ -47,12 +47,12 @@ export interface ISortConfig {
 }
 
 export interface GenerateMigrationModelsConfig {
-    addEnvironmentInfo: boolean;
-    environmentId: string;
-    addTimestamp: boolean;
-    apiKey: string;
-    moduleResolution: ModuleResolution;
-    outputDir: string;
-    managementApiUrl?: string;
-    formatOptions?: Options;
+    readonly addEnvironmentInfo: boolean;
+    readonly environmentId: string;
+    readonly addTimestamp: boolean;
+    readonly apiKey: string;
+    readonly moduleResolution: ModuleResolution;
+    readonly outputDir: string;
+    readonly managementApiUrl?: string;
+    readonly formatOptions?: Options;
 }
