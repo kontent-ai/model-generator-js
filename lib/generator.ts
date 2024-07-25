@@ -217,6 +217,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     const migrationFileProcessor = fileProcessor(outputDir);
     const barrelExportFilename: string = 'index.ts';
     const migrationItemsFolderName: string = `items`;
+    const migrationTypesFilename: string = `migration-types.ts`;
 
     const projectInformation = await getEnvironmentInfoAsync(client);
     console.log(`Project '${chalk.yellow(projectInformation.name)}'`);
@@ -236,8 +237,11 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         }
     });
 
-    const migrationTypeFile = migrationGeneratorObj.getMigrationTypesFile(`migration-types.ts`);
-    const migrationItemFiles = migrationGeneratorObj.getMigrationItemFiles(migrationItemsFolderName);
+    const migrationTypeFile = migrationGeneratorObj.getMigrationTypesFile(migrationTypesFilename);
+    const migrationItemFiles = migrationGeneratorObj.getMigrationItemFiles(
+        migrationTypesFilename,
+        migrationItemsFolderName
+    );
     const allFiles = [migrationTypeFile, ...migrationItemFiles];
 
     // create all files on FS

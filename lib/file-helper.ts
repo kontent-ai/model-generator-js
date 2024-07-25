@@ -11,18 +11,14 @@ export function fileProcessor(outputDir: string) {
         formatOptions: Options | undefined
     ): Promise<void> => {
         const fullFilePath = `${outputDir.endsWith('/') ? outputDir : `${outputDir}/`}${filePath}`;
+        let fileContent = text;
         try {
-            const contentToStore = await formatHelper.formatCodeAsync(text, formatOptions);
-
-            ensureDirectoryExistence(fullFilePath);
-            fs.writeFileSync('./' + fullFilePath, contentToStore, {});
-            console.log(`Created '${chalk.yellow(fullFilePath)}'`);
+            fileContent = await formatHelper.formatCodeAsync(fileContent, formatOptions);
         } catch (error) {
             console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
-
-            const contentToStore = text;
-
-            fs.writeFileSync('./' + fullFilePath, contentToStore);
+        } finally {
+            ensureDirectoryExistence(fullFilePath);
+            fs.writeFileSync('./' + fullFilePath, fileContent, {});
             console.log(`Created '${chalk.yellow(fullFilePath)}'`);
         }
     };
