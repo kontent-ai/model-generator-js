@@ -1,4 +1,4 @@
-import { MigrationItemSystem, MigrationItem, MigrationElements } from '@kontent-ai/migration-toolkit';
+import type { MigrationItemSystem, MigrationItem, MigrationElements } from '@kontent-ai/migration-toolkit';
 
 export type LanguageCodenames = 'cz' | 'en' | 'German';
 export type ContentTypeCodenames = 'actor' | 'movie';

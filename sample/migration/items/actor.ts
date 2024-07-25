@@ -1,5 +1,5 @@
-import { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import { Item } from '../migration-types.js';
+import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
+import type { Item } from '../migration-types.js';
 
 export type ActorItem = Item<
     'actor',

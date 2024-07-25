@@ -227,6 +227,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     console.log(`Module resolution '${chalk.yellow(moduleResolution)}'\n`);
     const migrationGeneratorObj = migrationGenerator({
         addTimestamp: config.addTimestamp,
+        moduleResolution: config.moduleResolution,
         addEnvironmentInfo: config.addEnvironmentInfo,
         environmentData: {
             languages: await getLanguagesAsync(client),
@@ -287,7 +288,7 @@ async function getEnvironmentInfoAsync(
 
 async function getWorkflowsAsync(client: ManagementClient): Promise<WorkflowModels.Workflow[]> {
     const items = commonHelper.sortAlphabetically((await client.listWorkflows().toPromise()).data, (item) => item.name);
-    console.log(`Found '${chalk.yellow(items.length.toString())}' workflows`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' workflows`);
     return items;
 }
 
@@ -296,7 +297,7 @@ async function getRolesAsync(client: ManagementClient): Promise<RoleModels.Role[
         (await client.listRoles().toPromise()).data.roles,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' roles`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' roles`);
     return items;
 }
 
@@ -305,7 +306,7 @@ async function getAssetFoldersAsync(client: ManagementClient): Promise<AssetFold
         (await client.listAssetFolders().toPromise()).data.items,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' asset folders`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' asset folders`);
     return items;
 }
 
@@ -314,7 +315,7 @@ async function getCollectionsAsync(client: ManagementClient): Promise<Collection
         (await client.listCollections().toPromise()).data.collections,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' collections`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' collections`);
     return items;
 }
 
@@ -323,7 +324,7 @@ async function getWebhooksAsync(client: ManagementClient): Promise<WebhookModels
         (await client.listWebhooks().toPromise()).data.webhooks,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' webhooks`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' webhooks`);
     return items;
 }
 
@@ -332,7 +333,7 @@ async function getLanguagesAsync(client: ManagementClient): Promise<LanguageMode
         (await client.listLanguages().toAllPromise()).data.items,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' languages`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' languages`);
     return items;
 }
 
@@ -341,7 +342,7 @@ async function getTypesAsync(client: ManagementClient): Promise<ContentTypeModel
         (await client.listContentTypes().toAllPromise()).data.items,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' types`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' types`);
     return items;
 }
 
@@ -350,7 +351,7 @@ async function getSnippetsAsync(client: ManagementClient): Promise<ContentTypeSn
         (await client.listContentTypeSnippets().toAllPromise()).data.items,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' snippets`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' snippets`);
     return items;
 }
 
@@ -359,6 +360,6 @@ async function getTaxonomiesAsync(client: ManagementClient): Promise<TaxonomyMod
         (await client.listTaxonomies().toAllPromise()).data.items,
         (item) => item.name
     );
-    console.log(`Found '${chalk.yellow(items.length.toString())}' taxonomies`);
+    console.log(`Fetched '${chalk.yellow(items.length.toString())}' taxonomies`);
     return items;
 }

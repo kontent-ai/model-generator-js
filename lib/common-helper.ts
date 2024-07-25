@@ -49,7 +49,7 @@ export class CommonHelper {
     }
 
     getImportStatement(data: {
-        filePath: string;
+        filePathOrPackage: string;
         importValue: string;
         moduleResolution: ModuleResolution;
         isExternalLib: boolean;
@@ -57,9 +57,9 @@ export class CommonHelper {
         let resolvedFilePath: string;
 
         if (data.moduleResolution === 'nodeNext' && !data.isExternalLib) {
-            resolvedFilePath = `${data.filePath}.js`;
+            resolvedFilePath = `${data.filePathOrPackage}.js`;
         } else {
-            resolvedFilePath = data.filePath;
+            resolvedFilePath = data.filePathOrPackage;
         }
 
         return `import { ${data.importValue} } from '${resolvedFilePath}';`;

@@ -1,4 +1,7 @@
 export type CliAction = 'delivery' | 'migration';
+export type LibraryType = '@kontent-ai/migration-toolkit';
+
+export type LiteralUnion<T extends string> = T | (string & NonNullable<unknown>);
 
 export interface ErrorData {
     readonly message: string;

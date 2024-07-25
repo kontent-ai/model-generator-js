@@ -267,7 +267,7 @@ export class DeliveryContentTypeGenerator {
                 imports.push(
                     commonHelper.getImportStatement({
                         moduleResolution: data.moduleResolution,
-                        filePath: fileName,
+                        filePathOrPackage: fileName,
                         importValue: `type ${taxonomyName}`,
                         isExternalLib: false
                     })
@@ -299,7 +299,7 @@ export class DeliveryContentTypeGenerator {
                     imports.push(
                         commonHelper.getImportStatement({
                             moduleResolution: data.moduleResolution,
-                            filePath: filePath,
+                            filePathOrPackage: filePath,
                             importValue: `type ${typeName}`,
                             isExternalLib: false
                         })
@@ -317,7 +317,7 @@ export class DeliveryContentTypeGenerator {
                 imports.push(
                     commonHelper.getImportStatement({
                         moduleResolution: data.moduleResolution,
-                        filePath: filePath,
+                        filePathOrPackage: filePath,
                         importValue: `type ${typeName}`,
                         isExternalLib: false
                     })
@@ -385,7 +385,7 @@ export class DeliveryContentTypeGenerator {
 
         let code = commonHelper.getImportStatement({
             moduleResolution: data.moduleResolution,
-            filePath: this.deliveryNpmPackageName,
+            filePathOrPackage: this.deliveryNpmPackageName,
             importValue: `${topLevelImports.join(', ')}`,
             isExternalLib: true
         });

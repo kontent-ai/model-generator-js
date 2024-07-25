@@ -7,12 +7,14 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { GeneratedFile } from '../../common-helper.js';
-import { replaceTsExtensionWithJs, uniqueFilter } from '../../core/index.js';
+import { getImportStatement, uniqueFilter } from '../../core/index.js';
 import { textHelper } from '../../text-helper.js';
+import { ModuleResolution } from '../../models.js';
 
 export interface MigrationGeneratorConfig {
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
+    moduleResolution: ModuleResolution;
 
     environmentData: {
         types: ContentTypeModels.ContentType[];
@@ -49,8 +51,16 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
         return {
             filename: `${folderName}/${type.codename}.ts`,
             text: `
-            import {${migrationTypeNames.migrationElementModels}} from '${migrationToolkitNpmPackage}';
-            import {${migrationTypeNames.item}} from '../${replaceTsExtensionWithJs(migrationTypesFilename)}';
+            ${getImportStatement({
+                filePathOrPackage: migrationToolkitNpmPackage,
+                importValue: migrationTypeNames.migrationElementModels,
+                moduleResolution: config.moduleResolution
+            })}
+             ${getImportStatement({
+                 filePathOrPackage: `../${migrationTypesFilename}`,
+                 importValue: migrationTypeNames.item,
+                 moduleResolution: config.moduleResolution
+             })}
 
             export type ${textHelper.toPascalCase(type.name)}Item = ${migrationTypeNames.item}<
             '${type.codename}',
@@ -68,7 +78,11 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             return {
                 filename: filename,
                 text: `
-                  import {${migrationTypeNames.migrationItemSystem}, ${migrationTypeNames.migrationItem}, ${migrationTypeNames.migrationElements}} from '${migrationToolkitNpmPackage}';
+                  ${getImportStatement({
+                      filePathOrPackage: migrationToolkitNpmPackage,
+                      importValue: `${migrationTypeNames.migrationItemSystem}, ${migrationTypeNames.migrationItem}, ${migrationTypeNames.migrationElements}`,
+                      moduleResolution: config.moduleResolution
+                  })}
 
                 ${getLanguageCodenamesType(config.environmentData.languages)}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
