@@ -49,8 +49,8 @@
         "yargs": "17.7.2",
         "prettier": "3.3.3",
         "colors": "1.4.0",
-        "@kontent-ai/delivery-sdk": "14.10.0",
-        "@kontent-ai/management-sdk": "6.5.0"
+        "@kontent-ai/delivery-sdk": "14.11.0",
+        "@kontent-ai/management-sdk": "7.2.0"
     },
     "devDependencies": {
         "@types/yargs": "17.0.32",
