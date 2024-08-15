@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.4.0](https://github.com/kontent-ai/model-generator-js/compare/v7.3.0...v7.4.0) (2024-08-15)
+
+
+### Features
+
+* updates deps (& fixes Axios vulnerability) ([a6999aa](https://github.com/kontent-ai/model-generator-js/commit/a6999aab660a06ff13451cc8d7f3e27dc793a58f))
+* updates deps & node.js req to >= 20 ([160fd56](https://github.com/kontent-ai/model-generator-js/commit/160fd560ed738b6210e814a13b344bfbe8633685))
+
 ## [7.3.0](https://github.com/kontent-ai/model-generator-js/compare/v7.2.0...v7.3.0) (2024-06-28)
 
 
