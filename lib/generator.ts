@@ -1,26 +1,12 @@
 import chalk from 'chalk';
-import { GenerateMigrationModelsConfig, IGenerateDeliveryModelsConfig, ModuleResolution } from './models.js';
+import { IGenerateDeliveryModelsConfig, ModuleResolution } from './models.js';
 import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator.js';
 import { projectGenerator } from './generators/index.js';
-import {
-    AssetFolderModels,
-    CollectionModels,
-    ContentTypeModels,
-    ContentTypeSnippetModels,
-    EnvironmentModels,
-    LanguageModels,
-    RoleModels,
-    TaxonomyModels,
-    WebhookModels,
-    WorkflowModels,
-    createManagementClient
-} from '@kontent-ai/management-sdk';
 import { deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator.js';
 import { commonHelper } from './common-helper.js';
 import { parse } from 'path';
-import { fileHelper, fileProcessor } from './file-helper.js';
-import { migrationGenerator as _migrationGenerator } from './generators/migration/migration-generator.js';
-import { coreConfig, GeneratorManagementClient, migrationConfig, toSafeString } from './core/index.js';
+import { fileHelper } from './file-helper.js';
+import { kontentFetcher as _kontentFetcher } from './fetch/kontent-fetcher.js';
 
 export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
@@ -44,25 +30,25 @@ export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModel
     fileHelper.createDir(taxonomiesFolderPath);
     fileHelper.createDir(projectFolderPath);
 
-    const client = createManagementClient({
+    const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.managementApiUrl
     });
 
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
-    const projectInformation = await getEnvironmentInfoAsync(client);
+    const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
 
-    const types = await getTypesAsync(client);
-    const snippets = await getSnippetsAsync(client);
-    const taxonomies = await getTaxonomiesAsync(client);
+    const types = await kontentFetcher.getTypesAsync();
+    const snippets = await kontentFetcher.getSnippetsAsync();
+    const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
-    const workflows = await getWorkflowsAsync(client);
-    const roles = config.isEnterpriseSubscription ? await getRolesAsync(client) : [];
-    const assetFolders = await getAssetFoldersAsync(client);
-    const collections = await getCollectionsAsync(client);
-    const webhooks = await getWebhooksAsync(client);
-    const languages = await getLanguagesAsync(client);
+    const workflows = await kontentFetcher.getWorkflowsAsync();
+    const roles = config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : [];
+    const assetFolders = await kontentFetcher.getAssetFoldersAsync();
+    const collections = await kontentFetcher.getCollectionsAsync();
+    const webhooks = await kontentFetcher.getWebhooksAsync();
+    const languages = await kontentFetcher.getLanguagesAsync();
 
     console.log('');
 
@@ -204,167 +190,4 @@ export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModel
     await fileHelper.createFileOnFsAsync(mainBarrelCode, mainBarrelExportPath, config.formatOptions);
 
     console.log(chalk.green(`\nCompleted`));
-}
-
-export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<void> {
-    const client = createManagementClient({
-        environmentId: config.environmentId,
-        apiKey: config.apiKey,
-        baseUrl: config.managementApiUrl
-    });
-
-    const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
-    const migrationFileProcessor = fileProcessor(outputDir);
-    const migrationItemsFolderName: string = migrationConfig.migrationItemsFolderName;
-    const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;
-
-    const projectInformation = await getEnvironmentInfoAsync(client);
-    console.log(`Project '${chalk.yellow(toSafeString(projectInformation.name))}'`);
-    console.log(`Environment '${chalk.yellow(toSafeString(projectInformation.environment))}'\n`);
-
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
-    console.log(`Module resolution '${chalk.yellow(moduleResolution)}'\n`);
-    const migrationGenerator = _migrationGenerator({
-        addTimestamp: config.addTimestamp,
-        moduleResolution: config.moduleResolution,
-        addEnvironmentInfo: config.addEnvironmentInfo,
-        environmentData: {
-            environment: projectInformation,
-            taxonomies: await getTaxonomiesAsync(client),
-            languages: await getLanguagesAsync(client),
-            workflows: await getWorkflowsAsync(client),
-            types: await getTypesAsync(client),
-            snippets: await getSnippetsAsync(client),
-            collections: await getCollectionsAsync(client)
-        }
-    });
-
-    const migrationTypeFile = migrationGenerator.getMigrationTypesFile(migrationTypesFilename);
-    const migrationItemFiles = migrationGenerator.getMigrationItemFiles(
-        migrationTypesFilename,
-        migrationItemsFolderName
-    );
-    const allFiles = [migrationTypeFile, ...migrationItemFiles];
-
-    // create all files on FS
-    for (const file of allFiles) {
-        await migrationFileProcessor.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
-    }
-
-    // migration items barrel
-    await migrationFileProcessor.createFileOnFsAsync(
-        commonHelper.getBarrelExportCode({
-            moduleResolution: moduleResolution,
-            filenames: [
-                ...migrationItemFiles.map((m) => {
-                    return `./${parse(m.filename).name}`;
-                })
-            ]
-        }),
-        `${migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
-        config.formatOptions
-    );
-
-    // main barrel
-    await migrationFileProcessor.createFileOnFsAsync(
-        commonHelper.getBarrelExportCode({
-            moduleResolution: moduleResolution,
-            filenames: [`./${migrationItemsFolderName}/index`, `./${migrationTypeFile.filename}`]
-        }),
-        `${coreConfig.barrelExportFilename}`,
-        config.formatOptions
-    );
-
-    console.log(chalk.green(`\nCompleted`));
-}
-
-async function getEnvironmentInfoAsync(
-    client: GeneratorManagementClient
-): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
-    const projectInformation = (await client.environmentInformation().toPromise()).data;
-    console.log(`Project '${chalk.yellow(projectInformation.project.name)}'`);
-    console.log(`Environment '${chalk.yellow(projectInformation.project.environment)}'\n`);
-    return projectInformation.project;
-}
-
-async function getWorkflowsAsync(client: GeneratorManagementClient): Promise<readonly WorkflowModels.Workflow[]> {
-    const items = commonHelper.sortAlphabetically((await client.listWorkflows().toPromise()).data, (item) => item.name);
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' workflows`);
-    return items;
-}
-
-async function getRolesAsync(client: GeneratorManagementClient): Promise<readonly RoleModels.Role[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listRoles().toPromise()).data.roles,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' roles`);
-    return items;
-}
-
-async function getAssetFoldersAsync(
-    client: GeneratorManagementClient
-): Promise<readonly AssetFolderModels.AssetFolder[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listAssetFolders().toPromise()).data.items,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' asset folders`);
-    return items;
-}
-
-async function getCollectionsAsync(client: GeneratorManagementClient): Promise<readonly CollectionModels.Collection[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listCollections().toPromise()).data.collections,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' collections`);
-    return items;
-}
-
-async function getWebhooksAsync(client: GeneratorManagementClient): Promise<readonly WebhookModels.Webhook[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listWebhooks().toPromise()).data.webhooks,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' webhooks`);
-    return items;
-}
-
-async function getLanguagesAsync(client: GeneratorManagementClient): Promise<readonly LanguageModels.LanguageModel[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listLanguages().toAllPromise()).data.items,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' languages`);
-    return items;
-}
-
-async function getTypesAsync(client: GeneratorManagementClient): Promise<readonly ContentTypeModels.ContentType[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listContentTypes().toAllPromise()).data.items,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' types`);
-    return items;
-}
-
-async function getSnippetsAsync(
-    client: GeneratorManagementClient
-): Promise<readonly ContentTypeSnippetModels.ContentTypeSnippet[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listContentTypeSnippets().toAllPromise()).data.items,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' snippets`);
-    return items;
-}
-
-async function getTaxonomiesAsync(client: GeneratorManagementClient): Promise<readonly TaxonomyModels.Taxonomy[]> {
-    const items = commonHelper.sortAlphabetically(
-        (await client.listTaxonomies().toAllPromise()).data.items,
-        (item) => item.name
-    );
-    console.log(`Fetched '${chalk.yellow(items.length.toString())}' taxonomies`);
-    return items;
 }

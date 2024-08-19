@@ -19,7 +19,7 @@ const run = async () => {
     }
 
     if (action === 'migration') {
-        return await migrateActionAsync();
+        return await migrateActionAsync(argsFetcher);
     }
 
     exitProgram({

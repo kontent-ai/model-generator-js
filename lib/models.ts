@@ -53,6 +53,6 @@ export interface GenerateMigrationModelsConfig {
     readonly apiKey: string;
     readonly moduleResolution: ModuleResolution;
     readonly outputDir: string;
-    readonly managementApiUrl?: string;
+    readonly baseUrl?: string;
     readonly formatOptions?: Options;
 }

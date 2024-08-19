@@ -87,8 +87,8 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                             * ${toSafeString(element.title)} (${element.type})
                             * 
                             * Required: ${element.isRequired ? 'true' : 'false'}
-                            * Id: ${element.id}
-                            * Codename: ${element.codename}${element.guidelines ? `\n* Guidelines: ${textHelper.removeLineEndings(element.guidelines)}` : ''}
+                            * Codename: ${element.codename}
+                            * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${textHelper.removeLineEndings(element.guidelines)}` : ''}
                             */
                             ${element.codename}: ${getElementPropType(element)}`;
                     })
