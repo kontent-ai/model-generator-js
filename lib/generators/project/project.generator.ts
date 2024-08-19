@@ -1,5 +1,5 @@
 import { Options } from 'prettier';
-import { commonHelper, IGeneratedFile } from '../../common-helper.js';
+import { commonHelper } from '../../common-helper.js';
 import { textHelper } from '../../text-helper.js';
 import {
     AssetFolderModels,
@@ -16,42 +16,43 @@ import {
 } from '@kontent-ai/management-sdk';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import { SortConfig } from '../../models.js';
+import { GeneratedFile } from '../../core/index.js';
 
-interface IProjectCodeResult {
-    filename: string;
-    code: string;
+interface ProjectCodeResult {
+    readonly filename: string;
+    readonly code: string;
 }
 
-interface IWorkflowStep {
-    name: string;
-    codename: string;
-    id: string;
+interface WorkflowStep {
+    readonly name: string;
+    readonly codename: string;
+    readonly id: string;
 }
 
-interface IExtendedContentTypeElement {
-    element: ContentTypeElements.ContentTypeElementModel;
-    snippet?: ContentTypeSnippetModels.ContentTypeSnippet;
-    mappedName: string | undefined;
+interface ExtendedContentTypeElement {
+    readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
+    readonly snippet?: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
+    readonly mappedName: string | undefined;
 }
 
 export class ProjectGenerator {
     generateProjectModel(data: {
-        outputDir: string;
-        environmentInfo: EnvironmentModels.EnvironmentInformationModel;
-        types: ContentTypeModels.ContentType[];
-        languages: LanguageModels.LanguageModel[];
-        taxonomies: TaxonomyModels.Taxonomy[];
-        workflows: WorkflowModels.Workflow[];
-        assetFolders: AssetFolderModels.AssetFolder[];
-        collections: CollectionModels.Collection[];
-        roles: RoleModels.Role[];
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
-        webhooks: WebhookModels.Webhook[];
-        addTimestamp: boolean;
-        addEnvironmentInfo: boolean;
-        sortConfig: SortConfig;
-        formatOptions?: Options;
-    }): IGeneratedFile[] {
+        readonly outputDir: string;
+        readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+        readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
+        readonly languages: readonly Readonly<LanguageModels.LanguageModel>[];
+        readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
+        readonly workflows: readonly Readonly<WorkflowModels.Workflow>[];
+        readonly assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[];
+        readonly collections: readonly Readonly<CollectionModels.Collection>[];
+        readonly roles: readonly Readonly<RoleModels.Role>[];
+        readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[];
+        readonly webhooks: readonly Readonly<WebhookModels.Webhook>[];
+        readonly addTimestamp: boolean;
+        readonly addEnvironmentInfo: boolean;
+        readonly sortConfig: SortConfig;
+        readonly formatOptions?: Options;
+    }): GeneratedFile[] {
         const projectCodes = this.getProjectModelCode({
             environmentInfo: data.environmentInfo,
             types: data.types,
@@ -81,7 +82,7 @@ export class ProjectGenerator {
         headerCode += `
 */`;
 
-        const generatedFiles: IGeneratedFile[] = [];
+        const generatedFiles: GeneratedFile[] = [];
 
         for (const projectCode of projectCodes) {
             const filePath = `${data.outputDir}${projectCode.filename}`;
@@ -95,7 +96,7 @@ export class ProjectGenerator {
         return generatedFiles;
     }
 
-    getAssetFoldersCount(folders: AssetFolderModels.AssetFolder[], count: number = 0): number {
+    getAssetFoldersCount(folders: readonly Readonly<AssetFolderModels.AssetFolder>[], count: number = 0): number {
         count += folders.length;
 
         for (const folder of folders) {
@@ -107,7 +108,7 @@ export class ProjectGenerator {
         return count;
     }
 
-    private getEnvironmentComment(environmentInfo: EnvironmentModels.EnvironmentInformationModel): string {
+    private getEnvironmentComment(environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>): string {
         let comment: string = `Project name: ${textHelper.toSafeName(environmentInfo.name, 'space')}`;
 
         comment += `\n* Environment: ${environmentInfo.environment}`;
@@ -116,7 +117,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getContentTypeComment(contentType: ContentTypeModels.ContentType): string {
+    private getContentTypeComment(contentType: Readonly<ContentTypeModels.ContentType>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(contentType.name, 'space')}`;
@@ -125,7 +126,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getContentTypeSnippetComment(snippet: ContentTypeSnippetModels.ContentTypeSnippet): string {
+    private getContentTypeSnippetComment(snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(snippet.name, 'space')}`;
@@ -134,7 +135,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getWorkflowComment(workflow: WorkflowModels.Workflow): string {
+    private getWorkflowComment(workflow: Readonly<WorkflowModels.Workflow>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(workflow.name, 'space')}`;
@@ -145,7 +146,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getAssetFolderComment(assetFolder: AssetFolderModels.AssetFolder): string {
+    private getAssetFolderComment(assetFolder: Readonly<AssetFolderModels.AssetFolder>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(assetFolder.name, 'space')}`;
@@ -154,7 +155,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getLanguageComment(language: LanguageModels.LanguageModel): string {
+    private getLanguageComment(language: Readonly<LanguageModels.LanguageModel>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(language.name, 'space')}`;
@@ -164,8 +165,8 @@ export class ProjectGenerator {
     }
 
     private getElementName(
-        element: ContentTypeElements.ContentTypeElementModel,
-        taxonomies: TaxonomyModels.Taxonomy[]
+        element: Readonly<ContentTypeElements.ContentTypeElementModel>,
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string | undefined {
         if ((element as { name?: string })['name']) {
             return (element as { name: string })['name'];
@@ -187,8 +188,8 @@ export class ProjectGenerator {
     }
 
     private getElementComment(
-        element: ContentTypeElements.ContentTypeElementModel,
-        taxonomies: TaxonomyModels.Taxonomy[]
+        element: Readonly<ContentTypeElements.ContentTypeElementModel>,
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string {
         let comment: string = `/**`;
         const guidelines = commonHelper.getElementGuidelines(element);
@@ -208,7 +209,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getTaxonomyComment(taxonomy: TaxonomyModels.Taxonomy): string {
+    private getTaxonomyComment(taxonomy: Readonly<TaxonomyModels.Taxonomy>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(taxonomy.name, 'space')}`;
@@ -217,7 +218,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getCollectionComment(collection: CollectionModels.Collection): string {
+    private getCollectionComment(collection: Readonly<CollectionModels.Collection>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(collection.name, 'space')}`;
@@ -226,7 +227,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getRoleComment(role: RoleModels.Role): string {
+    private getRoleComment(role: Readonly<RoleModels.Role>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(role.name, 'space')}`;
@@ -235,7 +236,7 @@ export class ProjectGenerator {
         return comment;
     }
 
-    private getWebhookComment(webhook: WebhookModels.Webhook): string {
+    private getWebhookComment(webhook: Readonly<WebhookModels.Webhook>): string {
         let comment: string = `/**`;
 
         comment += `\n* ${textHelper.toSafeName(webhook.name, 'space')}`;
@@ -245,21 +246,21 @@ export class ProjectGenerator {
     }
 
     private getProjectModelCode(data: {
-        environmentInfo: EnvironmentModels.EnvironmentInformationModel;
-        types: ContentTypeModels.ContentType[];
-        languages: LanguageModels.LanguageModel[];
-        taxonomies: TaxonomyModels.Taxonomy[];
-        workflows: WorkflowModels.Workflow[];
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
-        assetFolders: AssetFolderModels.AssetFolder[];
-        collections: CollectionModels.Collection[];
-        roles: RoleModels.Role[];
-        webhooks: WebhookModels.Webhook[];
-        addTimestamp: boolean;
-        sortConfig: SortConfig;
-        formatOptions?: Options;
-    }): IProjectCodeResult[] {
-        const result: IProjectCodeResult[] = [
+        readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+        readonly types: readonly ContentTypeModels.ContentType[];
+        readonly languages: readonly LanguageModels.LanguageModel[];
+        readonly taxonomies: readonly TaxonomyModels.Taxonomy[];
+        readonly workflows: readonly WorkflowModels.Workflow[];
+        readonly snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[];
+        readonly assetFolders: readonly AssetFolderModels.AssetFolder[];
+        readonly collections: readonly CollectionModels.Collection[];
+        readonly roles: readonly RoleModels.Role[];
+        readonly webhooks: readonly WebhookModels.Webhook[];
+        readonly addTimestamp: boolean;
+        readonly sortConfig: SortConfig;
+        readonly formatOptions?: Options;
+    }): ProjectCodeResult[] {
+        const result: ProjectCodeResult[] = [
             {
                 code: `export const languages = {
                     ${this.getProjectLanguages(data.languages)}
@@ -317,7 +318,7 @@ export class ProjectGenerator {
         return result;
     }
 
-    private getProjectLanguages(languages: LanguageModels.LanguageModel[]): string {
+    private getProjectLanguages(languages: readonly LanguageModels.LanguageModel[]): string {
         let code: string = ``;
         for (let i = 0; i < languages.length; i++) {
             const language = languages[i];
@@ -345,7 +346,7 @@ export class ProjectGenerator {
         return `'${text}'`;
     }
 
-    private getProjectWorkflows(workflows: WorkflowModels.Workflow[]): string {
+    private getProjectWorkflows(workflows: readonly WorkflowModels.Workflow[]): string {
         let code: string = ``;
         for (let i = 0; i < workflows.length; i++) {
             const workflow = workflows[i];
@@ -364,7 +365,7 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getAssetFolders(assetFolders: AssetFolderModels.AssetFolder[]): string {
+    private getAssetFolders(assetFolders: readonly AssetFolderModels.AssetFolder[]): string {
         let code: string = `{`;
         for (let i = 0; i < assetFolders.length; i++) {
             const assetFolder = assetFolders[i];
@@ -385,8 +386,8 @@ export class ProjectGenerator {
     }
 
     private getProjectContentTypeSnippets(
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
-        taxonomies: TaxonomyModels.Taxonomy[]
+        snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
+        taxonomies: readonly TaxonomyModels.Taxonomy[]
     ): string {
         let code: string = ``;
         for (let i = 0; i < snippets.length; i++) {
@@ -408,9 +409,9 @@ export class ProjectGenerator {
     }
 
     private getProjectContentTypes(
-        contentTypes: ContentTypeModels.ContentType[],
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
-        taxonomies: TaxonomyModels.Taxonomy[]
+        contentTypes: readonly ContentTypeModels.ContentType[],
+        snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
+        taxonomies: readonly TaxonomyModels.Taxonomy[]
     ): string {
         let code: string = ``;
         for (let i = 0; i < contentTypes.length; i++) {
@@ -432,13 +433,13 @@ export class ProjectGenerator {
     }
 
     private getContentTypeElements(
-        contentType: ContentTypeModels.ContentType,
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
-        taxonomies: TaxonomyModels.Taxonomy[]
+        contentType: Readonly<ContentTypeModels.ContentType>,
+        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string {
         let code: string = '';
 
-        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements(
+        const extendedElements: readonly ExtendedContentTypeElement[] = this.getExtendedElements(
             contentType,
             snippets,
             taxonomies
@@ -515,8 +516,8 @@ export class ProjectGenerator {
     }
 
     private getContentTypeSnippetElements(
-        snippet: ContentTypeSnippetModels.ContentTypeSnippet,
-        taxonomies: TaxonomyModels.Taxonomy[]
+        snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>,
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string {
         let code: string = '';
 
@@ -555,11 +556,11 @@ export class ProjectGenerator {
     }
 
     private getExtendedElements(
-        contentType: ContentTypeModels.ContentType,
-        snippets: ContentTypeSnippetModels.ContentTypeSnippet[],
-        taxonomies: TaxonomyModels.Taxonomy[]
-    ): IExtendedContentTypeElement[] {
-        const extendedElements: IExtendedContentTypeElement[] = [];
+        contentType: Readonly<ContentTypeModels.ContentType>,
+        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+    ): readonly ExtendedContentTypeElement[] {
+        const extendedElements: ExtendedContentTypeElement[] = [];
         for (const element of contentType.elements) {
             if (element.type === 'snippet') {
                 // get snippet elements
@@ -573,7 +574,7 @@ export class ProjectGenerator {
                 }
                 extendedElements.push(
                     ...snippet.elements.map((mElement) => {
-                        const extendedElement: IExtendedContentTypeElement = {
+                        const extendedElement: ExtendedContentTypeElement = {
                             element: mElement,
                             snippet: snippet,
                             mappedName: this.getElementName(mElement, taxonomies)
@@ -594,7 +595,10 @@ export class ProjectGenerator {
         return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
     }
 
-    private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[], sortConfig: SortConfig): string {
+    private getProjectTaxonomies(
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
+        sortConfig: SortConfig
+    ): string {
         let code: string = ``;
         for (let i = 0; i < taxonomies.length; i++) {
             const taxonomy = taxonomies[i];
@@ -614,7 +618,7 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getCollections(collections: CollectionModels.Collection[]): string {
+    private getCollections(collections: readonly Readonly<CollectionModels.Collection>[]): string {
         let code: string = ``;
         for (let i = 0; i < collections.length; i++) {
             const collection = collections[i];
@@ -632,7 +636,7 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getRoles(roles: RoleModels.Role[]): string {
+    private getRoles(roles: readonly Readonly<RoleModels.Role>[]): string {
         let code: string = ``;
         for (let i = 0; i < roles.length; i++) {
             const role = roles[i];
@@ -650,7 +654,7 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getWebhooks(webhooks: WebhookModels.Webhook[]): string {
+    private getWebhooks(webhooks: readonly Readonly<WebhookModels.Webhook>[]): string {
         let code: string = ``;
         for (let i = 0; i < webhooks.length; i++) {
             const webhook = webhooks[i];
@@ -668,12 +672,15 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[], sortConfig: SortConfig): string {
+    private getProjectTaxonomiesTerms(
+        terms: readonly Readonly<TaxonomyModels.Taxonomy>[],
+        sortConfig: SortConfig
+    ): string {
         if (terms.length === 0) {
             return `terms: {}`;
         }
 
-        const sortedTerms: TaxonomyModels.Taxonomy[] = sortConfig.sortTaxonomyTerms
+        const sortedTerms = sortConfig.sortTaxonomyTerms
             ? commonHelper.sortAlphabetically(terms, (item) => item.name)
             : terms;
 
@@ -694,8 +701,8 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getProjectWorkflowSteps(workflow: WorkflowModels.Workflow): string {
-        const steps: IWorkflowStep[] = [
+    private getProjectWorkflowSteps(workflow: Readonly<WorkflowModels.Workflow>): string {
+        const steps: WorkflowStep[] = [
             {
                 codename: workflow.archivedStep.codename,
                 id: workflow.archivedStep.id,

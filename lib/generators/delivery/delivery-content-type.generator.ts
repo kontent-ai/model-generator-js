@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { commonHelper, IGeneratedFile } from '../../common-helper.js';
+import { commonHelper } from '../../common-helper.js';
 import {
     ContentTypeResolver,
     ElementResolver,
@@ -40,6 +40,7 @@ import {
     getMapContentTypeSnippetIdToObject
 } from './delivery-mappers.js';
 import { textHelper } from '../../text-helper.js';
+import { GeneratedFile } from '../../core/index.js';
 
 interface IExtendedContentTypeElement {
     type: ElementModels.ElementType;
@@ -76,9 +77,9 @@ export class DeliveryContentTypeGenerator {
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
         moduleResolution: ModuleResolution;
-    }): { contentTypeFiles: IGeneratedFile[]; snippetFiles: IGeneratedFile[] } {
-        const typeFiles: IGeneratedFile[] = [];
-        const snippetFiles: IGeneratedFile[] = [];
+    }): { contentTypeFiles: GeneratedFile[]; snippetFiles: GeneratedFile[] } {
+        const typeFiles: GeneratedFile[] = [];
+        const snippetFiles: GeneratedFile[] = [];
 
         let addNewLineAfterResolvers: boolean = false;
 
@@ -458,7 +459,7 @@ export type ${typeName} = IContentItem<{
         addTimestamp: boolean;
         addEnvironmentInfo: boolean;
         moduleResolution: ModuleResolution;
-    }): IGeneratedFile {
+    }): GeneratedFile {
         const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(
             data.type,
             true
@@ -513,7 +514,7 @@ export type ${typeName} = IContentItem<{
         addTimestamp: boolean;
         addEnvironmentInfo: boolean;
         moduleResolution: ModuleResolution;
-    }): IGeneratedFile {
+    }): GeneratedFile {
         const filename: string = `${data.outputDir}${data.typeSnippetsFolderName}${data.contentTypeSnippetFileNameMap(
             data.snippet,
             true

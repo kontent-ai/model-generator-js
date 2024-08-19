@@ -9,53 +9,57 @@ export type ElementResolver = DefaultResolverType | PropertyNameResolver;
 
 export type ContentTypeFileNameResolver =
     | DefaultResolverType
-    | ((contentType: ContentTypeModels.ContentType) => string);
+    | ((contentType: Readonly<ContentTypeModels.ContentType>) => string);
 export type ContentTypeSnippetFileNameResolver =
     | DefaultResolverType
-    | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
-export type TaxonomyTypeFileNameResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
+    | ((contentTypeSnippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>) => string);
+export type TaxonomyTypeFileNameResolver =
+    | DefaultResolverType
+    | ((taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string);
 
-export type ContentTypeResolver = DefaultResolverType | ((contentType: ContentTypeModels.ContentType) => string);
+export type ContentTypeResolver =
+    | DefaultResolverType
+    | ((contentType: Readonly<ContentTypeModels.ContentType>) => string);
 export type ContentTypeSnippetResolver =
     | DefaultResolverType
     | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
-export type TaxonomyTypeResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
+export type TaxonomyTypeResolver = DefaultResolverType | ((taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string);
 
 export interface GenerateDeliveryModelsConfig {
-    environmentId: string;
-    addTimestamp: boolean;
-    addEnvironmentInfo: boolean;
-    apiKey: string;
+    readonly environmentId: string;
+    readonly addTimestamp: boolean;
+    readonly addEnvironmentInfo: boolean;
+    readonly apiKey: string;
 
-    moduleResolution?: ModuleResolution;
-    baseUrl?: string;
-    outputDir?: string;
-    contentTypeFileResolver?: ContentTypeFileNameResolver;
-    contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
-    taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
-    contentTypeResolver?: ContentTypeResolver;
-    contentTypeSnippetResolver?: ContentTypeSnippetResolver;
-    taxonomyTypeResolver?: TaxonomyTypeResolver;
-    elementResolver?: ElementResolver;
-    formatOptions?: Options;
+    readonly moduleResolution?: ModuleResolution;
+    readonly baseUrl?: string;
+    readonly outputDir?: string;
+    readonly contentTypeFileResolver?: ContentTypeFileNameResolver;
+    readonly contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
+    readonly taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
+    readonly contentTypeResolver?: ContentTypeResolver;
+    readonly contentTypeSnippetResolver?: ContentTypeSnippetResolver;
+    readonly taxonomyTypeResolver?: TaxonomyTypeResolver;
+    readonly elementResolver?: ElementResolver;
+    readonly formatOptions?: Options;
 }
 
 export interface SortConfig {
-    sortTaxonomyTerms: boolean;
+    readonly sortTaxonomyTerms: boolean;
 }
 
 export interface GeneratProjectModelsConfig {
-    environmentId: string;
-    addTimestamp: boolean;
-    addEnvironmentInfo: boolean;
-    isEnterpriseSubscription: boolean;
-    apiKey: string;
+    readonly environmentId: string;
+    readonly addTimestamp: boolean;
+    readonly addEnvironmentInfo: boolean;
+    readonly isEnterpriseSubscription: boolean;
+    readonly apiKey: string;
 
-    moduleResolution?: ModuleResolution;
-    baseUrl?: string;
-    outputDir?: string;
-    sortConfig?: SortConfig;
-    formatOptions?: Options;
+    readonly moduleResolution?: ModuleResolution;
+    readonly baseUrl?: string;
+    readonly outputDir?: string;
+    readonly sortConfig?: SortConfig;
+    readonly formatOptions?: Options;
 }
 
 export interface GenerateMigrationModelsConfig {

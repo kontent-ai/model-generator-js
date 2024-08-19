@@ -3,19 +3,9 @@ import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk'
 import { libMetadata } from './meta/index.js';
 import { ModuleResolution } from './models.js';
 
-export interface IGeneratedFile {
-    filename: string;
-    text: string;
-}
-
-export interface GeneratedFile {
-    readonly filename: string;
-    readonly text: string;
-}
-
 export class CommonHelper {
-    sortAlphabetically<T>(arrayToSort: T[], propertySelector: (item: T) => string): T[] {
-        return arrayToSort.sort((a, b) =>
+    sortAlphabetically<T>(arrayToSort: readonly T[], propertySelector: (item: T) => string): readonly T[] {
+        return arrayToSort.toSorted((a, b) =>
             propertySelector(a).toLowerCase().localeCompare(propertySelector(b).toLowerCase())
         );
     }
@@ -67,7 +57,7 @@ export class CommonHelper {
 
     getElementTitle(
         element: ContentTypeElements.ContentTypeElementModel,
-        taxonomies: TaxonomyModels.Taxonomy[]
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string | null {
         if (element.type === 'taxonomy') {
             const taxonomyGroupId = element.taxonomy_group?.id;

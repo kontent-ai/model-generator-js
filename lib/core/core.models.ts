@@ -36,3 +36,8 @@ export interface FlattenedElement {
     readonly isRequired: boolean;
     readonly guidelines?: string;
 }
+
+export interface GeneratedFile {
+    readonly filename: string;
+    readonly text: string;
+}

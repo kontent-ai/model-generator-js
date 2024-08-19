@@ -7,8 +7,7 @@ import {
     TaxonomyModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { GeneratedFile } from '../../common-helper.js';
-import { FlattenedElement, getImportStatement, toSafeString, uniqueFilter } from '../../core/index.js';
+import { FlattenedElement, getImportStatement, toSafeString, uniqueFilter, GeneratedFile } from '../../core/index.js';
 import { textHelper } from '../../text-helper.js';
 import { ModuleResolution } from '../../models.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';

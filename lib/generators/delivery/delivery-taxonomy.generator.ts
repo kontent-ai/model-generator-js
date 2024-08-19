@@ -1,6 +1,6 @@
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models.js';
 import chalk from 'chalk';
-import { commonHelper, IGeneratedFile } from '../../common-helper.js';
+import { commonHelper, GeneratedFile } from '../../common-helper.js';
 import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     MapTaxonomyToFileName,
@@ -17,8 +17,8 @@ export class DeliveryTaxonomyGenerator {
         addTimestamp: boolean;
         fileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
-    }): IGeneratedFile[] {
-        const files: IGeneratedFile[] = [];
+    }): GeneratedFile[] {
+        const files: GeneratedFile[] = [];
 
         if (config.taxonomyResolver) {
             console.log(
@@ -72,7 +72,7 @@ export class DeliveryTaxonomyGenerator {
         addTimestamp: boolean;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         taxonomyNameMap: MapTaxonomyName;
-    }): IGeneratedFile {
+    }): GeneratedFile {
         const filename = `${data.outputDir}${data.taxonomyFolderName}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
