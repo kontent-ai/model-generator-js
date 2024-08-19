@@ -1,3 +1,8 @@
+import {
+    camelCasePropertyNameResolver,
+    pascalCasePropertyNameResolver,
+    snakeCasePropertyNameResolver
+} from '@kontent-ai/delivery-sdk';
 import { ModuleResolution } from '../models.js';
 import { LibraryType, LiteralUnion } from './index.js';
 
@@ -33,4 +38,32 @@ export function getImportStatement(data: {
             : data.filePathOrPackage;
 
     return `import type { ${data.importValue} } from '${resolvedFilePath}';`;
+}
+
+export function toPascalCase(text: string): string {
+    // use element resolver from SDK to keep it consistent
+    return toSafeString(pascalCasePropertyNameResolver('', text), 'nothing');
+}
+
+export function toCamelCase(text: string): string {
+    // use element resolver from SDK to keep it consistent
+    return toSafeString(camelCasePropertyNameResolver('', text), 'nothing');
+}
+
+export function toSnakeCase(text: string): string {
+    // use element resolver from SDK to keep it consistent
+    return toSafeString(snakeCasePropertyNameResolver('', text), 'nothing');
+}
+
+export function toAlphanumeric(value: string): string {
+    return value.replace(/\W/g, '');
+}
+
+export function removeLineEndings(value: string): string {
+    return value.replace(/(\r\n|\n|\r)/gm, '');
+}
+
+export function toSafeString(text: string, replaceWith: 'space' | 'nothing' = 'nothing'): string {
+    const replaceContent = replaceWith === 'space' ? ' ' : '';
+    return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
 }

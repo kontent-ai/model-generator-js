@@ -19,8 +19,8 @@ import { deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxono
 import { commonHelper } from './common-helper.js';
 import { parse } from 'path';
 import { fileHelper, fileProcessor } from './file-helper.js';
-import { migrationGenerator } from './generators/migration/migration-generator.js';
-import { GeneratorManagementClient } from './core/index.js';
+import { migrationGenerator as _migrationGenerator } from './generators/migration/migration-generator.js';
+import { coreConfig, GeneratorManagementClient, migrationConfig, toSafeString } from './core/index.js';
 
 export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
@@ -215,21 +215,22 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 
     const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
     const migrationFileProcessor = fileProcessor(outputDir);
-    const barrelExportFilename: string = 'index.ts';
-    const migrationItemsFolderName: string = `items`;
-    const migrationTypesFilename: string = `migration-types.ts`;
+    const migrationItemsFolderName: string = migrationConfig.migrationItemsFolderName;
+    const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;
 
     const projectInformation = await getEnvironmentInfoAsync(client);
-    console.log(`Project '${chalk.yellow(projectInformation.name)}'`);
-    console.log(`Environment '${chalk.yellow(projectInformation.environment)}'\n`);
+    console.log(`Project '${chalk.yellow(toSafeString(projectInformation.name))}'`);
+    console.log(`Environment '${chalk.yellow(toSafeString(projectInformation.environment))}'\n`);
 
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     console.log(`Module resolution '${chalk.yellow(moduleResolution)}'\n`);
-    const migrationGeneratorObj = migrationGenerator({
+    const migrationGenerator = _migrationGenerator({
         addTimestamp: config.addTimestamp,
         moduleResolution: config.moduleResolution,
         addEnvironmentInfo: config.addEnvironmentInfo,
         environmentData: {
+            environment: projectInformation,
+            taxonomies: await getTaxonomiesAsync(client),
             languages: await getLanguagesAsync(client),
             workflows: await getWorkflowsAsync(client),
             types: await getTypesAsync(client),
@@ -238,8 +239,8 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         }
     });
 
-    const migrationTypeFile = migrationGeneratorObj.getMigrationTypesFile(migrationTypesFilename);
-    const migrationItemFiles = migrationGeneratorObj.getMigrationItemFiles(
+    const migrationTypeFile = migrationGenerator.getMigrationTypesFile(migrationTypesFilename);
+    const migrationItemFiles = migrationGenerator.getMigrationItemFiles(
         migrationTypesFilename,
         migrationItemsFolderName
     );
@@ -260,7 +261,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
                 })
             ]
         }),
-        `${migrationItemsFolderName}/${barrelExportFilename}`,
+        `${migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
         config.formatOptions
     );
 
@@ -270,7 +271,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
             moduleResolution: moduleResolution,
             filenames: [`./${migrationItemsFolderName}/index`, `./${migrationTypeFile.filename}`]
         }),
-        `${barrelExportFilename}`,
+        `${coreConfig.barrelExportFilename}`,
         config.formatOptions
     );
 

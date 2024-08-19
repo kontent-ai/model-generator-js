@@ -14,7 +14,7 @@ export function fileProcessor(outputDir: string) {
         let fileContent = text;
         try {
             fileContent = await formatHelper.formatCodeAsync(fileContent, formatOptions);
-        } catch (error) {
+        } catch {
             console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
         } finally {
             ensureDirectoryExistence(fullFilePath);
@@ -51,7 +51,7 @@ export class FileHelper {
             this.ensureDirectoryExistence(fullFilePath);
             fs.writeFileSync('./' + fullFilePath, contentToStore, {});
             console.log(`Created '${chalk.yellow(fullFilePath)}'`);
-        } catch (error) {
+        } catch {
             console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
 
             const contentToStore = text;

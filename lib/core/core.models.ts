@@ -1,4 +1,4 @@
-import { IManagementClient } from '@kontent-ai/management-sdk';
+import { ElementModels, IManagementClient } from '@kontent-ai/management-sdk';
 
 export type CliAction = 'delivery' | 'migration';
 export type LibraryType = '@kontent-ai/migration-toolkit';
@@ -26,4 +26,13 @@ export interface OriginalManagementError {
             readonly error_code?: number;
         };
     };
+}
+
+export interface FlattenedElement {
+    readonly title: string;
+    readonly id: string;
+    readonly codename: string;
+    readonly type: ElementModels.ElementType;
+    readonly isRequired: boolean;
+    readonly guidelines?: string;
 }

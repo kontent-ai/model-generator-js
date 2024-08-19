@@ -1,15 +1,20 @@
 import {
     CollectionModels,
-    ContentTypeElements,
     ContentTypeModels,
     ContentTypeSnippetModels,
+    EnvironmentModels,
     LanguageModels,
+    TaxonomyModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { GeneratedFile } from '../../common-helper.js';
-import { getImportStatement, uniqueFilter } from '../../core/index.js';
+import { FlattenedElement, getImportStatement, toSafeString, uniqueFilter } from '../../core/index.js';
 import { textHelper } from '../../text-helper.js';
 import { ModuleResolution } from '../../models.js';
+import { commentsManager as _commentsManager } from '../../comments/index.js';
+import { match } from 'ts-pattern';
+import { isNotUndefined } from '@kontent-ai/migration-toolkit';
+import { getFlattenedElement } from 'lib/core/element.utils.js';
 
 export interface MigrationGeneratorConfig {
     readonly addTimestamp: boolean;
@@ -17,11 +22,13 @@ export interface MigrationGeneratorConfig {
     readonly moduleResolution: ModuleResolution;
 
     readonly environmentData: {
+        readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
         readonly types: readonly ContentTypeModels.ContentType[];
         readonly workflows: readonly WorkflowModels.Workflow[];
         readonly languages: readonly LanguageModels.LanguageModel[];
         readonly collections: readonly CollectionModels.Collection[];
         readonly snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[];
+        readonly taxonomies: readonly TaxonomyModels.Taxonomy[];
     };
 }
 
@@ -43,6 +50,8 @@ const migrationTypeNames = {
 const migrationToolkitNpmPackage = '@kontent-ai/migration-toolkit';
 
 export function migrationGenerator(config: MigrationGeneratorConfig) {
+    const commentsManager = _commentsManager(config.addTimestamp);
+
     const getMigrationItemType = (
         type: Readonly<ContentTypeModels.ContentType>,
         migrationTypesFilename: string,
@@ -62,11 +71,27 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                  moduleResolution: config.moduleResolution
              })}
 
+            /**
+            * ${toSafeString(type.name)}
+            * 
+            * Codename: ${type.codename}
+            * Id: ${type.id}
+            */
             export type ${textHelper.toPascalCase(type.name)}Item = ${migrationTypeNames.item}<
             '${type.codename}',
             {
-                ${getFlattenedElements(type, config.environmentData.snippets)
-                    .map((element) => `${element.codename}: ${getElementPropType(element)}`)
+                ${getFlattenedElements(type, config.environmentData.snippets, config.environmentData.taxonomies)
+                    .map((element) => {
+                        return `
+                            /**
+                            * ${toSafeString(element.title)} (${element.type})
+                            * 
+                            * Required: ${element.isRequired ? 'true' : 'false'}
+                            * Id: ${element.id}
+                            * Codename: ${element.codename}${element.guidelines ? `\n* Guidelines: ${textHelper.removeLineEndings(element.guidelines)}` : ''}
+                            */
+                            ${element.codename}: ${getElementPropType(element)}`;
+                    })
                     .join(',\n')},
             }
             >;`
@@ -84,12 +109,27 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                       moduleResolution: config.moduleResolution
                   })}
 
+                ${commentsManager.environmentInfo(config.environmentData.environment)}
+
+                ${commentsManager.wrapComment('Type representing all languages')}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
+
+                ${commentsManager.wrapComment('Type representing all content types')}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
+
+                ${commentsManager.wrapComment('Type representing all collections')}
                 ${getCollectionCodenamesType(config.environmentData.collections)}
+
+                ${commentsManager.wrapComment('Type representing all workflows')}
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
+
+                ${commentsManager.wrapComment('Type representing all worksflow steps across all workflows')}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
+
+                ${commentsManager.wrapComment('System object shared by all individual content type models')}
                 ${getSystemType()}
+
+                ${commentsManager.wrapComment('Item object shared by all individual content type models')}
                 ${getItemType()}
             `
             };
@@ -104,13 +144,15 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
 
 function getFlattenedElements(
     type: Readonly<ContentTypeModels.ContentType>,
-    snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[]
-): readonly ContentTypeElements.ContentTypeElementModel[] {
+    snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
+    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+): readonly FlattenedElement[] {
     return type.elements
         .filter((element) => {
             if (element.type === 'guidelines') {
                 return false;
             }
+
             return true;
         })
         .flatMap((element) => {
@@ -125,45 +167,30 @@ function getFlattenedElements(
             }
 
             return element;
-        });
+        })
+        .map((element) => {
+            return getFlattenedElement(element, taxonomies);
+        })
+        .filter(isNotUndefined);
 }
 
-function getElementPropType(element: Readonly<ContentTypeElements.ContentTypeElementModel>): string {
-    if (element.type === 'text') {
-        return `${migrationTypeNames.migrationElementModels}.TextElement`;
-    }
-    if (element.type === 'asset') {
-        return `${migrationTypeNames.migrationElementModels}.AssetElement`;
-    }
-    if (element.type === 'custom') {
-        return `${migrationTypeNames.migrationElementModels}.CustomElement`;
-    }
-    if (element.type === 'date_time') {
-        return `${migrationTypeNames.migrationElementModels}.DateTimeElement`;
-    }
-    if (element.type === 'rich_text') {
-        return `${migrationTypeNames.migrationElementModels}.RichTextElement`;
-    }
-    if (element.type === 'number') {
-        return `${migrationTypeNames.migrationElementModels}.NumberElement`;
-    }
-    if (element.type === 'multiple_choice') {
-        return `${migrationTypeNames.migrationElementModels}.MultipleChoiceElement`;
-    }
-    if (element.type === 'subpages') {
-        return `${migrationTypeNames.migrationElementModels}.SubpagesElement`;
-    }
-    if (element.type === 'taxonomy') {
-        return `${migrationTypeNames.migrationElementModels}.TaxonomyElement`;
-    }
-    if (element.type === 'url_slug') {
-        return `${migrationTypeNames.migrationElementModels}.UrlSlugElement`;
-    }
-    if (element.type === 'modular_content') {
-        return `${migrationTypeNames.migrationElementModels}.LinkedItemsElement`;
-    }
-
-    throw Error(`Element type '${element.type}' is not supported.`);
+function getElementPropType(element: Readonly<FlattenedElement>): string {
+    return match(element.type)
+        .returnType<string>()
+        .with('text', () => `${migrationTypeNames.migrationElementModels}.TextElement`)
+        .with('asset', () => `${migrationTypeNames.migrationElementModels}.AssetElement`)
+        .with('custom', () => `${migrationTypeNames.migrationElementModels}.CustomElement`)
+        .with('date_time', () => `${migrationTypeNames.migrationElementModels}.DateTimeElement`)
+        .with('rich_text', () => `${migrationTypeNames.migrationElementModels}.RichTextElement`)
+        .with('number', () => `${migrationTypeNames.migrationElementModels}.NumberElement`)
+        .with('multiple_choice', () => `${migrationTypeNames.migrationElementModels}.MultipleChoiceElement`)
+        .with('subpages', () => `${migrationTypeNames.migrationElementModels}.SubpagesElement`)
+        .with('taxonomy', () => `${migrationTypeNames.migrationElementModels}.TaxonomyElement`)
+        .with('url_slug', () => `${migrationTypeNames.migrationElementModels}.UrlSlugElement`)
+        .with('modular_content', () => `${migrationTypeNames.migrationElementModels}.LinkedItemsElement`)
+        .otherwise((type) => {
+            throw Error(`Element type '${type}' is not supported.`);
+        });
 }
 
 function getItemType(): string {

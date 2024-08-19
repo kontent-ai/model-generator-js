@@ -1,2 +1,2 @@
 export * from './items/index.js';
-export * from './migration-types.js';
+export * from './core.models.js';
