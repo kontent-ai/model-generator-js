@@ -1,14 +1,13 @@
 import chalk from 'chalk';
-import { IGenerateDeliveryModelsConfig, ModuleResolution } from './models.js';
-import { deliveryContentTypeGenerator } from './generators/delivery/delivery-content-type.generator.js';
-import { projectGenerator } from './generators/index.js';
-import { deliveryTaxonomyGenerator } from './generators/delivery/delivery-taxonomy.generator.js';
-import { commonHelper } from './common-helper.js';
+import { GenerateDeliveryModelsConfig, ModuleResolution } from '../../models.js';
+import { deliveryContentTypeGenerator } from '../../generators/delivery/delivery-content-type.generator.js';
+import { deliveryTaxonomyGenerator } from '../../generators/delivery/delivery-taxonomy.generator.js';
+import { commonHelper } from '../../common-helper.js';
 import { parse } from 'path';
-import { fileHelper } from './file-helper.js';
-import { kontentFetcher as _kontentFetcher } from './fetch/kontent-fetcher.js';
+import { fileHelper } from '../../file-helper.js';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
 
-export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModelsConfig): Promise<void> {
+export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
 
@@ -17,40 +16,28 @@ export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModel
     const contentTypesFolderName: string = `content-types/`;
     const contentTypeSnippetsFolderName: string = `content-type-snippets/`;
     const taxonomiesFolderName: string = `taxonomies/`;
-    const projectFolderName: string = `project/`;
 
     const contentTypesFolderPath: string = `${outputDir}${contentTypesFolderName}`;
     const contentTypeSnippetsFolderPath: string = `${outputDir}${contentTypeSnippetsFolderName}`;
     const taxonomiesFolderPath: string = `${outputDir}${taxonomiesFolderName}`;
-    const projectFolderPath: string = `${outputDir}${projectFolderName}`;
 
     // prepare directories
     fileHelper.createDir(contentTypesFolderPath);
     fileHelper.createDir(contentTypeSnippetsFolderPath);
     fileHelper.createDir(taxonomiesFolderPath);
-    fileHelper.createDir(projectFolderPath);
 
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
-        baseUrl: config.managementApiUrl
+        baseUrl: config.baseUrl
     });
 
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
-    const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
+    await kontentFetcher.getEnvironmentInfoAsync();
 
     const types = await kontentFetcher.getTypesAsync();
     const snippets = await kontentFetcher.getSnippetsAsync();
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
-
-    const workflows = await kontentFetcher.getWorkflowsAsync();
-    const roles = config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : [];
-    const assetFolders = await kontentFetcher.getAssetFoldersAsync();
-    const collections = await kontentFetcher.getCollectionsAsync();
-    const webhooks = await kontentFetcher.getWebhooksAsync();
-    const languages = await kontentFetcher.getLanguagesAsync();
-
-    console.log('');
 
     // create content type models
     const deliveryModels = deliveryContentTypeGenerator.generateModels({
@@ -81,28 +68,6 @@ export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModel
         addTimestamp: config.addTimestamp,
         fileResolver: config.taxonomyTypeFileResolver,
         taxonomyResolver: config.taxonomyTypeResolver
-    });
-
-    // create project structure
-    const projectFiles = projectGenerator.generateProjectModel({
-        outputDir: outputDir,
-        environmentInfo: projectInformation,
-        addTimestamp: config.addTimestamp,
-        formatOptions: config.formatOptions,
-        addEnvironmentInfo: config.addEnvironmentInfo,
-        languages: languages,
-        taxonomies: taxonomies,
-        types: types,
-        workflows: workflows,
-        assetFolders: assetFolders,
-        collections: collections,
-        roles: roles,
-        snippets: snippets,
-        webhooks: webhooks,
-        projectFolderName: projectFolderName,
-        sortConfig: config.sortConfig ?? {
-            sortTaxonomyTerms: true
-        }
     });
 
     // create barrel export
@@ -160,27 +125,10 @@ export async function generateDeliveryModelsAsync(config: IGenerateDeliveryModel
     const taxonomiesBarrelExportPath: string = `${taxonomiesFolderPath}${barrelExportFilename}`;
     await fileHelper.createFileOnFsAsync(taxonomiesBarrelCode, taxonomiesBarrelExportPath, config.formatOptions);
 
-    // project barrel
-    for (const file of projectFiles) {
-        await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
-    }
-    const projectBarrelCode = commonHelper.getBarrelExportCode({
-        moduleResolution: moduleResolution,
-        filenames: [
-            ...projectFiles.map((m) => {
-                const path = parse(m.filename);
-                return `./${path.name}`;
-            })
-        ]
-    });
-    const projectBarrelExportPath: string = `${projectFolderPath}${barrelExportFilename}`;
-    await fileHelper.createFileOnFsAsync(projectBarrelCode, projectBarrelExportPath, config.formatOptions);
-
     // main barrel
     const mainBarrelCode = commonHelper.getBarrelExportCode({
         moduleResolution: moduleResolution,
         filenames: [
-            `./${projectFolderName}index`,
             `./${contentTypesFolderName}index`,
             `./${contentTypeSnippetsFolderName}index`,
             `./${taxonomiesFolderName}index`

@@ -15,7 +15,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
-import { ISortConfig } from '../../models.js';
+import { SortConfig } from '../../models.js';
 
 interface IProjectCodeResult {
     filename: string;
@@ -49,8 +49,7 @@ export class ProjectGenerator {
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
         addEnvironmentInfo: boolean;
-        projectFolderName: string;
-        sortConfig: ISortConfig;
+        sortConfig: SortConfig;
         formatOptions?: Options;
     }): IGeneratedFile[] {
         const projectCodes = this.getProjectModelCode({
@@ -85,7 +84,7 @@ export class ProjectGenerator {
         const generatedFiles: IGeneratedFile[] = [];
 
         for (const projectCode of projectCodes) {
-            const filePath = `${data.outputDir}${data.projectFolderName}${projectCode.filename}`;
+            const filePath = `${data.outputDir}${projectCode.filename}`;
 
             generatedFiles.push({
                 filename: filePath,
@@ -257,7 +256,7 @@ export class ProjectGenerator {
         roles: RoleModels.Role[];
         webhooks: WebhookModels.Webhook[];
         addTimestamp: boolean;
-        sortConfig: ISortConfig;
+        sortConfig: SortConfig;
         formatOptions?: Options;
     }): IProjectCodeResult[] {
         const result: IProjectCodeResult[] = [
@@ -595,7 +594,7 @@ export class ProjectGenerator {
         return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
     }
 
-    private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[], sortConfig: ISortConfig): string {
+    private getProjectTaxonomies(taxonomies: TaxonomyModels.Taxonomy[], sortConfig: SortConfig): string {
         let code: string = ``;
         for (let i = 0; i < taxonomies.length; i++) {
             const taxonomy = taxonomies[i];
@@ -669,7 +668,7 @@ export class ProjectGenerator {
         return code;
     }
 
-    private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[], sortConfig: ISortConfig): string {
+    private getProjectTaxonomiesTerms(terms: TaxonomyModels.Taxonomy[], sortConfig: SortConfig): string {
         if (terms.length === 0) {
             return `terms: {}`;
         }

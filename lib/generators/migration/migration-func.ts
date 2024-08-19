@@ -1,7 +1,6 @@
 import chalk from 'chalk';
 import { commonHelper } from '../../common-helper.js';
 import { migrationConfig, coreConfig } from '../../core/core.config.js';
-import { toSafeString } from '../../core/core.utils.js';
 import { fileProcessor } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { migrationGenerator as _migrationGenerator } from '../../generators/migration/migration-generator.js';
@@ -21,8 +20,6 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;
 
     const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
-    console.log(`Project '${chalk.yellow(toSafeString(projectInformation.name))}'`);
-    console.log(`Environment '${chalk.yellow(toSafeString(projectInformation.environment))}'\n`);
 
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     console.log(`Module resolution '${chalk.yellow(moduleResolution)}'\n`);

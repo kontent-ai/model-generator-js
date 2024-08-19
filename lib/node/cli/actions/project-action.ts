@@ -1,23 +1,19 @@
-import { generateDeliveryModelsAsync } from '../../../generators/index.js';
+import { generateProjectModelsAsync } from '../../../generators/index.js';
 import { ModuleResolution } from '../../../models.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
-export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
-    await generateDeliveryModelsAsync({
+export async function projectActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
+    await generateProjectModelsAsync({
         environmentId: cliFetcher.getRequiredArgumentValue('environmentId'),
         baseUrl: cliFetcher.getRequiredArgumentValue('managementApiUrl'),
         apiKey: cliFetcher.getRequiredArgumentValue('apiKey'),
         outputDir: cliFetcher.getRequiredArgumentValue('outputDir'),
+        isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
         addEnvironmentInfo: cliFetcher.getBooleanArgumentValue('addEnvironmentInfo', false),
-        elementResolver: undefined,
-        contentTypeFileResolver: undefined,
-        contentTypeResolver: undefined,
-        taxonomyTypeFileResolver: undefined,
-        taxonomyTypeResolver: undefined,
-        contentTypeSnippetFileResolver: undefined,
-        contentTypeSnippetResolver: undefined,
-        formatOptions: undefined,
+        sortConfig: {
+            sortTaxonomyTerms: cliFetcher.getBooleanArgumentValue('sortTaxonomyTerms', true)
+        },
         moduleResolution:
             cliFetcher.getRequiredArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });

@@ -39,6 +39,7 @@
         "build": "npm run lint && npm run clean && npm run build:es2022",
         "test:all": "npm run build && npm run test:delivery-models",
         "test:delivery": "tsx scripts/tests/delivery-models",
+        "test:project": "tsx scripts/tests/project-models",
         "test:migration": "tsx scripts/tests/migration-models",
         "test:help:command": "tsx lib/node/cli/app delivery --help",
         "lint": "npx eslint lib",

@@ -11,7 +11,7 @@ import {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { GeneratorManagementClient } from '../core/index.js';
+import { GeneratorManagementClient, toSafeString } from '../core/index.js';
 import chalk from 'chalk';
 import { commonHelper } from '../common-helper.js';
 
@@ -31,8 +31,8 @@ export function kontentFetcher(config: KontentFetcherConfig) {
     return {
         async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
             const projectInformation = (await client.environmentInformation().toPromise()).data;
-            console.log(`Project '${chalk.yellow(projectInformation.project.name)}'`);
-            console.log(`Environment '${chalk.yellow(projectInformation.project.environment)}'\n`);
+            console.log(`Project '${chalk.yellow(toSafeString(projectInformation.project.name))}'`);
+            console.log(`Environment '${chalk.yellow(toSafeString(projectInformation.project.environment))}'\n`);
             return projectInformation.project;
         },
         async getWorkflowsAsync(): Promise<readonly WorkflowModels.Workflow[]> {

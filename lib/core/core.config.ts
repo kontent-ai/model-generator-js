@@ -3,6 +3,6 @@ export const coreConfig = {
 } as const;
 
 export const migrationConfig = {
-    migrationItemsFolderName: `items`,
+    migrationItemsFolderName: `content-types`,
     migrationTypesFilename: `core.models.ts`
 } as const;

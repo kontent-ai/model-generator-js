@@ -1,10 +1,10 @@
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { ModuleResolution, generateDeliveryModelsAsync, handleError } from '../../lib/index.js';
+import { ModuleResolution, generateProjectModelsAsync, handleError } from '../../lib/index.js';
 import chalk from 'chalk';
 import { getEnvironmentRequiredValue } from 'scripts/utils/test.utils.js';
 
-const outputDir: string = './sample/delivery';
+const outputDir: string = './sample/project';
 
 const run = async () => {
     // needed to load .env environment to current process when run via package.json script
@@ -25,13 +25,17 @@ const run = async () => {
     const apiKey = getEnvironmentRequiredValue('API_KEY');
     const moduleResolution = getEnvironmentRequiredValue('MODULE_RESOLUTION');
 
-    await generateDeliveryModelsAsync({
+    await generateProjectModelsAsync({
         addTimestamp: false,
         environmentId: environmentId,
         apiKey: apiKey,
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
+        isEnterpriseSubscription: true,
         addEnvironmentInfo: true,
-        outputDir: outputDir
+        outputDir: outputDir,
+        sortConfig: {
+            sortTaxonomyTerms: true
+        }
     });
 };
 

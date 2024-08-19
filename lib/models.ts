@@ -21,17 +21,15 @@ export type ContentTypeSnippetResolver =
     | ((contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet) => string);
 export type TaxonomyTypeResolver = DefaultResolverType | ((taxonomy: TaxonomyModels.Taxonomy) => string);
 
-export interface IGenerateDeliveryModelsConfig {
+export interface GenerateDeliveryModelsConfig {
     environmentId: string;
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
-    isEnterpriseSubscription: boolean;
     apiKey: string;
-    moduleResolution?: ModuleResolution;
-    managementApiUrl?: string;
 
+    moduleResolution?: ModuleResolution;
+    baseUrl?: string;
     outputDir?: string;
-    sortConfig?: ISortConfig;
     contentTypeFileResolver?: ContentTypeFileNameResolver;
     contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
     taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
@@ -42,8 +40,22 @@ export interface IGenerateDeliveryModelsConfig {
     formatOptions?: Options;
 }
 
-export interface ISortConfig {
+export interface SortConfig {
     sortTaxonomyTerms: boolean;
+}
+
+export interface GeneratProjectModelsConfig {
+    environmentId: string;
+    addTimestamp: boolean;
+    addEnvironmentInfo: boolean;
+    isEnterpriseSubscription: boolean;
+    apiKey: string;
+
+    moduleResolution?: ModuleResolution;
+    baseUrl?: string;
+    outputDir?: string;
+    sortConfig?: SortConfig;
+    formatOptions?: Options;
 }
 
 export interface GenerateMigrationModelsConfig {
@@ -53,6 +65,7 @@ export interface GenerateMigrationModelsConfig {
     readonly apiKey: string;
     readonly moduleResolution: ModuleResolution;
     readonly outputDir: string;
+
     readonly baseUrl?: string;
     readonly formatOptions?: Options;
 }
