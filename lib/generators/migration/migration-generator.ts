@@ -22,12 +22,12 @@ export interface MigrationGeneratorConfig {
 
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-        readonly types: readonly ContentTypeModels.ContentType[];
-        readonly workflows: readonly WorkflowModels.Workflow[];
-        readonly languages: readonly LanguageModels.LanguageModel[];
-        readonly collections: readonly CollectionModels.Collection[];
-        readonly snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[];
-        readonly taxonomies: readonly TaxonomyModels.Taxonomy[];
+        readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
+        readonly workflows: readonly Readonly<WorkflowModels.Workflow>[];
+        readonly languages: readonly Readonly<LanguageModels.LanguageModel>[];
+        readonly collections: readonly Readonly<CollectionModels.Collection>[];
+        readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[];
+        readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
     };
 }
 
@@ -143,7 +143,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
 
 function getFlattenedElements(
     type: Readonly<ContentTypeModels.ContentType>,
-    snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
+    snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
     taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
 ): readonly FlattenedElement[] {
     return type.elements
@@ -208,23 +208,23 @@ function getSystemType(): string {
 >;`;
 }
 
-function getLanguageCodenamesType(languages: readonly LanguageModels.LanguageModel[]): string {
+function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {
     return `export type ${migrationTypeNames.languageCodenames} = ${languages.map((language) => `'${language.codename}'`).join(' | ')};`;
 }
 
-function getContentTypeCodenamesType(types: readonly ContentTypeModels.ContentType[]): string {
+function getContentTypeCodenamesType(types: readonly Readonly<ContentTypeModels.ContentType>[]): string {
     return `export type ${migrationTypeNames.contentTypeCodenames} = ${types.map((type) => `'${type.codename}'`).join(' | ')};`;
 }
 
-function getWorkflowCodenamesType(workflows: readonly WorkflowModels.Workflow[]): string {
+function getWorkflowCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
     return `export type ${migrationTypeNames.workflowCodenames} = ${workflows.map((workflow) => `'${workflow.codename}'`).join(' | ')};`;
 }
 
-function getCollectionCodenamesType(collections: readonly CollectionModels.Collection[]): string {
+function getCollectionCodenamesType(collections: readonly Readonly<CollectionModels.Collection>[]): string {
     return `export type ${migrationTypeNames.collectionCodenames} = ${collections.map((collection) => `'${collection.codename}'`).join(' | ')};`;
 }
 
-function getWorkflowStepCodenamesType(workflows: readonly WorkflowModels.Workflow[]): string {
+function getWorkflowStepCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
     return `export type ${migrationTypeNames.workflowStepCodenames} = ${workflows
         .flatMap((workflow) => [
             ...workflow.steps,
