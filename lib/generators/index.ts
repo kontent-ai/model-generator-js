@@ -9,5 +9,5 @@ export * from './project/project.generator.js';
 export * from './project/project-func.js';
 
 // migration
-export * from './migration/migration-generator.js';
+export * from './migration/migration.generator.js';
 export * from './migration/migration-func.js';

@@ -1,11 +1,11 @@
 import chalk from 'chalk';
 import { GeneratProjectModelsConfig, ModuleResolution } from '../../models.js';
-import { projectGenerator as _projectGenerator } from '../../generators/index.js';
+import { projectGenerator as _projectGenerator } from './project.generator.js';
 import { commonHelper } from '../../common-helper.js';
 import { parse } from 'path';
 import { fileHelper } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
-import { coreConfig } from 'lib/core/core.config.js';
+import { coreConfig } from '../../core/index.js';
 
 export async function generateProjectModelsAsync(config: GeneratProjectModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));

@@ -1,9 +1,9 @@
 import chalk from 'chalk';
 import { commonHelper } from '../../common-helper.js';
-import { migrationConfig, coreConfig } from '../../core/core.config.js';
-import { fileProcessor } from '../../file-helper.js';
+import { migrationConfig, coreConfig } from '../../core/index.js';
+import { fileProcessor as _fileProcessor } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { migrationGenerator as _migrationGenerator } from '../../generators/migration/migration-generator.js';
+import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
 import { GenerateMigrationModelsConfig, ModuleResolution } from '../../models.js';
 import { parse } from 'path';
 
@@ -15,7 +15,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     });
 
     const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
-    const migrationFileProcessor = fileProcessor(outputDir);
+    const fileProcessor = _fileProcessor(outputDir);
     const migrationItemsFolderName: string = migrationConfig.migrationItemsFolderName;
     const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;
 
@@ -46,11 +46,11 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 
     // create all files on FS
     for (const file of allFiles) {
-        await migrationFileProcessor.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
+        await fileProcessor.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
     }
 
     // migration items barrel
-    await migrationFileProcessor.createFileOnFsAsync(
+    await fileProcessor.createFileOnFsAsync(
         commonHelper.getBarrelExportCode({
             moduleResolution: moduleResolution,
             filenames: [
@@ -64,7 +64,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     );
 
     // main barrel
-    await migrationFileProcessor.createFileOnFsAsync(
+    await fileProcessor.createFileOnFsAsync(
         commonHelper.getBarrelExportCode({
             moduleResolution: moduleResolution,
             filenames: [`./${migrationItemsFolderName}/index`, `./${migrationTypeFile.filename}`]

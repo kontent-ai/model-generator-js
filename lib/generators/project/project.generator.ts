@@ -1,4 +1,5 @@
 import { Options } from 'prettier';
+import { match } from 'ts-pattern';
 import {
     AssetFolderModels,
     CollectionModels,
@@ -23,7 +24,6 @@ import {
     toSafeString,
     toCamelCase
 } from '../../core/index.js';
-import { match } from 'ts-pattern';
 
 interface ProjectCodeResult {
     readonly filename: string;

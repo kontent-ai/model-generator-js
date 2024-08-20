@@ -7,6 +7,7 @@ import {
     TaxonomyModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
+import { match } from 'ts-pattern';
 import {
     FlattenedElement,
     getImportStatement,
@@ -14,12 +15,11 @@ import {
     GeneratedFile,
     toSafeString,
     removeLineEndings,
-    toPascalCase
+    toPascalCase,
+    getFlattenedElements
 } from '../../core/index.js';
 import { ModuleResolution } from '../../models.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
-import { match } from 'ts-pattern';
-import { getFlattenedElements } from 'lib/core/element.utils.js';
 
 export interface MigrationGeneratorConfig {
     readonly addTimestamp: boolean;
