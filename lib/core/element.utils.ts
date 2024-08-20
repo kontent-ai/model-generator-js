@@ -1,5 +1,38 @@
-import { ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
+import { ContentTypeElements, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { FlattenedElement } from './core.models.js';
+import { isNotUndefined } from '@kontent-ai/migration-toolkit';
+
+export function getFlattenedElements(
+    elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[],
+    snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
+    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+): readonly FlattenedElement[] {
+    return elements
+        .filter((element) => {
+            if (element.type === 'guidelines') {
+                return false;
+            }
+
+            return true;
+        })
+        .flatMap((element) => {
+            if (element.type === 'snippet') {
+                const snippet = snippets.find((snippet) => snippet.id === element.snippet.id);
+
+                if (!snippet) {
+                    throw Error(`Could not find snippet with id '${element.snippet.id}'`);
+                }
+
+                return snippet.elements;
+            }
+
+            return element;
+        })
+        .map((element) => {
+            return getFlattenedElement(element, taxonomies);
+        })
+        .filter(isNotUndefined);
+}
 
 export function getFlattenedElement(
     element: Readonly<ContentTypeElements.ContentTypeElementModel>,
@@ -18,7 +51,9 @@ export function getFlattenedElement(
         id: element.id,
         type: element.type,
         isRequired: isElementRequired(element),
-        guidelines: getElementGuidelines(element)
+        guidelines: getElementGuidelines(element),
+        externalId: element.external_id,
+        originalElement: element
     };
 }
 

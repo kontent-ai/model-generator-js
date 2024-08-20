@@ -26,7 +26,6 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     const migrationGenerator = _migrationGenerator({
         addTimestamp: config.addTimestamp,
         moduleResolution: config.moduleResolution,
-        addEnvironmentInfo: config.addEnvironmentInfo,
         environmentData: {
             environment: projectInformation,
             taxonomies: await kontentFetcher.getTaxonomiesAsync(),

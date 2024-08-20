@@ -1,4 +1,4 @@
-import { ElementModels, IManagementClient } from '@kontent-ai/management-sdk';
+import { ContentTypeElements, ElementModels, IManagementClient } from '@kontent-ai/management-sdk';
 
 export type CliAction = 'delivery' | 'migration';
 export type LibraryType = '@kontent-ai/migration-toolkit';
@@ -32,9 +32,11 @@ export interface FlattenedElement {
     readonly title: string;
     readonly id: string;
     readonly codename: string;
+    readonly externalId?: string;
     readonly type: ElementModels.ElementType;
     readonly isRequired: boolean;
     readonly guidelines?: string;
+    readonly originalElement: Readonly<ContentTypeElements.ContentTypeElementModel>;
 }
 
 export interface GeneratedFile {

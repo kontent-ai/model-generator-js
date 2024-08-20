@@ -1,14 +1,15 @@
 import chalk from 'chalk';
 import { GeneratProjectModelsConfig, ModuleResolution } from '../../models.js';
-import { projectGenerator } from '../../generators/index.js';
+import { projectGenerator as _projectGenerator } from '../../generators/index.js';
 import { commonHelper } from '../../common-helper.js';
 import { parse } from 'path';
 import { fileHelper } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { coreConfig } from 'lib/core/core.config.js';
 
 export async function generateProjectModelsAsync(config: GeneratProjectModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
-    console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
+    console.log(`Generating '${chalk.yellow('project')}' models\n`);
 
     const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
 
@@ -21,39 +22,26 @@ export async function generateProjectModelsAsync(config: GeneratProjectModelsCon
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
 
-    const types = await kontentFetcher.getTypesAsync();
-    const snippets = await kontentFetcher.getSnippetsAsync();
-    const taxonomies = await kontentFetcher.getTaxonomiesAsync();
-
-    const workflows = await kontentFetcher.getWorkflowsAsync();
-    const roles = config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : [];
-    const assetFolders = await kontentFetcher.getAssetFoldersAsync();
-    const collections = await kontentFetcher.getCollectionsAsync();
-    const webhooks = await kontentFetcher.getWebhooksAsync();
-    const languages = await kontentFetcher.getLanguagesAsync();
-
-    const projectFiles = projectGenerator.generateProjectModel({
+    const projectFiles = _projectGenerator({
         outputDir: outputDir,
-        environmentInfo: projectInformation,
         addTimestamp: config.addTimestamp,
         formatOptions: config.formatOptions,
-        addEnvironmentInfo: config.addEnvironmentInfo,
-        languages: languages,
-        taxonomies: taxonomies,
-        types: types,
-        workflows: workflows,
-        assetFolders: assetFolders,
-        collections: collections,
-        roles: roles,
-        snippets: snippets,
-        webhooks: webhooks,
         sortConfig: config.sortConfig ?? {
             sortTaxonomyTerms: true
+        },
+        environmentData: {
+            environmentInfo: projectInformation,
+            languages: await kontentFetcher.getLanguagesAsync(),
+            taxonomies: await kontentFetcher.getTaxonomiesAsync(),
+            types: await kontentFetcher.getTypesAsync(),
+            workflows: await kontentFetcher.getWorkflowsAsync(),
+            assetFolders: await kontentFetcher.getAssetFoldersAsync(),
+            collections: await kontentFetcher.getCollectionsAsync(),
+            roles: config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : [],
+            snippets: await kontentFetcher.getSnippetsAsync(),
+            webhooks: await kontentFetcher.getWebhooksAsync()
         }
-    });
-
-    // create barrel export
-    const barrelExportFilename: string = 'index.ts';
+    }).generateProjectModel();
 
     // project barrel
     for (const file of projectFiles) {
@@ -68,7 +56,7 @@ export async function generateProjectModelsAsync(config: GeneratProjectModelsCon
             })
         ]
     });
-    await fileHelper.createFileOnFsAsync(projectBarrelCode, barrelExportFilename, config.formatOptions);
+    await fileHelper.createFileOnFsAsync(projectBarrelCode, coreConfig.barrelExportFilename, config.formatOptions);
 
     console.log(chalk.green(`\nCompleted`));
 }

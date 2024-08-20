@@ -1,10 +1,7 @@
 import { Options } from 'prettier';
-import { commonHelper } from '../../common-helper.js';
-import { textHelper } from '../../text-helper.js';
 import {
     AssetFolderModels,
     CollectionModels,
-    ContentTypeElements,
     ContentTypeModels,
     ContentTypeSnippetModels,
     LanguageModels,
@@ -12,11 +9,21 @@ import {
     RoleModels,
     TaxonomyModels,
     WebhookModels,
-    WorkflowModels
+    WorkflowModels,
+    ContentTypeElements
 } from '@kontent-ai/management-sdk';
-import { camelCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
+import { commentsManager as _commentsManager } from '../../comments/index.js';
 import { SortConfig } from '../../models.js';
-import { GeneratedFile } from '../../core/index.js';
+import {
+    FlattenedElement,
+    GeneratedFile,
+    getFlattenedElements,
+    removeLineEndings,
+    sortAlphabetically,
+    toSafeString,
+    toCamelCase
+} from '../../core/index.js';
+import { match } from 'ts-pattern';
 
 interface ProjectCodeResult {
     readonly filename: string;
@@ -29,15 +36,13 @@ interface WorkflowStep {
     readonly id: string;
 }
 
-interface ExtendedContentTypeElement {
-    readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
-    readonly snippet?: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
-    readonly mappedName: string | undefined;
-}
+export interface ProjectGeneratorConfig {
+    readonly outputDir: string;
+    readonly addTimestamp: boolean;
+    readonly sortConfig: SortConfig;
+    readonly formatOptions?: Options;
 
-export class ProjectGenerator {
-    generateProjectModel(data: {
-        readonly outputDir: string;
+    readonly environmentData: {
         readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
         readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
         readonly languages: readonly Readonly<LanguageModels.LanguageModel>[];
@@ -48,692 +53,351 @@ export class ProjectGenerator {
         readonly roles: readonly Readonly<RoleModels.Role>[];
         readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[];
         readonly webhooks: readonly Readonly<WebhookModels.Webhook>[];
-        readonly addTimestamp: boolean;
-        readonly addEnvironmentInfo: boolean;
-        readonly sortConfig: SortConfig;
-        readonly formatOptions?: Options;
-    }): GeneratedFile[] {
-        const projectCodes = this.getProjectModelCode({
-            environmentInfo: data.environmentInfo,
-            types: data.types,
-            addTimestamp: data.addTimestamp,
-            formatOptions: data.formatOptions,
-            languages: data.languages,
-            taxonomies: data.taxonomies,
-            workflows: data.workflows,
-            assetFolders: data.assetFolders,
-            collections: data.collections,
-            roles: data.roles,
-            snippets: data.snippets,
-            webhooks: data.webhooks,
-            sortConfig: data.sortConfig
-        });
+    };
+}
 
-        let headerCode = `
-/**
-* ${commonHelper.getAutogenerateNote(data.addTimestamp)}`;
+export function projectGenerator(config: ProjectGeneratorConfig) {
+    const commentsManager = _commentsManager(config.addTimestamp);
 
-        if (data.addEnvironmentInfo) {
-            headerCode += `
-* 
-* ${this.getEnvironmentComment(data.environmentInfo)}`;
-        }
+    const getHeaderComment = (): string => {
+        return `${commentsManager.environmentInfo(config.environmentData.environmentInfo, { addGeneratedBy: true })}`;
+    };
 
-        headerCode += `
-*/`;
+    const generateProjectModel = (): readonly GeneratedFile[] => {
+        const headerCode = getHeaderComment();
 
-        const generatedFiles: GeneratedFile[] = [];
-
-        for (const projectCode of projectCodes) {
-            const filePath = `${data.outputDir}${projectCode.filename}`;
-
-            generatedFiles.push({
-                filename: filePath,
+        return getProjectModelCode().map((projectCode) => {
+            return {
+                filename: `${config.outputDir}${projectCode.filename}`,
                 text: headerCode + '\n' + projectCode.code
-            });
-        }
+            };
+        });
+    };
 
-        return generatedFiles;
-    }
-
-    getAssetFoldersCount(folders: readonly Readonly<AssetFolderModels.AssetFolder>[], count: number = 0): number {
-        count += folders.length;
-
-        for (const folder of folders) {
-            if (folder.folders) {
-                count = this.getAssetFoldersCount(folder.folders, count);
-            }
-        }
-
-        return count;
-    }
-
-    private getEnvironmentComment(environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>): string {
-        let comment: string = `Project name: ${textHelper.toSafeName(environmentInfo.name, 'space')}`;
-
-        comment += `\n* Environment: ${environmentInfo.environment}`;
-        comment += `\n* Environment Id: ${environmentInfo.id}`;
-
-        return comment;
-    }
-
-    private getContentTypeComment(contentType: Readonly<ContentTypeModels.ContentType>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(contentType.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getContentTypeSnippetComment(snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(snippet.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getWorkflowComment(workflow: Readonly<WorkflowModels.Workflow>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(workflow.name, 'space')}`;
-        comment += `\n* Archived step Id: ${workflow.archivedStep.id}`;
-        comment += `\n* Published step Id: ${workflow.publishedStep.id}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getAssetFolderComment(assetFolder: Readonly<AssetFolderModels.AssetFolder>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(assetFolder.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getLanguageComment(language: Readonly<LanguageModels.LanguageModel>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(language.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getElementName(
-        element: Readonly<ContentTypeElements.ContentTypeElementModel>,
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): string | undefined {
-        if ((element as { name?: string })['name']) {
-            return (element as { name: string })['name'];
-        }
-
-        if (element.type === 'taxonomy') {
-            const taxonomy = taxonomies.find(
-                (m) => m.id.toLowerCase() === element.taxonomy_group.id?.toLocaleLowerCase()
-            );
-
-            if (!taxonomy) {
-                throw Error(`Invalid taxonomy with id '${element.taxonomy_group.id}'`);
-            }
-
-            return taxonomy.name;
-        }
-
-        return undefined;
-    }
-
-    private getElementComment(
-        element: Readonly<ContentTypeElements.ContentTypeElementModel>,
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): string {
-        let comment: string = `/**`;
-        const guidelines = commonHelper.getElementGuidelines(element);
-        const name = commonHelper.getElementTitle(element, taxonomies);
-
-        if (name) {
-            comment += `\n* ${textHelper.toSafeName(name, 'space')} (${element.type})`;
-        }
-
-        if (guidelines) {
-            comment += `\n*`;
-            comment += `\n* ${textHelper.removeLineEndings(guidelines)}`;
-        }
-
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getTaxonomyComment(taxonomy: Readonly<TaxonomyModels.Taxonomy>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(taxonomy.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getCollectionComment(collection: Readonly<CollectionModels.Collection>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(collection.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getRoleComment(role: Readonly<RoleModels.Role>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(role.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getWebhookComment(webhook: Readonly<WebhookModels.Webhook>): string {
-        let comment: string = `/**`;
-
-        comment += `\n* ${textHelper.toSafeName(webhook.name, 'space')}`;
-        comment += `\n*/`;
-
-        return comment;
-    }
-
-    private getProjectModelCode(data: {
-        readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-        readonly types: readonly ContentTypeModels.ContentType[];
-        readonly languages: readonly LanguageModels.LanguageModel[];
-        readonly taxonomies: readonly TaxonomyModels.Taxonomy[];
-        readonly workflows: readonly WorkflowModels.Workflow[];
-        readonly snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[];
-        readonly assetFolders: readonly AssetFolderModels.AssetFolder[];
-        readonly collections: readonly CollectionModels.Collection[];
-        readonly roles: readonly RoleModels.Role[];
-        readonly webhooks: readonly WebhookModels.Webhook[];
-        readonly addTimestamp: boolean;
-        readonly sortConfig: SortConfig;
-        readonly formatOptions?: Options;
-    }): ProjectCodeResult[] {
+    const getProjectModelCode = (): ProjectCodeResult[] => {
         const result: ProjectCodeResult[] = [
             {
                 code: `export const languages = {
-                    ${this.getProjectLanguages(data.languages)}
+                    ${getProjectLanguages(config.environmentData.languages)}
                 } as const;`,
                 filename: 'languages.ts'
             },
             {
                 code: `export const collections = {
-                    ${this.getCollections(data.collections)}
+                    ${getCollections(config.environmentData.collections)}
                 } as const;`,
                 filename: 'collections.ts'
             },
             {
                 code: `export const contentTypes = {
-                    ${this.getProjectContentTypes(data.types, data.snippets, data.taxonomies)}
+                    ${getProjectContentTypes(config.environmentData.types, config.environmentData.snippets, config.environmentData.taxonomies)}
                 } as const;`,
                 filename: 'contentTypes.ts'
             },
             {
                 code: `export const contentTypeSnippets = {
-                    ${this.getProjectContentTypeSnippets(data.snippets, data.taxonomies)}
+                    ${getProjectContentTypeSnippets(config.environmentData.snippets, config.environmentData.taxonomies)}
                 } as const;`,
                 filename: 'contentTypeSnippets.ts'
             },
             {
                 code: `export const taxonomies = {
-                    ${this.getProjectTaxonomies(data.taxonomies, data.sortConfig)}
+                    ${getProjectTaxonomies(config.environmentData.taxonomies, config.sortConfig)}
                 } as const;`,
                 filename: 'taxonomies.ts'
             },
             {
                 code: `export const workflows = {
-                    ${this.getProjectWorkflows(data.workflows)}
+                    ${getProjectWorkflows(config.environmentData.workflows)}
                 } as const;`,
                 filename: 'workflows.ts'
             },
             {
                 code: `export const roles = {
-                    ${this.getRoles(data.roles)}
+                    ${getRoles(config.environmentData.roles)}
                 } as const;`,
                 filename: 'roles.ts'
             },
             {
-                code: `export const assetFolders = ${this.getAssetFolders(data.assetFolders)} as const;`,
+                code: `export const assetFolders = ${getAssetFolders(config.environmentData.assetFolders)} as const;`,
                 filename: 'assetFolders.ts'
             },
             {
                 code: `export const webhooks = {
-                    ${this.getWebhooks(data.webhooks)}
+                    ${getWebhooks(config.environmentData.webhooks)}
                 } as const;`,
                 filename: 'webhooks.ts'
             }
         ];
 
         return result;
-    }
+    };
 
-    private getProjectLanguages(languages: readonly LanguageModels.LanguageModel[]): string {
-        let code: string = ``;
-        for (let i = 0; i < languages.length; i++) {
-            const language = languages[i];
-            const isLast = i === languages.length - 1;
-            code += `\n`;
-            code += `${this.getLanguageComment(language)}\n`;
-            code += `${camelCasePropertyNameResolver('', language.codename)}: {
-                codename: '${language.codename}',
-                id: '${language.id}',
-                isActive: ${language.isActive ? 'true' : 'false'},
-                isDefault: ${language.isDefault ? 'true' : 'false'},
-                fallbackLanguageId: ${this.getStringOrUndefined(language.fallbackLanguage?.id)},
-                externalId: ${this.getStringOrUndefined(language.externalId)},
-                name: '${commonHelper.escapeNameValue(language.name)}'}`;
-            code += `${!isLast ? ',\n' : ''}`;
-        }
+    const getProjectLanguages = (languages: readonly LanguageModels.LanguageModel[]): string => {
+        return languages.reduce((code, language, index) => {
+            const isLast = index === languages.length - 1;
 
-        return code;
-    }
+            return `${code}\n
+                /**
+                * ${toSafeString(language.name)}
+                */
+                ${toCamelCase(language.codename)}: {
+                    codename: '${language.codename}',
+                    id: '${language.id}',
+                    name: '${toSafeString(language.name)}',
+                    isActive: ${language.isActive ? 'true' : 'false'},
+                    isDefault: ${language.isDefault ? 'true' : 'false'},
+                    fallbackLanguageId: ${getStringOrUndefined(language.fallbackLanguage?.id)},
+                    externalId: ${getStringOrUndefined(language.externalId)},
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-    private getStringOrUndefined(text?: string): string {
+    const getStringOrUndefined = (text?: string): string => {
         if (!text) {
             return 'undefined';
         }
         return `'${text}'`;
-    }
+    };
 
-    private getProjectWorkflows(workflows: readonly WorkflowModels.Workflow[]): string {
-        let code: string = ``;
-        for (let i = 0; i < workflows.length; i++) {
-            const workflow = workflows[i];
-            const isLast = i === workflows.length - 1;
+    const getProjectWorkflows = (workflows: readonly WorkflowModels.Workflow[]): string => {
+        return workflows.reduce((code, workflow, index) => {
+            const isLast = index === workflows.length - 1;
 
-            code += `\n`;
-            code += `${this.getWorkflowComment(workflow)}\n`;
-            code += `${workflow.codename}: {
-                codename: '${workflow.codename}',
-                id: '${workflow.id}',
-                name: '${commonHelper.escapeNameValue(workflow.name)}',
-                steps: ${this.getProjectWorkflowSteps(workflow)}
-            }${!isLast ? ',\n' : ''}`;
-        }
+            return `${code}\n
+                /**
+                * ${toSafeString(workflow.name)}
+                */
+                ${toCamelCase(workflow.codename)}: {
+                    codename: '${workflow.codename}',
+                    id: '${workflow.id}',
+                    name: '${toSafeString(workflow.name)}',
+                    steps: ${getProjectWorkflowSteps(workflow)}
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-        return code;
-    }
+    const getAssetFolders = (assetFolders: readonly AssetFolderModels.AssetFolder[]): string => {
+        return (
+            assetFolders.reduce((code, assetFolder, index) => {
+                const isLast = index === assetFolders.length - 1;
 
-    private getAssetFolders(assetFolders: readonly AssetFolderModels.AssetFolder[]): string {
-        let code: string = `{`;
-        for (let i = 0; i < assetFolders.length; i++) {
-            const assetFolder = assetFolders[i];
-            const isLast = i === assetFolders.length - 1;
+                return `${code}\n
+                /**
+                * ${toSafeString(assetFolder.name)}
+                */
+                ${toCamelCase(assetFolder.codename)}: {
+                    codename: '${assetFolder.codename}',
+                    id: '${assetFolder.id}',
+                    externalId: ${getStringOrUndefined(assetFolder.externalId)},
+                    name: '${toSafeString(assetFolder.name)}',
+                    folders: ${getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
+            }, '{') + '}'
+        );
+    };
 
-            code += `\n`;
-            code += `${this.getAssetFolderComment(assetFolder)}\n`;
-            code += `${camelCasePropertyNameResolver('', assetFolder.name)}: {
-                id: '${assetFolder.id}',
-                name: '${commonHelper.escapeNameValue(assetFolder.name)}',
-                externalId: ${this.getStringOrUndefined(assetFolder.externalId)},
-                folders: ${this.getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
-        }
-
-        code += '}';
-
-        return code;
-    }
-
-    private getProjectContentTypeSnippets(
+    const getProjectContentTypeSnippets = (
         snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
         taxonomies: readonly TaxonomyModels.Taxonomy[]
-    ): string {
-        let code: string = ``;
-        for (let i = 0; i < snippets.length; i++) {
-            const snippet = snippets[i];
-            const isLast = i === snippets.length - 1;
+    ): string => {
+        return snippets.reduce((code, snippet, index) => {
+            const isLast = index === snippets.length - 1;
 
-            code += `\n`;
-            code += `${this.getContentTypeSnippetComment(snippet)}\n`;
-            code += `${snippet.codename}: {
-                codename: '${snippet.codename}',
-                id: '${snippet.id}',
-                externalId: ${this.getStringOrUndefined(snippet.externalId)},
-                name: '${commonHelper.escapeNameValue(snippet.name)}',
-                elements: {${this.getContentTypeSnippetElements(snippet, taxonomies)}}
-            }${!isLast ? ',\n' : ''}`;
-        }
+            return `${code}\n
+                /**
+                * ${toSafeString(snippet.name)}
+                */
+                ${toCamelCase(snippet.codename)}: {
+                    codename: '${snippet.codename}',
+                    id: '${snippet.id}',
+                    externalId: ${getStringOrUndefined(snippet.externalId)},
+                    name: '${toSafeString(snippet.name)}',
+                    elements: {${getContentTypeElements(snippet.elements, snippets, taxonomies)}}
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-        return code;
-    }
-
-    private getProjectContentTypes(
+    const getProjectContentTypes = (
         contentTypes: readonly ContentTypeModels.ContentType[],
         snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
         taxonomies: readonly TaxonomyModels.Taxonomy[]
-    ): string {
-        let code: string = ``;
-        for (let i = 0; i < contentTypes.length; i++) {
-            const contentType = contentTypes[i];
-            const isLast = i === contentTypes.length - 1;
+    ): string => {
+        return contentTypes.reduce((code, contentType, index) => {
+            const isLast = index === contentTypes.length - 1;
 
-            code += `\n`;
-            code += `${this.getContentTypeComment(contentType)}\n`;
-            code += `${contentType.codename}: {
-                codename: '${contentType.codename}',
-                id: '${contentType.id}',
-                externalId: ${this.getStringOrUndefined(contentType.externalId)},
-                name: '${commonHelper.escapeNameValue(contentType.name)}',
-                elements: {${this.getContentTypeElements(contentType, snippets, taxonomies)}}
-            }${!isLast ? ',\n' : ''}`;
-        }
+            return `${code}\n
+                /**
+                * ${toSafeString(contentType.name)}
+                */
+                ${toCamelCase(contentType.codename)}: {
+                    codename: '${contentType.codename}',
+                    id: '${contentType.id}',
+                    externalId: ${getStringOrUndefined(contentType.externalId)},
+                    name: '${toSafeString(contentType.name)}',
+                    elements: {${getContentTypeElements(contentType.elements, snippets, taxonomies)}}
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-        return code;
-    }
-
-    private getContentTypeElements(
-        contentType: Readonly<ContentTypeModels.ContentType>,
+    const getContentTypeElements = (
+        elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[],
         snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
         taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): string {
-        let code: string = '';
+    ): string => {
+        const flattenedElements = getFlattenedElements(elements, snippets, taxonomies);
 
-        const extendedElements: readonly ExtendedContentTypeElement[] = this.getExtendedElements(
-            contentType,
-            snippets,
-            taxonomies
-        );
+        return flattenedElements.reduce((code, element, index) => {
+            const isLast = index === flattenedElements.length - 1;
+            const elementOptions = getElementOptionsCode(element);
 
-        for (let i = 0; i < extendedElements.length; i++) {
-            const extendedElement = extendedElements[i];
-            const element = extendedElement.element;
-            const codename = commonHelper.getElementCodename(element);
-            const name = this.getElementName(element, taxonomies);
+            return `${code}\n
+                /**
+                * ${toSafeString(element.title)} (${element.type})${element.guidelines ? `\n* Guidelines: ${removeLineEndings(element.guidelines)}` : ''}
+                */
+                ${toCamelCase(element.codename)}: {
+                    codename: '${element.codename}',
+                    id: '${element.id}',
+                    externalId: ${getStringOrUndefined(element.externalId)},
+                    name: '${toSafeString(element.title)}',
+                    required: ${element.isRequired},
+                    type: '${element.type}'
+                    ${elementOptions ? `, options: ${elementOptions}` : ''}
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-            if (!name) {
-                // element does not have a name (e.g. guidelines)
-                continue;
-            }
+    const getElementOptionsCode = (flattenedElement: FlattenedElement): string | undefined => {
+        return match(flattenedElement.originalElement)
+            .returnType<string | undefined>()
+            .with({ type: 'multiple_choice' }, (element) => {
+                return (
+                    element.options.reduce<string>((code, option, index) => {
+                        const isLast = index === element.options.length - 1;
 
-            if (!codename) {
-                // element does not have codename
-                continue;
-            }
-
-            const isLast = i === extendedElements.length - 1;
-
-            const isRequired = commonHelper.isElementRequired(element);
-
-            const elementOptions = this.getElementOptions(element);
-
-            code += `\n`;
-            code += `${this.getElementComment(element, taxonomies)}\n`;
-            code += `${codename}: {
-                codename: '${codename}',
-                id: '${element.id}',
-                externalId: ${this.getStringOrUndefined(element.external_id)},
-                name: '${commonHelper.escapeNameValue(name)}',
-                required: ${isRequired},
-                type: '${element.type}'
-                ${elementOptions ? `, options: ${elementOptions}` : ''}
-                ${
-                    extendedElement.snippet
-                        ? `, snippetCodename: ${this.getStringOrUndefined(extendedElement.snippet?.codename)}`
-                        : ''
-                }
-
-            }${!isLast ? ',\n' : ''}`;
-        }
-
-        return code;
-    }
-
-    private getElementOptions(element: ContentTypeElements.ContentTypeElementModel): string | undefined {
-        if (element.type === 'multiple_choice') {
-            let stronglyTypedOptions: string = `{`;
-
-            for (let i = 0; i < element.options.length; i++) {
-                const isLast = i === element.options.length - 1;
-                const option = element.options[i];
-
-                stronglyTypedOptions += `${option.codename}: {
-                    name: '${textHelper.toSafeName(option.name, 'space')}',
+                        return `${code}\n
+                /**
+                * ${toSafeString(option.name)}
+                */
+                ${toCamelCase(option.codename ?? option.name)}: {
+                    name: '${toSafeString(option.name)}',
                     id: '${option.id}',
-                    codename: '${option.codename}',
-                    externalId: ${this.getStringOrUndefined(option.external_id)}
-                }`;
-
-                stronglyTypedOptions += !isLast ? ',\n' : '';
-            }
-
-            stronglyTypedOptions += `}`;
-
-            return stronglyTypedOptions;
-        }
-
-        return undefined;
-    }
-
-    private getContentTypeSnippetElements(
-        snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>,
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): string {
-        let code: string = '';
-
-        for (let i = 0; i < snippet.elements.length; i++) {
-            const element = snippet.elements[i];
-            const codename = commonHelper.getElementCodename(element);
-            const name = this.getElementName(element, taxonomies);
-
-            if (!name) {
-                // element does not have a name (e.g. guidelines)
-                continue;
-            }
-
-            if (!codename) {
-                // element does not have codename
-                continue;
-            }
-
-            const isLast = i === snippet.elements.length - 1;
-
-            const isRequired = commonHelper.isElementRequired(element);
-
-            code += `\n`;
-            code += `${this.getElementComment(element, taxonomies)}\n`;
-            code += `${codename}: {
-                codename: '${codename}',
-                id: '${element.id}',
-                externalId: ${this.getStringOrUndefined(element.external_id)},
-                name: '${commonHelper.escapeNameValue(name)}',
-                required: ${isRequired},
-                type: '${element.type}',
-            }${!isLast ? ',\n' : ''}`;
-        }
-
-        return code;
-    }
-
-    private getExtendedElements(
-        contentType: Readonly<ContentTypeModels.ContentType>,
-        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): readonly ExtendedContentTypeElement[] {
-        const extendedElements: ExtendedContentTypeElement[] = [];
-        for (const element of contentType.elements) {
-            if (element.type === 'snippet') {
-                // get snippet elements
-                const snippetElement: ContentTypeElements.ISnippetElement = element;
-                const snippet = snippets.find((m) => m.id === snippetElement.snippet.id);
-
-                if (!snippet) {
-                    throw Error(
-                        `Could not find content type snippet with id '${snippetElement.snippet.id}'. This snippet is used in type '${contentType.codename}'`
-                    );
-                }
-                extendedElements.push(
-                    ...snippet.elements.map((mElement) => {
-                        const extendedElement: ExtendedContentTypeElement = {
-                            element: mElement,
-                            snippet: snippet,
-                            mappedName: this.getElementName(mElement, taxonomies)
-                        };
-
-                        return extendedElement;
-                    })
+                    codename: ${getStringOrUndefined(option.codename)},
+                    externalId: ${getStringOrUndefined(option.external_id)}
+                }${!isLast ? ',\n' : ''}`;
+                    }, '{') + '}'
                 );
-            } else {
-                extendedElements.push({
-                    element: element,
-                    snippet: undefined,
-                    mappedName: this.getElementName(element, taxonomies)
-                });
-            }
-        }
+            })
+            .otherwise(() => undefined);
+    };
 
-        return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
-    }
-
-    private getProjectTaxonomies(
+    const getProjectTaxonomies = (
         taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
         sortConfig: SortConfig
-    ): string {
-        let code: string = ``;
-        for (let i = 0; i < taxonomies.length; i++) {
-            const taxonomy = taxonomies[i];
-            const isLast = i === taxonomies.length - 1;
+    ): string => {
+        return taxonomies.reduce((code, taxonomy, index) => {
+            const isLast = index === taxonomies.length - 1;
 
-            code += `\n`;
-            code += `${this.getTaxonomyComment(taxonomy)}\n`;
-            code += `${taxonomy.codename}: {
-                codename: '${taxonomy.codename}',
-                id: '${taxonomy.id}',
-                externalId: ${this.getStringOrUndefined(taxonomy.externalId)},
-                name: '${commonHelper.escapeNameValue(taxonomy.name)}',
-                ${this.getProjectTaxonomiesTerms(taxonomy.terms, sortConfig)}
+            return `${code}\n
+                /**
+                * ${toSafeString(taxonomy.name)}
+                */
+                ${toCamelCase(taxonomy.codename)}: {
+                    codename: '${taxonomy.codename}',
+                    externalId: ${getStringOrUndefined(taxonomy.externalId)},
+                    id: '${taxonomy.id}',
+                    name: '${toSafeString(taxonomy.name)}',
+                    ${getProjectTaxonomiesTerms(taxonomy.terms, sortConfig)}
             }${!isLast ? ',\n' : ''}`;
-        }
+        }, '');
+    };
 
-        return code;
-    }
+    const getCollections = (collections: readonly Readonly<CollectionModels.Collection>[]): string => {
+        return collections.reduce((code, collection, index) => {
+            const isLast = index === collections.length - 1;
 
-    private getCollections(collections: readonly Readonly<CollectionModels.Collection>[]): string {
-        let code: string = ``;
-        for (let i = 0; i < collections.length; i++) {
-            const collection = collections[i];
-            const isLast = i === collections.length - 1;
+            return `${code}\n
+                /**
+                * ${toSafeString(collection.name)}
+                */
+                ${toCamelCase(collection.codename)}: {
+                    codename: '${collection.codename}',
+                    id: '${collection.id}',
+                    name: '${toSafeString(collection.name)}'
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-            code += `\n`;
-            code += `${this.getCollectionComment(collection)}\n`;
-            code += `${collection.codename}: {
-                codename: '${collection.codename}',
-                id: '${collection.id}',
-                name: '${commonHelper.escapeNameValue(collection.name)}'
-            }${!isLast ? ',\n' : ''}`;
-        }
+    const getRoles = (roles: readonly Readonly<RoleModels.Role>[]): string => {
+        return roles.reduce((code, role, index) => {
+            const isLast = index === roles.length - 1;
 
-        return code;
-    }
+            return `${code}\n
+                /**
+                * ${toSafeString(role.name)}
+                */
+                ${toCamelCase(role.codename ?? role.name)}: {
+                    codename: ${getStringOrUndefined(role.codename)},
+                    id: '${role.id}',
+                    name: '${toSafeString(role.name)}'
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-    private getRoles(roles: readonly Readonly<RoleModels.Role>[]): string {
-        let code: string = ``;
-        for (let i = 0; i < roles.length; i++) {
-            const role = roles[i];
-            const isLast = i === roles.length - 1;
+    const getWebhooks = (webhooks: readonly Readonly<WebhookModels.Webhook>[]): string => {
+        return webhooks.reduce((code, webhook, index) => {
+            const isLast = index === webhooks.length - 1;
 
-            code += `\n`;
-            code += `${this.getRoleComment(role)}\n`;
-            code += `${camelCasePropertyNameResolver('', role.name)}: {
-                codename: ${role.codename ? "'" + role.codename + "'" : undefined},
-                id: '${role.id}',
-                name: '${commonHelper.escapeNameValue(role.name)}'
-            }${!isLast ? ',\n' : ''}`;
-        }
+            return `${code}\n
+                /**
+                * ${toSafeString(webhook.name)}
+                */
+                ${toCamelCase(webhook.name)}: {
+                    url: '${webhook.url}',
+                    id: '${webhook.id}',
+                    name: '${toSafeString(webhook.name)}'
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
 
-        return code;
-    }
-
-    private getWebhooks(webhooks: readonly Readonly<WebhookModels.Webhook>[]): string {
-        let code: string = ``;
-        for (let i = 0; i < webhooks.length; i++) {
-            const webhook = webhooks[i];
-            const isLast = i === webhooks.length - 1;
-
-            code += `\n`;
-            code += `${this.getWebhookComment(webhook)}\n`;
-            code += `${camelCasePropertyNameResolver('', webhook.name)}: {
-                url: '${webhook.url}',
-                id: '${webhook.id}',
-                name: '${commonHelper.escapeNameValue(webhook.name)}'
-            }${!isLast ? ',\n' : ''}`;
-        }
-
-        return code;
-    }
-
-    private getProjectTaxonomiesTerms(
+    const getProjectTaxonomiesTerms = (
         terms: readonly Readonly<TaxonomyModels.Taxonomy>[],
         sortConfig: SortConfig
-    ): string {
-        if (terms.length === 0) {
-            return `terms: {}`;
-        }
+    ): string => {
+        const sortedTerms = sortConfig.sortTaxonomyTerms ? sortAlphabetically(terms, (item) => item.name) : terms;
 
-        const sortedTerms = sortConfig.sortTaxonomyTerms
-            ? commonHelper.sortAlphabetically(terms, (item) => item.name)
-            : terms;
+        return (
+            sortedTerms.reduce<string>((code, term, index) => {
+                const isLast = index === sortedTerms.length - 1;
 
-        let code: string = `terms: {`;
-        for (let i = 0; i < sortedTerms.length; i++) {
-            const term = sortedTerms[i];
-            const isLast = i === sortedTerms.length - 1;
-            code += `${term.codename}: {
-                codename: '${term.codename}',
-                id: '${term.id}',
-                externalId: ${this.getStringOrUndefined(term.externalId)},
-                name: '${commonHelper.escapeNameValue(term.name)}',
-                ${this.getProjectTaxonomiesTerms(term.terms, sortConfig)}
-            }${!isLast ? ',\n' : ''}`;
-        }
-        code += '}';
+                return `${code}\n
+                    /**
+                    * ${toSafeString(term.name)}
+                    */
+                    ${toCamelCase(term.codename)}: {
+                        codename: '${term.codename}',
+                        id: '${term.id}',
+                        externalId: ${getStringOrUndefined(term.externalId)},
+                        name: '${toSafeString(term.name)}',
+                        ${getProjectTaxonomiesTerms(term.terms, sortConfig)}
+                    }${!isLast ? ',\n' : ''}`;
+            }, 'terms: {') + '}'
+        );
+    };
 
-        return code;
-    }
-
-    private getProjectWorkflowSteps(workflow: Readonly<WorkflowModels.Workflow>): string {
+    const getProjectWorkflowSteps = (workflow: Readonly<WorkflowModels.Workflow>): string => {
         const steps: WorkflowStep[] = [
-            {
-                codename: workflow.archivedStep.codename,
-                id: workflow.archivedStep.id,
-                name: workflow.archivedStep.name
-            },
-            {
-                codename: workflow.publishedStep.codename,
-                id: workflow.publishedStep.id,
-                name: workflow.publishedStep.name
-            },
-            {
-                codename: workflow.scheduledStep.codename,
-                id: workflow.scheduledStep.id,
-                name: workflow.scheduledStep.name
-            }
+            workflow.archivedStep,
+            workflow.publishedStep,
+            workflow.scheduledStep,
+            ...workflow.steps
         ];
-
-        for (const step of workflow.steps) {
-            steps.push({
-                codename: step.codename,
-                id: step.id,
-                name: step.name
-            });
-        }
 
         const code = `{${steps.reduce((code, step) => {
             return (
                 code +
                 `
-                ${step.codename}: {
-                    name: '${commonHelper.escapeNameValue(step.name)}',
+                ${toCamelCase(step.codename)}: {
+                    name: '${toSafeString(step.name)}',
                     codename: '${step.codename}',
                     id: '${step.id}'
                 },`
@@ -741,7 +405,9 @@ export class ProjectGenerator {
         }, ``)}}`;
 
         return code;
-    }
-}
+    };
 
-export const projectGenerator = new ProjectGenerator();
+    return {
+        generateProjectModel
+    };
+}

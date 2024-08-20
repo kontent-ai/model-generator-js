@@ -11,9 +11,8 @@ import {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { GeneratorManagementClient, toSafeString } from '../core/index.js';
+import { GeneratorManagementClient, sortAlphabetically, toSafeString } from '../core/index.js';
 import chalk from 'chalk';
-import { commonHelper } from '../common-helper.js';
 
 interface KontentFetcherConfig {
     environmentId: string;
@@ -36,23 +35,17 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return projectInformation.project;
         },
         async getWorkflowsAsync(): Promise<readonly WorkflowModels.Workflow[]> {
-            const items = commonHelper.sortAlphabetically(
-                (await client.listWorkflows().toPromise()).data,
-                (item) => item.name
-            );
+            const items = sortAlphabetically((await client.listWorkflows().toPromise()).data, (item) => item.name);
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' workflows`);
             return items;
         },
         async getRolesAsync(): Promise<readonly RoleModels.Role[]> {
-            const items = commonHelper.sortAlphabetically(
-                (await client.listRoles().toPromise()).data.roles,
-                (item) => item.name
-            );
+            const items = sortAlphabetically((await client.listRoles().toPromise()).data.roles, (item) => item.name);
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' roles`);
             return items;
         },
         async getAssetFoldersAsync(): Promise<readonly AssetFolderModels.AssetFolder[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listAssetFolders().toPromise()).data.items,
                 (item) => item.name
             );
@@ -60,7 +53,7 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return items;
         },
         async getCollectionsAsync(): Promise<readonly CollectionModels.Collection[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listCollections().toPromise()).data.collections,
                 (item) => item.name
             );
@@ -68,7 +61,7 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return items;
         },
         async getWebhooksAsync(): Promise<readonly WebhookModels.Webhook[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listWebhooks().toPromise()).data.webhooks,
                 (item) => item.name
             );
@@ -76,7 +69,7 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return items;
         },
         async getLanguagesAsync(): Promise<readonly LanguageModels.LanguageModel[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listLanguages().toAllPromise()).data.items,
                 (item) => item.name
             );
@@ -84,7 +77,7 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return items;
         },
         async getTypesAsync(): Promise<readonly ContentTypeModels.ContentType[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listContentTypes().toAllPromise()).data.items,
                 (item) => item.name
             );
@@ -92,7 +85,7 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return items;
         },
         async getSnippetsAsync(): Promise<readonly ContentTypeSnippetModels.ContentTypeSnippet[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listContentTypeSnippets().toAllPromise()).data.items,
                 (item) => item.name
             );
@@ -100,7 +93,7 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return items;
         },
         async getTaxonomiesAsync(): Promise<readonly TaxonomyModels.Taxonomy[]> {
-            const items = commonHelper.sortAlphabetically(
+            const items = sortAlphabetically(
                 (await client.listTaxonomies().toAllPromise()).data.items,
                 (item) => item.name
             );

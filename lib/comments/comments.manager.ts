@@ -17,14 +17,17 @@ export function commentsManager(addTimestamp: boolean) {
         return `/** \n * ${comment} \n*/`;
     };
 
-    const environmentInfo = (environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>): string => {
+    const environmentInfo = (
+        environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>,
+        opts?: { addGeneratedBy: boolean }
+    ): string => {
         return wrapComment(
             `
 * ${environmentInfo.name}
 *  
 * Environment: ${environmentInfo.environment}
 * Id: ${environmentInfo.id}`,
-            { addGeneratedBy: true }
+            opts
         );
     };
 

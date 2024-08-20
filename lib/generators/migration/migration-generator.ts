@@ -7,17 +7,22 @@ import {
     TaxonomyModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { FlattenedElement, getImportStatement, toSafeString, uniqueFilter, GeneratedFile } from '../../core/index.js';
-import { textHelper } from '../../text-helper.js';
+import {
+    FlattenedElement,
+    getImportStatement,
+    uniqueFilter,
+    GeneratedFile,
+    toSafeString,
+    removeLineEndings,
+    toPascalCase
+} from '../../core/index.js';
 import { ModuleResolution } from '../../models.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
 import { match } from 'ts-pattern';
-import { isNotUndefined } from '@kontent-ai/migration-toolkit';
-import { getFlattenedElement } from 'lib/core/element.utils.js';
+import { getFlattenedElements } from 'lib/core/element.utils.js';
 
 export interface MigrationGeneratorConfig {
     readonly addTimestamp: boolean;
-    readonly addEnvironmentInfo: boolean;
     readonly moduleResolution: ModuleResolution;
 
     readonly environmentData: {
@@ -76,10 +81,14 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             * Codename: ${type.codename}
             * Id: ${type.id}
             */
-            export type ${textHelper.toPascalCase(type.name)}Item = ${migrationTypeNames.item}<
+            export type ${toPascalCase(type.name)}Item = ${migrationTypeNames.item}<
             '${type.codename}',
             {
-                ${getFlattenedElements(type, config.environmentData.snippets, config.environmentData.taxonomies)
+                ${getFlattenedElements(
+                    type.elements,
+                    config.environmentData.snippets,
+                    config.environmentData.taxonomies
+                )
                     .map((element) => {
                         return `
                             /**
@@ -87,7 +96,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                             * 
                             * Required: ${element.isRequired ? 'true' : 'false'}
                             * Codename: ${element.codename}
-                            * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${textHelper.removeLineEndings(element.guidelines)}` : ''}
+                            * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${removeLineEndings(element.guidelines)}` : ''}
                             */
                             ${element.codename}: ${getElementPropType(element)}`;
                     })
@@ -139,38 +148,6 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             );
         }
     };
-}
-
-function getFlattenedElements(
-    type: Readonly<ContentTypeModels.ContentType>,
-    snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-): readonly FlattenedElement[] {
-    return type.elements
-        .filter((element) => {
-            if (element.type === 'guidelines') {
-                return false;
-            }
-
-            return true;
-        })
-        .flatMap((element) => {
-            if (element.type === 'snippet') {
-                const snippet = snippets.find((snippet) => snippet.id === element.snippet.id);
-
-                if (!snippet) {
-                    throw Error(`Could not find snippet with id '${element.snippet.id}'`);
-                }
-
-                return snippet.elements;
-            }
-
-            return element;
-        })
-        .map((element) => {
-            return getFlattenedElement(element, taxonomies);
-        })
-        .filter(isNotUndefined);
 }
 
 function getElementPropType(element: Readonly<FlattenedElement>): string {

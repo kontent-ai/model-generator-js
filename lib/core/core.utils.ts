@@ -26,6 +26,12 @@ export function getFileNameWithoutExtension(filePath: string): string {
     return filePath.substring(0, lastDotIndex);
 }
 
+export function sortAlphabetically<T>(arrayToSort: readonly T[], propertySelector: (item: T) => string): readonly T[] {
+    return arrayToSort.toSorted((a, b) =>
+        propertySelector(a).toLowerCase().localeCompare(propertySelector(b).toLowerCase())
+    );
+}
+
 export function getImportStatement(data: {
     filePathOrPackage: LiteralUnion<LibraryType>;
     importValue: string;
@@ -42,17 +48,17 @@ export function getImportStatement(data: {
 
 export function toPascalCase(text: string): string {
     // use element resolver from SDK to keep it consistent
-    return toSafeString(pascalCasePropertyNameResolver('', text), 'nothing');
+    return toSafeStringCode(pascalCasePropertyNameResolver('', text));
 }
 
 export function toCamelCase(text: string): string {
     // use element resolver from SDK to keep it consistent
-    return toSafeString(camelCasePropertyNameResolver('', text), 'nothing');
+    return toSafeStringCode(camelCasePropertyNameResolver('', text));
 }
 
 export function toSnakeCase(text: string): string {
     // use element resolver from SDK to keep it consistent
-    return toSafeString(snakeCasePropertyNameResolver('', text), 'nothing');
+    return toSafeStringCode(snakeCasePropertyNameResolver('', text));
 }
 
 export function toAlphanumeric(value: string): string {
@@ -63,7 +69,12 @@ export function removeLineEndings(value: string): string {
     return value.replace(/(\r\n|\n|\r)/gm, '');
 }
 
-export function toSafeString(text: string, replaceWith: 'space' | 'nothing' = 'nothing'): string {
-    const replaceContent = replaceWith === 'space' ? ' ' : '';
+export function toSafeStringCode(text: string): string {
+    const replaceContent = '';
+    return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
+}
+
+export function toSafeString(text: string): string {
+    const replaceContent = ' ';
     return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
 }

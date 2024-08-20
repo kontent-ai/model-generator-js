@@ -5,46 +5,45 @@ import type { Item } from '../core.models.js';
  * Actor
  *
  * Codename: actor
- * Id: 58099989-319f-495f-aa36-cb3710854e36
+ * Id: d8900ee2-82f4-4189-a994-4e121582aadf
  */
 export type ActorItem = Item<
     'actor',
     {
         /**
-         * Url (url_slug)
+         * photo (asset)
+         *
+         * Required: false
+         * Codename: photo
+         * Id: 069b38ee-385c-410f-b7fe-53ec59a5f139
+         */
+        photo: MigrationElementModels.AssetElement;
+
+        /**
+         * url (url_slug)
          *
          * Required: false
          * Codename: url
-         * Id: c8658782-f209-a573-9c85-430fb4e3e9f0
+         * Id: c4b2d64f-af45-45a4-92d8-4829833563ff
          */
         url: MigrationElementModels.UrlSlugElement;
 
         /**
-         * Firstname (text)
+         * last_name (text)
          *
-         * Required: true
-         * Codename: first_name
-         * Id: 14dd70e5-c42d-f111-9640-c82b443edf1d
-         * Guidelines: This is the first name of the actor
-         */
-        first_name: MigrationElementModels.TextElement;
-
-        /**
-         * Lastname (text)
-         *
-         * Required: true
+         * Required: false
          * Codename: last_name
-         * Id: 9f7a0dd4-af3a-95ca-0358-400c14ce7075
+         * Id: 0f00b26e-60f3-462d-8110-18180137c3a0
          */
         last_name: MigrationElementModels.TextElement;
 
         /**
-         * Photo (asset)
+         * first_name (text)
          *
          * Required: false
-         * Codename: photo
-         * Id: eaec9ba3-9624-6875-04ec-80d0b2e00781
+         * Codename: first_name
+         * Id: 4af5e7ce-88ef-4159-96ae-96a552992f91
          */
-        photo: MigrationElementModels.AssetElement;
+        first_name: MigrationElementModels.TextElement;
     }
 >;

@@ -51,7 +51,6 @@ export interface SortConfig {
 export interface GeneratProjectModelsConfig {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly addEnvironmentInfo: boolean;
     readonly isEnterpriseSubscription: boolean;
     readonly apiKey: string;
 
@@ -63,7 +62,6 @@ export interface GeneratProjectModelsConfig {
 }
 
 export interface GenerateMigrationModelsConfig {
-    readonly addEnvironmentInfo: boolean;
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly apiKey: string;

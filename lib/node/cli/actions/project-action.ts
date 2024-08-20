@@ -10,7 +10,6 @@ export async function projectActionAsync(cliFetcher: CliArgumentsFetcher): Promi
         outputDir: cliFetcher.getRequiredArgumentValue('outputDir'),
         isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
-        addEnvironmentInfo: cliFetcher.getBooleanArgumentValue('addEnvironmentInfo', false),
         sortConfig: {
             sortTaxonomyTerms: cliFetcher.getBooleanArgumentValue('sortTaxonomyTerms', true)
         },

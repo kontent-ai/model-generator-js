@@ -30,7 +30,6 @@ const run = async () => {
         environmentId: environmentId,
         apiKey: apiKey,
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
-        addEnvironmentInfo: true,
         outputDir: outputDir
     });
 };

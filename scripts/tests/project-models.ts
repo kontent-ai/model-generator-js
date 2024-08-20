@@ -31,7 +31,6 @@ const run = async () => {
         apiKey: apiKey,
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
         isEnterpriseSubscription: true,
-        addEnvironmentInfo: true,
         outputDir: outputDir,
         sortConfig: {
             sortTaxonomyTerms: true
