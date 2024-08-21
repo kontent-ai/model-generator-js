@@ -1,6 +1,6 @@
 import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models.js';
 import chalk from 'chalk';
-import { commonHelper, GeneratedFile } from '../../common-helper.js';
+import { commonHelper } from '../../common-helper.js';
 import { TaxonomyModels } from '@kontent-ai/management-sdk';
 import {
     MapTaxonomyToFileName,
@@ -8,10 +8,10 @@ import {
     getMapTaxonomyToFileName,
     getMapTaxonomyName
 } from './delivery-mappers.js';
+import { GeneratedFile } from '../../core/index.js';
 
 export class DeliveryTaxonomyGenerator {
     generateTaxonomyTypes(config: {
-        outputDir: string;
         taxonomies: TaxonomyModels.Taxonomy[];
         taxonomyFolderName: string;
         addTimestamp: boolean;
@@ -42,7 +42,6 @@ export class DeliveryTaxonomyGenerator {
 
         for (const taxonomy of config.taxonomies) {
             const file = this.generateModels({
-                outputDir: config.outputDir,
                 taxonomy: taxonomy,
                 taxonomyFolderName: config.taxonomyFolderName,
                 addTimestamp: config.addTimestamp,
@@ -66,14 +65,13 @@ export class DeliveryTaxonomyGenerator {
     }
 
     private generateModels(data: {
-        outputDir: string;
         taxonomy: TaxonomyModels.Taxonomy;
         taxonomyFolderName: string;
         addTimestamp: boolean;
         taxonomyFileNameMap: MapTaxonomyToFileName;
         taxonomyNameMap: MapTaxonomyName;
     }): GeneratedFile {
-        const filename = `${data.outputDir}${data.taxonomyFolderName}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
+        const filename = `${data.taxonomyFolderName}/${data.taxonomyFileNameMap(data.taxonomy, true)}`;
         const code = this.getModelCode({
             taxonomy: data.taxonomy,
             addTimestamp: data.addTimestamp,
@@ -112,7 +110,10 @@ export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTerms
 
         let code: string = '';
 
-        const sortedTaxonomyTerms: string[] = commonHelper.sortAlphabetically(taxonomyTermCodenames, (item) => item);
+        const sortedTaxonomyTerms: readonly string[] = commonHelper.sortAlphabetically(
+            taxonomyTermCodenames,
+            (item) => item
+        );
 
         for (let i = 0; i < sortedTaxonomyTerms.length; i++) {
             const term = sortedTaxonomyTerms[i];

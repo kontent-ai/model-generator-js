@@ -3,5 +3,6 @@ export * from './text-helper.js';
 export * from './name-helper.js';
 export * from './models.js';
 export * from './core/index.js';
+export * from './files/index.js';
 export * from './comments/index.js';
 export * from './generators/index.js';

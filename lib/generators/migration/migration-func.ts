@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { migrationConfig, coreConfig, toOutputDirPath, getBarrelExportCode } from '../../core/index.js';
-import { fileProcessor as _fileProcessor } from '../../file-helper.js';
+import { fileProcessor as _fileProcessor } from '../../files/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
 import { GenerateMigrationModelsConfig, ModuleResolution } from '../../models.js';

@@ -1,9 +1,9 @@
 import chalk from 'chalk';
 import { GeneratProjectModelsConfig, ModuleResolution } from '../../models.js';
 import { projectGenerator as _projectGenerator } from './project.generator.js';
-import { fileProcessor as _fileProcessor } from '../../file-helper.js';
+import { fileProcessor as _fileProcessor } from '../../files/index.js';
 import { parse } from 'path';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { coreConfig, getBarrelExportCode, toOutputDirPath } from '../../core/index.js';
 
 export async function generateProjectModelsAsync(config: GeneratProjectModelsConfig): Promise<void> {

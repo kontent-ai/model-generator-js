@@ -1,32 +1,17 @@
 import chalk from 'chalk';
 import { GenerateDeliveryModelsConfig, ModuleResolution } from '../../models.js';
-import { deliveryContentTypeGenerator } from '../../generators/delivery/delivery-content-type.generator.js';
-import { deliveryTaxonomyGenerator } from '../../generators/delivery/delivery-taxonomy.generator.js';
-import { commonHelper } from '../../common-helper.js';
+import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
+import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
+import { fileProcessor as _fileProcessor } from '../../files/index.js';
 import { parse } from 'path';
-import { fileHelper } from '../../file-helper.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
-import { toOutputDirPath } from '../../core/index.js';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
+import { coreConfig, deliveryConfig, GeneratedFile, getBarrelExportCode, toOutputDirPath } from '../../core/index.js';
+import { Options } from 'prettier';
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
-
-    const outputDir: string = toOutputDirPath(config.outputDir);
-
-    const contentTypesFolderName: string = `content-types/`;
-    const contentTypeSnippetsFolderName: string = `content-type-snippets/`;
-    const taxonomiesFolderName: string = `taxonomies/`;
-
-    const contentTypesFolderPath: string = `${outputDir}${contentTypesFolderName}`;
-    const contentTypeSnippetsFolderPath: string = `${outputDir}${contentTypeSnippetsFolderName}`;
-    const taxonomiesFolderPath: string = `${outputDir}${taxonomiesFolderName}`;
-
-    // prepare directories
-    fileHelper.createDir(contentTypesFolderPath);
-    fileHelper.createDir(contentTypeSnippetsFolderPath);
-    fileHelper.createDir(taxonomiesFolderPath);
 
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
@@ -34,21 +19,22 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
         baseUrl: config.baseUrl
     });
 
+    const contentTypesFolderName: string = deliveryConfig.contentTypesFolderName;
+    const contentTypeSnippetsFolderName: string = deliveryConfig.contentTypeSnippetsFolderName;
+    const taxonomiesFolderName: string = deliveryConfig.taxonomiesFolderName;
+
     await kontentFetcher.getEnvironmentInfoAsync();
 
-    const types = await kontentFetcher.getTypesAsync();
-    const snippets = await kontentFetcher.getSnippetsAsync();
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
     // create content type models
     const deliveryModels = deliveryContentTypeGenerator.generateModels({
-        outputDir: outputDir,
-        types: types,
+        types: await kontentFetcher.getTypesAsync(),
         typeFolderName: contentTypesFolderName,
         taxonomyFolderName: taxonomiesFolderName,
         typeSnippetsFolderName: contentTypeSnippetsFolderName,
         taxonomies: taxonomies,
-        snippets: snippets,
+        snippets: await kontentFetcher.getSnippetsAsync(),
         addTimestamp: config.addTimestamp,
         addEnvironmentInfo: config.addEnvironmentInfo,
         elementResolver: config.elementResolver,
@@ -64,79 +50,106 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     // create taxonomy types
     const taxonomyFiles = deliveryTaxonomyGenerator.generateTaxonomyTypes({
         taxonomies: taxonomies,
-        outputDir: outputDir,
         taxonomyFolderName: taxonomiesFolderName,
         addTimestamp: config.addTimestamp,
         fileResolver: config.taxonomyTypeFileResolver,
         taxonomyResolver: config.taxonomyTypeResolver
     });
 
-    // create barrel export
-    const barrelExportFilename: string = 'index.ts';
-
-    // content types
-    for (const file of deliveryModels.contentTypeFiles) {
-        await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
-    }
-    const contentTypeBarrelCode = commonHelper.getBarrelExportCode({
-        moduleResolution: moduleResolution,
-        filenames: [
-            ...deliveryModels.contentTypeFiles.map((m) => {
-                const path = parse(m.filename);
-                return `./${path.name}`;
-            })
-        ]
-    });
-    const contentTypeBarrelExportPath: string = `${contentTypesFolderPath}${barrelExportFilename}`;
-    await fileHelper.createFileOnFsAsync(contentTypeBarrelCode, contentTypeBarrelExportPath, config.formatOptions);
-
-    // content type snippets
-    for (const file of deliveryModels.snippetFiles) {
-        await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
-    }
-    const contentTypeSnippetsBarrelCode = commonHelper.getBarrelExportCode({
-        moduleResolution: moduleResolution,
-        filenames: [
-            ...deliveryModels.snippetFiles.map((m) => {
-                const path = parse(m.filename);
-                return `./${path.name}`;
-            })
-        ]
-    });
-    const contentTypeSnippetsBarrelExportPath: string = `${contentTypeSnippetsFolderPath}${barrelExportFilename}`;
-    await fileHelper.createFileOnFsAsync(
-        contentTypeSnippetsBarrelCode,
-        contentTypeSnippetsBarrelExportPath,
-        config.formatOptions
+    await createDeliveryFilesAsync(
+        {
+            contentTypeFiles: deliveryModels.contentTypeFiles,
+            snippetFiles: deliveryModels.snippetFiles,
+            taxonomyFiles: taxonomyFiles
+        },
+        {
+            formatOptions: config.formatOptions,
+            moduleResolution: moduleResolution,
+            outputDir: config.outputDir
+        },
+        {
+            contentTypesFolderName,
+            contentTypeSnippetsFolderName,
+            taxonomiesFolderName
+        }
     );
 
-    // taxonomies
-    for (const file of taxonomyFiles) {
-        await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
-    }
-    const taxonomiesBarrelCode = commonHelper.getBarrelExportCode({
-        moduleResolution: moduleResolution,
-        filenames: [
-            ...taxonomyFiles.map((m) => {
-                const path = parse(m.filename);
-                return `./${path.name}`;
-            })
-        ]
-    });
-    const taxonomiesBarrelExportPath: string = `${taxonomiesFolderPath}${barrelExportFilename}`;
-    await fileHelper.createFileOnFsAsync(taxonomiesBarrelCode, taxonomiesBarrelExportPath, config.formatOptions);
-
-    // main barrel
-    const mainBarrelCode = commonHelper.getBarrelExportCode({
-        moduleResolution: moduleResolution,
-        filenames: [
-            `./${contentTypesFolderName}index`,
-            `./${contentTypeSnippetsFolderName}index`,
-            `./${taxonomiesFolderName}index`
-        ]
-    });
-    const mainBarrelExportPath: string = `${outputDir}${barrelExportFilename}`;
-    await fileHelper.createFileOnFsAsync(mainBarrelCode, mainBarrelExportPath, config.formatOptions);
-
     console.log(chalk.green(`\nCompleted`));
+}
+
+async function createDeliveryFilesAsync(
+    data: {
+        readonly contentTypeFiles: readonly GeneratedFile[];
+        readonly snippetFiles: readonly GeneratedFile[];
+        readonly taxonomyFiles: readonly GeneratedFile[];
+    },
+    config: {
+        readonly outputDir: string | undefined;
+        readonly moduleResolution: ModuleResolution;
+        readonly formatOptions: Options | undefined;
+    },
+    folders: {
+        readonly contentTypesFolderName: string;
+        readonly contentTypeSnippetsFolderName: string;
+        readonly taxonomiesFolderName: string;
+    }
+): Promise<void> {
+    const fileProcessor = _fileProcessor(toOutputDirPath(config.outputDir));
+
+    await fileProcessor.createFilesAsync(
+        [
+            ...data.contentTypeFiles,
+            ...data.snippetFiles,
+            ...data.taxonomyFiles,
+            // barrel files
+            {
+                filename: `${folders.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
+                text: getBarrelExportCode({
+                    moduleResolution: config.moduleResolution,
+                    filenames: [
+                        ...data.contentTypeFiles.map((m) => {
+                            const path = parse(m.filename);
+                            return `./${path.name}`;
+                        })
+                    ]
+                })
+            },
+            {
+                filename: `${folders.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
+                text: getBarrelExportCode({
+                    moduleResolution: config.moduleResolution,
+                    filenames: [
+                        ...data.snippetFiles.map((m) => {
+                            const path = parse(m.filename);
+                            return `./${path.name}`;
+                        })
+                    ]
+                })
+            },
+            {
+                filename: `${folders.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
+                text: getBarrelExportCode({
+                    moduleResolution: config.moduleResolution,
+                    filenames: [
+                        ...data.taxonomyFiles.map((m) => {
+                            const path = parse(m.filename);
+                            return `./${path.name}`;
+                        })
+                    ]
+                })
+            },
+            {
+                filename: coreConfig.barrelExportFilename,
+                text: getBarrelExportCode({
+                    moduleResolution: config.moduleResolution,
+                    filenames: [
+                        `./${folders.contentTypesFolderName}/index`,
+                        `./${folders.contentTypeSnippetsFolderName}/index`,
+                        `./${folders.taxonomiesFolderName}/index`
+                    ]
+                })
+            }
+        ],
+        config.formatOptions
+    );
 }

@@ -40,7 +40,7 @@ import {
     getMapContentTypeSnippetIdToObject
 } from './delivery-mappers.js';
 import { textHelper } from '../../text-helper.js';
-import { GeneratedFile } from '../../core/index.js';
+import { GeneratedFile, sortAlphabetically } from '../../core/index.js';
 
 interface IExtendedContentTypeElement {
     type: ElementModels.ElementType;
@@ -51,16 +51,15 @@ interface IExtendedContentTypeElement {
 }
 
 interface IExtractImportsResult {
-    imports: string[];
+    imports: readonly string[];
     contentTypeSnippetExtensions: string[];
-    processedElements: IExtendedContentTypeElement[];
+    processedElements: readonly IExtendedContentTypeElement[];
 }
 
 export class DeliveryContentTypeGenerator {
     private readonly deliveryNpmPackageName: string = '@kontent-ai/delivery-sdk';
 
     generateModels(data: {
-        outputDir: string;
         typeFolderName: string;
         typeSnippetsFolderName: string;
         taxonomyFolderName: string;
@@ -77,7 +76,7 @@ export class DeliveryContentTypeGenerator {
         taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
         taxonomyResolver?: TaxonomyTypeResolver;
         moduleResolution: ModuleResolution;
-    }): { contentTypeFiles: GeneratedFile[]; snippetFiles: GeneratedFile[] } {
+    }): { contentTypeFiles: readonly GeneratedFile[]; snippetFiles: readonly GeneratedFile[] } {
         const typeFiles: GeneratedFile[] = [];
         const snippetFiles: GeneratedFile[] = [];
 
@@ -137,7 +136,6 @@ export class DeliveryContentTypeGenerator {
         for (const contentTypeSnippet of data.snippets) {
             try {
                 const file = this.createContentTypeSnippetModel({
-                    outputDir: data.outputDir,
                     snippet: contentTypeSnippet,
                     snippets: data.snippets,
                     taxonomies: data.taxonomies,
@@ -175,7 +173,6 @@ export class DeliveryContentTypeGenerator {
             try {
                 const file = this.createContentTypeModel({
                     moduleResolution: data.moduleResolution,
-                    outputDir: data.outputDir,
                     type: type,
                     snippets: data.snippets,
                     taxonomies: data.taxonomies,
@@ -236,7 +233,7 @@ export class DeliveryContentTypeGenerator {
         const processedTypeIds: string[] = [];
         const processedTaxonomyIds: string[] = [];
 
-        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
+        const extendedElements: readonly IExtendedContentTypeElement[] = this.getExtendedElements({
             elementNameMap: data.elementNameMap,
             contentType: data.contentType,
             contentTypeSnippet: data.contentTypeSnippet,
@@ -263,7 +260,7 @@ export class DeliveryContentTypeGenerator {
                 processedTaxonomyIds.push(taxonomy.id);
 
                 const taxonomyName: string = data.taxonomyNameMap(taxonomy);
-                const fileName: string = `../${data.taxonomyFolderName}${data.taxonomyFileNameMap(taxonomy, false)}`;
+                const fileName: string = `../${data.taxonomyFolderName}/${data.taxonomyFileNameMap(taxonomy, false)}`;
 
                 imports.push(
                     commonHelper.getImportStatement({
@@ -294,7 +291,7 @@ export class DeliveryContentTypeGenerator {
                     const fileName: string = `${data.contentTypeFileNameMap(referencedType, false)}`;
 
                     const filePath: string = data.contentTypeSnippet
-                        ? `../${data.typeFolderName}${fileName}`
+                        ? `../${data.typeFolderName}/${fileName}`
                         : `./${fileName}`;
 
                     imports.push(
@@ -329,7 +326,7 @@ export class DeliveryContentTypeGenerator {
         }
 
         return {
-            imports: commonHelper.sortAlphabetically(imports, (item) => item),
+            imports: sortAlphabetically(imports, (item) => item),
             contentTypeSnippetExtensions: contentTypeSnippetExtensions,
             processedElements: extendedElements
         };
@@ -439,7 +436,6 @@ export type ${typeName} = IContentItem<{
     }
 
     private createContentTypeModel(data: {
-        outputDir: string;
         type: ContentTypeModels.ContentType;
         typeFolderName: string;
         typeSnippetsFolderName: string;
@@ -460,10 +456,7 @@ export type ${typeName} = IContentItem<{
         addEnvironmentInfo: boolean;
         moduleResolution: ModuleResolution;
     }): GeneratedFile {
-        const filename: string = `${data.outputDir}${data.typeFolderName}${data.contentTypeFileNameMap(
-            data.type,
-            true
-        )}`;
+        const filename: string = `${data.typeFolderName}/${data.contentTypeFileNameMap(data.type, true)}`;
         const code = this.getModelCode({
             contentTypeFileNameMap: data.contentTypeFileNameMap,
             contentTypeSnippetFileNameMap: data.contentTypeSnippetFileNameMap,
@@ -494,7 +487,6 @@ export type ${typeName} = IContentItem<{
     }
 
     private createContentTypeSnippetModel(data: {
-        outputDir: string;
         snippet: ContentTypeSnippetModels.ContentTypeSnippet;
         typeSnippetsFolderName: string;
         taxonomyFolderName: string;
@@ -515,7 +507,7 @@ export type ${typeName} = IContentItem<{
         addEnvironmentInfo: boolean;
         moduleResolution: ModuleResolution;
     }): GeneratedFile {
-        const filename: string = `${data.outputDir}${data.typeSnippetsFolderName}${data.contentTypeSnippetFileNameMap(
+        const filename: string = `${data.typeSnippetsFolderName}/${data.contentTypeSnippetFileNameMap(
             data.snippet,
             true
         )}`;
@@ -615,7 +607,7 @@ export type ${typeName} = IContentItem<{
         taxonomyNameMap: MapTaxonomyName;
         taxonomies: TaxonomyModels.Taxonomy[];
     }): string {
-        const extendedElements: IExtendedContentTypeElement[] = this.getExtendedElements({
+        const extendedElements: readonly IExtendedContentTypeElement[] = this.getExtendedElements({
             elementNameMap: data.elementNameMap,
             contentType: data.contentType,
             contentTypeSnippet: data.contentTypeSnippet,
@@ -723,7 +715,7 @@ export type ${typeName} = IContentItem<{
         contentTypeObjectMap: MapContentTypeIdToObject;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
-    }): IExtendedContentTypeElement[] {
+    }): readonly IExtendedContentTypeElement[] {
         const extendedElements: IExtendedContentTypeElement[] = [];
 
         const elements = data.contentType ? data.contentType.elements : (data.contentTypeSnippet?.elements ?? []);
@@ -742,7 +734,7 @@ export type ${typeName} = IContentItem<{
             );
         }
 
-        return commonHelper.sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
+        return sortAlphabetically(extendedElements, (item) => item.mappedName ?? '');
     }
 
     private getTaxonomyTypeName(
