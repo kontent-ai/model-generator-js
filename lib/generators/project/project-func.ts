@@ -5,13 +5,13 @@ import { commonHelper } from '../../common-helper.js';
 import { parse } from 'path';
 import { fileHelper } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
-import { coreConfig } from '../../core/index.js';
+import { coreConfig, toOutputDirPath } from '../../core/index.js';
 
 export async function generateProjectModelsAsync(config: GeneratProjectModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('project')}' models\n`);
 
-    const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
+    const outputDir: string = toOutputDirPath(config.outputDir);
 
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,

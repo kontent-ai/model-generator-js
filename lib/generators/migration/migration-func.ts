@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { commonHelper } from '../../common-helper.js';
-import { migrationConfig, coreConfig } from '../../core/index.js';
+import { migrationConfig, coreConfig, toOutputDirPath } from '../../core/index.js';
 import { fileProcessor as _fileProcessor } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
@@ -14,7 +14,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         baseUrl: config.baseUrl
     });
 
-    const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
+    const outputDir: string = toOutputDirPath(config.outputDir);
     const fileProcessor = _fileProcessor(outputDir);
     const migrationItemsFolderName: string = migrationConfig.migrationItemsFolderName;
     const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;

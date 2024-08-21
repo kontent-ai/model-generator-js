@@ -6,12 +6,13 @@ import { commonHelper } from '../../common-helper.js';
 import { parse } from 'path';
 import { fileHelper } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { toOutputDirPath } from '../../core/index.js';
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
 
-    const outputDir: string = config.outputDir ? `${config.outputDir}/`.replaceAll('//', '/') : `./`;
+    const outputDir: string = toOutputDirPath(config.outputDir);
 
     const contentTypesFolderName: string = `content-types/`;
     const contentTypeSnippetsFolderName: string = `content-type-snippets/`;

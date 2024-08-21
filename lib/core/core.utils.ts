@@ -78,3 +78,7 @@ export function toSafeString(text: string): string {
     const replaceContent = ' ';
     return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
 }
+
+export function toOutputDirPath(outputDir?: string): string {
+    return outputDir ? `${outputDir}/`.replaceAll('//', '/') : `./`;
+}

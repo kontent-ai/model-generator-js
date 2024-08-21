@@ -1,7 +1,6 @@
 {
     "compileOnSave": true,
     "compilerOptions": {
-        "baseUrl": ".",
         "outDir": "dist",
         "sourceMap": true,
         "declaration": true,
