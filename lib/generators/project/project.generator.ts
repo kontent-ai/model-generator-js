@@ -130,7 +130,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         return result;
     };
 
-    const getProjectLanguages = (languages: readonly LanguageModels.LanguageModel[]): string => {
+    const getProjectLanguages = (languages: readonly Readonly<LanguageModels.LanguageModel>[]): string => {
         return languages.reduce((code, language, index) => {
             const isLast = index === languages.length - 1;
 
@@ -157,7 +157,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         return `'${text}'`;
     };
 
-    const getProjectWorkflows = (workflows: readonly WorkflowModels.Workflow[]): string => {
+    const getProjectWorkflows = (workflows: readonly Readonly<WorkflowModels.Workflow>[]): string => {
         return workflows.reduce((code, workflow, index) => {
             const isLast = index === workflows.length - 1;
 
@@ -174,7 +174,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         }, '');
     };
 
-    const getAssetFolders = (assetFolders: readonly AssetFolderModels.AssetFolder[]): string => {
+    const getAssetFolders = (assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[]): string => {
         return (
             assetFolders.reduce((code, assetFolder, index) => {
                 const isLast = index === assetFolders.length - 1;
@@ -194,8 +194,8 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectContentTypeSnippets = (
-        snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
-        taxonomies: readonly TaxonomyModels.Taxonomy[]
+        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string => {
         return snippets.reduce((code, snippet, index) => {
             const isLast = index === snippets.length - 1;
@@ -215,9 +215,9 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectContentTypes = (
-        contentTypes: readonly ContentTypeModels.ContentType[],
-        snippets: readonly ContentTypeSnippetModels.ContentTypeSnippet[],
-        taxonomies: readonly TaxonomyModels.Taxonomy[]
+        contentTypes: readonly Readonly<ContentTypeModels.ContentType>[],
+        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
+        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
     ): string => {
         return contentTypes.reduce((code, contentType, index) => {
             const isLast = index === contentTypes.length - 1;

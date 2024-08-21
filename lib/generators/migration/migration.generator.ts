@@ -142,7 +142,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             `
             };
         },
-        getMigrationItemFiles(migrationTypesFilename: string, folderName: string): GeneratedFile[] {
+        getMigrationItemFiles(migrationTypesFilename: string, folderName: string): readonly GeneratedFile[] {
             return config.environmentData.types.map((type) =>
                 getMigrationItemType(type, migrationTypesFilename, folderName)
             );
