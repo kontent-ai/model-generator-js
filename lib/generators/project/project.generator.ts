@@ -37,7 +37,6 @@ interface WorkflowStep {
 }
 
 export interface ProjectGeneratorConfig {
-    readonly outputDir: string;
     readonly addTimestamp: boolean;
     readonly sortConfig: SortConfig;
     readonly formatOptions?: Options;
@@ -68,7 +67,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
 
         return getProjectModelCode().map((projectCode) => {
             return {
-                filename: `${config.outputDir}${projectCode.filename}`,
+                filename: `${projectCode.filename}`,
                 text: headerCode + '\n' + projectCode.code
             };
         });

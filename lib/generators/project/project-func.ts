@@ -2,8 +2,8 @@ import chalk from 'chalk';
 import { GeneratProjectModelsConfig, ModuleResolution } from '../../models.js';
 import { projectGenerator as _projectGenerator } from './project.generator.js';
 import { commonHelper } from '../../common-helper.js';
+import { fileProcessor as _fileProcessor } from '../../file-helper.js';
 import { parse } from 'path';
-import { fileHelper } from '../../file-helper.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
 import { coreConfig, toOutputDirPath } from '../../core/index.js';
 
@@ -11,7 +11,7 @@ export async function generateProjectModelsAsync(config: GeneratProjectModelsCon
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('project')}' models\n`);
 
-    const outputDir: string = toOutputDirPath(config.outputDir);
+    const fileProcessor = _fileProcessor(toOutputDirPath(config.outputDir));
 
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
@@ -23,7 +23,6 @@ export async function generateProjectModelsAsync(config: GeneratProjectModelsCon
     const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
 
     const projectFiles = _projectGenerator({
-        outputDir: outputDir,
         addTimestamp: config.addTimestamp,
         formatOptions: config.formatOptions,
         sortConfig: config.sortConfig ?? {
@@ -45,7 +44,7 @@ export async function generateProjectModelsAsync(config: GeneratProjectModelsCon
 
     // project barrel
     for (const file of projectFiles) {
-        await fileHelper.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
+        await fileProcessor.createFileOnFsAsync(file.text, file.filename, config.formatOptions);
     }
     const projectBarrelCode = commonHelper.getBarrelExportCode({
         moduleResolution: moduleResolution,
@@ -56,7 +55,7 @@ export async function generateProjectModelsAsync(config: GeneratProjectModelsCon
             })
         ]
     });
-    await fileHelper.createFileOnFsAsync(projectBarrelCode, coreConfig.barrelExportFilename, config.formatOptions);
+    await fileProcessor.createFileOnFsAsync(projectBarrelCode, coreConfig.barrelExportFilename, config.formatOptions);
 
     console.log(chalk.green(`\nCompleted`));
 }

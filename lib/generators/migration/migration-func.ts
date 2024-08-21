@@ -14,8 +14,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         baseUrl: config.baseUrl
     });
 
-    const outputDir: string = toOutputDirPath(config.outputDir);
-    const fileProcessor = _fileProcessor(outputDir);
+    const fileProcessor = _fileProcessor(toOutputDirPath(config.outputDir));
     const migrationItemsFolderName: string = migrationConfig.migrationItemsFolderName;
     const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;
 
