@@ -3,6 +3,7 @@ import { Options } from 'prettier';
 import { formatHelper } from './format-helper.js';
 import * as fs from 'fs';
 import { dirname } from 'path';
+import { GeneratedFile } from './core/index.js';
 
 export function fileProcessor(outputDir: string) {
     const createFileOnFsAsync = async (
@@ -36,9 +37,21 @@ export function fileProcessor(outputDir: string) {
         fs.mkdirSync(resolvedDirname);
     };
 
+    const createFilesAsync = async (
+        files: readonly GeneratedFile[],
+        formatOptions: Options | undefined
+    ): Promise<void> => {
+        await Promise.all(
+            files.map((file) => {
+                return createFileOnFsAsync(file.text, file.filename, formatOptions);
+            })
+        );
+    };
+
     return {
         createDir,
-        createFileOnFsAsync
+        createFileOnFsAsync,
+        createFilesAsync
     };
 }
 

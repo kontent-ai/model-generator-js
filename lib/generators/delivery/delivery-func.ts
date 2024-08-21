@@ -11,6 +11,7 @@ import { toOutputDirPath } from '../../core/index.js';
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
+    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
 
     const outputDir: string = toOutputDirPath(config.outputDir);
 
@@ -33,7 +34,6 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
         baseUrl: config.baseUrl
     });
 
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     await kontentFetcher.getEnvironmentInfoAsync();
 
     const types = await kontentFetcher.getTypesAsync();

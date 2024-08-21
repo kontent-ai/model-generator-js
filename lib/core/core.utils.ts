@@ -5,6 +5,7 @@ import {
 } from '@kontent-ai/delivery-sdk';
 import { ModuleResolution } from '../models.js';
 import { LibraryType, LiteralUnion } from './index.js';
+import { parse } from 'path';
 
 export function exitProgram(data: { readonly message: string }): never {
     throw Error(data.message);
@@ -81,4 +82,26 @@ export function toSafeString(text: string): string {
 
 export function toOutputDirPath(outputDir?: string): string {
     return outputDir ? `${outputDir}/`.replaceAll('//', '/') : `./`;
+}
+
+export function getBarrelExportCode(data: { filenames: string[]; moduleResolution: ModuleResolution }): string {
+    let code = '';
+
+    if (data.filenames.length) {
+        for (let i = 0; i < data.filenames.length; i++) {
+            const isLast = i === data.filenames.length - 1;
+            const filename = data.filenames[i];
+            const path = parse(filename);
+            const extension = data.moduleResolution === 'nodeNext' ? '.js' : '';
+            code += `export * from '${path.dir}/${path.name}${extension}'`;
+
+            if (!isLast) {
+                code += `\n`;
+            }
+        }
+    } else {
+        code = `export {}`;
+    }
+
+    return code;
 }

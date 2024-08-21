@@ -44,10 +44,6 @@ export interface GenerateDeliveryModelsConfig {
     readonly formatOptions?: Options;
 }
 
-export interface SortConfig {
-    readonly sortTaxonomyTerms: boolean;
-}
-
 export interface GeneratProjectModelsConfig {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
@@ -57,7 +53,6 @@ export interface GeneratProjectModelsConfig {
     readonly moduleResolution?: ModuleResolution;
     readonly baseUrl?: string;
     readonly outputDir?: string;
-    readonly sortConfig?: SortConfig;
     readonly formatOptions?: Options;
 }
 

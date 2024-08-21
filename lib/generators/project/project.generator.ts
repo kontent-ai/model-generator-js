@@ -14,7 +14,6 @@ import {
     ContentTypeElements
 } from '@kontent-ai/management-sdk';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
-import { SortConfig } from '../../models.js';
 import {
     FlattenedElement,
     GeneratedFile,
@@ -38,7 +37,6 @@ interface WorkflowStep {
 
 export interface ProjectGeneratorConfig {
     readonly addTimestamp: boolean;
-    readonly sortConfig: SortConfig;
     readonly formatOptions?: Options;
 
     readonly environmentData: {
@@ -73,7 +71,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         });
     };
 
-    const getProjectModelCode = (): ProjectCodeResult[] => {
+    const getProjectModelCode = (): readonly ProjectCodeResult[] => {
         const result: ProjectCodeResult[] = [
             {
                 code: `export const languages = {
@@ -101,7 +99,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
             },
             {
                 code: `export const taxonomies = {
-                    ${getProjectTaxonomies(config.environmentData.taxonomies, config.sortConfig)}
+                    ${getProjectTaxonomies(config.environmentData.taxonomies)}
                 } as const;`,
                 filename: 'taxonomies.ts'
             },
@@ -289,10 +287,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
             .otherwise(() => undefined);
     };
 
-    const getProjectTaxonomies = (
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
-        sortConfig: SortConfig
-    ): string => {
+    const getProjectTaxonomies = (taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
         return taxonomies.reduce((code, taxonomy, index) => {
             const isLast = index === taxonomies.length - 1;
 
@@ -305,7 +300,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                     externalId: ${getStringOrUndefined(taxonomy.externalId)},
                     id: '${taxonomy.id}',
                     name: '${toSafeString(taxonomy.name)}',
-                    ${getProjectTaxonomiesTerms(taxonomy.terms, sortConfig)}
+                    ${getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -358,11 +353,8 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         }, '');
     };
 
-    const getProjectTaxonomiesTerms = (
-        terms: readonly Readonly<TaxonomyModels.Taxonomy>[],
-        sortConfig: SortConfig
-    ): string => {
-        const sortedTerms = sortConfig.sortTaxonomyTerms ? sortAlphabetically(terms, (item) => item.name) : terms;
+    const getProjectTaxonomiesTerms = (terms: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
+        const sortedTerms = sortAlphabetically(terms, (item) => item.name);
 
         return (
             sortedTerms.reduce<string>((code, term, index) => {
@@ -377,7 +369,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                         id: '${term.id}',
                         externalId: ${getStringOrUndefined(term.externalId)},
                         name: '${toSafeString(term.name)}',
-                        ${getProjectTaxonomiesTerms(term.terms, sortConfig)}
+                        ${getProjectTaxonomiesTerms(term.terms)}
                     }${!isLast ? ',\n' : ''}`;
             }, 'terms: {') + '}'
         );
