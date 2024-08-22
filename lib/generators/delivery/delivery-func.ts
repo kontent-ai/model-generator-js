@@ -48,13 +48,17 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     });
 
     // create taxonomy types
-    const taxonomyFiles = deliveryTaxonomyGenerator.generateTaxonomyTypes({
-        taxonomies: taxonomies,
+    const taxonomyFiles = deliveryTaxonomyGenerator({
         taxonomyFolderName: taxonomiesFolderName,
         addTimestamp: config.addTimestamp,
         fileResolver: config.taxonomyTypeFileResolver,
-        taxonomyResolver: config.taxonomyTypeResolver
-    });
+        taxonomyResolver: config.taxonomyTypeResolver,
+        moduleResolution: moduleResolution,
+        environmentData: {
+            environment: await kontentFetcher.getEnvironmentInfoAsync(),
+            taxonomies: taxonomies
+        }
+    }).generateTaxonomyTypes();
 
     await createDeliveryFilesAsync(
         {
