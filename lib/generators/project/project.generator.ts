@@ -87,13 +87,13 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
             },
             {
                 code: `export const contentTypes = {
-                    ${getProjectContentTypes(config.environmentData.types, config.environmentData.snippets, config.environmentData.taxonomies)}
+                    ${getProjectContentTypes(config.environmentData.types)}
                 } as const;`,
                 filename: 'contentTypes.ts'
             },
             {
                 code: `export const contentTypeSnippets = {
-                    ${getProjectContentTypeSnippets(config.environmentData.snippets, config.environmentData.taxonomies)}
+                    ${getProjectContentTypeSnippets(config.environmentData.snippets)}
                 } as const;`,
                 filename: 'contentTypeSnippets.ts'
             },
@@ -194,8 +194,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectContentTypeSnippets = (
-        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]
     ): string => {
         return snippets.reduce((code, snippet, index) => {
             const isLast = index === snippets.length - 1;
@@ -209,16 +208,12 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                     id: '${snippet.id}',
                     externalId: ${getStringOrUndefined(snippet.externalId)},
                     name: '${toSafeString(snippet.name)}',
-                    elements: {${getContentTypeElements(snippet.elements, snippets, taxonomies)}}
+                    elements: {${getContentTypeElements(snippet.elements)}}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
 
-    const getProjectContentTypes = (
-        contentTypes: readonly Readonly<ContentTypeModels.ContentType>[],
-        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): string => {
+    const getProjectContentTypes = (contentTypes: readonly Readonly<ContentTypeModels.ContentType>[]): string => {
         return contentTypes.reduce((code, contentType, index) => {
             const isLast = index === contentTypes.length - 1;
 
@@ -231,17 +226,20 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                     id: '${contentType.id}',
                     externalId: ${getStringOrUndefined(contentType.externalId)},
                     name: '${toSafeString(contentType.name)}',
-                    elements: {${getContentTypeElements(contentType.elements, snippets, taxonomies)}}
+                    elements: {${getContentTypeElements(contentType.elements)}}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
 
     const getContentTypeElements = (
-        elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[],
-        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-        taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+        elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[]
     ): string => {
-        const flattenedElements = getFlattenedElements(elements, snippets, taxonomies);
+        const flattenedElements = getFlattenedElements(
+            elements,
+            config.environmentData.snippets,
+            config.environmentData.taxonomies,
+            config.environmentData.types
+        );
 
         return flattenedElements.reduce((code, element, index) => {
             const isLast = index === flattenedElements.length - 1;

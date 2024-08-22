@@ -1,11 +1,18 @@
-import { ContentTypeElements, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import {
+    ContentTypeElements,
+    ContentTypeModels,
+    ContentTypeSnippetModels,
+    TaxonomyModels
+} from '@kontent-ai/management-sdk';
 import { FlattenedElement } from './core.models.js';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
+import { match } from 'ts-pattern';
 
 export function getFlattenedElements(
     elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[],
     snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
+    types: readonly Readonly<ContentTypeModels.ContentType>[]
 ): readonly FlattenedElement[] {
     return elements
         .filter((element) => {
@@ -29,14 +36,15 @@ export function getFlattenedElements(
             return element;
         })
         .map((element) => {
-            return getFlattenedElement(element, taxonomies);
+            return getFlattenedElement(element, taxonomies, types);
         })
         .filter(isNotUndefined);
 }
 
 export function getFlattenedElement(
     element: Readonly<ContentTypeElements.ContentTypeElementModel>,
-    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
+    types: readonly Readonly<ContentTypeModels.ContentType>[]
 ): Readonly<FlattenedElement> | undefined {
     if (!element.codename) {
         return undefined;
@@ -53,7 +61,9 @@ export function getFlattenedElement(
         isRequired: isElementRequired(element),
         guidelines: getElementGuidelines(element),
         externalId: element.external_id,
-        originalElement: element
+        originalElement: element,
+        allowedContentTypes: extractLinkedItemsAllowedTypes(element, types),
+        assignedTaxonomy: extractTaxonomy(element, taxonomies)
     };
 }
 
@@ -85,4 +95,34 @@ function getElementTitle(
         return taxonomy.name;
     }
     return (<{ name?: string }>element).name ?? element.codename ?? 'n/a';
+}
+
+function extractLinkedItemsAllowedTypes(
+    element: Readonly<ContentTypeElements.ContentTypeElementModel>,
+    types: readonly Readonly<ContentTypeModels.ContentType>[]
+): readonly Readonly<ContentTypeModels.ContentType>[] {
+    const allowedTypeIds = match(element)
+        .returnType<Readonly<string>[]>()
+        .with({ type: 'modular_content' }, (linkedItemsElement) => {
+            return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
+        })
+        .with({ type: 'subpages' }, (linkedItemsElement) => {
+            return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
+        })
+        .otherwise(() => []);
+
+    return allowedTypeIds.map((id) => types.find((m) => m.id === id)).filter(isNotUndefined);
+}
+
+function extractTaxonomy(
+    element: Readonly<ContentTypeElements.ContentTypeElementModel>,
+    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
+): Readonly<TaxonomyModels.Taxonomy> | undefined {
+    return match(element)
+        .returnType<Readonly<TaxonomyModels.Taxonomy> | undefined>()
+        .with({ type: 'taxonomy' }, (taxonomyElement) => {
+            return taxonomies.find((m) => m.id === taxonomyElement.taxonomy_group?.id);
+        })
+
+        .otherwise(() => undefined);
 }

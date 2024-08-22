@@ -16,7 +16,8 @@ import {
     toSafeString,
     removeLineEndings,
     toPascalCase,
-    getFlattenedElements
+    getFlattenedElements,
+    migrationConfig
 } from '../../core/index.js';
 import { ModuleResolution } from '../../models.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
@@ -51,8 +52,6 @@ const migrationTypeNames = {
     codename: 'Codename'
 } as const;
 
-const migrationToolkitNpmPackage = '@kontent-ai/migration-toolkit';
-
 export function migrationGenerator(config: MigrationGeneratorConfig) {
     const commentsManager = _commentsManager(config.addTimestamp);
 
@@ -65,7 +64,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             filename: `${folderName}/${type.codename}.ts`,
             text: `
             ${getImportStatement({
-                filePathOrPackage: migrationToolkitNpmPackage,
+                filePathOrPackage: migrationConfig.npmPackageName,
                 importValue: migrationTypeNames.migrationElementModels,
                 moduleResolution: config.moduleResolution
             })}
@@ -87,7 +86,8 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 ${getFlattenedElements(
                     type.elements,
                     config.environmentData.snippets,
-                    config.environmentData.taxonomies
+                    config.environmentData.taxonomies,
+                    config.environmentData.types
                 )
                     .map((element) => {
                         return `
@@ -112,7 +112,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 filename: filename,
                 text: `
                   ${getImportStatement({
-                      filePathOrPackage: migrationToolkitNpmPackage,
+                      filePathOrPackage: migrationConfig.npmPackageName,
                       importValue: `${migrationTypeNames.migrationItemSystem}, ${migrationTypeNames.migrationItem}, ${migrationTypeNames.migrationElements}`,
                       moduleResolution: config.moduleResolution
                   })}

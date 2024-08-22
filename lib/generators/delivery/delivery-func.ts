@@ -23,18 +23,15 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     const contentTypeSnippetsFolderName: string = deliveryConfig.contentTypeSnippetsFolderName;
     const taxonomiesFolderName: string = deliveryConfig.taxonomiesFolderName;
 
-    await kontentFetcher.getEnvironmentInfoAsync();
+    const environment = await kontentFetcher.getEnvironmentInfoAsync();
 
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
     // create content type models
-    const deliveryModels = deliveryContentTypeGenerator.generateModels({
-        types: await kontentFetcher.getTypesAsync(),
+    const deliveryModels = deliveryContentTypeGenerator({
         typeFolderName: contentTypesFolderName,
         taxonomyFolderName: taxonomiesFolderName,
         typeSnippetsFolderName: contentTypeSnippetsFolderName,
-        taxonomies: taxonomies,
-        snippets: await kontentFetcher.getSnippetsAsync(),
         addTimestamp: config.addTimestamp,
         addEnvironmentInfo: config.addEnvironmentInfo,
         elementResolver: config.elementResolver,
@@ -44,8 +41,14 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
         taxonomyResolver: config.taxonomyTypeResolver,
         contentTypeSnippetFileNameResolver: config.contentTypeSnippetFileResolver,
         contentTypeSnippetResolver: config.contentTypeSnippetResolver,
-        moduleResolution: moduleResolution
-    });
+        moduleResolution: moduleResolution,
+        environmentData: {
+            environment: environment,
+            types: await kontentFetcher.getTypesAsync(),
+            snippets: await kontentFetcher.getSnippetsAsync(),
+            taxonomies: taxonomies
+        }
+    }).generateModels();
 
     // create taxonomy types
     const taxonomyFiles = deliveryTaxonomyGenerator({
