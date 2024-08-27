@@ -1,50 +1,49 @@
-import { type IContentItem, type Elements } from '@kontent-ai/delivery-sdk';
-/**
- *
- * Movie Database
- *
- * Environment: Production
- * Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
- */
+import type { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
 
 /**
  *
+ * Migration Toolkit - tests
+ *
+ * Environment: Production
+ * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+ */
+
+/**
  * Actor
- * Id: 58099989-319f-495f-aa36-cb3710854e36
+ *
+ * Id: d8900ee2-82f4-4189-a994-4e121582aadf
  * Codename: actor
  */
 export type Actor = IContentItem<{
     /**
-     * Url (url_slug)
+     * photo (asset)
      * Required: false
-     * Id: c8658782-f209-a573-9c85-430fb4e3e9f0
+     * Id: 069b38ee-385c-410f-b7fe-53ec59a5f139
+     * Codename: photo
+     */
+    photo: Elements.AssetsElement;
+
+    /**
+     * url (url_slug)
+     * Required: false
+     * Id: c4b2d64f-af45-45a4-92d8-4829833563ff
      * Codename: url
      */
     url: Elements.UrlSlugElement;
 
     /**
-     * First name (text)
-     * Required: true
-     * Id: 14dd70e5-c42d-f111-9640-c82b443edf1d
-     * Codename: first_name
-     *
-     * This is the first name of the actor
-     */
-    first_name: Elements.TextElement;
-
-    /**
-     * Last name (text)
-     * Required: true
-     * Id: 9f7a0dd4-af3a-95ca-0358-400c14ce7075
+     * last_name (text)
+     * Required: false
+     * Id: 0f00b26e-60f3-462d-8110-18180137c3a0
      * Codename: last_name
      */
     last_name: Elements.TextElement;
 
     /**
-     * Photo (asset)
+     * first_name (text)
      * Required: false
-     * Id: eaec9ba3-9624-6875-04ec-80d0b2e00781
-     * Codename: photo
+     * Id: 4af5e7ce-88ef-4159-96ae-96a552992f91
+     * Codename: first_name
      */
-    photo: Elements.AssetsElement;
+    first_name: Elements.TextElement;
 }>;

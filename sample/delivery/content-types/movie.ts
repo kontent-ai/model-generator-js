@@ -1,91 +1,93 @@
-import { type IContentItem, type Elements } from '@kontent-ai/delivery-sdk';
-import { type Actor } from '../content-types/actor.js';
-import { type ReleaseCategory } from '../taxonomies/releasecategory.js';
+import type { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
+import type { Category } from '../taxonomies/category.js';
+import type { ReleaseCategory } from '../taxonomies/release_category.js';
+import type { TaxonomySnippetTest } from '../content-type-snippets/taxonomy_snippet_test.js';
 
 /**
  *
- * Movie Database
+ * Migration Toolkit - tests
  *
  * Environment: Production
- * Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
+ * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
  */
 
 /**
- *
  * Movie
- * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
+ *
+ * Id: db7356f6-1d82-42a0-9ebb-07865cffa995
  * Codename: movie
  */
 export type Movie = IContentItem<{
     /**
-     * Title (text)
-     * Required: true
-     * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
-     * Codename: title
+     * Release category (taxonomy)
+     * Required: false
+     * Id: 5faa827f-f262-43c3-8f58-0f354b8d393f
+     * Codename: releasecategory
      */
-    title: Elements.TextElement;
+    releasecategory: Elements.TaxonomyElement<ReleaseCategory>;
 
     /**
-     * Plot (rich_text)
+     * Category (taxonomy)
      * Required: false
-     * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
-     * Codename: plot
+     * Id: 8c12be35-e3e7-447c-a185-7b5e101ebf12
+     * Codename: category
      */
-    plot: Elements.RichTextElement;
+    category: Elements.TaxonomyElement<Category>;
 
     /**
-     * Released (date_time)
+     * length (number)
      * Required: false
-     * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
-     * Codename: released
-     */
-    released: Elements.DateTimeElement;
-
-    /**
-     * Length (number)
-     * Required: false
-     * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
+     * Id: e3d07f3a-60c2-4072-846d-c23e51ec833e
      * Codename: length
      */
     length: Elements.NumberElement;
 
     /**
-     * Poster (asset)
+     * stars (modular_content)
      * Required: false
-     * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
-     * Codename: poster
-     */
-    poster: Elements.AssetsElement;
-
-    /**
-     * Category (multiple_choice)
-     * Required: false
-     * Id: 9821c252-6414-f549-c17f-cc171dd87713
-     * Codename: category
-     */
-    category: Elements.MultipleChoiceElement;
-
-    /**
-     * Stars (modular_content)
-     * Required: false
-     * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
+     * Id: 55596dd1-e808-415d-95aa-e2be34238d11
      * Codename: stars
      */
-    stars: Elements.LinkedItemsElement<Actor | Movie>;
+    stars: Elements.LinkedItemsElement<IContentItem>;
 
     /**
-     * SeoName (url_slug)
+     * seoname (url_slug)
      * Required: false
-     * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
+     * Id: 734f94be-5930-4bdf-b05b-f59f5a291675
      * Codename: seoname
      */
     seoname: Elements.UrlSlugElement;
 
     /**
-     * ReleaseCategory (taxonomy)
+     * poster (asset)
      * Required: false
-     * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
-     * Codename: releasecategory
+     * Id: 9b197f1e-0728-4d14-9814-97f7b8ef01fc
+     * Codename: poster
      */
-    releasecategory: Elements.TaxonomyElement<ReleaseCategory>;
-}>;
+    poster: Elements.AssetsElement;
+
+    /**
+     * released (date_time)
+     * Required: false
+     * Id: 656b9dc9-7bba-4f1f-a2b8-52f7f730a66f
+     * Codename: released
+     */
+    released: Elements.DateTimeElement;
+
+    /**
+     * plot (rich_text)
+     * Required: false
+     * Id: ad2e5dc7-8d08-4f74-afeb-25b475f1e6fc
+     * Codename: plot
+     */
+    plot: Elements.RichTextElement;
+
+    /**
+     * title (text)
+     * Required: false
+     * Id: 660c851a-a9a1-4378-97a3-1348bc2a4d76
+     * Codename: title
+     */
+    title: Elements.TextElement;
+}> &
+    TaxonomySnippetTest;

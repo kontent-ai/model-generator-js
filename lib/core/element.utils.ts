@@ -8,6 +8,11 @@ import { FlattenedElement } from './core.models.js';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match } from 'ts-pattern';
 
+interface ElementWrapper {
+    readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
+    readonly fromSnippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet> | undefined;
+}
+
 export function getFlattenedElements(
     elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[],
     snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
@@ -22,7 +27,7 @@ export function getFlattenedElements(
 
             return true;
         })
-        .flatMap((element) => {
+        .flatMap<ElementWrapper>((element) => {
             if (element.type === 'snippet') {
                 const snippet = snippets.find((snippet) => snippet.id === element.snippet.id);
 
@@ -30,10 +35,18 @@ export function getFlattenedElements(
                     throw Error(`Could not find snippet with id '${element.snippet.id}'`);
                 }
 
-                return snippet.elements;
+                return snippet.elements.map((snippetElement) => {
+                    return {
+                        element: snippetElement,
+                        fromSnippet: snippet
+                    };
+                });
             }
 
-            return element;
+            return {
+                element: element,
+                fromSnippet: undefined
+            };
         })
         .map((element) => {
             return getFlattenedElement(element, taxonomies, types);
@@ -42,28 +55,29 @@ export function getFlattenedElements(
 }
 
 export function getFlattenedElement(
-    element: Readonly<ContentTypeElements.ContentTypeElementModel>,
+    wrapper: ElementWrapper,
     taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
     types: readonly Readonly<ContentTypeModels.ContentType>[]
 ): Readonly<FlattenedElement> | undefined {
-    if (!element.codename) {
+    if (!wrapper.element.codename) {
         return undefined;
     }
-    if (!element.id) {
+    if (!wrapper.element.id) {
         return undefined;
     }
 
     return {
-        title: getElementTitle(element, taxonomies),
-        codename: element.codename,
-        id: element.id,
-        type: element.type,
-        isRequired: isElementRequired(element),
-        guidelines: getElementGuidelines(element),
-        externalId: element.external_id,
-        originalElement: element,
-        allowedContentTypes: extractLinkedItemsAllowedTypes(element, types),
-        assignedTaxonomy: extractTaxonomy(element, taxonomies)
+        title: getElementTitle(wrapper.element, taxonomies),
+        codename: wrapper.element.codename,
+        id: wrapper.element.id,
+        type: wrapper.element.type,
+        isRequired: isElementRequired(wrapper.element),
+        guidelines: getElementGuidelines(wrapper.element),
+        externalId: wrapper.element.external_id,
+        originalElement: wrapper.element,
+        allowedContentTypes: extractLinkedItemsAllowedTypes(wrapper.element, types),
+        assignedTaxonomy: extractTaxonomy(wrapper.element, taxonomies),
+        fromSnippet: wrapper.fromSnippet
     };
 }
 
@@ -123,6 +137,5 @@ function extractTaxonomy(
         .with({ type: 'taxonomy' }, (taxonomyElement) => {
             return taxonomies.find((m) => m.id === taxonomyElement.taxonomy_group?.id);
         })
-
         .otherwise(() => undefined);
 }

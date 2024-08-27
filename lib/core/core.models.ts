@@ -1,13 +1,14 @@
 import {
     ContentTypeElements,
     ContentTypeModels,
+    ContentTypeSnippetModels,
     ElementModels,
     IManagementClient,
     TaxonomyModels
 } from '@kontent-ai/management-sdk';
 
 export type CliAction = 'delivery' | 'migration';
-export type LibraryType = '@kontent-ai/migration-toolkit';
+export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
 
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
 
@@ -45,6 +46,7 @@ export interface FlattenedElement {
     readonly allowedContentTypes?: readonly Readonly<ContentTypeModels.ContentType>[];
     readonly originalElement: Readonly<ContentTypeElements.ContentTypeElementModel>;
     readonly assignedTaxonomy?: Readonly<TaxonomyModels.Taxonomy>;
+    readonly fromSnippet?: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
 }
 
 export interface GeneratedFile {

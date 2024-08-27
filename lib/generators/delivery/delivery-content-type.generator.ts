@@ -47,8 +47,13 @@ import {
     FlattenedElement,
     GeneratedFile,
     getFlattenedElements,
-    sortAlphabetically
+    getImportStatement,
+    sortAlphabetically,
+    toSafeString,
+    uniqueFilter
 } from '../../core/index.js';
+import { match, P } from 'ts-pattern';
+import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 
 // interface IExtendedContentTypeElement {
 //     readonly type: ElementModels.ElementType;
@@ -59,9 +64,9 @@ import {
 // }
 
 interface IExtractImportsResult {
+    readonly typeName: string;
     readonly imports: readonly string[];
-    readonly contentTypeSnippetExtensions: string[];
-    readonly processedElements: readonly FlattenedElement[];
+    readonly contentTypeExtends: string | undefined;
 }
 
 export interface DeliveryContentTypeGeneratorConfig {
@@ -197,118 +202,108 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         };
     };
 
+    const snippetImports = (
+        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]
+    ): readonly string[] => {
+        return snippets.map((snippet) => {
+            return getImportStatement({
+                moduleResolution: config.moduleResolution,
+                filePathOrPackage: `../${config.typeSnippetsFolderName}/${contentTypeSnippetFileNameMap(
+                    snippet,
+                    false
+                )}.ts`,
+                importValue: contentTypeSnippetNameMap(snippet)
+            });
+        });
+    };
+
+    const getElementImports = (
+        typeOrSnippet: ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet,
+        elements: readonly FlattenedElement[]
+    ): readonly string[] => {
+        return (
+            elements
+                // only take elements that are not from snippets
+                .filter((m) => !m.fromSnippet)
+                .map((flattenedElement) =>
+                    match(flattenedElement)
+                        .returnType<string | string[]>()
+                        .with({ type: 'taxonomy' }, (taxonomyElement) => {
+                            if (!taxonomyElement.assignedTaxonomy) {
+                                throw Error(`Invalid taxonomy for element '${taxonomyElement.codename}'`);
+                            }
+                            return getImportStatement({
+                                moduleResolution: config.moduleResolution,
+                                filePathOrPackage: `../${config.taxonomyFolderName}/${taxonomyFileNameMap(taxonomyElement.assignedTaxonomy, false)}.ts`,
+                                importValue: taxonomyNameMap(taxonomyElement.assignedTaxonomy)
+                            });
+                        })
+                        .with(
+                            P.union({ type: 'modular_content' }, { type: 'subpages' }),
+                            (linkedItemsOrSubpagesElement) => {
+                                return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
+                                    .filter((allowedContentType) => {
+                                        // filter self-referencing types
+                                        if (allowedContentType.codename === typeOrSnippet.codename) {
+                                            return false;
+                                        }
+                                        return true;
+                                    })
+                                    .map((allowedContentType) => {
+                                        const referencedTypeFilename: string = `${contentTypeFileNameMap(allowedContentType, false)}`;
+
+                                        return getImportStatement({
+                                            moduleResolution: config.moduleResolution,
+                                            filePathOrPackage:
+                                                typeOrSnippet instanceof ContentTypeModels.ContentType
+                                                    ? `../${config.typeFolderName}/${referencedTypeFilename}.ts`
+                                                    : `./${referencedTypeFilename}.ts`,
+                                            importValue: `${contentTypeNameMap(allowedContentType)}`
+                                        });
+                                    });
+                            }
+                        )
+                        .otherwise(() => [])
+                )
+                .flatMap((m) => m)
+                .filter(isNotUndefined)
+        );
+    };
+
     const getContentTypeImports = (data: {
         typeOrSnippet: ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet;
+        flattenedElements: readonly FlattenedElement[];
     }): IExtractImportsResult => {
-        const imports: string[] = [];
-        const contentTypeSnippetExtensions: string[] = [];
-        const processedTypeIds: string[] = [];
-        const processedTaxonomyIds: string[] = [];
-
-        const flattenedElements = getFlattenedElements(
-            data.typeOrSnippet.elements,
-            config.environmentData.snippets,
-            config.environmentData.taxonomies,
-            config.environmentData.types
-        );
-
-        for (const extendedElement of flattenedElements) {
-            const element = extendedElement.originalElement;
-
-            if (element.type === 'taxonomy') {
-                const taxonomy = extractUsedTaxonomy(element, taxonomyObjectMap);
-
-                if (!taxonomy) {
-                    continue;
-                }
-
-                if (processedTaxonomyIds.includes(taxonomy.id)) {
-                    continue;
-                }
-
-                processedTaxonomyIds.push(taxonomy.id);
-
-                const taxonomyName: string = taxonomyNameMap(taxonomy);
-                const fileName: string = `../${config.taxonomyFolderName}/${taxonomyFileNameMap(taxonomy, false)}`;
-
-                imports.push(
-                    commonHelper.getImportStatement({
-                        moduleResolution: config.moduleResolution,
-                        filePathOrPackage: fileName,
-                        importValue: `type ${taxonomyName}`,
-                        isExternalLib: false
-                    })
-                );
-            } else if (element.type === 'modular_content' || element.type === 'subpages') {
-                // extract referenced types
-                const referencedTypes = extractLinkedItemsAllowedTypes(element, contentTypeObjectMap);
-
-                for (const referencedType of referencedTypes) {
-                    if (processedTypeIds.includes(referencedType.id)) {
-                        // type was already processed, no need to import it multiple times
-                        continue;
-                    }
-
-                    // filter 'self referencing' types as they don't need to be imported
-                    if (data.typeOrSnippet?.id === referencedType.id) {
-                        continue;
-                    }
-
-                    processedTypeIds.push(referencedType.id);
-
-                    const typeName: string = contentTypeNameMap(referencedType);
-                    const fileName: string = `${contentTypeFileNameMap(referencedType, false)}`;
-
-                    const filePath: string =
-                        data.typeOrSnippet instanceof ContentTypeModels.ContentType
-                            ? `../${config.typeFolderName}/${fileName}`
-                            : `./${fileName}`;
-
-                    imports.push(
-                        commonHelper.getImportStatement({
-                            moduleResolution: config.moduleResolution,
-                            filePathOrPackage: filePath,
-                            importValue: `type ${typeName}`,
-                            isExternalLib: false
-                        })
-                    );
-                }
-            } else if (element.type === 'snippet') {
-                const contentTypeSnipped = extractUsedSnippet(element, contentTypeSnippetObjectMap);
-
-                const typeName: string = contentTypeSnippetNameMap(contentTypeSnipped);
-                const filePath: string = `../${config.typeSnippetsFolderName}${contentTypeSnippetFileNameMap(
-                    contentTypeSnipped,
-                    false
-                )}`;
-
-                imports.push(
-                    commonHelper.getImportStatement({
-                        moduleResolution: config.moduleResolution,
-                        filePathOrPackage: filePath,
-                        importValue: `type ${typeName}`,
-                        isExternalLib: false
-                    })
-                );
-
-                contentTypeSnippetExtensions.push(typeName);
-            }
-        }
+        const snippets = data.flattenedElements.map((m) => m.fromSnippet).filter(isNotUndefined);
 
         return {
-            imports: sortAlphabetically(imports, (item) => item),
-            contentTypeSnippetExtensions: contentTypeSnippetExtensions,
-            processedElements: flattenedElements
+            imports: sortAlphabetically(
+                [...getElementImports(data.typeOrSnippet, data.flattenedElements), ...snippetImports(snippets)]
+                    .filter(isNotUndefined)
+                    .filter(uniqueFilter),
+                (importValue) => importValue
+            ),
+            contentTypeExtends:
+                data.typeOrSnippet instanceof ContentTypeModels.ContentType && snippets.length
+                    ? `& ${snippets
+                          .map((snippet) => contentTypeSnippetNameMap(snippet))
+                          .filter(uniqueFilter)
+                          .join(' & ')}`
+                    : undefined,
+            typeName:
+                data.typeOrSnippet instanceof ContentTypeModels.ContentType
+                    ? contentTypeNameMap(data.typeOrSnippet)
+                    : contentTypeSnippetNameMap(data.typeOrSnippet)
         };
+    };
+
+    const getDeliverySdkContentTypeImports = (flattenedElements: readonly FlattenedElement[]): string[] => {
+        return ['IContentItem', ...(flattenedElements.length ? ['Elements'] : [])];
     };
 
     const getModelCode = (data: {
         typeOrSnippet: ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet;
     }): string => {
-        const importResult = getContentTypeImports({
-            typeOrSnippet: data.typeOrSnippet
-        });
-
         const flattenedElements = getFlattenedElements(
             data.typeOrSnippet.elements,
             config.environmentData.snippets,
@@ -316,56 +311,32 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             config.environmentData.types
         );
 
-        const topLevelImports: string[] = ['type IContentItem'];
-
-        if (importResult.processedElements.filter((m) => m.type !== 'snippet' && m.type !== 'guidelines').length) {
-            // add 'Elements' import only if there is > 1 elements in content type
-            topLevelImports.push('type Elements');
-        }
-
-        let code = commonHelper.getImportStatement({
-            moduleResolution: config.moduleResolution,
-            filePathOrPackage: deliveryConfig.npmPackageName,
-            importValue: `${topLevelImports.join(', ')}`,
-            isExternalLib: true
+        const contentTypeImports = getContentTypeImports({
+            typeOrSnippet: data.typeOrSnippet,
+            flattenedElements: flattenedElements
         });
 
-        if (importResult.imports.length) {
-            for (const importItem of importResult.imports) {
-                code += `${importItem}`;
-            }
+        const code = `
+${getImportStatement({
+    moduleResolution: config.moduleResolution,
+    filePathOrPackage: deliveryConfig.npmPackageName,
+    importValue: `${getDeliverySdkContentTypeImports(flattenedElements).join(', ')}`
+})}
+${contentTypeImports.imports.join('\n')}
 
-            code += `\n`;
-        }
-
-        let comment: string = '';
-        let typeName: string = '';
-        let typeExtends: string = '';
-
-        if (data.typeOrSnippet instanceof ContentTypeModels.ContentType) {
-            comment = getContentTypeComment(data.typeOrSnippet);
-            typeName = contentTypeNameMap(data.typeOrSnippet);
-
-            if (importResult.contentTypeSnippetExtensions.length) {
-                typeExtends = `& ${importResult.contentTypeSnippetExtensions.join(' & ')}`;
-            }
-        } else if (data.typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet) {
-            comment = getContentTypeSnippetComment(data.typeOrSnippet);
-            typeName = contentTypeSnippetNameMap(data.typeOrSnippet);
-        }
-
-        code += `
 ${commentsManager.environmentInfo(config.environmentData.environment)}
 
 /**
+* ${toSafeString(data.typeOrSnippet.name)}
 * 
-* ${comment}
+* Id: ${data.typeOrSnippet.id}
+* Codename: ${data.typeOrSnippet.codename}
 */
-export type ${typeName} = IContentItem<{
+export type ${contentTypeImports.typeName} = IContentItem<{
     ${getElementsCode({
         flattenedElements: flattenedElements
     })}
-}>${typeExtends};
+}>${contentTypeImports.contentTypeExtends ? ` ${contentTypeImports.contentTypeExtends}` : ''};
 `;
         return code;
     };
@@ -397,24 +368,6 @@ export type ${typeName} = IContentItem<{
             filename: filename,
             text: code
         };
-    };
-
-    const getContentTypeComment = (contentType: ContentTypeModels.ContentType): string => {
-        let comment: string = `${contentType.name}`;
-
-        comment += `\n* Id: ${contentType.id}`;
-        comment += `\n* Codename: ${contentType.codename}`;
-
-        return comment;
-    };
-
-    const getContentTypeSnippetComment = (contentTypeSnippet: ContentTypeSnippetModels.ContentTypeSnippet): string => {
-        let comment: string = `${contentTypeSnippet.name}`;
-
-        comment += `\n* Id: ${contentTypeSnippet.id}`;
-        comment += `\n* Codename: ${contentTypeSnippet.codename}`;
-
-        return comment;
     };
 
     const getElementComment = (
@@ -456,9 +409,11 @@ export type ${typeName} = IContentItem<{
     };
 
     const getElementsCode = (data: { flattenedElements: readonly FlattenedElement[] }): string => {
+        // filter out elements that are from snippets
+        const filteredElements = data.flattenedElements.filter((m) => !m.fromSnippet);
         let code = '';
-        for (let i = 0; i < data.flattenedElements.length; i++) {
-            const flattenedElement = data.flattenedElements[i];
+        for (let i = 0; i < filteredElements.length; i++) {
+            const flattenedElement = filteredElements[i];
             const element = flattenedElement.originalElement;
             const mappedType = mapElementType({ element: flattenedElement });
 
@@ -483,7 +438,7 @@ export type ${typeName} = IContentItem<{
             code += `${getElementComment(flattenedElement, config.environmentData.taxonomies)}\n`;
             code += `${elementName}: Elements.${mappedType};`;
 
-            if (i !== data.flattenedElements.length - 1) {
+            if (i !== filteredElements.length - 1) {
                 code += '\n\n';
             }
         }
@@ -541,75 +496,6 @@ export type ${typeName} = IContentItem<{
         const allowedTypeNames: string[] = types.map((m) => contentTypeNameMap(m)) ?? [];
 
         return allowedTypeNames;
-    };
-
-    const extractLinkedItemsAllowedTypes = (
-        element: ContentTypeElements.ContentTypeElementModel,
-        contentTypeObjectMap: MapContentTypeIdToObject
-    ): ContentTypeModels.ContentType[] => {
-        const allowedTypeIds: string[] = [];
-
-        const codename = commonHelper.getElementCodename(element);
-
-        if (element.type === 'modular_content') {
-            const linkedItemsElement: ContentTypeElements.ILinkedItemsElement = element;
-
-            if (linkedItemsElement?.allowed_content_types?.length) {
-                allowedTypeIds.push(...(linkedItemsElement.allowed_content_types?.map((m) => m.id as string) ?? []));
-            }
-        } else if (element.type === 'subpages') {
-            const subpagesItemsElement: ContentTypeElements.ISubpagesElement = element;
-
-            if (subpagesItemsElement?.allowed_content_types?.length) {
-                allowedTypeIds.push(...(subpagesItemsElement.allowed_content_types?.map((m) => m.id as string) ?? []));
-            }
-        } else {
-            throw Error(
-                `Expected 'modular_content' or 'subpages' but got '${element.type}' for element '${codename}' with id '${element.id}'`
-            );
-        }
-
-        return allowedTypeIds.map((id) => contentTypeObjectMap(id));
-    };
-
-    const extractUsedSnippet = (
-        element: ContentTypeElements.ContentTypeElementModel,
-        contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject
-    ): ContentTypeSnippetModels.ContentTypeSnippet => {
-        if (element.type !== 'snippet') {
-            throw Error(`Expected 'snippet' but got '${element.type}' for element '${element.codename}'`);
-        }
-
-        const snippetElement: ContentTypeElements.ISnippetElement = element;
-
-        const snippedId = snippetElement.snippet.id;
-        if (!snippedId) {
-            throw Error(`Invalid snippet id for taxonomy element '${element.id}'`);
-        }
-
-        return contentTypeSnippetObjectMap(snippedId);
-    };
-
-    const extractUsedTaxonomy = (
-        element: ContentTypeElements.ContentTypeElementModel,
-        taxonomyObjectMap: MapTaxonomyIdTobject
-    ): TaxonomyModels.Taxonomy | undefined => {
-        const codename = commonHelper.getElementCodename(element);
-
-        if (element.type !== 'taxonomy') {
-            throw Error(
-                `Expected 'taxonomy' but got '${element.type}' for element '${codename}' with id '${element.id}'`
-            );
-        }
-
-        const taxonomyElement: ContentTypeElements.ITaxonomyElement = element;
-
-        const taxonomyGroupId = taxonomyElement.taxonomy_group.id;
-        if (!taxonomyGroupId) {
-            throw Error(`Invalid taxonomy group id for taxonomy element '${element.id}'`);
-        }
-
-        return taxonomyObjectMap(taxonomyGroupId);
     };
 
     return {
