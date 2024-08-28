@@ -2,7 +2,7 @@ import type { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
 
 /**
  *
- * Migration Toolkit - tests
+ * Migration Toolkit   tests
  *
  * Environment: Production
  * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
@@ -17,17 +17,19 @@ import type { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
 export type MySnippet = IContentItem<{
     /**
      * Snippet elem1 (text)
+     *
      * Required: false
-     * Id: 3b89ad47-4a72-4b4e-84b0-e8e8a7a3814d
      * Codename: my_snippet__snippet_elem1
+     * Id: 3b89ad47-4a72-4b4e-84b0-e8e8a7a3814d
      */
     my_snippet__snippet_elem1: Elements.TextElement;
 
     /**
      * Snippet elem 2 (number)
+     *
      * Required: false
-     * Id: b2f65646-3310-4a64-af2a-0d9d025a91d0
      * Codename: my_snippet__snippet_elem_2
+     * Id: b2f65646-3310-4a64-af2a-0d9d025a91d0
      */
     my_snippet__snippet_elem_2: Elements.NumberElement;
 }>;

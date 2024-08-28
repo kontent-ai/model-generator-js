@@ -1,13 +1,17 @@
-import { ModuleResolution, TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models.js';
+import { ModuleResolution, TaxonomyTypeResolver } from '../../models.js';
 import chalk from 'chalk';
 import { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+
 import {
-    MapTaxonomyToFileName,
-    MapTaxonomyName,
+    GeneratedFile,
+    getMapTaxonomyName,
     getMapTaxonomyToFileName,
-    getMapTaxonomyName
-} from './delivery-mappers.js';
-import { GeneratedFile, sortAlphabetically, toSafeString } from '../../core/index.js';
+    MapTaxonomyName,
+    MapTaxonomyToFileName,
+    sortAlphabetically,
+    TaxonomyTypeFileNameResolver,
+    toSafeString
+} from '../../core/index.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {

@@ -1,21 +1,16 @@
 import { PropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { Options } from 'prettier';
+import {
+    ContentTypeFileNameResolver,
+    ContentTypeSnippetFileNameResolver,
+    TaxonomyTypeFileNameResolver
+} from './core/index.js';
 
 export type ModuleResolution = 'nodeNext' | 'node';
 export type DefaultResolverType = 'camelCase' | 'pascalCase' | 'snakeCase';
 export type ModelType = 'delivery' | 'migration';
 export type ElementResolver = DefaultResolverType | PropertyNameResolver;
-
-export type ContentTypeFileNameResolver =
-    | DefaultResolverType
-    | ((contentType: Readonly<ContentTypeModels.ContentType>) => string);
-export type ContentTypeSnippetFileNameResolver =
-    | DefaultResolverType
-    | ((contentTypeSnippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>) => string);
-export type TaxonomyTypeFileNameResolver =
-    | DefaultResolverType
-    | ((taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string);
 
 export type ContentTypeResolver =
     | DefaultResolverType

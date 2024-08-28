@@ -1,5 +1,6 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import { libMetadata } from '../meta/index.js';
+import { toSafeString } from '../core/index.js';
 
 export function commentsManager(addTimestamp: boolean) {
     const generatedBy = (): string => {
@@ -23,9 +24,9 @@ export function commentsManager(addTimestamp: boolean) {
     ): string => {
         return wrapComment(
             `
-* ${environmentInfo.name}
+* ${toSafeString(environmentInfo.name)}
 *  
-* Environment: ${environmentInfo.environment}
+* Environment: ${toSafeString(environmentInfo.environment)}
 * Id: ${environmentInfo.id}`,
             opts
         );
