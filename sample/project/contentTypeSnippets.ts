@@ -6,66 +6,9 @@
  * -------------------------------------------------------------------------------
  *
  * Environment: Production
- * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+ * Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
  *
  * -------------------------------------------------------------------------------
  **/
-export const contentTypeSnippets = {
-    /**
-     * My snippet
-     */
-    mySnippet: {
-        codename: 'my_snippet',
-        id: '3274f9e7-ff1b-43f8-aa32-29b53939cd3e',
-        externalId: undefined,
-        name: 'My snippet',
-        elements: {
-            /**
-             * Snippet elem1 (text)
-             */
-            mySnippetSnippetElem1: {
-                codename: 'my_snippet__snippet_elem1',
-                id: '3b89ad47-4a72-4b4e-84b0-e8e8a7a3814d',
-                externalId: undefined,
-                name: 'Snippet elem1',
-                required: false,
-                type: 'text'
-            },
 
-            /**
-             * Snippet elem 2 (number)
-             */
-            mySnippetSnippetElem2: {
-                codename: 'my_snippet__snippet_elem_2',
-                id: 'b2f65646-3310-4a64-af2a-0d9d025a91d0',
-                externalId: undefined,
-                name: 'Snippet elem 2',
-                required: false,
-                type: 'number'
-            }
-        }
-    },
-
-    /**
-     * Taxonomy snippet test
-     */
-    taxonomySnippetTest: {
-        codename: 'taxonomy_snippet_test',
-        id: 'e8219115-e629-4552-b79b-d9f813272573',
-        externalId: undefined,
-        name: 'Taxonomy snippet test',
-        elements: {
-            /**
-             * Category (taxonomy)
-             */
-            taxonomySnippetTestTestTaxonomy: {
-                codename: 'taxonomy_snippet_test__test_taxonomy',
-                id: 'c030e3ec-5031-4d7f-af88-5032365733c7',
-                externalId: undefined,
-                name: 'Category',
-                required: false,
-                type: 'taxonomy'
-            }
-        }
-    }
-} as const;
+export const contentTypeSnippets = {} as const;

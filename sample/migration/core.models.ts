@@ -6,7 +6,7 @@
  * -------------------------------------------------------------------------------
  *
  * Environment: Production
- * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+ * Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
  *
  * -------------------------------------------------------------------------------
  **/
@@ -16,12 +16,12 @@ import type { MigrationItemSystem, MigrationItem, MigrationElements } from '@kon
 /**
  * Type representing all languages
  */
-export type LanguageCodenames = 'en' | 'es';
+export type LanguageCodenames = 'cz' | 'en' | 'German';
 
 /**
  * Type representing all content types
  */
-export type ContentTypeCodenames = 'actor' | 'movie' | 'test';
+export type ContentTypeCodenames = 'actor' | 'movie';
 
 /**
  * Type representing all collections
@@ -31,19 +31,12 @@ export type CollectionCodenames = 'default';
 /**
  * Type representing all workflows
  */
-export type WorkflowCodenames = 'default' | 'my_test_workflow';
+export type WorkflowCodenames = 'default';
 
 /**
  * Type representing all worksflow steps across all workflows
  */
-export type WorkflowStepCodenames =
-    | 'draft'
-    | 'ready_to_publish'
-    | 'published'
-    | 'archived'
-    | 'scheduled'
-    | 'draft_3171da5'
-    | 'ready_for_review';
+export type WorkflowStepCodenames = 'draft' | 'review' | 'ready_to_publish' | 'published' | 'archived' | 'scheduled';
 
 /**
  * System object shared by all individual content type models
