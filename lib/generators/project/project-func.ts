@@ -3,7 +3,14 @@ import { projectGenerator as _projectGenerator } from './project.generator.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { parse } from 'path';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { coreConfig, GeneratedFile, getBarrelExportCode, ModuleResolution, toOutputDirPath } from '../../core/index.js';
+import {
+    coreConfig,
+    GeneratedFile,
+    getBarrelExportCode,
+    getDefaultModuleResolution,
+    ModuleResolution,
+    toOutputDirPath
+} from '../../core/index.js';
 import { Options } from 'prettier';
 
 export interface GenerateProjectModelsConfig {
@@ -37,7 +44,7 @@ export async function generateProjectModelsAsync(config: GenerateProjectModelsCo
 async function getModelsAsync(
     config: GenerateProjectModelsConfig
 ): Promise<{ projectFiles: readonly GeneratedFile[]; moduleResolution: ModuleResolution }> {
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
+    const moduleResolution: ModuleResolution = getDefaultModuleResolution(config.moduleResolution);
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,

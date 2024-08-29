@@ -5,7 +5,8 @@ import {
     toOutputDirPath,
     getBarrelExportCode,
     ModuleResolution,
-    GeneratedFile
+    GeneratedFile,
+    getDefaultModuleResolution
 } from '../../core/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
@@ -46,7 +47,7 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
     readonly migrationItemFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
 }> {
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
+    const moduleResolution: ModuleResolution = getDefaultModuleResolution(config.moduleResolution);
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,

@@ -15,6 +15,10 @@ export function uniqueFilter(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
 }
 
+export function getDefaultModuleResolution(moduleResolution: ModuleResolution | undefined): ModuleResolution {
+    return moduleResolution ?? 'node';
+}
+
 export function replaceTsExtensionWithJs(filePath: string): string {
     return filePath.replace('.ts', '.js');
 }

@@ -17,7 +17,8 @@ import {
     ModuleResolution,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver,
-    toOutputDirPath
+    toOutputDirPath,
+    getDefaultModuleResolution
 } from '../../core/index.js';
 import { Options } from 'prettier';
 
@@ -74,8 +75,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     readonly taxonomyFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
 }> {
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
-
+    const moduleResolution: ModuleResolution = getDefaultModuleResolution(config.moduleResolution);
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
