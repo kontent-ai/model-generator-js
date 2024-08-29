@@ -19,6 +19,7 @@ export function commentsManager() {
 *  
 * -------------------------------------------------------------------------------
 * 
+* Project: ${toSafeString(data.environmentInfo.name)}
 * Environment: ${toSafeString(data.environmentInfo.environment)}
 * Id: ${data.environmentInfo.id}${data.addTimestamp ? `\n* Generated: ${new Date().toLocaleString()}` : ''}
 * 
