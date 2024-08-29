@@ -1,10 +1,5 @@
 import {} from '@kontent-ai/delivery-sdk';
-import {
-    ContentTypeModels,
-    ContentTypeSnippetModels,
-    ContentTypeElements,
-    TaxonomyModels
-} from '@kontent-ai/management-sdk';
+import { ContentTypeModels, ContentTypeSnippetModels, ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { toCamelCase, toPascalCase, toSnakeCase } from './core.utils.js';
 import { match } from 'ts-pattern';
 import { CaseType, GeneratorElementResolver } from './core.models.js';
@@ -14,31 +9,20 @@ export type ObjectWithCodename = {
 };
 
 /** File name resolvers */
-export type FilenameResolver<T extends Readonly<object>> =
-    | undefined
-    | CaseType
-    | ((item: T & ObjectWithCodename) => string);
+export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
 
-export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (
-    item: T,
-    addExtension: boolean
-) => string;
+export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T, addExtension: boolean) => string;
 
 export type ContentTypeFileNameResolver = FilenameResolver<ContentTypeModels.ContentType>;
 export type ContentTypeSnippetFileNameResolver = FilenameResolver<ContentTypeSnippetModels.ContentTypeSnippet>;
 export type TaxonomyTypeFileNameResolver = FilenameResolver<TaxonomyModels.Taxonomy>;
 
 /** Name resolvers */
-export type NameResolver<T extends Readonly<object>> =
-    | undefined
-    | CaseType
-    | ((item: T & ObjectWithCodename) => string);
+export type NameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
 
 export type MapObjectToName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T) => string;
 
-export type ElementNameResolver = (
-    element: Readonly<ContentTypeElements.ContentTypeElementModel>
-) => string | undefined;
+export type ElementNameResolver = (element: Readonly<ContentTypeElements.ContentTypeElementModel>) => string | undefined;
 export type ContentTypeNameResolver = NameResolver<ContentTypeModels.ContentType>;
 export type ContentTypeSnippetNameResolver = NameResolver<ContentTypeSnippetModels.ContentTypeSnippet>;
 export type TaxonomyNameResolver = NameResolver<TaxonomyModels.Taxonomy>;
@@ -63,10 +47,7 @@ export function mapFilename<T extends ObjectWithCodename>(resolver: FilenameReso
     };
 }
 
-export function mapName<T extends ObjectWithCodename>(
-    resolver: NameResolver<T>,
-    defaultCase: CaseType
-): MapObjectToName<T> {
+export function mapName<T extends ObjectWithCodename>(resolver: NameResolver<T>, defaultCase: CaseType): MapObjectToName<T> {
     return (item) => {
         return match(resolver)
             .returnType<string>()
@@ -82,10 +63,7 @@ export function mapName<T extends ObjectWithCodename>(
     };
 }
 
-export function mapElementName(
-    resolver: GeneratorElementResolver | undefined,
-    defaultCase: CaseType
-): ElementNameResolver {
+export function mapElementName(resolver: GeneratorElementResolver | undefined, defaultCase: CaseType): ElementNameResolver {
     return (element) => {
         const codename = element.codename;
 
