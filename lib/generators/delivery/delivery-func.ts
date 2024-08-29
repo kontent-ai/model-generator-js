@@ -17,10 +17,10 @@ import {
     ModuleResolution,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver,
-    toOutputDirPath,
     getDefaultModuleResolution
 } from '../../core/index.js';
 import { Options } from 'prettier';
+import { EnvironmentModels } from '@kontent-ai/management-sdk';
 
 export interface GenerateDeliveryModelsConfig {
     readonly environmentId: string;
@@ -51,18 +51,21 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
 
-    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution } = await getFilesAsync(config);
+    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution, environmentInfo } =
+        await getFilesAsync(config);
 
     await createFilesAsync(
         {
             contentTypeFiles,
             snippetFiles,
-            taxonomyFiles
+            taxonomyFiles,
+            environmentInfo
         },
         {
             formatOptions: config.formatOptions,
             moduleResolution: moduleResolution,
-            outputDir: config.outputDir
+            outputDir: config.outputDir,
+            addTimestamp: config.addTimestamp
         }
     );
 
@@ -74,6 +77,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     readonly snippetFiles: readonly GeneratedFile[];
     readonly taxonomyFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
+    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
     const moduleResolution: ModuleResolution = getDefaultModuleResolution(config.moduleResolution);
     const kontentFetcher = _kontentFetcher({
@@ -82,7 +86,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         baseUrl: config.baseUrl
     });
 
-    const environment = await kontentFetcher.getEnvironmentInfoAsync();
+    const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
     const { contentTypeFiles, snippetFiles } = deliveryContentTypeGenerator({
@@ -90,7 +94,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         addEnvironmentInfo: config.addEnvironmentInfo,
         moduleResolution: moduleResolution,
         environmentData: {
-            environment: environment,
+            environment: environmentInfo,
             types: await kontentFetcher.getTypesAsync(),
             snippets: await kontentFetcher.getSnippetsAsync(),
             taxonomies: taxonomies
@@ -114,7 +118,8 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         contentTypeFiles,
         snippetFiles,
         taxonomyFiles,
-        moduleResolution
+        moduleResolution,
+        environmentInfo
     };
 }
 
@@ -123,69 +128,73 @@ async function createFilesAsync(
         readonly contentTypeFiles: readonly GeneratedFile[];
         readonly snippetFiles: readonly GeneratedFile[];
         readonly taxonomyFiles: readonly GeneratedFile[];
+        readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
     },
     config: {
+        readonly addTimestamp: boolean;
         readonly outputDir: string | undefined;
         readonly moduleResolution: ModuleResolution;
         readonly formatOptions: Readonly<Options> | undefined;
     }
 ): Promise<void> {
-    const fileManager = _fileManager(toOutputDirPath(config.outputDir));
+    const fileManager = _fileManager({
+        outputDir: config.outputDir,
+        addTimestamp: config.addTimestamp,
+        environmentInfo: data.environmentInfo,
+        formatOptions: config.formatOptions
+    });
 
-    await fileManager.createFilesAsync(
-        [
-            ...data.contentTypeFiles,
-            ...data.snippetFiles,
-            ...data.taxonomyFiles,
-            // barrel files
-            {
-                filename: `${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
-                text: getBarrelExportCode({
-                    moduleResolution: config.moduleResolution,
-                    filenames: [
-                        ...data.contentTypeFiles.map((m) => {
-                            const path = parse(m.filename);
-                            return `./${path.name}`;
-                        })
-                    ]
-                })
-            },
-            {
-                filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
-                text: getBarrelExportCode({
-                    moduleResolution: config.moduleResolution,
-                    filenames: [
-                        ...data.snippetFiles.map((m) => {
-                            const path = parse(m.filename);
-                            return `./${path.name}`;
-                        })
-                    ]
-                })
-            },
-            {
-                filename: `${deliveryConfig.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
-                text: getBarrelExportCode({
-                    moduleResolution: config.moduleResolution,
-                    filenames: [
-                        ...data.taxonomyFiles.map((m) => {
-                            const path = parse(m.filename);
-                            return `./${path.name}`;
-                        })
-                    ]
-                })
-            },
-            {
-                filename: coreConfig.barrelExportFilename,
-                text: getBarrelExportCode({
-                    moduleResolution: config.moduleResolution,
-                    filenames: [
-                        `./${deliveryConfig.contentTypesFolderName}/index`,
-                        `./${deliveryConfig.contentTypeSnippetsFolderName}/index`,
-                        `./${deliveryConfig.taxonomiesFolderName}/index`
-                    ]
-                })
-            }
-        ],
-        config.formatOptions
-    );
+    await fileManager.createFilesAsync([
+        ...data.contentTypeFiles,
+        ...data.snippetFiles,
+        ...data.taxonomyFiles,
+        // barrel files
+        {
+            filename: `${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
+            text: getBarrelExportCode({
+                moduleResolution: config.moduleResolution,
+                filenames: [
+                    ...data.contentTypeFiles.map((m) => {
+                        const path = parse(m.filename);
+                        return `./${path.name}`;
+                    })
+                ]
+            })
+        },
+        {
+            filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
+            text: getBarrelExportCode({
+                moduleResolution: config.moduleResolution,
+                filenames: [
+                    ...data.snippetFiles.map((m) => {
+                        const path = parse(m.filename);
+                        return `./${path.name}`;
+                    })
+                ]
+            })
+        },
+        {
+            filename: `${deliveryConfig.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
+            text: getBarrelExportCode({
+                moduleResolution: config.moduleResolution,
+                filenames: [
+                    ...data.taxonomyFiles.map((m) => {
+                        const path = parse(m.filename);
+                        return `./${path.name}`;
+                    })
+                ]
+            })
+        },
+        {
+            filename: coreConfig.barrelExportFilename,
+            text: getBarrelExportCode({
+                moduleResolution: config.moduleResolution,
+                filenames: [
+                    `./${deliveryConfig.contentTypesFolderName}/index`,
+                    `./${deliveryConfig.contentTypeSnippetsFolderName}/index`,
+                    `./${deliveryConfig.taxonomiesFolderName}/index`
+                ]
+            })
+        }
+    ]);
 }

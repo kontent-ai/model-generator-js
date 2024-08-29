@@ -13,7 +13,6 @@ import {
     WorkflowModels,
     ContentTypeElements
 } from '@kontent-ai/management-sdk';
-import { commentsManager as _commentsManager } from '../../comments/index.js';
 import {
     FlattenedElement,
     GeneratedFile,
@@ -55,19 +54,11 @@ export interface ProjectGeneratorConfig {
 }
 
 export function projectGenerator(config: ProjectGeneratorConfig) {
-    const commentsManager = _commentsManager(config.addTimestamp);
-
-    const getHeaderComment = (): string => {
-        return `${commentsManager.environmentInfo(config.environmentData.environmentInfo, { addGeneratedBy: true })}`;
-    };
-
     const generateProjectModel = (): readonly GeneratedFile[] => {
-        const headerCode = getHeaderComment();
-
         return getProjectModelCode().map((projectCode) => {
             return {
                 filename: `${projectCode.filename}`,
-                text: headerCode + '\n' + projectCode.code
+                text: projectCode.code
             };
         });
     };

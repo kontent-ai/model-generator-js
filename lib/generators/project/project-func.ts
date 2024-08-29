@@ -8,10 +8,10 @@ import {
     GeneratedFile,
     getBarrelExportCode,
     getDefaultModuleResolution,
-    ModuleResolution,
-    toOutputDirPath
+    ModuleResolution
 } from '../../core/index.js';
 import { Options } from 'prettier';
+import { EnvironmentModels } from '@kontent-ai/management-sdk';
 
 export interface GenerateProjectModelsConfig {
     readonly environmentId: string;
@@ -29,21 +29,25 @@ export async function generateProjectModelsAsync(config: GenerateProjectModelsCo
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('project')}' models\n`);
 
-    const { moduleResolution, projectFiles } = await getModelsAsync(config);
+    const { moduleResolution, projectFiles, environmentInfo } = await getModelsAsync(config);
 
     await createFilesAsync({
         moduleResolution,
         projectFiles,
         outputDir: config.outputDir,
-        formatOptions: config.formatOptions
+        formatOptions: config.formatOptions,
+        addTimestamp: config.addTimestamp,
+        environmentInfo
     });
 
     console.log(chalk.green(`\nCompleted`));
 }
 
-async function getModelsAsync(
-    config: GenerateProjectModelsConfig
-): Promise<{ projectFiles: readonly GeneratedFile[]; moduleResolution: ModuleResolution }> {
+async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
+    projectFiles: readonly GeneratedFile[];
+    moduleResolution: ModuleResolution;
+    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+}> {
     const moduleResolution: ModuleResolution = getDefaultModuleResolution(config.moduleResolution);
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
@@ -51,14 +55,15 @@ async function getModelsAsync(
         baseUrl: config.baseUrl
     });
 
-    const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
+    const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 
     return {
+        environmentInfo,
         projectFiles: _projectGenerator({
             addTimestamp: config.addTimestamp,
             formatOptions: config.formatOptions,
             environmentData: {
-                environmentInfo: projectInformation,
+                environmentInfo: environmentInfo,
                 languages: await kontentFetcher.getLanguagesAsync(),
                 taxonomies: await kontentFetcher.getTaxonomiesAsync(),
                 types: await kontentFetcher.getTypesAsync(),
@@ -78,27 +83,31 @@ async function createFilesAsync(data: {
     readonly projectFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
     readonly outputDir?: string;
-
+    readonly addTimestamp: boolean;
+    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
     readonly formatOptions?: Readonly<Options>;
 }): Promise<void> {
-    const fileManager = _fileManager(toOutputDirPath(data.outputDir));
-    await fileManager.createFilesAsync(
-        [
-            ...data.projectFiles,
-            // barrel file
-            {
-                filename: coreConfig.barrelExportFilename,
-                text: getBarrelExportCode({
-                    moduleResolution: data.moduleResolution,
-                    filenames: [
-                        ...data.projectFiles.map((m) => {
-                            const path = parse(m.filename);
-                            return `./${path.name}`;
-                        })
-                    ]
-                })
-            }
-        ],
-        data.formatOptions
-    );
+    const fileManager = _fileManager({
+        addTimestamp: data.addTimestamp,
+        environmentInfo: data.environmentInfo,
+        formatOptions: data.formatOptions,
+        outputDir: data.outputDir
+    });
+
+    await fileManager.createFilesAsync([
+        ...data.projectFiles,
+        // barrel file
+        {
+            filename: coreConfig.barrelExportFilename,
+            text: getBarrelExportCode({
+                moduleResolution: data.moduleResolution,
+                filenames: [
+                    ...data.projectFiles.map((m) => {
+                        const path = parse(m.filename);
+                        return `./${path.name}`;
+                    })
+                ]
+            })
+        }
+    ]);
 }

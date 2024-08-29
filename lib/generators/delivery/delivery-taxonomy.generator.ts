@@ -11,7 +11,6 @@ import {
     ModuleResolution,
     deliveryConfig
 } from '../../core/index.js';
-import { commentsManager as _commentsManager } from '../../comments/index.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {
     readonly addTimestamp: boolean;
@@ -31,7 +30,6 @@ export interface DeliveryTaxonomyGeneratorConfig {
 }
 
 export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfig) {
-    const commentsManager = _commentsManager(config.addTimestamp);
     const taxonomyFileNameMap = mapFilename(config.fileResolvers?.taxonomy);
     const taxonomyNameMap = mapName(config.nameResolvers?.taxonomy, 'pascalCase');
 
@@ -50,8 +48,6 @@ export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfi
 
     const getModelCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
         return `
-${commentsManager.environmentInfo(config.environmentData.environment)}
-
 /**
  * ${toSafeString(taxonomy.name)}
  * 

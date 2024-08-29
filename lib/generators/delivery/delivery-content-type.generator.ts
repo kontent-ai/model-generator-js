@@ -7,7 +7,6 @@ import {
     TaxonomyModels
 } from '@kontent-ai/management-sdk';
 
-import { commentsManager as _commentsManager } from '../../comments/index.js';
 import {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
@@ -64,8 +63,6 @@ export interface DeliveryContentTypeGeneratorConfig {
 }
 
 export function deliveryContentTypeGenerator(config: DeliveryContentTypeGeneratorConfig) {
-    const commentsManager = _commentsManager(config.addTimestamp);
-
     // prepare resolvers
     const fileResolvers = {
         snippet: mapFilename(config.fileResolvers?.snippet),
@@ -216,8 +213,6 @@ ${getImportStatement({
     importValue: `${getDeliverySdkContentTypeImports(flattenedElements).join(', ')}`
 })}
 ${contentTypeImports.imports.join('\n')}
-
-${commentsManager.environmentInfo(config.environmentData.environment)}
 
 /**
 * ${toSafeString(typeOrSnippet.name)}

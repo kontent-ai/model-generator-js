@@ -53,7 +53,7 @@ const migrationTypeNames = {
 } as const;
 
 export function migrationGenerator(config: MigrationGeneratorConfig) {
-    const commentsManager = _commentsManager(config.addTimestamp);
+    const commentsManager = _commentsManager();
 
     const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {
@@ -112,8 +112,6 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                       importValue: `${migrationTypeNames.migrationItemSystem}, ${migrationTypeNames.migrationItem}, ${migrationTypeNames.migrationElements}`,
                       moduleResolution: config.moduleResolution
                   })}
-
-                ${commentsManager.environmentInfo(config.environmentData.environment)}
 
                 ${commentsManager.wrapComment('Type representing all languages')}
                 ${getLanguageCodenamesType(config.environmentData.languages)}

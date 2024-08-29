@@ -3,16 +3,30 @@ import { Options } from 'prettier';
 import { formatCodeAsync } from '../format/formatter.js';
 import * as fs from 'fs';
 import { dirname } from 'path';
-import { GeneratedFile } from '../core/index.js';
+import { GeneratedFile, toOutputDirPath } from '../core/index.js';
+import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import { commentsManager } from '../comments/index.js';
 
-export function fileManager(outputDir: string) {
+export function fileManager(config: {
+    outputDir: string | undefined;
+    formatOptions: Readonly<Options> | undefined;
+    environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+    addTimestamp: boolean;
+}) {
+    const fixedOutputDir = toOutputDirPath(config.outputDir);
+
     const createFileOnFsAsync = async (
         text: string,
         filePath: string,
         formatOptions: Readonly<Options> | undefined
     ): Promise<void> => {
-        const fullFilePath = `${outputDir.endsWith('/') ? outputDir : `${outputDir}/`}${filePath}`;
-        let fileContent = text;
+        const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
+
+        let fileContent =
+            `${commentsManager().getEnvironmentInfoComment({
+                environmentInfo: config.environmentInfo,
+                addTimestamp: config.addTimestamp
+            })}\n\n` + text;
         try {
             fileContent = await formatCodeAsync(fileContent, formatOptions);
         } catch {
@@ -37,13 +51,10 @@ export function fileManager(outputDir: string) {
         fs.mkdirSync(resolvedDirname);
     };
 
-    const createFilesAsync = async (
-        files: readonly GeneratedFile[],
-        formatOptions: Readonly<Options> | undefined
-    ): Promise<void> => {
+    const createFilesAsync = async (files: readonly GeneratedFile[]): Promise<void> => {
         await Promise.all(
             files.map((file) => {
-                return createFileOnFsAsync(file.text, file.filename, formatOptions);
+                return createFileOnFsAsync(file.text, file.filename, config.formatOptions);
             })
         );
     };
