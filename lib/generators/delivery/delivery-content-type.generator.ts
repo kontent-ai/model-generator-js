@@ -1,11 +1,6 @@
 import { match, P } from 'ts-pattern';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
-import {
-    ContentTypeModels,
-    ContentTypeSnippetModels,
-    EnvironmentModels,
-    TaxonomyModels
-} from '@kontent-ai/management-sdk';
+import { ContentTypeModels, ContentTypeSnippetModels, EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 
 import {
     ContentTypeFileNameResolver,
@@ -83,22 +78,15 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     } => {
         return {
             contentTypeFiles: config.environmentData.types.map((type) => createContentTypeModel(type)),
-            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) =>
-                createContentTypeSnippetModel(contentTypeSnippet)
-            )
+            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createContentTypeSnippetModel(contentTypeSnippet))
         };
     };
 
-    const getSnippetImports = (
-        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]
-    ): readonly string[] => {
+    const getSnippetImports = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): readonly string[] => {
         return snippets.map((snippet) => {
             return getImportStatement({
                 moduleResolution: config.moduleResolution,
-                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.snippet(
-                    snippet,
-                    false
-                )}.ts`,
+                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.snippet(snippet, false)}.ts`,
                 importValue: nameResolvers.snippet(snippet)
             });
         });
@@ -125,31 +113,28 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                                 importValue: nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy)
                             });
                         })
-                        .with(
-                            P.union({ type: 'modular_content' }, { type: 'subpages' }),
-                            (linkedItemsOrSubpagesElement) => {
-                                return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
-                                    .filter((allowedContentType) => {
-                                        // filter self-referencing types
-                                        if (allowedContentType.codename === typeOrSnippet.codename) {
-                                            return false;
-                                        }
-                                        return true;
-                                    })
-                                    .map((allowedContentType) => {
-                                        const referencedTypeFilename: string = `${fileResolvers.contentType(allowedContentType, false)}`;
+                        .with(P.union({ type: 'modular_content' }, { type: 'subpages' }), (linkedItemsOrSubpagesElement) => {
+                            return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
+                                .filter((allowedContentType) => {
+                                    // filter self-referencing types
+                                    if (allowedContentType.codename === typeOrSnippet.codename) {
+                                        return false;
+                                    }
+                                    return true;
+                                })
+                                .map((allowedContentType) => {
+                                    const referencedTypeFilename: string = `${fileResolvers.contentType(allowedContentType, false)}`;
 
-                                        return getImportStatement({
-                                            moduleResolution: config.moduleResolution,
-                                            filePathOrPackage:
-                                                typeOrSnippet instanceof ContentTypeModels.ContentType
-                                                    ? `../${deliveryConfig.contentTypesFolderName}/${referencedTypeFilename}.ts`
-                                                    : `./${referencedTypeFilename}.ts`,
-                                            importValue: `${nameResolvers.contentType(allowedContentType)}`
-                                        });
+                                    return getImportStatement({
+                                        moduleResolution: config.moduleResolution,
+                                        filePathOrPackage:
+                                            typeOrSnippet instanceof ContentTypeModels.ContentType
+                                                ? `../${deliveryConfig.contentTypesFolderName}/${referencedTypeFilename}.ts`
+                                                : `./${referencedTypeFilename}.ts`,
+                                        importValue: `${nameResolvers.contentType(allowedContentType)}`
                                     });
-                            }
-                        )
+                                });
+                        })
                         .otherwise(() => [])
                 )
                 .flatMap((m) => m)
@@ -159,9 +144,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     };
 
     const getContentTypeImports = (data: {
-        readonly typeOrSnippet:
-            | Readonly<ContentTypeModels.ContentType>
-            | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
+        readonly typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
         readonly flattenedElements: readonly FlattenedElement[];
     }): ExtractImportsResult => {
         const snippets = data.flattenedElements.map((m) => m.fromSnippet).filter(isNotUndefined);
@@ -234,9 +217,7 @@ export type ${contentTypeImports.typeName} = IContentItem<{
         };
     };
 
-    const createContentTypeSnippetModel = (
-        snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>
-    ): GeneratedFile => {
+    const createContentTypeSnippetModel = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): GeneratedFile => {
         return {
             filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.snippet(snippet, true)}`,
             text: getModelCode(snippet)
@@ -294,9 +275,7 @@ export type ${contentTypeImports.typeName} = IContentItem<{
         return element.assignedTaxonomy ? nameResolvers.taxonomy(element.assignedTaxonomy) : undefined;
     };
 
-    const getLinkedItemsAllowedTypes = (
-        types: readonly Readonly<ContentTypeModels.ContentType>[]
-    ): readonly string[] => {
+    const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {
         if (!types.length) {
             return ['IContentItem'];
         }

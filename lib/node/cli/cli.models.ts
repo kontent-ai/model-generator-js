@@ -4,7 +4,7 @@ export interface Command {
     readonly name: string;
     readonly description: string;
     readonly options: readonly CommandOption[];
-    readonly examples: string[];
+    readonly examples: readonly string[];
 }
 
 export interface CommandOption {
