@@ -17,9 +17,9 @@ import {
     removeLineEndings,
     toPascalCase,
     getFlattenedElements,
-    migrationConfig
+    migrationConfig,
+    ModuleResolution
 } from '../../core/index.js';
-import { ModuleResolution } from '../../models.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
 
 export interface MigrationGeneratorConfig {

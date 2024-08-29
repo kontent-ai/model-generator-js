@@ -3,9 +3,9 @@ import {
     pascalCasePropertyNameResolver,
     snakeCasePropertyNameResolver
 } from '@kontent-ai/delivery-sdk';
-import { ModuleResolution } from '../models.js';
 import { LibraryType, LiteralUnion } from './index.js';
 import { parse } from 'path';
+import { ModuleResolution } from './core.models.js';
 
 export function exitProgram(data: { readonly message: string }): never {
     throw Error(data.message);

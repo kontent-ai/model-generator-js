@@ -23,5 +23,5 @@ export type TaxonomySnippetTest = IContentItem<{
      * Codename: taxonomy_snippet_test__test_taxonomy
      * Id: c030e3ec-5031-4d7f-af88-5032365733c7
      */
-    taxonomy_snippet_test__test_taxonomy: Elements.TaxonomyElement<Category>;
+    taxonomySnippetTestTestTaxonomy: Elements.TaxonomyElement<Category>;
 }>;

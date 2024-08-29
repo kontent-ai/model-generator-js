@@ -40,7 +40,7 @@ export type Actor = IContentItem<{
      * Codename: last_name
      * Id: 0f00b26e-60f3-462d-8110-18180137c3a0
      */
-    last_name: Elements.TextElement;
+    lastName: Elements.TextElement;
 
     /**
      * first_name (text)
@@ -49,5 +49,5 @@ export type Actor = IContentItem<{
      * Codename: first_name
      * Id: 4af5e7ce-88ef-4159-96ae-96a552992f91
      */
-    first_name: Elements.TextElement;
+    firstName: Elements.TextElement;
 }>;

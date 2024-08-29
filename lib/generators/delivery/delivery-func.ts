@@ -1,12 +1,44 @@
 import chalk from 'chalk';
-import { GenerateDeliveryModelsConfig, ModuleResolution } from '../../models.js';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
 import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
-import { fileProcessor as _fileProcessor } from '../../files/index.js';
+import { fileManager as _fileManager } from '../../files/index.js';
 import { parse } from 'path';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { coreConfig, deliveryConfig, GeneratedFile, getBarrelExportCode, toOutputDirPath } from '../../core/index.js';
+import {
+    ContentTypeFileNameResolver,
+    ContentTypeNameResolver,
+    ContentTypeSnippetFileNameResolver,
+    ContentTypeSnippetNameResolver,
+    coreConfig,
+    deliveryConfig,
+    GeneratorElementResolver,
+    GeneratedFile,
+    getBarrelExportCode,
+    ModuleResolution,
+    TaxonomyNameResolver,
+    TaxonomyTypeFileNameResolver,
+    toOutputDirPath
+} from '../../core/index.js';
 import { Options } from 'prettier';
+
+export interface GenerateDeliveryModelsConfig {
+    readonly environmentId: string;
+    readonly addTimestamp: boolean;
+    readonly addEnvironmentInfo: boolean;
+    readonly apiKey: string;
+
+    readonly moduleResolution?: ModuleResolution;
+    readonly baseUrl?: string;
+    readonly outputDir?: string;
+    readonly contentTypeFileResolver?: ContentTypeFileNameResolver;
+    readonly contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
+    readonly taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
+    readonly contentTypeResolver?: ContentTypeNameResolver;
+    readonly contentTypeSnippetResolver?: ContentTypeSnippetNameResolver;
+    readonly taxonomyTypeResolver?: TaxonomyNameResolver;
+    readonly elementResolver?: GeneratorElementResolver;
+    readonly formatOptions?: Readonly<Options>;
+}
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
@@ -29,37 +61,49 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 
     // create content type models
     const deliveryModels = deliveryContentTypeGenerator({
-        typeFolderName: contentTypesFolderName,
-        taxonomyFolderName: taxonomiesFolderName,
-        typeSnippetsFolderName: contentTypeSnippetsFolderName,
         addTimestamp: config.addTimestamp,
         addEnvironmentInfo: config.addEnvironmentInfo,
-        elementResolver: config.elementResolver,
-        contentTypeFileNameResolver: config.contentTypeFileResolver,
-        contentTypeResolver: config.contentTypeResolver,
-        taxonomyFileResolver: config.taxonomyTypeFileResolver,
-        taxonomyResolver: config.taxonomyTypeResolver,
-        contentTypeSnippetFileNameResolver: config.contentTypeSnippetFileResolver,
-        contentTypeSnippetResolver: config.contentTypeSnippetResolver,
         moduleResolution: moduleResolution,
         environmentData: {
             environment: environment,
             types: await kontentFetcher.getTypesAsync(),
             snippets: await kontentFetcher.getSnippetsAsync(),
             taxonomies: taxonomies
+        },
+        folders: {
+            typeFolderName: contentTypesFolderName,
+            taxonomyFolderName: taxonomiesFolderName,
+            typeSnippetsFolderName: contentTypeSnippetsFolderName
+        },
+        fileResolvers: {
+            taxonomyFileResolver: config.taxonomyTypeFileResolver,
+            contentTypeFileResolver: config.contentTypeFileResolver,
+            contentTypeSnippetFileResolver: config.contentTypeSnippetFileResolver
+        },
+        nameResolvers: {
+            elementNameResolver: config.elementResolver,
+            contentTypeNameResolver: config.contentTypeResolver,
+            taxonomyNameResolver: config.taxonomyTypeResolver,
+            snippetNameResolver: config.contentTypeSnippetResolver
         }
     }).generateModels();
 
     // create taxonomy types
     const taxonomyFiles = deliveryTaxonomyGenerator({
-        taxonomyFolderName: taxonomiesFolderName,
         addTimestamp: config.addTimestamp,
-        fileResolver: config.taxonomyTypeFileResolver,
-        taxonomyResolver: config.taxonomyTypeResolver,
         moduleResolution: moduleResolution,
         environmentData: {
             environment: await kontentFetcher.getEnvironmentInfoAsync(),
             taxonomies: taxonomies
+        },
+        fileResolvers: {
+            taxonomyFilenameResolver: config.taxonomyTypeFileResolver
+        },
+        folders: {
+            taxonomyFolderName: taxonomiesFolderName
+        },
+        nameResolvers: {
+            taxonomyNameResolver: config.taxonomyTypeResolver
         }
     }).generateTaxonomyTypes();
 
@@ -93,7 +137,7 @@ async function createDeliveryFilesAsync(
     config: {
         readonly outputDir: string | undefined;
         readonly moduleResolution: ModuleResolution;
-        readonly formatOptions: Options | undefined;
+        readonly formatOptions: Readonly<Options> | undefined;
     },
     folders: {
         readonly contentTypesFolderName: string;
@@ -101,9 +145,9 @@ async function createDeliveryFilesAsync(
         readonly taxonomiesFolderName: string;
     }
 ): Promise<void> {
-    const fileProcessor = _fileProcessor(toOutputDirPath(config.outputDir));
+    const fileManager = _fileManager(toOutputDirPath(config.outputDir));
 
-    await fileProcessor.createFilesAsync(
+    await fileManager.createFilesAsync(
         [
             ...data.contentTypeFiles,
             ...data.snippetFiles,

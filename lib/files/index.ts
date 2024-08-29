@@ -1,1 +1,1 @@
-export * from './file-processor.js';
+export * from './file-manager.js';

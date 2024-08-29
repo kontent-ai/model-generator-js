@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { match, P } from 'ts-pattern';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import {
@@ -7,33 +6,29 @@ import {
     EnvironmentModels,
     TaxonomyModels
 } from '@kontent-ai/management-sdk';
-import {
-    ContentTypeResolver,
-    ElementResolver,
-    TaxonomyTypeResolver,
-    ContentTypeSnippetResolver,
-    ModuleResolution
-} from '../../models.js';
 
 import { commentsManager as _commentsManager } from '../../comments/index.js';
 import {
     ContentTypeFileNameResolver,
+    ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
+    ContentTypeSnippetNameResolver,
     deliveryConfig,
     FlattenedElement,
     GeneratedFile,
     getFlattenedElements,
     getImportStatement,
-    getMapContentTypeSnippetToDeliveryTypeName,
-    getMapContentTypeToDeliveryTypeName,
-    getMapElementToName,
-    getMapTaxonomyName,
+    mapElementName,
     mapFilename,
+    mapName,
     removeLineEndings,
     sortAlphabetically,
     TaxonomyTypeFileNameResolver,
+    TaxonomyNameResolver,
     toSafeString,
-    uniqueFilter
+    uniqueFilter,
+    ModuleResolution,
+    GeneratorElementResolver
 } from '../../core/index.js';
 
 interface ExtractImportsResult {
@@ -43,20 +38,28 @@ interface ExtractImportsResult {
 }
 
 export interface DeliveryContentTypeGeneratorConfig {
-    readonly typeFolderName: string;
-    readonly typeSnippetsFolderName: string;
-    readonly taxonomyFolderName: string;
-
     readonly addTimestamp: boolean;
     readonly addEnvironmentInfo: boolean;
-    readonly elementResolver?: ElementResolver;
-    readonly contentTypeFileNameResolver?: ContentTypeFileNameResolver;
-    readonly contentTypeSnippetFileNameResolver?: ContentTypeSnippetFileNameResolver;
-    readonly contentTypeResolver?: ContentTypeResolver;
-    readonly contentTypeSnippetResolver?: ContentTypeSnippetResolver;
-    readonly taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
-    readonly taxonomyResolver?: TaxonomyTypeResolver;
     readonly moduleResolution: ModuleResolution;
+
+    readonly folders: {
+        readonly typeFolderName: string;
+        readonly typeSnippetsFolderName: string;
+        readonly taxonomyFolderName: string;
+    };
+
+    readonly fileResolvers: {
+        readonly contentTypeFileResolver?: ContentTypeFileNameResolver;
+        readonly contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
+        readonly taxonomyFileResolver?: TaxonomyTypeFileNameResolver;
+    };
+
+    readonly nameResolvers: {
+        readonly contentTypeNameResolver?: ContentTypeNameResolver;
+        readonly snippetNameResolver?: ContentTypeSnippetNameResolver;
+        readonly taxonomyNameResolver?: TaxonomyNameResolver;
+        readonly elementNameResolver?: GeneratorElementResolver;
+    };
 
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -70,63 +73,19 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     const commentsManager = _commentsManager(config.addTimestamp);
 
     // prepare resolvers
-    const contentTypeSnippetFileNameMap = mapFilename(config.contentTypeSnippetFileNameResolver);
-    const contentTypeFileNameMap = mapFilename(config.contentTypeFileNameResolver);
-    const taxonomyFileNameMap = mapFilename(config.taxonomyFileResolver);
+    const contentTypeSnippetFileNameMap = mapFilename(config.fileResolvers.contentTypeSnippetFileResolver);
+    const contentTypeFileNameMap = mapFilename(config.fileResolvers.contentTypeFileResolver);
+    const taxonomyFileNameMap = mapFilename(config.fileResolvers.taxonomyFileResolver);
 
-    const contentTypeSnippetNameMap = getMapContentTypeSnippetToDeliveryTypeName(config.contentTypeSnippetResolver);
-    const contentTypeNameMap = getMapContentTypeToDeliveryTypeName(config.contentTypeResolver);
-    const elementNameMap = getMapElementToName(config.elementResolver);
-    const taxonomyNameMap = getMapTaxonomyName(config.taxonomyResolver);
+    const contentTypeSnippetNameMap = mapName(config.nameResolvers.snippetNameResolver, 'pascalCase');
+    const contentTypeNameMap = mapName(config.nameResolvers.contentTypeNameResolver, 'pascalCase');
+    const elementNameMap = mapElementName(config.nameResolvers.elementNameResolver, 'camelCase');
+    const taxonomyNameMap = mapName(config.nameResolvers.taxonomyNameResolver, 'pascalCase');
 
     const generateModels = (): {
         contentTypeFiles: readonly GeneratedFile[];
         snippetFiles: readonly GeneratedFile[];
     } => {
-        if (config.elementResolver) {
-            console.log(
-                `Using '${chalk.yellow(
-                    config.elementResolver instanceof Function ? 'custom' : config.elementResolver
-                )}' name resolver for content type elements`
-            );
-        }
-
-        if (config.contentTypeFileNameResolver) {
-            console.log(
-                `Using '${chalk.yellow(
-                    config.contentTypeFileNameResolver instanceof Function
-                        ? 'custom'
-                        : config.contentTypeFileNameResolver
-                )}' name resolver for content type filenames`
-            );
-        }
-
-        if (config.contentTypeSnippetFileNameResolver) {
-            console.log(
-                `Using '${chalk.yellow(
-                    config.contentTypeSnippetFileNameResolver instanceof Function
-                        ? 'custom'
-                        : config.contentTypeSnippetFileNameResolver
-                )}' name resolver for content type snippet filenames`
-            );
-        }
-
-        if (config.contentTypeResolver) {
-            console.log(
-                `Using '${chalk.yellow(
-                    config.contentTypeResolver instanceof Function ? 'custom' : config.contentTypeResolver
-                )}' name resolver for content types`
-            );
-        }
-
-        if (config.contentTypeSnippetResolver) {
-            console.log(
-                `Using '${chalk.yellow(
-                    config.contentTypeSnippetResolver instanceof Function ? 'custom' : config.contentTypeSnippetResolver
-                )}' name resolver for content type snippets`
-            );
-        }
-
         return {
             contentTypeFiles: config.environmentData.types.map((type) => createContentTypeModel(type)),
             snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) =>
@@ -141,7 +100,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         return snippets.map((snippet) => {
             return getImportStatement({
                 moduleResolution: config.moduleResolution,
-                filePathOrPackage: `../${config.typeSnippetsFolderName}/${contentTypeSnippetFileNameMap(
+                filePathOrPackage: `../${config.folders.typeSnippetsFolderName}/${contentTypeSnippetFileNameMap(
                     snippet,
                     false
                 )}.ts`,
@@ -167,7 +126,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                             }
                             return getImportStatement({
                                 moduleResolution: config.moduleResolution,
-                                filePathOrPackage: `../${config.taxonomyFolderName}/${taxonomyFileNameMap(taxonomyElement.assignedTaxonomy, false)}.ts`,
+                                filePathOrPackage: `../${config.folders.taxonomyFolderName}/${taxonomyFileNameMap(taxonomyElement.assignedTaxonomy, false)}.ts`,
                                 importValue: taxonomyNameMap(taxonomyElement.assignedTaxonomy)
                             });
                         })
@@ -189,7 +148,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                                             moduleResolution: config.moduleResolution,
                                             filePathOrPackage:
                                                 typeOrSnippet instanceof ContentTypeModels.ContentType
-                                                    ? `../${config.typeFolderName}/${referencedTypeFilename}.ts`
+                                                    ? `../${config.folders.typeFolderName}/${referencedTypeFilename}.ts`
                                                     : `./${referencedTypeFilename}.ts`,
                                             importValue: `${contentTypeNameMap(allowedContentType)}`
                                         });
@@ -277,7 +236,7 @@ export type ${contentTypeImports.typeName} = IContentItem<{
 
     const createContentTypeModel = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {
-            filename: `${config.typeFolderName}/${contentTypeFileNameMap(type, true)}`,
+            filename: `${config.folders.typeFolderName}/${contentTypeFileNameMap(type, true)}`,
             text: getModelCode(type)
         };
     };
@@ -286,7 +245,7 @@ export type ${contentTypeImports.typeName} = IContentItem<{
         snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>
     ): GeneratedFile => {
         return {
-            filename: `${config.typeSnippetsFolderName}/${contentTypeSnippetFileNameMap(snippet, true)}`,
+            filename: `${config.folders.typeSnippetsFolderName}/${contentTypeSnippetFileNameMap(snippet, true)}`,
             text: getModelCode(snippet)
         };
     };

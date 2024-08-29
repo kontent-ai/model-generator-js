@@ -1,5 +1,5 @@
+import { ModuleResolution } from '../../../core/index.js';
 import { generateProjectModelsAsync } from '../../../generators/index.js';
-import { ModuleResolution } from '../../../models.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function projectActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {

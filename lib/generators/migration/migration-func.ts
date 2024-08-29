@@ -1,17 +1,34 @@
 import chalk from 'chalk';
-import { migrationConfig, coreConfig, toOutputDirPath, getBarrelExportCode } from '../../core/index.js';
-import { fileProcessor as _fileProcessor } from '../../files/index.js';
+import {
+    migrationConfig,
+    coreConfig,
+    toOutputDirPath,
+    getBarrelExportCode,
+    ModuleResolution
+} from '../../core/index.js';
+import { fileManager as _fileManager } from '../../files/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
-import { GenerateMigrationModelsConfig, ModuleResolution } from '../../models.js';
 import { parse } from 'path';
+import { Options } from 'prettier';
+
+export interface GenerateMigrationModelsConfig {
+    readonly environmentId: string;
+    readonly addTimestamp: boolean;
+    readonly apiKey: string;
+    readonly moduleResolution: ModuleResolution;
+    readonly outputDir: string;
+
+    readonly baseUrl?: string;
+    readonly formatOptions?: Readonly<Options>;
+}
 
 export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('migration')}' models\n`);
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
 
-    const fileProcessor = _fileProcessor(toOutputDirPath(config.outputDir));
+    const fileManager = _fileManager(toOutputDirPath(config.outputDir));
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
@@ -43,7 +60,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         migrationItemsFolderName
     );
 
-    await fileProcessor.createFilesAsync(
+    await fileManager.createFilesAsync(
         [
             migrationTypeFile,
             ...migrationItemFiles,

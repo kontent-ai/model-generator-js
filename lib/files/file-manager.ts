@@ -5,11 +5,11 @@ import * as fs from 'fs';
 import { dirname } from 'path';
 import { GeneratedFile } from '../core/index.js';
 
-export function fileProcessor(outputDir: string) {
+export function fileManager(outputDir: string) {
     const createFileOnFsAsync = async (
         text: string,
         filePath: string,
-        formatOptions: Options | undefined
+        formatOptions: Readonly<Options> | undefined
     ): Promise<void> => {
         const fullFilePath = `${outputDir.endsWith('/') ? outputDir : `${outputDir}/`}${filePath}`;
         let fileContent = text;
@@ -39,7 +39,7 @@ export function fileProcessor(outputDir: string) {
 
     const createFilesAsync = async (
         files: readonly GeneratedFile[],
-        formatOptions: Options | undefined
+        formatOptions: Readonly<Options> | undefined
     ): Promise<void> => {
         await Promise.all(
             files.map((file) => {

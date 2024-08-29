@@ -1,5 +1,5 @@
+import { ModuleResolution } from '../../../core/index.js';
 import { generateDeliveryModelsAsync } from '../../../generators/index.js';
-import { ModuleResolution } from '../../../models.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {

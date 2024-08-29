@@ -31,10 +31,7 @@ const run = async () => {
         apiKey: apiKey,
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
         isEnterpriseSubscription: true,
-        outputDir: outputDir,
-        sortConfig: {
-            sortTaxonomyTerms: true
-        }
+        outputDir: outputDir
     });
 };
 
