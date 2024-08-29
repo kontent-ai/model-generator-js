@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { formatHelper } from '../format-helper.js';
+import { formatCodeAsync } from '../format/formatter.js';
 import * as fs from 'fs';
 import { dirname } from 'path';
 import { GeneratedFile } from '../core/index.js';
@@ -14,7 +14,7 @@ export function fileManager(outputDir: string) {
         const fullFilePath = `${outputDir.endsWith('/') ? outputDir : `${outputDir}/`}${filePath}`;
         let fileContent = text;
         try {
-            fileContent = await formatHelper.formatCodeAsync(fileContent, formatOptions);
+            fileContent = await formatCodeAsync(fileContent, formatOptions);
         } catch {
             console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
         } finally {
