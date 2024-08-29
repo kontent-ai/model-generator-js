@@ -56,7 +56,6 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     const taxonomiesFolderName: string = deliveryConfig.taxonomiesFolderName;
 
     const environment = await kontentFetcher.getEnvironmentInfoAsync();
-
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
     // create content type models
