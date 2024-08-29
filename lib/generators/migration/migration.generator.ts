@@ -55,13 +55,9 @@ const migrationTypeNames = {
 export function migrationGenerator(config: MigrationGeneratorConfig) {
     const commentsManager = _commentsManager(config.addTimestamp);
 
-    const getMigrationItemType = (
-        type: Readonly<ContentTypeModels.ContentType>,
-        migrationTypesFilename: string,
-        folderName: string
-    ): GeneratedFile => {
+    const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {
-            filename: `${folderName}/${type.codename}.ts`,
+            filename: `${migrationConfig.migrationItemsFolderName}/${type.codename}.ts`,
             text: `
             ${getImportStatement({
                 filePathOrPackage: migrationConfig.npmPackageName,
@@ -69,7 +65,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 moduleResolution: config.moduleResolution
             })}
              ${getImportStatement({
-                 filePathOrPackage: `../${migrationTypesFilename}`,
+                 filePathOrPackage: `../${migrationConfig.migrationTypesFilename}`,
                  importValue: migrationTypeNames.item,
                  moduleResolution: config.moduleResolution
              })}
@@ -96,7 +92,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                             * 
                             * Required: ${element.isRequired ? 'true' : 'false'}
                             * Codename: ${element.codename}
-                            * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${removeLineEndings(element.guidelines)}` : ''}
+                            * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toSafeString(removeLineEndings(element.guidelines))}` : ''}
                             */
                             ${element.codename}: ${getElementPropType(element)}`;
                     })
@@ -107,9 +103,9 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
     };
 
     return {
-        getMigrationTypesFile(filename: string): GeneratedFile {
+        getMigrationTypesFile(): GeneratedFile {
             return {
-                filename: filename,
+                filename: migrationConfig.migrationTypesFilename,
                 text: `
                   ${getImportStatement({
                       filePathOrPackage: migrationConfig.npmPackageName,
@@ -142,10 +138,8 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             `
             };
         },
-        getMigrationItemFiles(migrationTypesFilename: string, folderName: string): readonly GeneratedFile[] {
-            return config.environmentData.types.map((type) =>
-                getMigrationItemType(type, migrationTypesFilename, folderName)
-            );
+        getMigrationItemFiles(): readonly GeneratedFile[] {
+            return config.environmentData.types.map((type) => getMigrationItemType(type));
         }
     };
 }

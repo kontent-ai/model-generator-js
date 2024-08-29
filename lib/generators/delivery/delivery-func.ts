@@ -30,19 +30,50 @@ export interface GenerateDeliveryModelsConfig {
     readonly moduleResolution?: ModuleResolution;
     readonly baseUrl?: string;
     readonly outputDir?: string;
-    readonly contentTypeFileResolver?: ContentTypeFileNameResolver;
-    readonly contentTypeSnippetFileResolver?: ContentTypeSnippetFileNameResolver;
-    readonly taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
-    readonly contentTypeResolver?: ContentTypeNameResolver;
-    readonly contentTypeSnippetResolver?: ContentTypeSnippetNameResolver;
-    readonly taxonomyTypeResolver?: TaxonomyNameResolver;
-    readonly elementResolver?: GeneratorElementResolver;
     readonly formatOptions?: Readonly<Options>;
+
+    readonly fileResolvers?: {
+        readonly taxonomy?: TaxonomyTypeFileNameResolver;
+        readonly contentType?: ContentTypeFileNameResolver;
+        readonly snippet?: ContentTypeSnippetFileNameResolver;
+    };
+
+    readonly nameResolvers?: {
+        readonly contentType?: ContentTypeNameResolver;
+        readonly snippet?: ContentTypeSnippetNameResolver;
+        readonly taxonomy?: TaxonomyNameResolver;
+        readonly element?: GeneratorElementResolver;
+    };
 }
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
+
+    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution } = await getFilesAsync(config);
+
+    await createFilesAsync(
+        {
+            contentTypeFiles,
+            snippetFiles,
+            taxonomyFiles
+        },
+        {
+            formatOptions: config.formatOptions,
+            moduleResolution: moduleResolution,
+            outputDir: config.outputDir
+        }
+    );
+
+    console.log(chalk.green(`\nCompleted`));
+}
+
+async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
+    readonly contentTypeFiles: readonly GeneratedFile[];
+    readonly snippetFiles: readonly GeneratedFile[];
+    readonly taxonomyFiles: readonly GeneratedFile[];
+    readonly moduleResolution: ModuleResolution;
+}> {
     const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
 
     const kontentFetcher = _kontentFetcher({
@@ -51,15 +82,10 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
         baseUrl: config.baseUrl
     });
 
-    const contentTypesFolderName: string = deliveryConfig.contentTypesFolderName;
-    const contentTypeSnippetsFolderName: string = deliveryConfig.contentTypeSnippetsFolderName;
-    const taxonomiesFolderName: string = deliveryConfig.taxonomiesFolderName;
-
     const environment = await kontentFetcher.getEnvironmentInfoAsync();
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
-    // create content type models
-    const deliveryModels = deliveryContentTypeGenerator({
+    const { contentTypeFiles, snippetFiles } = deliveryContentTypeGenerator({
         addTimestamp: config.addTimestamp,
         addEnvironmentInfo: config.addEnvironmentInfo,
         moduleResolution: moduleResolution,
@@ -69,25 +95,10 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
             snippets: await kontentFetcher.getSnippetsAsync(),
             taxonomies: taxonomies
         },
-        folders: {
-            typeFolderName: contentTypesFolderName,
-            taxonomyFolderName: taxonomiesFolderName,
-            typeSnippetsFolderName: contentTypeSnippetsFolderName
-        },
-        fileResolvers: {
-            taxonomyFileResolver: config.taxonomyTypeFileResolver,
-            contentTypeFileResolver: config.contentTypeFileResolver,
-            contentTypeSnippetFileResolver: config.contentTypeSnippetFileResolver
-        },
-        nameResolvers: {
-            elementNameResolver: config.elementResolver,
-            contentTypeNameResolver: config.contentTypeResolver,
-            taxonomyNameResolver: config.taxonomyTypeResolver,
-            snippetNameResolver: config.contentTypeSnippetResolver
-        }
+        fileResolvers: config.fileResolvers,
+        nameResolvers: config.nameResolvers
     }).generateModels();
 
-    // create taxonomy types
     const taxonomyFiles = deliveryTaxonomyGenerator({
         addTimestamp: config.addTimestamp,
         moduleResolution: moduleResolution,
@@ -95,39 +106,19 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
             environment: await kontentFetcher.getEnvironmentInfoAsync(),
             taxonomies: taxonomies
         },
-        fileResolvers: {
-            taxonomyFilenameResolver: config.taxonomyTypeFileResolver
-        },
-        folders: {
-            taxonomyFolderName: taxonomiesFolderName
-        },
-        nameResolvers: {
-            taxonomyNameResolver: config.taxonomyTypeResolver
-        }
+        fileResolvers: config.fileResolvers,
+        nameResolvers: config.nameResolvers
     }).generateTaxonomyTypes();
 
-    await createDeliveryFilesAsync(
-        {
-            contentTypeFiles: deliveryModels.contentTypeFiles,
-            snippetFiles: deliveryModels.snippetFiles,
-            taxonomyFiles: taxonomyFiles
-        },
-        {
-            formatOptions: config.formatOptions,
-            moduleResolution: moduleResolution,
-            outputDir: config.outputDir
-        },
-        {
-            contentTypesFolderName,
-            contentTypeSnippetsFolderName,
-            taxonomiesFolderName
-        }
-    );
-
-    console.log(chalk.green(`\nCompleted`));
+    return {
+        contentTypeFiles,
+        snippetFiles,
+        taxonomyFiles,
+        moduleResolution
+    };
 }
 
-async function createDeliveryFilesAsync(
+async function createFilesAsync(
     data: {
         readonly contentTypeFiles: readonly GeneratedFile[];
         readonly snippetFiles: readonly GeneratedFile[];
@@ -137,11 +128,6 @@ async function createDeliveryFilesAsync(
         readonly outputDir: string | undefined;
         readonly moduleResolution: ModuleResolution;
         readonly formatOptions: Readonly<Options> | undefined;
-    },
-    folders: {
-        readonly contentTypesFolderName: string;
-        readonly contentTypeSnippetsFolderName: string;
-        readonly taxonomiesFolderName: string;
     }
 ): Promise<void> {
     const fileManager = _fileManager(toOutputDirPath(config.outputDir));
@@ -153,7 +139,7 @@ async function createDeliveryFilesAsync(
             ...data.taxonomyFiles,
             // barrel files
             {
-                filename: `${folders.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
+                filename: `${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
                 text: getBarrelExportCode({
                     moduleResolution: config.moduleResolution,
                     filenames: [
@@ -165,7 +151,7 @@ async function createDeliveryFilesAsync(
                 })
             },
             {
-                filename: `${folders.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
+                filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
                 text: getBarrelExportCode({
                     moduleResolution: config.moduleResolution,
                     filenames: [
@@ -177,7 +163,7 @@ async function createDeliveryFilesAsync(
                 })
             },
             {
-                filename: `${folders.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
+                filename: `${deliveryConfig.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
                 text: getBarrelExportCode({
                     moduleResolution: config.moduleResolution,
                     filenames: [
@@ -193,9 +179,9 @@ async function createDeliveryFilesAsync(
                 text: getBarrelExportCode({
                     moduleResolution: config.moduleResolution,
                     filenames: [
-                        `./${folders.contentTypesFolderName}/index`,
-                        `./${folders.contentTypeSnippetsFolderName}/index`,
-                        `./${folders.taxonomiesFolderName}/index`
+                        `./${deliveryConfig.contentTypesFolderName}/index`,
+                        `./${deliveryConfig.contentTypeSnippetsFolderName}/index`,
+                        `./${deliveryConfig.taxonomiesFolderName}/index`
                     ]
                 })
             }

@@ -21,7 +21,8 @@ import {
     removeLineEndings,
     sortAlphabetically,
     toSafeString,
-    toCamelCase
+    toCamelCase,
+    getStringOrUndefined
 } from '../../core/index.js';
 
 interface ProjectCodeResult {
@@ -148,13 +149,6 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                     externalId: ${getStringOrUndefined(language.externalId)},
                 }${!isLast ? ',\n' : ''}`;
         }, '');
-    };
-
-    const getStringOrUndefined = (text?: string): string => {
-        if (!text) {
-            return 'undefined';
-        }
-        return `'${text}'`;
     };
 
     const getProjectWorkflows = (workflows: readonly Readonly<WorkflowModels.Workflow>[]): string => {

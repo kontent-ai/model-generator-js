@@ -11,6 +11,6 @@ export async function projectActionAsync(cliFetcher: CliArgumentsFetcher): Promi
         isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
         moduleResolution:
-            cliFetcher.getRequiredArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+            cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });
 }

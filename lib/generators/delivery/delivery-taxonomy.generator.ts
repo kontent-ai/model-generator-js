@@ -8,7 +8,8 @@ import {
     TaxonomyTypeFileNameResolver,
     TaxonomyNameResolver,
     toSafeString,
-    ModuleResolution
+    ModuleResolution,
+    deliveryConfig
 } from '../../core/index.js';
 import { commentsManager as _commentsManager } from '../../comments/index.js';
 
@@ -16,25 +17,23 @@ export interface DeliveryTaxonomyGeneratorConfig {
     readonly addTimestamp: boolean;
     readonly moduleResolution: ModuleResolution;
 
-    readonly folders: {
-        readonly taxonomyFolderName: string;
-    };
-    readonly fileResolvers: {
-        readonly taxonomyFilenameResolver?: TaxonomyTypeFileNameResolver;
-    };
-    readonly nameResolvers: {
-        readonly taxonomyNameResolver?: TaxonomyNameResolver;
-    };
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
         readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
+    };
+
+    readonly fileResolvers?: {
+        readonly taxonomy?: TaxonomyTypeFileNameResolver;
+    };
+    readonly nameResolvers?: {
+        readonly taxonomy?: TaxonomyNameResolver;
     };
 }
 
 export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfig) {
     const commentsManager = _commentsManager(config.addTimestamp);
-    const taxonomyFileNameMap = mapFilename(config.fileResolvers.taxonomyFilenameResolver);
-    const taxonomyNameMap = mapName(config.nameResolvers.taxonomyNameResolver, 'pascalCase');
+    const taxonomyFileNameMap = mapFilename(config.fileResolvers?.taxonomy);
+    const taxonomyNameMap = mapName(config.nameResolvers?.taxonomy, 'pascalCase');
 
     const generateTaxonomyTypes = (): readonly GeneratedFile[] => {
         return config.environmentData.taxonomies.map<GeneratedFile>((taxonomy) => {
@@ -44,7 +43,7 @@ export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfi
 
     const getTaxonomyFile = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): GeneratedFile => {
         return {
-            filename: `${config.folders.taxonomyFolderName}/${taxonomyFileNameMap(taxonomy, true)}`,
+            filename: `${deliveryConfig.taxonomiesFolderName}/${taxonomyFileNameMap(taxonomy, true)}`,
             text: getModelCode(taxonomy)
         };
     };

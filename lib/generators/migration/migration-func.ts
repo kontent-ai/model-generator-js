@@ -4,7 +4,8 @@ import {
     coreConfig,
     toOutputDirPath,
     getBarrelExportCode,
-    ModuleResolution
+    ModuleResolution,
+    GeneratedFile
 } from '../../core/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
@@ -26,17 +27,31 @@ export interface GenerateMigrationModelsConfig {
 export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('migration')}' models\n`);
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
 
-    const fileManager = _fileManager(toOutputDirPath(config.outputDir));
+    const { migrationItemFiles, migrationTypeFile, moduleResolution } = await getFilesAsync(config);
+
+    await createFilesAsync({
+        migrationItemFiles,
+        migrationTypeFile,
+        moduleResolution,
+        outputDir: config.outputDir,
+        formatOptions: config.formatOptions
+    });
+
+    console.log(chalk.green(`\nCompleted`));
+}
+
+async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
+    readonly migrationTypeFile: GeneratedFile;
+    readonly migrationItemFiles: readonly GeneratedFile[];
+    readonly moduleResolution: ModuleResolution;
+}> {
+    const moduleResolution: ModuleResolution = config.moduleResolution ?? 'node';
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl
     });
-
-    const migrationItemsFolderName: string = migrationConfig.migrationItemsFolderName;
-    const migrationTypesFilename: string = migrationConfig.migrationTypesFilename;
 
     const projectInformation = await kontentFetcher.getEnvironmentInfoAsync();
 
@@ -54,23 +69,33 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         }
     });
 
-    const migrationTypeFile = migrationGenerator.getMigrationTypesFile(migrationTypesFilename);
-    const migrationItemFiles = migrationGenerator.getMigrationItemFiles(
-        migrationTypesFilename,
-        migrationItemsFolderName
-    );
+    return {
+        moduleResolution,
+        migrationTypeFile: migrationGenerator.getMigrationTypesFile(),
+        migrationItemFiles: migrationGenerator.getMigrationItemFiles()
+    };
+}
+
+async function createFilesAsync(data: {
+    readonly migrationTypeFile: GeneratedFile;
+    readonly migrationItemFiles: readonly GeneratedFile[];
+    readonly moduleResolution: ModuleResolution;
+    readonly outputDir: string;
+    readonly formatOptions?: Readonly<Options>;
+}): Promise<void> {
+    const fileManager = _fileManager(toOutputDirPath(data.outputDir));
 
     await fileManager.createFilesAsync(
         [
-            migrationTypeFile,
-            ...migrationItemFiles,
+            data.migrationTypeFile,
+            ...data.migrationItemFiles,
             // types barrel file
             {
-                filename: `${migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
+                filename: `${migrationConfig.migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
                 text: getBarrelExportCode({
-                    moduleResolution: moduleResolution,
+                    moduleResolution: data.moduleResolution,
                     filenames: [
-                        ...migrationItemFiles.map((m) => {
+                        ...data.migrationItemFiles.map((m) => {
                             return `./${parse(m.filename).name}`;
                         })
                     ]
@@ -80,13 +105,14 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
             {
                 filename: coreConfig.barrelExportFilename,
                 text: getBarrelExportCode({
-                    moduleResolution: moduleResolution,
-                    filenames: [`./${migrationItemsFolderName}/index`, `./${migrationTypeFile.filename}`]
+                    moduleResolution: data.moduleResolution,
+                    filenames: [
+                        `./${migrationConfig.migrationItemsFolderName}/index`,
+                        `./${data.migrationTypeFile.filename}`
+                    ]
                 })
             }
         ],
-        config.formatOptions
+        data.formatOptions
     );
-
-    console.log(chalk.green(`\nCompleted`));
 }

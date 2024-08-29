@@ -10,15 +10,7 @@ export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Prom
         outputDir: cliFetcher.getRequiredArgumentValue('outputDir'),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
         addEnvironmentInfo: cliFetcher.getBooleanArgumentValue('addEnvironmentInfo', false),
-        elementResolver: undefined,
-        contentTypeFileResolver: undefined,
-        contentTypeResolver: undefined,
-        taxonomyTypeFileResolver: undefined,
-        taxonomyTypeResolver: undefined,
-        contentTypeSnippetFileResolver: undefined,
-        contentTypeSnippetResolver: undefined,
-        formatOptions: undefined,
         moduleResolution:
-            cliFetcher.getRequiredArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+            cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });
 }

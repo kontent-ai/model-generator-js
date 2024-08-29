@@ -70,6 +70,13 @@ export function removeLineEndings(value: string): string {
     return value.replace(/(\r\n|\n|\r)/gm, '');
 }
 
+export function getStringOrUndefined(text?: string): string {
+    if (!text) {
+        return 'undefined';
+    }
+    return `'${text}'`;
+}
+
 export function toSafeStringCode(text: string): string {
     const replaceContent = '';
     return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);

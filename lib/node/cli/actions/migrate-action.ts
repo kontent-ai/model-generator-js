@@ -11,6 +11,6 @@ export async function migrateActionAsync(cliFetcher: CliArgumentsFetcher): Promi
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
         formatOptions: undefined,
         moduleResolution:
-            cliFetcher.getRequiredArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+            cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });
 }
