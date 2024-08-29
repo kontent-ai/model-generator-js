@@ -10,7 +10,6 @@ export type ObjectWithCodename = {
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
-
 export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T, addExtension: boolean) => string;
 
 export type ContentTypeFileNameResolver = FilenameResolver<ContentTypeModels.ContentType>;
@@ -19,7 +18,6 @@ export type TaxonomyTypeFileNameResolver = FilenameResolver<TaxonomyModels.Taxon
 
 /** Name resolvers */
 export type NameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
-
 export type MapObjectToName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T) => string;
 
 export type ElementNameResolver = (element: Readonly<ContentTypeElements.ContentTypeElementModel>) => string | undefined;
