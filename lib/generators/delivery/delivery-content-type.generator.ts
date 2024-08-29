@@ -143,7 +143,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                                             moduleResolution: config.moduleResolution,
                                             filePathOrPackage:
                                                 typeOrSnippet instanceof ContentTypeModels.ContentType
-                                                    ? `../${deliveryConfig.taxonomiesFolderName}/${referencedTypeFilename}.ts`
+                                                    ? `../${deliveryConfig.contentTypesFolderName}/${referencedTypeFilename}.ts`
                                                     : `./${referencedTypeFilename}.ts`,
                                             importValue: `${nameResolvers.contentType(allowedContentType)}`
                                         });
