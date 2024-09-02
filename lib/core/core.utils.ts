@@ -22,6 +22,10 @@ export function getFileNameWithoutExtension(filePath: string): string {
     return filePath.substring(0, filePath.lastIndexOf('.'));
 }
 
+export function getFilenameFromPath(filePath: string): string {
+    return parse(filePath).name;
+}
+
 export function sortAlphabetically<T>(arrayToSort: readonly T[], propertySelector: (item: T) => string): readonly T[] {
     return arrayToSort.toSorted((a, b) => propertySelector(a).toLowerCase().localeCompare(propertySelector(b).toLowerCase()));
 }

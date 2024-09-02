@@ -5,12 +5,12 @@ import {
     getBarrelExportCode,
     ModuleResolution,
     GeneratedFile,
-    getDefaultModuleResolution
+    getDefaultModuleResolution,
+    getFilenameFromPath
 } from '../../core/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
-import { parse } from 'path';
 import { Options } from 'prettier';
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 
@@ -117,7 +117,7 @@ async function createFilesAsync(data: {
                 moduleResolution: data.moduleResolution,
                 filenames: [
                     ...data.migrationItemFiles.map((m) => {
-                        return `./${parse(m.filename).name}`;
+                        return `./${getFilenameFromPath(m.filename)}`;
                     })
                 ]
             })
@@ -129,7 +129,7 @@ async function createFilesAsync(data: {
                 moduleResolution: data.moduleResolution,
                 filenames: [
                     ...data.environmentFiles.map((m) => {
-                        return `./${parse(m.filename).name}`;
+                        return `./${getFilenameFromPath(m.filename)}`;
                     })
                 ]
             })

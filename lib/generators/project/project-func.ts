@@ -1,9 +1,15 @@
 import chalk from 'chalk';
 import { projectGenerator as _projectGenerator } from './project.generator.js';
 import { fileManager as _fileManager } from '../../files/index.js';
-import { parse } from 'path';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { coreConfig, GeneratedFile, getBarrelExportCode, getDefaultModuleResolution, ModuleResolution } from '../../core/index.js';
+import {
+    coreConfig,
+    GeneratedFile,
+    getBarrelExportCode,
+    getDefaultModuleResolution,
+    getFilenameFromPath,
+    ModuleResolution
+} from '../../core/index.js';
 import { Options } from 'prettier';
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 
@@ -95,8 +101,7 @@ async function createFilesAsync(data: {
                 moduleResolution: data.moduleResolution,
                 filenames: [
                     ...data.projectFiles.map((m) => {
-                        const path = parse(m.filename);
-                        return `./${path.name}`;
+                        return `./${getFilenameFromPath(m.filename)}`;
                     })
                 ]
             })

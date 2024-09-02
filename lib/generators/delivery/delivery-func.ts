@@ -2,7 +2,6 @@ import chalk from 'chalk';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
 import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 import { fileManager as _fileManager } from '../../files/index.js';
-import { parse } from 'path';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import {
     ContentTypeFileNameResolver,
@@ -17,7 +16,8 @@ import {
     ModuleResolution,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver,
-    getDefaultModuleResolution
+    getDefaultModuleResolution,
+    getFilenameFromPath
 } from '../../core/index.js';
 import { Options } from 'prettier';
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
@@ -150,8 +150,7 @@ async function createFilesAsync(
                 moduleResolution: config.moduleResolution,
                 filenames: [
                     ...data.contentTypeFiles.map((m) => {
-                        const path = parse(m.filename);
-                        return `./${path.name}`;
+                        return `./${getFilenameFromPath(m.filename)}`;
                     })
                 ]
             })
@@ -162,8 +161,7 @@ async function createFilesAsync(
                 moduleResolution: config.moduleResolution,
                 filenames: [
                     ...data.snippetFiles.map((m) => {
-                        const path = parse(m.filename);
-                        return `./${path.name}`;
+                        return `./${getFilenameFromPath(m.filename)}`;
                     })
                 ]
             })
@@ -174,8 +172,7 @@ async function createFilesAsync(
                 moduleResolution: config.moduleResolution,
                 filenames: [
                     ...data.taxonomyFiles.map((m) => {
-                        const path = parse(m.filename);
-                        return `./${path.name}`;
+                        return `./${getFilenameFromPath(m.filename)}`;
                     })
                 ]
             })
