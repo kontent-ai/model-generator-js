@@ -3,13 +3,7 @@ import { projectGenerator as _projectGenerator } from './project.generator.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { parse } from 'path';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import {
-    coreConfig,
-    GeneratedFile,
-    getBarrelExportCode,
-    getDefaultModuleResolution,
-    ModuleResolution
-} from '../../core/index.js';
+import { coreConfig, GeneratedFile, getBarrelExportCode, getDefaultModuleResolution, ModuleResolution } from '../../core/index.js';
 import { Options } from 'prettier';
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 
@@ -60,8 +54,6 @@ async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
     return {
         environmentInfo,
         projectFiles: _projectGenerator({
-            addTimestamp: config.addTimestamp,
-            formatOptions: config.formatOptions,
             environmentData: {
                 environmentInfo: environmentInfo,
                 languages: await kontentFetcher.getLanguagesAsync(),

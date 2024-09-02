@@ -1,12 +1,7 @@
-import {} from '@kontent-ai/delivery-sdk';
 import { ContentTypeModels, ContentTypeSnippetModels, ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { toCamelCase, toPascalCase, toSnakeCase } from './core.utils.js';
-import { match } from 'ts-pattern';
-import { CaseType, GeneratorElementResolver } from './core.models.js';
-
-export type ObjectWithCodename = {
-    readonly codename: string;
-};
+import { match, P } from 'ts-pattern';
+import { CaseType, GeneratorElementResolver, ObjectWithCodename } from './core.models.js';
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
@@ -30,16 +25,9 @@ export function mapFilename<T extends ObjectWithCodename>(resolver: FilenameReso
         return addExtensionToFilename(
             match(resolver)
                 .returnType<string>()
-                .when(
-                    (resolver) => resolver instanceof Function,
-                    (resolver) => resolver(item)
-                )
-                .when(
-                    (resolver) => resolver === undefined,
-                    () => item.codename
-                )
+                .with(P.instanceOf(Function), (resolver) => resolver(item))
+                .with(undefined, () => item.codename)
                 .otherwise((resolverType) => resolveCase(item.codename, resolverType)),
-
             addExtension
         );
     };
@@ -49,14 +37,8 @@ export function mapName<T extends ObjectWithCodename>(resolver: NameResolver<T>,
     return (item) => {
         return match(resolver)
             .returnType<string>()
-            .when(
-                (resolver) => resolver instanceof Function,
-                (resolver) => resolver(item)
-            )
-            .when(
-                (resolver) => resolver === undefined,
-                () => resolveCase(item.codename, defaultCase)
-            )
+            .with(P.instanceOf(Function), (resolver) => resolver(item))
+            .with(undefined, () => resolveCase(item.codename, defaultCase))
             .otherwise((resolverType) => resolveCase(item.codename, resolverType));
     };
 }
@@ -71,14 +53,8 @@ export function mapElementName(resolver: GeneratorElementResolver | undefined, d
 
         return match(resolver)
             .returnType<string>()
-            .when(
-                (resolver) => resolver instanceof Function,
-                (resolver) => resolver('', codename)
-            )
-            .when(
-                (resolver) => resolver === undefined,
-                () => resolveCase(codename, defaultCase)
-            )
+            .with(P.instanceOf(Function), (resolver) => resolver('', codename))
+            .with(undefined, () => resolveCase(codename, defaultCase))
             .otherwise((resolverType) => resolveCase(codename, resolverType));
     };
 }

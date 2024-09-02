@@ -9,8 +9,6 @@ export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Prom
         apiKey: cliFetcher.getRequiredArgumentValue('apiKey'),
         outputDir: cliFetcher.getRequiredArgumentValue('outputDir'),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
-        addEnvironmentInfo: cliFetcher.getBooleanArgumentValue('addEnvironmentInfo', false),
-        moduleResolution:
-            cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+        moduleResolution: cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });
 }

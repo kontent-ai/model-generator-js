@@ -8,8 +8,8 @@ export function commentsManager() {
     };
 
     const getEnvironmentInfoComment = (data: {
-        addTimestamp?: boolean;
-        environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+        readonly addTimestamp?: boolean;
+        readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
     }): string => {
         return `
 /** 

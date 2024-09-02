@@ -3,8 +3,7 @@ import { argumentsSetter } from './args/args-setter.js';
 export const cliArgs = argumentsSetter()
     .withCommand({
         name: 'delivery',
-        description:
-            'Generates Delivery & project models based on the content types and content items in your Kontent.ai project',
+        description: 'Generates Delivery & project models based on the content types and content items in your Kontent.ai project',
         examples: [`kontent-generate delivery --environmentId=x --apiKey=x`],
         options: [
             {
@@ -28,12 +27,6 @@ export const cliArgs = argumentsSetter()
             {
                 name: `addTimestamp`,
                 description: `Indicates if timestamp should be generated`,
-                type: 'string',
-                isRequired: false
-            },
-            {
-                name: `addEnvironmentInfo`,
-                description: `Indicates if environment info stamp should be generated`,
                 type: 'string',
                 isRequired: false
             },

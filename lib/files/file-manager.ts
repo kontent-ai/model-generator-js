@@ -8,38 +8,32 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import { commentsManager } from '../comments/index.js';
 
 export function fileManager(config: {
-    outputDir: string | undefined;
-    formatOptions: Readonly<Options> | undefined;
-    environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-    addTimestamp: boolean;
+    readonly outputDir: string | undefined;
+    readonly formatOptions: Readonly<Options> | undefined;
+    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+    readonly addTimestamp: boolean;
 }) {
     const fixedOutputDir = toOutputDirPath(config.outputDir);
 
-    const createFileOnFsAsync = async (
-        text: string,
-        filePath: string,
-        formatOptions: Readonly<Options> | undefined
-    ): Promise<void> => {
+    const createFileOnFsAsync = async (text: string, filePath: string, formatOptions: Readonly<Options> | undefined): Promise<void> => {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
+        const fileContent = `${commentsManager().getEnvironmentInfoComment({
+            environmentInfo: config.environmentInfo,
+            addTimestamp: config.addTimestamp
+        })}\n\n${await getFormattedCodeAsync(text, filePath, formatOptions)}`;
 
-        let fileContent =
-            `${commentsManager().getEnvironmentInfoComment({
-                environmentInfo: config.environmentInfo,
-                addTimestamp: config.addTimestamp
-            })}\n\n` + text;
-        try {
-            fileContent = await formatCodeAsync(fileContent, formatOptions);
-        } catch {
-            console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
-        } finally {
-            ensureDirectoryExistence(fullFilePath);
-            fs.writeFileSync('./' + fullFilePath, fileContent, {});
-            console.log(`Created '${chalk.yellow(fullFilePath)}'`);
-        }
+        ensureDirectoryExistence(fullFilePath);
+        fs.writeFileSync('./' + fullFilePath, fileContent, {});
+        console.log(`Created '${chalk.yellow(fullFilePath)}'`);
     };
 
-    const createDir = (dirPath: string): void => {
-        fs.mkdirSync(dirPath, { recursive: true });
+    const getFormattedCodeAsync = async (code: string, filePath: string, formatOptions: Readonly<Options> | undefined): Promise<string> => {
+        try {
+            return await formatCodeAsync(code, formatOptions);
+        } catch {
+            console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
+            return code;
+        }
     };
 
     const ensureDirectoryExistence = (filePath: string): void => {
@@ -53,15 +47,13 @@ export function fileManager(config: {
 
     const createFilesAsync = async (files: readonly GeneratedFile[]): Promise<void> => {
         await Promise.all(
-            files.map((file) => {
-                return createFileOnFsAsync(file.text, file.filename, config.formatOptions);
+            files.map(async (file) => {
+                return await createFileOnFsAsync(file.text, file.filename, config.formatOptions);
             })
         );
     };
 
     return {
-        createDir,
-        createFileOnFsAsync,
         createFilesAsync
     };
 }

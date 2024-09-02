@@ -13,7 +13,6 @@ import {
 } from '../../core/index.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {
-    readonly addTimestamp: boolean;
     readonly moduleResolution: ModuleResolution;
 
     readonly environmentData: {
@@ -59,10 +58,7 @@ export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
     };
 
     const getTaxonomyTermsCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        const taxonomyTermCodenames = sortAlphabetically(
-            getTaxonomyTermCodenames(taxonomy.terms),
-            (codename) => codename
-        );
+        const taxonomyTermCodenames = sortAlphabetically(getTaxonomyTermCodenames(taxonomy.terms), (codename) => codename);
 
         if (!taxonomyTermCodenames.length) {
             return `''`;
@@ -74,9 +70,7 @@ export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
         }, '');
     };
 
-    const getTaxonomyTermCodenames = (
-        taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]
-    ): readonly string[] => {
+    const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
         return taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
             return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
         }, []);

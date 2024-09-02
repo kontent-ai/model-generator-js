@@ -11,18 +11,18 @@ import {
     FlattenedElement,
     GeneratedFile,
     getFlattenedElements,
-    getImportStatement,
     mapElementName,
     mapFilename,
     mapName,
-    removeLineEndings,
     sortAlphabetically,
     TaxonomyTypeFileNameResolver,
     TaxonomyNameResolver,
     toSafeString,
     uniqueFilter,
     ModuleResolution,
-    GeneratorElementResolver
+    GeneratorElementResolver,
+    importer as _importer,
+    toGuidelinesComment
 } from '../../core/index.js';
 
 interface ExtractImportsResult {
@@ -32,8 +32,6 @@ interface ExtractImportsResult {
 }
 
 export interface DeliveryContentTypeGeneratorConfig {
-    readonly addTimestamp: boolean;
-    readonly addEnvironmentInfo: boolean;
     readonly moduleResolution: ModuleResolution;
 
     readonly environmentData: {
@@ -58,12 +56,13 @@ export interface DeliveryContentTypeGeneratorConfig {
 }
 
 export function deliveryContentTypeGenerator(config: DeliveryContentTypeGeneratorConfig) {
-    // prepare resolvers
     const fileResolvers = {
         snippet: mapFilename(config.fileResolvers?.snippet),
         contentType: mapFilename(config.fileResolvers?.contentType),
         taxonomy: mapFilename(config.fileResolvers?.taxonomy)
     };
+
+    const importer = _importer(config.moduleResolution);
 
     const nameResolvers = {
         snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),
@@ -84,8 +83,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
     const getSnippetImports = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): readonly string[] => {
         return snippets.map((snippet) => {
-            return getImportStatement({
-                moduleResolution: config.moduleResolution,
+            return importer.importType({
                 filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.snippet(snippet, false)}.ts`,
                 importValue: nameResolvers.snippet(snippet)
             });
@@ -107,8 +105,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                             if (!taxonomyElement.assignedTaxonomy) {
                                 throw Error(`Invalid taxonomy for element '${taxonomyElement.codename}'`);
                             }
-                            return getImportStatement({
-                                moduleResolution: config.moduleResolution,
+                            return importer.importType({
                                 filePathOrPackage: `../${deliveryConfig.taxonomiesFolderName}/${fileResolvers.taxonomy(taxonomyElement.assignedTaxonomy, false)}.ts`,
                                 importValue: nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy)
                             });
@@ -116,7 +113,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                         .with(P.union({ type: 'modular_content' }, { type: 'subpages' }), (linkedItemsOrSubpagesElement) => {
                             return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
                                 .filter((allowedContentType) => {
-                                    // filter self-referencing types
+                                    // filter self-referencing types as they do not need to be importer
                                     if (allowedContentType.codename === typeOrSnippet.codename) {
                                         return false;
                                     }
@@ -125,8 +122,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                                 .map((allowedContentType) => {
                                     const referencedTypeFilename: string = `${fileResolvers.contentType(allowedContentType, false)}`;
 
-                                    return getImportStatement({
-                                        moduleResolution: config.moduleResolution,
+                                    return importer.importType({
                                         filePathOrPackage:
                                             typeOrSnippet instanceof ContentTypeModels.ContentType
                                                 ? `../${deliveryConfig.contentTypesFolderName}/${referencedTypeFilename}.ts`
@@ -189,9 +185,8 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             flattenedElements: flattenedElements
         });
 
-        const code = `
-${getImportStatement({
-    moduleResolution: config.moduleResolution,
+        return `
+${importer.importType({
     filePathOrPackage: deliveryConfig.npmPackageName,
     importValue: `${getDeliverySdkContentTypeImports(flattenedElements).join(', ')}`
 })}
@@ -207,7 +202,6 @@ export type ${contentTypeImports.typeName} = IContentItem<{
     ${getElementsCode(flattenedElements)}
 }>${contentTypeImports.contentTypeExtends ? ` ${contentTypeImports.contentTypeExtends}` : ''};
 `;
-        return code;
     };
 
     const createContentTypeModel = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
@@ -237,13 +231,13 @@ export type ${contentTypeImports.typeName} = IContentItem<{
                         return code;
                     }
 
-                    return (code += `\n
+                    return (code += `
                 /**
                 * ${element.title} (${element.type})
                 * 
                 * Required: ${element.isRequired ? 'true' : 'false'}
                 * Codename: ${element.codename}
-                * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toSafeString(removeLineEndings(element.guidelines))}` : ''}
+                * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 */ 
                 ${elementName}: Elements.${mappedType};`);
                 }, '')

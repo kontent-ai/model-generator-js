@@ -56,3 +56,7 @@ export interface GeneratedFile {
     readonly filename: string;
     readonly text: string;
 }
+
+export type ObjectWithCodename = {
+    readonly codename: string;
+};

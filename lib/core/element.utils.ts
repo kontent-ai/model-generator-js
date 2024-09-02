@@ -1,9 +1,4 @@
-import {
-    ContentTypeElements,
-    ContentTypeModels,
-    ContentTypeSnippetModels,
-    TaxonomyModels
-} from '@kontent-ai/management-sdk';
+import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { FlattenedElement } from './core.models.js';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match } from 'ts-pattern';
@@ -101,12 +96,7 @@ function getElementTitle(
         }
 
         const taxonomy = taxonomies.find((m) => m.id === taxonomyGroupId);
-
-        if (!taxonomy) {
-            return element.type;
-        }
-
-        return taxonomy.name;
+        return taxonomy?.name ?? element.type;
     }
     return (<{ name?: string }>element).name ?? element.codename ?? 'n/a';
 }

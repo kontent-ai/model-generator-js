@@ -60,7 +60,6 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 
     const migrationGenerator = _migrationGenerator({
-        addTimestamp: config.addTimestamp,
         moduleResolution: config.moduleResolution,
         environmentData: {
             environment: environmentInfo,
@@ -117,10 +116,7 @@ async function createFilesAsync(data: {
             filename: coreConfig.barrelExportFilename,
             text: getBarrelExportCode({
                 moduleResolution: data.moduleResolution,
-                filenames: [
-                    `./${migrationConfig.migrationItemsFolderName}/index`,
-                    `./${data.migrationTypeFile.filename}`
-                ]
+                filenames: [`./${migrationConfig.migrationItemsFolderName}/index`, `./${data.migrationTypeFile.filename}`]
             })
         }
     ]);

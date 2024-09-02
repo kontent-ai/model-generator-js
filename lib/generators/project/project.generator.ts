@@ -1,4 +1,3 @@
-import { Options } from 'prettier';
 import { match } from 'ts-pattern';
 import {
     AssetFolderModels,
@@ -17,11 +16,11 @@ import {
     FlattenedElement,
     GeneratedFile,
     getFlattenedElements,
-    removeLineEndings,
     sortAlphabetically,
     toSafeString,
     toCamelCase,
-    getStringOrUndefined
+    getStringOrUndefined,
+    toGuidelinesComment
 } from '../../core/index.js';
 
 interface ProjectCodeResult {
@@ -36,9 +35,6 @@ interface WorkflowStep {
 }
 
 export interface ProjectGeneratorConfig {
-    readonly addTimestamp: boolean;
-    readonly formatOptions?: Options;
-
     readonly environmentData: {
         readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
         readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
@@ -64,7 +60,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectModelCode = (): readonly ProjectCodeResult[] => {
-        const result: ProjectCodeResult[] = [
+        return [
             {
                 code: `export const languages = {
                     ${getProjectLanguages(config.environmentData.languages)}
@@ -118,8 +114,6 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                 filename: 'webhooks.ts'
             }
         ];
-
-        return result;
     };
 
     const getProjectLanguages = (languages: readonly Readonly<LanguageModels.LanguageModel>[]): string => {
@@ -178,9 +172,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         );
     };
 
-    const getProjectContentTypeSnippets = (
-        snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]
-    ): string => {
+    const getProjectContentTypeSnippets = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): string => {
         return snippets.reduce((code, snippet, index) => {
             const isLast = index === snippets.length - 1;
 
@@ -216,9 +208,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
         }, '');
     };
 
-    const getContentTypeElements = (
-        elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[]
-    ): string => {
+    const getContentTypeElements = (elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[]): string => {
         const flattenedElements = getFlattenedElements(
             elements,
             config.environmentData.snippets,
@@ -232,7 +222,7 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
 
             return `${code}\n
                 /**
-                * ${toSafeString(element.title)} (${element.type})${element.guidelines ? `\n* Guidelines: ${removeLineEndings(element.guidelines)}` : ''}
+                * ${toSafeString(element.title)} (${element.type})${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 */
                 ${toCamelCase(element.codename)}: {
                     codename: '${element.codename}',
@@ -253,7 +243,6 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                 return (
                     element.options.reduce<string>((code, option, index) => {
                         const isLast = index === element.options.length - 1;
-
                         return `${code}\n
                 /**
                 * ${toSafeString(option.name)}
@@ -359,14 +348,9 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectWorkflowSteps = (workflow: Readonly<WorkflowModels.Workflow>): string => {
-        const steps: WorkflowStep[] = [
-            workflow.archivedStep,
-            workflow.publishedStep,
-            workflow.scheduledStep,
-            ...workflow.steps
-        ];
+        const steps: readonly WorkflowStep[] = [workflow.archivedStep, workflow.publishedStep, workflow.scheduledStep, ...workflow.steps];
 
-        const code = `{${steps.reduce((code, step) => {
+        return `{${steps.reduce((code, step) => {
             return (
                 code +
                 `
@@ -377,8 +361,6 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                 },`
             );
         }, ``)}}`;
-
-        return code;
     };
 
     return {

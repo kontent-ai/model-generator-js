@@ -5,7 +5,22 @@ export const coreConfig = {
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
     migrationItemsFolderName: `content-types`,
-    migrationTypesFilename: `core.models.ts`
+    migrationTypesFilename: `core.models.ts`,
+
+    typeNames: {
+        languageCodenames: 'LanguageCodenames',
+        collectionCodenames: 'CollectionCodenames',
+        workflowCodenames: 'WorkflowCodenames',
+        workflowStepCodenames: 'WorkflowStepCodenames',
+        contentTypeCodenames: 'ContentTypeCodenames',
+        migrationItemSystem: 'MigrationItemSystem',
+        migrationElementModels: 'MigrationElementModels',
+        migrationItem: 'MigrationItem',
+        migrationElements: 'MigrationElements',
+        system: 'System',
+        item: 'Item',
+        codename: 'Codename'
+    }
 } as const;
 
 export const deliveryConfig = {

@@ -25,7 +25,6 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 export interface GenerateDeliveryModelsConfig {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly addEnvironmentInfo: boolean;
     readonly apiKey: string;
 
     readonly moduleResolution?: ModuleResolution;
@@ -51,8 +50,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
 
-    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution, environmentInfo } =
-        await getFilesAsync(config);
+    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution, environmentInfo } = await getFilesAsync(config);
 
     await createFilesAsync(
         {
@@ -90,8 +88,6 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     const taxonomies = await kontentFetcher.getTaxonomiesAsync();
 
     const { contentTypeFiles, snippetFiles } = deliveryContentTypeGenerator({
-        addTimestamp: config.addTimestamp,
-        addEnvironmentInfo: config.addEnvironmentInfo,
         moduleResolution: moduleResolution,
         environmentData: {
             environment: environmentInfo,
@@ -104,7 +100,6 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     }).generateModels();
 
     const taxonomyFiles = deliveryTaxonomyGenerator({
-        addTimestamp: config.addTimestamp,
         moduleResolution: moduleResolution,
         environmentData: {
             environment: await kontentFetcher.getEnvironmentInfoAsync(),

@@ -1,34 +1,40 @@
 import { SharedModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { ErrorData, OriginalManagementError } from './core.models.js';
+import { match, P } from 'ts-pattern';
 
 export function extractErrorData(error: unknown): ErrorData {
-    let isUnknownError: boolean = true;
-    let message: string = `Unknown error`;
-    let requestUrl: string | undefined = undefined;
-    let requestData: string | undefined = undefined;
+    return match(error)
+        .returnType<ErrorData>()
+        .with(P.instanceOf(SharedModels.ContentManagementBaseKontentError), (error) => {
+            const originalError = error.originalError as OriginalManagementError | undefined;
 
-    if (error instanceof SharedModels.ContentManagementBaseKontentError) {
-        isUnknownError = false;
-        const originalError = error.originalError as OriginalManagementError | undefined;
-
-        requestUrl = originalError?.response?.config?.url;
-        requestData = originalError?.response?.config?.data;
-
-        message = `${error.message}: ${error.validationErrors.map((m) => m.message).join(', ')}`;
-    } else if (error instanceof Error) {
-        message = error.message;
-    }
-
-    const errorData: ErrorData = {
-        message: message,
-        requestData: requestData,
-        requestUrl: requestUrl,
-        error: error,
-        isUnknownError: isUnknownError
-    };
-
-    return errorData;
+            return {
+                message: `${error.message}: ${error.validationErrors.map((m) => m.message).join(', ')}`,
+                requestData: originalError?.response?.config?.data,
+                requestUrl: originalError?.response?.config?.url,
+                error: error,
+                isUnknownError: false
+            };
+        })
+        .with(P.instanceOf(Error), (error) => {
+            return {
+                message: error.message,
+                requestData: undefined,
+                requestUrl: undefined,
+                error: error,
+                isUnknownError: true
+            };
+        })
+        .otherwise(() => {
+            return {
+                message: `Unknown error`,
+                requestData: undefined,
+                requestUrl: undefined,
+                error: error,
+                isUnknownError: true
+            };
+        });
 }
 
 export function is404Error(error: unknown): boolean {

@@ -4,9 +4,9 @@
 
 # Kontent.ai Model Generator
 
-The purpose of this project is to help you generate `Typescript models` based on [Kontent.ai](https://kontent.ai) item
-types. These models can be used with the [Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk) and
-enhances your experience by providing strongly typed models.
+The purpose of this project is to help you generate `Typescript models` based on [Kontent.ai](https://kontent.ai) item types. These models
+can be used with the [Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk) and enhances your experience by providing
+strongly typed models.
 
 ## Installation
 
@@ -26,8 +26,8 @@ You may specify other options like:
 
 ## Generate models in code
 
-Apart from generating models via CLI, you may also generate models in code which also gives you some additional
-configuration options (such as using custom name resolver).
+Apart from generating models via CLI, you may also generate models in code which also gives you some additional configuration options (such
+as using custom name resolver).
 
 ```typescript
 import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
@@ -39,7 +39,6 @@ await generateDeliveryModelsAsync({
     apiKey: 'yyy',
     addTimestamp: true,
     moduleResolution: 'nodeNext',
-    addEnvironmentInfo: true,
     elementResolver: 'camelCase',
     sortConfig: {
         sortTaxonomyTerms: true
@@ -49,15 +48,14 @@ await generateDeliveryModelsAsync({
 
 ### Customizing generated file names
 
-You may customize the way filenames are stored on file system using the `contentTypeFileResolver` and / or
-`taxonomyTypeFileResolver` configuration option:
+You may customize the way filenames are stored on file system using the `contentTypeFileResolver` and / or `taxonomyTypeFileResolver`
+configuration option:
 
 ```typescript
 await generateDeliveryModelsAsync({
     sdkType: 'delivery',
     environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
     isEnterpriseSubscription: true,
-    addEnvironmentInfo: true,
     apiKey: 'yyy',
     moduleResolution: 'nodeNext',
     addTimestamp: true,
@@ -80,7 +78,6 @@ await generateDeliveryModelsAsync({
     apiKey: 'yyy',
     moduleResolution: 'nodeNext',
     addTimestamp: true,
-    addEnvironmentInfo: true,
     elementResolver: 'camelCase',
     contentTypeResolver: (type) => `${textHelper.toPascalCase(type.codename)}Model`,
     taxonomyTypeResolver: (taxonomy) => `${textHelper.toPascalCase(taxonomy.codename)}Taxonomy`
@@ -89,31 +86,25 @@ await generateDeliveryModelsAsync({
 
 ## FAQ
 
--   If you are getting the `The Subscription API is not supported in your plan` error, set the
-    `isEnterpriseSubscription` option to false
+-   If you are getting the `The Subscription API is not supported in your plan` error, set the `isEnterpriseSubscription` option to false
 
 ## CLI Configuration
 
 -   `environmentId` - Id of the Kontent.ai environment
 -   `apiKey`- Management API Key
--   `outputDir`- Directory where files will be created. Defaults to current directory - `--outputDir=./`. Some other
-    examples: `--outputDir=./sample`
+-   `outputDir`- Directory where files will be created. Defaults to current directory - `--outputDir=./`. Some other examples:
+    `--outputDir=./sample`
 -   `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.
 -   `addTimestamp`- Indicates if timestamp is added to generated models
--   `addEnvironmentInfo`- Indicates if environment info stamp is added to generated models
 -   `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
--   `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`,
-    `pascalCase`, `snakeCase`
--   `contentTypeSnippetFileResolver`- Name resolver for content type snippet filenames. Available options are:
-    `camelCase`, `pascalCase`, `snakeCase`
--   `taxonomyTypeFileResolver`- Name resolver for taxonomy filenames. Available options are: `camelCase`, `pascalCase`,
+-   `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+-   `contentTypeSnippetFileResolver`- Name resolver for content type snippet filenames. Available options are: `camelCase`, `pascalCase`,
     `snakeCase`
--   `contentTypeResolver`- Name resolver for content type names. Available options are: `camelCase`, `pascalCase`,
+-   `taxonomyTypeFileResolver`- Name resolver for taxonomy filenames. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+-   `contentTypeResolver`- Name resolver for content type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+-   `contentTypeSnippetResolver`- Name resolver for content type snippet names. Available options are: `camelCase`, `pascalCase`,
     `snakeCase`
--   `contentTypeSnippetResolver`- Name resolver for content type snippet names. Available options are: `camelCase`,
-    `pascalCase`, `snakeCase`
--   `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`,
-    `snakeCase`
+-   `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`, `snakeCase`
 -   `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`, `migration`
 -   `exportWebhooks` - Indicates if webhooks are exported
 -   `exportWorkflows` - Indicates if workflows are exported
@@ -230,8 +221,7 @@ export type Movie = IContentItem<{
 export type MovieType = 'student' | 'film' | 'tv' | 'blockbuster' | 'cinema_only';
 ```
 
-To learn the complete generator output, see the following folder:
-https://github.com/kontent-ai/model-generator-js/tree/master/sample
+To learn the complete generator output, see the following folder: https://github.com/kontent-ai/model-generator-js/tree/master/sample
 
 ## Contribution & Feedback
 
