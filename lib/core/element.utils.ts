@@ -16,11 +16,7 @@ export function getFlattenedElements(
 ): readonly FlattenedElement[] {
     return elements
         .filter((element) => {
-            if (element.type === 'guidelines') {
-                return false;
-            }
-
-            return true;
+            return element.type !== 'guidelines';
         })
         .flatMap<ElementWrapper>((element) => {
             if (element.type === 'snippet') {
@@ -54,10 +50,7 @@ export function getFlattenedElement(
     taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
     types: readonly Readonly<ContentTypeModels.ContentType>[]
 ): Readonly<FlattenedElement> | undefined {
-    if (!wrapper.element.codename) {
-        return undefined;
-    }
-    if (!wrapper.element.id) {
+    if (!wrapper.element.codename || !wrapper.element.id) {
         return undefined;
     }
 

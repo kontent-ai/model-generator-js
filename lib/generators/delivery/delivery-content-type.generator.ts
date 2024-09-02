@@ -1,7 +1,6 @@
 import { match, P } from 'ts-pattern';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { ContentTypeModels, ContentTypeSnippetModels, EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
-
 import {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,

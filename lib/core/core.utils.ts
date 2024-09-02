@@ -14,10 +14,6 @@ export function getDefaultModuleResolution(moduleResolution: ModuleResolution | 
     return moduleResolution ?? 'node';
 }
 
-export function replaceTsExtensionWithJs(filePath: string): string {
-    return filePath.replace('.ts', '.js');
-}
-
 export function getFileNameWithoutExtension(filePath: string): string {
     return filePath.substring(0, filePath.lastIndexOf('.'));
 }
@@ -43,10 +39,6 @@ export function toCamelCase(text: string): string {
 export function toSnakeCase(text: string): string {
     // use element resolver from SDK to keep it consistent
     return toSafeStringCode(snakeCasePropertyNameResolver('', text));
-}
-
-export function toAlphanumeric(value: string): string {
-    return value.replace(/\W/g, '');
 }
 
 export function removeLineEndings(value: string): string {

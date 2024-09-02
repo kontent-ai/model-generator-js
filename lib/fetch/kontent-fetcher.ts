@@ -21,11 +21,15 @@ interface KontentFetcherConfig {
 }
 
 export function kontentFetcher(config: KontentFetcherConfig) {
-    const client: GeneratorManagementClient = createManagementClient({
-        environmentId: config.environmentId,
-        apiKey: config.apiKey,
-        baseUrl: config.baseUrl
-    });
+    const getManagementClient = (): GeneratorManagementClient => {
+        return createManagementClient({
+            environmentId: config.environmentId,
+            apiKey: config.apiKey,
+            baseUrl: config.baseUrl
+        });
+    };
+
+    const client = getManagementClient();
 
     return {
         async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {

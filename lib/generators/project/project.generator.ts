@@ -23,11 +23,6 @@ import {
     toGuidelinesComment
 } from '../../core/index.js';
 
-interface ProjectCodeResult {
-    readonly filename: string;
-    readonly code: string;
-}
-
 interface WorkflowStep {
     readonly name: string;
     readonly codename: string;
@@ -51,64 +46,55 @@ export interface ProjectGeneratorConfig {
 
 export function projectGenerator(config: ProjectGeneratorConfig) {
     const generateProjectModel = (): readonly GeneratedFile[] => {
-        return getProjectModelCode().map((projectCode) => {
-            return {
-                filename: `${projectCode.filename}`,
-                text: projectCode.code
-            };
-        });
-    };
-
-    const getProjectModelCode = (): readonly ProjectCodeResult[] => {
         return [
             {
-                code: `export const languages = {
+                text: `export const languages = {
                     ${getProjectLanguages(config.environmentData.languages)}
                 } as const;`,
                 filename: 'languages.ts'
             },
             {
-                code: `export const collections = {
+                text: `export const collections = {
                     ${getCollections(config.environmentData.collections)}
                 } as const;`,
                 filename: 'collections.ts'
             },
             {
-                code: `export const contentTypes = {
+                text: `export const contentTypes = {
                     ${getProjectContentTypes(config.environmentData.types)}
                 } as const;`,
                 filename: 'contentTypes.ts'
             },
             {
-                code: `export const contentTypeSnippets = {
+                text: `export const contentTypeSnippets = {
                     ${getProjectContentTypeSnippets(config.environmentData.snippets)}
                 } as const;`,
                 filename: 'contentTypeSnippets.ts'
             },
             {
-                code: `export const taxonomies = {
+                text: `export const taxonomies = {
                     ${getProjectTaxonomies(config.environmentData.taxonomies)}
                 } as const;`,
                 filename: 'taxonomies.ts'
             },
             {
-                code: `export const workflows = {
+                text: `export const workflows = {
                     ${getProjectWorkflows(config.environmentData.workflows)}
                 } as const;`,
                 filename: 'workflows.ts'
             },
             {
-                code: `export const roles = {
+                text: `export const roles = {
                     ${getRoles(config.environmentData.roles)}
                 } as const;`,
                 filename: 'roles.ts'
             },
             {
-                code: `export const assetFolders = ${getAssetFolders(config.environmentData.assetFolders)} as const;`,
+                text: `export const assetFolders = ${getAssetFolders(config.environmentData.assetFolders)} as const;`,
                 filename: 'assetFolders.ts'
             },
             {
-                code: `export const webhooks = {
+                text: `export const webhooks = {
                     ${getWebhooks(config.environmentData.webhooks)}
                 } as const;`,
                 filename: 'webhooks.ts'
