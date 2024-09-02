@@ -5,21 +5,27 @@ export const coreConfig = {
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
     migrationItemsFolderName: `content-types`,
-    migrationTypesFilename: `core.models.ts`,
+    environmentFolderName: `environment`,
+    migrationTypesFilename: `migration`,
+    environmentFilename: `environment`,
 
-    typeNames: {
+    sdkTypeNames: {
+        system: 'MigrationItemSystem',
+        item: 'MigrationItem',
+        elements: 'MigrationElements',
+        elementModels: 'MigrationElementModels'
+    },
+
+    localTypeNames: {
         languageCodenames: 'LanguageCodenames',
         collectionCodenames: 'CollectionCodenames',
         workflowCodenames: 'WorkflowCodenames',
         workflowStepCodenames: 'WorkflowStepCodenames',
         contentTypeCodenames: 'ContentTypeCodenames',
-        migrationItemSystem: 'MigrationItemSystem',
-        migrationElementModels: 'MigrationElementModels',
-        migrationItem: 'MigrationItem',
-        migrationElements: 'MigrationElements',
-        system: 'System',
+        system: 'ItemSystem',
         item: 'Item',
-        codename: 'Codename'
+        codename: 'TCodename',
+        elements: 'TElements'
     }
 } as const;
 

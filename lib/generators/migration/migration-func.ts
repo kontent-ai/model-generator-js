@@ -29,11 +29,18 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('migration')}' models\n`);
 
-    const { migrationItemFiles, migrationTypeFile, moduleResolution, environmentInfo } = await getFilesAsync(config);
+    const {
+        migrationItemFiles,
+        migrationTypeFiles: migrationTypeFiles,
+        moduleResolution,
+        environmentInfo,
+        environmentFiles
+    } = await getFilesAsync(config);
 
     await createFilesAsync({
         migrationItemFiles,
-        migrationTypeFile,
+        environmentFiles,
+        migrationTypeFiles,
         moduleResolution,
         outputDir: config.outputDir,
         formatOptions: config.formatOptions,
@@ -45,8 +52,9 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 }
 
 async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
-    readonly migrationTypeFile: GeneratedFile;
+    readonly migrationTypeFiles: readonly GeneratedFile[];
     readonly migrationItemFiles: readonly GeneratedFile[];
+    readonly environmentFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -74,14 +82,16 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
 
     return {
         moduleResolution,
-        migrationTypeFile: migrationGenerator.getMigrationTypesFile(),
+        migrationTypeFiles: migrationGenerator.getMigrationTypeFiles(),
         migrationItemFiles: migrationGenerator.getMigrationItemFiles(),
+        environmentFiles: migrationGenerator.getEnvironmentFiles(),
         environmentInfo
     };
 }
 
 async function createFilesAsync(data: {
-    readonly migrationTypeFile: GeneratedFile;
+    readonly migrationTypeFiles: readonly GeneratedFile[];
+    readonly environmentFiles: readonly GeneratedFile[];
     readonly migrationItemFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
     readonly outputDir: string;
@@ -97,9 +107,10 @@ async function createFilesAsync(data: {
     });
 
     await fileManager.createFilesAsync([
-        data.migrationTypeFile,
+        ...data.migrationTypeFiles,
+        ...data.environmentFiles,
         ...data.migrationItemFiles,
-        // types barrel file
+        // items barrel file
         {
             filename: `${migrationConfig.migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
             text: getBarrelExportCode({
@@ -111,12 +122,28 @@ async function createFilesAsync(data: {
                 ]
             })
         },
+        // environment barrel file
+        {
+            filename: `${migrationConfig.environmentFolderName}/${coreConfig.barrelExportFilename}`,
+            text: getBarrelExportCode({
+                moduleResolution: data.moduleResolution,
+                filenames: [
+                    ...data.environmentFiles.map((m) => {
+                        return `./${parse(m.filename).name}`;
+                    })
+                ]
+            })
+        },
         // main barrel file
         {
             filename: coreConfig.barrelExportFilename,
             text: getBarrelExportCode({
                 moduleResolution: data.moduleResolution,
-                filenames: [`./${migrationConfig.migrationItemsFolderName}/index`, `./${data.migrationTypeFile.filename}`]
+                filenames: [
+                    `./${migrationConfig.migrationItemsFolderName}/index`,
+                    `./${migrationConfig.environmentFolderName}/index`,
+                    ...data.migrationTypeFiles.map((file) => `./${file.filename}`)
+                ]
             })
         }
     ]);

@@ -14,7 +14,7 @@
 **/
 
 import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { Item } from '../core.models.js';
+import type { Item } from '../migration.js';
 
 /**
  * Movie

@@ -13,8 +13,6 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { MigrationItemSystem, MigrationItem, MigrationElements } from '@kontent-ai/migration-toolkit';
-
 /**
  * Type representing all languages
  */
@@ -39,21 +37,3 @@ export type WorkflowCodenames = 'default';
  * Type representing all worksflow steps across all workflows
  */
 export type WorkflowStepCodenames = 'draft' | 'review' | 'ready_to_publish' | 'published' | 'archived' | 'scheduled';
-
-/**
- * System object shared by all individual content type models
- */
-export type System<Codename extends ContentTypeCodenames> = MigrationItemSystem<
-    Codename,
-    LanguageCodenames,
-    CollectionCodenames,
-    WorkflowCodenames
->;
-
-/**
- * Item object shared by all individual content type models
- */
-export type Item<
-    Codename extends ContentTypeCodenames,
-    TElements extends MigrationElements = MigrationElements
-> = MigrationItem<TElements, System<Codename>, WorkflowStepCodenames>;

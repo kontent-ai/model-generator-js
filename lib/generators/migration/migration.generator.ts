@@ -46,11 +46,11 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             text: `
             ${importer.importType({
                 filePathOrPackage: migrationConfig.npmPackageName,
-                importValue: migrationConfig.typeNames.migrationElementModels
+                importValue: migrationConfig.sdkTypeNames.elementModels
             })}
              ${importer.importType({
-                 filePathOrPackage: `../${migrationConfig.migrationTypesFilename}`,
-                 importValue: migrationConfig.typeNames.item
+                 filePathOrPackage: `../${migrationConfig.migrationTypesFilename}.ts`,
+                 importValue: migrationConfig.localTypeNames.item
              })}
 
             /**
@@ -59,7 +59,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             * Codename: ${type.codename}
             * Id: ${type.id}
             */
-            export type ${toPascalCase(type.name)}Item = ${migrationConfig.typeNames.item}<
+            export type ${toPascalCase(type.name)}Item = ${migrationConfig.localTypeNames.item}<
             '${type.codename}',
             {
                 ${getFlattenedElements(
@@ -86,15 +86,11 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
     };
 
     return {
-        getMigrationTypesFile(): GeneratedFile {
-            return {
-                filename: migrationConfig.migrationTypesFilename,
-                text: `
-                  ${importer.importType({
-                      filePathOrPackage: migrationConfig.npmPackageName,
-                      importValue: `${migrationConfig.typeNames.migrationItemSystem}, ${migrationConfig.typeNames.migrationItem}, ${migrationConfig.typeNames.migrationElements}`
-                  })}
-
+        getEnvironmentFiles(): readonly GeneratedFile[] {
+            return [
+                {
+                    filename: `${migrationConfig.environmentFolderName}/${migrationConfig.environmentFilename}.ts`,
+                    text: `
                 ${commentsManager.wrapComment('Type representing all languages')}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
@@ -109,6 +105,23 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
 
                 ${commentsManager.wrapComment('Type representing all worksflow steps across all workflows')}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
+            `
+                }
+            ];
+        },
+        getMigrationTypeFiles(): readonly GeneratedFile[] {
+            return [
+                {
+                    filename: `${migrationConfig.migrationTypesFilename}.ts`,
+                    text: `
+                  ${importer.importType({
+                      filePathOrPackage: migrationConfig.npmPackageName,
+                      importValue: `${migrationConfig.sdkTypeNames.item}, ${migrationConfig.sdkTypeNames.system}, ${migrationConfig.sdkTypeNames.elements}`
+                  })}
+                   ${importer.importType({
+                       filePathOrPackage: `./${migrationConfig.environmentFolderName}/${migrationConfig.environmentFilename}.ts`,
+                       importValue: `${migrationConfig.localTypeNames.collectionCodenames}, ${migrationConfig.localTypeNames.contentTypeCodenames}, ${migrationConfig.localTypeNames.languageCodenames}, ${migrationConfig.localTypeNames.workflowCodenames}, ${migrationConfig.localTypeNames.workflowStepCodenames}`
+                   })}
 
                 ${commentsManager.wrapComment('System object shared by all individual content type models')}
                 ${getSystemType()}
@@ -116,7 +129,8 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 ${commentsManager.wrapComment('Item object shared by all individual content type models')}
                 ${getItemType()}
             `
-            };
+                }
+            ];
         },
         getMigrationItemFiles(): readonly GeneratedFile[] {
             return config.environmentData.types.map((type) => getMigrationItemType(type));
@@ -127,56 +141,56 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
 function getElementPropType(element: Readonly<FlattenedElement>): string {
     return match(element.type)
         .returnType<string>()
-        .with('text', () => `${migrationConfig.typeNames.migrationElementModels}.TextElement`)
-        .with('asset', () => `${migrationConfig.typeNames.migrationElementModels}.AssetElement`)
-        .with('custom', () => `${migrationConfig.typeNames.migrationElementModels}.CustomElement`)
-        .with('date_time', () => `${migrationConfig.typeNames.migrationElementModels}.DateTimeElement`)
-        .with('rich_text', () => `${migrationConfig.typeNames.migrationElementModels}.RichTextElement`)
-        .with('number', () => `${migrationConfig.typeNames.migrationElementModels}.NumberElement`)
-        .with('multiple_choice', () => `${migrationConfig.typeNames.migrationElementModels}.MultipleChoiceElement`)
-        .with('subpages', () => `${migrationConfig.typeNames.migrationElementModels}.SubpagesElement`)
-        .with('taxonomy', () => `${migrationConfig.typeNames.migrationElementModels}.TaxonomyElement`)
-        .with('url_slug', () => `${migrationConfig.typeNames.migrationElementModels}.UrlSlugElement`)
-        .with('modular_content', () => `${migrationConfig.typeNames.migrationElementModels}.LinkedItemsElement`)
+        .with('text', () => `${migrationConfig.sdkTypeNames.elementModels}.TextElement`)
+        .with('asset', () => `${migrationConfig.sdkTypeNames.elementModels}.AssetElement`)
+        .with('custom', () => `${migrationConfig.sdkTypeNames.elementModels}.CustomElement`)
+        .with('date_time', () => `${migrationConfig.sdkTypeNames.elementModels}.DateTimeElement`)
+        .with('rich_text', () => `${migrationConfig.sdkTypeNames.elementModels}.RichTextElement`)
+        .with('number', () => `${migrationConfig.sdkTypeNames.elementModels}.NumberElement`)
+        .with('multiple_choice', () => `${migrationConfig.sdkTypeNames.elementModels}.MultipleChoiceElement`)
+        .with('subpages', () => `${migrationConfig.sdkTypeNames.elementModels}.SubpagesElement`)
+        .with('taxonomy', () => `${migrationConfig.sdkTypeNames.elementModels}.TaxonomyElement`)
+        .with('url_slug', () => `${migrationConfig.sdkTypeNames.elementModels}.UrlSlugElement`)
+        .with('modular_content', () => `${migrationConfig.sdkTypeNames.elementModels}.LinkedItemsElement`)
         .otherwise((type) => {
             throw Error(`Element type '${type}' is not supported.`);
         });
 }
 
 function getItemType(): string {
-    return `export type ${migrationConfig.typeNames.item}<
-        ${migrationConfig.typeNames.codename} extends ${migrationConfig.typeNames.contentTypeCodenames},
-        TElements extends ${migrationConfig.typeNames.migrationElements} = ${migrationConfig.typeNames.migrationElements},
-    > = ${migrationConfig.typeNames.migrationItem}<TElements, ${migrationConfig.typeNames.system}<${migrationConfig.typeNames.codename}>, ${migrationConfig.typeNames.workflowStepCodenames}>;`;
+    return `export type ${migrationConfig.localTypeNames.item}<
+        ${migrationConfig.localTypeNames.codename} extends ${migrationConfig.localTypeNames.contentTypeCodenames},
+        ${migrationConfig.localTypeNames.elements} extends ${migrationConfig.sdkTypeNames.elements} = ${migrationConfig.sdkTypeNames.elements},
+    > = ${migrationConfig.sdkTypeNames.item}<${migrationConfig.localTypeNames.elements}, ${migrationConfig.localTypeNames.system}<${migrationConfig.localTypeNames.codename}>, ${migrationConfig.localTypeNames.workflowStepCodenames}>;`;
 }
 
 function getSystemType(): string {
-    return `export type ${migrationConfig.typeNames.system}<${migrationConfig.typeNames.codename} extends ${migrationConfig.typeNames.contentTypeCodenames}> = ${migrationConfig.typeNames.migrationItemSystem}<
-    ${migrationConfig.typeNames.codename},
-    ${migrationConfig.typeNames.languageCodenames},
-    ${migrationConfig.typeNames.collectionCodenames},
-    ${migrationConfig.typeNames.workflowCodenames}
+    return `export type ${migrationConfig.localTypeNames.system}<${migrationConfig.localTypeNames.codename} extends ${migrationConfig.localTypeNames.contentTypeCodenames}> = ${migrationConfig.sdkTypeNames.system}<
+    ${migrationConfig.localTypeNames.codename},
+    ${migrationConfig.localTypeNames.languageCodenames},
+    ${migrationConfig.localTypeNames.collectionCodenames},
+    ${migrationConfig.localTypeNames.workflowCodenames}
 >;`;
 }
 
 function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {
-    return `export type ${migrationConfig.typeNames.languageCodenames} = ${languages.map((language) => `'${language.codename}'`).join(' | ')};`;
+    return `export type ${migrationConfig.localTypeNames.languageCodenames} = ${languages.map((language) => `'${language.codename}'`).join(' | ')};`;
 }
 
 function getContentTypeCodenamesType(types: readonly Readonly<ContentTypeModels.ContentType>[]): string {
-    return `export type ${migrationConfig.typeNames.contentTypeCodenames} = ${types.map((type) => `'${type.codename}'`).join(' | ')};`;
+    return `export type ${migrationConfig.localTypeNames.contentTypeCodenames} = ${types.map((type) => `'${type.codename}'`).join(' | ')};`;
 }
 
 function getWorkflowCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
-    return `export type ${migrationConfig.typeNames.workflowCodenames} = ${workflows.map((workflow) => `'${workflow.codename}'`).join(' | ')};`;
+    return `export type ${migrationConfig.localTypeNames.workflowCodenames} = ${workflows.map((workflow) => `'${workflow.codename}'`).join(' | ')};`;
 }
 
 function getCollectionCodenamesType(collections: readonly Readonly<CollectionModels.Collection>[]): string {
-    return `export type ${migrationConfig.typeNames.collectionCodenames} = ${collections.map((collection) => `'${collection.codename}'`).join(' | ')};`;
+    return `export type ${migrationConfig.localTypeNames.collectionCodenames} = ${collections.map((collection) => `'${collection.codename}'`).join(' | ')};`;
 }
 
 function getWorkflowStepCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
-    return `export type ${migrationConfig.typeNames.workflowStepCodenames} = ${workflows
+    return `export type ${migrationConfig.localTypeNames.workflowStepCodenames} = ${workflows
         .flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep])
         .map((workflowStep) => `'${workflowStep.codename}'`)
         .filter(uniqueFilter)
