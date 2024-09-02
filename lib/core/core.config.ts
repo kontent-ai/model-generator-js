@@ -33,5 +33,10 @@ export const deliveryConfig = {
     npmPackageName: '@kontent-ai/delivery-sdk',
     contentTypesFolderName: `content-types`,
     contentTypeSnippetsFolderName: `content-type-snippets`,
-    taxonomiesFolderName: `taxonomies`
+    taxonomiesFolderName: `taxonomies`,
+
+    sdkTypes: {
+        contentItem: 'IContentItem',
+        elements: 'Elements'
+    }
 } as const;

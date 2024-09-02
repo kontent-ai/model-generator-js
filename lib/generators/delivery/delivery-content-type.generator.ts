@@ -167,7 +167,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     };
 
     const getDeliverySdkContentTypeImports = (flattenedElements: readonly FlattenedElement[]): readonly string[] => {
-        return ['IContentItem', ...(flattenedElements.length ? ['Elements'] : [])];
+        return [deliveryConfig.sdkTypes.contentItem, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])];
     };
 
     const getModelCode = (
@@ -198,7 +198,7 @@ ${contentTypeImports.imports.join('\n')}
 * Id: ${typeOrSnippet.id}
 * Codename: ${typeOrSnippet.codename}
 */
-export type ${contentTypeImports.typeName} = IContentItem<{
+export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentItem}<{
     ${getElementsCode(flattenedElements)}
 }>${contentTypeImports.contentTypeExtends ? ` ${contentTypeImports.contentTypeExtends}` : ''};
 `;
@@ -239,7 +239,7 @@ export type ${contentTypeImports.typeName} = IContentItem<{
                 * Codename: ${element.codename}
                 * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 */ 
-                ${elementName}: Elements.${mappedType};`);
+                ${elementName}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
                 }, '')
         );
     };
@@ -271,7 +271,7 @@ export type ${contentTypeImports.typeName} = IContentItem<{
 
     const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {
         if (!types.length) {
-            return ['IContentItem'];
+            return [deliveryConfig.sdkTypes.contentItem];
         }
 
         return types.map((type) => nameResolvers.contentType(type));
