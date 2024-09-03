@@ -1,18 +1,18 @@
-import chalk from 'chalk';
-import {
-    migrationConfig,
-    coreConfig,
-    getBarrelExportCode,
-    ModuleResolution,
-    GeneratedFile,
-    getDefaultModuleResolution,
-    getFilenameFromPath
-} from '../../core/index.js';
-import { fileManager as _fileManager } from '../../files/index.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
-import { Options } from 'prettier';
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import chalk from 'chalk';
+import { Options } from 'prettier';
+import {
+    coreConfig,
+    GeneratedFile,
+    getBarrelExportCode,
+    getDefaultModuleResolution,
+    getFilenameFromPath,
+    migrationConfig,
+    ModuleResolution
+} from '../../core/index.js';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
+import { fileManager as _fileManager } from '../../files/index.js';
+import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
 
 export interface GenerateMigrationModelsConfig {
     readonly environmentId: string;

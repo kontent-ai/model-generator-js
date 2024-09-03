@@ -1,9 +1,9 @@
+import chalk from 'chalk';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import chalk from 'chalk';
-import { CliArgumentsFetcher } from '../cli.models.js';
 import { CliAction } from '../../../core/core.models.js';
 import { exitProgram } from '../../../core/index.js';
+import { CliArgumentsFetcher } from '../cli.models.js';
 
 type ArgvResult = {
     [x: string]: unknown;

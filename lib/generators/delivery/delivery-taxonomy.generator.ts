@@ -1,15 +1,15 @@
 import { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 
 import {
+    deliveryConfig,
     GeneratedFile,
     mapFilename,
     mapName,
-    sortAlphabetically,
-    TaxonomyTypeFileNameResolver,
-    TaxonomyNameResolver,
-    toSafeString,
     ModuleResolution,
-    deliveryConfig
+    sortAlphabetically,
+    TaxonomyNameResolver,
+    TaxonomyTypeFileNameResolver,
+    toSafeString
 } from '../../core/index.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {

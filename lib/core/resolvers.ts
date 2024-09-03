@@ -1,7 +1,7 @@
-import { ContentTypeModels, ContentTypeSnippetModels, ContentTypeElements, TaxonomyModels } from '@kontent-ai/management-sdk';
-import { toCamelCase, toPascalCase, toSnakeCase } from './core.utils.js';
+import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { CaseType, GeneratorElementResolver, ObjectWithCodename } from './core.models.js';
+import { toCamelCase, toPascalCase, toSnakeCase } from './core.utils.js';
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);

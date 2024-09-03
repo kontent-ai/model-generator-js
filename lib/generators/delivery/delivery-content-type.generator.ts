@@ -1,7 +1,8 @@
-import { match, P } from 'ts-pattern';
-import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { ContentTypeModels, ContentTypeSnippetModels, EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import { isNotUndefined } from '@kontent-ai/migration-toolkit';
+import { match, P } from 'ts-pattern';
 import {
+    importer as _importer,
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
@@ -9,19 +10,18 @@ import {
     deliveryConfig,
     FlattenedElement,
     GeneratedFile,
+    GeneratorElementResolver,
     getFlattenedElements,
     mapElementName,
     mapFilename,
     mapName,
-    sortAlphabetically,
-    TaxonomyTypeFileNameResolver,
-    TaxonomyNameResolver,
-    toSafeString,
-    uniqueFilter,
     ModuleResolution,
-    GeneratorElementResolver,
-    importer as _importer,
-    toGuidelinesComment
+    sortAlphabetically,
+    TaxonomyNameResolver,
+    TaxonomyTypeFileNameResolver,
+    toGuidelinesComment,
+    toSafeString,
+    uniqueFilter
 } from '../../core/index.js';
 
 interface ExtractImportsResult {

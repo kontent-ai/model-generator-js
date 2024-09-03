@@ -11,8 +11,8 @@ import {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { GeneratorManagementClient, sortAlphabetically, toSafeString } from '../core/index.js';
 import chalk from 'chalk';
+import { GeneratorManagementClient, sortAlphabetically, toSafeString } from '../core/index.js';
 
 interface KontentFetcherConfig {
     readonly environmentId: string;

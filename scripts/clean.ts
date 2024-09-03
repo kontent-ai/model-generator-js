@@ -1,5 +1,5 @@
-import fs from 'fs';
 import chalk from 'chalk';
+import fs from 'fs';
 
 const paths = ['dist'];
 for (const path of paths) {

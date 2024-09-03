@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
 
-import { handleError, exitProgram } from '../../core/index.js';
+import { exitProgram, handleError } from '../../core/index.js';
 import { deliveryActionAsync } from './actions/delivery-action.js';
 import { migrateActionAsync } from './actions/migrate-action.js';
 import { argumentsFetcherAsync } from './args/args-fetcher.js';

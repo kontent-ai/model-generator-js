@@ -1,3 +1,4 @@
+import { PropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import {
     ContentTypeElements,
     ContentTypeModels,
@@ -6,7 +7,6 @@ import {
     IManagementClient,
     TaxonomyModels
 } from '@kontent-ai/management-sdk';
-import { PropertyNameResolver } from '@kontent-ai/delivery-sdk';
 
 export type CliAction = 'delivery' | 'migration';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';

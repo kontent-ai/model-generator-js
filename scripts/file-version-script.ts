@@ -1,5 +1,5 @@
-import fs from 'fs';
 import chalk from 'chalk';
+import fs from 'fs';
 import PackageJson from '../package.json' assert { type: 'json' };
 
 export const createVersionFile = (date: Date, versionPath: string, propertyName: string) => {

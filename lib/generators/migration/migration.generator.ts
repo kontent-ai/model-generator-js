@@ -8,19 +8,19 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
+import { commentsManager as _commentsManager } from '../../comments/index.js';
 import {
+    importer as _importer,
     FlattenedElement,
-    uniqueFilter,
     GeneratedFile,
-    toSafeString,
-    toPascalCase,
     getFlattenedElements,
     migrationConfig,
     ModuleResolution,
-    importer as _importer,
-    toGuidelinesComment
+    toGuidelinesComment,
+    toPascalCase,
+    toSafeString,
+    uniqueFilter
 } from '../../core/index.js';
-import { commentsManager as _commentsManager } from '../../comments/index.js';
 
 export interface MigrationGeneratorConfig {
     readonly moduleResolution: ModuleResolution;

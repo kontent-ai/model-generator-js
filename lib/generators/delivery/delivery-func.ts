@@ -1,8 +1,6 @@
+import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
-import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
-import { fileManager as _fileManager } from '../../files/index.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
+import { Options } from 'prettier';
 import {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
@@ -10,17 +8,19 @@ import {
     ContentTypeSnippetNameResolver,
     coreConfig,
     deliveryConfig,
-    GeneratorElementResolver,
     GeneratedFile,
+    GeneratorElementResolver,
     getBarrelExportCode,
+    getDefaultModuleResolution,
+    getFilenameFromPath,
     ModuleResolution,
     TaxonomyNameResolver,
-    TaxonomyTypeFileNameResolver,
-    getDefaultModuleResolution,
-    getFilenameFromPath
+    TaxonomyTypeFileNameResolver
 } from '../../core/index.js';
-import { Options } from 'prettier';
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
+import { fileManager as _fileManager } from '../../files/index.js';
+import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
+import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 
 export interface GenerateDeliveryModelsConfig {
     readonly environmentId: string;

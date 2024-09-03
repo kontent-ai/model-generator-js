@@ -1,4 +1,4 @@
-import { ModuleResolution, LibraryType, LiteralUnion } from './core.models.js';
+import { LibraryType, LiteralUnion, ModuleResolution } from './core.models.js';
 import { getFileNameWithoutExtension } from './core.utils.js';
 
 export function importer(moduleResolution: ModuleResolution) {

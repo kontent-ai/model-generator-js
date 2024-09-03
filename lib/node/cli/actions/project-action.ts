@@ -10,7 +10,6 @@ export async function projectActionAsync(cliFetcher: CliArgumentsFetcher): Promi
         outputDir: cliFetcher.getRequiredArgumentValue('outputDir'),
         isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
-        moduleResolution:
-            cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+        moduleResolution: cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
     });
 }

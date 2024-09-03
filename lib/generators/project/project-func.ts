@@ -1,7 +1,6 @@
+import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { projectGenerator as _projectGenerator } from './project.generator.js';
-import { fileManager as _fileManager } from '../../files/index.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
+import { Options } from 'prettier';
 import {
     coreConfig,
     GeneratedFile,
@@ -10,8 +9,9 @@ import {
     getFilenameFromPath,
     ModuleResolution
 } from '../../core/index.js';
-import { Options } from 'prettier';
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
+import { fileManager as _fileManager } from '../../files/index.js';
+import { projectGenerator as _projectGenerator } from './project.generator.js';
 
 export interface GenerateProjectModelsConfig {
     readonly environmentId: string;

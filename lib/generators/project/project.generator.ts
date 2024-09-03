@@ -1,26 +1,26 @@
-import { match } from 'ts-pattern';
 import {
     AssetFolderModels,
     CollectionModels,
+    ContentTypeElements,
     ContentTypeModels,
     ContentTypeSnippetModels,
-    LanguageModels,
     EnvironmentModels,
+    LanguageModels,
     RoleModels,
     TaxonomyModels,
     WebhookModels,
-    WorkflowModels,
-    ContentTypeElements
+    WorkflowModels
 } from '@kontent-ai/management-sdk';
+import { match } from 'ts-pattern';
 import {
     FlattenedElement,
     GeneratedFile,
     getFlattenedElements,
-    sortAlphabetically,
-    toSafeString,
-    toCamelCase,
     getStringOrUndefined,
-    toGuidelinesComment
+    sortAlphabetically,
+    toCamelCase,
+    toGuidelinesComment,
+    toSafeString
 } from '../../core/index.js';
 
 interface WorkflowStep {

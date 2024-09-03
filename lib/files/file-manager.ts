@@ -1,11 +1,11 @@
+import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { Options } from 'prettier';
-import { formatCodeAsync } from '../format/formatter.js';
 import * as fs from 'fs';
 import { dirname } from 'path';
-import { GeneratedFile, toOutputDirPath } from '../core/index.js';
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import { Options } from 'prettier';
 import { commentsManager } from '../comments/index.js';
+import { GeneratedFile, toOutputDirPath } from '../core/index.js';
+import { formatCodeAsync } from '../format/formatter.js';
 
 export function fileManager(config: {
     readonly outputDir: string | undefined;
