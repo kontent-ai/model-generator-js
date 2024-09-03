@@ -12,10 +12,10 @@ import { cliArgs } from './commands.js';
 // This enables --help with all commands, options & samples
 cliArgs.registerCommands();
 
-const run = async () => {
+try {
     const argsFetcher = await argumentsFetcherAsync();
 
-    return match(argsFetcher.getCliAction())
+    await match(argsFetcher.getCliAction())
         .returnType<Promise<void>>()
         .with('delivery-sdk', async () => await deliveryActionAsync(argsFetcher))
         .with('migration-toolkit', async () => await migrateActionAsync(argsFetcher))
@@ -23,8 +23,6 @@ const run = async () => {
         .otherwise((action) => {
             throw Error(`Invalid action '${chalk.red(action)}'`);
         });
-};
-
-run().catch((err) => {
-    handleError(err);
-});
+} catch (error) {
+    handleError(error);
+}
