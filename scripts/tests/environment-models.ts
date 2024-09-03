@@ -4,7 +4,7 @@ import { rmSync } from 'fs';
 import { ModuleResolution, generateEnvironmentModelsAsync, handleError } from '../../lib/index.js';
 import { getEnvironmentRequiredValue } from '../utils/test.utils.js';
 
-const outputDir: string = './sample/project';
+const outputDir: string = './sample/environment';
 
 const run = async () => {
     // needed to load .env environment to current process when run via package.json script
