@@ -5,9 +5,9 @@ import { coreConfig } from '../../config.js';
 import { GeneratedFile, getBarrelExportCode, getDefaultModuleResolution, getFilenameFromPath, ModuleResolution } from '../../core/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
-import { projectGenerator as _projectGenerator } from './project.generator.js';
+import { environmentGenerator as _environmentGenerator } from './environment.generator.js';
 
-export interface GenerateProjectModelsConfig {
+export interface GenerateEnvironmentModelsConfig {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly isEnterpriseSubscription: boolean;
@@ -19,11 +19,11 @@ export interface GenerateProjectModelsConfig {
     readonly formatOptions?: Readonly<Options>;
 }
 
-export async function generateProjectModelsAsync(config: GenerateProjectModelsConfig): Promise<void> {
+export async function generateEnvironmentModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<void> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('project')}' models\n`);
 
-    const { moduleResolution, projectFiles, environmentInfo } = await getModelsAsync(config);
+    const { moduleResolution, environmentFiles: projectFiles, environmentInfo } = await getModelsAsync(config);
 
     await createFilesAsync({
         moduleResolution,
@@ -37,8 +37,8 @@ export async function generateProjectModelsAsync(config: GenerateProjectModelsCo
     console.log(chalk.green(`\nCompleted`));
 }
 
-async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
-    projectFiles: readonly GeneratedFile[];
+async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<{
+    environmentFiles: readonly GeneratedFile[];
     moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -65,7 +65,7 @@ async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
 
     return {
         environmentInfo,
-        projectFiles: _projectGenerator({
+        environmentFiles: _environmentGenerator({
             environmentData: {
                 environmentInfo: environmentInfo,
                 languages: languages,
@@ -78,7 +78,7 @@ async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
                 snippets: snippets,
                 webhooks: webooks
             }
-        }).generateProjectModel(),
+        }).generateEnvironmentModels(),
         moduleResolution: moduleResolution
     };
 }

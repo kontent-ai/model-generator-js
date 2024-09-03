@@ -44,8 +44,8 @@ export interface ProjectGeneratorConfig {
     };
 }
 
-export function projectGenerator(config: ProjectGeneratorConfig) {
-    const generateProjectModel = (): readonly GeneratedFile[] => {
+export function environmentGenerator(config: ProjectGeneratorConfig) {
+    const generateEnvironmentModels = (): readonly GeneratedFile[] => {
         return [
             {
                 text: `export const languages = {
@@ -353,6 +353,6 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
     };
 
     return {
-        generateProjectModel
+        generateEnvironmentModels
     };
 }

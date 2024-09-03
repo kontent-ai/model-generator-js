@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { ModuleResolution, generateProjectModelsAsync, handleError } from '../../lib/index.js';
+import { ModuleResolution, generateEnvironmentModelsAsync, handleError } from '../../lib/index.js';
 import { getEnvironmentRequiredValue } from '../utils/test.utils.js';
 
 const outputDir: string = './sample/project';
@@ -25,7 +25,7 @@ const run = async () => {
     const apiKey = getEnvironmentRequiredValue('API_KEY');
     const moduleResolution = getEnvironmentRequiredValue('MODULE_RESOLUTION');
 
-    await generateProjectModelsAsync({
+    await generateEnvironmentModelsAsync({
         addTimestamp: false,
         environmentId: environmentId,
         apiKey: apiKey,

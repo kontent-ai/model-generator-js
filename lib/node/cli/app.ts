@@ -4,8 +4,8 @@ import chalk from 'chalk';
 import { match } from 'ts-pattern';
 import { handleError } from '../../core/index.js';
 import { deliveryActionAsync } from './actions/delivery-action.js';
+import { environmentActionAsync } from './actions/environment-action.js';
 import { migrateActionAsync } from './actions/migrate-action.js';
-import { projectActionAsync } from './actions/project-action.js';
 import { argumentsFetcherAsync } from './args/args-fetcher.js';
 import { cliArgs } from './commands.js';
 
@@ -19,7 +19,7 @@ const run = async () => {
         .returnType<Promise<void>>()
         .with('delivery-sdk', async () => await deliveryActionAsync(argsFetcher))
         .with('migration-toolkit', async () => await migrateActionAsync(argsFetcher))
-        .with('environment', async () => await projectActionAsync(argsFetcher))
+        .with('environment', async () => await environmentActionAsync(argsFetcher))
         .otherwise((action) => {
             throw Error(`Invalid action '${chalk.red(action)}'`);
         });

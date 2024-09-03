@@ -4,8 +4,8 @@ export * from './delivery/delivery-func.js';
 export * from './delivery/delivery-taxonomy.generator.js';
 
 // project
-export * from './project/project-func.js';
-export * from './project/project.generator.js';
+export * from './environment/environment-func.js';
+export * from './environment/environment.generator.js';
 
 // migration
 export * from './migration/migration-func.js';

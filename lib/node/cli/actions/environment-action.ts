@@ -1,9 +1,9 @@
 import { ModuleResolution } from '../../../core/index.js';
-import { generateProjectModelsAsync } from '../../../generators/index.js';
+import { generateEnvironmentModelsAsync } from '../../../generators/index.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
-export async function projectActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
-    await generateProjectModelsAsync({
+export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
+    await generateEnvironmentModelsAsync({
         environmentId: cliFetcher.getRequiredArgumentValue('environmentId'),
         baseUrl: cliFetcher.getRequiredArgumentValue('managementApiUrl'),
         apiKey: cliFetcher.getRequiredArgumentValue('apiKey'),
