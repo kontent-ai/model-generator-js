@@ -153,10 +153,10 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             ),
             contentTypeExtends:
                 data.typeOrSnippet instanceof ContentTypeModels.ContentType && snippets.length
-                    ? `& ${snippets
-                          .map((snippet) => nameResolvers.snippet(snippet))
-                          .filter(uniqueFilter)
-                          .join(' & ')}`
+                    ? `& ${sortAlphabetically(
+                          snippets.map((snippet) => nameResolvers.snippet(snippet)).filter(uniqueFilter),
+                          (snippetName) => snippetName
+                      ).join(' & ')}`
                     : undefined,
             typeName:
                 data.typeOrSnippet instanceof ContentTypeModels.ContentType
@@ -166,7 +166,10 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     };
 
     const getDeliverySdkContentTypeImports = (flattenedElements: readonly FlattenedElement[]): readonly string[] => {
-        return [deliveryConfig.sdkTypes.contentItem, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])];
+        return sortAlphabetically(
+            [deliveryConfig.sdkTypes.contentItem, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])],
+            (m) => m
+        );
     };
 
     const getModelCode = (
@@ -273,7 +276,10 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
             return [deliveryConfig.sdkTypes.contentItem];
         }
 
-        return types.map((type) => nameResolvers.contentType(type));
+        return sortAlphabetically(
+            types.map((type) => nameResolvers.contentType(type)),
+            (type) => type
+        );
     };
 
     return {
