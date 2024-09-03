@@ -60,7 +60,7 @@ async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
         kontentFetcher.getWorkflowsAsync(),
         kontentFetcher.getWebhooksAsync(),
         kontentFetcher.getAssetFoldersAsync(),
-        config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : Promise.resolve([])
+        config.isEnterpriseSubscription ? kontentFetcher.getRolesAsync() : Promise.resolve([])
     ]);
 
     return {
