@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
 
-import { exitProgram, handleError } from '../../core/index.js';
+import { handleError } from '../../core/index.js';
 import { deliveryActionAsync } from './actions/delivery-action.js';
 import { migrateActionAsync } from './actions/migrate-action.js';
 import { argumentsFetcherAsync } from './args/args-fetcher.js';
@@ -22,9 +22,7 @@ const run = async () => {
         return await migrateActionAsync(argsFetcher);
     }
 
-    exitProgram({
-        message: `Invalid action '${chalk.red(action)}'`
-    });
+    throw Error(`Invalid action '${chalk.red(action)}'`);
 };
 
 run().catch((err) => {

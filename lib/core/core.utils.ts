@@ -2,10 +2,6 @@ import { camelCasePropertyNameResolver, pascalCasePropertyNameResolver, snakeCas
 import { parse } from 'path';
 import { ModuleResolution } from './core.models.js';
 
-export function exitProgram(data: { readonly message: string }): never {
-    throw Error(data.message);
-}
-
 export function uniqueFilter(value: string, index: number, self: readonly string[]): boolean {
     return self.indexOf(value) === index;
 }

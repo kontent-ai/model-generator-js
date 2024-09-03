@@ -2,7 +2,6 @@ import chalk from 'chalk';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { CliAction } from '../../../core/core.models.js';
-import { exitProgram } from '../../../core/index.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 type ArgvResult = {
@@ -39,9 +38,7 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
             const value = getOptionalArgumentValue(argName);
 
             if (!value) {
-                exitProgram({
-                    message: `Missing '${chalk.yellow(argName)}' argument value`
-                });
+                throw Error(`Missing '${chalk.yellow(argName)}' argument value`);
             }
 
             return value;
