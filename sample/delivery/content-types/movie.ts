@@ -13,7 +13,7 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
+import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
 import type { Actor } from '../content-types/actor.js';
 import type { Releasecategory } from '../taxonomies/releasecategory.js';
 
