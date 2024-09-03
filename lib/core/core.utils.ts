@@ -1,9 +1,21 @@
 import { camelCasePropertyNameResolver, pascalCasePropertyNameResolver, snakeCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import { parse } from 'path';
-import { ModuleResolution } from './core.models.js';
+import { CliAction, LibraryType, ModuleResolution } from './core.models.js';
 
 export function uniqueFilter(value: string, index: number, self: readonly string[]): boolean {
     return self.indexOf(value) === index;
+}
+
+export function getCliAction(cliAction: CliAction): CliAction {
+    return cliAction;
+}
+
+export function getLibrary(library: LibraryType): LibraryType {
+    return library;
+}
+
+export function getModuleResolution(module: ModuleResolution): ModuleResolution {
+    return module;
 }
 
 export function getDefaultModuleResolution(moduleResolution: ModuleResolution | undefined): ModuleResolution {

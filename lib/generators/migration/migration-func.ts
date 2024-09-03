@@ -12,8 +12,8 @@ export interface GenerateMigrationModelsConfig {
     readonly addTimestamp: boolean;
     readonly apiKey: string;
     readonly moduleResolution: ModuleResolution;
-    readonly outputDir: string;
 
+    readonly outputDir?: string;
     readonly baseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 }
@@ -90,7 +90,7 @@ async function createFilesAsync(data: {
     readonly environmentFiles: readonly GeneratedFile[];
     readonly migrationItemFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
-    readonly outputDir: string;
+    readonly outputDir?: string;
     readonly formatOptions?: Readonly<Options>;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
     readonly addTimestamp: boolean;

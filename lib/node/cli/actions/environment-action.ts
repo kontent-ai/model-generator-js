@@ -4,12 +4,14 @@ import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
     await generateEnvironmentModelsAsync({
+        // required
         environmentId: cliFetcher.getRequiredArgumentValue('environmentId'),
-        baseUrl: cliFetcher.getRequiredArgumentValue('managementApiUrl'),
         apiKey: cliFetcher.getRequiredArgumentValue('apiKey'),
-        outputDir: cliFetcher.getRequiredArgumentValue('outputDir'),
-        isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false),
+        // optional
+        baseUrl: cliFetcher.getOptionalArgumentValue('baseUrl'),
+        outputDir: cliFetcher.getOptionalArgumentValue('outputDir'),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
-        moduleResolution: cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+        moduleResolution: cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext',
+        isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false)
     });
 }
