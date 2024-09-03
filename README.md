@@ -27,8 +27,13 @@ npm i @kontent-ai/model-generator -g
 Go to folder where you want to create models and run:
 
 ```bash
+# Models for Delivery SDK
 kontent-generate delivery-sdk --environmentId=x --apiKey=y
+
+# Models for Migration Toolkit
 kontent-generate migration-toolkit --environmentId=x --apiKey=y
+
+# Environment models used for scripting and strongly typed access to environment objects
 kontent-generate environment --environmentId=x --apiKey=y
 ```
 
