@@ -1,14 +1,8 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import {
-    coreConfig,
-    GeneratedFile,
-    getBarrelExportCode,
-    getDefaultModuleResolution,
-    getFilenameFromPath,
-    ModuleResolution
-} from '../../core/index.js';
+import { coreConfig } from '../../config.js';
+import { GeneratedFile, getBarrelExportCode, getDefaultModuleResolution, getFilenameFromPath, ModuleResolution } from '../../core/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { projectGenerator as _projectGenerator } from './project.generator.js';

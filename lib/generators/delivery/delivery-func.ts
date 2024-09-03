@@ -1,13 +1,12 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
+import { coreConfig, deliveryConfig } from '../../config.js';
 import {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
-    coreConfig,
-    deliveryConfig,
     GeneratedFile,
     GeneratorElementResolver,
     getBarrelExportCode,

@@ -3,8 +3,7 @@ import chalk from 'chalk';
 import * as fs from 'fs';
 import { dirname } from 'path';
 import { Options } from 'prettier';
-import { commentsManager } from '../comments/index.js';
-import { GeneratedFile, toOutputDirPath } from '../core/index.js';
+import { GeneratedFile, getEnvironmentInfoComment, toOutputDirPath } from '../core/index.js';
 import { formatCodeAsync } from '../format/formatter.js';
 
 export function fileManager(config: {
@@ -17,7 +16,7 @@ export function fileManager(config: {
 
     const createFileOnFsAsync = async (text: string, filePath: string, formatOptions: Readonly<Options> | undefined): Promise<void> => {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
-        const fileContent = `${commentsManager().getEnvironmentInfoComment({
+        const fileContent = `${getEnvironmentInfoComment({
             environmentInfo: config.environmentInfo,
             addTimestamp: config.addTimestamp
         })}\n\n${await getFormattedCodeAsync(text, filePath, formatOptions)}`;

@@ -1,7 +1,7 @@
 import { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 
+import { deliveryConfig } from '../../config.js';
 import {
-    deliveryConfig,
     GeneratedFile,
     mapFilename,
     mapName,

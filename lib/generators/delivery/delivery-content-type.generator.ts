@@ -1,13 +1,13 @@
 import { ContentTypeModels, ContentTypeSnippetModels, EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match, P } from 'ts-pattern';
+import { deliveryConfig } from '../../config.js';
 import {
     importer as _importer,
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
-    deliveryConfig,
     FlattenedElement,
     GeneratedFile,
     GeneratorElementResolver,

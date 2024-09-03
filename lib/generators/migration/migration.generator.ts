@@ -8,19 +8,19 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
-import { commentsManager as _commentsManager } from '../../comments/index.js';
+import { migrationConfig } from '../../config.js';
 import {
     importer as _importer,
     FlattenedElement,
     GeneratedFile,
     getFlattenedElements,
-    migrationConfig,
     ModuleResolution,
     sortAlphabetically,
     toGuidelinesComment,
     toPascalCase,
     toSafeString,
-    uniqueFilter
+    uniqueFilter,
+    wrapComment
 } from '../../core/index.js';
 
 export interface MigrationGeneratorConfig {
@@ -38,7 +38,6 @@ export interface MigrationGeneratorConfig {
 }
 
 export function migrationGenerator(config: MigrationGeneratorConfig) {
-    const commentsManager = _commentsManager();
     const importer = _importer(config.moduleResolution);
 
     const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
@@ -92,19 +91,19 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 {
                     filename: `${migrationConfig.environmentFolderName}/${migrationConfig.environmentFilename}.ts`,
                     text: `
-                ${commentsManager.wrapComment('Type representing all languages')}
+                ${wrapComment('Type representing all languages')}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
-                ${commentsManager.wrapComment('Type representing all content types')}
+                ${wrapComment('Type representing all content types')}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
 
-                ${commentsManager.wrapComment('Type representing all collections')}
+                ${wrapComment('Type representing all collections')}
                 ${getCollectionCodenamesType(config.environmentData.collections)}
 
-                ${commentsManager.wrapComment('Type representing all workflows')}
+                ${wrapComment('Type representing all workflows')}
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
 
-                ${commentsManager.wrapComment('Type representing all worksflow steps across all workflows')}
+                ${wrapComment('Type representing all worksflow steps across all workflows')}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
             `
                 }
@@ -124,10 +123,10 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                        importValue: `${migrationConfig.localTypeNames.collectionCodenames}, ${migrationConfig.localTypeNames.contentTypeCodenames}, ${migrationConfig.localTypeNames.languageCodenames}, ${migrationConfig.localTypeNames.workflowCodenames}, ${migrationConfig.localTypeNames.workflowStepCodenames}`
                    })}
 
-                ${commentsManager.wrapComment('System object shared by all individual content type models')}
+                ${wrapComment('System object shared by all individual content type models')}
                 ${getSystemType()}
 
-                ${commentsManager.wrapComment('Item object shared by all individual content type models')}
+                ${wrapComment('Item object shared by all individual content type models')}
                 ${getItemType()}
             `
                 }
