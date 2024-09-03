@@ -22,13 +22,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('migration')}' models\n`);
 
-    const {
-        migrationItemFiles,
-        migrationTypeFiles: migrationTypeFiles,
-        moduleResolution,
-        environmentInfo,
-        environmentFiles
-    } = await getFilesAsync(config);
+    const { migrationItemFiles, migrationTypeFiles, moduleResolution, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
     await createFilesAsync({
         migrationItemFiles,
