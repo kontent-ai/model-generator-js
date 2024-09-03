@@ -37,10 +37,6 @@ export function toSnakeCase(text: string): string {
     return toSafeStringCode(snakeCasePropertyNameResolver('', text));
 }
 
-export function removeLineEndings(value: string): string {
-    return value.replace(/(\r\n|\n|\r)/gm, '');
-}
-
 export function toGuidelinesComment(guidelines: string): string {
     return toSafeString(removeLineEndings(guidelines));
 }
@@ -63,10 +59,6 @@ export function toOutputDirPath(outputDir?: string): string {
     return outputDir ? `${outputDir}/`.replaceAll('//', '/') : `./`;
 }
 
-export function getExtensionForModuleResolution(moduleResolution: ModuleResolution): string {
-    return moduleResolution === 'nodeNext' ? '.js' : '';
-}
-
 export function getBarrelExportCode(data: { readonly filenames: readonly string[]; readonly moduleResolution: ModuleResolution }): string {
     if (!data.filenames.length) {
         return 'export {}';
@@ -75,4 +67,12 @@ export function getBarrelExportCode(data: { readonly filenames: readonly string[
         const path = parse(filename);
         return (barrelCode += `export * from '${path.dir}/${path.name}${getExtensionForModuleResolution(data.moduleResolution)}';`);
     }, '');
+}
+
+function getExtensionForModuleResolution(moduleResolution: ModuleResolution): string {
+    return moduleResolution === 'nodeNext' ? '.js' : '';
+}
+
+function removeLineEndings(value: string): string {
+    return value.replace(/(\r\n|\n|\r)/gm, '');
 }

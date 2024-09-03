@@ -36,4 +36,4 @@ export type WorkflowCodenames = 'default';
 /**
  * Type representing all worksflow steps across all workflows
  */
-export type WorkflowStepCodenames = 'draft' | 'review' | 'ready_to_publish' | 'published' | 'archived' | 'scheduled';
+export type WorkflowStepCodenames = 'archived' | 'draft' | 'published' | 'ready_to_publish' | 'review' | 'scheduled';

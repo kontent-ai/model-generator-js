@@ -37,15 +37,6 @@ export function extractErrorData(error: unknown): ErrorData {
         });
 }
 
-export function is404Error(error: unknown): boolean {
-    if (error instanceof SharedModels.ContentManagementBaseKontentError) {
-        const originalError = error.originalError as OriginalManagementError | undefined;
-        return originalError?.response?.status === 404;
-    }
-
-    return false;
-}
-
 export function handleError(error: unknown): void {
     const errorData = extractErrorData(error);
 

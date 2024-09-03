@@ -60,16 +60,25 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 
+    const [languages, taxonomies, types, snippets, collections, workflows] = await Promise.all([
+        kontentFetcher.getLanguagesAsync(),
+        kontentFetcher.getTaxonomiesAsync(),
+        kontentFetcher.getTypesAsync(),
+        kontentFetcher.getSnippetsAsync(),
+        kontentFetcher.getCollectionsAsync(),
+        kontentFetcher.getWorkflowsAsync()
+    ]);
+
     const migrationGenerator = _migrationGenerator({
         moduleResolution: config.moduleResolution,
         environmentData: {
             environment: environmentInfo,
-            taxonomies: await kontentFetcher.getTaxonomiesAsync(),
-            languages: await kontentFetcher.getLanguagesAsync(),
-            workflows: await kontentFetcher.getWorkflowsAsync(),
-            types: await kontentFetcher.getTypesAsync(),
-            snippets: await kontentFetcher.getSnippetsAsync(),
-            collections: await kontentFetcher.getCollectionsAsync()
+            taxonomies: taxonomies,
+            languages: languages,
+            workflows: workflows,
+            types: types,
+            snippets: snippets,
+            collections: collections
         }
     });
 

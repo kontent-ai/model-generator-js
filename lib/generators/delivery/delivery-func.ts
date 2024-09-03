@@ -84,14 +84,19 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     });
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
-    const taxonomies = await kontentFetcher.getTaxonomiesAsync();
+
+    const [taxonomies, types, snippets] = await Promise.all([
+        kontentFetcher.getTaxonomiesAsync(),
+        kontentFetcher.getTypesAsync(),
+        kontentFetcher.getSnippetsAsync()
+    ]);
 
     const { contentTypeFiles, snippetFiles } = deliveryContentTypeGenerator({
         moduleResolution: moduleResolution,
         environmentData: {
             environment: environmentInfo,
-            types: await kontentFetcher.getTypesAsync(),
-            snippets: await kontentFetcher.getSnippetsAsync(),
+            types: types,
+            snippets: snippets,
             taxonomies: taxonomies
         },
         fileResolvers: config.fileResolvers,
@@ -101,7 +106,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     const taxonomyFiles = deliveryTaxonomyGenerator({
         moduleResolution: moduleResolution,
         environmentData: {
-            environment: await kontentFetcher.getEnvironmentInfoAsync(),
+            environment: environmentInfo,
             taxonomies: taxonomies
         },
         fileResolvers: config.fileResolvers,

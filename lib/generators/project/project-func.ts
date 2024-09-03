@@ -51,20 +51,32 @@ async function getModelsAsync(config: GenerateProjectModelsConfig): Promise<{
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 
+    const [languages, taxonomies, types, snippets, collections, workflows, webooks, assetFolders, roles] = await Promise.all([
+        kontentFetcher.getLanguagesAsync(),
+        kontentFetcher.getTaxonomiesAsync(),
+        kontentFetcher.getTypesAsync(),
+        kontentFetcher.getSnippetsAsync(),
+        kontentFetcher.getCollectionsAsync(),
+        kontentFetcher.getWorkflowsAsync(),
+        kontentFetcher.getWebhooksAsync(),
+        kontentFetcher.getAssetFoldersAsync(),
+        config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : Promise.resolve([])
+    ]);
+
     return {
         environmentInfo,
         projectFiles: _projectGenerator({
             environmentData: {
                 environmentInfo: environmentInfo,
-                languages: await kontentFetcher.getLanguagesAsync(),
-                taxonomies: await kontentFetcher.getTaxonomiesAsync(),
-                types: await kontentFetcher.getTypesAsync(),
-                workflows: await kontentFetcher.getWorkflowsAsync(),
-                assetFolders: await kontentFetcher.getAssetFoldersAsync(),
-                collections: await kontentFetcher.getCollectionsAsync(),
-                roles: config.isEnterpriseSubscription ? await kontentFetcher.getRolesAsync() : [],
-                snippets: await kontentFetcher.getSnippetsAsync(),
-                webhooks: await kontentFetcher.getWebhooksAsync()
+                languages: languages,
+                taxonomies: taxonomies,
+                types: types,
+                workflows: workflows,
+                assetFolders: assetFolders,
+                collections: collections,
+                roles: roles,
+                snippets: snippets,
+                webhooks: webooks
             }
         }).generateProjectModel(),
         moduleResolution: moduleResolution

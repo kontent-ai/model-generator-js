@@ -1,5 +1,4 @@
 export * from './comment.utils.js';
-export * from './core.config.js';
 export * from './core.models.js';
 export * from './core.utils.js';
 export * from './element.utils.js';

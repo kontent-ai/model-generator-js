@@ -49,7 +49,7 @@ export function getFlattenedElements(
     );
 }
 
-export function getFlattenedElement(
+function getFlattenedElement(
     wrapper: ElementWrapper,
     taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
     types: readonly Readonly<ContentTypeModels.ContentType>[]

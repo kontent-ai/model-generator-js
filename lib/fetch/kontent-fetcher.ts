@@ -1,3 +1,4 @@
+import { HttpService } from '@kontent-ai/core-sdk';
 import {
     AssetFolderModels,
     CollectionModels,
@@ -25,7 +26,8 @@ export function kontentFetcher(config: KontentFetcherConfig) {
         return createManagementClient({
             environmentId: config.environmentId,
             apiKey: config.apiKey,
-            baseUrl: config.baseUrl
+            baseUrl: config.baseUrl,
+            httpService: new HttpService({ logErrorsToConsole: false })
         });
     };
 
