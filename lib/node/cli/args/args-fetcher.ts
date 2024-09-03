@@ -1,7 +1,8 @@
 import chalk from 'chalk';
+import { match } from 'ts-pattern';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { CliAction } from '../../../core/core.models.js';
+import { CliAction, LiteralUnion } from '../../../core/core.models.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 type ArgvResult = {
@@ -20,20 +21,18 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 
     return {
         getCliAction(): CliAction {
-            const command = resolvedArgv._?.[0]?.toString()?.toLowerCase();
+            const command = resolvedArgv._?.[0]?.toString()?.toLowerCase() as LiteralUnion<CliAction>;
 
-            if (command === <CliAction>'delivery') {
-                return 'delivery';
-            }
-            if (command === <CliAction>'migration') {
-                return 'migration';
-            }
-
-            throw Error(`Unsupported command '${chalk.yellow(command)}'`);
+            return match(command)
+                .returnType<CliAction>()
+                .with('delivery-sdk', () => 'delivery-sdk')
+                .with('migration-toolkit', () => 'migration-toolkit')
+                .with('environment', () => 'environment')
+                .otherwise(() => {
+                    throw Error(`Unsupported command '${chalk.red(command)}'`);
+                });
         },
-        getOptionalArgumentValue(argName: string): string | undefined {
-            return resolvedArgv[argName]?.toString();
-        },
+        getOptionalArgumentValue,
         getRequiredArgumentValue(argName: string): string {
             const value = getOptionalArgumentValue(argName);
 

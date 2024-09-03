@@ -8,11 +8,10 @@ import {
     TaxonomyModels
 } from '@kontent-ai/management-sdk';
 
-export type CliAction = 'delivery' | 'migration';
+export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
 export type ModuleResolution = 'nodeNext' | 'node';
 export type CaseType = 'camelCase' | 'pascalCase' | 'snakeCase';
-export type ModelType = 'delivery' | 'migration';
 export type GeneratorElementResolver = CaseType | PropertyNameResolver;
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
 export type LiteralUnion<T extends string> = T | (string & NonNullable<unknown>);
