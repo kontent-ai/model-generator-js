@@ -72,7 +72,10 @@ export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
 
     const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
         return taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
-            return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
+            return sortAlphabetically(
+                codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename),
+                (codename) => codename
+            );
         }, []);
     };
 

@@ -26,31 +26,13 @@ export type MovieItem = Item<
     'movie',
     {
         /**
-         * Title (text)
-         *
-         * Required: true
-         * Codename: title
-         * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
-         */
-        title: MigrationElementModels.TextElement;
-
-        /**
-         * Plot (rich_text)
+         * Category (multiple_choice)
          *
          * Required: false
-         * Codename: plot
-         * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
+         * Codename: category
+         * Id: 9821c252-6414-f549-c17f-cc171dd87713
          */
-        plot: MigrationElementModels.RichTextElement;
-
-        /**
-         * Released (date_time)
-         *
-         * Required: false
-         * Codename: released
-         * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
-         */
-        released: MigrationElementModels.DateTimeElement;
+        category: MigrationElementModels.MultipleChoiceElement;
 
         /**
          * Length (number)
@@ -62,6 +44,15 @@ export type MovieItem = Item<
         length: MigrationElementModels.NumberElement;
 
         /**
+         * Plot (rich_text)
+         *
+         * Required: false
+         * Codename: plot
+         * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
+         */
+        plot: MigrationElementModels.RichTextElement;
+
+        /**
          * Poster (asset)
          *
          * Required: false
@@ -71,22 +62,22 @@ export type MovieItem = Item<
         poster: MigrationElementModels.AssetElement;
 
         /**
-         * Category (multiple_choice)
+         * ReleaseCategory (taxonomy)
          *
          * Required: false
-         * Codename: category
-         * Id: 9821c252-6414-f549-c17f-cc171dd87713
+         * Codename: releasecategory
+         * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
          */
-        category: MigrationElementModels.MultipleChoiceElement;
+        releasecategory: MigrationElementModels.TaxonomyElement;
 
         /**
-         * Stars (modular_content)
+         * Released (date_time)
          *
          * Required: false
-         * Codename: stars
-         * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
+         * Codename: released
+         * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
          */
-        stars: MigrationElementModels.LinkedItemsElement;
+        released: MigrationElementModels.DateTimeElement;
 
         /**
          * SeoName (url_slug)
@@ -98,12 +89,21 @@ export type MovieItem = Item<
         seoname: MigrationElementModels.UrlSlugElement;
 
         /**
-         * ReleaseCategory (taxonomy)
+         * Stars (modular_content)
          *
          * Required: false
-         * Codename: releasecategory
-         * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
+         * Codename: stars
+         * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
          */
-        releasecategory: MigrationElementModels.TaxonomyElement;
+        stars: MigrationElementModels.LinkedItemsElement;
+
+        /**
+         * Title (text)
+         *
+         * Required: true
+         * Codename: title
+         * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
+         */
+        title: MigrationElementModels.TextElement;
     }
 >;

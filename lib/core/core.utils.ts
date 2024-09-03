@@ -71,7 +71,7 @@ export function getBarrelExportCode(data: { readonly filenames: readonly string[
     if (!data.filenames.length) {
         return 'export {}';
     }
-    return data.filenames.reduce<string>((barrelCode, filename) => {
+    return sortAlphabetically(data.filenames, (filename) => filename).reduce<string>((barrelCode, filename) => {
         const path = parse(filename);
         return (barrelCode += `export * from '${path.dir}/${path.name}${getExtensionForModuleResolution(data.moduleResolution)}';`);
     }, '');

@@ -23,14 +23,6 @@ import type { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
  */
 export type Actor = IContentItem<{
     /**
-     * Url (url_slug)
-     *
-     * Required: false
-     * Codename: url
-     * Id: c8658782-f209-a573-9c85-430fb4e3e9f0
-     */
-    url: Elements.UrlSlugElement;
-    /**
      * First name (text)
      *
      * Required: true
@@ -55,4 +47,12 @@ export type Actor = IContentItem<{
      * Id: eaec9ba3-9624-6875-04ec-80d0b2e00781
      */
     photo: Elements.AssetsElement;
+    /**
+     * Url (url_slug)
+     *
+     * Required: false
+     * Codename: url
+     * Id: c8658782-f209-a573-9c85-430fb4e3e9f0
+     */
+    url: Elements.UrlSlugElement;
 }>;

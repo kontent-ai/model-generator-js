@@ -227,9 +227,10 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
             .returnType<string | undefined>()
             .with({ type: 'multiple_choice' }, (element) => {
                 return (
-                    element.options.reduce<string>((code, option, index) => {
-                        const isLast = index === element.options.length - 1;
-                        return `${code}\n
+                    sortAlphabetically(element.options, (option) => option.codename ?? option.name).reduce<string>(
+                        (code, option, index) => {
+                            const isLast = index === element.options.length - 1;
+                            return `${code}\n
                 /**
                 * ${toSafeString(option.name)}
                 */
@@ -239,7 +240,9 @@ export function projectGenerator(config: ProjectGeneratorConfig) {
                     codename: ${getStringOrUndefined(option.codename)},
                     externalId: ${getStringOrUndefined(option.external_id)}
                 }${!isLast ? ',\n' : ''}`;
-                    }, '{') + '}'
+                        },
+                        '{'
+                    ) + '}'
                 );
             })
             .otherwise(() => undefined);

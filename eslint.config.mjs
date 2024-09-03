@@ -10,10 +10,6 @@ export default tseslint.config(eslint.configs.recommended, ...tseslint.configs.r
     },
     rules: {
         '@typescript-eslint/no-namespace': 'off',
-        'import/no-duplicatees': 'error',
-        'import/newline-after-import': 'error',
-        'simple-import-sort/imports': 'error',
-        'sipmle-export-sort/exports': 'error',
         '@typescript-eslint/naming-convention': [
             'warn',
             {

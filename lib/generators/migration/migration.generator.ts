@@ -16,6 +16,7 @@ import {
     getFlattenedElements,
     migrationConfig,
     ModuleResolution,
+    sortAlphabetically,
     toGuidelinesComment,
     toPascalCase,
     toSafeString,
@@ -190,9 +191,11 @@ function getCollectionCodenamesType(collections: readonly Readonly<CollectionMod
 }
 
 function getWorkflowStepCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
-    return `export type ${migrationConfig.localTypeNames.workflowStepCodenames} = ${workflows
-        .flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep])
-        .map((workflowStep) => `'${workflowStep.codename}'`)
-        .filter(uniqueFilter)
-        .join(' | ')};`;
+    return `export type ${migrationConfig.localTypeNames.workflowStepCodenames} = ${sortAlphabetically(
+        workflows
+            .flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep])
+            .map((workflowStep) => `'${workflowStep.codename}'`)
+            .filter(uniqueFilter),
+        (codename) => codename
+    ).join(' | ')};`;
 }

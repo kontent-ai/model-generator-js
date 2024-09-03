@@ -24,18 +24,6 @@ export const contentTypes = {
         name: 'Actor',
         elements: {
             /**
-             * Url (url_slug)
-             */
-            url: {
-                codename: 'url',
-                id: 'c8658782-f209-a573-9c85-430fb4e3e9f0',
-                externalId: undefined,
-                name: 'Url',
-                required: false,
-                type: 'url_slug'
-            },
-
-            /**
              * First name (text)
              * Guidelines: This is the first name of the actor
              */
@@ -70,6 +58,18 @@ export const contentTypes = {
                 name: 'Photo',
                 required: false,
                 type: 'asset'
+            },
+
+            /**
+             * Url (url_slug)
+             */
+            url: {
+                codename: 'url',
+                id: 'c8658782-f209-a573-9c85-430fb4e3e9f0',
+                externalId: undefined,
+                name: 'Url',
+                required: false,
+                type: 'url_slug'
             }
         }
     },
@@ -84,66 +84,6 @@ export const contentTypes = {
         name: 'Movie',
         elements: {
             /**
-             * Title (text)
-             */
-            title: {
-                codename: 'title',
-                id: '3473187e-dc78-eff2-7099-f690f7042d4a',
-                externalId: undefined,
-                name: 'Title',
-                required: true,
-                type: 'text'
-            },
-
-            /**
-             * Plot (rich_text)
-             */
-            plot: {
-                codename: 'plot',
-                id: 'f7ee4f27-27fd-a19b-3c5c-102aae1c50ce',
-                externalId: undefined,
-                name: 'Plot',
-                required: false,
-                type: 'rich_text'
-            },
-
-            /**
-             * Released (date_time)
-             */
-            released: {
-                codename: 'released',
-                id: '5ccf4644-0d65-5d96-9a32-f4ea21974d51',
-                externalId: undefined,
-                name: 'Released',
-                required: false,
-                type: 'date_time'
-            },
-
-            /**
-             * Length (number)
-             */
-            length: {
-                codename: 'length',
-                id: '7e8ecfab-a419-27ee-d8ec-8adb76fd007c',
-                externalId: undefined,
-                name: 'Length',
-                required: false,
-                type: 'number'
-            },
-
-            /**
-             * Poster (asset)
-             */
-            poster: {
-                codename: 'poster',
-                id: 'a39a7237-9503-a1ae-8431-5b6cdb85ae9d',
-                externalId: undefined,
-                name: 'Poster',
-                required: false,
-                type: 'asset'
-            },
-
-            /**
              * Category (multiple_choice)
              */
             category: {
@@ -155,26 +95,6 @@ export const contentTypes = {
                 type: 'multiple_choice',
                 options: {
                     /**
-                     * Sci fi
-                     */
-                    sciFi: {
-                        name: 'Sci fi',
-                        id: 'b087f774-1f57-9aa8-dab5-2ca88a646824',
-                        codename: 'sci_fi',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Documentary
-                     */
-                    documentary: {
-                        name: 'Documentary',
-                        id: '19c5e959-c24a-4863-0b4d-453cdef8fe9d',
-                        codename: 'documentary',
-                        externalId: undefined
-                    },
-
-                    /**
                      * Action
                      */
                     action: {
@@ -185,12 +105,12 @@ export const contentTypes = {
                     },
 
                     /**
-                     * Romance
+                     * Adventure
                      */
-                    romance: {
-                        name: 'Romance',
-                        id: '60550cc7-c986-a59f-b069-7565862fe1c1',
-                        codename: 'romance',
+                    adventure: {
+                        name: 'Adventure',
+                        id: 'cd8389b0-7628-7739-7b14-3225a50212c1',
+                        codename: 'adventure',
                         externalId: undefined
                     },
 
@@ -215,12 +135,12 @@ export const contentTypes = {
                     },
 
                     /**
-                     * Adventure
+                     * Documentary
                      */
-                    adventure: {
-                        name: 'Adventure',
-                        id: 'cd8389b0-7628-7739-7b14-3225a50212c1',
-                        codename: 'adventure',
+                    documentary: {
+                        name: 'Documentary',
+                        id: '19c5e959-c24a-4863-0b4d-453cdef8fe9d',
+                        codename: 'documentary',
                         externalId: undefined
                     },
 
@@ -232,20 +152,88 @@ export const contentTypes = {
                         id: '051e74de-f2e0-f405-9ad5-5263221e46f2',
                         codename: 'drama',
                         externalId: undefined
+                    },
+
+                    /**
+                     * Romance
+                     */
+                    romance: {
+                        name: 'Romance',
+                        id: '60550cc7-c986-a59f-b069-7565862fe1c1',
+                        codename: 'romance',
+                        externalId: undefined
+                    },
+
+                    /**
+                     * Sci fi
+                     */
+                    sciFi: {
+                        name: 'Sci fi',
+                        id: 'b087f774-1f57-9aa8-dab5-2ca88a646824',
+                        codename: 'sci_fi',
+                        externalId: undefined
                     }
                 }
             },
 
             /**
-             * Stars (modular_content)
+             * Length (number)
              */
-            stars: {
-                codename: 'stars',
-                id: 'aa26a55d-19f8-7501-fea3-b0d9b1eeac71',
+            length: {
+                codename: 'length',
+                id: '7e8ecfab-a419-27ee-d8ec-8adb76fd007c',
                 externalId: undefined,
-                name: 'Stars',
+                name: 'Length',
                 required: false,
-                type: 'modular_content'
+                type: 'number'
+            },
+
+            /**
+             * Plot (rich_text)
+             */
+            plot: {
+                codename: 'plot',
+                id: 'f7ee4f27-27fd-a19b-3c5c-102aae1c50ce',
+                externalId: undefined,
+                name: 'Plot',
+                required: false,
+                type: 'rich_text'
+            },
+
+            /**
+             * Poster (asset)
+             */
+            poster: {
+                codename: 'poster',
+                id: 'a39a7237-9503-a1ae-8431-5b6cdb85ae9d',
+                externalId: undefined,
+                name: 'Poster',
+                required: false,
+                type: 'asset'
+            },
+
+            /**
+             * ReleaseCategory (taxonomy)
+             */
+            releasecategory: {
+                codename: 'releasecategory',
+                id: '65f2fd44-1856-bc2b-17c2-decb0635e3d2',
+                externalId: undefined,
+                name: 'ReleaseCategory',
+                required: false,
+                type: 'taxonomy'
+            },
+
+            /**
+             * Released (date_time)
+             */
+            released: {
+                codename: 'released',
+                id: '5ccf4644-0d65-5d96-9a32-f4ea21974d51',
+                externalId: undefined,
+                name: 'Released',
+                required: false,
+                type: 'date_time'
             },
 
             /**
@@ -261,15 +249,27 @@ export const contentTypes = {
             },
 
             /**
-             * ReleaseCategory (taxonomy)
+             * Stars (modular_content)
              */
-            releasecategory: {
-                codename: 'releasecategory',
-                id: '65f2fd44-1856-bc2b-17c2-decb0635e3d2',
+            stars: {
+                codename: 'stars',
+                id: 'aa26a55d-19f8-7501-fea3-b0d9b1eeac71',
                 externalId: undefined,
-                name: 'ReleaseCategory',
+                name: 'Stars',
                 required: false,
-                type: 'taxonomy'
+                type: 'modular_content'
+            },
+
+            /**
+             * Title (text)
+             */
+            title: {
+                codename: 'title',
+                id: '3473187e-dc78-eff2-7099-f690f7042d4a',
+                externalId: undefined,
+                name: 'Title',
+                required: true,
+                type: 'text'
             }
         }
     }

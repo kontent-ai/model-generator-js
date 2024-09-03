@@ -35,7 +35,8 @@ export type ItemSystem<TCodename extends ContentTypeCodenames> = MigrationItemSy
 /**
  * Item object shared by all individual content type models
  */
-export type Item<
-    TCodename extends ContentTypeCodenames,
-    TElements extends MigrationElements = MigrationElements
-> = MigrationItem<TElements, ItemSystem<TCodename>, WorkflowStepCodenames>;
+export type Item<TCodename extends ContentTypeCodenames, TElements extends MigrationElements = MigrationElements> = MigrationItem<
+    TElements,
+    ItemSystem<TCodename>,
+    WorkflowStepCodenames
+>;

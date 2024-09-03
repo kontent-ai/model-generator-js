@@ -13,12 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './languages.js';
+export * from './assetFolders.js';
 export * from './collections.js';
 export * from './contentTypes.js';
 export * from './contentTypeSnippets.js';
-export * from './taxonomies.js';
-export * from './workflows.js';
+export * from './languages.js';
 export * from './roles.js';
-export * from './assetFolders.js';
+export * from './taxonomies.js';
 export * from './webhooks.js';
+export * from './workflows.js';
