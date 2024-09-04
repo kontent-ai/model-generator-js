@@ -57,14 +57,8 @@ export function getStringOrUndefined(text?: string): string {
     return text ? `'${text}'` : 'undefined';
 }
 
-export function toSafeStringCode(text: string): string {
-    const replaceContent = '';
-    return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
-}
-
 export function toSafeString(text: string): string {
-    const replaceContent = ' ';
-    return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
+    return text;
 }
 
 export function toOutputDirPath(outputDir?: string): string {
@@ -73,4 +67,9 @@ export function toOutputDirPath(outputDir?: string): string {
 
 function removeLineEndings(value: string): string {
     return value.replace(/(\r\n|\n|\r)/gm, '');
+}
+
+function toSafeStringCode(text: string): string {
+    const replaceContent = '';
+    return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
 }

@@ -20,7 +20,8 @@ import {
     sortAlphabetically,
     toCamelCase,
     toGuidelinesComment,
-    toSafeString
+    toSafeString,
+    wrapComment
 } from '../../core/index.js';
 
 interface WorkflowStep {
@@ -107,9 +108,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === languages.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(language.name)}
-                */
+                ${wrapComment(`
+                * ${language.name}
+                `)}
                 ${toCamelCase(language.codename)}: {
                     codename: '${language.codename}',
                     id: '${language.id}',
@@ -127,9 +128,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === workflows.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(workflow.name)}
-                */
+                ${wrapComment(`
+                * ${workflow.name}
+                `)}
                 ${toCamelCase(workflow.codename)}: {
                     codename: '${workflow.codename}',
                     id: '${workflow.id}',
@@ -145,9 +146,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 const isLast = index === assetFolders.length - 1;
 
                 return `${code}\n
-                /**
-                * ${toSafeString(assetFolder.name)}
-                */
+                 ${wrapComment(`
+                * ${assetFolder.name}
+                `)}
                 ${toCamelCase(assetFolder.codename)}: {
                     codename: '${assetFolder.codename}',
                     id: '${assetFolder.id}',
@@ -163,9 +164,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === snippets.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(snippet.name)}
-                */
+                ${wrapComment(`
+                * ${snippet.name}
+                `)}
                 ${toCamelCase(snippet.codename)}: {
                     codename: '${snippet.codename}',
                     id: '${snippet.id}',
@@ -181,9 +182,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === contentTypes.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(contentType.name)}
-                */
+                ${wrapComment(`
+                * ${contentType.name}
+                `)}
                 ${toCamelCase(contentType.codename)}: {
                     codename: '${contentType.codename}',
                     id: '${contentType.id}',
@@ -206,10 +207,10 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === flattenedElements.length - 1;
             const elementOptions = getElementOptionsCode(element);
 
-            return `${code}\n
-                /**
-                * ${toSafeString(element.title)} (${element.type})${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                */
+            return `${code}
+                ${wrapComment(`
+                * ${element.title} (${element.type})${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
+                `)}
                 ${toCamelCase(element.codename)}: {
                     codename: '${element.codename}',
                     id: '${element.id}',
@@ -231,9 +232,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                         (code, option, index) => {
                             const isLast = index === element.options.length - 1;
                             return `${code}\n
-                /**
-                * ${toSafeString(option.name)}
-                */
+                ${wrapComment(`
+                * ${option.name}
+                `)}
                 ${toCamelCase(option.codename ?? option.name)}: {
                     name: '${toSafeString(option.name)}',
                     id: '${option.id}',
@@ -253,9 +254,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === taxonomies.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(taxonomy.name)}
-                */
+                ${wrapComment(`
+                * ${taxonomy.name}
+                `)}
                 ${toCamelCase(taxonomy.codename)}: {
                     codename: '${taxonomy.codename}',
                     externalId: ${getStringOrUndefined(taxonomy.externalId)},
@@ -271,9 +272,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === collections.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(collection.name)}
-                */
+                ${wrapComment(`
+                * ${collection.name}
+                `)}
                 ${toCamelCase(collection.codename)}: {
                     codename: '${collection.codename}',
                     id: '${collection.id}',
@@ -287,9 +288,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === roles.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(role.name)}
-                */
+                ${wrapComment(`
+                * ${role.name}
+                `)}
                 ${toCamelCase(role.codename ?? role.name)}: {
                     codename: ${getStringOrUndefined(role.codename)},
                     id: '${role.id}',
@@ -303,9 +304,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             const isLast = index === webhooks.length - 1;
 
             return `${code}\n
-                /**
-                * ${toSafeString(webhook.name)}
-                */
+                ${wrapComment(`
+                * ${webhook.name}
+                `)}
                 ${toCamelCase(webhook.name)}: {
                     url: '${webhook.url}',
                     id: '${webhook.id}',
@@ -322,9 +323,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 const isLast = index === sortedTerms.length - 1;
 
                 return `${code}\n
-                    /**
-                    * ${toSafeString(term.name)}
-                    */
+                    ${wrapComment(`
+                    * ${term.name}
+                    `)}
                     ${toCamelCase(term.codename)}: {
                         codename: '${term.codename}',
                         id: '${term.id}',

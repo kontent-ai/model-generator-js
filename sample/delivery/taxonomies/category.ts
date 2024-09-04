@@ -6,7 +6,7 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit   tests
+* Project: Migration Toolkit - tests
 * Environment: Production
 * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 

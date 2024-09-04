@@ -3,7 +3,12 @@ import { libMetadata } from '../meta/index.js';
 import { toSafeString } from './core.utils.js';
 
 export function wrapComment(comment: string): string {
-    return `/** \n * ${comment} \n*/`;
+    return `/**${toSafeComment(comment)}*/`;
+}
+
+export function toSafeComment(text: string): string {
+    const replaceContent = '';
+    return text.replace(/\/\*/g, replaceContent).replace(/\*\//g, replaceContent);
 }
 
 export function getEnvironmentInfoComment(data: {

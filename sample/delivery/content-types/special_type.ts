@@ -6,7 +6,7 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit   tests
+* Project: Migration Toolkit - tests
 * Environment: Production
 * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
@@ -16,7 +16,7 @@
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
 
 /**
- *    My Special type hello
+ * 😺 My Special type[hello]++🥸'`
  *
  * Id: 410fb007-42e3-442d-8cdf-fba4cf50f850
  * Codename: special_type

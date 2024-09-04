@@ -6,7 +6,7 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit   tests
+* Project: Migration Toolkit - tests
 * Environment: Production
 * Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
@@ -15,24 +15,24 @@
 
 export const assetFolders = {
     /**
-     * my folder
+     * my-folder
      */
     myFolder: {
         codename: 'my_folder',
         id: 'f1c6ba01-3b13-41ce-81e7-3125840b0b0e',
         externalId: undefined,
-        name: 'my folder',
+        name: 'my-folder',
         folders: {}
     },
 
     /**
-     * my folder2
+     * my-folder2
      */
     myFolder2: {
         codename: 'my_folder2',
         id: '44a00189-9298-4cf9-b8fb-3f208c3f4f8f',
         externalId: undefined,
-        name: 'my folder2',
+        name: 'my-folder2',
         folders: {}
     }
 } as const;

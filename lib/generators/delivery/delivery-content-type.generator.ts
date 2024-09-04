@@ -20,8 +20,8 @@ import {
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver,
     toGuidelinesComment,
-    toSafeString,
-    uniqueFilter
+    uniqueFilter,
+    wrapComment
 } from '../../core/index.js';
 
 interface ExtractImportsResult {
@@ -194,12 +194,12 @@ ${importer.importType({
 })}
 ${contentTypeImports.imports.join('\n')}
 
-/**
-* ${toSafeString(typeOrSnippet.name)}
+${wrapComment(`
+* ${typeOrSnippet.name}
 * 
 * Id: ${typeOrSnippet.id}
-* Codename: ${typeOrSnippet.codename}
-*/
+* Codename: ${typeOrSnippet.codename}    
+`)}
 export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentItem}<{
     ${getElementsCode(flattenedElements)}
 }>${contentTypeImports.contentTypeExtends ? ` ${contentTypeImports.contentTypeExtends}` : ''};
@@ -234,13 +234,13 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
                     }
 
                     return (code += `
-                /**
+                ${wrapComment(`
                 * ${element.title} (${element.type})
                 * 
                 * Required: ${element.isRequired ? 'true' : 'false'}
                 * Codename: ${element.codename}
                 * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                */ 
+                `)} 
                 ${elementName}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
                 }, '')
         );

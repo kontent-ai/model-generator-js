@@ -18,7 +18,6 @@ import {
     sortAlphabetically,
     toGuidelinesComment,
     toPascalCase,
-    toSafeString,
     uniqueFilter,
     wrapComment
 } from '../../core/index.js';
@@ -53,12 +52,12 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                  importValue: migrationConfig.localTypeNames.item
              })}
 
-            /**
-            * ${toSafeString(type.name)}
+            ${wrapComment(`
+            * ${type.name}
             * 
             * Codename: ${type.codename}
             * Id: ${type.id}
-            */
+            `)}
             export type ${toPascalCase(type.name)}Item = ${migrationConfig.localTypeNames.item}<
             '${type.codename}',
             {
@@ -70,13 +69,13 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 )
                     .map((element) => {
                         return `
-                            /**
-                            * ${toSafeString(element.title)} (${element.type})
+                            ${wrapComment(`
+                            * ${element.title} (${element.type})
                             * 
                             * Required: ${element.isRequired ? 'true' : 'false'}
                             * Codename: ${element.codename}
                             * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                            */
+                            `)}
                             ${element.codename}: ${getElementPropType(element)}`;
                     })
                     .join(',\n')},
@@ -91,19 +90,19 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 {
                     filename: `${migrationConfig.environmentFolderName}/${migrationConfig.environmentFilename}.ts`,
                     text: `
-                ${wrapComment('Type representing all languages')}
+                ${wrapComment(`\n * Type representing all languages\n`)}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
-                ${wrapComment('Type representing all content types')}
+                ${wrapComment(`\n * Type representing all content types\n`)}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
 
-                ${wrapComment('Type representing all collections')}
+                ${wrapComment(`\n * Type representing all collections\n`)}
                 ${getCollectionCodenamesType(config.environmentData.collections)}
 
-                ${wrapComment('Type representing all workflows')}
+                ${wrapComment(`\n * Type representing all workflows\n`)}
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
 
-                ${wrapComment('Type representing all worksflow steps across all workflows')}
+                ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
             `
                 }

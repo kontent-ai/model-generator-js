@@ -9,7 +9,7 @@ import {
     sortAlphabetically,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver,
-    toSafeString
+    wrapComment
 } from '../../core/index.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {
@@ -47,12 +47,12 @@ export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfi
 
     const getModelCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
         return `
-/**
- * ${toSafeString(taxonomy.name)}
+${wrapComment(`
+ * ${taxonomy.name}
  * 
  * Codename: ${taxonomy.codename}
  * Id: ${taxonomy.id}
- */
+`)}
 export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
 `;
     };
