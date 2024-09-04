@@ -6,20 +6,47 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit - tests
+* Project: Movie Database
 * Environment: Production
-* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
 * 
 * -------------------------------------------------------------------------------
 **/
 
 export const roles = {
     /**
+     * Content contributor
+     */
+    contentcontributor: {
+        codename: undefined,
+        id: 'dca0ac85-274f-429e-b00e-6f74bf917051',
+        name: 'Content contributor'
+    },
+
+    /**
+     * Developer
+     */
+    developer: {
+        codename: undefined,
+        id: 'b3994090-0818-4969-816b-f4c5d3e526f3',
+        name: 'Developer'
+    },
+
+    /**
      * Project manager
      */
-    projectManager: {
+    projectmanager: {
         codename: 'project-manager',
-        id: '5a8e7afd-3dcc-4adc-9f23-bf36a31d61bf',
+        id: 'af95ac37-4efa-4b92-aa26-db773cd172c6',
         name: 'Project manager'
+    },
+
+    /**
+     * Reviewer
+     */
+    reviewer: {
+        codename: undefined,
+        id: '94478afa-d898-45dd-8300-ba61b6e0eb4b',
+        name: 'Reviewer'
     }
 } as const;

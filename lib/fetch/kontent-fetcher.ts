@@ -13,7 +13,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { GeneratorManagementClient, sortAlphabetically, toSafeString } from '../core/index.js';
+import { GeneratorManagementClient, sortAlphabetically, toSafeComment } from '../core/index.js';
 
 interface KontentFetcherConfig {
     readonly environmentId: string;
@@ -36,8 +36,8 @@ export function kontentFetcher(config: KontentFetcherConfig) {
     return {
         async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
             const projectInformation = (await client.environmentInformation().toPromise()).data;
-            console.log(`Project '${chalk.yellow(toSafeString(projectInformation.project.name))}'`);
-            console.log(`Environment '${chalk.yellow(toSafeString(projectInformation.project.environment))}'\n`);
+            console.log(`Project '${chalk.yellow(toSafeComment(projectInformation.project.name))}'`);
+            console.log(`Environment '${chalk.yellow(toSafeComment(projectInformation.project.environment))}'\n`);
             return projectInformation.project;
         },
         async getWorkflowsAsync(): Promise<readonly Readonly<WorkflowModels.Workflow>[]> {

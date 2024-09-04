@@ -18,9 +18,9 @@ import {
     getFlattenedElements,
     getStringOrUndefined,
     sortAlphabetically,
-    toCamelCase,
     toGuidelinesComment,
-    toSafeString,
+    toSafePropertyName,
+    toSafePropertyValue,
     wrapComment
 } from '../../core/index.js';
 
@@ -111,10 +111,10 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${language.name}
                 `)}
-                ${toCamelCase(language.codename)}: {
+                ${language.codename}: {
+                    name: '${toSafePropertyValue(language.name)}',
                     codename: '${language.codename}',
                     id: '${language.id}',
-                    name: '${toSafeString(language.name)}',
                     isActive: ${language.isActive ? 'true' : 'false'},
                     isDefault: ${language.isDefault ? 'true' : 'false'},
                     fallbackLanguageId: ${getStringOrUndefined(language.fallbackLanguage?.id)},
@@ -131,10 +131,10 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${workflow.name}
                 `)}
-                ${toCamelCase(workflow.codename)}: {
+                ${workflow.codename}: {
+                    name: '${toSafePropertyValue(workflow.name)}',
                     codename: '${workflow.codename}',
                     id: '${workflow.id}',
-                    name: '${toSafeString(workflow.name)}',
                     steps: ${getProjectWorkflowSteps(workflow)}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
@@ -149,11 +149,11 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                  ${wrapComment(`
                 * ${assetFolder.name}
                 `)}
-                ${toCamelCase(assetFolder.codename)}: {
+                ${assetFolder.codename}: {
+                    name: '${toSafePropertyValue(assetFolder.name)}',
                     codename: '${assetFolder.codename}',
                     id: '${assetFolder.id}',
                     externalId: ${getStringOrUndefined(assetFolder.externalId)},
-                    name: '${toSafeString(assetFolder.name)}',
                     folders: ${getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
             }, '{') + '}'
         );
@@ -167,11 +167,11 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${snippet.name}
                 `)}
-                ${toCamelCase(snippet.codename)}: {
+                ${snippet.codename}: {
+                    name: '${toSafePropertyValue(snippet.name)}',
                     codename: '${snippet.codename}',
                     id: '${snippet.id}',
                     externalId: ${getStringOrUndefined(snippet.externalId)},
-                    name: '${toSafeString(snippet.name)}',
                     elements: {${getContentTypeElements(snippet.elements)}}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
@@ -185,11 +185,11 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${contentType.name}
                 `)}
-                ${toCamelCase(contentType.codename)}: {
+                ${contentType.codename}: {
+                    name: '${toSafePropertyValue(contentType.name)}',
                     codename: '${contentType.codename}',
                     id: '${contentType.id}',
                     externalId: ${getStringOrUndefined(contentType.externalId)},
-                    name: '${toSafeString(contentType.name)}',
                     elements: {${getContentTypeElements(contentType.elements)}}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
@@ -211,11 +211,11 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${element.title} (${element.type})${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 `)}
-                ${toCamelCase(element.codename)}: {
+                ${element.codename}: {
+                    name: '${toSafePropertyValue(element.title)}',
                     codename: '${element.codename}',
                     id: '${element.id}',
                     externalId: ${getStringOrUndefined(element.externalId)},
-                    name: '${toSafeString(element.title)}',
                     required: ${element.isRequired},
                     type: '${element.type}'
                     ${elementOptions ? `, options: ${elementOptions}` : ''}
@@ -235,8 +235,8 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${option.name}
                 `)}
-                ${toCamelCase(option.codename ?? option.name)}: {
-                    name: '${toSafeString(option.name)}',
+                ${toSafePropertyName(option.codename ?? option.name)}: {
+                    name: '${toSafePropertyValue(option.name)}',
                     id: '${option.id}',
                     codename: ${getStringOrUndefined(option.codename)},
                     externalId: ${getStringOrUndefined(option.external_id)}
@@ -255,13 +255,13 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
 
             return `${code}\n
                 ${wrapComment(`
-                * ${taxonomy.name}
+                * ${taxonomy.codename}
                 `)}
-                ${toCamelCase(taxonomy.codename)}: {
+                 ${taxonomy.codename}: {
+                    name: '${toSafePropertyValue(taxonomy.name)}',
                     codename: '${taxonomy.codename}',
                     externalId: ${getStringOrUndefined(taxonomy.externalId)},
                     id: '${taxonomy.id}',
-                    name: '${toSafeString(taxonomy.name)}',
                     ${getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
         }, '');
@@ -275,10 +275,10 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${collection.name}
                 `)}
-                ${toCamelCase(collection.codename)}: {
+                ${collection.codename}: {
                     codename: '${collection.codename}',
                     id: '${collection.id}',
-                    name: '${toSafeString(collection.name)}'
+                    name: '${toSafePropertyValue(collection.name)}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -291,10 +291,10 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${role.name}
                 `)}
-                ${toCamelCase(role.codename ?? role.name)}: {
+                ${toSafePropertyName(role.codename ?? role.name)}: {
                     codename: ${getStringOrUndefined(role.codename)},
                     id: '${role.id}',
-                    name: '${toSafeString(role.name)}'
+                    name: '${toSafePropertyValue(role.name)}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -307,10 +307,10 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${webhook.name}
                 `)}
-                ${toCamelCase(webhook.name)}: {
+                ${toSafePropertyName(webhook.name)}: {
                     url: '${webhook.url}',
                     id: '${webhook.id}',
-                    name: '${toSafeString(webhook.name)}'
+                    name: '${toSafePropertyValue(webhook.name)}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -326,11 +326,11 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     ${wrapComment(`
                     * ${term.name}
                     `)}
-                    ${toCamelCase(term.codename)}: {
+                    ${term.codename}: {
                         codename: '${term.codename}',
                         id: '${term.id}',
                         externalId: ${getStringOrUndefined(term.externalId)},
-                        name: '${toSafeString(term.name)}',
+                        name: '${toSafePropertyValue(term.name)}',
                         ${getProjectTaxonomiesTerms(term.terms)}
                     }${!isLast ? ',\n' : ''}`;
             }, 'terms: {') + '}'
@@ -344,8 +344,8 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             return (
                 code +
                 `
-                ${toCamelCase(step.codename)}: {
-                    name: '${toSafeString(step.name)}',
+                ${step.codename}: {
+                    name: '${toSafePropertyValue(step.name)}',
                     codename: '${step.codename}',
                     id: '${step.id}'
                 },`

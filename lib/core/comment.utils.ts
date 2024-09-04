@@ -1,6 +1,5 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import { libMetadata } from '../meta/index.js';
-import { toSafeString } from './core.utils.js';
 
 export function wrapComment(comment: string): string {
     return `/**${toSafeComment(comment)}*/`;
@@ -23,8 +22,8 @@ export function getEnvironmentInfoComment(data: {
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: ${toSafeString(data.environmentInfo.name)}
-* Environment: ${toSafeString(data.environmentInfo.environment)}
+* Project: ${toSafeComment(data.environmentInfo.name)}
+* Environment: ${toSafeComment(data.environmentInfo.environment)}
 * Id: ${data.environmentInfo.id}${data.addTimestamp ? `\n* Generated: ${new Date().toLocaleString()}` : ''}
 * 
 * -------------------------------------------------------------------------------

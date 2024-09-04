@@ -6,9 +6,9 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit - tests
+* Project: Movie Database
 * Environment: Production
-* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
 * 
 * -------------------------------------------------------------------------------
 **/
@@ -20,44 +20,45 @@ import type { Item } from '../migration.js';
  * Actor
  *
  * Codename: actor
- * Id: d8900ee2-82f4-4189-a994-4e121582aadf
+ * Id: 58099989-319f-495f-aa36-cb3710854e36
  */
 export type ActorItem = Item<
     'actor',
     {
         /**
-         * first_name (text)
+         * First name (text)
          *
-         * Required: false
+         * Required: true
          * Codename: first_name
-         * Id: 4af5e7ce-88ef-4159-96ae-96a552992f91
+         * Id: 14dd70e5-c42d-f111-9640-c82b443edf1d
+         * Guidelines: This is the first name of the actor
          */
         first_name: MigrationElementModels.TextElement;
 
         /**
-         * last_name (text)
+         * Last name (text)
          *
-         * Required: false
+         * Required: true
          * Codename: last_name
-         * Id: 0f00b26e-60f3-462d-8110-18180137c3a0
+         * Id: 9f7a0dd4-af3a-95ca-0358-400c14ce7075
          */
         last_name: MigrationElementModels.TextElement;
 
         /**
-         * photo (asset)
+         * Photo (asset)
          *
          * Required: false
          * Codename: photo
-         * Id: 069b38ee-385c-410f-b7fe-53ec59a5f139
+         * Id: eaec9ba3-9624-6875-04ec-80d0b2e00781
          */
         photo: MigrationElementModels.AssetElement;
 
         /**
-         * url (url_slug)
+         * Url (url_slug)
          *
          * Required: false
          * Codename: url
-         * Id: c4b2d64f-af45-45a4-92d8-4829833563ff
+         * Id: c8658782-f209-a573-9c85-430fb4e3e9f0
          */
         url: MigrationElementModels.UrlSlugElement;
     }

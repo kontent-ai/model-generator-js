@@ -6,9 +6,9 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit - tests
+* Project: Movie Database
 * Environment: Production
-* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
 * 
 * -------------------------------------------------------------------------------
 **/
@@ -18,9 +18,9 @@ export const workflows = {
      * Default
      */
     default: {
+        name: 'Default',
         codename: 'default',
         id: '00000000-0000-0000-0000-000000000000',
-        name: 'Default',
         steps: {
             archived: {
                 name: 'Archived',
@@ -30,7 +30,7 @@ export const workflows = {
             published: {
                 name: 'Published',
                 codename: 'published',
-                id: 'c199950d-99f0-4983-b711-6c4c91624b22'
+                id: 'f05b8a85-c6cc-429a-ac6d-21d5edd268fe'
             },
             scheduled: {
                 name: 'Scheduled',
@@ -40,48 +40,17 @@ export const workflows = {
             draft: {
                 name: 'Draft',
                 codename: 'draft',
-                id: 'eee6db3b-545a-4785-8e86-e3772c8756f9'
+                id: 'e3ef0816-2203-4456-bfdc-a735b4f339ab'
             },
-            readyToPublish: {
-                name: 'ready_to_publish',
+            review: {
+                name: 'Review',
+                codename: 'review',
+                id: 'c5682935-f5a2-4514-8025-57d8bdf7558d'
+            },
+            ready_to_publish: {
+                name: 'Ready to publish',
                 codename: 'ready_to_publish',
-                id: 'f4afd295-cc0b-48e3-9431-176cc1e17e2c'
-            }
-        }
-    },
-
-    /**
-     * my_test_workflow
-     */
-    myTestWorkflow: {
-        codename: 'my_test_workflow',
-        id: '51036ae0-1a0c-48c6-980e-bf73600ba462',
-        name: 'my_test_workflow',
-        steps: {
-            archived: {
-                name: 'Archived',
-                codename: 'archived',
-                id: '7a535a69-ad34-47f8-806a-def1fdf4d391'
-            },
-            published: {
-                name: 'Published',
-                codename: 'published',
-                id: 'c199950d-99f0-4983-b711-6c4c91624b22'
-            },
-            scheduled: {
-                name: 'Scheduled',
-                codename: 'scheduled',
-                id: '9d2b0228-4d0d-4c23-8b49-01a698857709'
-            },
-            draft3171da5: {
-                name: 'Draft',
-                codename: 'draft_3171da5',
-                id: '3171da5f-679d-49af-a42c-617d83eac222'
-            },
-            readyForReview: {
-                name: 'ready_for_review',
-                codename: 'ready_for_review',
-                id: '20f49208-5e57-4300-b6bd-0f668cbce00b'
+                id: 'aaee1d73-f0cc-4185-9e49-844d161c3634'
             }
         }
     }

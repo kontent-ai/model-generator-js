@@ -6,21 +6,34 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit - tests
+* Project: Movie Database
 * Environment: Production
-* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
 * 
 * -------------------------------------------------------------------------------
 **/
 
 export const languages = {
     /**
-     * Default project language
+     * cz
+     */
+    cz: {
+        name: 'cz',
+        codename: 'cz',
+        id: '41ccb26f-ceab-04d0-6ffa-9c7c5358aa8f',
+        isActive: true,
+        isDefault: false,
+        fallbackLanguageId: '00000000-0000-0000-0000-000000000000',
+        externalId: undefined
+    },
+
+    /**
+     * English
      */
     en: {
+        name: 'English',
         codename: 'en',
         id: '00000000-0000-0000-0000-000000000000',
-        name: 'Default project language',
         isActive: true,
         isDefault: true,
         fallbackLanguageId: '00000000-0000-0000-0000-000000000000',
@@ -28,13 +41,13 @@ export const languages = {
     },
 
     /**
-     * Spanish
+     * German
      */
-    es: {
-        codename: 'es',
-        id: '71cf90e5-8124-43e3-8ef4-bbb8bdcd22ae',
-        name: 'Spanish',
-        isActive: true,
+    German: {
+        name: 'German',
+        codename: 'German',
+        id: '14f7bcc0-4fd6-4b77-8c22-70e5ccfdae1d',
+        isActive: false,
         isDefault: false,
         fallbackLanguageId: '00000000-0000-0000-0000-000000000000',
         externalId: undefined

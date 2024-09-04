@@ -1,4 +1,5 @@
 import { camelCasePropertyNameResolver, pascalCasePropertyNameResolver, snakeCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
+import { createHash } from 'crypto';
 import { parse } from 'path';
 import { CliAction, LibraryType, ModuleResolution } from './core.models.js';
 
@@ -50,15 +51,32 @@ export function toSnakeCase(text: string): string {
 }
 
 export function toGuidelinesComment(guidelines: string): string {
-    return toSafeString(removeLineEndings(guidelines));
+    return removeLineEndings(guidelines);
 }
 
 export function getStringOrUndefined(text?: string): string {
     return text ? `'${text}'` : 'undefined';
 }
 
-export function toSafeString(text: string): string {
-    return text;
+export function toSafePropertyName(value: string): string {
+    const replaceContent = '';
+    const withoutNumbers = value.replace(/^\d+/, replaceContent);
+    const propertyName = withoutNumbers
+        .replace(/[\s-]/g, replaceContent)
+        .replace(/[^a-zA-Z0-9_]/g, replaceContent)
+        .toLowerCase();
+
+    if (propertyName.length === 0) {
+        // to prevent empty string being used as property name, use hash
+        return getPropertyStringHash(value);
+    }
+
+    return propertyName;
+}
+
+export function toSafePropertyValue(value: string): string {
+    const replaceContent = '';
+    return value.replace(/'/g, replaceContent);
 }
 
 export function toOutputDirPath(outputDir?: string): string {
@@ -72,4 +90,10 @@ function removeLineEndings(value: string): string {
 function toSafeStringCode(text: string): string {
     const replaceContent = '';
     return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
+}
+
+function getPropertyStringHash(text: string): string {
+    const hash = createHash('sha256');
+    hash.update(text);
+    return `_${hash.digest('hex')}`.slice(0, 10);
 }

@@ -6,17 +6,17 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Migration Toolkit - tests
+* Project: Movie Database
 * Environment: Production
-* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
+* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
 * 
 * -------------------------------------------------------------------------------
 **/
 
 /**
- * Release category
+ * MovieType
  *
- * Codename: release_category
- * Id: 4dbfc78f-5ea2-4f33-880d-193c75e0b975
+ * Codename: movietype
+ * Id: 365a17e6-1929-27ab-9f67-a9273c846717
  */
-export type ReleaseCategory = 'global_release' | 'us_only';
+export type MovieType = 'blockbuster' | 'cinema_only' | 'film' | 'student' | 'tv';
