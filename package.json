@@ -37,7 +37,7 @@
         "publish:beta": "npm publish --tag=next",
         "build:es2022": "tsc --p tsconfig.es2022.json",
         "build": "npm run lint && npm run clean && npm run build:es2022",
-        "test:all": "npm run build && npm run test:delivery-models",
+        "test:all": "npm run build",
         "test:delivery": "tsx scripts/tests/delivery-models",
         "test:environment": "tsx scripts/tests/environment-models",
         "test:migration": "tsx scripts/tests/migration-models",
