@@ -1,6 +1,6 @@
 import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
-import { CaseType, GeneratorElementResolver, ObjectWithCodename } from './core.models.js';
+import { CaseType, GeneratorElementResolver, ObjectWithCodename, ObjectWithName } from './core.models.js';
 import { toCamelCase, toPascalCase, toSnakeCase } from './core.utils.js';
 
 /** File name resolvers */
@@ -12,8 +12,8 @@ export type ContentTypeSnippetFileNameResolver = FilenameResolver<ContentTypeSni
 export type TaxonomyTypeFileNameResolver = FilenameResolver<TaxonomyModels.Taxonomy>;
 
 /** Name resolvers */
-export type NameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
-export type MapObjectToName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T) => string;
+export type NameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithName) => string);
+export type MapObjectToName<T extends Readonly<ObjectWithName> = ObjectWithName> = (item: T) => string;
 
 export type ElementNameResolver = (element: Readonly<ContentTypeElements.ContentTypeElementModel>) => string | undefined;
 export type ContentTypeNameResolver = NameResolver<ContentTypeModels.ContentType>;
@@ -33,13 +33,13 @@ export function mapFilename<T extends ObjectWithCodename>(resolver: FilenameReso
     };
 }
 
-export function mapName<T extends ObjectWithCodename>(resolver: NameResolver<T>, defaultCase: CaseType): MapObjectToName<T> {
+export function mapName<T extends ObjectWithName>(resolver: NameResolver<T>, defaultCase: CaseType): MapObjectToName<T> {
     return (item) => {
         return match(resolver)
             .returnType<string>()
             .with(P.instanceOf(Function), (resolver) => resolver(item))
-            .with(undefined, () => resolveCase(item.codename, defaultCase))
-            .otherwise((resolverType) => resolveCase(item.codename, resolverType));
+            .with(undefined, () => resolveCase(item.name, defaultCase))
+            .otherwise((resolverType) => resolveCase(item.name, resolverType));
     };
 }
 
