@@ -2,7 +2,6 @@ import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, Taxon
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match } from 'ts-pattern';
 import { FlattenedElement } from './core.models.js';
-import { sortAlphabetically } from './core.utils.js';
 
 interface ElementWrapper {
     readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
@@ -15,38 +14,35 @@ export function getFlattenedElements(
     taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
     types: readonly Readonly<ContentTypeModels.ContentType>[]
 ): readonly FlattenedElement[] {
-    return sortAlphabetically(
-        elements
-            .filter((element) => {
-                return element.type !== 'guidelines';
-            })
-            .flatMap<ElementWrapper>((element) => {
-                if (element.type === 'snippet') {
-                    const snippet = snippets.find((snippet) => snippet.id === element.snippet.id);
+    return elements
+        .filter((element) => {
+            return element.type !== 'guidelines';
+        })
+        .flatMap<ElementWrapper>((element) => {
+            if (element.type === 'snippet') {
+                const snippet = snippets.find((snippet) => snippet.id === element.snippet.id);
 
-                    if (!snippet) {
-                        throw Error(`Could not find snippet with id '${element.snippet.id}'`);
-                    }
-
-                    return snippet.elements.map((snippetElement) => {
-                        return {
-                            element: snippetElement,
-                            fromSnippet: snippet
-                        };
-                    });
+                if (!snippet) {
+                    throw Error(`Could not find snippet with id '${element.snippet.id}'`);
                 }
 
-                return {
-                    element: element,
-                    fromSnippet: undefined
-                };
-            })
-            .map((element) => {
-                return getFlattenedElement(element, taxonomies, types);
-            })
-            .filter(isNotUndefined),
-        (element) => element.codename
-    );
+                return snippet.elements.map((snippetElement) => {
+                    return {
+                        element: snippetElement,
+                        fromSnippet: snippet
+                    };
+                });
+            }
+
+            return {
+                element: element,
+                fromSnippet: undefined
+            };
+        })
+        .map((element) => {
+            return getFlattenedElement(element, taxonomies, types);
+        })
+        .filter(isNotUndefined);
 }
 
 function getFlattenedElement(
@@ -112,7 +108,7 @@ function extractLinkedItemsAllowedTypes(
         })
         .otherwise(() => []);
 
-    return sortAlphabetically(allowedTypeIds.map((id) => types.find((m) => m.id === id)).filter(isNotUndefined), (type) => type.codename);
+    return allowedTypeIds.map((id) => types.find((m) => m.id === id)).filter(isNotUndefined);
 }
 
 function extractTaxonomy(

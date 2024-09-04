@@ -13,7 +13,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { GeneratorManagementClient, sortAlphabetically, toSafeComment } from '../core/index.js';
+import { GeneratorManagementClient, toSafeComment } from '../core/index.js';
 
 interface KontentFetcherConfig {
     readonly environmentId: string;
@@ -41,49 +41,49 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             return projectInformation.project;
         },
         async getWorkflowsAsync(): Promise<readonly Readonly<WorkflowModels.Workflow>[]> {
-            const items = sortAlphabetically((await client.listWorkflows().toPromise()).data, (item) => item.name);
+            const items = (await client.listWorkflows().toPromise()).data;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' workflows`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         },
         async getRolesAsync(): Promise<readonly Readonly<RoleModels.Role>[]> {
-            const items = sortAlphabetically((await client.listRoles().toPromise()).data.roles, (item) => item.name);
+            const items = (await client.listRoles().toPromise()).data.roles;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' roles`);
-            return sortAlphabetically(items, (item) => item.codename ?? item.name);
+            return items;
         },
         async getAssetFoldersAsync(): Promise<readonly Readonly<AssetFolderModels.AssetFolder>[]> {
-            const items = sortAlphabetically((await client.listAssetFolders().toPromise()).data.items, (item) => item.name);
+            const items = (await client.listAssetFolders().toPromise()).data.items;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' asset folders`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         },
         async getCollectionsAsync(): Promise<readonly Readonly<CollectionModels.Collection>[]> {
-            const items = sortAlphabetically((await client.listCollections().toPromise()).data.collections, (item) => item.name);
+            const items = (await client.listCollections().toPromise()).data.collections;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' collections`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         },
         async getWebhooksAsync(): Promise<readonly Readonly<WebhookModels.Webhook>[]> {
-            const items = sortAlphabetically((await client.listWebhooks().toPromise()).data.webhooks, (item) => item.name);
+            const items = (await client.listWebhooks().toPromise()).data.webhooks;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' webhooks`);
-            return sortAlphabetically(items, (item) => item.name);
+            return items;
         },
         async getLanguagesAsync(): Promise<readonly Readonly<LanguageModels.LanguageModel>[]> {
-            const items = sortAlphabetically((await client.listLanguages().toAllPromise()).data.items, (item) => item.name);
+            const items = (await client.listLanguages().toAllPromise()).data.items;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' languages`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         },
         async getTypesAsync(): Promise<readonly Readonly<ContentTypeModels.ContentType>[]> {
-            const items = sortAlphabetically((await client.listContentTypes().toAllPromise()).data.items, (item) => item.name);
+            const items = (await client.listContentTypes().toAllPromise()).data.items;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' types`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         },
         async getSnippetsAsync(): Promise<readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]> {
-            const items = sortAlphabetically((await client.listContentTypeSnippets().toAllPromise()).data.items, (item) => item.name);
+            const items = (await client.listContentTypeSnippets().toAllPromise()).data.items;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' snippets`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         },
         async getTaxonomiesAsync(): Promise<readonly Readonly<TaxonomyModels.Taxonomy>[]> {
-            const items = sortAlphabetically((await client.listTaxonomies().toAllPromise()).data.items, (item) => item.name);
+            const items = (await client.listTaxonomies().toAllPromise()).data.items;
             console.log(`Fetched '${chalk.yellow(items.length.toString())}' taxonomies`);
-            return sortAlphabetically(items, (item) => item.codename);
+            return items;
         }
     };
 }

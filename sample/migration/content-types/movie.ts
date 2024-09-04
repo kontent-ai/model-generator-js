@@ -26,22 +26,13 @@ export type MovieItem = Item<
     'movie',
     {
         /**
-         * Category (multiple_choice)
+         * Title (text)
          *
-         * Required: false
-         * Codename: category
-         * Id: 9821c252-6414-f549-c17f-cc171dd87713
+         * Required: true
+         * Codename: title
+         * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
          */
-        category: MigrationElementModels.MultipleChoiceElement;
-
-        /**
-         * Length (number)
-         *
-         * Required: false
-         * Codename: length
-         * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
-         */
-        length: MigrationElementModels.NumberElement;
+        title: MigrationElementModels.TextElement;
 
         /**
          * Plot (rich_text)
@@ -53,24 +44,6 @@ export type MovieItem = Item<
         plot: MigrationElementModels.RichTextElement;
 
         /**
-         * Poster (asset)
-         *
-         * Required: false
-         * Codename: poster
-         * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
-         */
-        poster: MigrationElementModels.AssetElement;
-
-        /**
-         * ReleaseCategory (taxonomy)
-         *
-         * Required: false
-         * Codename: releasecategory
-         * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
-         */
-        releasecategory: MigrationElementModels.TaxonomyElement;
-
-        /**
          * Released (date_time)
          *
          * Required: false
@@ -80,13 +53,31 @@ export type MovieItem = Item<
         released: MigrationElementModels.DateTimeElement;
 
         /**
-         * SeoName (url_slug)
+         * Length (number)
          *
          * Required: false
-         * Codename: seoname
-         * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
+         * Codename: length
+         * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
          */
-        seoname: MigrationElementModels.UrlSlugElement;
+        length: MigrationElementModels.NumberElement;
+
+        /**
+         * Poster (asset)
+         *
+         * Required: false
+         * Codename: poster
+         * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
+         */
+        poster: MigrationElementModels.AssetElement;
+
+        /**
+         * Category (multiple_choice)
+         *
+         * Required: false
+         * Codename: category
+         * Id: 9821c252-6414-f549-c17f-cc171dd87713
+         */
+        category: MigrationElementModels.MultipleChoiceElement;
 
         /**
          * Stars (modular_content)
@@ -98,12 +89,21 @@ export type MovieItem = Item<
         stars: MigrationElementModels.LinkedItemsElement;
 
         /**
-         * Title (text)
+         * SeoName (url_slug)
          *
-         * Required: true
-         * Codename: title
-         * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
+         * Required: false
+         * Codename: seoname
+         * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
          */
-        title: MigrationElementModels.TextElement;
+        seoname: MigrationElementModels.UrlSlugElement;
+
+        /**
+         * ReleaseCategory (taxonomy)
+         *
+         * Required: false
+         * Codename: releasecategory
+         * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
+         */
+        releasecategory: MigrationElementModels.TaxonomyElement;
     }
 >;

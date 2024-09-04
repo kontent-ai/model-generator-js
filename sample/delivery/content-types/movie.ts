@@ -25,21 +25,13 @@ import type { ReleaseCategory } from '../taxonomies/releasecategory.js';
  */
 export type Movie = IContentItem<{
     /**
-     * Category (multiple_choice)
+     * Title (text)
      *
-     * Required: false
-     * Codename: category
-     * Id: 9821c252-6414-f549-c17f-cc171dd87713
+     * Required: true
+     * Codename: title
+     * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
      */
-    category: Elements.MultipleChoiceElement;
-    /**
-     * Length (number)
-     *
-     * Required: false
-     * Codename: length
-     * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
-     */
-    length: Elements.NumberElement;
+    title: Elements.TextElement;
     /**
      * Plot (rich_text)
      *
@@ -49,22 +41,6 @@ export type Movie = IContentItem<{
      */
     plot: Elements.RichTextElement;
     /**
-     * Poster (asset)
-     *
-     * Required: false
-     * Codename: poster
-     * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
-     */
-    poster: Elements.AssetsElement;
-    /**
-     * ReleaseCategory (taxonomy)
-     *
-     * Required: false
-     * Codename: releasecategory
-     * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
-     */
-    releasecategory: Elements.TaxonomyElement<ReleaseCategory>;
-    /**
      * Released (date_time)
      *
      * Required: false
@@ -73,13 +49,29 @@ export type Movie = IContentItem<{
      */
     released: Elements.DateTimeElement;
     /**
-     * SeoName (url_slug)
+     * Length (number)
      *
      * Required: false
-     * Codename: seoname
-     * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
+     * Codename: length
+     * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
      */
-    seoname: Elements.UrlSlugElement;
+    length: Elements.NumberElement;
+    /**
+     * Poster (asset)
+     *
+     * Required: false
+     * Codename: poster
+     * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
+     */
+    poster: Elements.AssetsElement;
+    /**
+     * Category (multiple_choice)
+     *
+     * Required: false
+     * Codename: category
+     * Id: 9821c252-6414-f549-c17f-cc171dd87713
+     */
+    category: Elements.MultipleChoiceElement;
     /**
      * Stars (modular_content)
      *
@@ -89,11 +81,19 @@ export type Movie = IContentItem<{
      */
     stars: Elements.LinkedItemsElement<Actor | Movie>;
     /**
-     * Title (text)
+     * SeoName (url_slug)
      *
-     * Required: true
-     * Codename: title
-     * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
+     * Required: false
+     * Codename: seoname
+     * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
      */
-    title: Elements.TextElement;
+    seoname: Elements.UrlSlugElement;
+    /**
+     * ReleaseCategory (taxonomy)
+     *
+     * Required: false
+     * Codename: releasecategory
+     * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
+     */
+    releasecategory: Elements.TaxonomyElement<ReleaseCategory>;
 }>;

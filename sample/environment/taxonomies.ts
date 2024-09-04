@@ -24,6 +24,17 @@ export const taxonomies = {
         id: '365a17e6-1929-27ab-9f67-a9273c846717',
         terms: {
             /**
+             * Student
+             */
+            student: {
+                codename: 'student',
+                id: 'b107e12c-124d-705f-1029-c0dfdd0b2438',
+                externalId: undefined,
+                name: 'Student',
+                terms: {}
+            },
+
+            /**
              * Film
              */
             film: {
@@ -32,6 +43,17 @@ export const taxonomies = {
                 externalId: undefined,
                 name: 'Film',
                 terms: {
+                    /**
+                     * TV
+                     */
+                    tv: {
+                        codename: 'tv',
+                        id: '47511b09-6c39-fa04-ff59-7c47551e827f',
+                        externalId: undefined,
+                        name: 'TV',
+                        terms: {}
+                    },
+
                     /**
                      * Blockbuster
                      */
@@ -52,30 +74,8 @@ export const taxonomies = {
                         externalId: undefined,
                         name: 'Cinema only',
                         terms: {}
-                    },
-
-                    /**
-                     * TV
-                     */
-                    tv: {
-                        codename: 'tv',
-                        id: '47511b09-6c39-fa04-ff59-7c47551e827f',
-                        externalId: undefined,
-                        name: 'TV',
-                        terms: {}
                     }
                 }
-            },
-
-            /**
-             * Student
-             */
-            student: {
-                codename: 'student',
-                id: 'b107e12c-124d-705f-1029-c0dfdd0b2438',
-                externalId: undefined,
-                name: 'Student',
-                terms: {}
             }
         }
     },
@@ -101,17 +101,6 @@ export const taxonomies = {
             },
 
             /**
-             * Local release
-             */
-            local_release: {
-                codename: 'local_release',
-                id: '37e55484-f0dc-14eb-bf2a-b0293a0d1b1f',
-                externalId: undefined,
-                name: 'Local release',
-                terms: {}
-            },
-
-            /**
              * US only
              */
             us_only: {
@@ -119,6 +108,17 @@ export const taxonomies = {
                 id: 'b03d990a-55a9-601e-dd5c-aa2edc8698ca',
                 externalId: undefined,
                 name: 'US only',
+                terms: {}
+            },
+
+            /**
+             * Local release
+             */
+            local_release: {
+                codename: 'local_release',
+                id: '37e55484-f0dc-14eb-bf2a-b0293a0d1b1f',
+                externalId: undefined,
+                name: 'Local release',
                 terms: {}
             }
         }

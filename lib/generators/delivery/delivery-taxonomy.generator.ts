@@ -6,7 +6,6 @@ import {
     mapFilename,
     mapName,
     ModuleResolution,
-    sortAlphabetically,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver,
     wrapComment
@@ -58,7 +57,7 @@ export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
     };
 
     const getTaxonomyTermsCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        const taxonomyTermCodenames = sortAlphabetically(getTaxonomyTermCodenames(taxonomy.terms), (codename) => codename);
+        const taxonomyTermCodenames = getTaxonomyTermCodenames(taxonomy.terms);
 
         if (!taxonomyTermCodenames.length) {
             return `''`;
@@ -72,10 +71,7 @@ export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
 
     const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
         return taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
-            return sortAlphabetically(
-                codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename),
-                (codename) => codename
-            );
+            return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
         }, []);
     };
 

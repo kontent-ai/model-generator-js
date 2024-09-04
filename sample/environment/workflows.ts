@@ -22,21 +22,6 @@ export const workflows = {
         codename: 'default',
         id: '00000000-0000-0000-0000-000000000000',
         steps: {
-            archived: {
-                name: 'Archived',
-                codename: 'archived',
-                id: '7a535a69-ad34-47f8-806a-def1fdf4d391'
-            },
-            published: {
-                name: 'Published',
-                codename: 'published',
-                id: 'f05b8a85-c6cc-429a-ac6d-21d5edd268fe'
-            },
-            scheduled: {
-                name: 'Scheduled',
-                codename: 'scheduled',
-                id: '9d2b0228-4d0d-4c23-8b49-01a698857709'
-            },
             draft: {
                 name: 'Draft',
                 codename: 'draft',
@@ -51,6 +36,21 @@ export const workflows = {
                 name: 'Ready to publish',
                 codename: 'ready_to_publish',
                 id: 'aaee1d73-f0cc-4185-9e49-844d161c3634'
+            },
+            scheduled: {
+                name: 'Scheduled',
+                codename: 'scheduled',
+                id: '9d2b0228-4d0d-4c23-8b49-01a698857709'
+            },
+            published: {
+                name: 'Published',
+                codename: 'published',
+                id: 'f05b8a85-c6cc-429a-ac6d-21d5edd268fe'
+            },
+            archived: {
+                name: 'Archived',
+                codename: 'archived',
+                id: '7a535a69-ad34-47f8-806a-def1fdf4d391'
             }
         }
     }

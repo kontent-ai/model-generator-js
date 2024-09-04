@@ -276,10 +276,7 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
             return [deliveryConfig.sdkTypes.contentItem];
         }
 
-        return sortAlphabetically(
-            types.map((type) => nameResolvers.contentType(type)),
-            (type) => type
-        );
+        return types.map((type) => nameResolvers.contentType(type));
     };
 
     return {

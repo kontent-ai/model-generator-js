@@ -17,7 +17,6 @@ import {
     GeneratedFile,
     getFlattenedElements,
     getStringOrUndefined,
-    sortAlphabetically,
     toGuidelinesComment,
     toSafePropertyName,
     toSafePropertyValue,
@@ -228,10 +227,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             .returnType<string | undefined>()
             .with({ type: 'multiple_choice' }, (element) => {
                 return (
-                    sortAlphabetically(element.options, (option) => option.codename ?? option.name).reduce<string>(
-                        (code, option, index) => {
-                            const isLast = index === element.options.length - 1;
-                            return `${code}\n
+                    element.options.reduce<string>((code, option, index) => {
+                        const isLast = index === element.options.length - 1;
+                        return `${code}\n
                 ${wrapComment(`
                 * ${option.name}
                 `)}
@@ -241,9 +239,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     codename: ${getStringOrUndefined(option.codename)},
                     externalId: ${getStringOrUndefined(option.external_id)}
                 }${!isLast ? ',\n' : ''}`;
-                        },
-                        '{'
-                    ) + '}'
+                    }, '{') + '}'
                 );
             })
             .otherwise(() => undefined);
@@ -316,11 +312,9 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectTaxonomiesTerms = (terms: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
-        const sortedTerms = sortAlphabetically(terms, (item) => item.name);
-
         return (
-            sortedTerms.reduce<string>((code, term, index) => {
-                const isLast = index === sortedTerms.length - 1;
+            terms.reduce<string>((code, term, index) => {
+                const isLast = index === terms.length - 1;
 
                 return `${code}\n
                     ${wrapComment(`
@@ -338,7 +332,8 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getProjectWorkflowSteps = (workflow: Readonly<WorkflowModels.Workflow>): string => {
-        const steps: readonly WorkflowStep[] = [workflow.archivedStep, workflow.publishedStep, workflow.scheduledStep, ...workflow.steps];
+        // The order of these steps should reflect the order in which they appear in the Kontent UI
+        const steps: readonly WorkflowStep[] = [...workflow.steps, workflow.scheduledStep, workflow.publishedStep, workflow.archivedStep];
 
         return `{${steps.reduce((code, step) => {
             return (

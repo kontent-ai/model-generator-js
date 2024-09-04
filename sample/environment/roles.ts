@@ -24,12 +24,12 @@ export const roles = {
     },
 
     /**
-     * Developer
+     * Reviewer
      */
-    developer: {
+    reviewer: {
         codename: undefined,
-        id: 'b3994090-0818-4969-816b-f4c5d3e526f3',
-        name: 'Developer'
+        id: '94478afa-d898-45dd-8300-ba61b6e0eb4b',
+        name: 'Reviewer'
     },
 
     /**
@@ -42,11 +42,11 @@ export const roles = {
     },
 
     /**
-     * Reviewer
+     * Developer
      */
-    reviewer: {
+    developer: {
         codename: undefined,
-        id: '94478afa-d898-45dd-8300-ba61b6e0eb4b',
-        name: 'Reviewer'
+        id: 'b3994090-0818-4969-816b-f4c5d3e526f3',
+        name: 'Developer'
     }
 } as const;
