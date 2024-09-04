@@ -6,119 +6,119 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Movie Database
+* Project: Migration Toolkit   tests
 * Environment: Production
-* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
+* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
 * -------------------------------------------------------------------------------
 **/
 
 export const taxonomies = {
     /**
-     * MovieType
+     * Category
      */
-    movietype: {
-        codename: 'movietype',
+    category: {
+        codename: 'category',
         externalId: undefined,
-        id: '365a17e6-1929-27ab-9f67-a9273c846717',
-        name: 'MovieType',
+        id: 'c1b56389-f00a-4917-95c4-3b02ea3610ea',
+        name: 'Category',
         terms: {
             /**
-             * Film
+             * action
              */
-            film: {
-                codename: 'film',
-                id: '5a2a1927-41a4-294f-5d89-cf0cc045e943',
+            action: {
+                codename: 'action',
+                id: 'e3410312-52d6-4c15-8e23-e5a4cc57a204',
                 externalId: undefined,
-                name: 'Film',
-                terms: {
-                    /**
-                     * Blockbuster
-                     */
-                    blockbuster: {
-                        codename: 'blockbuster',
-                        id: '875a4657-1dcd-0415-cb3a-892078f5991a',
-                        externalId: undefined,
-                        name: 'Blockbuster',
-                        terms: {}
-                    },
-
-                    /**
-                     * Cinema only
-                     */
-                    cinemaOnly: {
-                        codename: 'cinema_only',
-                        id: 'e15c4e32-ab7c-57a2-1b66-d8e3566a1dd2',
-                        externalId: undefined,
-                        name: 'Cinema only',
-                        terms: {}
-                    },
-
-                    /**
-                     * TV
-                     */
-                    tv: {
-                        codename: 'tv',
-                        id: '47511b09-6c39-fa04-ff59-7c47551e827f',
-                        externalId: undefined,
-                        name: 'TV',
-                        terms: {}
-                    }
-                }
+                name: 'action',
+                terms: {}
             },
 
             /**
-             * Student
+             * animation
              */
-            student: {
-                codename: 'student',
-                id: 'b107e12c-124d-705f-1029-c0dfdd0b2438',
+            animation: {
+                codename: 'animation',
+                id: '2d8a95a8-61c9-4add-94a1-1d7944098144',
                 externalId: undefined,
-                name: 'Student',
+                name: 'animation',
+                terms: {}
+            },
+
+            /**
+             * comedy
+             */
+            comedy: {
+                codename: 'comedy',
+                id: 'eddaa24b-fb5c-4a44-8507-8dd7a45fdc39',
+                externalId: undefined,
+                name: 'comedy',
+                terms: {}
+            },
+
+            /**
+             * drama
+             */
+            drama: {
+                codename: 'drama',
+                id: '7377ea7c-d928-408a-bfb8-a0bf7392c996',
+                externalId: undefined,
+                name: 'drama',
+                terms: {}
+            },
+
+            /**
+             * romance
+             */
+            romance: {
+                codename: 'romance',
+                id: 'fe8bdfdb-cc13-4890-ab45-a6669e94d1d0',
+                externalId: undefined,
+                name: 'romance',
+                terms: {}
+            },
+
+            /**
+             * sci_fi
+             */
+            sciFi: {
+                codename: 'sci_fi',
+                id: '1432c10c-096c-47c5-a045-dcd6dc4af366',
+                externalId: undefined,
+                name: 'sci_fi',
                 terms: {}
             }
         }
     },
 
     /**
-     * ReleaseCategory
+     * Release category
      */
-    releasecategory: {
-        codename: 'releasecategory',
+    releaseCategory: {
+        codename: 'release_category',
         externalId: undefined,
-        id: '09b6a348-0f86-7a68-4af3-7cab9a5c60b7',
-        name: 'ReleaseCategory',
+        id: '4dbfc78f-5ea2-4f33-880d-193c75e0b975',
+        name: 'Release category',
         terms: {
             /**
-             * Global release
+             * global_release
              */
             globalRelease: {
                 codename: 'global_release',
-                id: '4acaf439-9f3a-f34a-6211-d3fc6ec7152e',
+                id: 'afb51aba-cb5a-499a-973c-d5b44fdeafcf',
                 externalId: undefined,
-                name: 'Global release',
+                name: 'global_release',
                 terms: {}
             },
 
             /**
-             * Local release
-             */
-            localRelease: {
-                codename: 'local_release',
-                id: '37e55484-f0dc-14eb-bf2a-b0293a0d1b1f',
-                externalId: undefined,
-                name: 'Local release',
-                terms: {}
-            },
-
-            /**
-             * US only
+             * us_only
              */
             usOnly: {
                 codename: 'us_only',
-                id: 'b03d990a-55a9-601e-dd5c-aa2edc8698ca',
+                id: '3f8bddaf-c203-471b-af76-6539d3e72e89',
                 externalId: undefined,
-                name: 'US only',
+                name: 'us_only',
                 terms: {}
             }
         }

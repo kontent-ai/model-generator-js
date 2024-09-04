@@ -71,20 +71,6 @@ export function toOutputDirPath(outputDir?: string): string {
     return outputDir ? `${outputDir}/`.replaceAll('//', '/') : `./`;
 }
 
-export function getBarrelExportCode(data: { readonly filenames: readonly string[]; readonly moduleResolution: ModuleResolution }): string {
-    if (!data.filenames.length) {
-        return 'export {}';
-    }
-    return sortAlphabetically(data.filenames, (filename) => filename).reduce<string>((barrelCode, filename) => {
-        const path = parse(filename);
-        return (barrelCode += `export * from '${path.dir}/${path.name}${getExtensionForModuleResolution(data.moduleResolution)}';`);
-    }, '');
-}
-
-function getExtensionForModuleResolution(moduleResolution: ModuleResolution): string {
-    return moduleResolution === 'nodeNext' ? '.js' : '';
-}
-
 function removeLineEndings(value: string): string {
     return value.replace(/(\r\n|\n|\r)/gm, '');
 }

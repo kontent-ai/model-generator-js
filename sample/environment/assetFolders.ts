@@ -6,66 +6,33 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Movie Database
+* Project: Migration Toolkit   tests
 * Environment: Production
-* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
+* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
 * -------------------------------------------------------------------------------
 **/
 
 export const assetFolders = {
     /**
-     * my folder A
+     * my folder
      */
-    myFolderA: {
-        codename: 'my_folder_a',
-        id: '6bb4814a-6a5c-4b8c-836e-7f83b008d5d1',
+    myFolder: {
+        codename: 'my_folder',
+        id: 'f1c6ba01-3b13-41ce-81e7-3125840b0b0e',
         externalId: undefined,
-        name: 'my folder A',
-        folders: {
-            /**
-             * my folder nested A
-             */
-            myFolderNestedA: {
-                codename: 'my_folder_nested_a',
-                id: '555784e5-e92e-4a86-b40b-d642afbf7b4e',
-                externalId: undefined,
-                name: 'my folder nested A',
-                folders: {
-                    /**
-                     * even more nested A
-                     */
-                    evenMoreNestedA: {
-                        codename: 'even_more_nested_a',
-                        id: 'd26940cc-6c8d-41e6-93a0-0748c854b100',
-                        externalId: undefined,
-                        name: 'even more nested A',
-                        folders: {}
-                    },
-
-                    /**
-                     * even more nested B
-                     */
-                    evenMoreNestedB: {
-                        codename: 'even_more_nested_b',
-                        id: '97fc4b03-98d2-44b4-8e03-b223a013b0b6',
-                        externalId: undefined,
-                        name: 'even more nested B',
-                        folders: {}
-                    }
-                }
-            }
-        }
+        name: 'my folder',
+        folders: {}
     },
 
     /**
-     * my folder B
+     * my folder2
      */
-    myFolderB: {
-        codename: 'my_folder_b',
-        id: '58d1c135-42cb-43c2-a2cd-c615e0a36e83',
+    myFolder2: {
+        codename: 'my_folder2',
+        id: '44a00189-9298-4cf9-b8fb-3f208c3f4f8f',
         externalId: undefined,
-        name: 'my folder B',
+        name: 'my folder2',
         folders: {}
     }
 } as const;

@@ -2,7 +2,13 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
 import { coreConfig } from '../../config.js';
-import { GeneratedFile, getBarrelExportCode, getDefaultModuleResolution, getFilenameFromPath, ModuleResolution } from '../../core/index.js';
+import {
+    importer as _importer,
+    GeneratedFile,
+    getDefaultModuleResolution,
+    getFilenameFromPath,
+    ModuleResolution
+} from '../../core/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { environmentGenerator as _environmentGenerator } from './environment.generator.js';
@@ -98,19 +104,18 @@ async function createFilesAsync(data: {
         outputDir: data.outputDir
     });
 
+    const importer = _importer(data.moduleResolution);
+
     await fileManager.createFilesAsync([
         ...data.projectFiles,
         // barrel file
         {
             filename: coreConfig.barrelExportFilename,
-            text: getBarrelExportCode({
-                moduleResolution: data.moduleResolution,
-                filenames: [
-                    ...data.projectFiles.map((m) => {
-                        return `./${getFilenameFromPath(m.filename)}`;
-                    })
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                ...data.projectFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
         }
     ]);
 }

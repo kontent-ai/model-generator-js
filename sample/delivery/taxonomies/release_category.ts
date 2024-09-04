@@ -6,17 +6,17 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Movie Database
+* Project: Migration Toolkit   tests
 * Environment: Production
-* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
+* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
 * -------------------------------------------------------------------------------
 **/
 
 /**
- * ReleaseCategory
+ * Release category
  *
- * Codename: releasecategory
- * Id: 09b6a348-0f86-7a68-4af3-7cab9a5c60b7
+ * Codename: release_category
+ * Id: 4dbfc78f-5ea2-4f33-880d-193c75e0b975
  */
-export type Releasecategory = 'global_release' | 'local_release' | 'us_only';
+export type ReleaseCategory = 'global_release' | 'us_only';

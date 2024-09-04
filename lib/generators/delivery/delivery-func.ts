@@ -3,13 +3,13 @@ import chalk from 'chalk';
 import { Options } from 'prettier';
 import { coreConfig, deliveryConfig } from '../../config.js';
 import {
+    importer as _importer,
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
     GeneratedFile,
     GeneratorElementResolver,
-    getBarrelExportCode,
     getDefaultModuleResolution,
     getFilenameFromPath,
     ModuleResolution,
@@ -143,6 +143,8 @@ async function createFilesAsync(
         formatOptions: config.formatOptions
     });
 
+    const importer = _importer(config.moduleResolution);
+
     await fileManager.createFilesAsync([
         ...data.contentTypeFiles,
         ...data.snippetFiles,
@@ -150,47 +152,35 @@ async function createFilesAsync(
         // barrel files
         {
             filename: `${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
-            text: getBarrelExportCode({
-                moduleResolution: config.moduleResolution,
-                filenames: [
-                    ...data.contentTypeFiles.map((m) => {
-                        return `./${getFilenameFromPath(m.filename)}`;
-                    })
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                ...data.contentTypeFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
         },
         {
             filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
-            text: getBarrelExportCode({
-                moduleResolution: config.moduleResolution,
-                filenames: [
-                    ...data.snippetFiles.map((m) => {
-                        return `./${getFilenameFromPath(m.filename)}`;
-                    })
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                ...data.snippetFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
         },
         {
             filename: `${deliveryConfig.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
-            text: getBarrelExportCode({
-                moduleResolution: config.moduleResolution,
-                filenames: [
-                    ...data.taxonomyFiles.map((m) => {
-                        return `./${getFilenameFromPath(m.filename)}`;
-                    })
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                ...data.taxonomyFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
         },
         {
             filename: coreConfig.barrelExportFilename,
-            text: getBarrelExportCode({
-                moduleResolution: config.moduleResolution,
-                filenames: [
-                    `./${deliveryConfig.contentTypesFolderName}/index`,
-                    `./${deliveryConfig.contentTypeSnippetsFolderName}/index`,
-                    `./${deliveryConfig.taxonomiesFolderName}/index`
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                `./${deliveryConfig.contentTypesFolderName}/index`,
+                `./${deliveryConfig.contentTypeSnippetsFolderName}/index`,
+                `./${deliveryConfig.taxonomiesFolderName}/index`
+            ])
         }
     ]);
 }

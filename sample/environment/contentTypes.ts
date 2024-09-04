@@ -6,9 +6,9 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Movie Database
+* Project: Migration Toolkit   tests
 * Environment: Production
-* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
+* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
 * -------------------------------------------------------------------------------
 **/
@@ -19,55 +19,54 @@ export const contentTypes = {
      */
     actor: {
         codename: 'actor',
-        id: '58099989-319f-495f-aa36-cb3710854e36',
+        id: 'd8900ee2-82f4-4189-a994-4e121582aadf',
         externalId: undefined,
         name: 'Actor',
         elements: {
             /**
-             * First name (text)
-             * Guidelines: This is the first name of the actor
+             * first_name (text)
              */
             firstName: {
                 codename: 'first_name',
-                id: '14dd70e5-c42d-f111-9640-c82b443edf1d',
+                id: '4af5e7ce-88ef-4159-96ae-96a552992f91',
                 externalId: undefined,
-                name: 'First name',
-                required: true,
+                name: 'first_name',
+                required: false,
                 type: 'text'
             },
 
             /**
-             * Last name (text)
+             * last_name (text)
              */
             lastName: {
                 codename: 'last_name',
-                id: '9f7a0dd4-af3a-95ca-0358-400c14ce7075',
+                id: '0f00b26e-60f3-462d-8110-18180137c3a0',
                 externalId: undefined,
-                name: 'Last name',
-                required: true,
+                name: 'last_name',
+                required: false,
                 type: 'text'
             },
 
             /**
-             * Photo (asset)
+             * photo (asset)
              */
             photo: {
                 codename: 'photo',
-                id: 'eaec9ba3-9624-6875-04ec-80d0b2e00781',
+                id: '069b38ee-385c-410f-b7fe-53ec59a5f139',
                 externalId: undefined,
-                name: 'Photo',
+                name: 'photo',
                 required: false,
                 type: 'asset'
             },
 
             /**
-             * Url (url_slug)
+             * url (url_slug)
              */
             url: {
                 codename: 'url',
-                id: 'c8658782-f209-a573-9c85-430fb4e3e9f0',
+                id: 'c4b2d64f-af45-45a4-92d8-4829833563ff',
                 externalId: undefined,
-                name: 'Url',
+                name: 'url',
                 required: false,
                 type: 'url_slug'
             }
@@ -79,196 +78,197 @@ export const contentTypes = {
      */
     movie: {
         codename: 'movie',
-        id: 'b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c',
+        id: 'db7356f6-1d82-42a0-9ebb-07865cffa995',
         externalId: undefined,
         name: 'Movie',
         elements: {
             /**
-             * Category (multiple_choice)
+             * Category (taxonomy)
              */
             category: {
                 codename: 'category',
-                id: '9821c252-6414-f549-c17f-cc171dd87713',
+                id: '8c12be35-e3e7-447c-a185-7b5e101ebf12',
                 externalId: undefined,
                 name: 'Category',
-                required: false,
-                type: 'multiple_choice',
-                options: {
-                    /**
-                     * Action
-                     */
-                    action: {
-                        name: 'Action',
-                        id: '7d453309-8d74-9607-80c4-36dcc1bd005f',
-                        codename: 'action',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Adventure
-                     */
-                    adventure: {
-                        name: 'Adventure',
-                        id: 'cd8389b0-7628-7739-7b14-3225a50212c1',
-                        codename: 'adventure',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Animation
-                     */
-                    animation: {
-                        name: 'Animation',
-                        id: '54c0590d-6a94-a69a-902d-fceea4fa62f8',
-                        codename: 'animation',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Comedy
-                     */
-                    comedy: {
-                        name: 'Comedy',
-                        id: 'd2fe357f-894e-9bc3-550c-c2c400d99c6b',
-                        codename: 'comedy',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Documentary
-                     */
-                    documentary: {
-                        name: 'Documentary',
-                        id: '19c5e959-c24a-4863-0b4d-453cdef8fe9d',
-                        codename: 'documentary',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Drama
-                     */
-                    drama: {
-                        name: 'Drama',
-                        id: '051e74de-f2e0-f405-9ad5-5263221e46f2',
-                        codename: 'drama',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Romance
-                     */
-                    romance: {
-                        name: 'Romance',
-                        id: '60550cc7-c986-a59f-b069-7565862fe1c1',
-                        codename: 'romance',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Sci fi
-                     */
-                    sciFi: {
-                        name: 'Sci fi',
-                        id: 'b087f774-1f57-9aa8-dab5-2ca88a646824',
-                        codename: 'sci_fi',
-                        externalId: undefined
-                    }
-                }
-            },
-
-            /**
-             * Length (number)
-             */
-            length: {
-                codename: 'length',
-                id: '7e8ecfab-a419-27ee-d8ec-8adb76fd007c',
-                externalId: undefined,
-                name: 'Length',
-                required: false,
-                type: 'number'
-            },
-
-            /**
-             * Plot (rich_text)
-             */
-            plot: {
-                codename: 'plot',
-                id: 'f7ee4f27-27fd-a19b-3c5c-102aae1c50ce',
-                externalId: undefined,
-                name: 'Plot',
-                required: false,
-                type: 'rich_text'
-            },
-
-            /**
-             * Poster (asset)
-             */
-            poster: {
-                codename: 'poster',
-                id: 'a39a7237-9503-a1ae-8431-5b6cdb85ae9d',
-                externalId: undefined,
-                name: 'Poster',
-                required: false,
-                type: 'asset'
-            },
-
-            /**
-             * ReleaseCategory (taxonomy)
-             */
-            releasecategory: {
-                codename: 'releasecategory',
-                id: '65f2fd44-1856-bc2b-17c2-decb0635e3d2',
-                externalId: undefined,
-                name: 'ReleaseCategory',
                 required: false,
                 type: 'taxonomy'
             },
 
             /**
-             * Released (date_time)
+             * length (number)
+             */
+            length: {
+                codename: 'length',
+                id: 'e3d07f3a-60c2-4072-846d-c23e51ec833e',
+                externalId: undefined,
+                name: 'length',
+                required: false,
+                type: 'number'
+            },
+
+            /**
+             * plot (rich_text)
+             */
+            plot: {
+                codename: 'plot',
+                id: 'ad2e5dc7-8d08-4f74-afeb-25b475f1e6fc',
+                externalId: undefined,
+                name: 'plot',
+                required: false,
+                type: 'rich_text'
+            },
+
+            /**
+             * poster (asset)
+             */
+            poster: {
+                codename: 'poster',
+                id: '9b197f1e-0728-4d14-9814-97f7b8ef01fc',
+                externalId: undefined,
+                name: 'poster',
+                required: false,
+                type: 'asset'
+            },
+
+            /**
+             * Release category (taxonomy)
+             */
+            releasecategory: {
+                codename: 'releasecategory',
+                id: '5faa827f-f262-43c3-8f58-0f354b8d393f',
+                externalId: undefined,
+                name: 'Release category',
+                required: false,
+                type: 'taxonomy'
+            },
+
+            /**
+             * released (date_time)
              */
             released: {
                 codename: 'released',
-                id: '5ccf4644-0d65-5d96-9a32-f4ea21974d51',
+                id: '656b9dc9-7bba-4f1f-a2b8-52f7f730a66f',
                 externalId: undefined,
-                name: 'Released',
+                name: 'released',
                 required: false,
                 type: 'date_time'
             },
 
             /**
-             * SeoName (url_slug)
+             * seoname (url_slug)
              */
             seoname: {
                 codename: 'seoname',
-                id: '756cc91a-a090-60f9-a7f0-f505bfbe046c',
+                id: '734f94be-5930-4bdf-b05b-f59f5a291675',
                 externalId: undefined,
-                name: 'SeoName',
+                name: 'seoname',
                 required: false,
                 type: 'url_slug'
             },
 
             /**
-             * Stars (modular_content)
+             * stars (modular_content)
              */
             stars: {
                 codename: 'stars',
-                id: 'aa26a55d-19f8-7501-fea3-b0d9b1eeac71',
+                id: '55596dd1-e808-415d-95aa-e2be34238d11',
                 externalId: undefined,
-                name: 'Stars',
+                name: 'stars',
                 required: false,
                 type: 'modular_content'
             },
 
             /**
-             * Title (text)
+             * Category (taxonomy)
+             */
+            taxonomySnippetTestTestTaxonomy: {
+                codename: 'taxonomy_snippet_test__test_taxonomy',
+                id: 'c030e3ec-5031-4d7f-af88-5032365733c7',
+                externalId: undefined,
+                name: 'Category',
+                required: false,
+                type: 'taxonomy'
+            },
+
+            /**
+             * title (text)
              */
             title: {
                 codename: 'title',
-                id: '3473187e-dc78-eff2-7099-f690f7042d4a',
+                id: '660c851a-a9a1-4378-97a3-1348bc2a4d76',
                 externalId: undefined,
-                name: 'Title',
-                required: true,
+                name: 'title',
+                required: false,
+                type: 'text'
+            }
+        }
+    },
+
+    /**
+     *    My Special type hello
+     */
+    specialType: {
+        codename: 'special_type',
+        id: '410fb007-42e3-442d-8cdf-fba4cf50f850',
+        externalId: undefined,
+        name: '   My Special type hello     ',
+        elements: {
+            /**
+             * Hello (text)
+             */
+            hello: {
+                codename: 'hello',
+                id: '41d50fe3-0858-494c-9f33-85960821b5d6',
+                externalId: undefined,
+                name: 'Hello',
+                required: false,
+                type: 'text'
+            }
+        }
+    },
+
+    /**
+     * Test
+     */
+    test: {
+        codename: 'test',
+        id: '81ab0b2c-dd14-41e7-a1ed-868b249ad8bc',
+        externalId: undefined,
+        name: 'Test',
+        elements: {
+            /**
+             * Snippet elem 2 (number)
+             */
+            mySnippetSnippetElem2: {
+                codename: 'my_snippet__snippet_elem_2',
+                id: 'b2f65646-3310-4a64-af2a-0d9d025a91d0',
+                externalId: undefined,
+                name: 'Snippet elem 2',
+                required: false,
+                type: 'number'
+            },
+
+            /**
+             * Snippet elem1 (text)
+             */
+            mySnippetSnippetElem1: {
+                codename: 'my_snippet__snippet_elem1',
+                id: '3b89ad47-4a72-4b4e-84b0-e8e8a7a3814d',
+                externalId: undefined,
+                name: 'Snippet elem1',
+                required: false,
+                type: 'text'
+            },
+
+            /**
+             * Text (text)
+             */
+            text: {
+                codename: 'text',
+                id: '65f61f6a-b69c-47dc-bc38-19855507bf14',
+                externalId: undefined,
+                name: 'Text',
+                required: false,
                 type: 'text'
             }
         }

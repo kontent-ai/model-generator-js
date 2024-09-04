@@ -2,7 +2,13 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
 import { coreConfig, migrationConfig } from '../../config.js';
-import { GeneratedFile, getBarrelExportCode, getDefaultModuleResolution, getFilenameFromPath, ModuleResolution } from '../../core/index.js';
+import {
+    importer as _importer,
+    GeneratedFile,
+    getDefaultModuleResolution,
+    getFilenameFromPath,
+    ModuleResolution
+} from '../../core/index.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
 import { fileManager as _fileManager } from '../../files/index.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
@@ -102,6 +108,8 @@ async function createFilesAsync(data: {
         formatOptions: data.formatOptions
     });
 
+    const importer = _importer(data.moduleResolution);
+
     await fileManager.createFilesAsync([
         ...data.migrationTypeFiles,
         ...data.environmentFiles,
@@ -109,38 +117,29 @@ async function createFilesAsync(data: {
         // items barrel file
         {
             filename: `${migrationConfig.migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
-            text: getBarrelExportCode({
-                moduleResolution: data.moduleResolution,
-                filenames: [
-                    ...data.migrationItemFiles.map((m) => {
-                        return `./${getFilenameFromPath(m.filename)}`;
-                    })
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                ...data.migrationItemFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
         },
         // environment barrel file
         {
             filename: `${migrationConfig.environmentFolderName}/${coreConfig.barrelExportFilename}`,
-            text: getBarrelExportCode({
-                moduleResolution: data.moduleResolution,
-                filenames: [
-                    ...data.environmentFiles.map((m) => {
-                        return `./${getFilenameFromPath(m.filename)}`;
-                    })
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                ...data.environmentFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
         },
         // main barrel file
         {
             filename: coreConfig.barrelExportFilename,
-            text: getBarrelExportCode({
-                moduleResolution: data.moduleResolution,
-                filenames: [
-                    `./${migrationConfig.migrationItemsFolderName}/index`,
-                    `./${migrationConfig.environmentFolderName}/index`,
-                    ...data.migrationTypeFiles.map((file) => `./${file.filename}`)
-                ]
-            })
+            text: importer.getBarrelExportCode([
+                `./${migrationConfig.migrationItemsFolderName}/index`,
+                `./${migrationConfig.environmentFolderName}/index`,
+                ...data.migrationTypeFiles.map((file) => `./${file.filename}`)
+            ])
         }
     ]);
 }

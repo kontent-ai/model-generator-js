@@ -6,9 +6,9 @@
 *  
 * -------------------------------------------------------------------------------
 * 
-* Project: Movie Database
+* Project: Migration Toolkit   tests
 * Environment: Production
-* Id: da5abe9f-fdad-4168-97cd-b3464be2ccb9
+* Id: 5ddb8f47-a51f-0124-35b1-f6634fa91ae2
 * 
 * -------------------------------------------------------------------------------
 **/
@@ -16,12 +16,12 @@
 /**
  * Type representing all languages
  */
-export type LanguageCodenames = 'cz' | 'en' | 'German';
+export type LanguageCodenames = 'en' | 'es';
 
 /**
  * Type representing all content types
  */
-export type ContentTypeCodenames = 'actor' | 'movie';
+export type ContentTypeCodenames = 'actor' | 'movie' | 'special_type' | 'test';
 
 /**
  * Type representing all collections
@@ -31,9 +31,16 @@ export type CollectionCodenames = 'default';
 /**
  * Type representing all workflows
  */
-export type WorkflowCodenames = 'default';
+export type WorkflowCodenames = 'default' | 'my_test_workflow';
 
 /**
  * Type representing all worksflow steps across all workflows
  */
-export type WorkflowStepCodenames = 'archived' | 'draft' | 'published' | 'ready_to_publish' | 'review' | 'scheduled';
+export type WorkflowStepCodenames =
+    | 'archived'
+    | 'draft_3171da5'
+    | 'draft'
+    | 'published'
+    | 'ready_for_review'
+    | 'ready_to_publish'
+    | 'scheduled';

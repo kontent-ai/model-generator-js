@@ -13,13 +13,21 @@
 * -------------------------------------------------------------------------------
 **/
 
-export const roles = {
+import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
+
+/**
+ *    My Special type hello
+ *
+ * Id: 410fb007-42e3-442d-8cdf-fba4cf50f850
+ * Codename: special_type
+ */
+export type MySpecialTypehello = IContentItem<{
     /**
-     * Project manager
+     * Hello (text)
+     *
+     * Required: false
+     * Codename: hello
+     * Id: 41d50fe3-0858-494c-9f33-85960821b5d6
      */
-    projectManager: {
-        codename: 'project-manager',
-        id: '5a8e7afd-3dcc-4adc-9f23-bf36a31d61bf',
-        name: 'Project manager'
-    }
-} as const;
+    hello: Elements.TextElement;
+}>;
