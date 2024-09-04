@@ -11,12 +11,5 @@ export function getEnvironmentRequiredValue(variableName: string): string {
 }
 
 export function getEnvironmentOptionalValue(variableName: string): string | undefined {
-    // get value from environment variables first
-    const value = process.env[variableName];
-
-    if (!value) {
-        return undefined;
-    }
-
-    return value;
+    return process.env?.[variableName];
 }

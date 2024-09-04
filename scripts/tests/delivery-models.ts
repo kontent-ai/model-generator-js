@@ -6,7 +6,7 @@ import { getEnvironmentRequiredValue } from '../utils/test.utils.js';
 
 const outputDir: string = './sample/delivery';
 
-const run = async () => {
+try {
     // needed to load .env environment to current process when run via package.json script
     dotenv.config({
         path: './.env'
@@ -32,8 +32,6 @@ const run = async () => {
         moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
         outputDir: outputDir
     });
-};
-
-run().catch((err) => {
-    handleError(err);
-});
+} catch (error) {
+    handleError(error);
+}
