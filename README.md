@@ -4,7 +4,7 @@
 
 # Kontent.ai Model Generator
 
-The purpose of this library is to help you write better code by using strongly typed objects or Typescript models. There are 3 types of
+The purpose of this library is to help you write better code by using strongly typed objects or Typescript models. There are 4 types of
 models you can generate:
 
 1. `delivery-sdk` - Typescript models for [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk) representing Content
@@ -13,6 +13,9 @@ models you can generate:
    write migration scripts easier
 3. `environment` - Strongly typed objects representing all structural objects within an environment (i.e. content types, workflows,
    taxonomies ...). These models help you write scripts because they provide you a straightforward access to objects properties.
+4. `items` - Generates `Type` representing all available item codenames for each content type and object representing `id` and `codenames`
+   properties of all items. This makes it easy and convenient to reference items in your code. It is not recommended to use this if your
+   environment contains high number of items.
 
 ## Installation
 
@@ -35,6 +38,9 @@ kontent-generate migration-toolkit --environmentId=x --apiKey=y
 
 # Environment models used for scripting and strongly typed access to environment objects
 kontent-generate environment --environmentId=x --apiKey=y
+
+# Items overview with ids / codenames and Types representing available item codenames
+kontent-generate items --environmentId=x --apiKey=y
 ```
 
 To learn what options are available use the `help` command:
@@ -49,7 +55,7 @@ kontent-generate delivery-sdk --help
 ## Use in code
 
 ```typescript
-import { generateDeliveryModelsAsync, generateEnvironmentModelsAsync, generateMigrationModelsAsync } from '@kontent-ai/model-generator';
+import { generateDeliveryModelsAsync, generateEnvironmentModelsAsync, generateMigrationModelsAsync, generateItemsAsync } from '@kontent-ai/model-generator';
 
 // delivery-sdk models
 await generateDeliveryModelsAsync({
@@ -61,8 +67,13 @@ await generateMigrationModelsAsync({
     ...
 });
 
-// environment models
+// environment overview
 await generateEnvironmentModelsAsync({
+    ...
+});
+
+// items
+await generateItemsAsync({
     ...
 });
 ```
@@ -74,6 +85,7 @@ To see how models are generated have a look at following sample generated models
 1. `delivery-sdk` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/delivery
 2. `migration-toolkit` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/migration
 3. `environment` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/environment
+4. `items` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/items
 
 ## Contribution & Feedback
 

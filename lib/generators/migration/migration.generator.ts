@@ -150,9 +150,13 @@ function getElementPropType(element: Readonly<FlattenedElement>): string {
         .with('taxonomy', () => `${migrationConfig.sdkTypeNames.elementModels}.TaxonomyElement`)
         .with('url_slug', () => `${migrationConfig.sdkTypeNames.elementModels}.UrlSlugElement`)
         .with('modular_content', () => `${migrationConfig.sdkTypeNames.elementModels}.LinkedItemsElement`)
-        .otherwise((type) => {
-            throw Error(`Element type '${type}' is not supported.`);
-        });
+        .with('guidelines', () => {
+            throw new Error('Guidelines are not supported');
+        })
+        .with('snippet', () => {
+            throw new Error('Snippets are not supported');
+        })
+        .exhaustive();
 }
 
 function getItemType(): string {

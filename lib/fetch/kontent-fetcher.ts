@@ -2,6 +2,7 @@ import { HttpService } from '@kontent-ai/core-sdk';
 import {
     AssetFolderModels,
     CollectionModels,
+    ContentItemModels,
     ContentTypeModels,
     ContentTypeSnippetModels,
     createManagementClient,
@@ -39,6 +40,20 @@ export function kontentFetcher(config: KontentFetcherConfig) {
             console.log(`Project '${chalk.yellow(toSafeComment(projectInformation.project.name))}'`);
             console.log(`Environment '${chalk.yellow(toSafeComment(projectInformation.project.environment))}'\n`);
             return projectInformation.project;
+        },
+        async getItemsAsync(): Promise<readonly Readonly<ContentItemModels.ContentItem>[]> {
+            const data = (
+                await client
+                    .listContentItems()
+                    .withListQueryConfig({
+                        responseFetched: (response) => {
+                            console.log(`Fetched '${chalk.yellow(response.data.items.length.toString())}' content items`);
+                        }
+                    })
+                    .toAllPromise()
+            ).data;
+
+            return data.items;
         },
         async getWorkflowsAsync(): Promise<readonly Readonly<WorkflowModels.Workflow>[]> {
             const items = (await client.listWorkflows().toPromise()).data;

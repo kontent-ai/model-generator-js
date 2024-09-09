@@ -40,3 +40,8 @@ export const deliveryConfig = {
         elements: 'Elements'
     }
 } as const;
+
+export const itemsConfig = {
+    itemsFolderName: 'items',
+    codenamesFolderName: 'codenames'
+} as const;

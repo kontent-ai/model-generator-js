@@ -10,3 +10,7 @@ export * from './environment/environment.generator.js';
 // migration
 export * from './migration/migration-func.js';
 export * from './migration/migration.generator.js';
+
+// items
+export * from './items/items-func.js';
+export * from './items/items.generator.js';

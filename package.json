@@ -41,6 +41,7 @@
         "test:delivery": "tsx scripts/tests/delivery-models",
         "test:environment": "tsx scripts/tests/environment-models",
         "test:migration": "tsx scripts/tests/migration-models",
+        "test:items": "tsx scripts/tests/item-models",
         "test:help": "tsx lib/node/cli/app --help",
         "test:help:delivery-sdk": "tsx lib/node/cli/app delivery-sdk --help",
         "lint": "npx eslint lib",

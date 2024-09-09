@@ -63,6 +63,12 @@ export const cliArgs = argumentsSetter()
         examples: [`kontent-generate ${getCliAction('migration-toolkit')} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
         options: [environmentIdOption, apiKeyOption, addTimestampOption, moduleResolutionOption, outputDirOption, baseUrl]
     })
+    .withCommand({
+        name: getCliAction('items'),
+        description: `Overview of all items in the environment and their ids/codenames as well as Type representing all item codenames`,
+        examples: [`kontent-generate ${getCliAction('items')} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
+        options: [environmentIdOption, apiKeyOption, addTimestampOption, moduleResolutionOption, outputDirOption, baseUrl]
+    })
     .withOption({
         alias: `h`,
         name: `help`,

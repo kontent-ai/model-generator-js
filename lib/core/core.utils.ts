@@ -1,6 +1,5 @@
 import { camelCasePropertyNameResolver, pascalCasePropertyNameResolver, snakeCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import { createHash } from 'crypto';
-import { parse } from 'path';
 import { CliAction, LibraryType, ModuleResolution } from './core.models.js';
 
 export function uniqueFilter(value: string, index: number, self: readonly string[]): boolean {
@@ -27,8 +26,9 @@ export function getFileNameWithoutExtension(filePath: string): string {
     return filePath.substring(0, filePath.lastIndexOf('.'));
 }
 
-export function getFilenameFromPath(filePath: string): string {
-    return parse(filePath).name;
+export function getFilenameFromPath(text: string): string {
+    const lastIndex = text.lastIndexOf('/');
+    return text.substring(lastIndex + 1);
 }
 
 export function sortAlphabetically<T>(arrayToSort: readonly T[], propertySelector: (item: T) => string): readonly T[] {

@@ -28,6 +28,7 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
                 .with('delivery-sdk', () => 'delivery-sdk')
                 .with('migration-toolkit', () => 'migration-toolkit')
                 .with('environment', () => 'environment')
+                .with('items', () => 'items')
                 .otherwise(() => {
                     throw Error(`Unsupported command '${chalk.red(command)}'`);
                 });
