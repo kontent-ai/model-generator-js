@@ -121,10 +121,10 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                        importValue: `${migrationConfig.localTypeNames.collectionCodenames}, ${migrationConfig.localTypeNames.contentTypeCodenames}, ${migrationConfig.localTypeNames.languageCodenames}, ${migrationConfig.localTypeNames.workflowCodenames}, ${migrationConfig.localTypeNames.workflowStepCodenames}`
                    })}
 
-                ${wrapComment('System object shared by all individual content type models')}
+                ${wrapComment('\n * System object shared by all individual content type models\n')}
                 ${getSystemType()}
 
-                ${wrapComment('Item object shared by all individual content type models')}
+                ${wrapComment('\n * Item object shared by all individual content type models\n')}
                 ${getItemType()}
             `
                 }

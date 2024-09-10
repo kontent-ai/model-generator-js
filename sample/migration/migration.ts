@@ -22,7 +22,9 @@ import type {
     WorkflowStepCodenames
 } from './environment/environment.js';
 
-/**System object shared by all individual content type models*/
+/**
+ * System object shared by all individual content type models
+ */
 export type ItemSystem<TCodename extends ContentTypeCodenames> = MigrationItemSystem<
     TCodename,
     LanguageCodenames,
@@ -30,7 +32,9 @@ export type ItemSystem<TCodename extends ContentTypeCodenames> = MigrationItemSy
     WorkflowCodenames
 >;
 
-/**Item object shared by all individual content type models*/
+/**
+ * Item object shared by all individual content type models
+ */
 export type Item<TCodename extends ContentTypeCodenames, TElements extends MigrationElements = MigrationElements> = MigrationItem<
     TElements,
     ItemSystem<TCodename>,
