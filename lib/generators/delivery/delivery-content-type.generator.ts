@@ -10,9 +10,7 @@ import {
     ContentTypeSnippetNameResolver,
     FlattenedElement,
     GeneratedFile,
-    GeneratorElementResolver,
     getFlattenedElements,
-    mapElementName,
     mapFilename,
     mapName,
     ModuleResolution,
@@ -50,7 +48,6 @@ export interface DeliveryContentTypeGeneratorConfig {
         readonly contentType?: ContentTypeNameResolver;
         readonly snippet?: ContentTypeSnippetNameResolver;
         readonly taxonomy?: TaxonomyNameResolver;
-        readonly element?: GeneratorElementResolver;
     };
 }
 
@@ -66,7 +63,6 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     const nameResolvers = {
         snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),
         contentType: mapName(config.nameResolvers?.contentType, 'pascalCase'),
-        element: mapElementName(config.nameResolvers?.element, 'camelCase'),
         taxonomy: mapName(config.nameResolvers?.taxonomy, 'pascalCase')
     };
 
@@ -227,9 +223,8 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
                 .filter((m) => !m.fromSnippet)
                 .reduce<string>((code, element) => {
                     const mappedType = mapElementType(element);
-                    const elementName = nameResolvers.element(element.originalElement);
 
-                    if (!mappedType || !elementName) {
+                    if (!mappedType) {
                         return code;
                     }
 
@@ -241,7 +236,7 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
                 * Codename: ${element.codename}
                 * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 `)} 
-                ${elementName}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
+                ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
                 }, '')
         );
     };

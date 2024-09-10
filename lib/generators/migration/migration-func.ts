@@ -85,7 +85,7 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
     return {
         moduleResolution,
         migrationTypeFiles: migrationGenerator.getMigrationTypeFiles(),
-        migrationItemFiles: migrationGenerator.getMigrationTypeFiles(),
+        migrationItemFiles: migrationGenerator.getMigrationItemFiles(),
         environmentFiles: migrationGenerator.getEnvironmentFiles(),
         environmentInfo
     };

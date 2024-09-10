@@ -38,7 +38,7 @@ export type Actor = IContentItem<{
      * Id: 14dd70e5-c42d-f111-9640-c82b443edf1d
      * Guidelines: This is the first name of the actor
      */
-    firstName: Elements.TextElement;
+    first_name: Elements.TextElement;
     /**
      * Last name (text)
      *
@@ -46,7 +46,7 @@ export type Actor = IContentItem<{
      * Codename: last_name
      * Id: 9f7a0dd4-af3a-95ca-0358-400c14ce7075
      */
-    lastName: Elements.TextElement;
+    last_name: Elements.TextElement;
     /**
      * Photo (asset)
      *

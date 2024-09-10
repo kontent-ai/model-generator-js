@@ -1,4 +1,3 @@
-import { camelCasePropertyNameResolver, pascalCasePropertyNameResolver, snakeCasePropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import { createHash } from 'crypto';
 import { CliAction, LibraryType, ModuleResolution } from './core.models.js';
 
@@ -36,20 +35,25 @@ export function sortAlphabetically<T>(arrayToSort: readonly T[], propertySelecto
 }
 
 export function toPascalCase(text: string): string {
-    // use element resolver from SDK to keep it consistent
-    return toSafeStringCode(pascalCasePropertyNameResolver('', text));
+    return toSafeStringCode(
+        `${text}`
+            .toLowerCase()
+            .replace(new RegExp(/[-_]+/, 'g'), ' ')
+            .replace(new RegExp(/[^\w\s]/, 'g'), '')
+            .replace(new RegExp(/\s+(.)(\w*)/, 'g'), ($1, $2, $3) => `${($2 as string).toUpperCase() + $3}`)
+            .replace(new RegExp(/\w/), (s) => s.toUpperCase())
+    );
 }
 
 export function toCamelCase(text: string): string {
-    // use element resolver from SDK to keep it consistent
-    return toSafeStringCode(camelCasePropertyNameResolver('', text));
+    return toSafeStringCode(
+        text
+            .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+                return index === 0 ? word.toLowerCase() : word.toUpperCase();
+            })
+            .replace(/\s+/g, '')
+    );
 }
-
-export function toSnakeCase(text: string): string {
-    // use element resolver from SDK to keep it consistent
-    return toSafeStringCode(snakeCasePropertyNameResolver('', text));
-}
-
 export function toGuidelinesComment(guidelines: string): string {
     return removeLineEndings(guidelines);
 }

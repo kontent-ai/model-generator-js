@@ -15,7 +15,7 @@
 
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
 import type { Actor } from '../content-types/actor.js';
-import type { ReleaseCategory } from '../taxonomies/releasecategory.js';
+import type { Releasecategory } from '../taxonomies/releasecategory.js';
 
 /**
  * Movie
@@ -95,5 +95,5 @@ export type Movie = IContentItem<{
      * Codename: releasecategory
      * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
      */
-    releasecategory: Elements.TaxonomyElement<ReleaseCategory>;
+    releasecategory: Elements.TaxonomyElement<Releasecategory>;
 }>;

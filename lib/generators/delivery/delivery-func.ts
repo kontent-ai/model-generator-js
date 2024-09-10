@@ -9,7 +9,6 @@ import {
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
     GeneratedFile,
-    GeneratorElementResolver,
     getDefaultModuleResolution,
     getFilenameFromPath,
     ModuleResolution,
@@ -41,7 +40,6 @@ export interface GenerateDeliveryModelsConfig {
         readonly contentType?: ContentTypeNameResolver;
         readonly snippet?: ContentTypeSnippetNameResolver;
         readonly taxonomy?: TaxonomyNameResolver;
-        readonly element?: GeneratorElementResolver;
     };
 }
 

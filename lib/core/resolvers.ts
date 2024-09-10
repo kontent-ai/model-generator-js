@@ -1,7 +1,7 @@
 import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
-import { CaseType, GeneratorElementResolver, ObjectWithCodename, ObjectWithName } from './core.models.js';
-import { toCamelCase, toPascalCase, toSnakeCase } from './core.utils.js';
+import { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
+import { toCamelCase, toPascalCase } from './core.utils.js';
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
@@ -43,22 +43,6 @@ export function mapName<T extends ObjectWithName>(resolver: NameResolver<T>, def
     };
 }
 
-export function mapElementName(resolver: GeneratorElementResolver | undefined, defaultCase: CaseType): ElementNameResolver {
-    return (element) => {
-        const codename = element.codename;
-
-        if (!codename) {
-            return undefined;
-        }
-
-        return match(resolver)
-            .returnType<string>()
-            .with(P.instanceOf(Function), (resolver) => resolver('', codename))
-            .with(undefined, () => resolveCase(codename, defaultCase))
-            .otherwise((resolverType) => resolveCase(codename, resolverType));
-    };
-}
-
 function addExtensionToFilename(filename: string, addExtension: boolean): string {
     return `${filename}${addExtension ? '.ts' : ''}`;
 }
@@ -68,6 +52,5 @@ function resolveCase(text: string, resolverType: CaseType): string {
         .returnType<string>()
         .with('camelCase', () => toCamelCase(text))
         .with('pascalCase', () => toPascalCase(text))
-        .with('snakeCase', () => toSnakeCase(text))
         .exhaustive();
 }

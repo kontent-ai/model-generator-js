@@ -1,4 +1,3 @@
-import { PropertyNameResolver } from '@kontent-ai/delivery-sdk';
 import {
     ContentTypeElements,
     ContentTypeModels,
@@ -11,8 +10,7 @@ import {
 export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment' | 'items';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
 export type ModuleResolution = 'nodeNext' | 'node';
-export type CaseType = 'camelCase' | 'pascalCase' | 'snakeCase';
-export type GeneratorElementResolver = CaseType | PropertyNameResolver;
+export type CaseType = 'camelCase' | 'pascalCase';
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
 export type LiteralUnion<T extends string> = T | (string & NonNullable<unknown>);
 
