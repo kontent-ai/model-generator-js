@@ -71,8 +71,8 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         snippetFiles: readonly GeneratedFile[];
     } => {
         return {
-            contentTypeFiles: config.environmentData.types.map((type) => createContentTypeModel(type)),
-            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createContentTypeSnippetModel(contentTypeSnippet))
+            contentTypeFiles: config.environmentData.types.map((type) => createTypeModel(type)),
+            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createTypeModel(contentTypeSnippet))
         };
     };
 
@@ -93,8 +93,8 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             elements
                 // only take elements that are not from snippets
                 .filter((m) => !m.fromSnippet)
-                .map((flattenedElement) =>
-                    match(flattenedElement)
+                .map((flattenedElement) => {
+                    return match(flattenedElement)
                         .returnType<string | string[]>()
                         .with({ type: 'taxonomy' }, (taxonomyElement) => {
                             if (!taxonomyElement.assignedTaxonomy) {
@@ -126,8 +126,8 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                                     });
                                 });
                         })
-                        .otherwise(() => [])
-                )
+                        .otherwise(() => []);
+                })
                 .flatMap((m) => m)
                 .filter(isNotUndefined)
                 .filter(uniqueFilter)
@@ -202,17 +202,12 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
 `;
     };
 
-    const createContentTypeModel = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
+    const createTypeModel = (
+        type: Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>
+    ): GeneratedFile => {
         return {
             filename: `${deliveryConfig.contentTypesFolderName}/${fileResolvers.contentType(type, true)}`,
             text: getModelCode(type)
-        };
-    };
-
-    const createContentTypeSnippetModel = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): GeneratedFile => {
-        return {
-            filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.snippet(snippet, true)}`,
-            text: getModelCode(snippet)
         };
     };
 
