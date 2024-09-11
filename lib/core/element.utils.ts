@@ -8,19 +8,19 @@ interface ElementWrapper {
     readonly fromSnippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet> | undefined;
 }
 
-export function getFlattenedElements(
-    elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[],
-    snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[],
-    taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[],
-    types: readonly Readonly<ContentTypeModels.ContentType>[]
-): readonly FlattenedElement[] {
-    return elements
+export function getFlattenedElements(data: {
+    readonly elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[];
+    readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[];
+    readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
+    readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
+}): readonly FlattenedElement[] {
+    return data.elements
         .filter((element) => {
             return element.type !== 'guidelines';
         })
         .flatMap<ElementWrapper>((element) => {
             if (element.type === 'snippet') {
-                const snippet = snippets.find((snippet) => snippet.id === element.snippet.id);
+                const snippet = data.snippets.find((snippet) => snippet.id === element.snippet.id);
 
                 if (!snippet) {
                     throw Error(`Could not find snippet with id '${element.snippet.id}'`);
@@ -40,7 +40,7 @@ export function getFlattenedElements(
             };
         })
         .map((element) => {
-            return getFlattenedElement(element, taxonomies, types);
+            return getFlattenedElement(element, data.taxonomies, data.types);
         })
         .filter(isNotUndefined);
 }

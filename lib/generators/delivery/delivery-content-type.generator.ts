@@ -254,12 +254,12 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     };
 
     const getSnippetCode = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): string => {
-        const flattenedElements = getFlattenedElements(
-            snippet.elements,
-            config.environmentData.snippets,
-            config.environmentData.taxonomies,
-            config.environmentData.types
-        );
+        const flattenedElements = getFlattenedElements({
+            elements: snippet.elements,
+            snippets: config.environmentData.snippets,
+            taxonomies: config.environmentData.taxonomies,
+            types: config.environmentData.types
+        });
 
         const importsResult = getSnippetModelImports({
             snippet,
@@ -285,12 +285,12 @@ ${getElementsCode(flattenedElements)};
     };
 
     const getContentTypeCode = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
-        const flattenedElements = getFlattenedElements(
-            contentType.elements,
-            config.environmentData.snippets,
-            config.environmentData.taxonomies,
-            config.environmentData.types
-        );
+        const flattenedElements = getFlattenedElements({
+            elements: contentType.elements,
+            snippets: config.environmentData.snippets,
+            taxonomies: config.environmentData.taxonomies,
+            types: config.environmentData.types
+        });
 
         const importsResult = getContentTypeModelImports({
             contentType,
