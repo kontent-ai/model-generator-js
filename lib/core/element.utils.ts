@@ -1,7 +1,7 @@
 import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match } from 'ts-pattern';
-import { FlattenedElement } from './core.models.js';
+import { FlattenedElement, MultipleChoiceOption } from './core.models.js';
 
 interface ElementWrapper {
     readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
@@ -65,7 +65,8 @@ function getFlattenedElement(
         originalElement: wrapper.element,
         allowedContentTypes: extractLinkedItemsAllowedTypes(wrapper.element, types),
         assignedTaxonomy: extractTaxonomy(wrapper.element, taxonomies),
-        fromSnippet: wrapper.fromSnippet
+        fromSnippet: wrapper.fromSnippet,
+        multipleChoiceOptions: extractMultipleChoiceOptions(wrapper.element)
     };
 }
 
@@ -109,6 +110,22 @@ function extractLinkedItemsAllowedTypes(
         .otherwise(() => []);
 
     return allowedTypeIds.map((id) => types.find((m) => m.id === id)).filter(isNotUndefined);
+}
+
+function extractMultipleChoiceOptions(
+    element: Readonly<ContentTypeElements.ContentTypeElementModel>
+): readonly MultipleChoiceOption[] | undefined {
+    return match(element)
+        .returnType<readonly MultipleChoiceOption[] | undefined>()
+        .with({ type: 'multiple_choice' }, (multipleChoiceElement) => {
+            return multipleChoiceElement.options.map((option) => {
+                return {
+                    codename: option.codename ?? '',
+                    name: option.name
+                };
+            });
+        })
+        .otherwise(() => undefined);
 }
 
 function extractTaxonomy(

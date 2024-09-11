@@ -375,7 +375,12 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
             .with({ type: 'asset' }, () => 'AssetsElement')
             .with({ type: 'date_time' }, () => 'DateTimeElement')
             .with({ type: 'rich_text' }, () => 'RichTextElement')
-            .with({ type: 'multiple_choice' }, () => 'MultipleChoiceElement')
+            .with({ type: 'multiple_choice' }, (multipleChoiceElement) => {
+                if (!multipleChoiceElement.multipleChoiceOptions?.length) {
+                    return 'MultipleChoiceElement';
+                }
+                return `MultipleChoiceElement<${multipleChoiceElement.multipleChoiceOptions.map((option) => `'${option.codename}'`).join(' | ')}>`;
+            })
             .with({ type: 'url_slug' }, () => 'UrlSlugElement')
             .with({ type: 'taxonomy' }, (taxonomyElement) => {
                 if (!taxonomyElement.assignedTaxonomy) {

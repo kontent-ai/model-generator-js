@@ -35,6 +35,11 @@ export interface OriginalManagementError {
     };
 }
 
+export interface MultipleChoiceOption {
+    readonly name: string;
+    readonly codename: string;
+}
+
 export interface FlattenedElement {
     readonly title: string;
     readonly id: string;
@@ -47,6 +52,7 @@ export interface FlattenedElement {
     readonly originalElement: Readonly<ContentTypeElements.ContentTypeElementModel>;
     readonly assignedTaxonomy?: Readonly<TaxonomyModels.Taxonomy>;
     readonly fromSnippet?: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
+    readonly multipleChoiceOptions?: readonly Readonly<MultipleChoiceOption>[];
 }
 
 export interface GeneratedFile {
