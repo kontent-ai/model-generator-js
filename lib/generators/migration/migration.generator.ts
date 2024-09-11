@@ -75,13 +75,14 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                     .map((element) => {
                         return `
                             ${wrapComment(`
-                            * ${element.title} (${element.type})
+                            * ${element.title}
                             * 
+                            * Type: ${element.type} 
                             * Required: ${element.isRequired ? 'true' : 'false'}
                             * Codename: ${element.codename}
                             * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                             `)}
-                            ${element.codename}: ${getElementPropType(element)}`;
+                            readonly ${element.codename}: ${getElementPropType(element)}`;
                     })
                     .join(',\n')},
             }

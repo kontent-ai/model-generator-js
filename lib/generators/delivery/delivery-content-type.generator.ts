@@ -349,13 +349,14 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
 
                 return (code += `
                 ${wrapComment(`
-                * ${element.title} (${element.type})
+                * ${element.title}
                 * 
+                * Type: ${element.type}
                 * Required: ${element.isRequired ? 'true' : 'false'}
                 * Codename: ${element.codename}
                 * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 `)} 
-                ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
+                readonly ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
             }, '{') + '}'
         );
     };

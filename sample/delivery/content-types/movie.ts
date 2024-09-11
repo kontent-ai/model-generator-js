@@ -27,77 +27,86 @@ import type { Releasecategory } from '../taxonomies/index.js';
 export type Movie = IContentItem<
     {
         /**
-         * Title (text)
+         * Title
          *
+         * Type: text
          * Required: true
          * Codename: title
          * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
          */
-        title: Elements.TextElement;
+        readonly title: Elements.TextElement;
         /**
-         * Plot (rich_text)
+         * Plot
          *
+         * Type: rich_text
          * Required: false
          * Codename: plot
          * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
          */
-        plot: Elements.RichTextElement;
+        readonly plot: Elements.RichTextElement;
         /**
-         * Released (date_time)
+         * Released
          *
+         * Type: date_time
          * Required: false
          * Codename: released
          * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
          */
-        released: Elements.DateTimeElement;
+        readonly released: Elements.DateTimeElement;
         /**
-         * Length (number)
+         * Length
          *
+         * Type: number
          * Required: false
          * Codename: length
          * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
          */
-        length: Elements.NumberElement;
+        readonly length: Elements.NumberElement;
         /**
-         * Poster (asset)
+         * Poster
          *
+         * Type: asset
          * Required: false
          * Codename: poster
          * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
          */
-        poster: Elements.AssetsElement;
+        readonly poster: Elements.AssetsElement;
         /**
-         * Category (multiple_choice)
+         * Category
          *
+         * Type: multiple_choice
          * Required: false
          * Codename: category
          * Id: 9821c252-6414-f549-c17f-cc171dd87713
          */
-        category: Elements.MultipleChoiceElement;
+        readonly category: Elements.MultipleChoiceElement;
         /**
-         * Stars (modular_content)
+         * Stars
          *
+         * Type: modular_content
          * Required: false
          * Codename: stars
          * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
          */
-        stars: Elements.LinkedItemsElement<Actor | Movie>;
+        readonly stars: Elements.LinkedItemsElement<Actor | Movie>;
         /**
-         * SeoName (url_slug)
+         * SeoName
          *
+         * Type: url_slug
          * Required: false
          * Codename: seoname
          * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
          */
-        seoname: Elements.UrlSlugElement;
+        readonly seoname: Elements.UrlSlugElement;
         /**
-         * ReleaseCategory (taxonomy)
+         * ReleaseCategory
          *
+         * Type: taxonomy
          * Required: false
          * Codename: releasecategory
          * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
          */
-        releasecategory: Elements.TaxonomyElement<Releasecategory>;
+        readonly releasecategory: Elements.TaxonomyElement<Releasecategory>;
     },
     'movie',
     LanguageCodenames,
