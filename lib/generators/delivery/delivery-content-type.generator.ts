@@ -1,7 +1,15 @@
-import { ContentTypeModels, ContentTypeSnippetModels, EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import {
+    CollectionModels,
+    ContentTypeModels,
+    ContentTypeSnippetModels,
+    EnvironmentModels,
+    LanguageModels,
+    TaxonomyModels,
+    WorkflowModels
+} from '@kontent-ai/management-sdk';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match, P } from 'ts-pattern';
-import { deliveryConfig } from '../../config.js';
+import { deliveryConfig, sharedTypesConfig } from '../../config.js';
 import {
     importer as _importer,
     ContentTypeFileNameResolver,
@@ -21,6 +29,13 @@ import {
     uniqueFilter,
     wrapComment
 } from '../../core/index.js';
+import {
+    getCollectionCodenamesType,
+    getContentTypeCodenamesType,
+    getLanguageCodenamesType,
+    getWorkflowCodenamesType,
+    getWorkflowStepCodenamesType
+} from '../shared/generator.utils.js';
 
 interface ExtractImportsResult {
     readonly typeName: string;
@@ -36,8 +51,11 @@ export interface DeliveryContentTypeGeneratorConfig {
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
         readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
-        readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
         readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[];
+        readonly workflows: readonly Readonly<WorkflowModels.Workflow>[];
+        readonly languages: readonly Readonly<LanguageModels.LanguageModel>[];
+        readonly collections: readonly Readonly<CollectionModels.Collection>[];
+        readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
     };
 
     readonly fileResolvers?: {
@@ -68,69 +86,109 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         taxonomy: mapName(config.nameResolvers?.taxonomy, 'pascalCase')
     };
 
-    const generateModels = (): {
-        contentTypeFiles: readonly GeneratedFile[];
-        snippetFiles: readonly GeneratedFile[];
-    } => {
-        return {
-            contentTypeFiles: config.environmentData.types.map((type) => createTypeModel(type)),
-            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
-        };
+    const getSystemTypeImports = (): readonly string[] => {
+        return [
+            importer.importType({
+                filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.typesFilename}.ts`,
+                importValue: [
+                    sharedTypesConfig.collectionCodenames,
+                    sharedTypesConfig.languageCodenames,
+                    sharedTypesConfig.workflowCodenames,
+                    sharedTypesConfig.workflowStepCodenames
+                ]
+                    .map((m) => m)
+                    .join(', ')
+            })
+        ];
     };
 
     const getSnippetImports = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): readonly string[] => {
-        return snippets.map((snippet) => {
-            return importer.importType({
-                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.snippet(snippet, false)}.ts`,
-                importValue: nameResolvers.snippet(snippet)
-            });
-        });
+        if (snippets.length === 0) {
+            return [];
+        }
+
+        return [
+            importer.importType({
+                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/index.ts`,
+                importValue: snippets
+                    .map((snippet) => nameResolvers.snippet(snippet))
+                    .map((m) => m)
+                    .filter(uniqueFilter)
+                    .join(', ')
+            })
+        ];
     };
 
-    const getElementImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
-        return (
-            elements
-                // only take elements that are not from snippets
-                .filter((m) => !m.fromSnippet)
-                .map((flattenedElement) => {
-                    return match(flattenedElement)
-                        .returnType<string | string[]>()
-                        .with({ type: 'taxonomy' }, (taxonomyElement) => {
-                            if (!taxonomyElement.assignedTaxonomy) {
-                                throw Error(`Invalid taxonomy for element '${taxonomyElement.codename}'`);
-                            }
-                            return importer.importType({
-                                filePathOrPackage: `../${deliveryConfig.taxonomiesFolderName}/${fileResolvers.taxonomy(taxonomyElement.assignedTaxonomy, false)}.ts`,
-                                importValue: nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy)
+    const getReferencedTypesImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
+        const referencedTypeNames = elements
+            // only take elements that are not from snippets
+            .filter((m) => !m.fromSnippet)
+            .map((flattenedElement) => {
+                return match(flattenedElement)
+                    .returnType<string | string[]>()
+                    .with(P.union({ type: 'modular_content' }, { type: 'subpages' }), (linkedItemsOrSubpagesElement) => {
+                        return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
+                            .filter((allowedContentType) => {
+                                // filter self-referencing types as they do not need to be importer
+                                if (allowedContentType.codename === typeOrSnippet.codename) {
+                                    return false;
+                                }
+                                return true;
+                            })
+                            .map((allowedContentType) => {
+                                return nameResolvers.contentType(allowedContentType);
                             });
-                        })
-                        .with(P.union({ type: 'modular_content' }, { type: 'subpages' }), (linkedItemsOrSubpagesElement) => {
-                            return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
-                                .filter((allowedContentType) => {
-                                    // filter self-referencing types as they do not need to be importer
-                                    if (allowedContentType.codename === typeOrSnippet.codename) {
-                                        return false;
-                                    }
-                                    return true;
-                                })
-                                .map((allowedContentType) => {
-                                    const referencedTypeFilename: string = `${fileResolvers.contentType(allowedContentType, false)}`;
+                    })
+                    .otherwise(() => []);
+            })
+            .flatMap((m) => m)
+            .filter(isNotUndefined)
+            .filter(uniqueFilter);
 
-                                    return importer.importType({
-                                        filePathOrPackage:
-                                            typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
-                                                ? `../${deliveryConfig.contentTypesFolderName}/${referencedTypeFilename}.ts`
-                                                : `./${referencedTypeFilename}.ts`,
-                                        importValue: `${nameResolvers.contentType(allowedContentType)}`
-                                    });
-                                });
-                        })
-                        .otherwise(() => []);
-                })
-                .flatMap((m) => m)
-                .filter(isNotUndefined)
-                .filter(uniqueFilter)
-        );
+        if (referencedTypeNames.length === 0) {
+            return [];
+        }
+
+        return [
+            importer.importType({
+                filePathOrPackage:
+                    typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
+                        ? `../${deliveryConfig.contentTypesFolderName}/index.ts`
+                        : `./index.ts`,
+                importValue: referencedTypeNames.join(', ')
+            })
+        ];
+    };
+
+    const getReferencedTaxonomyImports = (elements: readonly FlattenedElement[]): readonly string[] => {
+        const taxonomyTypeNames = elements
+            // only take elements that are not from snippets
+            .filter((m) => !m.fromSnippet)
+            .map((flattenedElement) => {
+                return match(flattenedElement)
+                    .returnType<string | undefined>()
+                    .with({ type: 'taxonomy' }, (taxonomyElement) => {
+                        if (!taxonomyElement.assignedTaxonomy) {
+                            throw Error(`Invalid taxonomy for element '${taxonomyElement.codename}'`);
+                        }
+
+                        return nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy);
+                    })
+                    .otherwise(() => undefined);
+            })
+            .filter(isNotUndefined)
+            .filter(uniqueFilter);
+
+        if (taxonomyTypeNames.length === 0) {
+            return [];
+        }
+
+        return [
+            importer.importType({
+                filePathOrPackage: `../${deliveryConfig.taxonomiesFolderName}/index.ts`,
+                importValue: taxonomyTypeNames.join(', ')
+            })
+        ];
     };
 
     const getContentTypeModelImports = (data: {
@@ -141,7 +199,12 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
         return {
             imports: sortAlphabetically(
-                [...getElementImports(data.contentType, data.flattenedElements), ...getSnippetImports(snippets)]
+                [
+                    ...getSystemTypeImports(),
+                    ...getReferencedTypesImports(data.contentType, data.flattenedElements),
+                    ...getReferencedTaxonomyImports(data.flattenedElements),
+                    ...getSnippetImports(snippets)
+                ]
                     .filter(isNotUndefined)
                     .filter(uniqueFilter),
                 (importValue) => importValue
@@ -164,7 +227,11 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
         return {
             imports: sortAlphabetically(
-                [...getElementImports(data.snippet, data.flattenedElements), ...getSnippetImports(snippets)]
+                [
+                    ...getReferencedTypesImports(data.snippet, data.flattenedElements),
+                    ...getReferencedTaxonomyImports(data.flattenedElements),
+                    ...getSnippetImports(snippets)
+                ]
                     .filter(isNotUndefined)
                     .filter(uniqueFilter),
                 (importValue) => importValue
@@ -245,7 +312,7 @@ ${wrapComment(`
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItem}<
 ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
-'${contentType.codename}'>;
+'${contentType.codename}', ${sharedTypesConfig.languageCodenames}, ${sharedTypesConfig.collectionCodenames}, ${sharedTypesConfig.workflowCodenames}, ${sharedTypesConfig.workflowStepCodenames}>;
 `;
     };
 
@@ -330,6 +397,37 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
     };
 
     return {
-        generateModels
+        generateModels: (): {
+            contentTypeFiles: readonly GeneratedFile[];
+            snippetFiles: readonly GeneratedFile[];
+        } => {
+            return {
+                contentTypeFiles: config.environmentData.types.map((type) => createTypeModel(type)),
+                snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
+            };
+        },
+        getSystemFiles(): readonly GeneratedFile[] {
+            return [
+                {
+                    filename: `${deliveryConfig.systemTypesFolderName}/${deliveryConfig.typesFilename}.ts`,
+                    text: `
+                ${wrapComment(`\n * Type representing all languages\n`)}
+                ${getLanguageCodenamesType(config.environmentData.languages)}
+
+                ${wrapComment(`\n * Type representing all content types\n`)}
+                ${getContentTypeCodenamesType(config.environmentData.types)}
+
+                ${wrapComment(`\n * Type representing all collections\n`)}
+                ${getCollectionCodenamesType(config.environmentData.collections)}
+
+                ${wrapComment(`\n * Type representing all workflows\n`)}
+                ${getWorkflowCodenamesType(config.environmentData.workflows)}
+
+                ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
+                ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
+            `
+                }
+            ];
+        }
     };
 }

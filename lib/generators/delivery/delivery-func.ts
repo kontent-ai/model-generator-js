@@ -47,14 +47,15 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
 
-    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution, environmentInfo } = await getFilesAsync(config);
+    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution, environmentInfo, systemFiles } = await getFilesAsync(config);
 
     await createFilesAsync(
         {
             contentTypeFiles,
             snippetFiles,
             taxonomyFiles,
-            environmentInfo
+            environmentInfo,
+            systemFiles
         },
         {
             formatOptions: config.formatOptions,
@@ -71,6 +72,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     readonly contentTypeFiles: readonly GeneratedFile[];
     readonly snippetFiles: readonly GeneratedFile[];
     readonly taxonomyFiles: readonly GeneratedFile[];
+    readonly systemFiles: readonly GeneratedFile[];
     readonly moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -83,23 +85,31 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 
-    const [taxonomies, types, snippets] = await Promise.all([
+    const [taxonomies, types, snippets, languages, collections, workflows] = await Promise.all([
         kontentFetcher.getTaxonomiesAsync(),
         kontentFetcher.getTypesAsync(),
-        kontentFetcher.getSnippetsAsync()
+        kontentFetcher.getSnippetsAsync(),
+        kontentFetcher.getLanguagesAsync(),
+        kontentFetcher.getCollectionsAsync(),
+        kontentFetcher.getWorkflowsAsync()
     ]);
 
-    const { contentTypeFiles, snippetFiles } = deliveryContentTypeGenerator({
+    const deliveryGenerator = deliveryContentTypeGenerator({
         moduleResolution: moduleResolution,
         environmentData: {
             environment: environmentInfo,
-            types: types,
-            snippets: snippets,
-            taxonomies: taxonomies
+            types,
+            snippets,
+            taxonomies,
+            languages,
+            collections,
+            workflows
         },
         fileResolvers: config.fileResolvers,
         nameResolvers: config.nameResolvers
-    }).generateModels();
+    });
+
+    const { contentTypeFiles, snippetFiles } = deliveryGenerator.generateModels();
 
     const taxonomyFiles = deliveryTaxonomyGenerator({
         moduleResolution: moduleResolution,
@@ -116,12 +126,14 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         snippetFiles,
         taxonomyFiles,
         moduleResolution,
-        environmentInfo
+        environmentInfo,
+        systemFiles: deliveryGenerator.getSystemFiles()
     };
 }
 
 async function createFilesAsync(
     data: {
+        readonly systemFiles: readonly GeneratedFile[];
         readonly contentTypeFiles: readonly GeneratedFile[];
         readonly snippetFiles: readonly GeneratedFile[];
         readonly taxonomyFiles: readonly GeneratedFile[];
@@ -147,7 +159,17 @@ async function createFilesAsync(
         ...data.contentTypeFiles,
         ...data.snippetFiles,
         ...data.taxonomyFiles,
+        // system files
+        ...data.systemFiles,
         // barrel files
+        {
+            filename: `${deliveryConfig.systemTypesFolderName}/${coreConfig.barrelExportFilename}`,
+            text: importer.getBarrelExportCode([
+                ...data.systemFiles.map((m) => {
+                    return `./${getFilenameFromPath(m.filename)}`;
+                })
+            ])
+        },
         {
             filename: `${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`,
             text: importer.getBarrelExportCode([
@@ -177,7 +199,8 @@ async function createFilesAsync(
             text: importer.getBarrelExportCode([
                 `./${deliveryConfig.contentTypesFolderName}/index`,
                 `./${deliveryConfig.contentTypeSnippetsFolderName}/index`,
-                `./${deliveryConfig.taxonomiesFolderName}/index`
+                `./${deliveryConfig.taxonomiesFolderName}/index`,
+                `./${deliveryConfig.systemTypesFolderName}/index`
             ])
         }
     ]);

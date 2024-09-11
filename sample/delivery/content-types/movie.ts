@@ -14,8 +14,9 @@
 **/
 
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { Actor } from './actor.js';
-import type { Releasecategory } from '../taxonomies/releasecategory.js';
+import type { Actor } from './index.js';
+import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery-types.js';
+import type { Releasecategory } from '../taxonomies/index.js';
 
 /**
  * Movie
@@ -98,5 +99,9 @@ export type Movie = IContentItem<
          */
         releasecategory: Elements.TaxonomyElement<Releasecategory>;
     },
-    'movie'
+    'movie',
+    LanguageCodenames,
+    CollectionCodenames,
+    WorkflowCodenames,
+    WorkflowStepCodenames
 >;

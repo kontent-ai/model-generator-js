@@ -14,6 +14,7 @@
 **/
 
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
+import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery-types.js';
 
 /**
  * Actor
@@ -57,5 +58,9 @@ export type Actor = IContentItem<
          */
         photo: Elements.AssetsElement;
     },
-    'actor'
+    'actor',
+    LanguageCodenames,
+    CollectionCodenames,
+    WorkflowCodenames,
+    WorkflowStepCodenames
 >;

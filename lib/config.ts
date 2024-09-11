@@ -2,6 +2,14 @@ export const coreConfig = {
     barrelExportFilename: 'index.ts'
 } as const;
 
+export const sharedTypesConfig = {
+    languageCodenames: 'LanguageCodenames',
+    collectionCodenames: 'CollectionCodenames',
+    workflowCodenames: 'WorkflowCodenames',
+    workflowStepCodenames: 'WorkflowStepCodenames',
+    contentTypeCodenames: 'ContentTypeCodenames'
+};
+
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
     migrationItemsFolderName: `content-types`,
@@ -17,11 +25,6 @@ export const migrationConfig = {
     },
 
     localTypeNames: {
-        languageCodenames: 'LanguageCodenames',
-        collectionCodenames: 'CollectionCodenames',
-        workflowCodenames: 'WorkflowCodenames',
-        workflowStepCodenames: 'WorkflowStepCodenames',
-        contentTypeCodenames: 'ContentTypeCodenames',
         system: 'ItemSystem',
         item: 'Item',
         codename: 'TCodename',
@@ -34,6 +37,8 @@ export const deliveryConfig = {
     contentTypesFolderName: `content-types`,
     contentTypeSnippetsFolderName: `content-type-snippets`,
     taxonomiesFolderName: `taxonomies`,
+    systemTypesFolderName: 'system',
+    typesFilename: 'delivery-types',
 
     sdkTypes: {
         contentItem: 'IContentItem',

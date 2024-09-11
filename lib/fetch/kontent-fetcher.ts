@@ -37,8 +37,8 @@ export function kontentFetcher(config: KontentFetcherConfig) {
     return {
         async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
             const projectInformation = (await client.environmentInformation().toPromise()).data;
-            console.log(`Project '${chalk.yellow(toSafeComment(projectInformation.project.name))}'`);
-            console.log(`Environment '${chalk.yellow(toSafeComment(projectInformation.project.environment))}'\n`);
+            console.log(`Project '${chalk.cyan(toSafeComment(projectInformation.project.name))}'`);
+            console.log(`Environment '${chalk.cyan(toSafeComment(projectInformation.project.environment))}'\n`);
             return projectInformation.project;
         },
         async getItemsAsync(): Promise<readonly Readonly<ContentItemModels.ContentItem>[]> {
