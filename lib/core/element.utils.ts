@@ -100,7 +100,7 @@ function extractLinkedItemsAllowedTypes(
     types: readonly Readonly<ContentTypeModels.ContentType>[]
 ): readonly Readonly<ContentTypeModels.ContentType>[] {
     const allowedTypeIds = match(element)
-        .returnType<Readonly<string>[]>()
+        .returnType<readonly string[]>()
         .with({ type: 'modular_content' }, (linkedItemsElement) => {
             return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
         })
