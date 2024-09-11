@@ -13,4 +13,4 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './delivery-types.js';
+export * from './delivery.codenames.js';

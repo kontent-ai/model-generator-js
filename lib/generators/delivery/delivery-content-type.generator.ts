@@ -89,7 +89,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     const getSystemTypeImports = (): readonly string[] => {
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.typesFilename}.ts`,
+                filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.coreCodenamesFilename}.ts`,
                 importValue: [
                     sharedTypesConfig.collectionCodenames,
                     sharedTypesConfig.languageCodenames,
@@ -378,15 +378,18 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
             .with({ type: 'multiple_choice' }, () => 'MultipleChoiceElement')
             .with({ type: 'url_slug' }, () => 'UrlSlugElement')
             .with({ type: 'taxonomy' }, (taxonomyElement) => {
-                const taxonomyName = getTaxonomyTypeName(taxonomyElement);
-                return taxonomyName ? `TaxonomyElement<${taxonomyName}>` : `TaxonomyElement`;
+                if (!taxonomyElement.assignedTaxonomy) {
+                    return `TaxonomyElement`;
+                }
+
+                return `TaxonomyElement<${getTaxonomyTypeName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
             })
             .with({ type: 'custom' }, () => 'CustomElement')
             .otherwise(() => undefined);
     };
 
-    const getTaxonomyTypeName = (element: FlattenedElement): string | undefined => {
-        return element.assignedTaxonomy ? nameResolvers.taxonomy(element.assignedTaxonomy) : undefined;
+    const getTaxonomyTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
+        return nameResolvers.taxonomy(taxonomy);
     };
 
     const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {
@@ -410,7 +413,7 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
         getSystemFiles(): readonly GeneratedFile[] {
             return [
                 {
-                    filename: `${deliveryConfig.systemTypesFolderName}/${deliveryConfig.typesFilename}.ts`,
+                    filename: `${deliveryConfig.systemTypesFolderName}/${deliveryConfig.coreCodenamesFilename}.ts`,
                     text: `
                 ${wrapComment(`\n * Type representing all languages\n`)}
                 ${getLanguageCodenamesType(config.environmentData.languages)}

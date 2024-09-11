@@ -15,7 +15,7 @@
 
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
 import type { Actor } from './index.js';
-import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery-types.js';
+import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery.codenames.js';
 import type { Releasecategory } from '../taxonomies/index.js';
 
 /**
@@ -106,7 +106,7 @@ export type Movie = IContentItem<
          * Codename: releasecategory
          * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
          */
-        readonly releasecategory: Elements.TaxonomyElement<Releasecategory>;
+        readonly releasecategory: Elements.TaxonomyElement<Releasecategory, 'releasecategory'>;
     },
     'movie',
     LanguageCodenames,

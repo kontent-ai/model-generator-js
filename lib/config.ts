@@ -38,7 +38,7 @@ export const deliveryConfig = {
     contentTypeSnippetsFolderName: `content-type-snippets`,
     taxonomiesFolderName: `taxonomies`,
     systemTypesFolderName: 'system',
-    typesFilename: 'delivery-types',
+    coreCodenamesFilename: 'delivery.codenames',
 
     sdkTypes: {
         contentItem: 'IContentItem',

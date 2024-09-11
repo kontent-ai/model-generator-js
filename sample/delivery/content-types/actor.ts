@@ -14,7 +14,7 @@
 **/
 
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery-types.js';
+import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery.codenames.js';
 
 /**
  * Actor
