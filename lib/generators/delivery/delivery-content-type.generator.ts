@@ -28,6 +28,8 @@ interface ExtractImportsResult {
     readonly contentTypeExtends: string | undefined;
 }
 
+type ContentTypeOrSnippet = Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>;
+
 export interface DeliveryContentTypeGeneratorConfig {
     readonly moduleResolution: ModuleResolution;
 
@@ -72,7 +74,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     } => {
         return {
             contentTypeFiles: config.environmentData.types.map((type) => createTypeModel(type)),
-            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createTypeModel(contentTypeSnippet))
+            snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
         };
     };
 
@@ -85,10 +87,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         });
     };
 
-    const getElementImports = (
-        typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>,
-        elements: readonly FlattenedElement[]
-    ): readonly string[] => {
+    const getElementImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
         return (
             elements
                 // only take elements that are not from snippets
@@ -119,7 +118,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
                                     return importer.importType({
                                         filePathOrPackage:
-                                            typeOrSnippet instanceof ContentTypeModels.ContentType
+                                            typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
                                                 ? `../${deliveryConfig.contentTypesFolderName}/${referencedTypeFilename}.ts`
                                                 : `./${referencedTypeFilename}.ts`,
                                         importValue: `${nameResolvers.contentType(allowedContentType)}`
@@ -134,96 +133,154 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         );
     };
 
-    const getContentTypeImports = (data: {
-        readonly typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
+    const getContentTypeModelImports = (data: {
+        readonly contentType: Readonly<ContentTypeModels.ContentType>;
         readonly flattenedElements: readonly FlattenedElement[];
     }): ExtractImportsResult => {
         const snippets = data.flattenedElements.map((m) => m.fromSnippet).filter(isNotUndefined);
 
         return {
             imports: sortAlphabetically(
-                [...getElementImports(data.typeOrSnippet, data.flattenedElements), ...getSnippetImports(snippets)]
+                [...getElementImports(data.contentType, data.flattenedElements), ...getSnippetImports(snippets)]
                     .filter(isNotUndefined)
                     .filter(uniqueFilter),
                 (importValue) => importValue
             ),
-            contentTypeExtends:
-                data.typeOrSnippet instanceof ContentTypeModels.ContentType && snippets.length
-                    ? `& ${sortAlphabetically(
-                          snippets.map((snippet) => nameResolvers.snippet(snippet)).filter(uniqueFilter),
-                          (snippetName) => snippetName
-                      ).join(' & ')}`
-                    : undefined,
-            typeName:
-                data.typeOrSnippet instanceof ContentTypeModels.ContentType
-                    ? nameResolvers.contentType(data.typeOrSnippet)
-                    : nameResolvers.snippet(data.typeOrSnippet)
+            contentTypeExtends: snippets.length
+                ? `& ${sortAlphabetically(
+                      snippets.map((snippet) => nameResolvers.snippet(snippet)).filter(uniqueFilter),
+                      (snippetName) => snippetName
+                  ).join(' & ')}`
+                : undefined,
+            typeName: nameResolvers.contentType(data.contentType)
         };
     };
 
-    const getDeliverySdkContentTypeImports = (flattenedElements: readonly FlattenedElement[]): readonly string[] => {
-        return sortAlphabetically(
-            [deliveryConfig.sdkTypes.contentItem, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])],
-            (m) => m
-        );
+    const getSnippetModelImports = (data: {
+        readonly snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
+        readonly flattenedElements: readonly FlattenedElement[];
+    }): ExtractImportsResult => {
+        const snippets = data.flattenedElements.map((m) => m.fromSnippet).filter(isNotUndefined);
+
+        return {
+            imports: sortAlphabetically(
+                [...getElementImports(data.snippet, data.flattenedElements), ...getSnippetImports(snippets)]
+                    .filter(isNotUndefined)
+                    .filter(uniqueFilter),
+                (importValue) => importValue
+            ),
+            contentTypeExtends: undefined,
+            typeName: nameResolvers.snippet(data.snippet)
+        };
     };
 
-    const getModelCode = (
-        typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>
-    ): string => {
+    const getDeliverySdkImports = (
+        typeOrSnippet: ContentTypeOrSnippet,
+        flattenedElements: readonly FlattenedElement[]
+    ): readonly string[] => {
+        const mainType =
+            typeOrSnippet instanceof ContentTypeModels.ContentType
+                ? deliveryConfig.sdkTypes.contentItem
+                : deliveryConfig.sdkTypes.contentItemElements;
+
+        return sortAlphabetically([mainType, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])], (m) => m);
+    };
+
+    const getSnippetCode = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): string => {
         const flattenedElements = getFlattenedElements(
-            typeOrSnippet.elements,
+            snippet.elements,
             config.environmentData.snippets,
             config.environmentData.taxonomies,
             config.environmentData.types
         );
 
-        const contentTypeImports = getContentTypeImports({
-            typeOrSnippet,
-            flattenedElements: flattenedElements
+        const importsResult = getSnippetModelImports({
+            snippet,
+            flattenedElements
         });
 
         return `
 ${importer.importType({
     filePathOrPackage: deliveryConfig.npmPackageName,
-    importValue: `${getDeliverySdkContentTypeImports(flattenedElements).join(', ')}`
+    importValue: `${getDeliverySdkImports(snippet, flattenedElements).join(', ')}`
 })}
-${contentTypeImports.imports.join('\n')}
+${importsResult.imports.join('\n')}
 
 ${wrapComment(`
-* ${typeOrSnippet.name}
+* ${snippet.name}
 * 
-* Id: ${typeOrSnippet.id}
-* Codename: ${typeOrSnippet.codename}    
+* Id: ${snippet.id}
+* Codename: ${snippet.codename}    
 `)}
-export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentItem}<{
-    ${getElementsCode(flattenedElements)}
-}>${contentTypeImports.contentTypeExtends ? ` ${contentTypeImports.contentTypeExtends}` : ''};
+export interface ${importsResult.typeName} extends ${deliveryConfig.sdkTypes.contentItemElements}
+${getElementsCode(flattenedElements)};
 `;
     };
 
-    const createTypeModel = (
-        type: Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>
-    ): GeneratedFile => {
+    const getContentTypeCode = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
+        const flattenedElements = getFlattenedElements(
+            contentType.elements,
+            config.environmentData.snippets,
+            config.environmentData.taxonomies,
+            config.environmentData.types
+        );
+
+        const importsResult = getContentTypeModelImports({
+            contentType,
+            flattenedElements
+        });
+
+        return `
+${importer.importType({
+    filePathOrPackage: deliveryConfig.npmPackageName,
+    importValue: `${getDeliverySdkImports(contentType, flattenedElements).join(', ')}`
+})}
+${importsResult.imports.join('\n')}
+
+${wrapComment(`
+* ${contentType.name}
+* 
+* Id: ${contentType.id}
+* Codename: ${contentType.codename}    
+`)}
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItem}<
+${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
+'${contentType.codename}'>;
+`;
+    };
+
+    const createTypeModel = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {
             filename: `${deliveryConfig.contentTypesFolderName}/${fileResolvers.contentType(type, true)}`,
-            text: getModelCode(type)
+            text: getContentTypeCode(type)
+        };
+    };
+
+    const createSnippetModel = (type: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): GeneratedFile => {
+        return {
+            filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.contentType(type, true)}`,
+            text: getSnippetCode(type)
         };
     };
 
     const getElementsCode = (flattenedElements: readonly FlattenedElement[]): string => {
+        const filteredElements = flattenedElements
+            // filter out elements that are from snippets
+            .filter((m) => !m.fromSnippet);
+
+        if (filteredElements.length === 0) {
+            return `Record<string, never>`;
+        }
+
         return (
-            flattenedElements
-                // filter out elements that are from snippets
-                .filter((m) => !m.fromSnippet)
-                .reduce<string>((code, element) => {
-                    const mappedType = mapElementType(element);
+            filteredElements.reduce<string>((code, element) => {
+                const mappedType = mapElementType(element);
 
-                    if (!mappedType) {
-                        return code;
-                    }
+                if (!mappedType) {
+                    return code;
+                }
 
-                    return (code += `
+                return (code += `
                 ${wrapComment(`
                 * ${element.title} (${element.type})
                 * 
@@ -232,7 +289,7 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
                 * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
                 `)} 
                 ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
-                }, '')
+            }, '{') + '}'
         );
     };
 
@@ -242,6 +299,9 @@ export type ${contentTypeImports.typeName} = ${deliveryConfig.sdkTypes.contentIt
             .with({ type: 'text' }, () => 'TextElement')
             .with({ type: 'number' }, () => 'NumberElement')
             .with({ type: 'modular_content' }, (linkedItemsElement) => {
+                return `LinkedItemsElement<${getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes ?? []).join(' | ')}>`;
+            })
+            .with({ type: 'subpages' }, (linkedItemsElement) => {
                 return `LinkedItemsElement<${getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes ?? []).join(' | ')}>`;
             })
             .with({ type: 'asset' }, () => 'AssetsElement')

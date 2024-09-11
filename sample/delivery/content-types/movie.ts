@@ -14,7 +14,7 @@
 **/
 
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { Actor } from '../content-types/actor.js';
+import type { Actor } from './actor.js';
 import type { Releasecategory } from '../taxonomies/releasecategory.js';
 
 /**
@@ -23,77 +23,80 @@ import type { Releasecategory } from '../taxonomies/releasecategory.js';
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export type Movie = IContentItem<{
-    /**
-     * Title (text)
-     *
-     * Required: true
-     * Codename: title
-     * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
-     */
-    title: Elements.TextElement;
-    /**
-     * Plot (rich_text)
-     *
-     * Required: false
-     * Codename: plot
-     * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
-     */
-    plot: Elements.RichTextElement;
-    /**
-     * Released (date_time)
-     *
-     * Required: false
-     * Codename: released
-     * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
-     */
-    released: Elements.DateTimeElement;
-    /**
-     * Length (number)
-     *
-     * Required: false
-     * Codename: length
-     * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
-     */
-    length: Elements.NumberElement;
-    /**
-     * Poster (asset)
-     *
-     * Required: false
-     * Codename: poster
-     * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
-     */
-    poster: Elements.AssetsElement;
-    /**
-     * Category (multiple_choice)
-     *
-     * Required: false
-     * Codename: category
-     * Id: 9821c252-6414-f549-c17f-cc171dd87713
-     */
-    category: Elements.MultipleChoiceElement;
-    /**
-     * Stars (modular_content)
-     *
-     * Required: false
-     * Codename: stars
-     * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
-     */
-    stars: Elements.LinkedItemsElement<Actor | Movie>;
-    /**
-     * SeoName (url_slug)
-     *
-     * Required: false
-     * Codename: seoname
-     * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
-     */
-    seoname: Elements.UrlSlugElement;
-    /**
-     * ReleaseCategory (taxonomy)
-     *
-     * Required: false
-     * Codename: releasecategory
-     * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
-     */
-    releasecategory: Elements.TaxonomyElement<Releasecategory>;
-}>;
+export type Movie = IContentItem<
+    {
+        /**
+         * Title (text)
+         *
+         * Required: true
+         * Codename: title
+         * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
+         */
+        title: Elements.TextElement;
+        /**
+         * Plot (rich_text)
+         *
+         * Required: false
+         * Codename: plot
+         * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
+         */
+        plot: Elements.RichTextElement;
+        /**
+         * Released (date_time)
+         *
+         * Required: false
+         * Codename: released
+         * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
+         */
+        released: Elements.DateTimeElement;
+        /**
+         * Length (number)
+         *
+         * Required: false
+         * Codename: length
+         * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
+         */
+        length: Elements.NumberElement;
+        /**
+         * Poster (asset)
+         *
+         * Required: false
+         * Codename: poster
+         * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
+         */
+        poster: Elements.AssetsElement;
+        /**
+         * Category (multiple_choice)
+         *
+         * Required: false
+         * Codename: category
+         * Id: 9821c252-6414-f549-c17f-cc171dd87713
+         */
+        category: Elements.MultipleChoiceElement;
+        /**
+         * Stars (modular_content)
+         *
+         * Required: false
+         * Codename: stars
+         * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
+         */
+        stars: Elements.LinkedItemsElement<Actor | Movie>;
+        /**
+         * SeoName (url_slug)
+         *
+         * Required: false
+         * Codename: seoname
+         * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
+         */
+        seoname: Elements.UrlSlugElement;
+        /**
+         * ReleaseCategory (taxonomy)
+         *
+         * Required: false
+         * Codename: releasecategory
+         * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
+         */
+        releasecategory: Elements.TaxonomyElement<Releasecategory>;
+    },
+    'movie'
+>;

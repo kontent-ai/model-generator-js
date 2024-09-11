@@ -37,6 +37,7 @@ export const deliveryConfig = {
 
     sdkTypes: {
         contentItem: 'IContentItem',
+        contentItemElements: 'IContentItemElements',
         elements: 'Elements'
     }
 } as const;

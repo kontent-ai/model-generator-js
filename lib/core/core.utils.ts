@@ -35,23 +35,27 @@ export function sortAlphabetically<T>(arrayToSort: readonly T[], propertySelecto
 }
 
 export function toPascalCase(text: string): string {
-    return toSafeStringCode(
-        `${text}`
-            .toLowerCase()
-            .replace(new RegExp(/[-_]+/, 'g'), ' ')
-            .replace(new RegExp(/[^\w\s]/, 'g'), '')
-            .replace(new RegExp(/\s+(.)(\w*)/, 'g'), ($1, $2, $3) => `${($2 as string).toUpperCase() + $3}`)
-            .replace(new RegExp(/\w/), (s) => s.toUpperCase())
+    return prefixWithUnderscoreWhenStartsWithNonAlpha(
+        toSafeStringCode(
+            `${text}`
+                .toLowerCase()
+                .replace(new RegExp(/[-_]+/, 'g'), ' ')
+                .replace(new RegExp(/[^\w\s]/, 'g'), '')
+                .replace(new RegExp(/\s+(.)(\w*)/, 'g'), ($1, $2, $3) => `${($2 as string).toUpperCase() + $3}`)
+                .replace(new RegExp(/\w/), (s) => s.toUpperCase())
+        )
     );
 }
 
 export function toCamelCase(text: string): string {
-    return toSafeStringCode(
-        text
-            .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
-                return index === 0 ? word.toLowerCase() : word.toUpperCase();
-            })
-            .replace(/\s+/g, '')
+    return prefixWithUnderscoreWhenStartsWithNonAlpha(
+        toSafeStringCode(
+            text
+                .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+                    return index === 0 ? word.toLowerCase() : word.toUpperCase();
+                })
+                .replace(/\s+/g, '')
+        )
     );
 }
 export function toGuidelinesComment(guidelines: string): string {
@@ -63,24 +67,19 @@ export function getStringOrUndefined(text?: string): string {
 }
 
 export function toSafePropertyName(value: string): string {
-    const replaceContent = '';
-    const withoutNumbers = value.replace(/^\d+/, replaceContent);
-    const propertyName = withoutNumbers
-        .replace(/[\s-]/g, replaceContent)
-        .replace(/[^a-zA-Z0-9_]/g, replaceContent)
-        .toLowerCase();
+    const propertyName = toSafeStringCode(value);
 
     if (propertyName.length === 0) {
         // to prevent empty string being used as property name, use hash
         return getPropertyStringHash(value);
     }
 
-    return propertyName;
+    return prefixWithUnderscoreWhenStartsWithNonAlpha(value);
 }
 
 export function toSafePropertyValue(value: string): string {
-    const replaceContent = '';
-    return value.replace(/'/g, replaceContent);
+    const replaceWith = '';
+    return value.replace(/'/g, replaceWith);
 }
 
 export function toOutputDirPath(outputDir?: string): string {
@@ -92,8 +91,15 @@ function removeLineEndings(value: string): string {
 }
 
 function toSafeStringCode(text: string): string {
-    const replaceContent = '';
-    return text.replace(/[\s-]/g, replaceContent).replace(/[^a-zA-Z0-9_]/g, replaceContent);
+    const replaceWith = '';
+    return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
+}
+
+export function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string {
+    if (/^[^a-zA-Z]/.test(text)) {
+        return `_${text}`;
+    }
+    return text;
 }
 
 function getPropertyStringHash(text: string): string {
