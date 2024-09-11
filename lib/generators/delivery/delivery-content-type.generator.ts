@@ -367,14 +367,25 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
             .with({ type: 'text' }, () => 'TextElement')
             .with({ type: 'number' }, () => 'NumberElement')
             .with({ type: 'modular_content' }, (linkedItemsElement) => {
+                if (!linkedItemsElement.allowedContentTypes?.length) {
+                    return 'LinkedItemsElement';
+                }
                 return `LinkedItemsElement<${getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes ?? []).join(' | ')}>`;
             })
             .with({ type: 'subpages' }, (linkedItemsElement) => {
+                if (!linkedItemsElement.allowedContentTypes?.length) {
+                    return 'LinkedItemsElement';
+                }
                 return `LinkedItemsElement<${getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes ?? []).join(' | ')}>`;
             })
             .with({ type: 'asset' }, () => 'AssetsElement')
             .with({ type: 'date_time' }, () => 'DateTimeElement')
-            .with({ type: 'rich_text' }, () => 'RichTextElement')
+            .with({ type: 'rich_text' }, (richTextElement) => {
+                if (!richTextElement.allowedContentTypes?.length) {
+                    return 'RichTextElement';
+                }
+                return `RichTextElement<${getLinkedItemsAllowedTypes(richTextElement.allowedContentTypes ?? []).join(' | ')}>`;
+            })
             .with({ type: 'multiple_choice' }, (multipleChoiceElement) => {
                 if (!multipleChoiceElement.multipleChoiceOptions?.length) {
                     return 'MultipleChoiceElement';

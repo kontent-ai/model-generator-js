@@ -107,6 +107,9 @@ function extractLinkedItemsAllowedTypes(
         .with({ type: 'subpages' }, (linkedItemsElement) => {
             return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
         })
+        .with({ type: 'rich_text' }, (linkedItemsElement) => {
+            return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
+        })
         .otherwise(() => []);
 
     return allowedTypeIds.map((id) => types.find((m) => m.id === id)).filter(isNotUndefined);
