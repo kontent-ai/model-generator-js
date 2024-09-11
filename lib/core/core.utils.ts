@@ -67,14 +67,14 @@ export function getStringOrUndefined(text?: string): string {
 }
 
 export function toSafePropertyName(value: string): string {
-    const propertyName = toSafeStringCode(value);
+    const propertyName = toCamelCase(value);
 
     if (propertyName.length === 0) {
         // to prevent empty string being used as property name, use hash
         return getPropertyStringHash(value);
     }
 
-    return prefixWithUnderscoreWhenStartsWithNonAlpha(value);
+    return prefixWithUnderscoreWhenStartsWithNonAlpha(propertyName);
 }
 
 export function toSafePropertyValue(value: string): string {
