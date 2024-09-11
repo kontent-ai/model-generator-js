@@ -66,12 +66,12 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             export type ${toPascalCase(type.name)}Item = ${migrationConfig.localTypeNames.item}<
             '${type.codename}',
             {
-                ${getFlattenedElements(
-                    type.elements,
-                    config.environmentData.snippets,
-                    config.environmentData.taxonomies,
-                    config.environmentData.types
-                )
+                ${getFlattenedElements({
+                    elements: type.elements,
+                    snippets: config.environmentData.snippets,
+                    taxonomies: config.environmentData.taxonomies,
+                    types: config.environmentData.types
+                })
                     .map((element) => {
                         return `
                             ${wrapComment(`
