@@ -119,7 +119,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         ];
     };
 
-    const getReferencedTypesImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
+    const getReferencedTypeImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
         const referencedTypeNames = elements
             // only take elements that are not from snippets
             .filter((m) => !m.fromSnippet)
@@ -195,13 +195,13 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         readonly contentType: Readonly<ContentTypeModels.ContentType>;
         readonly flattenedElements: readonly FlattenedElement[];
     }): ExtractImportsResult => {
-        const snippets = data.flattenedElements.map((m) => m.fromSnippet).filter(isNotUndefined);
+        const snippets = data.flattenedElements.map((flattenedElement) => flattenedElement.fromSnippet).filter(isNotUndefined);
 
         return {
             imports: sortAlphabetically(
                 [
                     ...getSystemTypeImports(),
-                    ...getReferencedTypesImports(data.contentType, data.flattenedElements),
+                    ...getReferencedTypeImports(data.contentType, data.flattenedElements),
                     ...getReferencedTaxonomyImports(data.flattenedElements),
                     ...getSnippetImports(snippets)
                 ]
@@ -223,12 +223,12 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         readonly snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
         readonly flattenedElements: readonly FlattenedElement[];
     }): ExtractImportsResult => {
-        const snippets = data.flattenedElements.map((m) => m.fromSnippet).filter(isNotUndefined);
+        const snippets = data.flattenedElements.map((flattenedElement) => flattenedElement.fromSnippet).filter(isNotUndefined);
 
         return {
             imports: sortAlphabetically(
                 [
-                    ...getReferencedTypesImports(data.snippet, data.flattenedElements),
+                    ...getReferencedTypeImports(data.snippet, data.flattenedElements),
                     ...getReferencedTaxonomyImports(data.flattenedElements),
                     ...getSnippetImports(snippets)
                 ]
@@ -250,7 +250,10 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                 ? deliveryConfig.sdkTypes.contentItem
                 : deliveryConfig.sdkTypes.contentItemElements;
 
-        return sortAlphabetically([mainType, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])], (m) => m);
+        return sortAlphabetically(
+            [mainType, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])],
+            (importValue) => importValue
+        );
     };
 
     const getSnippetCode = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): string => {
@@ -398,14 +401,10 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
                     return `TaxonomyElement`;
                 }
 
-                return `TaxonomyElement<${getTaxonomyTypeName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
+                return `TaxonomyElement<${nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
             })
             .with({ type: 'custom' }, () => 'CustomElement')
             .otherwise(() => undefined);
-    };
-
-    const getTaxonomyTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        return nameResolvers.taxonomy(taxonomy);
     };
 
     const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {

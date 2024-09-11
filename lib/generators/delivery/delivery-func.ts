@@ -159,7 +159,6 @@ async function createFilesAsync(
         ...data.contentTypeFiles,
         ...data.snippetFiles,
         ...data.taxonomyFiles,
-        // system files
         ...data.systemFiles,
         // barrel files
         {

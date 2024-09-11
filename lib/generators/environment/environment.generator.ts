@@ -195,12 +195,12 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getContentTypeElements = (elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[]): string => {
-        const flattenedElements = getFlattenedElements(
-            elements,
-            config.environmentData.snippets,
-            config.environmentData.taxonomies,
-            config.environmentData.types
-        );
+        const flattenedElements = getFlattenedElements({
+            elements: elements,
+            snippets: config.environmentData.snippets,
+            taxonomies: config.environmentData.taxonomies,
+            types: config.environmentData.types
+        });
 
         return flattenedElements.reduce((code, element, index) => {
             const isLast = index === flattenedElements.length - 1;
