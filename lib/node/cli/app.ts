@@ -2,7 +2,7 @@
 import chalk from 'chalk';
 
 import { match } from 'ts-pattern';
-import { handleError } from '../../core/index.js';
+import { handleError } from '../../core/error.utils.js';
 import { deliveryActionAsync } from './actions/delivery-action.js';
 import { environmentActionAsync } from './actions/environment-action.js';
 import { itemsActionAsync } from './actions/items-action.js';

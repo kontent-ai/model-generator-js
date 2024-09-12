@@ -1,5 +1,5 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
-import { libMetadata } from '../meta/index.js';
+import { libMetadata } from '../meta/metadata.js';
 
 export function wrapComment(comment: string): string {
     return `/**${toSafeComment(comment)}*/`;

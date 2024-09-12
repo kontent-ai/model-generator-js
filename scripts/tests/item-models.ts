@@ -1,7 +1,9 @@
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { ModuleResolution, generateItemsAsync, handleError } from '../../lib/index.js';
+import { ModuleResolution } from '../../lib/core/core.models.js';
+import { handleError } from '../../lib/core/error.utils.js';
+import { generateItemsAsync } from '../../lib/generators/items/items-func.js';
 import { getEnvironmentRequiredValue } from '../utils/test.utils.js';
 
 const outputDir: string = './sample/items';

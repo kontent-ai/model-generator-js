@@ -1,5 +1,5 @@
-import { ModuleResolution } from '../../../core/index.js';
-import { generateMigrationModelsAsync } from '../../../generators/index.js';
+import { ModuleResolution } from '../../../core/core.models.js';
+import { generateMigrationModelsAsync } from '../../../generators/migration/migration-func.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function migrateActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {

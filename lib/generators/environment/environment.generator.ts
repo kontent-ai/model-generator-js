@@ -12,16 +12,10 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
-import {
-    FlattenedElement,
-    GeneratedFile,
-    getFlattenedElements,
-    getStringOrUndefined,
-    toGuidelinesComment,
-    toSafePropertyName,
-    toSafePropertyValue,
-    wrapComment
-} from '../../core/index.js';
+import { wrapComment } from '../../core/comment.utils.js';
+import { FlattenedElement, GeneratedFile } from '../../core/core.models.js';
+import { getStringOrUndefined, toGuidelinesComment, toSafePropertyName, toSafePropertyValue } from '../../core/core.utils.js';
+import { getFlattenedElements } from '../../core/element.utils.js';
 
 interface WorkflowStep {
     readonly name: string;

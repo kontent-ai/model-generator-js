@@ -3,7 +3,9 @@ import chalk from 'chalk';
 import * as fs from 'fs';
 import { dirname } from 'path';
 import { Options } from 'prettier';
-import { GeneratedFile, getEnvironmentInfoComment, toOutputDirPath } from '../core/index.js';
+import { getEnvironmentInfoComment } from '../core/comment.utils.js';
+import { GeneratedFile } from '../core/core.models.js';
+import { toOutputDirPath } from '../core/core.utils.js';
 import { formatCodeAsync } from '../format/formatter.js';
 
 export function fileManager(config: {

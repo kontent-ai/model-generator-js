@@ -14,7 +14,8 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { GeneratorManagementClient, toSafeComment } from '../core/index.js';
+import { toSafeComment } from '../core/comment.utils.js';
+import { GeneratorManagementClient } from '../core/core.models.js';
 
 interface KontentFetcherConfig {
     readonly environmentId: string;

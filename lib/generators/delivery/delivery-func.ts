@@ -2,21 +2,19 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
 import { coreConfig, deliveryConfig } from '../../config.js';
+import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { getDefaultModuleResolution, getFilenameFromPath } from '../../core/core.utils.js';
+import { importer as _importer } from '../../core/importer.js';
 import {
-    importer as _importer,
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
-    GeneratedFile,
-    getDefaultModuleResolution,
-    getFilenameFromPath,
-    ModuleResolution,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver
-} from '../../core/index.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { fileManager as _fileManager } from '../../files/index.js';
+} from '../../core/resolvers.js';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
 import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 

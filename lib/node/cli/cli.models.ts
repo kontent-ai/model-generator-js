@@ -1,4 +1,4 @@
-import { CliAction } from '../../core/index.js';
+import { CliAction } from '../../core/core.models.js';
 
 export interface Command {
     readonly name: string;

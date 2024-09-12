@@ -1,4 +1,4 @@
-import { getCliAction, getLibrary, getModuleResolution } from '../../core/index.js';
+import { getCliAction, getLibrary, getModuleResolution } from '../../core/core.utils.js';
 import { argumentsSetter } from './args/args-setter.js';
 import { CommandOption } from './cli.models.js';
 

@@ -1,5 +1,5 @@
-import { ModuleResolution } from '../../../core/index.js';
-import { generateEnvironmentModelsAsync } from '../../../generators/index.js';
+import { ModuleResolution } from '../../../core/core.models.js';
+import { generateEnvironmentModelsAsync } from '../../../generators/environment/environment-func.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {

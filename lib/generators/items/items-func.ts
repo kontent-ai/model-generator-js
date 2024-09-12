@@ -2,15 +2,11 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
 import { coreConfig, itemsConfig } from '../../config.js';
-import {
-    importer as _importer,
-    GeneratedFile,
-    getDefaultModuleResolution,
-    getFilenameFromPath,
-    ModuleResolution
-} from '../../core/index.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/index.js';
-import { fileManager as _fileManager } from '../../files/index.js';
+import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { getDefaultModuleResolution, getFilenameFromPath } from '../../core/core.utils.js';
+import { importer as _importer } from '../../core/importer.js';
+import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { itemsGenerator as _itemsGenerator } from './items.generator.js';
 
 export interface GenerateItemsModelsConfig {

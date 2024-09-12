@@ -10,25 +10,21 @@ import {
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match, P } from 'ts-pattern';
 import { deliveryConfig, sharedTypesConfig } from '../../config.js';
+import { wrapComment } from '../../core/comment.utils.js';
+import { FlattenedElement, GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { sortAlphabetically, toGuidelinesComment, uniqueFilter } from '../../core/core.utils.js';
+import { getFlattenedElements } from '../../core/element.utils.js';
+import { importer as _importer } from '../../core/importer.js';
 import {
-    importer as _importer,
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
-    FlattenedElement,
-    GeneratedFile,
-    getFlattenedElements,
     mapFilename,
     mapName,
-    ModuleResolution,
-    sortAlphabetically,
     TaxonomyNameResolver,
-    TaxonomyTypeFileNameResolver,
-    toGuidelinesComment,
-    uniqueFilter,
-    wrapComment
-} from '../../core/index.js';
+    TaxonomyTypeFileNameResolver
+} from '../../core/resolvers.js';
 import {
     getCollectionCodenamesType,
     getContentTypeCodenamesType,
