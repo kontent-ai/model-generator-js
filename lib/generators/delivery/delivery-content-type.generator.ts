@@ -9,7 +9,7 @@ import {
 } from '@kontent-ai/management-sdk';
 import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match, P } from 'ts-pattern';
-import { deliveryConfig, sharedTypesConfig } from '../../config.js';
+import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
 import { FlattenedElement, GeneratedFile, ModuleResolution } from '../../core/core.models.js';
 import { sortAlphabetically, toGuidelinesComment, uniqueFilter } from '../../core/core.utils.js';
@@ -105,7 +105,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/index.ts`,
+                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
                 importValue: snippets
                     .map((snippet) => nameResolvers.snippet(snippet))
                     .map((m) => m)
@@ -149,8 +149,8 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             importer.importType({
                 filePathOrPackage:
                     typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
-                        ? `../${deliveryConfig.contentTypesFolderName}/index.ts`
-                        : `./index.ts`,
+                        ? `../${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`
+                        : `./${coreConfig.barrelExportFilename}`,
                 importValue: referencedTypeNames.join(', ')
             })
         ];
@@ -181,7 +181,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.taxonomiesFolderName}/index.ts`,
+                filePathOrPackage: `../${deliveryConfig.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
                 importValue: taxonomyTypeNames.join(', ')
             })
         ];
