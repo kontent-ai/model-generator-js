@@ -8,7 +8,7 @@ export const sharedTypesConfig = {
     workflowCodenames: 'WorkflowCodenames',
     workflowStepCodenames: 'WorkflowStepCodenames',
     contentTypeCodenames: 'ContentTypeCodenames'
-};
+} as const;
 
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
