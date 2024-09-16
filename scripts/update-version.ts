@@ -15,7 +15,7 @@ function createVersionFile(date: Date, filePath: string, propertyName: string): 
     const src = `
 export const ${propertyName} = {
 	name: '${PackageJson.name}',
-    timestamp:  ${date.toUTCString()},
+    timestamp: '${date.toUTCString()}',
     version: '${PackageJson.version}'
 };
 `;
