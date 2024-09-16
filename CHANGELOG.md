@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.0.0-1](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0-0...v8.0.0-1) (2024-09-16)
+
+
+### Bug Fixes
+
+* Adds missing references for RichTextElement ([3b92689](https://github.com/kontent-ai/model-generator-js/commit/3b9268918de67a99bbc0831adf7fc17d76917723))
+
 ## [8.0.0-0](https://github.com/kontent-ai/model-generator-js/compare/v7.4.0...v8.0.0-0) (2024-09-16)
 
 
