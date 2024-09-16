@@ -122,19 +122,22 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             .map((flattenedElement) => {
                 return match(flattenedElement)
                     .returnType<string | string[]>()
-                    .with(P.union({ type: 'modular_content' }, { type: 'subpages' }), (linkedItemsOrSubpagesElement) => {
-                        return (linkedItemsOrSubpagesElement.allowedContentTypes ?? [])
-                            .filter((allowedContentType) => {
-                                // filter self-referencing types as they do not need to be importer
-                                if (allowedContentType.codename === typeOrSnippet.codename) {
-                                    return false;
-                                }
-                                return true;
-                            })
-                            .map((allowedContentType) => {
-                                return nameResolvers.contentType(allowedContentType);
-                            });
-                    })
+                    .with(
+                        P.union({ type: 'modular_content' }, { type: 'subpages' }, { type: 'rich_text' }),
+                        (alementWithAllowedContentTypes) => {
+                            return (alementWithAllowedContentTypes.allowedContentTypes ?? [])
+                                .filter((allowedContentType) => {
+                                    // filter self-referencing types as they do not need to be importer
+                                    if (allowedContentType.codename === typeOrSnippet.codename) {
+                                        return false;
+                                    }
+                                    return true;
+                                })
+                                .map((allowedContentType) => {
+                                    return nameResolvers.contentType(allowedContentType);
+                                });
+                        }
+                    )
                     .otherwise(() => []);
             })
             .flatMap((m) => m)
