@@ -71,7 +71,10 @@ function getFlattenedElement(
 }
 
 function isElementRequired(element: Readonly<ContentTypeElements.ContentTypeElementModel>): boolean {
-    return (<{ is_required?: boolean }>element)['is_required'] === true;
+    return match(element)
+        .returnType<boolean>()
+        .with({ is_required: true }, () => true)
+        .otherwise(() => false);
 }
 
 function getElementGuidelines(element: Readonly<ContentTypeElements.ContentTypeElementModel>): string | undefined {
