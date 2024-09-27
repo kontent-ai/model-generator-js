@@ -14,8 +14,8 @@ models you can generate:
 3. `environment` - Strongly typed objects representing all structural objects within an environment (i.e. content types, workflows,
    taxonomies ...). These models help you write scripts because they provide you a straightforward access to objects properties.
 4. `items` - Generates `Type` representing all available item codenames for each content type and object representing `id` and `codenames`
-   properties of all items. This makes it easy and convenient to reference items in your code. **It is not recommended to use this if your
-   environment contains high number of items.**
+   properties of all items. This makes it easy and convenient to reference items in your code.
+    > It is not recommended to use this if your environment contains high number of items.
 
 ## Installation
 
