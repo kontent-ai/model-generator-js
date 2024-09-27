@@ -58,7 +58,7 @@
         "ts-pattern": "5.4.0"
     },
     "devDependencies": {
-        "@kontent-ai/delivery-sdk": "15.1.0",
+        "@kontent-ai/delivery-sdk": "15.2.0",
         "@kontent-ai/migration-toolkit": "1.5.1",
         "@types/yargs": "17.0.33",
         "standard-version": "9.5.0",

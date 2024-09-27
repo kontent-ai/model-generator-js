@@ -15,9 +15,6 @@ export function getFlattenedElements(data: {
     readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
 }): readonly FlattenedElement[] {
     return data.elements
-        .filter((element) => {
-            return element.type !== 'guidelines';
-        })
         .flatMap<ElementWrapper>((element) => {
             if (element.type === 'snippet') {
                 const snippet = data.snippets.find((snippet) => snippet.id === element.snippet.id);
@@ -42,7 +39,10 @@ export function getFlattenedElements(data: {
         .map((element) => {
             return getFlattenedElement(element, data.taxonomies, data.types);
         })
-        .filter(isNotUndefined);
+        .filter(isNotUndefined)
+        .filter((element) => {
+            return element.type !== 'guidelines';
+        });
 }
 
 function getFlattenedElement(

@@ -245,9 +245,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         flattenedElements: readonly FlattenedElement[]
     ): readonly string[] => {
         const mainType =
-            typeOrSnippet instanceof ContentTypeModels.ContentType
-                ? deliveryConfig.sdkTypes.contentItem
-                : deliveryConfig.sdkTypes.contentItemElements;
+            typeOrSnippet instanceof ContentTypeModels.ContentType ? deliveryConfig.sdkTypes.contentItem : deliveryConfig.sdkTypes.snippet;
 
         return sortAlphabetically(
             [mainType, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])],
@@ -268,6 +266,8 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             flattenedElements
         });
 
+        const nameOfTypeRepresentingAllElementCodenames = getNameOfTypeRepresentingAllElementCodenames(snippet);
+
         return `
 ${importer.importType({
     filePathOrPackage: deliveryConfig.npmPackageName,
@@ -276,13 +276,18 @@ ${importer.importType({
 ${importsResult.imports.join('\n')}
 
 ${wrapComment(`
+* Type representing all available element codenames for ${snippet.name}
+`)}
+${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
+
+${wrapComment(`
 * ${snippet.name}
 * 
 * Id: ${snippet.id}
 * Codename: ${snippet.codename}    
 `)}
-export interface ${importsResult.typeName} extends ${deliveryConfig.sdkTypes.contentItemElements}
-${getElementsCode(flattenedElements)};
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
+${getElementsCode(flattenedElements)}>;
 `;
     };
 
@@ -299,12 +304,19 @@ ${getElementsCode(flattenedElements)};
             flattenedElements
         });
 
+        const nameOfTypeRepresentingAllElementCodenames = getNameOfTypeRepresentingAllElementCodenames(contentType);
+
         return `
 ${importer.importType({
     filePathOrPackage: deliveryConfig.npmPackageName,
     importValue: `${getDeliverySdkImports(contentType, flattenedElements).join(', ')}`
 })}
 ${importsResult.imports.join('\n')}
+
+${wrapComment(`
+* Type representing all available element codenames for ${contentType.name}
+`)}
+${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
 
 ${wrapComment(`
 * ${contentType.name}
@@ -314,7 +326,12 @@ ${wrapComment(`
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItem}<
 ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
-'${contentType.codename}', ${sharedTypesConfig.languageCodenames}, ${sharedTypesConfig.collectionCodenames}, ${sharedTypesConfig.workflowCodenames}, ${sharedTypesConfig.workflowStepCodenames}>;
+'${contentType.codename}', 
+${sharedTypesConfig.languageCodenames}, 
+${sharedTypesConfig.collectionCodenames},
+${sharedTypesConfig.workflowCodenames}, 
+${sharedTypesConfig.workflowStepCodenames}, 
+${nameOfTypeRepresentingAllElementCodenames}>;
 `;
     };
 
@@ -361,6 +378,27 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
                 readonly ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
             }, '{') + '}'
         );
+    };
+
+    const getNameOfTypeRepresentingAllElementCodenames = (typeOrSnippet: ContentTypeOrSnippet): string => {
+        return `${
+            typeOrSnippet instanceof ContentTypeModels.ContentType
+                ? nameResolvers.contentType(typeOrSnippet)
+                : nameResolvers.snippet(typeOrSnippet)
+        }ElementCodenames`;
+    };
+
+    const getContentTypeElementCodenamesType = (typeName: string, flattenedElements: readonly FlattenedElement[]): string => {
+        if (flattenedElements.length === 0) {
+            return `export type ${typeName} = never`;
+        }
+
+        const el = flattenedElements.find((m) => m.codename === 'link__f25fb651_eea8_4a0a_8e39_ac5a0f97ed72');
+        if (el) {
+            console.log(el);
+        }
+
+        return `export type ${typeName} = ${flattenedElements.map((element) => `'${element.codename}'`).join(' | ')};`;
     };
 
     const mapElementType = (element: FlattenedElement): string | undefined => {

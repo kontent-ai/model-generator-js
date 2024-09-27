@@ -19,6 +19,20 @@ import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, Workflo
 import type { Releasecategory } from '../taxonomies/index.js';
 
 /**
+ * Type representing all available element codenames for Movie
+ */
+export type MovieElementCodenames =
+    | 'title'
+    | 'plot'
+    | 'released'
+    | 'length'
+    | 'poster'
+    | 'category'
+    | 'stars'
+    | 'seoname'
+    | 'releasecategory';
+
+/**
  * Movie
  *
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
@@ -114,5 +128,6 @@ export type Movie = IContentItem<
     LanguageCodenames,
     CollectionCodenames,
     WorkflowCodenames,
-    WorkflowStepCodenames
+    WorkflowStepCodenames,
+    MovieElementCodenames
 >;
