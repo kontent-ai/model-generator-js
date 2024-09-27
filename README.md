@@ -14,42 +14,46 @@ models you can generate:
 3. `environment` - Strongly typed objects representing all structural objects within an environment (i.e. content types, workflows,
    taxonomies ...). These models help you write scripts because they provide you a straightforward access to objects properties.
 4. `items` - Generates `Type` representing all available item codenames for each content type and object representing `id` and `codenames`
-   properties of all items. This makes it easy and convenient to reference items in your code. It is not recommended to use this if your
-   environment contains high number of items.
+   properties of all items. This makes it easy and convenient to reference items in your code. _It is not recommended to use this if your
+   environment contains high number of items._
 
 ## Installation
 
-Install package globally so you can use it anywhere:
+Install as a `dev dependency` to your project or use `npx`
 
 ```bash
-npm i @kontent-ai/model-generator -g
+# Install as dev dependency
+npm i --save-dev @kontent-ai/model-generator
+
+# Run with npx
+npx @kontent-ai/model-generator@latest --help
 ```
 
-## Use with CLI
+## Usage
 
 Go to folder where you want to create models and run:
 
 ```bash
 # Models for Delivery SDK
-kontent-generate delivery-sdk --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest --environmentId=x --apiKey=y
 
 # Models for Migration Toolkit
-kontent-generate migration-toolkit --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --apiKey=y
 
 # Environment models used for scripting and strongly typed access to environment objects
-kontent-generate environment --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest environment --environmentId=x --apiKey=y
 
 # Items overview with ids / codenames and Types representing available item codenames
-kontent-generate items --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest items --environmentId=x --apiKey=y
 ```
 
 To learn what options are available use the `help` command:
 
 ```bash
-kontent-generate --help
+npx @kontent-ai/model-generator@latest  --help
 
 # or get help for specific command
-kontent-generate delivery-sdk --help
+npx @kontent-ai/model-generator@latest delivery-sdk --help
 ```
 
 ## Use in code
