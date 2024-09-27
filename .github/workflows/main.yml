@@ -3,10 +3,10 @@ on: [pull_request]
 jobs:
     build:
         runs-on: windows-latest
+        strategy:
+            matrix:
+                node-version: ['latest']
         steps:
-        - uses: actions/setup-node@v4
-                with:
-                 node-version: latest
             - uses: actions/checkout@v2
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
