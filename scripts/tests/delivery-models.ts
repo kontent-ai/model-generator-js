@@ -10,9 +10,7 @@ const outputDir: string = './sample/delivery';
 
 try {
     // needed to load .env environment to current process when run via package.json script
-    dotenv.config({
-        path: './.env'
-    });
+    dotenv.config();
 
     // delete existing models
     console.log(`Deleting existing folder '${chalk.yellow(outputDir)}'`);
