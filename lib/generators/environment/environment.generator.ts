@@ -104,7 +104,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${language.name}
                 `)}
-                ${language.codename}: {
+                ${toSafePropertyName(language.codename)}: {
                     name: '${toSafePropertyValue(language.name)}',
                     codename: '${language.codename}',
                     id: '${language.id}',
