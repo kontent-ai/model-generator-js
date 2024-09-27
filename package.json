@@ -22,7 +22,6 @@
         "Kontent Model Generator",
         "Kontent.ai strongly typed models"
     ],
-    "preferGlobal": true,
     "exports": "./dist/es2022/lib/public_api.js",
     "types": "./dist/es2022/lib/public_api.d.ts",
     "type": "module",
