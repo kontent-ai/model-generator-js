@@ -1,4 +1,5 @@
-import { getCliAction, getLibrary, getModuleResolution } from '../../core/core.utils.js';
+import { CliAction, LibraryType } from '../../core/core.models.js';
+import { ModuleResolution } from '../../public_api.js';
 import { argumentsSetter } from './args/args-setter.js';
 import { CommandOption } from './cli.models.js';
 
@@ -32,7 +33,7 @@ const addTimestampOption: CommandOption = {
 
 const moduleResolutionOption: CommandOption = {
     name: `moduleResolution`,
-    description: `Module resolution for imports. Available options are: '${getModuleResolution('node')}', '${getModuleResolution('nodeNext')}'`,
+    description: `Module resolution for imports. Available options are: '${'node' satisfies ModuleResolution}', '${'nodeNext' satisfies ModuleResolution}'`,
     type: 'string',
     isRequired: false
 };
@@ -46,27 +47,27 @@ const baseUrl: CommandOption = {
 
 export const cliArgs = argumentsSetter()
     .withCommand({
-        name: getCliAction('delivery-sdk'),
-        description: `Generates models for '${getLibrary('@kontent-ai/delivery-sdk')}' library`,
-        examples: [`kontent-generate ${getCliAction('delivery-sdk')} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
+        name: 'delivery-sdk',
+        description: `Generates models for '${'@kontent-ai/delivery-sdk' satisfies LibraryType}' library`,
+        examples: [`kontent-generate ${'delivery-sdk' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
         options: [environmentIdOption, apiKeyOption, addTimestampOption, moduleResolutionOption, outputDirOption, baseUrl]
     })
     .withCommand({
-        name: getCliAction('environment'),
+        name: 'environment',
         description: `Generates strongly typed models representing all objects in the environment. This is useful for creating custom tools or scripts where you need to reference objects within your environment`,
-        examples: [`kontent-generate ${getCliAction('environment')} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
+        examples: [`kontent-generate ${'environment' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
         options: [environmentIdOption, apiKeyOption, addTimestampOption, moduleResolutionOption, outputDirOption, baseUrl]
     })
     .withCommand({
-        name: getCliAction('migration-toolkit'),
-        description: `Generates models for '${getLibrary('@kontent-ai/migration-toolkit')}' library`,
-        examples: [`kontent-generate ${getCliAction('migration-toolkit')} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
+        name: 'migration-toolkit',
+        description: `Generates models for '${'@kontent-ai/migration-toolkit' satisfies LibraryType}' library`,
+        examples: [`kontent-generate ${'migration-toolkit' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
         options: [environmentIdOption, apiKeyOption, addTimestampOption, moduleResolutionOption, outputDirOption, baseUrl]
     })
     .withCommand({
-        name: getCliAction('items'),
+        name: 'items',
         description: `Overview of all items in the environment and their ids/codenames as well as Type representing all item codenames`,
-        examples: [`kontent-generate ${getCliAction('items')} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
+        examples: [`kontent-generate ${'items' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
         options: [environmentIdOption, apiKeyOption, addTimestampOption, moduleResolutionOption, outputDirOption, baseUrl]
     })
     .withOption({

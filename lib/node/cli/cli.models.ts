@@ -1,7 +1,7 @@
 import { CliAction } from '../../core/core.models.js';
 
-export interface Command {
-    readonly name: string;
+export interface Command<TAction extends string> {
+    readonly name: TAction;
     readonly description: string;
     readonly options: readonly CommandOption[];
     readonly examples: readonly string[];
@@ -15,9 +15,9 @@ export interface CommandOption {
     readonly type?: 'boolean' | 'number' | 'string';
 }
 
-export type CliArgumentsSetter = {
-    withCommand(command: Command): CliArgumentsSetter;
-    withOption(option: CommandOption): CliArgumentsSetter;
+export type CliArgumentsSetter<TAction extends string> = {
+    withCommand(command: Command<TAction>): CliArgumentsSetter<TAction>;
+    withOption(option: CommandOption): CliArgumentsSetter<TAction>;
     registerCommands(): void;
 };
 
