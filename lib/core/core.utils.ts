@@ -75,7 +75,7 @@ export function toOutputDirPath(outputDir: string | undefined): string {
 }
 
 function removeLineEndings(value: string): string {
-    return value.replace(/(\r\n|\n|\r)/gm, '');
+    return value.replace(/(\r\n|\n|\r)/g, '');
 }
 
 function toSafeStringCode(text: string): string {
