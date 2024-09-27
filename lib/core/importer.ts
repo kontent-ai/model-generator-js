@@ -23,7 +23,7 @@ export function importer(moduleResolution: ModuleResolution) {
             }
             return sortAlphabetically(filenames, (filename) => filename).reduce<string>((barrelCode, filename) => {
                 const path = parse(filename);
-                return (barrelCode += `export * from '${path.dir}/${path.name}${getExtensionForModuleResolution(moduleResolution)}';`);
+                return `${barrelCode} export * from '${path.dir}/${path.name}${getExtensionForModuleResolution(moduleResolution)}';`;
             }, '');
         }
     };
