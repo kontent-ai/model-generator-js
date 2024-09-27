@@ -29,10 +29,10 @@ export function toPascalCase(text: string): string {
         toSafeStringCode(
             text
                 .toLowerCase()
-                .replace(new RegExp(/[-_]+/, 'g'), ' ')
-                .replace(new RegExp(/[^\w\s]/, 'g'), '')
-                .replace(new RegExp(/\s+(.)(\w*)/, 'g'), ($1, $2, $3) => `${($2 as string).toUpperCase() + $3}`)
-                .replace(new RegExp(/\w/), (s) => s.toUpperCase())
+                .replace(/[-_]+/g, ' ')
+                .replace(/[^\w\s]/g, '')
+                .replace(/\s+(.)(\w*)/g, (_, $2, $3) => `${($2 as string).toUpperCase() + $3}`)
+                .replace(/\w/, (s) => s.toUpperCase())
         )
     );
 }
