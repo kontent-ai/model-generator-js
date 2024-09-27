@@ -2,7 +2,7 @@ name: Test
 on: [pull_request]
 jobs:
     build:
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
         strategy:
             matrix:
                 node-version: ['latest']
