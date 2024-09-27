@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import fs from 'fs';
-import PackageJson from '../package.json' assert { type: 'json' };
+import { name, version } from '../package.json' with { type: 'json' };
 
 const date = new Date();
 const versionFilePath = './lib/meta/metadata.ts';
@@ -10,13 +10,13 @@ createVersionFile(date, versionFilePath, versionProp);
 
 function createVersionFile(date: Date, filePath: string, propertyName: string): void {
     console.log(chalk.cyan(`\nCreating version file at '${filePath}' with prop '${propertyName}'`));
-    console.log(chalk.green(`Updating version ${chalk.yellow(PackageJson.version)}`));
+    console.log(chalk.green(`Updating version ${chalk.yellow(version)}`));
 
     const src = `
 export const ${propertyName} = {
-	name: '${PackageJson.name}',
+	name: '${name}',
     timestamp: '${date.toUTCString()}',
-    version: '${PackageJson.version}'
+    version: '${version}'
 };
 `;
 
