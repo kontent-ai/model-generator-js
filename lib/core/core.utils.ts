@@ -50,7 +50,7 @@ export function toGuidelinesComment(guidelines: string): string {
     return removeLineEndings(guidelines);
 }
 
-export function getStringOrUndefined(text?: string): string {
+export function getStringOrUndefined(text: string | undefined): string {
     return text ? `'${text}'` : 'undefined';
 }
 
@@ -70,7 +70,7 @@ export function toSafePropertyValue(value: string): string {
     return value.replace(/'/g, replaceWith);
 }
 
-export function toOutputDirPath(outputDir?: string): string {
+export function toOutputDirPath(outputDir: string | undefined): string {
     return outputDir ? `${outputDir}/`.replaceAll('//', '/') : `./`;
 }
 
