@@ -1,5 +1,5 @@
 import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
-import { match } from 'ts-pattern';
+import { match, P } from 'ts-pattern';
 import { FlattenedElement, MultipleChoiceOption } from './core.models.js';
 import { isNotUndefined } from './core.utils.js';
 
@@ -78,7 +78,10 @@ function isElementRequired(element: Readonly<ContentTypeElements.ContentTypeElem
 }
 
 function getElementGuidelines(element: Readonly<ContentTypeElements.ContentTypeElementModel>): string | undefined {
-    return (<{ guidelines?: string }>element)['guidelines'];
+    return match(element)
+        .returnType<string | undefined>()
+        .with({ guidelines: P.string }, (element) => element.guidelines)
+        .otherwise(() => undefined);
 }
 
 function getElementTitle(
