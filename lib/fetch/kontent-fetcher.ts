@@ -24,16 +24,12 @@ interface KontentFetcherConfig {
 }
 
 export function kontentFetcher(config: KontentFetcherConfig) {
-    const getManagementClient = (): GeneratorManagementClient => {
-        return createManagementClient({
-            environmentId: config.environmentId,
-            apiKey: config.apiKey,
-            baseUrl: config.baseUrl,
-            httpService: new HttpService({ logErrorsToConsole: false })
-        });
-    };
-
-    const client = getManagementClient();
+    const client: GeneratorManagementClient = createManagementClient({
+        environmentId: config.environmentId,
+        apiKey: config.apiKey,
+        baseUrl: config.baseUrl,
+        httpService: new HttpService({ logErrorsToConsole: false })
+    });
 
     return {
         async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
