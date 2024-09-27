@@ -5,7 +5,7 @@ jobs:
         runs-on: windows-latest
         strategy:
             matrix:
-                node-version: [lts]
+                node-version: [lts/*]
         steps:
             - uses: actions/checkout@v2
             - name: Use Node.js ${{ matrix.node-version }}
