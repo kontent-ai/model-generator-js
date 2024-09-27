@@ -25,7 +25,7 @@ export function sortAlphabetically<T>(arrayToSort: readonly T[], propertySelecto
 export function toPascalCase(text: string): string {
     return prefixWithUnderscoreWhenStartsWithNonAlpha(
         toSafeStringCode(
-            `${text}`
+            text
                 .toLowerCase()
                 .replace(new RegExp(/[-_]+/, 'g'), ' ')
                 .replace(new RegExp(/[^\w\s]/, 'g'), '')
