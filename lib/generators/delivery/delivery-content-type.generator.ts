@@ -7,12 +7,11 @@ import {
     TaxonomyModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
 import { FlattenedElement, GeneratedFile, ModuleResolution } from '../../core/core.models.js';
-import { sortAlphabetically, toGuidelinesComment, uniqueFilter } from '../../core/core.utils.js';
+import { isNotUndefined, sortAlphabetically, toGuidelinesComment, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
 import {

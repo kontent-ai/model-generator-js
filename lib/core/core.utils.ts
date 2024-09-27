@@ -5,6 +5,8 @@ export function uniqueFilter(value: string, index: number, self: readonly string
     return self.indexOf(value) === index;
 }
 
+export const isNotUndefined = <T>(item: T | undefined): item is T => item !== undefined;
+
 export function getDefaultModuleResolution(moduleResolution: ModuleResolution | undefined): ModuleResolution {
     return moduleResolution ?? 'node';
 }

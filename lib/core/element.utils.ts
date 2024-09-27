@@ -1,7 +1,7 @@
 import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
-import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match } from 'ts-pattern';
 import { FlattenedElement, MultipleChoiceOption } from './core.models.js';
+import { isNotUndefined } from './core.utils.js';
 
 interface ElementWrapper {
     readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
