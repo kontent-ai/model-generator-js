@@ -1,5 +1,5 @@
-import { CliAction, LibraryType } from '../../core/core.models.js';
-import { ModuleResolution } from '../../public_api.js';
+import { CliAction, LibraryType } from '../core/core.models.js';
+import { ModuleResolution } from '../public_api.js';
 import { argumentsSetter } from './args/args-setter.js';
 import { CommandOption } from './cli.models.js';
 

@@ -1,9 +1,9 @@
-import { ModuleResolution } from '../../../core/core.models.js';
-import { generateItemsAsync } from '../../../generators/items/items-func.js';
+import { ModuleResolution } from '../../core/core.models.js';
+import { generateMigrationModelsAsync } from '../../generators/migration/migration-func.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
-export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
-    await generateItemsAsync({
+export async function migrateActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
+    await generateMigrationModelsAsync({
         // required
         environmentId: cliFetcher.getRequiredArgumentValue('environmentId'),
         apiKey: cliFetcher.getRequiredArgumentValue('apiKey'),

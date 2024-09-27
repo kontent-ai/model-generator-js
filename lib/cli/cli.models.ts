@@ -1,4 +1,4 @@
-import { CliAction } from '../../core/core.models.js';
+import { CliAction } from '../core/core.models.js';
 
 export interface Command<TAction extends string> {
     readonly name: TAction;
