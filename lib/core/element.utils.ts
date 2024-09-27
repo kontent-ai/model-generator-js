@@ -88,17 +88,20 @@ function getElementTitle(
     element: Readonly<ContentTypeElements.ContentTypeElementModel>,
     taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]
 ): string {
-    if (element.type === 'taxonomy') {
-        const taxonomyGroupId = element.taxonomy_group?.id;
+    return match(element)
+        .returnType<string>()
+        .with({ type: 'taxonomy' }, (taxonomyElement) => {
+            const taxonomyGroupId = taxonomyElement.taxonomy_group?.id;
 
-        if (!taxonomyGroupId) {
-            return element.type;
-        }
+            if (!taxonomyGroupId) {
+                return element.type;
+            }
 
-        const taxonomy = taxonomies.find((m) => m.id === taxonomyGroupId);
-        return taxonomy?.name ?? element.type;
-    }
-    return (<{ name?: string }>element).name ?? element.codename ?? 'n/a';
+            const taxonomy = taxonomies.find((m) => m.id === taxonomyGroupId);
+            return taxonomy?.name ?? element.type;
+        })
+        .with({ name: P.string }, (element) => element.name)
+        .otherwise(() => 'invalidTitle');
 }
 
 function extractLinkedItemsAllowedTypes(
