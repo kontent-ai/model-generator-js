@@ -1,15 +1,10 @@
 import { createHash } from 'crypto';
-import { ModuleResolution } from './core.models.js';
 
 export function uniqueFilter(value: string, index: number, self: readonly string[]): boolean {
     return self.indexOf(value) === index;
 }
 
 export const isNotUndefined = <T>(item: T | undefined): item is T => item !== undefined;
-
-export function getDefaultModuleResolution(moduleResolution: ModuleResolution | undefined): ModuleResolution {
-    return moduleResolution ?? 'node';
-}
 
 export function getFileNameWithoutExtension(filePath: string): string {
     return filePath.substring(0, filePath.lastIndexOf('.'));

@@ -1,9 +1,9 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { coreConfig } from '../../config.js';
+import { coreConfig, defaultModuleResolution } from '../../config.js';
 import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
-import { getDefaultModuleResolution, getFilenameFromPath } from '../../core/core.utils.js';
+import { getFilenameFromPath } from '../../core/core.utils.js';
 import { importer as _importer } from '../../core/importer.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
@@ -44,7 +44,7 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
     moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
-    const moduleResolution: ModuleResolution = getDefaultModuleResolution(config.moduleResolution);
+    const moduleResolution: ModuleResolution = config.moduleResolution ?? defaultModuleResolution;
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
