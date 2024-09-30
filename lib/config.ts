@@ -1,6 +1,6 @@
-import { ModuleResolution } from './core/core.models.js';
+import { ModuleFileExtension } from './core/core.models.js';
 
-export const defaultModuleResolution: ModuleResolution = 'node';
+export const defaultModuleFileExtension: ModuleFileExtension = 'js';
 
 export const coreConfig = {
     barrelExportFilename: 'index.ts'

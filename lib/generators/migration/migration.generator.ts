@@ -10,7 +10,7 @@ import {
 import { match } from 'ts-pattern';
 import { migrationConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleResolution } from '../../core/core.models.js';
+import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { toGuidelinesComment, toPascalCase } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
@@ -23,7 +23,7 @@ import {
 } from '../shared/type-codename.generator.js';
 
 export interface MigrationGeneratorConfig {
-    readonly moduleResolution: ModuleResolution;
+    readonly moduleFileExtension: ModuleFileExtension;
 
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -37,7 +37,7 @@ export interface MigrationGeneratorConfig {
 }
 
 export function migrationGenerator(config: MigrationGeneratorConfig) {
-    const importer = _importer(config.moduleResolution);
+    const importer = _importer(config.moduleFileExtension);
 
     const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {

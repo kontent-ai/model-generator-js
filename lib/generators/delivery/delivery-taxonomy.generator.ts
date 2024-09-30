@@ -1,11 +1,11 @@
 import { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { deliveryConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import { GeneratedFile, GeneratedSet, ModuleResolution } from '../../core/core.models.js';
+import { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { TaxonomyNameResolver, TaxonomyTypeFileNameResolver, mapFilename, mapName } from '../../core/resolvers.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {
-    readonly moduleResolution: ModuleResolution;
+    readonly moduleFileExtension: ModuleFileExtension;
 
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;

@@ -1,19 +1,16 @@
 import { parse } from 'path';
-import { LibraryType, LiteralUnion, ModuleResolution } from './core.models.js';
+import { LibraryType, LiteralUnion, ModuleFileExtension } from './core.models.js';
 import { getFileNameWithoutExtension, sortAlphabetically } from './core.utils.js';
 
-export function importer(moduleResolution: ModuleResolution) {
-    const getExtensionForModuleResolution = (moduleResolution: ModuleResolution): string => {
-        return moduleResolution === 'nodeNext' ? '.js' : '';
-    };
+export function importer(moduleFileExtension: ModuleFileExtension) {
+    const importExtension = moduleFileExtension === 'none' ? '' : `.${moduleFileExtension}`;
 
     return {
         importType: (data: { readonly filePathOrPackage: LiteralUnion<LibraryType>; readonly importValue: string }): string => {
             const isExternalLib = !data.filePathOrPackage.endsWith('.js') && !data.filePathOrPackage.endsWith('.ts');
-            const resolvedFilePath =
-                moduleResolution === 'nodeNext' && !isExternalLib
-                    ? `${getFileNameWithoutExtension(data.filePathOrPackage)}.js`
-                    : data.filePathOrPackage;
+            const resolvedFilePath = isExternalLib
+                ? data.filePathOrPackage
+                : `${getFileNameWithoutExtension(data.filePathOrPackage)}${importExtension}`;
 
             return `import type { ${data.importValue} } from '${resolvedFilePath}';`;
         },
@@ -23,7 +20,7 @@ export function importer(moduleResolution: ModuleResolution) {
             }
             return sortAlphabetically(filenames, (filename) => filename).reduce<string>((barrelCode, filename) => {
                 const path = parse(filename);
-                return `${barrelCode} export * from '${path.dir}/${path.name}${getExtensionForModuleResolution(moduleResolution)}';`;
+                return `${barrelCode} export * from '${path.dir}/${path.name}${importExtension}';`;
             }, '');
         }
     };

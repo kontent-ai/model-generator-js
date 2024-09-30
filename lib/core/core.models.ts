@@ -9,10 +9,10 @@ import {
 
 export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment' | 'items';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
-export type ModuleResolution = 'nodeNext' | 'node';
+export type ModuleFileExtension = 'js' | 'ts' | 'none';
 export type CaseType = 'camelCase' | 'pascalCase';
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
-export type LiteralUnion<T extends string> = T | (string & NonNullable<unknown>);
+export type LiteralUnion<T extends string | undefined> = T | (string & NonNullable<unknown>);
 
 export interface ErrorData {
     readonly message: string;

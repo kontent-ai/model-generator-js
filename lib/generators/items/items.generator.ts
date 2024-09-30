@@ -1,12 +1,10 @@
 import { ContentItemModels, ContentTypeModels, EnvironmentModels } from '@kontent-ai/management-sdk';
 import { itemsConfig } from '../../config.js';
 import { toSafeComment, wrapComment } from '../../core/comment.utils.js';
-import { GeneratedSet, ModuleResolution } from '../../core/core.models.js';
+import { GeneratedSet } from '../../core/core.models.js';
 import { toPascalCase } from '../../core/core.utils.js';
 
 export interface ItemGeneratorConfig {
-    readonly moduleResolution: ModuleResolution;
-
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
         readonly types: readonly Readonly<ContentTypeModels.ContentType>[];

@@ -1,5 +1,5 @@
-import { ModuleResolution } from '../../core/core.models.js';
 import { generateEnvironmentModelsAsync } from '../../generators/environment/environment-func.js';
+import { parseModuleFileExtension } from '../arg.utils.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
@@ -11,7 +11,7 @@ export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): P
         baseUrl: cliFetcher.getOptionalArgumentValue('baseUrl'),
         outputDir: cliFetcher.getOptionalArgumentValue('outputDir'),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
-        moduleResolution: cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext',
+        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue('moduleFileExtension')),
         isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue('isEnterpriseSubscription', false)
     });
 }

@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import { rmSync } from 'fs';
-import { ModuleResolution } from '../../lib/core/core.models.js';
+import { parseModuleFileExtension } from '../../lib/cli/arg.utils.js';
 import { logError } from '../../lib/core/error.utils.js';
 import { generateDeliveryModelsAsync } from '../../lib/generators/delivery/delivery-func.js';
 import { getEnvironmentRequiredValue } from '../utils/test.utils.js';
@@ -23,13 +23,13 @@ try {
 
     const environmentId = getEnvironmentRequiredValue('ENVIRONMENT_ID');
     const apiKey = getEnvironmentRequiredValue('API_KEY');
-    const moduleResolution = getEnvironmentRequiredValue('MODULE_RESOLUTION');
+    const moduleFileExtension = parseModuleFileExtension(getEnvironmentRequiredValue('MODULE_EXTENSION'));
 
     await generateDeliveryModelsAsync({
         addTimestamp: false,
         environmentId: environmentId,
         apiKey: apiKey,
-        moduleResolution: moduleResolution?.toLowerCase() === <ModuleResolution>'node' ? 'node' : 'nodeNext',
+        moduleFileExtension: moduleFileExtension,
         outputDir: outputDir
     });
 } catch (error) {

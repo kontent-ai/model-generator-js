@@ -35,7 +35,7 @@ Go to folder where you want to create models and run:
 
 ```bash
 # Models for Delivery SDK
-npx @kontent-ai/model-generator@latest --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest delivery --environmentId=x --apiKey=y
 
 # Models for Migration Toolkit
 npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --apiKey=y
@@ -45,6 +45,12 @@ npx @kontent-ai/model-generator@latest environment --environmentId=x --apiKey=y
 
 # Items overview with ids / codenames and Types representing available item codenames
 npx @kontent-ai/model-generator@latest items --environmentId=x --apiKey=y
+```
+
+Run with more options:
+
+```bash
+npx @kontent-ai/model-generator@latest delivery --environmentId=x --apiKey=y --moduleFileExtension=js --outputDir=kontent-models --addTimestamp=false
 ```
 
 To learn what options are available use the `help` command:

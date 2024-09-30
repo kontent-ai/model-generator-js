@@ -5,20 +5,20 @@ import { dirname } from 'path';
 import { Options } from 'prettier';
 import { coreConfig } from '../config.js';
 import { getEnvironmentInfoComment } from '../core/comment.utils.js';
-import { GeneratedFile, GeneratedSet, ModuleResolution } from '../core/core.models.js';
+import { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../core/core.models.js';
 import { toOutputDirPath } from '../core/core.utils.js';
 import { importer as _importer } from '../core/importer.js';
 import { formatCodeAsync } from '../format/formatter.js';
 
 export function fileManager(config: {
-    readonly moduleResolution: ModuleResolution;
-    readonly outputDir: string | undefined;
-    readonly formatOptions: Readonly<Options> | undefined;
+    readonly moduleFileExtension: ModuleFileExtension;
+    readonly outputDir?: string;
+    readonly formatOptions?: Readonly<Options>;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
     readonly addTimestamp: boolean;
 }) {
     const fixedOutputDir = toOutputDirPath(config.outputDir);
-    const importer = _importer(config.moduleResolution);
+    const importer = _importer(config.moduleFileExtension);
 
     const createFileOnFsAsync = async (text: string, filePath: string): Promise<void> => {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;

@@ -1,5 +1,5 @@
-import { ModuleResolution } from '../../core/core.models.js';
 import { generateItemsAsync } from '../../generators/items/items-func.js';
+import { parseModuleFileExtension } from '../arg.utils.js';
 import { CliArgumentsFetcher } from '../cli.models.js';
 
 export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
@@ -11,6 +11,6 @@ export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise
         baseUrl: cliFetcher.getOptionalArgumentValue('baseUrl'),
         outputDir: cliFetcher.getOptionalArgumentValue('outputDir'),
         addTimestamp: cliFetcher.getBooleanArgumentValue('addTimestamp', false),
-        moduleResolution: cliFetcher.getOptionalArgumentValue('moduleResolution') === <ModuleResolution>'node' ? 'node' : 'nodeNext'
+        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue('moduleFileExtension'))
     });
 }

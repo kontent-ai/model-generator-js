@@ -10,7 +10,7 @@ import {
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleResolution } from '../../core/core.models.js';
+import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, toGuidelinesComment, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
@@ -41,7 +41,7 @@ interface ExtractImportsResult {
 type ContentTypeOrSnippet = Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>;
 
 export interface DeliveryContentTypeGeneratorConfig {
-    readonly moduleResolution: ModuleResolution;
+    readonly moduleFileExtension: ModuleFileExtension;
 
     readonly environmentData: {
         readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -73,7 +73,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         taxonomy: mapFilename(config.fileResolvers?.taxonomy)
     };
 
-    const importer = _importer(config.moduleResolution);
+    const importer = _importer(config.moduleFileExtension);
 
     const nameResolvers = {
         snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),

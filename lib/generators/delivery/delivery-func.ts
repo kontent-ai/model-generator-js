@@ -1,8 +1,7 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { defaultModuleResolution } from '../../config.js';
-import { GeneratedSet, ModuleResolution } from '../../core/core.models.js';
+import { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
@@ -21,7 +20,7 @@ export interface GenerateDeliveryModelsConfig {
     readonly addTimestamp: boolean;
     readonly apiKey: string;
 
-    readonly moduleResolution?: ModuleResolution;
+    readonly moduleFileExtension: ModuleFileExtension;
     readonly baseUrl?: string;
     readonly outputDir?: string;
     readonly formatOptions?: Readonly<Options>;
@@ -43,14 +42,11 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
 
-    const { contentTypeFiles, snippetFiles, taxonomyFiles, moduleResolution, environmentInfo, systemFiles } = await getFilesAsync(config);
+    const { contentTypeFiles, snippetFiles, taxonomyFiles, environmentInfo, systemFiles } = await getFilesAsync(config);
 
     const fileManager = _fileManager({
-        outputDir: config.outputDir,
-        addTimestamp: config.addTimestamp,
-        environmentInfo: environmentInfo,
-        formatOptions: config.formatOptions,
-        moduleResolution: moduleResolution
+        ...config,
+        environmentInfo: environmentInfo
     });
 
     await fileManager.createSetsAsync([contentTypeFiles, snippetFiles, taxonomyFiles, systemFiles]);
@@ -63,10 +59,8 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     readonly snippetFiles: GeneratedSet;
     readonly taxonomyFiles: GeneratedSet;
     readonly systemFiles: GeneratedSet;
-    readonly moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
-    const moduleResolution: ModuleResolution = config.moduleResolution ?? defaultModuleResolution;
     const kontentFetcher = _kontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
@@ -85,7 +79,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     ]);
 
     const deliveryGenerator = deliveryContentTypeGenerator({
-        moduleResolution: moduleResolution,
+        moduleFileExtension: config.moduleFileExtension,
         environmentData: {
             environment: environmentInfo,
             types,
@@ -102,7 +96,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     const { contentTypeFiles, snippetFiles } = deliveryGenerator.generateModels();
 
     const taxonomyFiles = deliveryTaxonomyGenerator({
-        moduleResolution: moduleResolution,
+        moduleFileExtension: config.moduleFileExtension,
         environmentData: {
             environment: environmentInfo,
             taxonomies: taxonomies
@@ -115,7 +109,6 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         contentTypeFiles,
         snippetFiles,
         taxonomyFiles,
-        moduleResolution,
         environmentInfo,
         systemFiles: deliveryGenerator.getSystemFiles()
     };
