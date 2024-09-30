@@ -60,6 +60,11 @@ export interface GeneratedFile {
     readonly text: string;
 }
 
+export interface GeneratedSet {
+    readonly files: readonly GeneratedFile[];
+    readonly folderName: string | undefined;
+}
+
 export type ObjectWithCodename = {
     readonly codename: string;
 };

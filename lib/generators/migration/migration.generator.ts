@@ -10,7 +10,7 @@ import {
 import { match } from 'ts-pattern';
 import { migrationConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { toGuidelinesComment, toPascalCase } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
@@ -41,7 +41,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
 
     const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {
-            filename: `${migrationConfig.migrationItemsFolderName}/${type.codename}.ts`,
+            filename: `${type.codename}.ts`,
             text: `
             ${importer.importType({
                 filePathOrPackage: migrationConfig.npmPackageName,
@@ -86,11 +86,13 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
     };
 
     return {
-        getEnvironmentFiles(): readonly GeneratedFile[] {
-            return [
-                {
-                    filename: `${migrationConfig.environmentFolderName}/${migrationConfig.environmentFilename}.ts`,
-                    text: `
+        getEnvironmentFiles(): GeneratedSet {
+            return {
+                folderName: migrationConfig.environmentFolderName,
+                files: [
+                    {
+                        filename: `${migrationConfig.environmentFilename}.ts`,
+                        text: `
                 ${wrapComment(`\n * Type representing all languages\n`)}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
@@ -106,14 +108,17 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
             `
-                }
-            ];
+                    }
+                ]
+            };
         },
-        getMigrationTypeFiles(): readonly GeneratedFile[] {
-            return [
-                {
-                    filename: `${migrationConfig.migrationTypesFilename}.ts`,
-                    text: `
+        getMigrationTypeFiles(): GeneratedSet {
+            return {
+                folderName: undefined,
+                files: [
+                    {
+                        filename: `${migrationConfig.migrationTypesFilename}.ts`,
+                        text: `
                   ${importer.importType({
                       filePathOrPackage: migrationConfig.npmPackageName,
                       importValue: `${migrationConfig.sdkTypeNames.item}, ${migrationConfig.sdkTypeNames.system}, ${migrationConfig.sdkTypeNames.elements}`
@@ -129,11 +134,15 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
                 ${wrapComment('\n * Item object shared by all individual content type models\n')}
                 ${getItemType()}
             `
-                }
-            ];
+                    }
+                ]
+            };
         },
-        getMigrationItemFiles(): readonly GeneratedFile[] {
-            return config.environmentData.types.map((type) => getMigrationItemType(type));
+        getMigrationItemFiles(): GeneratedSet {
+            return {
+                folderName: migrationConfig.migrationItemsFolderName,
+                files: config.environmentData.types.map((type) => getMigrationItemType(type))
+            };
         }
     };
 }

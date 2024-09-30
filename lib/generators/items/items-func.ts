@@ -1,10 +1,8 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { coreConfig, defaultModuleResolution, itemsConfig } from '../../config.js';
-import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
-import { getFilenameFromPath } from '../../core/core.utils.js';
-import { importer as _importer } from '../../core/importer.js';
+import { defaultModuleResolution } from '../../config.js';
+import { GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { itemsGenerator as _itemsGenerator } from './items.generator.js';
@@ -26,22 +24,22 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
 
     const { itemFiles, moduleResolution, environmentInfo, codenameFiles } = await getFilesAsync(config);
 
-    await createFilesAsync({
-        moduleResolution,
-        itemFiles,
-        codenameFiles,
+    const fileManager = _fileManager({
         outputDir: config.outputDir,
-        formatOptions: config.formatOptions,
         addTimestamp: config.addTimestamp,
-        environmentInfo
+        environmentInfo: environmentInfo,
+        formatOptions: config.formatOptions,
+        moduleResolution: moduleResolution
     });
+
+    await fileManager.createSetsAsync([itemFiles, codenameFiles]);
 
     console.log(chalk.green(`\nCompleted`));
 }
 
 async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
-    readonly itemFiles: readonly GeneratedFile[];
-    readonly codenameFiles: readonly GeneratedFile[];
+    readonly itemFiles: GeneratedSet;
+    readonly codenameFiles: GeneratedSet;
     readonly moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -71,51 +69,4 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
         codenameFiles: itemsGenerator.getCodenameFiles(),
         environmentInfo
     };
-}
-
-async function createFilesAsync(data: {
-    readonly itemFiles: readonly GeneratedFile[];
-    readonly codenameFiles: readonly GeneratedFile[];
-    readonly moduleResolution: ModuleResolution;
-    readonly outputDir?: string;
-    readonly formatOptions?: Readonly<Options>;
-    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-    readonly addTimestamp: boolean;
-}): Promise<void> {
-    const fileManager = _fileManager({
-        outputDir: data.outputDir,
-        addTimestamp: data.addTimestamp,
-        environmentInfo: data.environmentInfo,
-        formatOptions: data.formatOptions
-    });
-
-    const importer = _importer(data.moduleResolution);
-
-    await fileManager.createFilesAsync([
-        ...data.itemFiles,
-        ...data.codenameFiles,
-        // items barrel file
-        {
-            filename: `${itemsConfig.itemsFolderName}/${coreConfig.barrelExportFilename}`,
-            text: importer.getBarrelExportCode([
-                ...data.itemFiles.map((m) => {
-                    return `./${getFilenameFromPath(m.filename)}`;
-                })
-            ])
-        },
-        // codename barrel file
-        {
-            filename: `${itemsConfig.codenamesFolderName}/${coreConfig.barrelExportFilename}`,
-            text: importer.getBarrelExportCode([
-                ...data.codenameFiles.map((m) => {
-                    return `./${getFilenameFromPath(m.filename)}`;
-                })
-            ])
-        },
-        // main barrel file
-        {
-            filename: coreConfig.barrelExportFilename,
-            text: importer.getBarrelExportCode([`./${itemsConfig.itemsFolderName}/index`, `./${itemsConfig.codenamesFolderName}/index`])
-        }
-    ]);
 }

@@ -1,10 +1,8 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { coreConfig, defaultModuleResolution, migrationConfig } from '../../config.js';
-import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
-import { getFilenameFromPath } from '../../core/core.utils.js';
-import { importer as _importer } from '../../core/importer.js';
+import { defaultModuleResolution } from '../../config.js';
+import { GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
@@ -26,24 +24,23 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 
     const { migrationItemFiles, migrationTypeFiles, moduleResolution, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
-    await createFilesAsync({
-        migrationItemFiles,
-        environmentFiles,
-        migrationTypeFiles,
-        moduleResolution,
+    const fileManager = _fileManager({
         outputDir: config.outputDir,
-        formatOptions: config.formatOptions,
         addTimestamp: config.addTimestamp,
-        environmentInfo
+        environmentInfo: environmentInfo,
+        formatOptions: config.formatOptions,
+        moduleResolution: moduleResolution
     });
+
+    await fileManager.createSetsAsync([migrationItemFiles, migrationTypeFiles, environmentFiles]);
 
     console.log(chalk.green(`\nCompleted`));
 }
 
 async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
-    readonly migrationTypeFiles: readonly GeneratedFile[];
-    readonly migrationItemFiles: readonly GeneratedFile[];
-    readonly environmentFiles: readonly GeneratedFile[];
+    readonly migrationTypeFiles: GeneratedSet;
+    readonly migrationItemFiles: GeneratedSet;
+    readonly environmentFiles: GeneratedSet;
     readonly moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -85,57 +82,4 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
         environmentFiles: migrationGenerator.getEnvironmentFiles(),
         environmentInfo
     };
-}
-
-async function createFilesAsync(data: {
-    readonly migrationTypeFiles: readonly GeneratedFile[];
-    readonly environmentFiles: readonly GeneratedFile[];
-    readonly migrationItemFiles: readonly GeneratedFile[];
-    readonly moduleResolution: ModuleResolution;
-    readonly outputDir?: string;
-    readonly formatOptions?: Readonly<Options>;
-    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-    readonly addTimestamp: boolean;
-}): Promise<void> {
-    const fileManager = _fileManager({
-        outputDir: data.outputDir,
-        addTimestamp: data.addTimestamp,
-        environmentInfo: data.environmentInfo,
-        formatOptions: data.formatOptions
-    });
-
-    const importer = _importer(data.moduleResolution);
-
-    await fileManager.createFilesAsync([
-        ...data.migrationTypeFiles,
-        ...data.environmentFiles,
-        ...data.migrationItemFiles,
-        // items barrel file
-        {
-            filename: `${migrationConfig.migrationItemsFolderName}/${coreConfig.barrelExportFilename}`,
-            text: importer.getBarrelExportCode([
-                ...data.migrationItemFiles.map((m) => {
-                    return `./${getFilenameFromPath(m.filename)}`;
-                })
-            ])
-        },
-        // environment barrel file
-        {
-            filename: `${migrationConfig.environmentFolderName}/${coreConfig.barrelExportFilename}`,
-            text: importer.getBarrelExportCode([
-                ...data.environmentFiles.map((m) => {
-                    return `./${getFilenameFromPath(m.filename)}`;
-                })
-            ])
-        },
-        // main barrel file
-        {
-            filename: coreConfig.barrelExportFilename,
-            text: importer.getBarrelExportCode([
-                `./${migrationConfig.migrationItemsFolderName}/index`,
-                `./${migrationConfig.environmentFolderName}/index`,
-                ...data.migrationTypeFiles.map((file) => `./${file.filename}`)
-            ])
-        }
-    ]);
 }

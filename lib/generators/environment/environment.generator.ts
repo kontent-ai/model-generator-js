@@ -13,7 +13,7 @@ import {
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedFile } from '../../core/core.models.js';
+import { FlattenedElement, GeneratedSet } from '../../core/core.models.js';
 import { getStringOrUndefined, toGuidelinesComment, toSafePropertyName, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 
@@ -39,61 +39,64 @@ export interface ProjectGeneratorConfig {
 }
 
 export function environmentGenerator(config: ProjectGeneratorConfig) {
-    const generateEnvironmentModels = (): readonly GeneratedFile[] => {
-        return [
-            {
-                text: `export const languages = {
+    const generateEnvironmentModels = (): GeneratedSet => {
+        return {
+            folderName: undefined,
+            files: [
+                {
+                    text: `export const languages = {
                     ${getProjectLanguages(config.environmentData.languages)}
                 } as const;`,
-                filename: 'languages.ts'
-            },
-            {
-                text: `export const collections = {
+                    filename: 'languages.ts'
+                },
+                {
+                    text: `export const collections = {
                     ${getCollections(config.environmentData.collections)}
                 } as const;`,
-                filename: 'collections.ts'
-            },
-            {
-                text: `export const contentTypes = {
+                    filename: 'collections.ts'
+                },
+                {
+                    text: `export const contentTypes = {
                     ${getProjectContentTypes(config.environmentData.types)}
                 } as const;`,
-                filename: 'contentTypes.ts'
-            },
-            {
-                text: `export const contentTypeSnippets = {
+                    filename: 'contentTypes.ts'
+                },
+                {
+                    text: `export const contentTypeSnippets = {
                     ${getProjectContentTypeSnippets(config.environmentData.snippets)}
                 } as const;`,
-                filename: 'contentTypeSnippets.ts'
-            },
-            {
-                text: `export const taxonomies = {
+                    filename: 'contentTypeSnippets.ts'
+                },
+                {
+                    text: `export const taxonomies = {
                     ${getProjectTaxonomies(config.environmentData.taxonomies)}
                 } as const;`,
-                filename: 'taxonomies.ts'
-            },
-            {
-                text: `export const workflows = {
+                    filename: 'taxonomies.ts'
+                },
+                {
+                    text: `export const workflows = {
                     ${getProjectWorkflows(config.environmentData.workflows)}
                 } as const;`,
-                filename: 'workflows.ts'
-            },
-            {
-                text: `export const roles = {
+                    filename: 'workflows.ts'
+                },
+                {
+                    text: `export const roles = {
                     ${getRoles(config.environmentData.roles)}
                 } as const;`,
-                filename: 'roles.ts'
-            },
-            {
-                text: `export const assetFolders = ${getAssetFolders(config.environmentData.assetFolders)} as const;`,
-                filename: 'assetFolders.ts'
-            },
-            {
-                text: `export const webhooks = {
+                    filename: 'roles.ts'
+                },
+                {
+                    text: `export const assetFolders = ${getAssetFolders(config.environmentData.assetFolders)} as const;`,
+                    filename: 'assetFolders.ts'
+                },
+                {
+                    text: `export const webhooks = {
                     ${getWebhooks(config.environmentData.webhooks)}
                 } as const;`,
-                filename: 'webhooks.ts'
-            }
-        ];
+                    filename: 'webhooks.ts'
+                }
+            ]
+        };
     };
 
     const getProjectLanguages = (languages: readonly Readonly<LanguageModels.LanguageModel>[]): string => {

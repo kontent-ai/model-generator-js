@@ -1,7 +1,7 @@
 import { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { deliveryConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { GeneratedFile, GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { TaxonomyNameResolver, TaxonomyTypeFileNameResolver, mapFilename, mapName } from '../../core/resolvers.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {
@@ -24,15 +24,18 @@ export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfi
     const taxonomyFileNameMap = mapFilename(config.fileResolvers?.taxonomy);
     const taxonomyNameMap = mapName(config.nameResolvers?.taxonomy, 'pascalCase');
 
-    const generateTaxonomyTypes = (): readonly GeneratedFile[] => {
-        return config.environmentData.taxonomies.map<GeneratedFile>((taxonomy) => {
-            return getTaxonomyFile(taxonomy);
-        });
+    const generateTaxonomyTypes = (): GeneratedSet => {
+        return {
+            folderName: deliveryConfig.taxonomiesFolderName,
+            files: config.environmentData.taxonomies.map<GeneratedFile>((taxonomy) => {
+                return getTaxonomyFile(taxonomy);
+            })
+        };
     };
 
     const getTaxonomyFile = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): GeneratedFile => {
         return {
-            filename: `${deliveryConfig.taxonomiesFolderName}/${taxonomyFileNameMap(taxonomy, true)}`,
+            filename: taxonomyFileNameMap(taxonomy, true),
             text: getModelCode(taxonomy)
         };
     };

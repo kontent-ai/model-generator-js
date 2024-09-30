@@ -10,7 +10,7 @@ import {
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, toGuidelinesComment, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
@@ -336,14 +336,14 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
 
     const createTypeModel = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         return {
-            filename: `${deliveryConfig.contentTypesFolderName}/${fileResolvers.contentType(type, true)}`,
+            filename: fileResolvers.contentType(type, true),
             text: getContentTypeCode(type)
         };
     };
 
     const createSnippetModel = (type: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): GeneratedFile => {
         return {
-            filename: `${deliveryConfig.contentTypeSnippetsFolderName}/${fileResolvers.contentType(type, true)}`,
+            filename: fileResolvers.contentType(type, true),
             text: getSnippetCode(type)
         };
     };
@@ -453,19 +453,27 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
 
     return {
         generateModels: (): {
-            contentTypeFiles: readonly GeneratedFile[];
-            snippetFiles: readonly GeneratedFile[];
+            contentTypeFiles: GeneratedSet;
+            snippetFiles: GeneratedSet;
         } => {
             return {
-                contentTypeFiles: config.environmentData.types.map((type) => createTypeModel(type)),
-                snippetFiles: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
+                contentTypeFiles: {
+                    folderName: deliveryConfig.contentTypesFolderName,
+                    files: config.environmentData.types.map((type) => createTypeModel(type))
+                },
+                snippetFiles: {
+                    folderName: deliveryConfig.contentTypeSnippetsFolderName,
+                    files: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
+                }
             };
         },
-        getSystemFiles(): readonly GeneratedFile[] {
-            return [
-                {
-                    filename: `${deliveryConfig.systemTypesFolderName}/${deliveryConfig.coreCodenamesFilename}.ts`,
-                    text: `
+        getSystemFiles(): GeneratedSet {
+            return {
+                folderName: deliveryConfig.systemTypesFolderName,
+                files: [
+                    {
+                        filename: `${deliveryConfig.coreCodenamesFilename}.ts`,
+                        text: `
                 ${wrapComment(`\n * Type representing all languages\n`)}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
@@ -481,8 +489,9 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
                 ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
             `
-                }
-            ];
+                    }
+                ]
+            };
         }
     };
 }

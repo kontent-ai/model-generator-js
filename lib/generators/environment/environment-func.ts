@@ -1,10 +1,8 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { coreConfig, defaultModuleResolution } from '../../config.js';
-import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
-import { getFilenameFromPath } from '../../core/core.utils.js';
-import { importer as _importer } from '../../core/importer.js';
+import { defaultModuleResolution } from '../../config.js';
+import { GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { environmentGenerator as _environmentGenerator } from './environment.generator.js';
@@ -27,20 +25,21 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 
     const { moduleResolution, environmentFiles: projectFiles, environmentInfo } = await getModelsAsync(config);
 
-    await createFilesAsync({
-        moduleResolution,
-        projectFiles,
-        outputDir: config.outputDir,
-        formatOptions: config.formatOptions,
+    const fileManager = _fileManager({
         addTimestamp: config.addTimestamp,
-        environmentInfo
+        environmentInfo: environmentInfo,
+        formatOptions: config.formatOptions,
+        outputDir: config.outputDir,
+        moduleResolution: moduleResolution
     });
+
+    await fileManager.createSetsAsync([projectFiles]);
 
     console.log(chalk.green(`\nCompleted`));
 }
 
 async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<{
-    environmentFiles: readonly GeneratedFile[];
+    environmentFiles: GeneratedSet;
     moduleResolution: ModuleResolution;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -83,35 +82,4 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
         }).generateEnvironmentModels(),
         moduleResolution: moduleResolution
     };
-}
-
-async function createFilesAsync(data: {
-    readonly projectFiles: readonly GeneratedFile[];
-    readonly moduleResolution: ModuleResolution;
-    readonly outputDir?: string;
-    readonly addTimestamp: boolean;
-    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-    readonly formatOptions?: Readonly<Options>;
-}): Promise<void> {
-    const fileManager = _fileManager({
-        addTimestamp: data.addTimestamp,
-        environmentInfo: data.environmentInfo,
-        formatOptions: data.formatOptions,
-        outputDir: data.outputDir
-    });
-
-    const importer = _importer(data.moduleResolution);
-
-    await fileManager.createFilesAsync([
-        ...data.projectFiles,
-        // barrel file
-        {
-            filename: coreConfig.barrelExportFilename,
-            text: importer.getBarrelExportCode([
-                ...data.projectFiles.map((m) => {
-                    return `./${getFilenameFromPath(m.filename)}`;
-                })
-            ])
-        }
-    ]);
 }

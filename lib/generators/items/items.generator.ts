@@ -1,7 +1,7 @@
 import { ContentItemModels, ContentTypeModels, EnvironmentModels } from '@kontent-ai/management-sdk';
 import { itemsConfig } from '../../config.js';
 import { toSafeComment, wrapComment } from '../../core/comment.utils.js';
-import { GeneratedFile, ModuleResolution } from '../../core/core.models.js';
+import { GeneratedSet, ModuleResolution } from '../../core/core.models.js';
 import { toPascalCase } from '../../core/core.utils.js';
 
 export interface ItemGeneratorConfig {
@@ -45,13 +45,15 @@ export function itemsGenerator(config: ItemGeneratorConfig) {
     };
 
     return {
-        getItemFiles(): readonly GeneratedFile[] {
-            return config.environmentData.types.map((type) => {
-                const typeItems = config.environmentData.items.filter((m) => m.type.id === type.id);
+        getItemFiles(): GeneratedSet {
+            return {
+                folderName: itemsConfig.itemsFolderName,
+                files: config.environmentData.types.map((type) => {
+                    const typeItems = config.environmentData.items.filter((m) => m.type.id === type.id);
 
-                return {
-                    filename: `${itemsConfig.itemsFolderName}/${type.codename}.items.ts`,
-                    text: `
+                    return {
+                        filename: `${type.codename}.items.ts`,
+                        text: `
                     ${wrapComment(`\n * Object representing identifiers of available items
                     *
                     * ${toSafeComment(type.name)}
@@ -59,16 +61,19 @@ export function itemsGenerator(config: ItemGeneratorConfig) {
                     * Codename: ${type.codename}
                     * Id: ${type.id}\n`)}
                     ${getItemCodenamesProp(type, typeItems)}`
-                };
-            });
+                    };
+                })
+            };
         },
-        getCodenameFiles(): readonly GeneratedFile[] {
-            return config.environmentData.types.map((type) => {
-                const typeItems = config.environmentData.items.filter((m) => m.type.id === type.id);
+        getCodenameFiles(): GeneratedSet {
+            return {
+                folderName: itemsConfig.codenamesFolderName,
+                files: config.environmentData.types.map((type) => {
+                    const typeItems = config.environmentData.items.filter((m) => m.type.id === type.id);
 
-                return {
-                    filename: `${itemsConfig.codenamesFolderName}/${type.codename}.codenames.ts`,
-                    text: `
+                    return {
+                        filename: `${type.codename}.codenames.ts`,
+                        text: `
                     ${wrapComment(`\n * Type representing available item codenames
                     *
                     * ${toSafeComment(type.name)}
@@ -76,8 +81,9 @@ export function itemsGenerator(config: ItemGeneratorConfig) {
                     * Codename: ${type.codename}
                     * Id: ${type.id}\n`)}
                     ${getItemCodenameType(type, typeItems)}`
-                };
-            });
+                    };
+                })
+            };
         }
     };
 }
