@@ -1,10 +1,7 @@
 import { CollectionModels, ContentTypeModels, LanguageModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { sharedTypesConfig } from '../../config.js';
+import { ObjectWithCodename } from '../../core/core.models.js';
 import { uniqueFilter } from '../../core/core.utils.js';
-
-interface ItemWithCodename {
-    readonly codename: string;
-}
 
 export function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {
     return getTypeWithCodenames(sharedTypesConfig.languageCodenames, languages);
@@ -29,7 +26,7 @@ export function getWorkflowStepCodenamesType(workflows: readonly Readonly<Workfl
     );
 }
 
-function getTypeWithCodenames(typeName: string, items: readonly ItemWithCodename[]): string {
+function getTypeWithCodenames(typeName: string, items: readonly ObjectWithCodename[]): string {
     return `export type ${typeName} = ${items
         .map((item) => `'${item.codename}'`)
         .filter(uniqueFilter)
