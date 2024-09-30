@@ -36,7 +36,7 @@ export function toCamelCase(text: string): string {
     return prefixWithUnderscoreWhenStartsWithNonAlpha(
         toSafeStringCode(
             text
-                .replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+                .replace(/(?:^\w|\b\w)/g, (word, index) => {
                     return index === 0 ? word.toLowerCase() : word.toUpperCase();
                 })
                 .replace(/\s+/g, '')
