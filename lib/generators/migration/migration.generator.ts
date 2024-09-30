@@ -20,7 +20,7 @@ import {
     getLanguageCodenamesType,
     getWorkflowCodenamesType,
     getWorkflowStepCodenamesType
-} from '../shared/generator.utils.js';
+} from '../shared/type-codename.generator.js';
 
 export interface MigrationGeneratorConfig {
     readonly moduleResolution: ModuleResolution;

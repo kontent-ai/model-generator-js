@@ -30,7 +30,7 @@ import {
     getLanguageCodenamesType,
     getWorkflowCodenamesType,
     getWorkflowStepCodenamesType
-} from '../shared/generator.utils.js';
+} from '../shared/type-codename.generator.js';
 
 interface ExtractImportsResult {
     readonly typeName: string;
