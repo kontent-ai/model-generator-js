@@ -31,7 +31,7 @@ const addTimestampOption: CommandOption = {
 };
 
 const ModuleFileExtensionOption: CommandOption = {
-    name: `ModuleFileExtension`,
+    name: `moduleFileExtension`,
     description: `Module resolution for imports. Available options are: '${'js' satisfies ModuleFileExtension}', '${'ts' satisfies ModuleFileExtension}' or '${'none' satisfies ModuleFileExtension}' (no extension) }`,
     type: 'string',
     isRequired: false
