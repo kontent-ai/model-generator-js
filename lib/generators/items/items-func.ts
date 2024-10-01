@@ -18,6 +18,7 @@ export interface GenerateItemsModelsConfig {
     readonly deliveryApiKey?: string;
     readonly outputDir?: string;
     readonly baseUrl?: string;
+    readonly deliveryBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 }
 
@@ -46,7 +47,7 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
         environmentId: config.environmentId,
         apiMode: config.apiMode,
         apiKey: config.deliveryApiKey,
-        baseUrl: config.baseUrl
+        baseUrl: config.deliveryBaseUrl
     });
 
     const managementKontentFetcher = _managementKontentFetcher({
