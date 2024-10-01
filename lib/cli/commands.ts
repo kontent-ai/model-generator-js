@@ -1,43 +1,64 @@
-import { CliAction, LibraryType, ModuleFileExtension } from '../core/core.models.js';
+import { CliAction, DeliveryApiMode, LibraryType, ModuleFileExtension } from '../core/core.models.js';
 import { argumentsSetter } from './args/args-setter.js';
 import { CommandOption } from './cli.models.js';
 
-const environmentIdOption: CommandOption = {
+export const environmentIdOption: CommandOption = {
     name: `environmentId`,
     description: `Id of the environment`,
     type: 'string',
     isRequired: true
 };
 
-const apiKeyOption: CommandOption = {
+export const managementApiKeyOption: CommandOption = {
     name: `apiKey`,
     description: `Management API key`,
     type: 'string',
     isRequired: true
 };
 
-const outputDirOption: CommandOption = {
+export const deliveryApiKeyOption: CommandOption = {
+    name: `apiKey`,
+    description: `Delivery API key`,
+    type: 'string',
+    isRequired: true
+};
+
+export const outputDirOption: CommandOption = {
     name: `outputDir`,
     description: `Relative directory path where directory will be created`,
     type: 'string',
     isRequired: false
 };
 
-const addTimestampOption: CommandOption = {
+export const addTimestampOption: CommandOption = {
     name: `outputDir`,
     description: `Indicates whether timestamp should be generated for every file`,
     type: 'boolean',
     isRequired: false
 };
 
-const ModuleFileExtensionOption: CommandOption = {
+export const ModuleFileExtensionOption: CommandOption = {
     name: `moduleFileExtension`,
     description: `Module resolution for imports. Available options are: '${'js' satisfies ModuleFileExtension}', '${'ts' satisfies ModuleFileExtension}' or '${'none' satisfies ModuleFileExtension}' (no extension) }`,
     type: 'string',
     isRequired: false
 };
 
-const baseUrl: CommandOption = {
+export const apiModeOption: CommandOption = {
+    name: `apiMode`,
+    description: `API mode for Delivery. Options are '${'default' satisfies DeliveryApiMode}', '${'preview' satisfies DeliveryApiMode}' or '${'secure' satisfies DeliveryApiMode}'`,
+    type: 'string',
+    isRequired: false
+};
+
+export const contentTypes: CommandOption = {
+    name: `contentTypes`,
+    description: `CSV of content types to generate models for. If not provided, all items will be generated`,
+    type: 'string',
+    isRequired: false
+};
+
+export const baseUrl: CommandOption = {
     name: `baseUrl`,
     description: `Base URL for Management API`,
     type: 'string',
@@ -48,26 +69,42 @@ export const cliArgs = argumentsSetter()
     .withCommand({
         name: 'delivery-sdk',
         description: `Generates models for '${'@kontent-ai/delivery-sdk' satisfies LibraryType}' library`,
-        examples: [`kontent-generate ${'delivery-sdk' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
-        options: [environmentIdOption, apiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
+        examples: [
+            `kontent-generate ${'delivery-sdk' satisfies CliAction} --${environmentIdOption.name}=x --${managementApiKeyOption.name}=x`
+        ],
+        options: [environmentIdOption, managementApiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
     })
     .withCommand({
         name: 'environment',
         description: `Generates strongly typed models representing all objects in the environment. This is useful for creating custom tools or scripts where you need to reference objects within your environment`,
-        examples: [`kontent-generate ${'environment' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
-        options: [environmentIdOption, apiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
+        examples: [
+            `kontent-generate ${'environment' satisfies CliAction} --${environmentIdOption.name}=x --${managementApiKeyOption.name}=x`
+        ],
+        options: [environmentIdOption, managementApiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
     })
     .withCommand({
         name: 'migration-toolkit',
         description: `Generates models for '${'@kontent-ai/migration-toolkit' satisfies LibraryType}' library`,
-        examples: [`kontent-generate ${'migration-toolkit' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
-        options: [environmentIdOption, apiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
+        examples: [
+            `kontent-generate ${'migration-toolkit' satisfies CliAction} --${environmentIdOption.name}=x --${managementApiKeyOption.name}=x`
+        ],
+        options: [environmentIdOption, managementApiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
     })
     .withCommand({
         name: 'items',
-        description: `Overview of all items in the environment and their ids/codenames as well as Type representing all item codenames`,
-        examples: [`kontent-generate ${'items' satisfies CliAction} --${environmentIdOption.name}=x --${apiKeyOption.name}=x`],
-        options: [environmentIdOption, apiKeyOption, addTimestampOption, ModuleFileExtensionOption, outputDirOption, baseUrl]
+        description: `Overview of all items in the environment and their ids/codenames as well as Type representing all item codenames.`,
+        examples: [
+            `kontent-generate ${'items' satisfies CliAction} --${environmentIdOption.name}=x --${managementApiKeyOption.name}=x --${deliveryApiKeyOption.name}=x --${apiModeOption.name}=preview --${contentTypes.name}=a,b,c`
+        ],
+        options: [
+            environmentIdOption,
+            managementApiKeyOption,
+            deliveryApiKeyOption,
+            addTimestampOption,
+            ModuleFileExtensionOption,
+            outputDirOption,
+            baseUrl
+        ]
     })
     .withOption({
         alias: `h`,

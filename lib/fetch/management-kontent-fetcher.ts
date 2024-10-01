@@ -23,7 +23,7 @@ interface KontentFetcherConfig {
     readonly baseUrl?: string;
 }
 
-export function kontentFetcher(config: KontentFetcherConfig) {
+export function managementKontentFetcher(config: KontentFetcherConfig) {
     const client: GeneratorManagementClient = createManagementClient({
         environmentId: config.environmentId,
         apiKey: config.apiKey,

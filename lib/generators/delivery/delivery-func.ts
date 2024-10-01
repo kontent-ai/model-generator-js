@@ -10,7 +10,7 @@ import {
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver
 } from '../../core/resolvers.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
 import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';

@@ -20,6 +20,7 @@
  *
  * Codename: actor
  * Id: 58099989-319f-495f-aa36-cb3710854e36
+ * Codename: actor
  */
 export const actorItems = {
     /**
@@ -31,35 +32,11 @@ export const actorItems = {
     },
 
     /**
-     * Rachel McAdams
+     * Bill Nighy
      */
-    rachel_mcadams: {
-        codename: 'rachel_mcadams',
-        id: '10145fa6-b074-4d2e-9a18-07cf23dff33d'
-    },
-
-    /**
-     * Nathalie Boltt
-     */
-    nathalie_boltt: {
-        codename: 'nathalie_boltt',
-        id: '11b2170c-6df8-48d6-af66-4ddafa2a425a'
-    },
-
-    /**
-     * Kristen Wiig
-     */
-    kristen_wiig: {
-        codename: 'kristen_wiig',
-        id: '2df17777-b347-4590-be05-cb256bf718e9'
-    },
-
-    /**
-     * Joel Edgerton
-     */
-    joel_edgerton: {
-        codename: 'joel_edgerton',
-        id: '3294e4b0-e58b-49d7-85fa-5bc9a86556ec'
+    bill_nighy: {
+        codename: 'bill_nighy',
+        id: 'cddc7576-38b3-4de2-9fb9-2d1ce16daa8b'
     },
 
     /**
@@ -71,27 +48,11 @@ export const actorItems = {
     },
 
     /**
-     * Matt Damon
+     * Christian Bale
      */
-    matt_damon: {
-        codename: 'matt_damon',
-        id: '69a1cbb3-fcc9-4f50-8631-8298fe106cd5'
-    },
-
-    /**
-     * Jessica Chastain
-     */
-    jessica_chastain: {
-        codename: 'jessica_chastain',
-        id: 'a67aacfa-b400-444d-b53e-df1766065034'
-    },
-
-    /**
-     * Sharlto Copley
-     */
-    sharlto_copley: {
-        codename: 'sharlto_copley',
-        id: 'c10783cb-c8b8-4fec-8f44-7323ffc3227b'
+    christian_bale: {
+        codename: 'christian_bale',
+        id: 'f0e9e9fa-91e8-40d5-9527-b7e0ae51fc54'
     },
 
     /**
@@ -103,11 +64,59 @@ export const actorItems = {
     },
 
     /**
-     * Bill Nighy
+     * Jessica Chastain
      */
-    bill_nighy: {
-        codename: 'bill_nighy',
-        id: 'cddc7576-38b3-4de2-9fb9-2d1ce16daa8b'
+    jessica_chastain: {
+        codename: 'jessica_chastain',
+        id: 'a67aacfa-b400-444d-b53e-df1766065034'
+    },
+
+    /**
+     * Joel Edgerton
+     */
+    joel_edgerton: {
+        codename: 'joel_edgerton',
+        id: '3294e4b0-e58b-49d7-85fa-5bc9a86556ec'
+    },
+
+    /**
+     * Kristen Wiig
+     */
+    kristen_wiig: {
+        codename: 'kristen_wiig',
+        id: '2df17777-b347-4590-be05-cb256bf718e9'
+    },
+
+    /**
+     * Matt Damon
+     */
+    matt_damon: {
+        codename: 'matt_damon',
+        id: '69a1cbb3-fcc9-4f50-8631-8298fe106cd5'
+    },
+
+    /**
+     * Nathalie Boltt
+     */
+    nathalie_boltt: {
+        codename: 'nathalie_boltt',
+        id: '11b2170c-6df8-48d6-af66-4ddafa2a425a'
+    },
+
+    /**
+     * Rachel McAdams
+     */
+    rachel_mcadams: {
+        codename: 'rachel_mcadams',
+        id: '10145fa6-b074-4d2e-9a18-07cf23dff33d'
+    },
+
+    /**
+     * Sharlto Copley
+     */
+    sharlto_copley: {
+        codename: 'sharlto_copley',
+        id: 'c10783cb-c8b8-4fec-8f44-7323ffc3227b'
     },
 
     /**
@@ -116,13 +125,5 @@ export const actorItems = {
     tom_hardy: {
         codename: 'tom_hardy',
         id: 'd1557cb1-d7ec-4d04-9742-f86b52bc34fc'
-    },
-
-    /**
-     * Christian Bale
-     */
-    christian_bale: {
-        codename: 'christian_bale',
-        id: 'f0e9e9fa-91e8-40d5-9527-b7e0ae51fc54'
     }
 } as const;

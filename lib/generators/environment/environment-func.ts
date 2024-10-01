@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import { Options } from 'prettier';
 import { defaultModuleFileExtension } from '../../config.js';
 import { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { environmentGenerator as _environmentGenerator } from './environment.generator.js';
 

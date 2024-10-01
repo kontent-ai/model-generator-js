@@ -26,4 +26,5 @@ export type CliArgumentsFetcher = {
     getOptionalArgumentValue(argName: string): string | undefined;
     getRequiredArgumentValue(argName: string): string;
     getBooleanArgumentValue(argName: string, defaultValue: boolean): boolean;
+    getOptionalArgumentArrayVaue(argName: string): readonly string[];
 };

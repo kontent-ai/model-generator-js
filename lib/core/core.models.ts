@@ -1,3 +1,4 @@
+import { IDeliveryClient } from '@kontent-ai/delivery-sdk';
 import {
     ContentTypeElements,
     ContentTypeModels,
@@ -11,7 +12,9 @@ export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment' | '
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
 export type ModuleFileExtension = 'js' | 'ts' | 'none';
 export type CaseType = 'camelCase' | 'pascalCase';
+export type DeliveryApiMode = 'preview' | 'secure' | 'default';
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
+export type GeneratorDeliveryClient = Readonly<IDeliveryClient>;
 export type LiteralUnion<T extends string | undefined> = T | (string & NonNullable<unknown>);
 
 export interface ErrorData {

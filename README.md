@@ -44,7 +44,9 @@ npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --api
 npx @kontent-ai/model-generator@latest environment --environmentId=x --apiKey=y
 
 # Items overview with ids / codenames and Types representing available item codenames
-npx @kontent-ai/model-generator@latest items --environmentId=x --apiKey=y
+# 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
+# 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
+npx @kontent-ai/model-generator@latest items --environmentId=x --apiKey=y --deliveryApiKey=y --apiMode=preview --contentTypes=a,b,c
 ```
 
 Run with more options:

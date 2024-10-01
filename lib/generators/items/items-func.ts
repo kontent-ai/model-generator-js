@@ -1,8 +1,9 @@
 import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
-import { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { kontentFetcher as _kontentFetcher } from '../../fetch/kontent-fetcher.js';
+import { DeliveryApiMode, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import { deliveryKontentFetcher as _deliveryKontentFetcher } from '../../fetch/delivery-kontent-fetcher.js';
+import { managementKontentFetcher as _managementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { itemsGenerator as _itemsGenerator } from './items.generator.js';
 
@@ -11,7 +12,10 @@ export interface GenerateItemsModelsConfig {
     readonly addTimestamp: boolean;
     readonly apiKey: string;
     readonly moduleFileExtension: ModuleFileExtension;
+    readonly apiMode: DeliveryApiMode;
+    readonly filterByTypeCodenames: readonly string[];
 
+    readonly deliveryApiKey?: string;
     readonly outputDir?: string;
     readonly baseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
@@ -38,19 +42,28 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
     readonly codenameFiles: GeneratedSet;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
-    const kontentFetcher = _kontentFetcher({
+    const deliveryKontentFetcher = _deliveryKontentFetcher({
+        environmentId: config.environmentId,
+        apiMode: config.apiMode,
+        apiKey: config.deliveryApiKey,
+        baseUrl: config.baseUrl
+    });
+
+    const managementKontentFetcher = _managementKontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl
     });
 
-    const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
+    const environmentInfo = await managementKontentFetcher.getEnvironmentInfoAsync();
 
-    const [items, types] = await Promise.all([kontentFetcher.getItemsAsync(), kontentFetcher.getTypesAsync()]);
+    const [items, types] = await Promise.all([
+        deliveryKontentFetcher.getItemsAsync(config.filterByTypeCodenames),
+        managementKontentFetcher.getTypesAsync()
+    ]);
 
     const itemsGenerator = _itemsGenerator({
         environmentData: {
-            environment: environmentInfo,
             types: types,
             items: items
         }

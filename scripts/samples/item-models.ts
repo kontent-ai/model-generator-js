@@ -4,7 +4,7 @@ import { rmSync } from 'fs';
 import { parseModuleFileExtension } from '../../lib/cli/arg.utils.js';
 import { logError } from '../../lib/core/error.utils.js';
 import { generateItemsAsync } from '../../lib/generators/items/items-func.js';
-import { getEnvironmentRequiredValue } from '../utils/test.utils.js';
+import { getEnvironmentOptionalValue, getEnvironmentRequiredValue } from '../utils/test.utils.js';
 
 const outputDir: string = './sample/items';
 
@@ -23,6 +23,7 @@ try {
 
     const environmentId = getEnvironmentRequiredValue('ENVIRONMENT_ID');
     const apiKey = getEnvironmentRequiredValue('API_KEY');
+    const deliveryApiKey = getEnvironmentOptionalValue('DELIVERY_API_KEY');
     const moduleFileExtension = parseModuleFileExtension(getEnvironmentRequiredValue('MODULE_EXTENSION'));
 
     await generateItemsAsync({
@@ -30,7 +31,10 @@ try {
         environmentId: environmentId,
         apiKey: apiKey,
         moduleFileExtension: moduleFileExtension,
-        outputDir: outputDir
+        outputDir: outputDir,
+        apiMode: 'default',
+        deliveryApiKey: deliveryApiKey,
+        filterByTypeCodenames: []
     });
 } catch (error) {
     logError(error);

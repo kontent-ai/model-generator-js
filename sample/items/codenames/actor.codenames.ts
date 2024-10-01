@@ -20,18 +20,19 @@
  *
  * Codename: actor
  * Id: 58099989-319f-495f-aa36-cb3710854e36
+ * Codename: actor
  */
 export type ActorCodenames =
     | 'anne_hathaway'
-    | 'rachel_mcadams'
-    | 'nathalie_boltt'
-    | 'kristen_wiig'
-    | 'joel_edgerton'
-    | 'billy_crystal'
-    | 'matt_damon'
-    | 'jessica_chastain'
-    | 'sharlto_copley'
-    | 'domhnall_gleeson'
     | 'bill_nighy'
-    | 'tom_hardy'
-    | 'christian_bale';
+    | 'billy_crystal'
+    | 'christian_bale'
+    | 'domhnall_gleeson'
+    | 'jessica_chastain'
+    | 'joel_edgerton'
+    | 'kristen_wiig'
+    | 'matt_damon'
+    | 'nathalie_boltt'
+    | 'rachel_mcadams'
+    | 'sharlto_copley'
+    | 'tom_hardy';
