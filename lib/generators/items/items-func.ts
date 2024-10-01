@@ -2,6 +2,7 @@ import { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { Options } from 'prettier';
 import { DeliveryApiMode, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import { singleItemToArray } from '../../core/core.utils.js';
 import { deliveryKontentFetcher as _deliveryKontentFetcher } from '../../fetch/delivery-kontent-fetcher.js';
 import { managementKontentFetcher as _managementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
@@ -14,6 +15,8 @@ export interface GenerateItemsModelsConfig {
     readonly moduleFileExtension: ModuleFileExtension;
     readonly apiMode: DeliveryApiMode;
     readonly filterByTypeCodenames: readonly string[];
+    readonly generateTypes: boolean;
+    readonly generateObjects: boolean;
 
     readonly deliveryApiKey?: string;
     readonly outputDir?: string;
@@ -33,14 +36,14 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
         environmentInfo: environmentInfo
     });
 
-    await fileManager.createSetsAsync([itemFiles, codenameFiles]);
+    await fileManager.createSetsAsync([...singleItemToArray(itemFiles), ...singleItemToArray(codenameFiles)]);
 
     console.log(chalk.green(`\nCompleted`));
 }
 
 async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
-    readonly itemFiles: GeneratedSet;
-    readonly codenameFiles: GeneratedSet;
+    readonly itemFiles: GeneratedSet | undefined;
+    readonly codenameFiles: GeneratedSet | undefined;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
     const deliveryKontentFetcher = _deliveryKontentFetcher({
@@ -71,8 +74,8 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
     });
 
     return {
-        itemFiles: itemsGenerator.getItemFiles(),
-        codenameFiles: itemsGenerator.getCodenameFiles(),
+        itemFiles: config.generateObjects ? itemsGenerator.getItemFiles() : undefined,
+        codenameFiles: config.generateTypes ? itemsGenerator.getCodenameFiles() : undefined,
         environmentInfo
     };
 }

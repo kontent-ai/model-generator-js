@@ -8,6 +8,8 @@ import {
     deliveryApiKeyOption,
     deliveryBaseUrlOption,
     environmentIdOption,
+    generateObjectsOption,
+    generateTypesOption,
     managementApiKeyOption,
     managementBaseUrlOption,
     moduleFileExtensionOption,
@@ -20,6 +22,8 @@ export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise
         environmentId: cliFetcher.getRequiredArgumentValue(environmentIdOption.name),
         apiKey: cliFetcher.getRequiredArgumentValue(managementApiKeyOption.name),
         // optional
+        generateTypes: cliFetcher.getBooleanArgumentValue(generateTypesOption.name, false),
+        generateObjects: cliFetcher.getBooleanArgumentValue(generateObjectsOption.name, false),
         deliveryApiKey: cliFetcher.getOptionalArgumentValue(deliveryApiKeyOption.name),
         baseUrl: cliFetcher.getOptionalArgumentValue(managementBaseUrlOption.name),
         deliveryBaseUrl: cliFetcher.getOptionalArgumentValue(deliveryBaseUrlOption.name),

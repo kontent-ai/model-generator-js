@@ -79,6 +79,20 @@ export const deliveryBaseUrlOption: CommandOption = {
     isRequired: false
 };
 
+export const generateTypesOption: CommandOption = {
+    name: `generateTypes`,
+    description: `Indicates if Typescript types representing data are generated`,
+    type: 'boolean',
+    isRequired: false
+};
+
+export const generateObjectsOption: CommandOption = {
+    name: `generateTypes`,
+    description: `Indicates if objects (const variables) representing data are generated`,
+    type: 'boolean',
+    isRequired: false
+};
+
 export const cliArgs = argumentsSetter()
     .withCommand({
         name: 'delivery-sdk',
@@ -142,7 +156,9 @@ export const cliArgs = argumentsSetter()
             managementBaseUrlOption,
             apiModeOption,
             contentTypesOption,
-            deliveryBaseUrlOption
+            deliveryBaseUrlOption,
+            generateTypesOption,
+            generateObjectsOption
         ]
     })
     .withOption({

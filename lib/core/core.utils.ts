@@ -71,15 +71,6 @@ export function toOutputDirPath(outputDir: string | undefined): string {
     return outputDir ? `${outputDir}/`.replaceAll('//', '/') : `./`;
 }
 
-function removeLineEndings(value: string): string {
-    return value.replace(/(\r\n|\n|\r)/g, '');
-}
-
-function toSafeStringCode(text: string): string {
-    const replaceWith = '';
-    return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
-}
-
 export function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string {
     if (/^[^a-zA-Z]/.test(text)) {
         return `_${text}`;
@@ -87,8 +78,21 @@ export function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string
     return text;
 }
 
+export function singleItemToArray<T>(item: T | undefined): readonly T[] {
+    return item ? [item] : [];
+}
+
 function getPropertyStringHash(text: string): string {
     const hash = createHash('sha256');
     hash.update(text);
     return `_${hash.digest('hex')}`.slice(0, 10);
+}
+
+function removeLineEndings(value: string): string {
+    return value.replace(/(\r\n|\n|\r)/g, '');
+}
+
+function toSafeStringCode(text: string): string {
+    const replaceWith = '';
+    return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
 }

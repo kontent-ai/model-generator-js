@@ -34,7 +34,9 @@ try {
         outputDir: outputDir,
         apiMode: 'default',
         deliveryApiKey: deliveryApiKey,
-        filterByTypeCodenames: []
+        filterByTypeCodenames: [],
+        generateObjects: true,
+        generateTypes: true
     });
 } catch (error) {
     logError(error);
