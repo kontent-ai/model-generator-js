@@ -10,7 +10,7 @@ import {
 
 export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment' | 'items';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
-export type ModuleFileExtension = 'js' | 'ts' | 'none';
+export type ModuleFileExtension = 'js' | 'ts' | 'mjs' | 'mts' | 'none';
 export type CaseType = 'camelCase' | 'pascalCase';
 export type DeliveryApiMode = 'preview' | 'secure' | 'default';
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;

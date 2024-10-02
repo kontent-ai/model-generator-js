@@ -14,7 +14,7 @@ import {
     managementBaseUrlOption,
     moduleFileExtensionOption,
     outputDirOption
-} from '../commands.js';
+} from '../command.options.js';
 
 export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
     await generateItemsAsync({

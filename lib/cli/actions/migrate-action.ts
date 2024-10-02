@@ -8,7 +8,7 @@ import {
     managementBaseUrlOption,
     moduleFileExtensionOption,
     outputDirOption
-} from '../commands.js';
+} from '../command.options.js';
 
 export async function migrateActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
     await generateMigrationModelsAsync({

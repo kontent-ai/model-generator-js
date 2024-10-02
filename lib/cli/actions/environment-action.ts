@@ -9,7 +9,7 @@ import {
     managementBaseUrlOption,
     moduleFileExtensionOption,
     outputDirOption
-} from '../commands.js';
+} from '../command.options.js';
 
 export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
     await generateEnvironmentModelsAsync({
