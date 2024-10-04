@@ -81,18 +81,11 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         taxonomy: mapName(config.nameResolvers?.taxonomy, 'pascalCase')
     };
 
-    const getSystemTypeImports = (): readonly string[] => {
+    const getContentTypeSystemImports = (): readonly string[] => {
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.coreCodenamesFilename}.ts`,
-                importValue: [
-                    sharedTypesConfig.collectionCodenames,
-                    sharedTypesConfig.languageCodenames,
-                    sharedTypesConfig.workflowCodenames,
-                    sharedTypesConfig.workflowStepCodenames
-                ]
-                    .map((m) => m)
-                    .join(', ')
+                filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${coreConfig.barrelExportFilename}`,
+                importValue: [deliveryConfig.coreContentTypeName].map((m) => m).join(', ')
             })
         ];
     };
@@ -198,7 +191,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         return {
             imports: sortAlphabetically(
                 [
-                    ...getSystemTypeImports(),
+                    ...getContentTypeSystemImports(),
                     ...getReferencedTypeImports(data.contentType, data.flattenedElements),
                     ...getReferencedTaxonomyImports(data.flattenedElements),
                     ...getSnippetImports(snippets)
@@ -239,15 +232,15 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         };
     };
 
-    const getDeliverySdkImports = (
+    const getTypeDeliverySdkImports = (
         typeOrSnippet: ContentTypeOrSnippet,
         flattenedElements: readonly FlattenedElement[]
     ): readonly string[] => {
-        const mainType =
-            typeOrSnippet instanceof ContentTypeModels.ContentType ? deliveryConfig.sdkTypes.contentItem : deliveryConfig.sdkTypes.snippet;
-
         return sortAlphabetically(
-            [mainType, ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])],
+            [
+                ...(typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet ? [deliveryConfig.sdkTypes.snippet] : []),
+                ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])
+            ],
             (importValue) => importValue
         );
     };
@@ -270,7 +263,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         return `
 ${importer.importType({
     filePathOrPackage: deliveryConfig.npmPackageName,
-    importValue: `${getDeliverySdkImports(snippet, flattenedElements).join(', ')}`
+    importValue: `${getTypeDeliverySdkImports(snippet, flattenedElements).join(', ')}`
 })}
 ${importsResult.imports.join('\n')}
 
@@ -308,7 +301,7 @@ ${getElementsCode(flattenedElements)}>;
         return `
 ${importer.importType({
     filePathOrPackage: deliveryConfig.npmPackageName,
-    importValue: `${getDeliverySdkImports(contentType, flattenedElements).join(', ')}`
+    importValue: `${getTypeDeliverySdkImports(contentType, flattenedElements).join(', ')}`
 })}
 ${importsResult.imports.join('\n')}
 
@@ -323,14 +316,9 @@ ${wrapComment(`
 * Id: ${contentType.id}
 * Codename: ${contentType.codename}    
 `)}
-export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItem}<
+export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
 ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
-'${contentType.codename}', 
-${sharedTypesConfig.languageCodenames}, 
-${sharedTypesConfig.collectionCodenames},
-${sharedTypesConfig.workflowCodenames}, 
-${sharedTypesConfig.workflowStepCodenames}, 
-${nameOfTypeRepresentingAllElementCodenames}>;
+'${contentType.codename}'>;
 `;
     };
 
@@ -391,12 +379,6 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
         if (flattenedElements.length === 0) {
             return `export type ${typeName} = never`;
         }
-
-        const el = flattenedElements.find((m) => m.codename === 'link__f25fb651_eea8_4a0a_8e39_ac5a0f97ed72');
-        if (el) {
-            console.log(el);
-        }
-
         return `export type ${typeName} = ${flattenedElements.map((element) => `'${element.codename}'`).join(' | ')};`;
     };
 
@@ -406,24 +388,27 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
             .with({ type: 'text' }, () => 'TextElement')
             .with({ type: 'number' }, () => 'NumberElement')
             .with({ type: 'modular_content' }, (linkedItemsElement) => {
-                if (!linkedItemsElement.allowedContentTypes?.length) {
-                    return 'LinkedItemsElement';
-                }
-                return `LinkedItemsElement<${getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes ?? []).join(' | ')}>`;
+                return `LinkedItemsElement<${
+                    linkedItemsElement.allowedContentTypes?.length
+                        ? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(' | ')
+                        : deliveryConfig.coreContentTypeName
+                }>`;
             })
             .with({ type: 'subpages' }, (linkedItemsElement) => {
-                if (!linkedItemsElement.allowedContentTypes?.length) {
-                    return 'LinkedItemsElement';
-                }
-                return `LinkedItemsElement<${getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes ?? []).join(' | ')}>`;
+                return `LinkedItemsElement<${
+                    linkedItemsElement.allowedContentTypes?.length
+                        ? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(' | ')
+                        : deliveryConfig.coreContentTypeName
+                }>`;
             })
             .with({ type: 'asset' }, () => 'AssetsElement')
             .with({ type: 'date_time' }, () => 'DateTimeElement')
             .with({ type: 'rich_text' }, (richTextElement) => {
-                if (!richTextElement.allowedContentTypes?.length) {
-                    return 'RichTextElement';
-                }
-                return `RichTextElement<${getLinkedItemsAllowedTypes(richTextElement.allowedContentTypes ?? []).join(' | ')}>`;
+                return `RichTextElement<${
+                    richTextElement.allowedContentTypes?.length
+                        ? getLinkedItemsAllowedTypes(richTextElement.allowedContentTypes).join(' | ')
+                        : deliveryConfig.coreContentTypeName
+                }>`;
             })
             .with({ type: 'multiple_choice' }, (multipleChoiceElement) => {
                 if (!multipleChoiceElement.multipleChoiceOptions?.length) {
@@ -451,6 +436,70 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
         return types.map((type) => nameResolvers.contentType(type));
     };
 
+    const getCoreContentTypeFile = (): GeneratedFile => {
+        const sdkImports: string[] = [deliveryConfig.sdkTypes.contentItem, deliveryConfig.sdkTypes.contentItemElements];
+
+        const codenameImports: string[] = [
+            sharedTypesConfig.contentTypeCodenames,
+            sharedTypesConfig.collectionCodenames,
+            sharedTypesConfig.languageCodenames,
+            sharedTypesConfig.workflowCodenames,
+            sharedTypesConfig.workflowStepCodenames
+        ];
+
+        const contentTypeGenericArgName: string = 'TContentTypeCodename';
+        const elementsGenericArgName: string = 'TElements';
+
+        return {
+            filename: `${deliveryConfig.coreTypeFilename}.ts`,
+            text: `
+              ${importer.importType({
+                  filePathOrPackage: deliveryConfig.npmPackageName,
+                  importValue: `${sdkImports.join(', ')}`
+              })}
+                ${importer.importType({
+                    filePathOrPackage: `./${deliveryConfig.coreCodenamesFilename}.ts`,
+                    importValue: `${codenameImports.join(', ')}`
+                })}
+
+                ${wrapComment(`\n * Core content type used in favor of generic '${deliveryConfig.sdkTypes.contentItem}'\n`)}
+                export type ${deliveryConfig.coreContentTypeName}<
+                        ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements} = ${deliveryConfig.sdkTypes.contentItemElements}, 
+                        ${contentTypeGenericArgName} extends ${sharedTypesConfig.contentTypeCodenames} = ${sharedTypesConfig.contentTypeCodenames}
+                    > = ${deliveryConfig.sdkTypes.contentItem}<
+                    ${elementsGenericArgName},
+                    ${contentTypeGenericArgName},
+                    ${sharedTypesConfig.languageCodenames},
+                    ${sharedTypesConfig.collectionCodenames},
+                    ${sharedTypesConfig.workflowCodenames},
+                    ${sharedTypesConfig.workflowStepCodenames}
+                >;
+            `
+        };
+    };
+
+    const getCodenamesFile = (): GeneratedFile => {
+        return {
+            filename: `${deliveryConfig.coreCodenamesFilename}.ts`,
+            text: `
+                ${wrapComment(`\n * Type representing all languages\n`)}
+                ${getLanguageCodenamesType(config.environmentData.languages)}
+
+                ${wrapComment(`\n * Type representing all content types\n`)}
+                ${getContentTypeCodenamesType(config.environmentData.types)}
+
+                ${wrapComment(`\n * Type representing all collections\n`)}
+                ${getCollectionCodenamesType(config.environmentData.collections)}
+
+                ${wrapComment(`\n * Type representing all workflows\n`)}
+                ${getWorkflowCodenamesType(config.environmentData.workflows)}
+
+                ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
+                ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
+            `
+        };
+    };
+
     return {
         generateModels: (): {
             contentTypeFiles: GeneratedSet;
@@ -470,27 +519,7 @@ ${nameOfTypeRepresentingAllElementCodenames}>;
         getSystemFiles(): GeneratedSet {
             return {
                 folderName: deliveryConfig.systemTypesFolderName,
-                files: [
-                    {
-                        filename: `${deliveryConfig.coreCodenamesFilename}.ts`,
-                        text: `
-                ${wrapComment(`\n * Type representing all languages\n`)}
-                ${getLanguageCodenamesType(config.environmentData.languages)}
-
-                ${wrapComment(`\n * Type representing all content types\n`)}
-                ${getContentTypeCodenamesType(config.environmentData.types)}
-
-                ${wrapComment(`\n * Type representing all collections\n`)}
-                ${getCollectionCodenamesType(config.environmentData.collections)}
-
-                ${wrapComment(`\n * Type representing all workflows\n`)}
-                ${getWorkflowCodenamesType(config.environmentData.workflows)}
-
-                ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
-                ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
-            `
-                    }
-                ]
+                files: [getCoreContentTypeFile(), getCodenamesFile()]
             };
         }
     };

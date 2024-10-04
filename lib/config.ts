@@ -44,6 +44,8 @@ export const deliveryConfig = {
     taxonomiesFolderName: `taxonomies`,
     systemTypesFolderName: 'system',
     coreCodenamesFilename: 'delivery.codenames',
+    coreTypeFilename: 'core.type',
+    coreContentTypeName: 'CoreContentType',
 
     sdkTypes: {
         contentItem: 'IContentItem',

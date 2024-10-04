@@ -13,8 +13,8 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { CollectionCodenames, LanguageCodenames, WorkflowCodenames, WorkflowStepCodenames } from '../system/delivery.codenames.js';
+import type { Elements } from '@kontent-ai/delivery-sdk';
+import type { CoreContentType } from '../system/index.js';
 
 /**
  * Type representing all available element codenames for Actor
@@ -27,7 +27,7 @@ export type ActorElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo'
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export type Actor = IContentItem<
+export type Actor = CoreContentType<
     {
         /**
          * Url
@@ -67,10 +67,5 @@ export type Actor = IContentItem<
          */
         readonly photo: Elements.AssetsElement;
     },
-    'actor',
-    LanguageCodenames,
-    CollectionCodenames,
-    WorkflowCodenames,
-    WorkflowStepCodenames,
-    ActorElementCodenames
+    'actor'
 >;
