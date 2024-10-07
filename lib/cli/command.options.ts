@@ -86,7 +86,7 @@ export const generateTypesOption: CommandOption = {
 };
 
 export const generateObjectsOption: CommandOption = {
-    name: `generateTypes`,
+    name: `generateObjects`,
     description: `Indicates if objects (const variables) representing data are generated`,
     type: 'boolean',
     isRequired: false
