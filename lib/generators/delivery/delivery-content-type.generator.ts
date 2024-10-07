@@ -85,7 +85,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         return [
             importer.importType({
                 filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${coreConfig.barrelExportFilename}`,
-                importValue: [deliveryConfig.coreContentTypeName].map((m) => m).join(', ')
+                importValue: [deliveryConfig.coreContentTypeName].join(', ')
             })
         ];
     };
