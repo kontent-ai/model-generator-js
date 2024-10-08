@@ -1,6 +1,7 @@
 import { HttpService } from '@kontent-ai/core-sdk';
 import { createDeliveryClient, IContentItem, ItemsFeedQuery } from '@kontent-ai/delivery-sdk';
 import chalk from 'chalk';
+import { coreConfig } from '../config.js';
 import { DeliveryApiMode, GeneratorDeliveryClient } from '../core/core.models.js';
 import { sortAlphabetically } from '../core/core.utils.js';
 
@@ -16,7 +17,13 @@ export function deliveryKontentFetcher(config: KontentFetcherConfig) {
         environmentId: config.environmentId,
         defaultQueryConfig: {
             usePreviewMode: config.apiMode === 'preview',
-            useSecuredMode: config.apiMode === 'secure'
+            useSecuredMode: config.apiMode === 'secure',
+            customHeaders: [
+                {
+                    header: coreConfig.kontentTrackingHeaderName,
+                    value: coreConfig.kontentTrackingHeaderValue
+                }
+            ]
         },
         secureApiKey: config.apiMode === 'secure' ? config.apiKey : undefined,
         previewApiKey: config.apiMode === 'preview' ? config.apiKey : undefined,

@@ -1,10 +1,13 @@
 import { DeliveryApiMode, ModuleFileExtension } from './core/core.models.js';
+import { libMetadata } from './meta/metadata.js';
 
 export const defaultModuleFileExtension: ModuleFileExtension = 'js';
 export const defaultDeliveryApiMode: DeliveryApiMode = 'default';
 
 export const coreConfig = {
-    barrelExportFilename: 'index.ts'
+    barrelExportFilename: 'index.ts',
+    kontentTrackingHeaderName: 'X-KC-SOURCE',
+    kontentTrackingHeaderValue: `${libMetadata.name};${libMetadata.version}`
 } as const;
 
 export const sharedTypesConfig = {

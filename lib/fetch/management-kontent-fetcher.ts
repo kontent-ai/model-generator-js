@@ -14,6 +14,7 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
+import { coreConfig } from '../config.js';
 import { toSafeComment } from '../core/comment.utils.js';
 import { GeneratorManagementClient } from '../core/core.models.js';
 
@@ -28,7 +29,8 @@ export function managementKontentFetcher(config: KontentFetcherConfig) {
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl,
-        httpService: new HttpService({ logErrorsToConsole: false })
+        httpService: new HttpService({ logErrorsToConsole: false }),
+        headers: [{ header: coreConfig.kontentTrackingHeaderName, value: coreConfig.kontentTrackingHeaderValue }]
     });
 
     return {

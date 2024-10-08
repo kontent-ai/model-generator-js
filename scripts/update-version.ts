@@ -14,6 +14,7 @@ function createVersionFile(date: Date, filePath: string, propertyName: string): 
 
     const src = `
 export const ${propertyName} = {
+    host: 'npmjs.com',
 	name: '${name}',
     timestamp: '${date.toUTCString()}',
     version: '${version}'
