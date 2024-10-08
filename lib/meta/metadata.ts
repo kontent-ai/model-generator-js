@@ -1,6 +1,7 @@
 
 export const libMetadata = {
+    host: 'npmjs.com',
 	name: '@kontent-ai/model-generator',
-    timestamp: 'Thu, 15 Aug 2024 09:05:18 GMT',
-    version: '7.4.0'
+    timestamp: 'Tue, 08 Oct 2024 10:03:49 GMT',
+    version: '8.0.0-5'
 };

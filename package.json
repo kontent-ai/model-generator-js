@@ -1,9 +1,9 @@
 {
     "name": "@kontent-ai/model-generator",
-    "version": "7.4.0",
-    "description": "This utility generates strongly-typed models based on Content Types in a Kontent.ai project. These models can be used with SDKs",
+    "version": "8.0.0-6",
+    "description": "This utility generates strongly-typed models for Delivery JS SDK, Migration toolkit or just general scripting to improve the experience when referencing Kontent.ai related objects.",
     "bin": {
-        "kontent-generate": "./dist/es2022/lib/cli/cli.js"
+        "kontent-generate": "./dist/lib/code/app.js"
     },
     "repository": {
         "type": "git",
@@ -22,46 +22,51 @@
         "Kontent Model Generator",
         "Kontent.ai strongly typed models"
     ],
-    "preferGlobal": true,
-    "exports": "./dist/es2022/lib/index.js",
-    "types": "./dist/es2022/lib/index.d.ts",
+    "exports": "./dist/lib/public_api.js",
+    "types": "./dist/lib/public_api.d.ts",
     "type": "module",
     "scripts": {
-        "release": "npm run lint:check && standard-version && npm run update:version",
-        "release:major": "npm run lint:check && standard-version --release-as major && npm run update:version",
-        "release:major:beta": "npm run lint:check && standard-version --prerelease --release-as major && npm run update:version",
+        "release": "standard-version && npm run update:version",
+        "release:major": "standard-version --release-as major && npm run update:version",
+        "release:major:beta": "standard-version --prerelease --release-as major && npm run update:version",
         "release:beta": "standard-version --prerelease",
         "prerelease:standard": "standard-version --prerelease",
         "prerelease:major": "standard-version --prerelease --release-as major",
-        "prepublishOnly": "npm run lint:check && npm run build && npm run push:tags",
+        "prepublishOnly": "npm run build && npm run push:tags",
         "publish:beta": "npm publish --tag=next",
-        "build:es2022": "tsc --p tsconfig.es2022.json",
-        "build": "npm run clean && npm run build:es2022",
-        "test:all": "npm run build && npm run test:delivery-models",
-        "test:delivery-models": "tsx scripts/generate-delivery-models",
-        "test:help": "npm run build && cd sample && node ../dist/es2022/lib/cli/cli -h",
-        "lint:check": "npx eslint lib",
-        "clean": "tsx clean.ts",
+        "build": "npm run clean && tsc --p tsconfig.json",
+        "test:all": "npm run build",
+        "sample:delivery": "tsx scripts/samples/delivery-models",
+        "sample:environment": "tsx scripts/samples/environment-models",
+        "sample:migration": "tsx scripts/samples/migration-models",
+        "sample:items": "tsx scripts/samples/item-models",
+        "show:help": "tsx lib/cli/app --help",
+        "show:help:delivery-sdk": "tsx lib/cli/app delivery-sdk --help",
+        "lint": "eslint lib",
+        "lint:fix": "eslint lib --fix",
+        "clean": "tsx scripts/clean.ts",
         "push:tags": "git push --tags",
         "update:version": "tsx ./scripts/update-version.ts"
     },
     "dependencies": {
-        "yargs": "17.7.2",
+        "@kontent-ai/management-sdk": "7.5.0",
+        "@kontent-ai/delivery-sdk": "15.2.0",
+        "chalk": "5.3.0",
         "prettier": "3.3.3",
-        "colors": "1.4.0",
-        "@kontent-ai/delivery-sdk": "14.11.0",
-        "@kontent-ai/management-sdk": "7.2.0"
+        "ts-pattern": "5.4.0",
+        "yargs": "17.7.2"
     },
     "devDependencies": {
-        "@types/yargs": "17.0.32",
+        "@eslint/js": "9.12.0",
+        "@kontent-ai/migration-toolkit": "2.0.0",
+        "@types/eslint__js": "8.42.3",
+        "@types/node": "22.7.5",
+        "@types/yargs": "17.0.33",
+        "dotenv-cli": "7.4.2",
+        "eslint": "9.12.0",
         "standard-version": "9.5.0",
-        "typescript": "5.5.3",
-        "@types/node": "20.14.11",
-        "@types/prettier": "3.0.0",
-        "@typescript-eslint/eslint-plugin": "7.16.1",
-        "@typescript-eslint/parser": "7.16.1",
-        "eslint": "8.57.0",
-        "tsx": "4.16.2",
-        "dotenv-cli": "7.4.2"
+        "tsx": "4.19.1",
+        "typescript": "5.6.2",
+        "typescript-eslint": "8.8.1"
     }
 }

@@ -1,144 +1,77 @@
-import { TaxonomyTypeFileNameResolver, TaxonomyTypeResolver } from '../../models.js';
-import Colors from 'colors';
-import { commonHelper, IGeneratedFile } from '../../common-helper.js';
-import { TaxonomyModels } from '@kontent-ai/management-sdk';
-import {
-    MapTaxonomyToFileName,
-    MapTaxonomyName,
-    getMapTaxonomyToFileName,
-    getMapTaxonomyName
-} from './delivery-mappers.js';
+import { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import { deliveryConfig } from '../../config.js';
+import { wrapComment } from '../../core/comment.utils.js';
+import { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import { TaxonomyNameResolver, TaxonomyTypeFileNameResolver, mapFilename, mapName } from '../../core/resolvers.js';
 
-export class DeliveryTaxonomyGenerator {
-    async generateTaxonomyTypesAsync(config: {
-        outputDir: string;
-        taxonomies: TaxonomyModels.Taxonomy[];
-        taxonomyFolderName: string;
-        addTimestamp: boolean;
-        fileResolver?: TaxonomyTypeFileNameResolver;
-        taxonomyResolver?: TaxonomyTypeResolver;
-    }): Promise<IGeneratedFile[]> {
-        const files: IGeneratedFile[] = [];
+export interface DeliveryTaxonomyGeneratorConfig {
+    readonly moduleFileExtension: ModuleFileExtension;
 
-        if (config.taxonomyResolver) {
-            console.log(
-                `Using '${Colors.yellow(
-                    config.taxonomyResolver instanceof Function ? 'custom' : config.taxonomyResolver
-                )}' name resolver for taxonomy type`
-            );
-        }
+    readonly environmentData: {
+        readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+        readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
+    };
 
-        if (config.fileResolver) {
-            console.log(
-                `Using '${Colors.yellow(
-                    config.fileResolver instanceof Function ? 'custom' : config.fileResolver
-                )}' name resolver for taxonomy filename`
-            );
-        }
+    readonly fileResolvers?: {
+        readonly taxonomy?: TaxonomyTypeFileNameResolver;
+    };
+    readonly nameResolvers?: {
+        readonly taxonomy?: TaxonomyNameResolver;
+    };
+}
 
-        if (config.fileResolver || config.taxonomyResolver) {
-            console.log('\n');
-        }
+export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfig) {
+    const taxonomyFileNameMap = mapFilename(config.fileResolvers?.taxonomy);
+    const taxonomyNameMap = mapName(config.nameResolvers?.taxonomy, 'pascalCase');
 
-        for (const taxonomy of config.taxonomies) {
-            const file = this.generateModels({
-                outputDir: config.outputDir,
-                taxonomy: taxonomy,
-                taxonomyFolderName: config.taxonomyFolderName,
-                addTimestamp: config.addTimestamp,
-                taxonomyNameMap: getMapTaxonomyName(config.taxonomyResolver),
-                taxonomyFileNameMap: getMapTaxonomyToFileName(config.fileResolver)
-            });
-
-            files.push(file);
-        }
-
-        return files;
-    }
-
-    private getTaxonomyComment(taxonomy: TaxonomyModels.Taxonomy): string {
-        let comment: string = `${taxonomy.name}`;
-
-        comment += `\n* Id: ${taxonomy.id}`;
-        comment += `\n* Codename: ${taxonomy.codename}`;
-
-        return comment;
-    }
-
-    private generateModels(data: {
-        outputDir: string;
-        taxonomy: TaxonomyModels.Taxonomy;
-        taxonomyFolderName: string;
-        addTimestamp: boolean;
-        taxonomyFileNameMap: MapTaxonomyToFileName;
-        taxonomyNameMap: MapTaxonomyName;
-    }): IGeneratedFile {
-        const filename = `${data.outputDir}${data.taxonomyFolderName}${data.taxonomyFileNameMap(data.taxonomy, true)}`;
-        const code = this.getModelCode({
-            taxonomy: data.taxonomy,
-            addTimestamp: data.addTimestamp,
-            taxonomyNameMap: data.taxonomyNameMap
-        });
-
+    const generateTaxonomyTypes = (): GeneratedSet => {
         return {
-            filename: filename,
-            text: code
+            folderName: deliveryConfig.taxonomiesFolderName,
+            files: config.environmentData.taxonomies.map<GeneratedFile>((taxonomy) => {
+                return getTaxonomyFile(taxonomy);
+            })
         };
-    }
+    };
 
-    private getModelCode(config: {
-        taxonomyNameMap: MapTaxonomyName;
-        taxonomy: TaxonomyModels.Taxonomy;
-        addTimestamp: boolean;
-    }): string {
-        const code = `
-/**
-* ${commonHelper.getAutogenerateNote(config.addTimestamp)}
-*
-* ${this.getTaxonomyComment(config.taxonomy)}
-*/
-export type ${config.taxonomyNameMap(config.taxonomy)} = ${this.getTaxonomyTermsCode(config.taxonomy)};
+    const getTaxonomyFile = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): GeneratedFile => {
+        return {
+            filename: taxonomyFileNameMap(taxonomy, true),
+            text: getModelCode(taxonomy)
+        };
+    };
+
+    const getModelCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
+        return `
+${wrapComment(`
+ * ${taxonomy.name}
+ * 
+ * Codename: ${taxonomy.codename}
+ * Id: ${taxonomy.id}
+`)}
+export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
 `;
-        return code;
-    }
+    };
 
-    private getTaxonomyTermsCode(taxonomy: TaxonomyModels.Taxonomy): string {
-        const taxonomyTermCodenames: string[] = [];
-        this.getTaxonomyTermCodenames(taxonomy.terms, taxonomyTermCodenames);
+    const getTaxonomyTermsCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
+        const taxonomyTermCodenames = getTaxonomyTermCodenames(taxonomy.terms);
 
         if (!taxonomyTermCodenames.length) {
             return `''`;
         }
 
-        let code: string = '';
+        return taxonomyTermCodenames.reduce<string>((code, codename, index) => {
+            const isLast = index === taxonomyTermCodenames.length - 1;
+            return `${code} '${codename}'${isLast ? '' : ' | '}`;
+        }, '');
+    };
 
-        const sortedTaxonomyTerms: string[] = commonHelper.sortAlphabetically(taxonomyTermCodenames, (item) => item);
+    const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
+        return taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
+            return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
+        }, []);
+    };
 
-        for (let i = 0; i < sortedTaxonomyTerms.length; i++) {
-            const term = sortedTaxonomyTerms[i];
-            const isLast = i === sortedTaxonomyTerms.length - 1;
-
-            code += `'${term}'`;
-
-            if (!isLast) {
-                code += ` | `;
-            }
-        }
-
-        return code;
-    }
-
-    private getTaxonomyTermCodenames(taxonomyTerms: TaxonomyModels.Taxonomy[], resolvedCodenames: string[]): void {
-        for (const taxonomyTerm of taxonomyTerms) {
-            if (!resolvedCodenames.includes(taxonomyTerm.codename)) {
-                resolvedCodenames.push(taxonomyTerm.codename);
-            }
-
-            if (taxonomyTerm.terms.length) {
-                this.getTaxonomyTermCodenames(taxonomyTerm.terms, resolvedCodenames);
-            }
-        }
-    }
+    return {
+        generateTaxonomyTypes
+    };
 }
-
-export const deliveryTaxonomylGenerator = new DeliveryTaxonomyGenerator();
