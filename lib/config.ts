@@ -15,7 +15,8 @@ export const sharedTypesConfig = {
     collectionCodenames: 'CollectionCodenames',
     workflowCodenames: 'WorkflowCodenames',
     workflowStepCodenames: 'WorkflowStepCodenames',
-    contentTypeCodenames: 'ContentTypeCodenames'
+    contentTypeCodenames: 'ContentTypeCodenames',
+    elementCodenames: 'ElementCodenames'
 } as const;
 
 export const migrationConfig = {

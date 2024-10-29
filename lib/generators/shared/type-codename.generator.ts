@@ -1,4 +1,6 @@
-import { CollectionModels, ContentTypeModels, LanguageModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import { CollectionModels, ContentTypeModels, ContentTypeSnippetModels, LanguageModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import { isNotUndefined } from '@kontent-ai/migration-toolkit';
+import { match, P } from 'ts-pattern';
 import { sharedTypesConfig } from '../../config.js';
 import { ObjectWithCodename } from '../../core/core.models.js';
 import { uniqueFilter } from '../../core/core.utils.js';
@@ -23,6 +25,27 @@ export function getWorkflowStepCodenamesType(workflows: readonly Readonly<Workfl
     return getTypeWithCodenames(
         sharedTypesConfig.workflowStepCodenames,
         workflows.flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep])
+    );
+}
+
+export function getElementCodenamesType(
+    types: readonly Readonly<ContentTypeModels.ContentType>[],
+    snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]
+): string {
+    return getTypeWithCodenames(
+        sharedTypesConfig.elementCodenames,
+        [...types, ...snippets].flatMap((type) =>
+            type.elements
+                .map((element) =>
+                    match(element)
+                        .returnType<ObjectWithCodename | undefined>()
+                        .with({ codename: P.nonNullable }, (elementWithCodename) => {
+                            return elementWithCodename;
+                        })
+                        .otherwise(() => undefined)
+                )
+                .filter(isNotUndefined)
+        )
     );
 }
 

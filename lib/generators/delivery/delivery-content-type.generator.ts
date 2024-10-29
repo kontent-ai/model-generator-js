@@ -27,6 +27,7 @@ import {
 import {
     getCollectionCodenamesType,
     getContentTypeCodenamesType,
+    getElementCodenamesType,
     getLanguageCodenamesType,
     getWorkflowCodenamesType,
     getWorkflowStepCodenamesType
@@ -437,9 +438,9 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
     };
 
     const getCoreContentTypeFile = (): GeneratedFile => {
-        const sdkImports: string[] = [deliveryConfig.sdkTypes.contentItem, deliveryConfig.sdkTypes.contentItemElements];
+        const sdkImports: readonly string[] = [deliveryConfig.sdkTypes.contentItem, deliveryConfig.sdkTypes.contentItemElements];
 
-        const codenameImports: string[] = [
+        const codenameImports: readonly string[] = [
             sharedTypesConfig.contentTypeCodenames,
             sharedTypesConfig.collectionCodenames,
             sharedTypesConfig.languageCodenames,
@@ -496,6 +497,9 @@ ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${im
 
                 ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
+
+                 ${wrapComment(`\n * Type representing all element codenames across all content types\n`)}
+                ${getElementCodenamesType(config.environmentData.types, config.environmentData.snippets)}
             `
         };
     };
