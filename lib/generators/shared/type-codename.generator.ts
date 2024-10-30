@@ -1,9 +1,8 @@
 import { CollectionModels, ContentTypeModels, ContentTypeSnippetModels, LanguageModels, WorkflowModels } from '@kontent-ai/management-sdk';
-import { isNotUndefined } from '@kontent-ai/migration-toolkit';
 import { match, P } from 'ts-pattern';
 import { sharedTypesConfig } from '../../config.js';
 import { ObjectWithCodename } from '../../core/core.models.js';
-import { uniqueFilter } from '../../core/core.utils.js';
+import { isNotUndefined, uniqueFilter } from '../../core/core.utils.js';
 
 export function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {
     return getTypeWithCodenames(sharedTypesConfig.languageCodenames, languages);
