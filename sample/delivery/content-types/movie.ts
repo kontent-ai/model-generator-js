@@ -19,20 +19,6 @@ import type { CoreContentType } from '../system/index.js';
 import type { Releasecategory } from '../taxonomies/index.js';
 
 /**
- * Type representing all available element codenames for Movie
- */
-export type MovieElementCodenames =
-    | 'title'
-    | 'plot'
-    | 'released'
-    | 'length'
-    | 'poster'
-    | 'category'
-    | 'stars'
-    | 'seoname'
-    | 'releasecategory';
-
-/**
  * Movie
  *
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
@@ -126,3 +112,24 @@ export type Movie = CoreContentType<
     },
     'movie'
 >;
+
+/**
+ * Type representing all available element codenames for Movie
+ */
+export type MovieElementCodenames =
+    | 'title'
+    | 'plot'
+    | 'released'
+    | 'length'
+    | 'poster'
+    | 'category'
+    | 'stars'
+    | 'seoname'
+    | 'releasecategory';
+
+/**
+ * Type guard for Movie
+ */
+export function isMovie(item: CoreContentType): item is Movie {
+    return item.system.type === 'movie';
+}

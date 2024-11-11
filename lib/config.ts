@@ -46,6 +46,7 @@ export const deliveryConfig = {
     contentTypesFolderName: `content-types`,
     contentTypeSnippetsFolderName: `content-type-snippets`,
     taxonomiesFolderName: `taxonomies`,
+    typeGuardsFileName: 'delivery.type-guards',
     systemTypesFolderName: 'system',
     coreCodenamesFilename: 'delivery.codenames',
     coreTypeFilename: 'core.type',

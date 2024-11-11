@@ -17,11 +17,6 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreContentType } from '../system/index.js';
 
 /**
- * Type representing all available element codenames for Actor
- */
-export type ActorElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo';
-
-/**
  * Actor
  *
  * Id: 58099989-319f-495f-aa36-cb3710854e36
@@ -69,3 +64,15 @@ export type Actor = CoreContentType<
     },
     'actor'
 >;
+
+/**
+ * Type representing all available element codenames for Actor
+ */
+export type ActorElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo';
+
+/**
+ * Type guard for Actor
+ */
+export function isActor(item: CoreContentType): item is Actor {
+    return item.system.type === 'actor';
+}

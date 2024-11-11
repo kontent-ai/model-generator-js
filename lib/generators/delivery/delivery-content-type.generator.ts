@@ -32,6 +32,7 @@ import {
     getWorkflowCodenamesType,
     getWorkflowStepCodenamesType
 } from '../shared/type-codename.generator.js';
+import { deliveryTypeGuardGenerator } from './delivery-type-guard.generator.js';
 
 interface ExtractImportsResult {
     readonly typeName: string;
@@ -269,11 +270,6 @@ ${importer.importType({
 ${importsResult.imports.join('\n')}
 
 ${wrapComment(`
-* Type representing all available element codenames for ${snippet.name}
-`)}
-${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
-
-${wrapComment(`
 * ${snippet.name}
 * 
 * Id: ${snippet.id}
@@ -281,6 +277,11 @@ ${wrapComment(`
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(flattenedElements)}>;
+
+${wrapComment(`
+* Type representing all available element codenames for ${snippet.name}
+`)}
+${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
 `;
     };
 
@@ -307,11 +308,6 @@ ${importer.importType({
 ${importsResult.imports.join('\n')}
 
 ${wrapComment(`
-* Type representing all available element codenames for ${contentType.name}
-`)}
-${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
-
-${wrapComment(`
 * ${contentType.name}
 * 
 * Id: ${contentType.id}
@@ -319,7 +315,17 @@ ${wrapComment(`
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
 ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
-'${contentType.codename}'>;
+'${contentType.codename}'>
+
+${wrapComment(`
+* Type representing all available element codenames for ${contentType.name}
+`)}
+${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
+
+${wrapComment(`
+* Type guard for ${contentType.name}
+`)}
+${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
 `;
     };
 

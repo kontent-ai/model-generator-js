@@ -33,13 +33,22 @@ export function mapFilename<T extends ObjectWithCodename>(resolver: FilenameReso
     };
 }
 
-export function mapName<T extends ObjectWithName>(resolver: NameResolver<T>, defaultCase: CaseType): MapObjectToName<T> {
+export function mapName<T extends ObjectWithName>(
+    resolver: NameResolver<T>,
+    defaultCase: CaseType,
+    options?: {
+        prefix?: string;
+    }
+): MapObjectToName<T> {
     return (item) => {
-        return match(resolver)
-            .returnType<string>()
-            .with(P.instanceOf(Function), (resolver) => resolver(item))
-            .with(undefined, () => resolveCase(item.name, defaultCase))
-            .otherwise((resolverType) => resolveCase(item.name, resolverType));
+        return (
+            `${options?.prefix ? options.prefix : ''}` +
+            match(resolver)
+                .returnType<string>()
+                .with(P.instanceOf(Function), (resolver) => resolver(item))
+                .with(undefined, () => resolveCase(item.name, defaultCase))
+                .otherwise((resolverType) => resolveCase(item.name, resolverType))
+        );
     };
 }
 
