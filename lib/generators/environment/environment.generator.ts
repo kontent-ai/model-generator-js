@@ -284,7 +284,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${role.name}
                 `)}
-                ${role.codename ? role.codename : toSafePropertyName(role.name)}: {
+                ${toSafePropertyName(role.codename ?? role.name)}: {
                     codename: ${getStringOrUndefined(role.codename)},
                     id: '${role.id}',
                     name: '${toSafePropertyValue(role.name)}'
