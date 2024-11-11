@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [8.0.0-10](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0-9...v8.0.0-10) (2024-11-11)
+
 ## [8.0.0-9](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0-8...v8.0.0-9) (2024-11-11)
 
 ## [8.0.0-8](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0-7...v8.0.0-8) (2024-10-30)
