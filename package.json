@@ -3,7 +3,7 @@
     "version": "8.0.0-8",
     "description": "This utility generates strongly-typed models for Delivery JS SDK, Migration toolkit or just general scripting to improve the experience when referencing Kontent.ai related objects.",
     "bin": {
-        "kontent-generate": "./dist/lib/code/app.js"
+        "kontent-generate": "./dist/lib/cli/app.js"
     },
     "repository": {
         "type": "git",
