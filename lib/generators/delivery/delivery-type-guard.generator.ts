@@ -17,8 +17,8 @@ export function deliveryTypeGuardGenerator(config: DeliveryTypeGuardGeneratorCon
     };
 
     const getTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
-        return `export function ${nameResolvers.typeGuardFunctionName(contentType)}(item: ${deliveryConfig.coreContentTypeName}): item is ${nameResolvers.typeName(contentType)} {
-            return item.system.type === '${contentType.codename}';
+        return `export function ${nameResolvers.typeGuardFunctionName(contentType)}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${nameResolvers.typeName(contentType)} {
+            return item?.system?.type === '${contentType.codename}';
         }`;
     };
 
