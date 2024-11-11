@@ -30,7 +30,8 @@ try {
         environmentId: environmentId,
         apiKey: apiKey,
         moduleFileExtension: moduleFileExtension,
-        outputDir: outputDir
+        outputDir: outputDir,
+        fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' }
     });
 } catch (error) {
     logError(error);
