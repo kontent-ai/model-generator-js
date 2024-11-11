@@ -49,24 +49,24 @@
         "update:version": "tsx ./scripts/update-version.ts"
     },
     "dependencies": {
-        "@kontent-ai/management-sdk": "7.5.0",
+        "@kontent-ai/management-sdk": "7.5.1",
         "@kontent-ai/delivery-sdk": "15.2.0",
         "chalk": "5.3.0",
         "prettier": "3.3.3",
-        "ts-pattern": "5.4.0",
+        "ts-pattern": "5.5.0",
         "yargs": "17.7.2"
     },
     "devDependencies": {
-        "@eslint/js": "9.12.0",
-        "@kontent-ai/migration-toolkit": "2.0.0",
+        "@eslint/js": "9.14.0",
+        "@kontent-ai/migration-toolkit": "2.2.2",
         "@types/eslint__js": "8.42.3",
-        "@types/node": "22.7.5",
+        "@types/node": "22.9.0",
         "@types/yargs": "17.0.33",
         "dotenv-cli": "7.4.2",
-        "eslint": "9.12.0",
+        "eslint": "9.14.0",
         "standard-version": "9.5.0",
-        "tsx": "4.19.1",
-        "typescript": "5.6.2",
-        "typescript-eslint": "8.8.1"
+        "tsx": "4.19.2",
+        "typescript": "5.6.3",
+        "typescript-eslint": "8.13.0"
     }
 }
