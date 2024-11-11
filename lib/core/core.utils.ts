@@ -33,16 +33,9 @@ export function toPascalCase(text: string): string {
 }
 
 export function toCamelCase(text: string): string {
-    return prefixWithUnderscoreWhenStartsWithNonAlpha(
-        toSafeStringCode(
-            text
-                .replace(/(?:^\w|\b\w)/g, (word, index) => {
-                    return index === 0 ? word.toLowerCase() : word.toUpperCase();
-                })
-                .replace(/\s+/g, '')
-        )
-    );
+    return toPascalCase(text).replace(/^\w/, (s) => s.toLowerCase());
 }
+
 export function toGuidelinesComment(guidelines: string): string {
     return removeLineEndings(guidelines);
 }
