@@ -130,6 +130,6 @@ export type MovieElementCodenames =
 /**
  * Type guard for Movie
  */
-export function isMovie(item: CoreContentType): item is Movie {
-    return item.system.type === 'movie';
+export function isMovie(item: CoreContentType | undefined | null): item is Movie {
+    return item?.system?.type === 'movie';
 }

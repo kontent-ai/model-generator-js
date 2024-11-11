@@ -73,6 +73,6 @@ export type ActorElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo'
 /**
  * Type guard for Actor
  */
-export function isActor(item: CoreContentType): item is Actor {
-    return item.system.type === 'actor';
+export function isActor(item: CoreContentType | undefined | null): item is Actor {
+    return item?.system?.type === 'actor';
 }
