@@ -230,7 +230,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${option.name}
                 `)}
-                ${toSafePropertyName(option.codename ?? option.name)}: {
+                ${option.codename ? option.codename : toSafePropertyName(option.name)}: {
                     name: '${toSafePropertyValue(option.name)}',
                     id: '${option.id}',
                     codename: ${getStringOrUndefined(option.codename)},
@@ -284,7 +284,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${role.name}
                 `)}
-                ${toSafePropertyName(role.codename ?? role.name)}: {
+                ${role.codename ? role.codename : toSafePropertyName(role.name)}: {
                     codename: ${getStringOrUndefined(role.codename)},
                     id: '${role.id}',
                     name: '${toSafePropertyValue(role.name)}'
