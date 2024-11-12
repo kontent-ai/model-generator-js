@@ -324,6 +324,8 @@ ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, 
 
 ${wrapComment(`
 * Type guard for ${contentType.name}
+*
+* Codename: ${contentType.codename}
 `)}
 ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
 `;
