@@ -40,16 +40,13 @@ export function mapName<T extends ObjectWithName>(
         prefix?: string;
     }
 ): MapObjectToName<T> {
-    return (item) => {
-        return (
-            `${options?.prefix ? options.prefix : ''}` +
-            match(resolver)
-                .returnType<string>()
-                .with(P.instanceOf(Function), (resolver) => resolver(item))
-                .with(undefined, () => resolveCase(item.name, defaultCase))
-                .otherwise((resolverType) => resolveCase(item.name, resolverType))
-        );
-    };
+    return (item) =>
+        (options?.prefix ? options.prefix : '') +
+        match(resolver)
+            .returnType<string>()
+            .with(P.instanceOf(Function), (resolver) => resolver(item))
+            .with(undefined, () => resolveCase(item.name, defaultCase))
+            .otherwise((resolverType) => resolveCase(item.name, resolverType));
 }
 
 function addExtensionToFilename(filename: string, addExtension: boolean): string {
