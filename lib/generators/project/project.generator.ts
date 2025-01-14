@@ -573,7 +573,7 @@ export class ProjectGenerator {
                     );
                 }
                 extendedElements.push(
-                    ...snippet.elements.map((mElement) => {
+                    ...snippet.elements.map((mElement: any) => {
                         const extendedElement: IExtendedContentTypeElement = {
                             element: mElement,
                             snippet: snippet,

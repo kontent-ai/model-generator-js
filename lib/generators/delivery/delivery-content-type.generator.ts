@@ -647,8 +647,9 @@ export type ${typeName} = IContentItem<{
                 continue;
             }
 
+            const isRequired = commonHelper.isElementRequired(extendedElement.element);
             code += `${this.getElementComment(extendedElement, data.taxonomies)}\n`;
-            code += `${elementName}: Elements.${extendedElement.mappedType};`;
+            code += `${elementName}${isRequired ? '' : '?'}: Elements.${extendedElement.mappedType};`;
 
             if (i !== extendedElements.length - 1) {
                 code += '\n\n';
