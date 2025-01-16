@@ -67,6 +67,7 @@ export class DeliveryContentTypeGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
+        optionalElements?: boolean;
         addEnvironmentInfo: boolean;
         elementResolver?: ElementResolver;
         contentTypeFileNameResolver?: ContentTypeFileNameResolver;
@@ -154,6 +155,7 @@ export class DeliveryContentTypeGenerator {
                     contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
                     contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
                     elementNameMap: getMapElementToName(data.elementResolver),
+                    optionalElements: data.optionalElements ?? false,
                     taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
@@ -192,6 +194,7 @@ export class DeliveryContentTypeGenerator {
                     contentTypeFileNameMap: getMapContentTypeToFileName(data.contentTypeFileNameResolver),
                     contentTypeSnippetObjectMap: getMapContentTypeSnippetIdToObject(data.snippets),
                     elementNameMap: getMapElementToName(data.elementResolver),
+                    optionalElements: data.optionalElements ?? false,
                     taxonomyNameMap: getMapTaxonomyName(data.taxonomyResolver),
                     taxonomyFileNameMap: getMapTaxonomyToFileName(data.taxonomyFileResolver),
                     taxonomyObjectMap: getMapTaxonomyIdTobject(data.taxonomies),
@@ -341,6 +344,7 @@ export class DeliveryContentTypeGenerator {
         contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
         contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
+        optionalElements: boolean;
         elementNameMap: MapElementToName;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
@@ -426,6 +430,7 @@ export type ${typeName} = IContentItem<{
         contentTypeNameMap: data.contentTypeNameMap,
         contentType: data.contentType,
         contentTypeSnippet: data.contentTypeSnippet,
+        optionalElements: data.optionalElements,
         snippets: data.snippets,
         elementNameMap: data.elementNameMap,
         taxonomyNameMap: data.taxonomyNameMap,
@@ -451,6 +456,7 @@ export type ${typeName} = IContentItem<{
         contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
         contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         elementNameMap: MapElementToName;
+        optionalElements: boolean;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
@@ -472,6 +478,7 @@ export type ${typeName} = IContentItem<{
             contentTypeSnippetObjectMap: data.contentTypeSnippetObjectMap,
             contentType: data.type,
             contentTypeSnippet: undefined,
+            optionalElements: data.optionalElements,
             snippets: data.snippets,
             taxonomies: data.taxonomies,
             typeFolderName: data.typeFolderName,
@@ -506,6 +513,7 @@ export type ${typeName} = IContentItem<{
         contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
         contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         elementNameMap: MapElementToName;
+        optionalElements: boolean;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
@@ -535,6 +543,7 @@ export type ${typeName} = IContentItem<{
             addTimestamp: data.addTimestamp,
             addEnvironmentInfo: data.addEnvironmentInfo,
             elementNameMap: data.elementNameMap,
+            optionalElements: data.optionalElements,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
             taxonomyObjectMap: data.taxonomyObjectMap,
@@ -607,6 +616,7 @@ export type ${typeName} = IContentItem<{
         contentTypeNameMap: MapContentTypeToDeliveryTypeName;
         contentTypeObjectMap: MapContentTypeIdToObject;
         elementNameMap: MapElementToName;
+        optionalElements: boolean;
         contentType?: ContentTypeModels.ContentType;
         contentTypeSnippet?: ContentTypeSnippetModels.ContentTypeSnippet;
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
@@ -649,7 +659,7 @@ export type ${typeName} = IContentItem<{
 
             const isRequired = commonHelper.isElementRequired(extendedElement.element);
             code += `${this.getElementComment(extendedElement, data.taxonomies)}\n`;
-            code += `${elementName}${isRequired ? '' : '?'}: Elements.${extendedElement.mappedType};`;
+            code += `${elementName}${!isRequired && data.optionalElements ? '?' : ''}: Elements.${extendedElement.mappedType};`;
 
             if (i !== extendedElements.length - 1) {
                 code += '\n\n';

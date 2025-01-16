@@ -23,6 +23,7 @@ export interface IGenerateModelsConfig {
     environmentId: string;
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
+    optionalElements?: boolean;
     isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;

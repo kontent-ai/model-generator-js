@@ -12,6 +12,7 @@ export declare class DeliveryContentTypeGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
+        optionalElements?: boolean;
         addEnvironmentInfo: boolean;
         elementResolver?: ElementResolver;
         contentTypeFileNameResolver?: ContentTypeFileNameResolver;

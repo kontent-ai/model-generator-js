@@ -17,6 +17,7 @@ export async function generateModelsAsync(config) {
     const contentTypeSnippetsFolderPath = `${outputDir}${contentTypeSnippetsFolderName}`;
     const taxonomiesFolderPath = `${outputDir}${taxonomiesFolderName}`;
     const projectFolderPath = `${outputDir}${projectFolderName}`;
+    const optionalElements = config.optionalElements;
     try {
         if (config.sdkType === 'delivery') {
             console.log(`Generating '${Colors.yellow('delivery')}' models\n`);
@@ -108,6 +109,7 @@ export async function generateModelsAsync(config) {
                 addTimestamp: config.addTimestamp,
                 addEnvironmentInfo: config.addEnvironmentInfo,
                 elementResolver: config.elementResolver,
+                optionalElements: optionalElements,
                 contentTypeFileNameResolver: config.contentTypeFileResolver,
                 contentTypeResolver: config.contentTypeResolver,
                 taxonomyFileResolver: config.taxonomyTypeFileResolver,
