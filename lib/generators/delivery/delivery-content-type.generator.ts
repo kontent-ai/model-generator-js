@@ -67,9 +67,9 @@ export class DeliveryContentTypeGenerator {
         taxonomies: TaxonomyModels.Taxonomy[];
         snippets: ContentTypeSnippetModels.ContentTypeSnippet[];
         addTimestamp: boolean;
-        optionalElements?: boolean;
         addEnvironmentInfo: boolean;
         elementResolver?: ElementResolver;
+        optionalElements?: boolean;
         contentTypeFileNameResolver?: ContentTypeFileNameResolver;
         contentTypeSnippetFileNameResolver?: ContentTypeSnippetFileNameResolver;
         contentTypeResolver?: ContentTypeResolver;
@@ -344,8 +344,8 @@ export class DeliveryContentTypeGenerator {
         contentTypeSnippetObjectMap: MapContentTypeSnippetIdToObject;
         contentTypeFileNameMap: MapContentTypeToFileName;
         contentTypeSnippetFileNameMap: MapContentTypeSnippetToFileName;
-        optionalElements: boolean;
         elementNameMap: MapElementToName;
+        optionalElements: boolean;
         taxonomyObjectMap: MapTaxonomyIdTobject;
         taxonomyNameMap: MapTaxonomyName;
         taxonomyFileNameMap: MapTaxonomyToFileName;
@@ -430,9 +430,9 @@ export type ${typeName} = IContentItem<{
         contentTypeNameMap: data.contentTypeNameMap,
         contentType: data.contentType,
         contentTypeSnippet: data.contentTypeSnippet,
-        optionalElements: data.optionalElements,
         snippets: data.snippets,
         elementNameMap: data.elementNameMap,
+        optionalElements: data.optionalElements,
         taxonomyNameMap: data.taxonomyNameMap,
         taxonomyObjectMap: data.taxonomyObjectMap,
         taxonomies: data.taxonomies
@@ -478,7 +478,6 @@ export type ${typeName} = IContentItem<{
             contentTypeSnippetObjectMap: data.contentTypeSnippetObjectMap,
             contentType: data.type,
             contentTypeSnippet: undefined,
-            optionalElements: data.optionalElements,
             snippets: data.snippets,
             taxonomies: data.taxonomies,
             typeFolderName: data.typeFolderName,
@@ -487,6 +486,7 @@ export type ${typeName} = IContentItem<{
             addTimestamp: data.addTimestamp,
             addEnvironmentInfo: data.addEnvironmentInfo,
             elementNameMap: data.elementNameMap,
+            optionalElements: data.optionalElements,
             taxonomyFileNameMap: data.taxonomyFileNameMap,
             taxonomyNameMap: data.taxonomyNameMap,
             taxonomyObjectMap: data.taxonomyObjectMap,

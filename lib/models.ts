@@ -35,7 +35,6 @@ export interface IGenerateModelsConfig {
     environmentId: string;
     addTimestamp: boolean;
     addEnvironmentInfo: boolean;
-    optionalElements?: boolean;
     isEnterpriseSubscription: boolean;
     sdkType: SdkType;
     apiKey: string;
@@ -54,6 +53,7 @@ export interface IGenerateModelsConfig {
     taxonomyTypeFileResolver?: TaxonomyTypeFileNameResolver;
     contentTypeResolver?: ContentTypeResolver;
     contentTypeSnippetResolver?: ContentTypeSnippetResolver;
+    optionalElements?: boolean;
     taxonomyTypeResolver?: TaxonomyTypeResolver;
     elementResolver?: ElementResolver;
     formatOptions?: Options;

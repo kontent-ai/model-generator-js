@@ -30,7 +30,6 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
     const contentTypeSnippetsFolderPath: string = `${outputDir}${contentTypeSnippetsFolderName}`;
     const taxonomiesFolderPath: string = `${outputDir}${taxonomiesFolderName}`;
     const projectFolderPath: string = `${outputDir}${projectFolderName}`;
-    const optionalElements = config.optionalElements
     
     try {
         if (config.sdkType === 'delivery') {
@@ -173,7 +172,7 @@ export async function generateModelsAsync(config: IGenerateModelsConfig): Promis
                 addTimestamp: config.addTimestamp,
                 addEnvironmentInfo: config.addEnvironmentInfo,
                 elementResolver: config.elementResolver,
-                optionalElements: optionalElements,
+                optionalElements: config.optionalElements,
                 contentTypeFileNameResolver: config.contentTypeFileResolver,
                 contentTypeResolver: config.contentTypeResolver,
                 taxonomyFileResolver: config.taxonomyTypeFileResolver,
