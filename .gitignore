@@ -12,6 +12,7 @@
 /tmp
 /coverage
 /out-tsc
+/dist
 
 # dependencies
 /node_modules
