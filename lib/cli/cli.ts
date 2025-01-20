@@ -50,7 +50,7 @@ const argv = yargs(process.argv.slice(2))
             'Name resolver for content type snippet names. Available options are: camelCase, pascalCase, snakeCase'
     })
     .option('optionalElements', {
-        description: 'Indicates if model generator should mark `Not Required` elements as optional'
+        description: 'Indicates if the model generator should mark `Not Required` elements as optional'
     })
     .option('taxonomyTypeFileResolver', {
         description: 'Name resolver for taxonomy filenames. Available options are: camelCase, pascalCase, snakeCase'
