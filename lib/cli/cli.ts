@@ -87,7 +87,7 @@ const run = async () => {
     const addTimestamp = resolvedArgs.addTimestamp;
     const addEnvironmentInfo = resolvedArgs.addEnvironmentInfo;
     const elementResolver = resolvedArgs.elementResolver;
-    const optionalElements = !resolvedArgs.optionalElements ? true : resolvedArgs.optionalElements === 'true';
+    const optionalElements = !resolvedArgs.optionalElements ? false : resolvedArgs.optionalElements === 'true';
     const contentTypeFileResolver = resolvedArgs.contentTypeFileResolver;
     const contentTypeSnippetFileResolver = resolvedArgs.contentTypeSnippetFileResolver;
     const taxonomyTypeFileResolver = resolvedArgs.taxonomyTypeFileResolver;
