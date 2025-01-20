@@ -102,6 +102,7 @@ await generateModelsAsync({
 -   `addTimestamp`- Indicates if timestamp is added to generated models
 -   `addEnvironmentInfo`- Indicates if environment info stamp is added to generated models
 -   `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
+-   `optionalElements`- Indicates if model generator should mark 'Not Required' elements as optional
 -   `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`,
     `pascalCase`, `snakeCase`
 -   `contentTypeSnippetFileResolver`- Name resolver for content type snippet filenames. Available options are:
