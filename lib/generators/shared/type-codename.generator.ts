@@ -1,4 +1,11 @@
-import { CollectionModels, ContentTypeModels, ContentTypeSnippetModels, LanguageModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import {
+    CollectionModels,
+    ContentTypeModels,
+    ContentTypeSnippetModels,
+    LanguageModels,
+    TaxonomyModels,
+    WorkflowModels
+} from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { sharedTypesConfig } from '../../config.js';
 import { ObjectWithCodename } from '../../core/core.models.js';
@@ -14,6 +21,10 @@ export function getContentTypeCodenamesType(types: readonly Readonly<ContentType
 
 export function getWorkflowCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
     return getTypeWithCodenames(sharedTypesConfig.workflowCodenames, workflows);
+}
+
+export function getTaxonomyCodenamesType(taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]): string {
+    return getTypeWithCodenames(sharedTypesConfig.taxonomyCodenames, taxonomies);
 }
 
 export function getCollectionCodenamesType(collections: readonly Readonly<CollectionModels.Collection>[]): string {

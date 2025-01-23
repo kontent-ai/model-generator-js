@@ -34,6 +34,11 @@ export type CollectionCodenames = 'default';
 export type WorkflowCodenames = 'default';
 
 /**
+ * Type representing all taxonomies
+ */
+export type TaxonomyCodenames = 'movietype' | 'releasecategory';
+
+/**
  * Type representing all worksflow steps across all workflows
  */
 export type WorkflowStepCodenames = 'draft' | 'review' | 'ready_to_publish' | 'published' | 'archived' | 'scheduled';

@@ -16,6 +16,7 @@ export const sharedTypesConfig = {
     workflowCodenames: 'WorkflowCodenames',
     workflowStepCodenames: 'WorkflowStepCodenames',
     contentTypeCodenames: 'ContentTypeCodenames',
+    taxonomyCodenames: 'TaxonomyCodenames',
     elementCodenames: 'ElementCodenames'
 } as const;
 

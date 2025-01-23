@@ -29,6 +29,7 @@ import {
     getContentTypeCodenamesType,
     getElementCodenamesType,
     getLanguageCodenamesType,
+    getTaxonomyCodenamesType,
     getWorkflowCodenamesType,
     getWorkflowStepCodenamesType
 } from '../shared/type-codename.generator.js';
@@ -325,6 +326,7 @@ ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, 
 ${wrapComment(`
 * Type guard for ${contentType.name}
 *
+* Id: ${contentType.id}
 * Codename: ${contentType.codename}
 `)}
 ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
@@ -502,6 +504,9 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
 
                 ${wrapComment(`\n * Type representing all workflows\n`)}
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
+
+                ${wrapComment(`\n * Type representing all taxonomies\n`)}
+                ${getTaxonomyCodenamesType(config.environmentData.taxonomies)}
 
                 ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}

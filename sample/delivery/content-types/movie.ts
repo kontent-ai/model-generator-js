@@ -130,6 +130,7 @@ export type MovieElementCodenames =
 /**
  * Type guard for Movie
  *
+ * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
 export function isMovie(item: CoreContentType | undefined | null): item is Movie {

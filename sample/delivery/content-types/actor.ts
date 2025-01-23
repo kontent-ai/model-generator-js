@@ -73,6 +73,7 @@ export type ActorElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo'
 /**
  * Type guard for Actor
  *
+ * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
 export function isActor(item: CoreContentType | undefined | null): item is Actor {
