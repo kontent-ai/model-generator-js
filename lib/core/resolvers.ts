@@ -49,14 +49,14 @@ export function mapName<T extends ObjectWithName>(
             .otherwise((resolverType) => resolveCase(item.name, resolverType));
 }
 
-function addExtensionToFilename(filename: string, addExtension: boolean): string {
-    return `${filename}${addExtension ? '.ts' : ''}`;
-}
-
-function resolveCase(text: string, resolverType: CaseType): string {
+export function resolveCase(text: string, resolverType: CaseType): string {
     return match(resolverType)
         .returnType<string>()
         .with('camelCase', () => toCamelCase(text))
         .with('pascalCase', () => toPascalCase(text))
         .exhaustive();
+}
+
+function addExtensionToFilename(filename: string, addExtension: boolean): string {
+    return `${filename}${addExtension ? '.ts' : ''}`;
 }

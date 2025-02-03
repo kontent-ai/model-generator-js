@@ -6,3 +6,4 @@ export { GenerateDeliveryModelsConfig, generateDeliveryModelsAsync } from './gen
 export { GenerateEnvironmentModelsConfig, generateEnvironmentModelsAsync } from './generators/environment/environment-func.js';
 export { GenerateItemsModelsConfig, generateItemsAsync } from './generators/items/items-func.js';
 export { GenerateMigrationModelsConfig, generateMigrationModelsAsync } from './generators/migration/migration-func.js';
+export { resolveCase } from './core/resolvers.js';
