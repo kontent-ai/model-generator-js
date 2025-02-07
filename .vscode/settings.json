@@ -1,3 +1,7 @@
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    }
 }
