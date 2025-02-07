@@ -5,14 +5,12 @@ import { coreConfig } from '../config.js';
 import { DeliveryApiMode, GeneratorDeliveryClient } from '../core/core.models.js';
 import { sortAlphabetically } from '../core/core.utils.js';
 
-interface KontentFetcherConfig {
+export function deliveryKontentFetcher(config: {
     readonly environmentId: string;
     readonly apiKey: string | undefined;
     readonly baseUrl?: string;
     readonly apiMode: DeliveryApiMode;
-}
-
-export function deliveryKontentFetcher(config: KontentFetcherConfig) {
+}) {
     const client: GeneratorDeliveryClient = createDeliveryClient({
         environmentId: config.environmentId,
         defaultQueryConfig: {

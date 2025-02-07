@@ -18,13 +18,7 @@ import { coreConfig } from '../config.js';
 import { toSafeComment } from '../core/comment.utils.js';
 import { GeneratorManagementClient } from '../core/core.models.js';
 
-type KontentFetcherConfig = {
-    readonly environmentId: string;
-    readonly apiKey: string;
-    readonly baseUrl?: string;
-};
-
-export function managementKontentFetcher(config: KontentFetcherConfig) {
+export function managementKontentFetcher(config: { readonly environmentId: string; readonly apiKey: string; readonly baseUrl?: string }) {
     const client: GeneratorManagementClient = createManagementClient({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
