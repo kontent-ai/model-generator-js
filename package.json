@@ -40,6 +40,7 @@
         "sample:environment": "tsx scripts/samples/environment-models",
         "sample:migration": "tsx scripts/samples/migration-models",
         "sample:items": "tsx scripts/samples/item-models",
+        "sample:all": "npm run sample:delivery && npm run sample:environment && npm run sample:migration && npm run sample:items",
         "show:help": "tsx lib/cli/app --help",
         "show:help:delivery-sdk": "tsx lib/cli/app delivery-sdk --help",
         "lint": "eslint lib",
@@ -49,24 +50,24 @@
         "update:version": "tsx ./scripts/update-version.ts"
     },
     "dependencies": {
-        "@kontent-ai/management-sdk": "7.5.1",
+        "@kontent-ai/management-sdk": "7.6.0",
         "@kontent-ai/delivery-sdk": "15.2.0",
-        "chalk": "5.3.0",
-        "prettier": "3.3.3",
-        "ts-pattern": "5.5.0",
+        "chalk": "5.4.1",
+        "prettier": "3.4.2",
+        "ts-pattern": "5.6.2",
         "yargs": "17.7.2"
     },
     "devDependencies": {
-        "@eslint/js": "9.14.0",
-        "@kontent-ai/migration-toolkit": "2.2.2",
+        "@eslint/js": "9.19.0",
+        "@kontent-ai/migration-toolkit": "2.4.0",
         "@types/eslint__js": "8.42.3",
-        "@types/node": "22.9.0",
+        "@types/node": "22.13.1",
         "@types/yargs": "17.0.33",
-        "dotenv-cli": "7.4.2",
-        "eslint": "9.14.0",
+        "dotenv-cli": "8.0.0",
+        "eslint": "9.19.0",
         "standard-version": "9.5.0",
         "tsx": "4.19.2",
-        "typescript": "5.6.3",
-        "typescript-eslint": "8.13.0"
+        "typescript": "5.7.3",
+        "typescript-eslint": "8.23.0"
     }
 }
