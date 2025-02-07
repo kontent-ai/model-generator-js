@@ -16,25 +16,28 @@ export function getFlattenedElements(data: {
 }): readonly FlattenedElement[] {
     return data.elements
         .flatMap<ElementWrapper>((element) => {
-            if (element.type === 'snippet') {
-                const snippet = data.snippets.find((snippet) => snippet.id === element.snippet.id);
+            return match(element)
+                .returnType<readonly ElementWrapper[] | ElementWrapper>()
+                .with({ type: 'snippet' }, (snippetElement) => {
+                    const snippet = data.snippets.find((snippet) => snippet.id === snippetElement.snippet.id);
 
-                if (!snippet) {
-                    throw Error(`Could not find snippet with id '${element.snippet.id}'`);
-                }
+                    if (!snippet) {
+                        throw Error(`Could not find snippet with id '${snippetElement.snippet.id}'`);
+                    }
 
-                return snippet.elements.map((snippetElement) => {
+                    return snippet.elements.map((snippetElement) => {
+                        return {
+                            element: snippetElement,
+                            fromSnippet: snippet
+                        };
+                    });
+                })
+                .otherwise(() => {
                     return {
-                        element: snippetElement,
-                        fromSnippet: snippet
+                        element: element,
+                        fromSnippet: undefined
                     };
                 });
-            }
-
-            return {
-                element: element,
-                fromSnippet: undefined
-            };
         })
         .map((element) => {
             return getFlattenedElement(element, data.taxonomies, data.types);
@@ -110,14 +113,8 @@ function extractLinkedItemsAllowedTypes(
 ): readonly Readonly<ContentTypeModels.ContentType>[] {
     const allowedTypeIds = match(element)
         .returnType<readonly string[]>()
-        .with({ type: 'modular_content' }, (linkedItemsElement) => {
-            return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
-        })
-        .with({ type: 'subpages' }, (linkedItemsElement) => {
-            return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
-        })
-        .with({ type: 'rich_text' }, (linkedItemsElement) => {
-            return linkedItemsElement.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
+        .with({ type: P.union('modular_content', 'subpages', 'rich_text') }, (elementWithAllowedContentTypes) => {
+            return elementWithAllowedContentTypes.allowed_content_types?.map((m) => m.id).filter(isNotUndefined) ?? [];
         })
         .otherwise(() => []);
 

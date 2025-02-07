@@ -37,7 +37,7 @@ export function mapName<T extends ObjectWithName>(
     resolver: NameResolver<T>,
     defaultCase: CaseType,
     options?: {
-        prefix?: string;
+        readonly prefix?: string;
     }
 ): MapObjectToName<T> {
     return (item) =>

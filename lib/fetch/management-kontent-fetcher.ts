@@ -18,11 +18,11 @@ import { coreConfig } from '../config.js';
 import { toSafeComment } from '../core/comment.utils.js';
 import { GeneratorManagementClient } from '../core/core.models.js';
 
-interface KontentFetcherConfig {
+type KontentFetcherConfig = {
     readonly environmentId: string;
     readonly apiKey: string;
     readonly baseUrl?: string;
-}
+};
 
 export function managementKontentFetcher(config: KontentFetcherConfig) {
     const client: GeneratorManagementClient = createManagementClient({
@@ -41,63 +41,96 @@ export function managementKontentFetcher(config: KontentFetcherConfig) {
             return projectInformation.project;
         },
         async getItemsAsync(): Promise<readonly Readonly<ContentItemModels.ContentItem>[]> {
-            const data = (
-                await client
-                    .listContentItems()
-                    .withListQueryConfig({
-                        responseFetched: (response) => {
-                            console.log(`Fetched '${chalk.yellow(response.data.items.length.toString())}' content items`);
-                        }
-                    })
-                    .toAllPromise()
-            ).data;
-
-            return data.items;
+            return await fetchItemsAsync({
+                fetch: async () =>
+                    (
+                        await client
+                            .listContentItems()
+                            .withListQueryConfig({
+                                responseFetched: (response) => {
+                                    console.log(`Fetched '${chalk.yellow(response.data.items.length.toString())}' content items`);
+                                }
+                            })
+                            .toAllPromise()
+                    ).data.items,
+                itemType: 'total content items'
+            });
         },
         async getWorkflowsAsync(): Promise<readonly Readonly<WorkflowModels.Workflow>[]> {
-            const items = (await client.listWorkflows().toPromise()).data;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' workflows`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listWorkflows().toPromise()).data,
+                itemType: 'workflows'
+            });
         },
         async getRolesAsync(): Promise<readonly Readonly<RoleModels.Role>[]> {
-            const items = (await client.listRoles().toPromise()).data.roles;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' roles`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listRoles().toPromise()).data.roles,
+                itemType: 'roles'
+            });
         },
         async getAssetFoldersAsync(): Promise<readonly Readonly<AssetFolderModels.AssetFolder>[]> {
-            const items = (await client.listAssetFolders().toPromise()).data.items;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' asset folders`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listAssetFolders().toPromise()).data.items,
+                itemType: 'asset folders'
+            });
         },
         async getCollectionsAsync(): Promise<readonly Readonly<CollectionModels.Collection>[]> {
-            const items = (await client.listCollections().toPromise()).data.collections;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' collections`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listCollections().toPromise()).data.collections,
+                itemType: 'collections'
+            });
         },
         async getWebhooksAsync(): Promise<readonly Readonly<WebhookModels.Webhook>[]> {
-            const items = (await client.listWebhooks().toPromise()).data.webhooks;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' webhooks`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listWebhooks().toPromise()).data.webhooks,
+                itemType: 'webhooks'
+            });
         },
         async getLanguagesAsync(): Promise<readonly Readonly<LanguageModels.LanguageModel>[]> {
-            const items = (await client.listLanguages().toAllPromise()).data.items;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' languages`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listLanguages().toAllPromise()).data.items,
+                itemType: 'languages'
+            });
         },
         async getTypesAsync(): Promise<readonly Readonly<ContentTypeModels.ContentType>[]> {
-            const items = (await client.listContentTypes().toAllPromise()).data.items;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' types`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listContentTypes().toAllPromise()).data.items,
+                itemType: 'types'
+            });
         },
         async getSnippetsAsync(): Promise<readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]> {
-            const items = (await client.listContentTypeSnippets().toAllPromise()).data.items;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' snippets`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listContentTypeSnippets().toAllPromise()).data.items,
+                itemType: 'snippets'
+            });
         },
         async getTaxonomiesAsync(): Promise<readonly Readonly<TaxonomyModels.Taxonomy>[]> {
-            const items = (await client.listTaxonomies().toAllPromise()).data.items;
-            console.log(`Fetched '${chalk.yellow(items.length.toString())}' taxonomies`);
-            return items;
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listTaxonomies().toAllPromise()).data.items,
+                itemType: 'taxonomies'
+            });
         }
     };
+}
+
+async function fetchItemsAsync<T>({
+    fetch,
+    itemType
+}: {
+    readonly fetch: () => Promise<T[]>;
+    readonly itemType:
+        | 'taxonomies'
+        | 'types'
+        | 'snippets'
+        | 'languages'
+        | 'webhooks'
+        | 'collections'
+        | 'roles'
+        | 'asset folders'
+        | 'workflows'
+        | 'total content items';
+}): Promise<T[]> {
+    const data = await fetch();
+    console.log(`Fetched '${chalk.yellow(data.length.toString())}' ${itemType}`);
+    return data;
 }
