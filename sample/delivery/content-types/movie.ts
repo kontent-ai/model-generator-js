@@ -16,7 +16,7 @@
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { Actor } from './index.js';
 import type { CoreContentType } from '../system/index.js';
-import type { Releasecategory } from '../taxonomies/index.js';
+import type { ReleaseCategory } from '../taxonomies/index.js';
 
 /**
  * Movie
@@ -108,7 +108,7 @@ export type Movie = CoreContentType<
          * Codename: releasecategory
          * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
          */
-        readonly releasecategory: Elements.TaxonomyElement<Releasecategory, 'releasecategory'>;
+        readonly releasecategory: Elements.TaxonomyElement<ReleaseCategory, 'releasecategory'>;
     },
     'movie'
 >;

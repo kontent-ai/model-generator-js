@@ -23,11 +23,9 @@ export function toPascalCase(text: string): string {
     return prefixWithUnderscoreWhenStartsWithNonAlpha(
         toSafeStringCode(
             text
-                .toLowerCase()
-                .replace(/[-_]+/g, ' ')
-                .replace(/[^\w\s]/g, '')
-                .replace(/\s+(.)(\w*)/g, (_, $2, $3) => `${($2 as string).toUpperCase() + $3}`)
-                .replace(/\w/, (s) => s.toUpperCase())
+                .replace(/[_-]+/g, ' ')
+                .replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match, index) => (index === 0 ? match.toUpperCase() : match.toUpperCase()))
+                .replace(/\s+/g, '')
         )
     );
 }
