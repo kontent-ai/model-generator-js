@@ -9,7 +9,7 @@ import {
 import { match, P } from 'ts-pattern';
 import { sharedTypesConfig } from '../../config.js';
 import { ObjectWithCodename } from '../../core/core.models.js';
-import { isNotUndefined, uniqueFilter } from '../../core/core.utils.js';
+import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 
 export function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {
     return getTypeWithCodenames(sharedTypesConfig.languageCodenames, languages);
@@ -60,8 +60,10 @@ export function getElementCodenamesType(
 }
 
 function getTypeWithCodenames(typeName: string, items: readonly ObjectWithCodename[]): string {
-    return `export type ${typeName} = ${items
-        .map((item) => `'${item.codename}'`)
-        .filter(uniqueFilter)
-        .join(' | ')};`;
+    if (!items.length) {
+        return `export type ${typeName} = never`;
+    }
+    return `export type ${typeName} = ${sortAlphabetically(items.map((item) => `'${item.codename}'`).filter(uniqueFilter), (m) => m).join(
+        ' | '
+    )};`;
 }

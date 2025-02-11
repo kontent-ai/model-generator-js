@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
-
 import { match } from 'ts-pattern';
 import { logError } from '../core/error.utils.js';
 import { deliveryActionAsync } from './actions/delivery-action.js';
