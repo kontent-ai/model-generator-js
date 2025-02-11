@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mapFilename, mapName, resolveCase, resolvePropertyName } from '../lib/core/resolvers.js';
+import { mapFilename, mapName, resolveCase, resolvePropertyName } from '../../lib/core/resolvers.js';
 
 describe('Resolvers - mapName', () => {
     it('Custom name should be used when function is used as arg (camelCase)', () => {

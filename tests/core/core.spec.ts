@@ -8,7 +8,7 @@ import {
     toOutputDirPath,
     toSafePropertyValue,
     uniqueFilter
-} from '../lib/core/core.utils.js';
+} from '../../lib/core/core.utils.js';
 
 describe('Core - uniqueFilter', () => {
     it('Array should contain only unique values', () => {
