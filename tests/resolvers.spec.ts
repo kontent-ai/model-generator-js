@@ -1,5 +1,57 @@
 import { describe, expect, it } from 'vitest';
-import { resolveCase } from '../lib/public_api.js';
+import { mapFilename, mapName, resolveCase } from '../lib/core/resolvers.js';
+
+describe('Resolvers - mapName', () => {
+    it('Custom name should be used when function is used as arg (camelCase)', () => {
+        expect(mapName((item) => `${item.name}custom`, 'camelCase')({ name: 'x' })).toStrictEqual('xcustom');
+    });
+
+    it('Custom name should be used when function is used as arg (pascalCase)', () => {
+        expect(mapName((item) => `${item.name}Custom`, 'pascalCase')({ name: 'X' })).toStrictEqual('XCustom');
+    });
+
+    it('Prefix should be applied to name', () => {
+        expect(mapName(() => `custom`, 'camelCase', { prefix: 'x_' })({ name: '' })).toStrictEqual('x_custom');
+    });
+
+    it('Default case should be used when resolver is undefined (camelCase)', () => {
+        expect(mapName(undefined, 'camelCase')({ name: 'FirstName' })).toStrictEqual('firstName');
+    });
+
+    it('Default case should be used when resolver is undefined (pascalCase)', () => {
+        expect(mapName(undefined, 'pascalCase')({ name: 'firstName' })).toStrictEqual('FirstName');
+    });
+
+    it('Given case should be used instead of default one (camelCase)', () => {
+        expect(mapName('camelCase', 'pascalCase')({ name: 'FirstName' })).toStrictEqual('firstName');
+    });
+
+    it('Given case should be used instead of default one (pascalCase)', () => {
+        expect(mapName('pascalCase', 'camelCase')({ name: 'firstName' })).toStrictEqual('FirstName');
+    });
+});
+
+describe('Resolvers - mapFilename', () => {
+    it('File extension should be added', () => {
+        expect(mapFilename((item) => `${item.codename}`)({ codename: 'x' }, true)).toStrictEqual('x.ts');
+    });
+
+    it('File extension should not be added', () => {
+        expect(mapFilename((item) => `${item.codename}`)({ codename: 'x' }, false)).toStrictEqual('x');
+    });
+
+    it('Codename should be used as is when resolver is undefined', () => {
+        expect(mapFilename(undefined)({ codename: 'firstName' }, true)).toStrictEqual('firstName.ts');
+    });
+
+    it('Filename should be in camelCase', () => {
+        expect(mapFilename('camelCase')({ codename: 'FirstName' }, true)).toStrictEqual('firstName.ts');
+    });
+
+    it('Filename should be in pascalCase', () => {
+        expect(mapFilename('pascalCase')({ codename: 'firstName' }, true)).toStrictEqual('FirstName.ts');
+    });
+});
 
 describe('Resolvers - camelCase', () => {
     it('should resolve single word to camelCase', () => {
