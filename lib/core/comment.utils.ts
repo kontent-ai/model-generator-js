@@ -35,5 +35,5 @@ export function getEnvironmentInfoComment(data: {
 }
 
 function removeLineEndings(value: string): string {
-    return value.replace(/(\r\n|\n|\r)/g, '');
+    return value.replace(/(\r\n|\n|\r)/g, ' ');
 }
