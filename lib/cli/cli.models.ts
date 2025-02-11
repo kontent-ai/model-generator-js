@@ -1,5 +1,19 @@
 import { CliAction } from '../core/core.models.js';
 
+export type CommandOptionNames =
+    | 'environmentId'
+    | 'help'
+    | 'apiKey'
+    | 'outputDir'
+    | 'moduleFileExtension'
+    | 'apiMode'
+    | 'contentTypes'
+    | 'isEnterpriseSubscription'
+    | 'baseUrl'
+    | 'deliveryBaseUrl'
+    | 'generateTypes'
+    | 'generateObjects';
+
 export interface Command<TAction extends string> {
     readonly name: TAction;
     readonly description: string;
@@ -8,7 +22,7 @@ export interface Command<TAction extends string> {
 }
 
 export interface CommandOption {
-    readonly name: string;
+    readonly name: CommandOptionNames;
     readonly isRequired: boolean;
     readonly alias?: string;
     readonly description?: string;
