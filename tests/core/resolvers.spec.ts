@@ -30,6 +30,7 @@ describe('Resolvers - mapName', () => {
         expect(mapName('pascalCase', 'camelCase')({ name: 'firstName' })).toStrictEqual('FirstName');
     });
 });
+
 describe('Resolvers - resolvePropertyName', () => {
     it('Property name should always be in camelCase', () => {
         expect(resolvePropertyName('FirstName')).toStrictEqual('firstName');
