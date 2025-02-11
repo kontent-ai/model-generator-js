@@ -9,9 +9,8 @@ import {
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { migrationConfig, sharedTypesConfig } from '../../config.js';
-import { wrapComment } from '../../core/comment.utils.js';
+import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { toGuidelinesComment } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
 import { resolveCase } from '../../core/resolvers.js';

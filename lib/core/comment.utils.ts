@@ -10,6 +10,10 @@ export function toSafeComment(text: string): string {
     return text.replace(/\/\*/g, replaceContent).replace(/\*\//g, replaceContent);
 }
 
+export function toGuidelinesComment(guidelines: string): string {
+    return removeLineEndings(guidelines);
+}
+
 export function getEnvironmentInfoComment(data: {
     readonly addTimestamp?: boolean;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -28,4 +32,8 @@ export function getEnvironmentInfoComment(data: {
 * 
 * -------------------------------------------------------------------------------
 **/`;
+}
+
+function removeLineEndings(value: string): string {
+    return value.replace(/(\r\n|\n|\r)/g, '');
 }

@@ -2,7 +2,6 @@ import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, Taxon
 import { createHash } from 'crypto';
 import { match, P } from 'ts-pattern';
 import { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
-import { prefixWithUnderscoreWhenStartsWithNonAlpha } from './core.utils.js';
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
@@ -97,4 +96,11 @@ function getPropertyStringHash(text: string): string {
 function toSafeStringCode(text: string): string {
     const replaceWith = '';
     return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
+}
+
+function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string {
+    if (/^[^a-zA-Z]/.test(text)) {
+        return `_${text.replace(/^_+/, '')}`;
+    }
+    return text;
 }

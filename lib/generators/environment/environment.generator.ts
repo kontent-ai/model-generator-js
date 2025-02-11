@@ -12,9 +12,9 @@ import {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
-import { wrapComment } from '../../core/comment.utils.js';
+import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import { FlattenedElement, GeneratedSet } from '../../core/core.models.js';
-import { getStringOrUndefined, toGuidelinesComment, toSafePropertyValue } from '../../core/core.utils.js';
+import { getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { resolvePropertyName } from '../../core/resolvers.js';
 
@@ -114,8 +114,8 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     id: '${language.id}',
                     isActive: ${language.isActive ? 'true' : 'false'},
                     isDefault: ${language.isDefault ? 'true' : 'false'},
-                    fallbackLanguageId: ${getStringOrUndefined(language.fallbackLanguage?.id)},
-                    externalId: ${getStringOrUndefined(language.externalId)},
+                    fallbackLanguageId: ${getStringOrUndefinedAsPropertyValue(language.fallbackLanguage?.id)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(language.externalId)},
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -150,7 +150,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     name: '${toSafePropertyValue(assetFolder.name)}',
                     codename: '${assetFolder.codename}',
                     id: '${assetFolder.id}',
-                    externalId: ${getStringOrUndefined(assetFolder.externalId)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(assetFolder.externalId)},
                     folders: ${getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
             }, '{') + '}'
         );
@@ -168,7 +168,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     name: '${toSafePropertyValue(snippet.name)}',
                     codename: '${snippet.codename}',
                     id: '${snippet.id}',
-                    externalId: ${getStringOrUndefined(snippet.externalId)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(snippet.externalId)},
                     elements: {${getContentTypeElements(snippet.elements)}}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
@@ -186,7 +186,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     name: '${toSafePropertyValue(contentType.name)}',
                     codename: '${contentType.codename}',
                     id: '${contentType.id}',
-                    externalId: ${getStringOrUndefined(contentType.externalId)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(contentType.externalId)},
                     elements: {${getContentTypeElements(contentType.elements)}}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
@@ -212,7 +212,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     name: '${toSafePropertyValue(element.title)}',
                     codename: '${element.codename}',
                     id: '${element.id}',
-                    externalId: ${getStringOrUndefined(element.externalId)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(element.externalId)},
                     required: ${element.isRequired},
                     type: '${element.type}'
                     ${elementOptions ? `, options: ${elementOptions}` : ''}
@@ -234,8 +234,8 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${option.codename ? option.codename : resolvePropertyName(option.name)}: {
                     name: '${toSafePropertyValue(option.name)}',
                     id: '${option.id}',
-                    codename: ${getStringOrUndefined(option.codename)},
-                    externalId: ${getStringOrUndefined(option.external_id)}
+                    codename: ${getStringOrUndefinedAsPropertyValue(option.codename)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(option.external_id)}
                 }${!isLast ? ',\n' : ''}`;
                     }, '{') + '}'
                 );
@@ -254,7 +254,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                  ${taxonomy.codename}: {
                     name: '${toSafePropertyValue(taxonomy.name)}',
                     codename: '${taxonomy.codename}',
-                    externalId: ${getStringOrUndefined(taxonomy.externalId)},
+                    externalId: ${getStringOrUndefinedAsPropertyValue(taxonomy.externalId)},
                     id: '${taxonomy.id}',
                     ${getProjectTaxonomiesTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
@@ -286,7 +286,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 * ${role.name}
                 `)}
                 ${resolvePropertyName(role.codename ?? role.name)}: {
-                    codename: ${getStringOrUndefined(role.codename)},
+                    codename: ${getStringOrUndefinedAsPropertyValue(role.codename)},
                     id: '${role.id}',
                     name: '${toSafePropertyValue(role.name)}'
                 }${!isLast ? ',\n' : ''}`;
@@ -321,7 +321,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     ${term.codename}: {
                         codename: '${term.codename}',
                         id: '${term.id}',
-                        externalId: ${getStringOrUndefined(term.externalId)},
+                        externalId: ${getStringOrUndefinedAsPropertyValue(term.externalId)},
                         name: '${toSafePropertyValue(term.name)}',
                         ${getProjectTaxonomiesTerms(term.terms)}
                     }${!isLast ? ',\n' : ''}`;
