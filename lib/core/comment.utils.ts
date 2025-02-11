@@ -15,7 +15,7 @@ export function toGuidelinesComment(guidelines: string): string {
 }
 
 export function getEnvironmentInfoComment(data: {
-    readonly addTimestamp?: boolean;
+    readonly timestampDate?: Date;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }): string {
     return `
@@ -28,7 +28,7 @@ export function getEnvironmentInfoComment(data: {
 * 
 * Project: ${toSafeComment(data.environmentInfo.name)}
 * Environment: ${toSafeComment(data.environmentInfo.environment)}
-* Id: ${data.environmentInfo.id}${data.addTimestamp ? `\n* Generated: ${new Date().toLocaleString()}` : ''}
+* Id: ${data.environmentInfo.id}${data.timestampDate ? `\n* Generated: ${data.timestampDate.toLocaleString()}` : ''}
 * 
 * -------------------------------------------------------------------------------
 **/`;

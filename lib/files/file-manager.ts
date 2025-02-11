@@ -24,7 +24,7 @@ export function fileManager(config: {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
         const fileContent = `${getEnvironmentInfoComment({
             environmentInfo: config.environmentInfo,
-            addTimestamp: config.addTimestamp
+            timestampDate: config.addTimestamp ? new Date() : undefined
         })}\n\n${await getFormattedCodeAsync(text, filePath)}`;
 
         ensureDirectoryExistence(fullFilePath);

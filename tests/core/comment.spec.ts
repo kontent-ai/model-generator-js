@@ -37,7 +37,7 @@ describe(`Comments - getEnvironmentInfoComment`, () => {
                         id: id,
                         name: name
                     },
-                    addTimestamp: false
+                    timestampDate: undefined
                 })
             )
         ).toStrictEqual(
@@ -65,6 +65,8 @@ describe(`Comments - getEnvironmentInfoComment`, () => {
         const name = 'test';
         const id = '123';
 
+        const date = new Date();
+
         expect(
             await formatCodeAsync(
                 getEnvironmentInfoComment({
@@ -73,7 +75,7 @@ describe(`Comments - getEnvironmentInfoComment`, () => {
                         id: id,
                         name: name
                     },
-                    addTimestamp: true
+                    timestampDate: date
                 })
             )
         ).toStrictEqual(
@@ -89,7 +91,7 @@ describe(`Comments - getEnvironmentInfoComment`, () => {
             * Project: ${name}
             * Environment: ${environment}
             * Id: ${id}
-            * Generated: ${new Date().toLocaleString()}
+            * Generated: ${date.toLocaleString()}
             * 
             * -------------------------------------------------------------------------------
             **/`
