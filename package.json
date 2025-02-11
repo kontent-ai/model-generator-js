@@ -3,7 +3,7 @@
     "version": "8.0.0-14",
     "description": "This utility generates strongly-typed models for Delivery JS SDK, Migration toolkit or just general scripting to improve the experience when referencing Kontent.ai related objects.",
     "bin": {
-        "kontent-generate": "./dist/lib/cli/app.js"
+        "kontent-generate": "./dist/cli/app.js"
     },
     "repository": {
         "type": "git",
@@ -22,8 +22,8 @@
         "Kontent Model Generator",
         "Kontent.ai strongly typed models"
     ],
-    "exports": "./dist/lib/public_api.js",
-    "types": "./dist/lib/public_api.d.ts",
+    "exports": "./dist/public_api.js",
+    "types": "./dist/public_api.d.ts",
     "type": "module",
     "scripts": {
         "release": "standard-version && npm run update:version",
@@ -34,7 +34,7 @@
         "prerelease:major": "standard-version --prerelease --release-as major && npm run update:version",
         "prepublishOnly": "npm run build && npm run push:tags",
         "publish:beta": "npm publish --tag=next",
-        "build": "npm run clean && tsc --p tsconfig.json",
+        "build": "npm run clean && tsc --p tsconfig.build.json",
         "test": "npm run test:unit",
         "test:unit": "vitest run --config=vitest.config.ts",
         "sample:delivery": "tsx scripts/samples/delivery-models",
