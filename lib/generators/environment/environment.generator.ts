@@ -14,8 +14,9 @@ import {
 import { match } from 'ts-pattern';
 import { wrapComment } from '../../core/comment.utils.js';
 import { FlattenedElement, GeneratedSet } from '../../core/core.models.js';
-import { getStringOrUndefined, toGuidelinesComment, toSafePropertyName, toSafePropertyValue } from '../../core/core.utils.js';
+import { getStringOrUndefined, toGuidelinesComment, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
+import { resolvePropertyName } from '../../core/resolvers.js';
 
 interface WorkflowStep {
     readonly name: string;
@@ -107,7 +108,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${language.name}
                 `)}
-                ${toSafePropertyName(language.codename)}: {
+                ${resolvePropertyName(language.codename)}: {
                     name: '${toSafePropertyValue(language.name)}',
                     codename: '${language.codename}',
                     id: '${language.id}',
@@ -230,7 +231,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${option.name}
                 `)}
-                ${option.codename ? option.codename : toSafePropertyName(option.name)}: {
+                ${option.codename ? option.codename : resolvePropertyName(option.name)}: {
                     name: '${toSafePropertyValue(option.name)}',
                     id: '${option.id}',
                     codename: ${getStringOrUndefined(option.codename)},
@@ -284,7 +285,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${role.name}
                 `)}
-                ${toSafePropertyName(role.codename ?? role.name)}: {
+                ${resolvePropertyName(role.codename ?? role.name)}: {
                     codename: ${getStringOrUndefined(role.codename)},
                     id: '${role.id}',
                     name: '${toSafePropertyValue(role.name)}'
@@ -300,7 +301,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 ${wrapComment(`
                 * ${webhook.name}
                 `)}
-                ${toSafePropertyName(webhook.name)}: {
+                ${resolvePropertyName(webhook.name)}: {
                     url: '${webhook.url}',
                     id: '${webhook.id}',
                     name: '${toSafePropertyValue(webhook.name)}'

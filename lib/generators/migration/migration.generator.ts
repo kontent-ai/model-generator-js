@@ -11,9 +11,10 @@ import { match } from 'ts-pattern';
 import { migrationConfig, sharedTypesConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
 import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { toGuidelinesComment, toPascalCase } from '../../core/core.utils.js';
+import { toGuidelinesComment } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
+import { resolveCase } from '../../core/resolvers.js';
 import {
     getCollectionCodenamesType,
     getContentTypeCodenamesType,
@@ -58,7 +59,7 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             * Codename: ${type.codename}
             * Id: ${type.id}
             `)}
-            export type ${toPascalCase(type.name)}Item = ${migrationConfig.localTypeNames.item}<
+            export type ${resolveCase(type.name, 'pascalCase')}Item = ${migrationConfig.localTypeNames.item}<
             '${type.codename}',
             {
                 ${getFlattenedElements({

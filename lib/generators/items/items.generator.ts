@@ -4,7 +4,7 @@ import Chalk from 'chalk';
 import { itemsConfig } from '../../config.js';
 import { toSafeComment, wrapComment } from '../../core/comment.utils.js';
 import { GeneratedSet } from '../../core/core.models.js';
-import { toPascalCase } from '../../core/core.utils.js';
+import { resolveCase } from '../../core/resolvers.js';
 
 export interface ItemGeneratorConfig {
     readonly environmentData: {
@@ -15,7 +15,7 @@ export interface ItemGeneratorConfig {
 
 export function itemsGenerator(config: ItemGeneratorConfig) {
     const getItemCodenameType = (typeCodename: string, items: readonly Readonly<IContentItem>[]): string => {
-        return `export type ${toPascalCase(typeCodename)}Codenames = ${items.map((item) => `'${item.system.codename}'`).join(' | ')};`;
+        return `export type ${resolveCase(typeCodename, 'pascalCase')}Codenames = ${items.map((item) => `'${item.system.codename}'`).join(' | ')};`;
     };
 
     const getItemCodenamesProp = (typeCodename: string, items: readonly Readonly<IContentItem>[]): string => {

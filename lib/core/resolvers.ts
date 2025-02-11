@@ -1,7 +1,8 @@
 import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import { createHash } from 'crypto';
 import { match, P } from 'ts-pattern';
 import { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
-import { toCamelCase, toPascalCase } from './core.utils.js';
+import { prefixWithUnderscoreWhenStartsWithNonAlpha } from './core.utils.js';
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
@@ -57,6 +58,43 @@ export function resolveCase(text: string, resolverType: CaseType): string {
         .exhaustive();
 }
 
+export function resolvePropertyName(value: string): string {
+    const propertyName = toCamelCase(value);
+
+    if (propertyName.length === 0) {
+        // to prevent empty string being used as property name, use hash
+        return getPropertyStringHash(value);
+    }
+
+    return prefixWithUnderscoreWhenStartsWithNonAlpha(propertyName);
+}
+
 function addExtensionToFilename(filename: string, addExtension: boolean): string {
     return `${filename}${addExtension ? '.ts' : ''}`;
+}
+
+function toPascalCase(text: string): string {
+    return prefixWithUnderscoreWhenStartsWithNonAlpha(
+        toSafeStringCode(
+            text
+                .replace(/[_-]+/g, ' ')
+                .replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match, index) => (index === 0 ? match.toUpperCase() : match.toUpperCase()))
+                .replace(/\s+/g, '')
+        )
+    );
+}
+
+function toCamelCase(text: string): string {
+    return toPascalCase(text).replace(/^\w/, (s) => s.toLowerCase());
+}
+
+function getPropertyStringHash(text: string): string {
+    const hash = createHash('sha256');
+    hash.update(text);
+    return `_${hash.digest('hex')}`.slice(0, 10);
+}
+
+function toSafeStringCode(text: string): string {
+    const replaceWith = '';
+    return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
 }

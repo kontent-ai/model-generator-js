@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { mapFilename, mapName, resolveCase } from '../lib/core/resolvers.js';
+import { mapFilename, mapName, resolveCase, resolvePropertyName } from '../lib/core/resolvers.js';
 
 describe('Resolvers - mapName', () => {
     it('Custom name should be used when function is used as arg (camelCase)', () => {
@@ -28,6 +28,27 @@ describe('Resolvers - mapName', () => {
 
     it('Given case should be used instead of default one (pascalCase)', () => {
         expect(mapName('pascalCase', 'camelCase')({ name: 'firstName' })).toStrictEqual('FirstName');
+    });
+});
+describe('Resolvers - resolvePropertyName', () => {
+    it('Property name should always be in camelCase', () => {
+        expect(resolvePropertyName('FirstName')).toStrictEqual('firstName');
+    });
+
+    it('Property name should have special characters stripped', () => {
+        expect(resolvePropertyName('#FirstName')).toStrictEqual('firstName');
+        expect(resolvePropertyName('.FirstName')).toStrictEqual('firstName');
+        expect(resolvePropertyName(' FirstName#?!')).toStrictEqual('firstName');
+    });
+
+    it('Property name should be prefixed with underscore when it starts with number characters', () => {
+        expect(resolvePropertyName('1FirstName')).toStrictEqual('_1FirstName');
+        expect(resolvePropertyName('111FirstName')).toStrictEqual('_111FirstName');
+    });
+
+    it('Random string should be generated when property name is empty', () => {
+        expect(resolvePropertyName('').length).toBeGreaterThan(0);
+        expect(resolvePropertyName('').length).toBeLessThan(15);
     });
 });
 
