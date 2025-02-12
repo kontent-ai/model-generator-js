@@ -1,4 +1,4 @@
-import { CliAction, LibraryType } from '../core/core.models.js';
+import type { CliAction, LibraryType } from '../core/core.models.js';
 import { argumentsSetter } from './args/args-setter.js';
 import { commandOptions } from './command.options.js';
 

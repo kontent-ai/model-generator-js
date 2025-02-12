@@ -1,5 +1,5 @@
 import { parse } from 'path';
-import { LibraryType, LiteralUnion, ModuleFileExtension } from './core.models.js';
+import type { LibraryType, LiteralUnion, ModuleFileExtension } from './core.models.js';
 import { getFileNameWithoutExtension, sortAlphabetically } from './core.utils.js';
 
 export function importer(moduleFileExtension: ModuleFileExtension) {

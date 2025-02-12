@@ -1,7 +1,7 @@
-import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import type { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { createHash } from 'crypto';
 import { match, P } from 'ts-pattern';
-import { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
+import type { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
 
 /** File name resolvers */
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);

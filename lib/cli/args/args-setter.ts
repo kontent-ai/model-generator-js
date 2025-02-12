@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { CliAction } from '../../core/core.models.js';
-import { CliArgumentsSetter, Command, CommandOption } from '../cli.models.js';
+import type { CliAction } from '../../core/core.models.js';
+import type { CliArgumentsSetter, Command, CommandOption } from '../cli.models.js';
 
 export function argumentsSetter(): CliArgumentsSetter<CliAction> {
     const argv = yargs(hideBin(process.argv));

@@ -1,6 +1,6 @@
 import { generateMigrationModelsAsync } from '../../generators/migration/migration-func.js';
 import { parseModuleFileExtension } from '../arg.utils.js';
-import { CliArgumentsFetcher } from '../cli.models.js';
+import type { CliArgumentsFetcher } from '../cli.models.js';
 import { commandOptions } from '../command.options.js';
 
 export async function migrateActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {

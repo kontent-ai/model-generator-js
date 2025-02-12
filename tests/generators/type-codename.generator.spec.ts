@@ -1,4 +1,4 @@
-import {
+import type {
     CollectionModels,
     ContentTypeModels,
     ContentTypeSnippetModels,
@@ -9,7 +9,7 @@ import {
 } from '@kontent-ai/management-sdk';
 import { describe, expect, it } from 'vitest';
 import { sharedTypesConfig } from '../../lib/config.js';
-import { ObjectWithCodename } from '../../lib/core/core.models.js';
+import type { ObjectWithCodename } from '../../lib/core/core.models.js';
 import { sortAlphabetically, uniqueFilter } from '../../lib/core/core.utils.js';
 import {
     getCollectionCodenamesType,

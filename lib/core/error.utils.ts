@@ -1,7 +1,7 @@
 import { SharedModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { match, P } from 'ts-pattern';
-import { ErrorData, OriginalManagementError } from './core.models.js';
+import type { ErrorData, OriginalManagementError } from './core.models.js';
 
 export function logError(error: unknown): void {
     const errorData = extractErrorData(error);

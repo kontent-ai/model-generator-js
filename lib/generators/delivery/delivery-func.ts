@@ -1,8 +1,8 @@
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { Options } from 'prettier';
-import { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import {
+import type { Options } from 'prettier';
+import type { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,

@@ -1,4 +1,4 @@
-import { CliAction } from '../core/core.models.js';
+import type { CliAction } from '../core/core.models.js';
 
 export type CommandOptionNames =
     | 'environmentId'

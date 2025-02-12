@@ -2,8 +2,8 @@ import chalk from 'chalk';
 import { match } from 'ts-pattern';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { CliAction, LiteralUnion } from '../../core/core.models.js';
-import { CliArgumentsFetcher } from '../cli.models.js';
+import type { CliAction, LiteralUnion } from '../../core/core.models.js';
+import type { CliArgumentsFetcher } from '../cli.models.js';
 
 type ArgvResult = {
     [x: string]: unknown;

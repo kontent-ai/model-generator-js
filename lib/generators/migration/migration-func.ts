@@ -1,7 +1,7 @@
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { Options } from 'prettier';
-import { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { Options } from 'prettier';
+import type { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';

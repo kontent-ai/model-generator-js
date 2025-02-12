@@ -1,4 +1,4 @@
-import {
+import type {
     CollectionModels,
     ContentTypeModels,
     ContentTypeSnippetModels,
@@ -8,7 +8,7 @@ import {
 } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { sharedTypesConfig } from '../../config.js';
-import { ObjectWithCodename } from '../../core/core.models.js';
+import type { ObjectWithCodename } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 
 export function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {

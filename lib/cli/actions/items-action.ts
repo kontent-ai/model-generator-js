@@ -1,6 +1,6 @@
 import { generateItemsAsync } from '../../generators/items/items-func.js';
 import { parseDeliveryApiMode, parseModuleFileExtension } from '../arg.utils.js';
-import { CliArgumentsFetcher } from '../cli.models.js';
+import type { CliArgumentsFetcher } from '../cli.models.js';
 import { commandOptions } from '../command.options.js';
 
 export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {

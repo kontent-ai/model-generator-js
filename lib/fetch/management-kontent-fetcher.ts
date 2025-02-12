@@ -1,11 +1,10 @@
 import { HttpService } from '@kontent-ai/core-sdk';
-import {
+import type {
     AssetFolderModels,
     CollectionModels,
     ContentItemModels,
     ContentTypeModels,
     ContentTypeSnippetModels,
-    createManagementClient,
     EnvironmentModels,
     LanguageModels,
     RoleModels,
@@ -13,10 +12,13 @@ import {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
+import {
+    createManagementClient
+} from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { coreConfig } from '../config.js';
 import { toSafeComment } from '../core/comment.utils.js';
-import { GeneratorManagementClient } from '../core/core.models.js';
+import type { GeneratorManagementClient } from '../core/core.models.js';
 
 export function managementKontentFetcher(config: { readonly environmentId: string; readonly apiKey: string; readonly baseUrl?: string }) {
     const client: GeneratorManagementClient = createManagementClient({

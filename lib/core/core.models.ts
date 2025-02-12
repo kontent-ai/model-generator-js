@@ -1,5 +1,5 @@
-import { IDeliveryClient } from '@kontent-ai/delivery-sdk';
-import {
+import type { IDeliveryClient } from '@kontent-ai/delivery-sdk';
+import type {
     ContentTypeElements,
     ContentTypeModels,
     ContentTypeSnippetModels,

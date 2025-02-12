@@ -1,28 +1,32 @@
-import {
+import type {
     CollectionModels,
-    ContentTypeModels,
-    ContentTypeSnippetModels,
     EnvironmentModels,
     LanguageModels,
     TaxonomyModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
+import {
+    ContentTypeModels,
+    ContentTypeSnippetModels
+} from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { importer as _importer } from '../../core/importer.js';
-import {
+import type {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
-    mapFilename,
-    mapName,
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver
+} from '../../core/resolvers.js';
+import {
+    mapFilename,
+    mapName
 } from '../../core/resolvers.js';
 import {
     getCollectionCodenamesType,

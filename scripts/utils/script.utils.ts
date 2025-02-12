@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import * as dotenv from 'dotenv';
 import fs, { rmSync } from 'fs';
 import { parseModuleFileExtension } from '../../lib/cli/arg.utils.js';
-import { ModuleFileExtension } from '../../lib/core/core.models.js';
+import type { ModuleFileExtension } from '../../lib/core/core.models.js';
 import { logError } from '../../lib/core/error.utils.js';
 import { getEnvironmentRequiredValue } from './test.utils.js';
 

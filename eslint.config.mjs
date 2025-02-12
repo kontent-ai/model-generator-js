@@ -10,6 +10,7 @@ export default tseslint.config(eslint.configs.recommended, ...tseslint.configs.r
     },
     rules: {
         '@typescript-eslint/no-namespace': 'off',
+        '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/naming-convention': [
             'warn',
             {

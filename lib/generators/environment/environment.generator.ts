@@ -1,4 +1,4 @@
-import {
+import type {
     AssetFolderModels,
     CollectionModels,
     ContentTypeElements,
@@ -13,7 +13,7 @@ import {
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import { FlattenedElement, GeneratedSet } from '../../core/core.models.js';
+import type { FlattenedElement, GeneratedSet } from '../../core/core.models.js';
 import { getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { resolvePropertyName } from '../../core/resolvers.js';

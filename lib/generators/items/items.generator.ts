@@ -1,9 +1,9 @@
-import { IContentItem } from '@kontent-ai/delivery-sdk';
-import { ContentTypeModels } from '@kontent-ai/management-sdk';
+import type { IContentItem } from '@kontent-ai/delivery-sdk';
+import type { ContentTypeModels } from '@kontent-ai/management-sdk';
 import Chalk from 'chalk';
 import { itemsConfig } from '../../config.js';
 import { toSafeComment, wrapComment } from '../../core/comment.utils.js';
-import { GeneratedSet } from '../../core/core.models.js';
+import type { GeneratedSet } from '../../core/core.models.js';
 import { resolveCase } from '../../core/resolvers.js';
 
 export interface ItemGeneratorConfig {

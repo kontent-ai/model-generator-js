@@ -1,7 +1,7 @@
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
-import { Options } from 'prettier';
-import { DeliveryApiMode, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { Options } from 'prettier';
+import type { DeliveryApiMode, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { singleItemToArray } from '../../core/core.utils.js';
 import { deliveryKontentFetcher as _deliveryKontentFetcher } from '../../fetch/delivery-kontent-fetcher.js';
 import { managementKontentFetcher as _managementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';

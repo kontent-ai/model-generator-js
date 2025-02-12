@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { importer as _importer } from '../../lib/core/importer.js';
 import { formatCodeAsync } from '../../lib/format/formatter.js';
-import { ModuleFileExtension } from '../../lib/public_api.js';
+import type { ModuleFileExtension } from '../../lib/public_api.js';
 
 for (const moduleFileExtension of ['js', 'ts', 'mjs', 'mts', 'none'] satisfies ModuleFileExtension[]) {
     describe(`Importer - ${moduleFileExtension}`, () => {

@@ -1,4 +1,4 @@
-import { DeliveryApiMode, ModuleFileExtension } from './core/core.models.js';
+import type { DeliveryApiMode, ModuleFileExtension } from './core/core.models.js';
 import { libMetadata } from './meta/metadata.js';
 
 export const defaultModuleFileExtension: ModuleFileExtension = 'js';

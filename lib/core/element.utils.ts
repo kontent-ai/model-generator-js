@@ -1,6 +1,6 @@
-import { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import type { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
-import { FlattenedElement, MultipleChoiceOption } from './core.models.js';
+import type { FlattenedElement, MultipleChoiceOption } from './core.models.js';
 import { isNotUndefined } from './core.utils.js';
 
 interface ElementWrapper {

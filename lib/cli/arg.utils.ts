@@ -1,5 +1,5 @@
 import { defaultDeliveryApiMode, defaultModuleFileExtension } from '../config.js';
-import { DeliveryApiMode, LiteralUnion, ModuleFileExtension } from '../core/core.models.js';
+import type { DeliveryApiMode, LiteralUnion, ModuleFileExtension } from '../core/core.models.js';
 
 export function parseModuleFileExtension(moduleFileExtension: LiteralUnion<ModuleFileExtension> | undefined): ModuleFileExtension {
     return moduleFileExtensionOptions[moduleFileExtension ?? defaultModuleFileExtension];

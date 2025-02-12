@@ -1,4 +1,5 @@
-import { Options, format } from 'prettier';
+import type { Options} from 'prettier';
+import { format } from 'prettier';
 
 export async function formatCodeAsync(code: string, options?: Readonly<Options>): Promise<string> {
     return await format(

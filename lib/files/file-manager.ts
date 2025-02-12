@@ -1,11 +1,11 @@
-import { EnvironmentModels } from '@kontent-ai/management-sdk';
+import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import * as fs from 'fs';
 import { dirname } from 'path';
-import { Options } from 'prettier';
+import type { Options } from 'prettier';
 import { coreConfig } from '../config.js';
 import { getEnvironmentInfoComment } from '../core/comment.utils.js';
-import { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../core/core.models.js';
+import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../core/core.models.js';
 import { toOutputDirPath } from '../core/core.utils.js';
 import { importer as _importer } from '../core/importer.js';
 import { formatCodeAsync } from '../format/formatter.js';

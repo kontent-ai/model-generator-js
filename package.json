@@ -34,7 +34,7 @@
         "prerelease:major": "standard-version --prerelease --release-as major && npm run update:version",
         "prepublishOnly": "npm run build && npm run push:tags",
         "publish:beta": "npm publish --tag=next",
-        "build": "npm run clean && tsc --p tsconfig.build.json",
+        "build": "npm run clean && npm run lint:fix && tsc --p tsconfig.build.json",
         "test": "npm run test:unit",
         "test:unit": "vitest run --config=vitest.config.ts",
         "sample:delivery": "tsx scripts/samples/delivery-models",

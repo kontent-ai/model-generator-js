@@ -1,8 +1,9 @@
 import { HttpService } from '@kontent-ai/core-sdk';
-import { createDeliveryClient, IContentItem, ItemsFeedQuery } from '@kontent-ai/delivery-sdk';
+import type { IContentItem, ItemsFeedQuery } from '@kontent-ai/delivery-sdk';
+import { createDeliveryClient } from '@kontent-ai/delivery-sdk';
 import chalk from 'chalk';
 import { coreConfig } from '../config.js';
-import { DeliveryApiMode, GeneratorDeliveryClient } from '../core/core.models.js';
+import type { DeliveryApiMode, GeneratorDeliveryClient } from '../core/core.models.js';
 import { sortAlphabetically } from '../core/core.utils.js';
 
 export function deliveryKontentFetcher(config: {

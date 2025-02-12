@@ -1,5 +1,5 @@
 import { deliveryApiModeOptions, moduleFileExtensionOptions } from './arg.utils.js';
-import { CommandOption } from './cli.models.js';
+import type { CommandOption } from './cli.models.js';
 
 export const commandOptions: { [key: string]: CommandOption } = {
     environmentIdOption: { name: `environmentId`, description: `Id of the environment`, type: 'string', isRequired: true },

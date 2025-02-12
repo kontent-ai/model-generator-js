@@ -1,6 +1,7 @@
-import { ContentTypeModels } from '@kontent-ai/management-sdk';
+import type { ContentTypeModels } from '@kontent-ai/management-sdk';
 import { deliveryConfig } from '../../config.js';
-import { ContentTypeNameResolver, mapName } from '../../core/resolvers.js';
+import type { ContentTypeNameResolver} from '../../core/resolvers.js';
+import { mapName } from '../../core/resolvers.js';
 
 export interface DeliveryTypeGuardGeneratorConfig {
     readonly nameResolvers?: {

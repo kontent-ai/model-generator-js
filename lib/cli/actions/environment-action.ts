@@ -1,6 +1,6 @@
 import { generateEnvironmentModelsAsync } from '../../generators/environment/environment-func.js';
 import { parseModuleFileExtension } from '../arg.utils.js';
-import { CliArgumentsFetcher } from '../cli.models.js';
+import type { CliArgumentsFetcher } from '../cli.models.js';
 import { commandOptions } from '../command.options.js';
 
 export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
