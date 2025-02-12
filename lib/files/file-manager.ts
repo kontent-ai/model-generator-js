@@ -20,12 +20,12 @@ export function fileManager(config: {
     const fixedOutputDir = toOutputDirPath(config.outputDir);
     const importer = _importer(config.moduleFileExtension);
 
-    const createFileOnFsAsync = async (text: string, filePath: string): Promise<void> => {
+    const createFileOnFs = (text: string, filePath: string): void => {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
         const fileContent = `${getEnvironmentInfoComment({
             environmentInfo: config.environmentInfo,
             timestampDate: config.addTimestamp ? new Date() : undefined
-        })}\n\n${await getFormattedCodeAsync(text, filePath)}`;
+        })}\n\n${text}`;
 
         ensureDirectoryExistence(fullFilePath);
         fs.writeFileSync('./' + fullFilePath, fileContent, {});
@@ -34,9 +34,12 @@ export function fileManager(config: {
 
     const getFormattedCodeAsync = async (code: string, filePath: string): Promise<string> => {
         try {
-            return await formatCodeAsync(code, config.formatOptions);
+            if (filePath.endsWith('.ts')) {
+                return await formatCodeAsync(code, config.formatOptions);
+            }
+            return code;
         } catch {
-            console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier for this file.`);
+            console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier.`);
             return code;
         }
     };
@@ -50,50 +53,65 @@ export function fileManager(config: {
         fs.mkdirSync(resolvedDirname);
     };
 
-    const createFilesAsync = async (files: readonly GeneratedFile[]): Promise<void> => {
-        await Promise.all(
-            files.map(async (file) => {
-                return await createFileOnFsAsync(file.text, file.filename);
-            })
-        );
+    const createFiles = (files: readonly GeneratedFile[]): void => {
+        for (const file of files) {
+            createFileOnFs(file.text, file.filename);
+        }
     };
 
-    const createSetAsync = async (set: GeneratedSet): Promise<void> => {
-        const setFolder = set.folderName ? `${set.folderName}/` : '';
+    const getSetFolder = (set: GeneratedSet): string => {
+        return set.folderName ? `${set.folderName}/` : '';
+    };
 
-        await createFilesAsync([
-            ...set.files.map((file) => {
-                return {
-                    filename: `${setFolder}${file.filename}`,
-                    text: file.text
-                };
-            }),
+    const getSetFiles = (set: GeneratedSet): readonly GeneratedFile[] => {
+        const setFolder = getSetFolder(set);
+        const setFiles: readonly GeneratedFile[] = set.files.map<GeneratedFile>((file) => {
+            return {
+                filename: `${setFolder}${file.filename}`,
+                text: file.text
+            };
+        });
+
+        if (!set.folderName) {
+            return setFiles;
+        }
+
+        return [
+            ...setFiles,
             {
                 filename: `${setFolder}${coreConfig.barrelExportFilename}`,
                 text: importer.getBarrelExportCode(set.files.map((m) => `./${m.filename}`))
             }
-        ]);
+        ];
+    };
+
+    const getSetsBarrelExportFiles = (sets: readonly GeneratedSet[]): GeneratedFile => {
+        return {
+            filename: coreConfig.barrelExportFilename,
+            text: importer.getBarrelExportCode(
+                sets.flatMap((set) => {
+                    if (!set.folderName) {
+                        // include file paths themselves if there is no folder
+                        return set.files.map((file) => `./${file.filename}`);
+                    }
+
+                    return `./${getSetFolder(set)}${coreConfig.barrelExportFilename}`;
+                })
+            )
+        };
     };
 
     return {
-        createFilesAsync,
-        createSetAsync,
-        createSetsAsync: async (sets: readonly GeneratedSet[]): Promise<void> => {
-            await Promise.all(sets.map((set) => createSetAsync(set)));
-            await createFileOnFsAsync(
-                importer.getBarrelExportCode(
-                    sets.flatMap((set) => {
-                        if (!set.folderName) {
-                            // include file paths themselves if there is no folder
-                            return set.files.map((file) => `./${file.filename}`);
-                        }
-
-                        const setFolder = set.folderName ? `${set.folderName}/` : '';
-                        return `./${setFolder}${coreConfig.barrelExportFilename}`;
-                    })
-                ),
-                coreConfig.barrelExportFilename
+        getSetFilesAsync: async (sets: readonly GeneratedSet[]): Promise<readonly GeneratedFile[]> => {
+            return await Promise.all(
+                [...sets.flatMap((set) => getSetFiles(set)), getSetsBarrelExportFiles(sets)].map<Promise<GeneratedFile>>(async (file) => {
+                    return {
+                        filename: file.filename,
+                        text: await getFormattedCodeAsync(file.text, file.filename)
+                    };
+                })
             );
-        }
+        },
+        createFiles
     };
 }

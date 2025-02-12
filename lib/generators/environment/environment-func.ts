@@ -2,12 +2,12 @@ import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
 import { defaultModuleFileExtension } from '../../config.js';
-import type { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { environmentGenerator as _environmentGenerator } from './environment.generator.js';
 
-export interface GenerateEnvironmentModelsConfig {
+export type GenerateEnvironmentModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly isEnterpriseSubscription: boolean;
@@ -15,13 +15,12 @@ export interface GenerateEnvironmentModelsConfig {
 
     readonly moduleFileExtension: ModuleFileExtension;
     readonly baseUrl?: string;
-    readonly outputDir?: string;
     readonly formatOptions?: Readonly<Options>;
-}
+} & CreateFilesConfig;
 
-export async function generateEnvironmentModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<void> {
+export async function generateEnvironmentModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<readonly GeneratedFile[]> {
     console.log(chalk.green(`Model generator started \n`));
-    console.log(`Generating '${chalk.yellow('project')}' models\n`);
+    console.log(`Generating '${chalk.yellow('environment' satisfies CliAction)}' models\n`);
 
     const { environmentFiles, environmentInfo } = await getModelsAsync(config);
 
@@ -30,9 +29,15 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
         environmentInfo: environmentInfo
     });
 
-    await fileManager.createSetsAsync([environmentFiles]);
+    const setFiles = await fileManager.getSetFilesAsync([environmentFiles]);
+
+    if (config.createFiles) {
+        fileManager.createFiles(setFiles);
+    }
 
     console.log(chalk.green(`\nCompleted`));
+
+    return setFiles;
 }
 
 async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<{

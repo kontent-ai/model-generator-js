@@ -1,4 +1,8 @@
 import chalk from 'chalk';
+import * as dotenv from 'dotenv';
+
+// needed to load .env environment to current process when run via package.json script
+dotenv.config();
 
 export function getEnvironmentRequiredValue(variableName: string): string {
     const value = getEnvironmentOptionalValue(variableName);

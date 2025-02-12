@@ -1,14 +1,21 @@
 import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
-import type { DeliveryApiMode, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type {
+    CliAction,
+    CreateFilesConfig,
+    DeliveryApiMode,
+    GeneratedFile,
+    GeneratedSet,
+    ModuleFileExtension
+} from '../../core/core.models.js';
 import { singleItemToArray } from '../../core/core.utils.js';
 import { deliveryKontentFetcher as _deliveryKontentFetcher } from '../../fetch/delivery-kontent-fetcher.js';
 import { managementKontentFetcher as _managementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { itemsGenerator as _itemsGenerator } from './items.generator.js';
 
-export interface GenerateItemsModelsConfig {
+export type GenerateItemsModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly apiKey: string;
@@ -19,15 +26,14 @@ export interface GenerateItemsModelsConfig {
     readonly generateObjects: boolean;
 
     readonly deliveryApiKey?: string;
-    readonly outputDir?: string;
     readonly baseUrl?: string;
     readonly deliveryBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
-}
+} & CreateFilesConfig;
 
-export async function generateItemsAsync(config: GenerateItemsModelsConfig): Promise<void> {
+export async function generateItemsAsync(config: GenerateItemsModelsConfig): Promise<readonly GeneratedFile[]> {
     console.log(chalk.green(`Model generator started \n`));
-    console.log(`Generating '${chalk.yellow('migration')}' models\n`);
+    console.log(`Generating '${chalk.yellow('items' satisfies CliAction)}' models\n`);
 
     const { itemFiles, environmentInfo, codenameFiles } = await getFilesAsync(config);
 
@@ -36,9 +42,15 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
         environmentInfo: environmentInfo
     });
 
-    await fileManager.createSetsAsync([...singleItemToArray(itemFiles), ...singleItemToArray(codenameFiles)]);
+    const setFiles = await fileManager.getSetFilesAsync([...singleItemToArray(itemFiles), ...singleItemToArray(codenameFiles)]);
+
+    if (config.createFiles) {
+        fileManager.createFiles(setFiles);
+    }
 
     console.log(chalk.green(`\nCompleted`));
+
+    return setFiles;
 }
 
 async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{

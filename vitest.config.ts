@@ -7,6 +7,7 @@ export default defineConfig({
         dir: 'tests',
         globals: true,
         environment: 'node',
+        setupFiles: ['dotenv/config'],
         env: loadEnv('', process.cwd(), '') // loads .env variables
     },
     build: {

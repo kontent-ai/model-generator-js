@@ -1,10 +1,9 @@
 import chalk from 'chalk';
-import * as dotenv from 'dotenv';
 import fs, { rmSync } from 'fs';
 import { parseModuleFileExtension } from '../../lib/cli/arg.utils.js';
 import type { ModuleFileExtension } from '../../lib/core/core.models.js';
 import { logError } from '../../lib/core/error.utils.js';
-import { getEnvironmentRequiredValue } from './test.utils.js';
+import { getEnvironmentRequiredValue } from './environment.utils.js';
 
 export async function runScriptAsync(
     func: (config: {
@@ -15,9 +14,6 @@ export async function runScriptAsync(
     }) => Promise<void>
 ): Promise<void> {
     try {
-        // needed to load .env environment to current process when run via package.json script
-        dotenv.config();
-
         await func({
             deliveryApiKey: getEnvironmentRequiredValue('DELIVERY_API_KEY'),
             environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),

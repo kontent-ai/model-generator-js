@@ -1,0 +1,12 @@
+[
+  { "filename": "languages.ts" },
+  { "filename": "collections.ts" },
+  { "filename": "contentTypes.ts" },
+  { "filename": "contentTypeSnippets.ts" },
+  { "filename": "taxonomies.ts" },
+  { "filename": "workflows.ts" },
+  { "filename": "roles.ts" },
+  { "filename": "assetFolders.ts" },
+  { "filename": "webhooks.ts" },
+  { "filename": "index.ts" }
+]

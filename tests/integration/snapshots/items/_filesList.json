@@ -1,0 +1,9 @@
+[
+  { "filename": "items/movie.items.ts" },
+  { "filename": "items/actor.items.ts" },
+  { "filename": "items/index.ts" },
+  { "filename": "codenames/movie.codenames.ts" },
+  { "filename": "codenames/actor.codenames.ts" },
+  { "filename": "codenames/index.ts" },
+  { "filename": "index.ts" }
+]

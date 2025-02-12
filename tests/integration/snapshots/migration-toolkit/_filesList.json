@@ -1,0 +1,9 @@
+[
+  { "filename": "content-types/actor.ts" },
+  { "filename": "content-types/movie.ts" },
+  { "filename": "content-types/index.ts" },
+  { "filename": "migration.ts" },
+  { "filename": "environment/environment.ts" },
+  { "filename": "environment/index.ts" },
+  { "filename": "index.ts" }
+]

@@ -6,6 +6,7 @@ import { commandOptions } from '../command.options.js';
 export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
     await generateEnvironmentModelsAsync({
         // required
+        createFiles: true,
         environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentIdOption.name),
         apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKeyOption.name),
         // optional

@@ -1,7 +1,7 @@
 import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
-import type { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import type {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
@@ -15,14 +15,13 @@ import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
 import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 
-export interface GenerateDeliveryModelsConfig {
+export type GenerateDeliveryModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly apiKey: string;
 
     readonly moduleFileExtension: ModuleFileExtension;
     readonly baseUrl?: string;
-    readonly outputDir?: string;
     readonly formatOptions?: Readonly<Options>;
 
     readonly fileResolvers?: {
@@ -36,11 +35,11 @@ export interface GenerateDeliveryModelsConfig {
         readonly snippet?: ContentTypeSnippetNameResolver;
         readonly taxonomy?: TaxonomyNameResolver;
     };
-}
+} & CreateFilesConfig;
 
-export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<void> {
+export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<readonly GeneratedFile[]> {
     console.log(chalk.green(`Model generator started \n`));
-    console.log(`Generating '${chalk.yellow('delivery')}' models\n`);
+    console.log(`Generating '${chalk.yellow('delivery-sdk' satisfies CliAction)}' models\n`);
 
     const { contentTypeFiles, snippetFiles, taxonomyFiles, environmentInfo, systemFiles } = await getFilesAsync(config);
 
@@ -49,9 +48,15 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
         environmentInfo: environmentInfo
     });
 
-    await fileManager.createSetsAsync([contentTypeFiles, snippetFiles, taxonomyFiles, systemFiles]);
+    const setFiles = await fileManager.getSetFilesAsync([contentTypeFiles, snippetFiles, taxonomyFiles, systemFiles]);
+
+    if (config.createFiles) {
+        fileManager.createFiles(setFiles);
+    }
 
     console.log(chalk.green(`\nCompleted`));
+
+    return setFiles;
 }
 
 async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{

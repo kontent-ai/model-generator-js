@@ -7,6 +7,7 @@ await runScriptAsync(async (config) => {
     deleteFolderRecursive(outputDir);
 
     await generateEnvironmentModelsAsync({
+        createFiles: true,
         addTimestamp: false,
         environmentId: config.environmentId,
         apiKey: config.managementApiKey,

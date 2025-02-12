@@ -1,25 +1,24 @@
 import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
-import type { GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
 import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
 
-export interface GenerateMigrationModelsConfig {
+export type GenerateMigrationModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly apiKey: string;
     readonly moduleFileExtension: ModuleFileExtension;
 
-    readonly outputDir?: string;
     readonly baseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
-}
+} & CreateFilesConfig;
 
-export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<void> {
+export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<readonly GeneratedFile[]> {
     console.log(chalk.green(`Model generator started \n`));
-    console.log(`Generating '${chalk.yellow('migration')}' models\n`);
+    console.log(`Generating '${chalk.yellow('migration-toolkit' satisfies CliAction)}' models\n`);
 
     const { migrationItemFiles, migrationTypeFiles, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
@@ -28,9 +27,15 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
         environmentInfo: environmentInfo
     });
 
-    await fileManager.createSetsAsync([migrationItemFiles, migrationTypeFiles, environmentFiles]);
+    const setFiles = await fileManager.getSetFilesAsync([migrationItemFiles, migrationTypeFiles, environmentFiles]);
+
+    if (config.createFiles) {
+        fileManager.createFiles(setFiles);
+    }
 
     console.log(chalk.green(`\nCompleted`));
+
+    return setFiles;
 }
 
 async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{

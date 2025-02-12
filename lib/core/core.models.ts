@@ -16,6 +16,7 @@ export type DeliveryApiMode = 'preview' | 'secure' | 'default';
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
 export type GeneratorDeliveryClient = Readonly<IDeliveryClient>;
 export type LiteralUnion<T extends string | undefined> = T | (string & NonNullable<unknown>);
+export type CreateFilesConfig = { readonly createFiles: true; readonly outputDir?: string } | { readonly createFiles: false };
 
 export interface ErrorData {
     readonly message: string;

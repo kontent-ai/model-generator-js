@@ -5,6 +5,7 @@ import { commandOptions } from '../command.options.js';
 
 export async function deliveryActionAsync(cliFetcher: CliArgumentsFetcher): Promise<void> {
     await generateDeliveryModelsAsync({
+        createFiles: true,
         // required
         environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentIdOption.name),
         apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKeyOption.name),
