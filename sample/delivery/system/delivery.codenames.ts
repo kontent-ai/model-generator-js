@@ -16,7 +16,7 @@
 /**
  * Type representing all languages
  */
-export type LanguageCodenames = 'en' | 'cz' | 'German';
+export type LanguageCodenames = 'cz' | 'en' | 'German';
 
 /**
  * Type representing all content types
@@ -41,22 +41,22 @@ export type TaxonomyCodenames = 'movietype' | 'releasecategory';
 /**
  * Type representing all worksflow steps across all workflows
  */
-export type WorkflowStepCodenames = 'draft' | 'review' | 'ready_to_publish' | 'published' | 'archived' | 'scheduled';
+export type WorkflowStepCodenames = 'archived' | 'draft' | 'published' | 'ready_to_publish' | 'review' | 'scheduled';
 
 /**
  * Type representing all element codenames across all content types
  */
 export type ElementCodenames =
-    | 'url'
+    | 'category'
     | 'first_name'
     | 'last_name'
-    | 'photo'
-    | 'title'
-    | 'plot'
-    | 'released'
     | 'length'
+    | 'photo'
+    | 'plot'
     | 'poster'
-    | 'category'
-    | 'stars'
+    | 'releasecategory'
+    | 'released'
     | 'seoname'
-    | 'releasecategory';
+    | 'stars'
+    | 'title'
+    | 'url';

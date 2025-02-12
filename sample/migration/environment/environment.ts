@@ -16,7 +16,7 @@
 /**
  * Type representing all languages
  */
-export type LanguageCodenames = 'en' | 'cz' | 'German';
+export type LanguageCodenames = 'cz' | 'en' | 'German';
 
 /**
  * Type representing all content types
@@ -36,4 +36,4 @@ export type WorkflowCodenames = 'default';
 /**
  * Type representing all worksflow steps across all workflows
  */
-export type WorkflowStepCodenames = 'draft' | 'review' | 'ready_to_publish' | 'published' | 'archived' | 'scheduled';
+export type WorkflowStepCodenames = 'archived' | 'draft' | 'published' | 'ready_to_publish' | 'review' | 'scheduled';
