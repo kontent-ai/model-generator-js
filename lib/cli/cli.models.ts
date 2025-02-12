@@ -14,6 +14,8 @@ export type CommandOptionNames =
     | 'generateTypes'
     | 'generateObjects';
 
+export type CommandAlias = 'h';
+
 export interface Command<TAction extends string> {
     readonly name: TAction;
     readonly description: string;
@@ -24,7 +26,7 @@ export interface Command<TAction extends string> {
 export interface CommandOption {
     readonly name: CommandOptionNames;
     readonly isRequired: boolean;
-    readonly alias?: string;
+    readonly alias?: CommandAlias;
     readonly description?: string;
     readonly type?: 'boolean' | 'number' | 'string';
 }

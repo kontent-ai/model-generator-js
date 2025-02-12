@@ -6,9 +6,9 @@ import type { CliAction, LiteralUnion } from '../../core/core.models.js';
 import type { CliArgumentsFetcher } from '../cli.models.js';
 
 type ArgvResult = {
-    [x: string]: unknown;
-    _: (string | number)[];
-    $0: string;
+    readonly [x: string]: unknown;
+    readonly _: readonly (string | number)[];
+    readonly $0: string;
 };
 
 export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
