@@ -1,6 +1,6 @@
 {
     "name": "@kontent-ai/model-generator",
-    "version": "8.0.0-14",
+    "version": "8.0.0-15",
     "description": "This utility generates strongly-typed models for Delivery JS SDK, Migration toolkit or just general scripting to improve the experience when referencing Kontent.ai related objects.",
     "bin": {
         "kontent-generate": "./dist/cli/app.js"
