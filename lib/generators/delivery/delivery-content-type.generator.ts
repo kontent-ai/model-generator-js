@@ -1,14 +1,5 @@
-import type {
-    CollectionModels,
-    EnvironmentModels,
-    LanguageModels,
-    TaxonomyModels,
-    WorkflowModels
-} from '@kontent-ai/management-sdk';
-import {
-    ContentTypeModels,
-    ContentTypeSnippetModels
-} from '@kontent-ai/management-sdk';
+import type { CollectionModels, EnvironmentModels, LanguageModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
@@ -24,10 +15,7 @@ import type {
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver
 } from '../../core/resolvers.js';
-import {
-    mapFilename,
-    mapName
-} from '../../core/resolvers.js';
+import { mapFilename, mapName } from '../../core/resolvers.js';
 import {
     getCollectionCodenamesType,
     getContentTypeCodenamesType,
@@ -452,15 +440,21 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
     };
 
     const getCoreContentTypeFile = (): GeneratedFile => {
-        const sdkImports: readonly string[] = [deliveryConfig.sdkTypes.contentItem, deliveryConfig.sdkTypes.contentItemElements];
+        const sdkImports = [
+            deliveryConfig.sdkTypes.contentItem,
+            deliveryConfig.sdkTypes.contentItemElements,
+            deliveryConfig.sdkTypes.deliveryClient
+        ] as const;
 
-        const codenameImports: readonly string[] = [
+        const codenameImports = [
             sharedTypesConfig.contentTypeCodenames,
             sharedTypesConfig.collectionCodenames,
             sharedTypesConfig.languageCodenames,
             sharedTypesConfig.workflowCodenames,
-            sharedTypesConfig.workflowStepCodenames
-        ];
+            sharedTypesConfig.workflowStepCodenames,
+            sharedTypesConfig.elementCodenames,
+            sharedTypesConfig.taxonomyCodenames
+        ] as const;
 
         const contentTypeGenericArgName: string = 'TContentTypeCodename';
         const elementsGenericArgName: string = 'TElements';
@@ -477,7 +471,7 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
                     importValue: `${codenameImports.join(', ')}`
                 })}
 
-                ${wrapComment(`\n * Core content type used in favor of generic '${deliveryConfig.sdkTypes.contentItem}'\n`)}
+                ${wrapComment(`\n * Core content type used in favor of default '${deliveryConfig.sdkTypes.contentItem}'\n`)}
                 export type ${deliveryConfig.coreContentTypeName}<
                         ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements} = ${deliveryConfig.sdkTypes.contentItemElements}, 
                         ${contentTypeGenericArgName} extends ${sharedTypesConfig.contentTypeCodenames} = ${sharedTypesConfig.contentTypeCodenames}
@@ -489,6 +483,18 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
                     ${sharedTypesConfig.workflowCodenames},
                     ${sharedTypesConfig.workflowStepCodenames}
                 >;
+
+                 ${wrapComment(`\n * Core delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
+                export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<{
+                    readonly collectionCodenames: ${sharedTypesConfig.collectionCodenames};
+                    readonly contentItemType: ${deliveryConfig.coreContentTypeName};
+                    readonly contentTypeCodenames: ${sharedTypesConfig.contentTypeCodenames};
+                    readonly elementCodenames: ${sharedTypesConfig.elementCodenames};
+                    readonly languageCodenames: ${sharedTypesConfig.languageCodenames};
+                    readonly taxonomyCodenames: ${sharedTypesConfig.taxonomyCodenames};
+                    readonly workflowCodenames: ${sharedTypesConfig.workflowCodenames};
+                    readonly worfklowStepCodenames: ${sharedTypesConfig.workflowStepCodenames};
+                }>;
             `
         };
     };
@@ -523,8 +529,8 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
 
     return {
         generateModels: (): {
-            contentTypeFiles: GeneratedSet;
-            snippetFiles: GeneratedSet;
+            readonly contentTypeFiles: GeneratedSet;
+            readonly snippetFiles: GeneratedSet;
         } => {
             return {
                 contentTypeFiles: {

@@ -52,12 +52,14 @@ export const deliveryConfig = {
     coreCodenamesFilename: 'delivery.codenames',
     coreTypeFilename: 'core.type',
     coreContentTypeName: 'CoreContentType',
+    coreDeliveryClientTypeName: 'CoreDeliveryClient',
 
     sdkTypes: {
         contentItem: 'IContentItem',
         contentItemElements: 'IContentItemElements',
         elements: 'Elements',
-        snippet: 'Snippet'
+        snippet: 'Snippet',
+        deliveryClient: 'IDeliveryClient'
     }
 } as const;
 
