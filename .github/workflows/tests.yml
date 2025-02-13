@@ -5,6 +5,10 @@ on:
         branches: [main]
     pull_request:
 
+env:
+    ENVIRONMENT_ID: ${{ secrets.ENVIRONMENT_ID }}
+    MANAGEMENT_API_KEY: ${{ secrets.MANAGEMENT_API_KEY }}
+
 jobs:
     build:
         runs-on: ubuntu-latest
