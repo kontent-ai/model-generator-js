@@ -1,5 +1,5 @@
 import { HttpService } from '@kontent-ai/core-sdk';
-import type { IContentItem, ItemsFeedQuery } from '@kontent-ai/delivery-sdk';
+import type { ClientTypes, IContentItem, ItemsFeedQuery } from '@kontent-ai/delivery-sdk';
 import { createDeliveryClient } from '@kontent-ai/delivery-sdk';
 import chalk from 'chalk';
 import { coreConfig } from '../config.js';
@@ -32,7 +32,7 @@ export function deliveryKontentFetcher(config: {
         httpService: new HttpService({ logErrorsToConsole: false })
     });
 
-    const getItemsQuery = (filterByTypeCodenames: readonly string[]): ItemsFeedQuery => {
+    const getItemsQuery = (filterByTypeCodenames: readonly string[]): ItemsFeedQuery<ClientTypes> => {
         return filterByTypeCodenames.length > 0 ? client.itemsFeed().types(filterByTypeCodenames.map((m) => m)) : client.itemsFeed();
     };
 
