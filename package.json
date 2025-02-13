@@ -52,7 +52,7 @@
     },
     "dependencies": {
         "@kontent-ai/management-sdk": "7.6.0",
-        "@kontent-ai/delivery-sdk": "15.2.0",
+        "@kontent-ai/delivery-sdk": "16.0.0-0",
         "chalk": "5.4.1",
         "prettier": "3.5.0",
         "ts-pattern": "5.6.2",
@@ -62,14 +62,14 @@
         "@eslint/js": "9.20.0",
         "@kontent-ai/migration-toolkit": "2.4.0",
         "@types/eslint__js": "8.42.3",
-        "@types/node": "22.13.1",
+        "@types/node": "22.13.2",
         "@types/yargs": "17.0.33",
         "dotenv-cli": "8.0.0",
-        "eslint": "9.20.0",
+        "eslint": "9.20.1",
         "standard-version": "9.5.0",
         "tsx": "4.19.2",
         "typescript": "5.7.3",
-        "typescript-eslint": "8.23.0",
+        "typescript-eslint": "8.24.0",
         "vitest": "3.0.5",
         "vite-tsconfig-paths": "5.1.4"
     }
