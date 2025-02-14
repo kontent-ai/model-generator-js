@@ -307,6 +307,7 @@ ${wrapComment(`
 * Codename: ${contentType.codename}    
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
+${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
 '${contentType.codename}'>
 
@@ -458,6 +459,7 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
 
         const contentTypeGenericArgName: string = 'TContentTypeCodename';
         const elementsGenericArgName: string = 'TElements';
+        const elementCodenamesGenericArgName: string = 'TElementCodenames';
 
         return {
             filename: `${deliveryConfig.coreTypeFilename}.ts`,
@@ -473,7 +475,8 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
 
                 ${wrapComment(`\n * Core content type used in favor of default '${deliveryConfig.sdkTypes.contentItem}'\n`)}
                 export type ${deliveryConfig.coreContentTypeName}<
-                        ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements} = ${deliveryConfig.sdkTypes.contentItemElements}, 
+                        ${elementCodenamesGenericArgName} extends string = string,
+                        ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
                         ${contentTypeGenericArgName} extends ${sharedTypesConfig.contentTypeCodenames} = ${sharedTypesConfig.contentTypeCodenames}
                     > = ${deliveryConfig.sdkTypes.contentItem}<
                     ${elementsGenericArgName},
