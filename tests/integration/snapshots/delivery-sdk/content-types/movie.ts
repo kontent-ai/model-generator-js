@@ -10,6 +10,7 @@ import type { ReleaseCategory } from '../taxonomies/index.js';
  * Codename: movie
  */
 export type Movie = CoreContentType<
+    MovieElementCodenames,
     {
         /**
          * Title

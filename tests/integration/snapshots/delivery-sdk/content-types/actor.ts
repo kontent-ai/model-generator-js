@@ -8,6 +8,7 @@ import type { CoreContentType } from '../system/index.js';
  * Codename: actor
  */
 export type Actor = CoreContentType<
+    ActorElementCodenames,
     {
         /**
          * Url

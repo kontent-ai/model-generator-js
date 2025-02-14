@@ -13,7 +13,8 @@ import type {
  * Core content type used in favor of default 'IContentItem'
  */
 export type CoreContentType<
-    TElements extends IContentItemElements = IContentItemElements,
+    TElementCodenames extends string = string,
+    TElements extends IContentItemElements<TElementCodenames> = IContentItemElements<TElementCodenames>,
     TContentTypeCodename extends ContentTypeCodenames = ContentTypeCodenames
 > = IContentItem<TElements, TContentTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>;
 
