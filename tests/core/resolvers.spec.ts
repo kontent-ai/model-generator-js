@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { mapFilename, mapName, resolveCase, resolvePropertyName } from '../../lib/core/resolvers.js';
 
+type CaseResolverTest = {
+    readonly text: string;
+    readonly pascalCase: string;
+    readonly camelCase: string;
+};
+
 describe('Resolvers - mapName', () => {
     it('Custom name should be used when function is used as arg (camelCase)', () => {
         expect(mapName((item) => `${item.name}custom`, 'camelCase')({ name: 'x' })).toStrictEqual('xcustom');
@@ -75,86 +81,67 @@ describe('Resolvers - mapFilename', () => {
     });
 });
 
-describe('Resolvers - camelCase', () => {
-    it('should resolve single word to camelCase', () => {
-        expect(resolveCase('Name', 'camelCase')).toStrictEqual('name');
-    });
+describe('Case resolvers', () => {
+    const testCases: readonly CaseResolverTest[] = [
+        {
+            text: 'First Name',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        },
+        {
+            text: 'first_name',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        },
+        {
+            text: 'first-name',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        },
+        {
+            text: 'FirstName',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        },
+        {
+            text: 'FIRSTNAME',
+            camelCase: 'fIRSTNAME',
+            pascalCase: 'FIRSTNAME'
+        },
+        {
+            text: 'firstName',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        },
+        {
+            text: 'first@name',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        },
+        {
+            text: 'first1name',
+            camelCase: 'first1Name',
+            pascalCase: 'First1Name'
+        },
+        {
+            text: 'first name@last',
+            camelCase: 'firstNameLast',
+            pascalCase: 'FirstNameLast'
+        },
+        {
+            text: '✏️ first name ✏️ ',
+            camelCase: 'firstName',
+            pascalCase: 'FirstName'
+        }
+    ];
 
-    it('should resolve multiple words to camelCase', () => {
-        expect(resolveCase('First Name', 'camelCase')).toStrictEqual('firstName');
-    });
+    for (const testCase of testCases) {
+        it('Should resolve to valid camel case format', () => {
+            expect(resolveCase(testCase.text, 'camelCase')).toStrictEqual(testCase.camelCase);
+        });
 
-    it('should resolve snake_case to camelCase', () => {
-        expect(resolveCase('first_name', 'camelCase')).toStrictEqual('firstName');
-    });
-
-    it('should resolve kebab-case to camelCase', () => {
-        expect(resolveCase('first-name', 'camelCase')).toStrictEqual('firstName');
-    });
-
-    it('should resolve mixed case to camelCase', () => {
-        expect(resolveCase('FirstName', 'camelCase')).toStrictEqual('firstName');
-    });
-
-    it('should resolve uppercase to camelCase', () => {
-        expect(resolveCase('FIRSTNAME', 'camelCase')).toStrictEqual('fIRSTNAME');
-    });
-
-    it('should resolve camelCase to camelCase', () => {
-        expect(resolveCase('firstName', 'camelCase')).toStrictEqual('firstName');
-    });
-
-    it('should resolve string with special characters to camelCase', () => {
-        expect(resolveCase('first@name', 'camelCase')).toStrictEqual('firstName');
-    });
-
-    it('should resolve string with numbers to camelCase', () => {
-        expect(resolveCase('first1name', 'camelCase')).toStrictEqual('first1Name');
-    });
-
-    it('should resolve string with spaces and special characters to camelCase', () => {
-        expect(resolveCase('first name@last', 'camelCase')).toStrictEqual('firstNameLast');
-    });
-});
-
-describe('Resolvers - pascalCase', () => {
-    it('should resolve single word to PascalCase', () => {
-        expect(resolveCase('name', 'pascalCase')).toStrictEqual('Name');
-    });
-
-    it('should resolve multiple words to PascalCase', () => {
-        expect(resolveCase('first name', 'pascalCase')).toStrictEqual('FirstName');
-    });
-
-    it('should resolve snake_case to PascalCase', () => {
-        expect(resolveCase('first_name', 'pascalCase')).toStrictEqual('FirstName');
-    });
-
-    it('should resolve kebab-case to PascalCase', () => {
-        expect(resolveCase('first-name', 'pascalCase')).toStrictEqual('FirstName');
-    });
-
-    it('should resolve mixed case to PascalCase', () => {
-        expect(resolveCase('FirstName', 'pascalCase')).toStrictEqual('FirstName');
-    });
-
-    it('should resolve uppercase to PascalCase', () => {
-        expect(resolveCase('FIRSTNAME', 'pascalCase')).toStrictEqual('FIRSTNAME');
-    });
-
-    it('should resolve camelCase to PascalCase', () => {
-        expect(resolveCase('firstName', 'pascalCase')).toStrictEqual('FirstName');
-    });
-
-    it('should resolve string with special characters to PascalCase', () => {
-        expect(resolveCase('first@name', 'pascalCase')).toStrictEqual('FirstName');
-    });
-
-    it('should resolve string with numbers to PascalCase', () => {
-        expect(resolveCase('first1name', 'pascalCase')).toStrictEqual('First1Name');
-    });
-
-    it('should resolve string with spaces and special characters to PascalCase', () => {
-        expect(resolveCase('first name@last', 'pascalCase')).toStrictEqual('FirstNameLast');
-    });
+        it('Should resolve to valid pascal case format', () => {
+            expect(resolveCase(testCase.text, 'pascalCase')).toStrictEqual(testCase.pascalCase);
+        });
+    }
 });
