@@ -19,9 +19,9 @@ export type CoreContentType<
 > = IContentItem<TElements, TContentTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>;
 
 /**
- * Core delivery client in favor of default 'IDeliveryClient'
+ * Core types for 'IDeliveryClient'
  */
-export type CoreDeliveryClient = IDeliveryClient<{
+export type CoreClientTypes = {
     readonly collectionCodenames: CollectionCodenames;
     readonly contentItemType: CoreContentType;
     readonly contentTypeCodenames: ContentTypeCodenames;
@@ -30,4 +30,9 @@ export type CoreDeliveryClient = IDeliveryClient<{
     readonly taxonomyCodenames: TaxonomyCodenames;
     readonly workflowCodenames: WorkflowCodenames;
     readonly worfklowStepCodenames: WorkflowStepCodenames;
-}>;
+};
+
+/**
+ * Typed delivery client in favor of default 'IDeliveryClient'
+ */
+export type CoreDeliveryClient = IDeliveryClient<CoreClientTypes>;

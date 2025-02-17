@@ -487,8 +487,8 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
                     ${sharedTypesConfig.workflowStepCodenames}
                 >;
 
-                 ${wrapComment(`\n * Core delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
-                export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<{
+                ${wrapComment(`\n * Core types for '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
+                export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
                     readonly collectionCodenames: ${sharedTypesConfig.collectionCodenames};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
                     readonly contentTypeCodenames: ${sharedTypesConfig.contentTypeCodenames};
@@ -497,7 +497,10 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
                     readonly taxonomyCodenames: ${sharedTypesConfig.taxonomyCodenames};
                     readonly workflowCodenames: ${sharedTypesConfig.workflowCodenames};
                     readonly worfklowStepCodenames: ${sharedTypesConfig.workflowStepCodenames};
-                }>;
+                };
+
+                ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
+                export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<${deliveryConfig.coreDeliveryClientTypesTypeName}>;
             `
         };
     };

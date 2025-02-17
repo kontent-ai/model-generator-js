@@ -53,6 +53,7 @@ export const deliveryConfig = {
     coreTypeFilename: 'core.type',
     coreContentTypeName: 'CoreContentType',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
+    coreDeliveryClientTypesTypeName: 'CoreClientTypes',
 
     sdkTypes: {
         contentItem: 'IContentItem',
