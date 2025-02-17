@@ -2,7 +2,7 @@ import type { EnvironmentModels, TaxonomyModels } from '@kontent-ai/management-s
 import { deliveryConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import type { TaxonomyNameResolver, TaxonomyTypeFileNameResolver} from '../../core/resolvers.js';
+import type { TaxonomyNameResolver, TaxonomyTypeFileNameResolver } from '../../core/resolvers.js';
 import { mapFilename, mapName } from '../../core/resolvers.js';
 
 export interface DeliveryTaxonomyGeneratorConfig {
@@ -24,6 +24,10 @@ export interface DeliveryTaxonomyGeneratorConfig {
 export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfig) {
     const taxonomyFileNameMap = mapFilename(config.fileResolvers?.taxonomy);
     const taxonomyNameMap = mapName(config.nameResolvers?.taxonomy, 'pascalCase');
+    const taxonomyValuesNameMap = mapName(config.nameResolvers?.taxonomy, 'camelCase', { suffix: 'Values' });
+    const taxonomyTypeGuardFunctionName = mapName(config.nameResolvers?.taxonomy, 'pascalCase', {
+        prefix: 'is'
+    });
 
     const generateTaxonomyTypes = (): GeneratedSet => {
         return {
@@ -41,29 +45,45 @@ export function deliveryTaxonomyGenerator(config: DeliveryTaxonomyGeneratorConfi
         };
     };
 
+    const getTaxonomyTypeGuardFunction = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
+        return `export function ${taxonomyTypeGuardFunctionName(taxonomy)}(value: string | undefined | null): value is ${taxonomyNameMap(taxonomy)} {
+                return typeof value === 'string' && (${taxonomyValuesNameMap(taxonomy)} as readonly string[]).includes(value);
+            }`;
+    };
+
+    const getTaxonomyValuesCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
+        return `export const ${taxonomyValuesNameMap(taxonomy)} = [${getTaxonomyTermCodenames(taxonomy.terms)
+            .map((m) => `'${m}'`)
+            .join(', ')}] as const;`;
+    };
+
     const getModelCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
         return `
+
 ${wrapComment(`
- * ${taxonomy.name}
+ * All taxonomy codename values for ${taxonomy.name}
  * 
  * Codename: ${taxonomy.codename}
  * Id: ${taxonomy.id}
 `)}
-export type ${taxonomyNameMap(taxonomy)} = ${getTaxonomyTermsCode(taxonomy)};
+ ${getTaxonomyValuesCode(taxonomy)}
+
+${wrapComment(`
+ * Type representing ${taxonomy.name} taxonomy
+ * 
+ * Codename: ${taxonomy.codename}
+ * Id: ${taxonomy.id}
+`)}
+export type ${taxonomyNameMap(taxonomy)} = typeof ${taxonomyValuesNameMap(taxonomy)}[number];
+
+${wrapComment(`
+ * Type guard for ${taxonomy.name}
+ * 
+ * Codename: ${taxonomy.codename}
+ * Id: ${taxonomy.id}
+`)}
+${getTaxonomyTypeGuardFunction(taxonomy)}
 `;
-    };
-
-    const getTaxonomyTermsCode = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        const taxonomyTermCodenames = getTaxonomyTermCodenames(taxonomy.terms);
-
-        if (!taxonomyTermCodenames.length) {
-            return `''`;
-        }
-
-        return taxonomyTermCodenames.reduce<string>((code, codename, index) => {
-            const isLast = index === taxonomyTermCodenames.length - 1;
-            return `${code} '${codename}'${isLast ? '' : ' | '}`;
-        }, '');
     };
 
     const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {

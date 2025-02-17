@@ -25,7 +25,6 @@ import {
     getWorkflowCodenamesType,
     getWorkflowStepCodenamesType
 } from '../shared/type-codename.generator.js';
-import { deliveryTypeGuardGenerator } from './delivery-type-guard.generator.js';
 
 interface ExtractImportsResult {
     readonly typeName: string;
@@ -322,7 +321,7 @@ ${wrapComment(`
 * Id: ${contentType.id}
 * Codename: ${contentType.codename}
 `)}
-${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
+${getContentItemTypeGuardFunction(contentType)};
 `;
     };
 
@@ -531,6 +530,19 @@ ${deliveryTypeGuardGenerator(config).getTypeGuardFunction(contentType)};
                 ${getElementCodenamesType(config.environmentData.types, config.environmentData.snippets)}
             `
         };
+    };
+
+    const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
+        const nameResolvers = {
+            contentItemTypeGuardFunctionName: mapName(config.nameResolvers?.contentType, 'pascalCase', {
+                prefix: 'is'
+            }),
+            contentItemTypeName: mapName(config.nameResolvers?.contentType, 'pascalCase')
+        };
+
+        return `export function ${nameResolvers.contentItemTypeGuardFunctionName(contentType)}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${nameResolvers.contentItemTypeName(contentType)} {
+                return item?.system?.type === '${contentType.codename}';
+            }`;
     };
 
     return {

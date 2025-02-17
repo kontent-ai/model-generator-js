@@ -38,6 +38,7 @@ export function mapName<T extends ObjectWithName>(
     defaultCase: CaseType,
     options?: {
         readonly prefix?: string;
+        readonly suffix?: string;
     }
 ): MapObjectToName<T> {
     return (item) =>
@@ -46,7 +47,8 @@ export function mapName<T extends ObjectWithName>(
             .returnType<string>()
             .with(P.instanceOf(Function), (resolver) => resolver(item))
             .with(undefined, () => resolveCase(item.name, defaultCase))
-            .otherwise((resolverType) => resolveCase(item.name, resolverType));
+            .otherwise((resolverType) => resolveCase(item.name, resolverType)) +
+        (options?.suffix ? options.suffix : '');
 }
 
 export function resolveCase(text: string, resolverType: CaseType): string {
