@@ -41,8 +41,8 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 }
 
 async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<{
-    environmentFiles: GeneratedSet;
-    moduleFileExtension: ModuleFileExtension;
+    readonly environmentFiles: GeneratedSet;
+    readonly moduleFileExtension: ModuleFileExtension;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
     const moduleFileExtension: ModuleFileExtension = config.moduleFileExtension ?? defaultModuleFileExtension;
