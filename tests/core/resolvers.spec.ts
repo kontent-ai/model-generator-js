@@ -20,6 +20,10 @@ describe('Resolvers - mapName', () => {
         expect(mapName(() => `custom`, 'camelCase', { prefix: 'x_' })({ name: '' })).toStrictEqual('x_custom');
     });
 
+    it('Suffix should be applied to name', () => {
+        expect(mapName(() => `custom`, 'camelCase', { suffix: '_x' })({ name: '' })).toStrictEqual('custom_x');
+    });
+
     it('Default case should be used when resolver is undefined (camelCase)', () => {
         expect(mapName(undefined, 'camelCase')({ name: 'FirstName' })).toStrictEqual('firstName');
     });
