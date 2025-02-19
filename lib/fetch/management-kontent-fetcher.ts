@@ -5,6 +5,7 @@ import type {
     ContentItemModels,
     ContentTypeModels,
     ContentTypeSnippetModels,
+    CustomAppModels,
     EnvironmentModels,
     LanguageModels,
     RoleModels,
@@ -31,6 +32,7 @@ export type ManagementKontentFetcher = {
     getTypesAsync(): Promise<readonly Readonly<ContentTypeModels.ContentType>[]>;
     getSnippetsAsync(): Promise<readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]>;
     getTaxonomiesAsync(): Promise<readonly Readonly<TaxonomyModels.Taxonomy>[]>;
+    getCustomApps(): Promise<readonly Readonly<CustomAppModels.CustomApp>[]>;
 };
 
 export function managementKontentFetcher(config: {
@@ -124,6 +126,12 @@ export function managementKontentFetcher(config: {
                 fetch: async () => (await client.listTaxonomies().toAllPromise()).data.items,
                 itemType: 'taxonomies'
             });
+        },
+        async getCustomApps(): Promise<readonly Readonly<CustomAppModels.CustomApp>[]> {
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listCustomApps().toPromise()).data.items,
+                itemType: 'custom apps'
+            });
         }
     };
 }
@@ -142,6 +150,7 @@ async function fetchItemsAsync<T>({
         | 'languages'
         | 'webhooks'
         | 'collections'
+        | 'custom apps'
         | 'roles'
         | 'asset folders'
         | 'workflows'

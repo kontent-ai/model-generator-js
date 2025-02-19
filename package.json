@@ -51,8 +51,8 @@
         "update:version": "tsx ./scripts/update-version.ts"
     },
     "dependencies": {
-        "@kontent-ai/management-sdk": "7.6.0",
         "@kontent-ai/delivery-sdk": "16.0.0-0",
+        "@kontent-ai/management-sdk": "7.6.1",
         "chalk": "5.4.1",
         "prettier": "3.5.1",
         "ts-pattern": "5.6.2",
@@ -70,7 +70,7 @@
         "tsx": "4.19.3",
         "typescript": "5.7.3",
         "typescript-eslint": "8.24.1",
-        "vitest": "3.0.6",
-        "vite-tsconfig-paths": "5.1.4"
+        "vite-tsconfig-paths": "5.1.4",
+        "vitest": "3.0.6"
     }
 }

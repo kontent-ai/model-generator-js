@@ -13,13 +13,4 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './assetFolders.js';
-export * from './collections.js';
-export * from './contentTypes.js';
-export * from './contentTypeSnippets.js';
-export * from './customApps.js';
-export * from './languages.js';
-export * from './roles.js';
-export * from './taxonomies.js';
-export * from './webhooks.js';
-export * from './workflows.js';
+export const customApps = {} as const;

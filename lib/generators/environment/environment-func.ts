@@ -87,44 +87,22 @@ async function getEntitiesAsync({
 }): Promise<EnvironmentEntities> {
     const extendedEntityTypes = getExtendedEntityTypes(entitiesConfig);
 
-    const [languages, taxonomies, types, snippets, collections, workflows, webhooks, assetFolders, roles] = await Promise.all([
-        fetchEntity(
-            () => extendedEntityTypes.includes('languages'),
-            () => kontentFetcher.getLanguagesAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('taxonomies'),
-            () => kontentFetcher.getTaxonomiesAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('contentTypes'),
-            () => kontentFetcher.getTypesAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('snippets'),
-            () => kontentFetcher.getSnippetsAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('collections'),
-            () => kontentFetcher.getCollectionsAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('workflows'),
-            () => kontentFetcher.getWorkflowsAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('webhooks'),
-            () => kontentFetcher.getWebhooksAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('assetFolders'),
-            () => kontentFetcher.getAssetFoldersAsync()
-        ),
-        fetchEntity(
-            () => extendedEntityTypes.includes('roles'),
-            () => kontentFetcher.getRolesAsync()
-        )
-    ]);
+    const [languages, taxonomies, contentTypes, snippets, collections, workflows, webhooks, assetFolders, roles, customApps] =
+        await Promise.all([
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('languages'), fetch: () => kontentFetcher.getLanguagesAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('taxonomies'), fetch: () => kontentFetcher.getTaxonomiesAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('contentTypes'), fetch: () => kontentFetcher.getTypesAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('snippets'), fetch: () => kontentFetcher.getSnippetsAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('collections'), fetch: () => kontentFetcher.getCollectionsAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('workflows'), fetch: () => kontentFetcher.getWorkflowsAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('webhooks'), fetch: () => kontentFetcher.getWebhooksAsync() }),
+            fetchEntity({
+                canFetch: () => extendedEntityTypes.includes('assetFolders'),
+                fetch: () => kontentFetcher.getAssetFoldersAsync()
+            }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('roles'), fetch: () => kontentFetcher.getRolesAsync() }),
+            fetchEntity({ canFetch: () => extendedEntityTypes.includes('customApps'), fetch: () => kontentFetcher.getCustomApps() })
+        ]);
 
     return {
         assetFolders,
@@ -133,9 +111,10 @@ async function getEntitiesAsync({
         roles,
         snippets,
         taxonomies,
-        contentTypes: types,
+        contentTypes,
         webhooks,
-        workflows
+        workflows,
+        customApps
     };
 }
 
@@ -155,7 +134,13 @@ function getExtendedEntityTypes(entityTypes: readonly EnvironmentEntity[]): read
         .otherwise((m) => m);
 }
 
-function fetchEntity<T>(canFetch: () => boolean, fetch: () => Promise<readonly T[]>): Promise<readonly T[] | undefined> {
+function fetchEntity<T>({
+    canFetch,
+    fetch
+}: {
+    canFetch: () => boolean;
+    fetch: () => Promise<readonly T[]>;
+}): Promise<readonly T[] | undefined> {
     if (!canFetch()) {
         return Promise.resolve(undefined);
     }

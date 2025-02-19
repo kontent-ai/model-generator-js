@@ -4,6 +4,7 @@ import type {
     ContentTypeElements,
     ContentTypeModels,
     ContentTypeSnippetModels,
+    CustomAppModels,
     EnvironmentModels,
     LanguageModels,
     RoleModels,
@@ -34,6 +35,7 @@ export type EnvironmentEntities = {
     readonly roles: readonly Readonly<RoleModels.Role>[] | undefined;
     readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[] | undefined;
     readonly webhooks: readonly Readonly<WebhookModels.Webhook>[] | undefined;
+    readonly customApps: readonly Readonly<CustomAppModels.CustomApp>[] | undefined;
 };
 
 export type EnvironmentGeneratorConfig = {
@@ -99,6 +101,12 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     propName: 'taxonomies',
                     entities: config.environmentEntities.taxonomies,
                     getCode: getTaxonomies
+                }),
+                ...getEntityFiles<'customApps'>({
+                    filename: 'customApps.ts',
+                    propName: 'customApps',
+                    entities: config.environmentEntities.customApps,
+                    getCode: getCustomApps
                 })
             ]
         };
@@ -160,6 +168,22 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     codename: '${workflow.codename}',
                     id: '${workflow.id}',
                     steps: ${getWorkflowSteps(workflow)}
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
+
+    const getCustomApps = (customApps: readonly Readonly<CustomAppModels.CustomApp>[]): string => {
+        return customApps.reduce((code, customApp, index) => {
+            const isLast = index === customApps.length - 1;
+
+            return `${code}\n
+                ${wrapComment(`
+                * ${customApp.name}
+                `)}
+                ${resolvePropertyName(customApp.codename)}: {
+                    codename: ${customApp.codename},
+                    name: '${toSafePropertyValue(customApp.name)}',
+                    sourceUrl: '${customApp.source_url}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
