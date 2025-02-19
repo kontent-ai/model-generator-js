@@ -52,7 +52,7 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 
             return value.toLowerCase() === 'true'.toLowerCase();
         },
-        getOptionalArgumentArrayVaue(argName: string): readonly string[] {
+        getOptionalArgumentArrayValue(argName: string): readonly string[] {
             return getOptionalArgumentValue(argName)?.split(',') ?? [];
         }
     };

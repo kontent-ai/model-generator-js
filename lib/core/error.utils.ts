@@ -21,18 +21,22 @@ export function logError(error: unknown): void {
     console.error(`${chalk.red('Error:')} ${errorData.message}`);
 }
 
-function extractErrorData(error: unknown): ErrorData {
+export function extractErrorData(error: unknown): ErrorData {
     return match(error)
         .returnType<ErrorData>()
         .with(P.instanceOf(SharedModels.ContentManagementBaseKontentError), (error) => {
             const originalError = error.originalError as OriginalManagementError | undefined;
+            const validationErrorMessage = error.validationErrors.length
+                ? `: ${error.validationErrors.map((m) => m.message).join(', ')}`
+                : '';
 
             return {
-                message: `${error.message}: ${error.validationErrors.map((m) => m.message).join(', ')}`,
+                message: `${error.message}${validationErrorMessage}`,
                 requestData: originalError?.response?.config?.data,
                 requestUrl: originalError?.response?.config?.url,
                 error: error,
-                isUnknownError: false
+                isUnknownError: false,
+                isMapiError: true
             };
         })
         .with(P.instanceOf(Error), (error) => {
@@ -41,7 +45,8 @@ function extractErrorData(error: unknown): ErrorData {
                 requestData: undefined,
                 requestUrl: undefined,
                 error: error,
-                isUnknownError: true
+                isUnknownError: true,
+                isMapiError: false
             };
         })
         .otherwise(() => {
@@ -50,7 +55,8 @@ function extractErrorData(error: unknown): ErrorData {
                 requestData: undefined,
                 requestUrl: undefined,
                 error: error,
-                isUnknownError: true
+                isUnknownError: true,
+                isMapiError: false
             };
         });
 }

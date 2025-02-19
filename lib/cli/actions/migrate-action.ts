@@ -7,12 +7,12 @@ export async function migrateActionAsync(cliFetcher: CliArgumentsFetcher): Promi
     await generateMigrationModelsAsync({
         // required
         createFiles: true,
-        environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentIdOption.name),
-        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKeyOption.name),
+        environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
+        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
         // optional
-        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrlOption.name),
-        outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDirOption.name),
-        addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestampOption.name, false),
-        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtensionOption.name))
+        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
+        outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),
+        addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestamp.name, false),
+        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtension.name))
     });
 }

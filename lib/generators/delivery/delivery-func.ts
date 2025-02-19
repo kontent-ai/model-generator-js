@@ -45,7 +45,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 
     const fileManager = _fileManager({
         ...config,
-        environmentInfo: environmentInfo
+        environmentInfo
     });
 
     const setFiles = await fileManager.getSetFilesAsync([contentTypeFiles, snippetFiles, taxonomyFiles, systemFiles]);

@@ -7,18 +7,18 @@ export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise
     await generateItemsAsync({
         // required
         createFiles: true,
-        environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentIdOption.name),
-        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKeyOption.name),
+        environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
+        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
         // optional
-        generateTypes: cliFetcher.getBooleanArgumentValue(commandOptions.generateTypesOption.name, false),
-        generateObjects: cliFetcher.getBooleanArgumentValue(commandOptions.generateObjectsOption.name, false),
-        deliveryApiKey: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryApiKeyOption.name),
-        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrlOption.name),
-        deliveryBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryBaseUrlOption.name),
-        outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDirOption.name),
-        addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestampOption.name, false),
-        apiMode: parseDeliveryApiMode(cliFetcher.getOptionalArgumentValue(commandOptions.apiModeOption.name)),
-        filterByTypeCodenames: cliFetcher.getOptionalArgumentArrayVaue(commandOptions.contentTypesOption.name) ?? [],
-        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtensionOption.name))
+        generateTypes: cliFetcher.getBooleanArgumentValue(commandOptions.generateTypes.name, false),
+        generateObjects: cliFetcher.getBooleanArgumentValue(commandOptions.generateObjects.name, false),
+        deliveryApiKey: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryApiKey.name),
+        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
+        deliveryBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryBaseUrl.name),
+        outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),
+        addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestamp.name, false),
+        apiMode: parseDeliveryApiMode(cliFetcher.getOptionalArgumentValue(commandOptions.apiMode.name)),
+        filterByTypeCodenames: cliFetcher.getOptionalArgumentArrayValue(commandOptions.contentTypes.name) ?? [],
+        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtension.name))
     });
 }

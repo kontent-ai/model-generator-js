@@ -24,7 +24,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 
     const fileManager = _fileManager({
         ...config,
-        environmentInfo: environmentInfo
+        environmentInfo
     });
 
     const setFiles = await fileManager.getSetFilesAsync([migrationItemFiles, migrationTypeFiles, environmentFiles]);

@@ -1,4 +1,4 @@
-export function uniqueFilter(value: string, index: number, self: readonly string[]): boolean {
+export function uniqueFilter<T extends string>(value: T, index: number, self: readonly T[]): boolean {
     return self.indexOf(value) === index;
 }
 

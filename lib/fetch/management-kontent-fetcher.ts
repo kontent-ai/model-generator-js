@@ -12,15 +12,32 @@ import type {
     WebhookModels,
     WorkflowModels
 } from '@kontent-ai/management-sdk';
-import {
-    createManagementClient
-} from '@kontent-ai/management-sdk';
+import { createManagementClient } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import { coreConfig } from '../config.js';
 import { toSafeComment } from '../core/comment.utils.js';
 import type { GeneratorManagementClient } from '../core/core.models.js';
+import { extractErrorData } from '../core/error.utils.js';
 
-export function managementKontentFetcher(config: { readonly environmentId: string; readonly apiKey: string; readonly baseUrl?: string }) {
+export type ManagementKontentFetcher = {
+    getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>>;
+    getItemsAsync(): Promise<readonly Readonly<ContentItemModels.ContentItem>[]>;
+    getWorkflowsAsync(): Promise<readonly Readonly<WorkflowModels.Workflow>[]>;
+    getRolesAsync(): Promise<readonly Readonly<RoleModels.Role>[]>;
+    getAssetFoldersAsync(): Promise<readonly Readonly<AssetFolderModels.AssetFolder>[]>;
+    getCollectionsAsync(): Promise<readonly Readonly<CollectionModels.Collection>[]>;
+    getWebhooksAsync(): Promise<readonly Readonly<WebhookModels.Webhook>[]>;
+    getLanguagesAsync(): Promise<readonly Readonly<LanguageModels.LanguageModel>[]>;
+    getTypesAsync(): Promise<readonly Readonly<ContentTypeModels.ContentType>[]>;
+    getSnippetsAsync(): Promise<readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]>;
+    getTaxonomiesAsync(): Promise<readonly Readonly<TaxonomyModels.Taxonomy>[]>;
+};
+
+export function managementKontentFetcher(config: {
+    readonly environmentId: string;
+    readonly apiKey: string;
+    readonly baseUrl?: string;
+}): ManagementKontentFetcher {
     const client: GeneratorManagementClient = createManagementClient({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
@@ -61,7 +78,9 @@ export function managementKontentFetcher(config: { readonly environmentId: strin
         async getRolesAsync(): Promise<readonly Readonly<RoleModels.Role>[]> {
             return await fetchItemsAsync({
                 fetch: async () => (await client.listRoles().toPromise()).data.roles,
-                itemType: 'roles'
+                itemType: 'roles',
+                // roles are available only for enterprise subscriptions
+                returnEmptyArrayOnMapiError: true
             });
         },
         async getAssetFoldersAsync(): Promise<readonly Readonly<AssetFolderModels.AssetFolder>[]> {
@@ -111,9 +130,11 @@ export function managementKontentFetcher(config: { readonly environmentId: strin
 
 async function fetchItemsAsync<T>({
     fetch,
-    itemType
+    itemType,
+    returnEmptyArrayOnMapiError
 }: {
     readonly fetch: () => Promise<T[]>;
+    readonly returnEmptyArrayOnMapiError?: boolean;
     readonly itemType:
         | 'taxonomies'
         | 'types'
@@ -126,7 +147,22 @@ async function fetchItemsAsync<T>({
         | 'workflows'
         | 'total content items';
 }): Promise<T[]> {
-    const data = await fetch();
-    console.log(`Fetched '${chalk.yellow(data.length.toString())}' ${itemType}`);
-    return data;
+    try {
+        const data = await fetch();
+        console.log(`Fetched '${chalk.yellow(data.length.toString())}' ${itemType}`);
+        return data;
+    } catch (error) {
+        if (!returnEmptyArrayOnMapiError) {
+            throw error;
+        }
+
+        const errorData = extractErrorData(error);
+
+        if (errorData.isMapiError) {
+            console.warn(`${chalk.red('Skip fetching ' + itemType)}: ${errorData.message}`);
+            return [];
+        }
+
+        throw error;
+    }
 }

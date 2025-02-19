@@ -11,6 +11,21 @@ import type {
 export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment' | 'items';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
 export type ModuleFileExtension = 'js' | 'ts' | 'mjs' | 'mts' | 'none';
+
+export const environmentEntities = [
+    'languages',
+    'taxonomies',
+    'contentTypes',
+    'snippets',
+    'webhooks',
+    'collections',
+    'workflows',
+    'assetFolders',
+    'roles'
+] as const;
+
+export type EnvironmentEntity = (typeof environmentEntities)[number];
+
 export type CaseType = 'camelCase' | 'pascalCase';
 export type DeliveryApiMode = 'preview' | 'secure' | 'default';
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
@@ -20,10 +35,12 @@ export type CreateFilesConfig = { readonly createFiles: true; readonly outputDir
 
 export interface ErrorData {
     readonly message: string;
+    readonly isMapiError: boolean;
+    readonly error: unknown;
+
     readonly requestData?: string;
     readonly requestUrl?: string;
     readonly isUnknownError: boolean;
-    readonly error: unknown;
 }
 
 export interface OriginalManagementError {

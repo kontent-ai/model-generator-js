@@ -39,7 +39,7 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
 
     const fileManager = _fileManager({
         ...config,
-        environmentInfo: environmentInfo
+        environmentInfo
     });
 
     const setFiles = await fileManager.getSetFilesAsync([...singleItemToArray(itemFiles), ...singleItemToArray(codenameFiles)]);

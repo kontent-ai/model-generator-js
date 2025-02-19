@@ -3,14 +3,16 @@ import type { CliAction } from '../core/core.models.js';
 export type CommandOptionNames =
     | 'environmentId'
     | 'help'
-    | 'apiKey'
+    | 'deliveryApiKey'
+    | 'managementApiKey'
     | 'outputDir'
+    | 'addTimestamp'
     | 'moduleFileExtension'
     | 'apiMode'
     | 'contentTypes'
-    | 'isEnterpriseSubscription'
-    | 'baseUrl'
+    | 'managementBaseUrl'
     | 'deliveryBaseUrl'
+    | 'entities'
     | 'generateTypes'
     | 'generateObjects';
 
@@ -39,8 +41,8 @@ export type CliArgumentsSetter<TAction extends string> = {
 
 export type CliArgumentsFetcher = {
     getCliAction(): CliAction;
-    getOptionalArgumentValue(argName: string): string | undefined;
-    getRequiredArgumentValue(argName: string): string;
-    getBooleanArgumentValue(argName: string, defaultValue: boolean): boolean;
-    getOptionalArgumentArrayVaue(argName: string): readonly string[];
+    getOptionalArgumentValue(argName: CommandOptionNames): string | undefined;
+    getRequiredArgumentValue(argName: CommandOptionNames): string;
+    getBooleanArgumentValue(argName: CommandOptionNames, defaultValue: boolean): boolean;
+    getOptionalArgumentArrayValue(argName: CommandOptionNames): readonly string[];
 };

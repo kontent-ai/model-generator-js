@@ -1,18 +1,28 @@
 import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
+import { match } from 'ts-pattern';
 import { defaultModuleFileExtension } from '../../config.js';
-import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
+import {
+    environmentEntities,
+    type CliAction,
+    type CreateFilesConfig,
+    type EnvironmentEntity,
+    type GeneratedFile,
+    type GeneratedSet,
+    type ModuleFileExtension
+} from '../../core/core.models.js';
+import { uniqueFilter } from '../../core/core.utils.js';
+import { managementKontentFetcher as _kontentFetcher, type ManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { fileManager as _fileManager } from '../../files/file-manager.js';
-import { environmentGenerator as _environmentGenerator } from './environment.generator.js';
+import { environmentGenerator as _environmentGenerator, type EnvironmentEntities } from './environment.generator.js';
 
 export type GenerateEnvironmentModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly isEnterpriseSubscription: boolean;
     readonly apiKey: string;
 
+    readonly entities?: readonly EnvironmentEntity[];
     readonly moduleFileExtension: ModuleFileExtension;
     readonly baseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
@@ -26,7 +36,7 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 
     const fileManager = _fileManager({
         ...config,
-        environmentInfo: environmentInfo
+        environmentInfo
     });
 
     const setFiles = await fileManager.getSetFilesAsync([environmentFiles]);
@@ -53,35 +63,101 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
     });
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
-
-    const [languages, taxonomies, types, snippets, collections, workflows, webooks, assetFolders, roles] = await Promise.all([
-        kontentFetcher.getLanguagesAsync(),
-        kontentFetcher.getTaxonomiesAsync(),
-        kontentFetcher.getTypesAsync(),
-        kontentFetcher.getSnippetsAsync(),
-        kontentFetcher.getCollectionsAsync(),
-        kontentFetcher.getWorkflowsAsync(),
-        kontentFetcher.getWebhooksAsync(),
-        kontentFetcher.getAssetFoldersAsync(),
-        config.isEnterpriseSubscription ? kontentFetcher.getRolesAsync() : Promise.resolve([])
-    ]);
+    const entities = await getEntitiesAsync({
+        kontentFetcher,
+        entitiesConfig: config.entities ?? environmentEntities // default to all entities export
+    });
 
     return {
         environmentInfo,
         environmentFiles: _environmentGenerator({
-            environmentData: {
-                environmentInfo: environmentInfo,
-                languages: languages,
-                taxonomies: taxonomies,
-                types: types,
-                workflows: workflows,
-                assetFolders: assetFolders,
-                collections: collections,
-                roles: roles,
-                snippets: snippets,
-                webhooks: webooks
-            }
+            environmentInfo,
+            environmentEntities: entities
         }).generateEnvironmentModels(),
         moduleFileExtension: moduleFileExtension
     };
+}
+
+async function getEntitiesAsync({
+    kontentFetcher,
+    entitiesConfig
+}: {
+    kontentFetcher: ManagementKontentFetcher;
+    entitiesConfig: readonly EnvironmentEntity[];
+}): Promise<EnvironmentEntities> {
+    const extendedEntityTypes = getExtendedEntityTypes(entitiesConfig);
+
+    const [languages, taxonomies, types, snippets, collections, workflows, webhooks, assetFolders, roles] = await Promise.all([
+        fetchEntity(
+            () => extendedEntityTypes.includes('languages'),
+            () => kontentFetcher.getLanguagesAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('taxonomies'),
+            () => kontentFetcher.getTaxonomiesAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('contentTypes'),
+            () => kontentFetcher.getTypesAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('snippets'),
+            () => kontentFetcher.getSnippetsAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('collections'),
+            () => kontentFetcher.getCollectionsAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('workflows'),
+            () => kontentFetcher.getWorkflowsAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('webhooks'),
+            () => kontentFetcher.getWebhooksAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('assetFolders'),
+            () => kontentFetcher.getAssetFoldersAsync()
+        ),
+        fetchEntity(
+            () => extendedEntityTypes.includes('roles'),
+            () => kontentFetcher.getRolesAsync()
+        )
+    ]);
+
+    return {
+        assetFolders,
+        collections,
+        languages,
+        roles,
+        snippets,
+        taxonomies,
+        contentTypes: types,
+        webhooks,
+        workflows
+    };
+}
+
+function getExtendedEntityTypes(entityTypes: readonly EnvironmentEntity[]): readonly EnvironmentEntity[] {
+    return match(entityTypes)
+        .returnType<readonly EnvironmentEntity[]>()
+        .when(
+            (m) => m.includes('snippets') || m.includes('contentTypes'),
+            // when requesting snippets or content types, we need to fetch taxonomies & (snippets or types) as well
+            // this is is because we need these entities to narrow down types for elements
+            (m) => {
+                const newEntities: readonly EnvironmentEntity[] = [...m, 'taxonomies', 'snippets', 'contentTypes'];
+
+                return newEntities.filter(uniqueFilter);
+            }
+        )
+        .otherwise((m) => m);
+}
+
+function fetchEntity<T>(canFetch: () => boolean, fetch: () => Promise<readonly T[]>): Promise<readonly T[] | undefined> {
+    if (!canFetch()) {
+        return Promise.resolve(undefined);
+    }
+    return fetch();
 }

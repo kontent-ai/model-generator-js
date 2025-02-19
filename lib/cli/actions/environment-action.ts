@@ -1,3 +1,4 @@
+import { isEnvironmentEntity } from '../../core/type-guards.js';
 import { generateEnvironmentModelsAsync } from '../../generators/environment/environment-func.js';
 import { parseModuleFileExtension } from '../arg.utils.js';
 import type { CliArgumentsFetcher } from '../cli.models.js';
@@ -7,13 +8,13 @@ export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): P
     await generateEnvironmentModelsAsync({
         // required
         createFiles: true,
-        environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentIdOption.name),
-        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKeyOption.name),
+        environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
+        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
         // optional
-        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrlOption.name),
-        outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDirOption.name),
-        addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestampOption.name, false),
-        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtensionOption.name)),
-        isEnterpriseSubscription: cliFetcher.getBooleanArgumentValue(commandOptions.isEnterpriseSubscriptionOption.name, false)
+        entities: cliFetcher.getOptionalArgumentArrayValue(commandOptions.entities.name).filter(isEnvironmentEntity),
+        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
+        outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),
+        addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestamp.name, false),
+        moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtension.name))
     });
 }

@@ -34,8 +34,7 @@ const snapshotTests: readonly SnapshotModelsTest[] = [
                 createFiles: false,
                 environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),
                 apiKey: getEnvironmentRequiredValue('MANAGEMENT_API_KEY'),
-                moduleFileExtension: 'js',
-                isEnterpriseSubscription: false
+                moduleFileExtension: 'js'
             })
     },
     {

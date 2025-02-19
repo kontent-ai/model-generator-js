@@ -35,24 +35,24 @@ Go to folder where you want to create models and run:
 
 ```bash
 # Models for Delivery SDK
-npx @kontent-ai/model-generator@latest delivery --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y
 
 # Models for Migration Toolkit
-npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --managementApiKey=y
 
 # Environment models used for scripting and strongly typed access to environment objects
-npx @kontent-ai/model-generator@latest environment --environmentId=x --apiKey=y
+npx @kontent-ai/model-generator@latest environment --environmentId=x --managementApiKey=y
 
 # Items overview with ids / codenames and Types representing available item codenames
 # 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
 # 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
-npx @kontent-ai/model-generator@latest items --environmentId=x --apiKey=y --deliveryApiKey=y --apiMode=preview --contentTypes=a,b,c
+npx @kontent-ai/model-generator@latest items --environmentId=x --managementApiKey=y --deliveryApiKey=y --apiMode=preview --contentTypes=a,b,c
 ```
 
 Run with more options:
 
 ```bash
-npx @kontent-ai/model-generator@latest delivery --environmentId=x --apiKey=y --moduleFileExtension=js --outputDir=kontent-models --addTimestamp=false
+npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y --moduleFileExtension=js --outputDir=kontent-models --addTimestamp=false
 ```
 
 To learn what options are available use the `help` command:

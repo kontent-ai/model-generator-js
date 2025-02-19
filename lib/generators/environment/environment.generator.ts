@@ -13,94 +13,121 @@ import type {
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import type { FlattenedElement, GeneratedSet } from '../../core/core.models.js';
+import type { FlattenedElement, GeneratedFile, GeneratedSet } from '../../core/core.models.js';
 import { getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { resolvePropertyName } from '../../core/resolvers.js';
 
-interface WorkflowStep {
+type WorkflowStep = {
     readonly name: string;
     readonly codename: string;
     readonly id: string;
-}
+};
 
-export interface ProjectGeneratorConfig {
-    readonly environmentData: {
-        readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
-        readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
-        readonly languages: readonly Readonly<LanguageModels.LanguageModel>[];
-        readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
-        readonly workflows: readonly Readonly<WorkflowModels.Workflow>[];
-        readonly assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[];
-        readonly collections: readonly Readonly<CollectionModels.Collection>[];
-        readonly roles: readonly Readonly<RoleModels.Role>[];
-        readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[];
-        readonly webhooks: readonly Readonly<WebhookModels.Webhook>[];
-    };
-}
+export type EnvironmentEntities = {
+    readonly contentTypes: readonly Readonly<ContentTypeModels.ContentType>[] | undefined;
+    readonly languages: readonly Readonly<LanguageModels.LanguageModel>[] | undefined;
+    readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[] | undefined;
+    readonly workflows: readonly Readonly<WorkflowModels.Workflow>[] | undefined;
+    readonly assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[] | undefined;
+    readonly collections: readonly Readonly<CollectionModels.Collection>[] | undefined;
+    readonly roles: readonly Readonly<RoleModels.Role>[] | undefined;
+    readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[] | undefined;
+    readonly webhooks: readonly Readonly<WebhookModels.Webhook>[] | undefined;
+};
 
-export function environmentGenerator(config: ProjectGeneratorConfig) {
+export type EnvironmentGeneratorConfig = {
+    readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+    readonly environmentEntities: EnvironmentEntities;
+};
+
+export function environmentGenerator(config: EnvironmentGeneratorConfig) {
     const generateEnvironmentModels = (): GeneratedSet => {
         return {
             folderName: undefined,
             files: [
-                {
-                    text: `export const languages = {
-                    ${getProjectLanguages(config.environmentData.languages)}
-                } as const;`,
-                    filename: 'languages.ts'
-                },
-                {
-                    text: `export const collections = {
-                    ${getCollections(config.environmentData.collections)}
-                } as const;`,
-                    filename: 'collections.ts'
-                },
-                {
-                    text: `export const contentTypes = {
-                    ${getProjectContentTypes(config.environmentData.types)}
-                } as const;`,
-                    filename: 'contentTypes.ts'
-                },
-                {
-                    text: `export const contentTypeSnippets = {
-                    ${getProjectContentTypeSnippets(config.environmentData.snippets)}
-                } as const;`,
-                    filename: 'contentTypeSnippets.ts'
-                },
-                {
-                    text: `export const taxonomies = {
-                    ${getProjectTaxonomies(config.environmentData.taxonomies)}
-                } as const;`,
-                    filename: 'taxonomies.ts'
-                },
-                {
-                    text: `export const workflows = {
-                    ${getProjectWorkflows(config.environmentData.workflows)}
-                } as const;`,
-                    filename: 'workflows.ts'
-                },
-                {
-                    text: `export const roles = {
-                    ${getRoles(config.environmentData.roles)}
-                } as const;`,
-                    filename: 'roles.ts'
-                },
-                {
-                    text: `export const assetFolders = ${getAssetFolders(config.environmentData.assetFolders)} as const;`,
-                    filename: 'assetFolders.ts'
-                },
-                {
-                    text: `export const webhooks = {
-                    ${getWebhooks(config.environmentData.webhooks)}
-                } as const;`,
-                    filename: 'webhooks.ts'
-                }
+                ...getEntityFiles<'languages'>({
+                    filename: 'languages.ts',
+                    propName: 'languages',
+                    entities: config.environmentEntities.languages,
+                    getCode: getLanguages
+                }),
+                ...getEntityFiles<'collections'>({
+                    filename: 'collections.ts',
+                    propName: 'collections',
+                    entities: config.environmentEntities.collections,
+                    getCode: getCollections
+                }),
+                ...getEntityFiles<'contentTypes'>({
+                    filename: 'contentTypes.ts',
+                    propName: 'contentTypes',
+                    entities: config.environmentEntities.contentTypes,
+                    getCode: getContentTypes
+                }),
+                ...getEntityFiles<'snippets'>({
+                    filename: 'contentTypeSnippets.ts',
+                    propName: 'contentTypeSnippets',
+                    entities: config.environmentEntities.snippets,
+                    getCode: getSnippets
+                }),
+                ...getEntityFiles<'workflows'>({
+                    filename: 'workflows.ts',
+                    propName: 'workflows',
+                    entities: config.environmentEntities.workflows,
+                    getCode: getWorkflows
+                }),
+                ...getEntityFiles<'roles'>({
+                    filename: 'roles.ts',
+                    propName: 'roles',
+                    entities: config.environmentEntities.roles,
+                    getCode: getRoles
+                }),
+                ...getEntityFiles<'assetFolders'>({
+                    filename: 'assetFolders.ts',
+                    propName: 'assetFolders',
+                    entities: config.environmentEntities.assetFolders,
+                    getCode: getAssetFolders
+                }),
+                ...getEntityFiles<'webhooks'>({
+                    filename: 'webhooks.ts',
+                    propName: 'webhooks',
+                    entities: config.environmentEntities.webhooks,
+                    getCode: getWebhooks
+                }),
+                ...getEntityFiles<'taxonomies'>({
+                    filename: 'taxonomies.ts',
+                    propName: 'taxonomies',
+                    entities: config.environmentEntities.taxonomies,
+                    getCode: getTaxonomies
+                })
             ]
         };
     };
 
-    const getProjectLanguages = (languages: readonly Readonly<LanguageModels.LanguageModel>[]): string => {
+    const getEntityFiles = <TProp extends keyof EnvironmentEntities>({
+        entities,
+        getCode,
+        filename,
+        propName
+    }: {
+        readonly filename: string;
+        readonly propName: string;
+        readonly entities: EnvironmentEntities[TProp];
+        readonly getCode: (entities: NonNullable<EnvironmentEntities[TProp]>) => string;
+    }): readonly GeneratedFile[] => {
+        if (!entities) {
+            return [];
+        }
+
+        return [
+            {
+                filename: filename,
+                text: wrapInConst({ propName, text: getCode(entities) })
+            }
+        ];
+    };
+
+    const getLanguages = (languages: readonly Readonly<LanguageModels.LanguageModel>[]): string => {
         return languages.reduce((code, language, index) => {
             const isLast = index === languages.length - 1;
 
@@ -120,7 +147,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
         }, '');
     };
 
-    const getProjectWorkflows = (workflows: readonly Readonly<WorkflowModels.Workflow>[]): string => {
+    const getWorkflows = (workflows: readonly Readonly<WorkflowModels.Workflow>[]): string => {
         return workflows.reduce((code, workflow, index) => {
             const isLast = index === workflows.length - 1;
 
@@ -132,17 +159,18 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     name: '${toSafePropertyValue(workflow.name)}',
                     codename: '${workflow.codename}',
                     id: '${workflow.id}',
-                    steps: ${getProjectWorkflowSteps(workflow)}
+                    steps: ${getWorkflowSteps(workflow)}
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
 
-    const getAssetFolders = (assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[]): string => {
+    const getAssetFolders = (assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[], isFirstLevel = true): string => {
         return (
-            assetFolders.reduce((code, assetFolder, index) => {
-                const isLast = index === assetFolders.length - 1;
+            assetFolders.reduce(
+                (code, assetFolder, index) => {
+                    const isLast = index === assetFolders.length - 1;
 
-                return `${code}\n
+                    return `${code}\n
                  ${wrapComment(`
                 * ${assetFolder.name}
                 `)}
@@ -151,12 +179,14 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     codename: '${assetFolder.codename}',
                     id: '${assetFolder.id}',
                     externalId: ${getStringOrUndefinedAsPropertyValue(assetFolder.externalId)},
-                    folders: ${getAssetFolders(assetFolder.folders)}}${!isLast ? ',\n' : ''}`;
-            }, '{') + '}'
+                    folders: ${getAssetFolders(assetFolder.folders, false)}}${!isLast ? ',\n' : ''}`;
+                },
+                !isFirstLevel ? '{' : ''
+            ) + (!isFirstLevel ? '}' : '')
         );
     };
 
-    const getProjectContentTypeSnippets = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): string => {
+    const getSnippets = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): string => {
         return snippets.reduce((code, snippet, index) => {
             const isLast = index === snippets.length - 1;
 
@@ -174,7 +204,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
         }, '');
     };
 
-    const getProjectContentTypes = (contentTypes: readonly Readonly<ContentTypeModels.ContentType>[]): string => {
+    const getContentTypes = (contentTypes: readonly Readonly<ContentTypeModels.ContentType>[]): string => {
         return contentTypes.reduce((code, contentType, index) => {
             const isLast = index === contentTypes.length - 1;
 
@@ -193,11 +223,21 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
     };
 
     const getContentTypeElements = (elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[]): string => {
+        if (!config.environmentEntities.snippets) {
+            throw new Error('Snippets are expected to be present in the environment entities.');
+        }
+        if (!config.environmentEntities.taxonomies) {
+            throw new Error('Taxonomies are expected to be present in the environment entities.');
+        }
+        if (!config.environmentEntities.contentTypes) {
+            throw new Error('Content types are expected to be present in the environment entities.');
+        }
+
         const flattenedElements = getFlattenedElements({
             elements: elements,
-            snippets: config.environmentData.snippets,
-            taxonomies: config.environmentData.taxonomies,
-            types: config.environmentData.types
+            snippets: config.environmentEntities.snippets,
+            taxonomies: config.environmentEntities.taxonomies,
+            types: config.environmentEntities.contentTypes
         });
 
         return flattenedElements.reduce((code, element, index) => {
@@ -243,7 +283,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
             .otherwise(() => undefined);
     };
 
-    const getProjectTaxonomies = (taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
+    const getTaxonomies = (taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
         return taxonomies.reduce((code, taxonomy, index) => {
             const isLast = index === taxonomies.length - 1;
 
@@ -256,7 +296,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                     codename: '${taxonomy.codename}',
                     externalId: ${getStringOrUndefinedAsPropertyValue(taxonomy.externalId)},
                     id: '${taxonomy.id}',
-                    ${getProjectTaxonomiesTerms(taxonomy.terms)}
+                    ${getTaxonomyTerms(taxonomy.terms)}
             }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -309,7 +349,7 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
         }, '');
     };
 
-    const getProjectTaxonomiesTerms = (terms: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
+    const getTaxonomyTerms = (terms: readonly Readonly<TaxonomyModels.Taxonomy>[]): string => {
         return (
             terms.reduce<string>((code, term, index) => {
                 const isLast = index === terms.length - 1;
@@ -323,13 +363,13 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                         id: '${term.id}',
                         externalId: ${getStringOrUndefinedAsPropertyValue(term.externalId)},
                         name: '${toSafePropertyValue(term.name)}',
-                        ${getProjectTaxonomiesTerms(term.terms)}
+                        ${getTaxonomyTerms(term.terms)}
                     }${!isLast ? ',\n' : ''}`;
             }, 'terms: {') + '}'
         );
     };
 
-    const getProjectWorkflowSteps = (workflow: Readonly<WorkflowModels.Workflow>): string => {
+    const getWorkflowSteps = (workflow: Readonly<WorkflowModels.Workflow>): string => {
         // The order of these steps should reflect the order in which they appear in the Kontent UI
         const steps: readonly WorkflowStep[] = [...workflow.steps, workflow.scheduledStep, workflow.publishedStep, workflow.archivedStep];
 
@@ -344,6 +384,12 @@ export function environmentGenerator(config: ProjectGeneratorConfig) {
                 },`
             );
         }, ``)}}`;
+    };
+
+    const wrapInConst = ({ propName, text }: { readonly propName: string; readonly text: string }): string => {
+        return `export const ${propName} = {
+                    ${text}
+                } as const;`;
     };
 
     return {

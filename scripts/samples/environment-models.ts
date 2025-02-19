@@ -8,11 +8,11 @@ await runScriptAsync(async (config) => {
 
     await generateEnvironmentModelsAsync({
         createFiles: true,
+        entities: undefined,
         addTimestamp: false,
         environmentId: config.environmentId,
         apiKey: config.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
-        isEnterpriseSubscription: true,
         outputDir: outputDir
     });
 });
