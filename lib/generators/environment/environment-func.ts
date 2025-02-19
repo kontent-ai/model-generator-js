@@ -1,7 +1,6 @@
 import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
-import { match } from 'ts-pattern';
 import { defaultModuleFileExtension } from '../../config.js';
 import {
     environmentEntities,
@@ -62,17 +61,20 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
         baseUrl: config.baseUrl
     });
 
+    const entitiesToCreate: readonly EnvironmentEntity[] = config.entities ?? environmentEntities; // default to all entities export
+
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
     const entities = await getEntitiesAsync({
         kontentFetcher,
-        entitiesConfig: config.entities ?? environmentEntities // default to all entities export
+        entitiesConfig: entitiesToCreate
     });
 
     return {
         environmentInfo,
         environmentFiles: _environmentGenerator({
             environmentInfo,
-            environmentEntities: entities
+            environmentEntities: entities,
+            entitiesToCreate: entitiesToCreate
         }).generateEnvironmentModels(),
         moduleFileExtension: moduleFileExtension
     };
@@ -85,7 +87,7 @@ async function getEntitiesAsync({
     kontentFetcher: ManagementKontentFetcher;
     entitiesConfig: readonly EnvironmentEntity[];
 }): Promise<EnvironmentEntities> {
-    const extendedEntityTypes = getExtendedEntityTypes(entitiesConfig);
+    const entitiesToFetch = getEntitiesToFetchFromApi(entitiesConfig);
 
     const [
         languages,
@@ -101,22 +103,22 @@ async function getEntitiesAsync({
         spaces,
         previewUrls
     ] = await Promise.all([
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('languages'), fetch: () => kontentFetcher.getLanguagesAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('taxonomies'), fetch: () => kontentFetcher.getTaxonomiesAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('contentTypes'), fetch: () => kontentFetcher.getTypesAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('snippets'), fetch: () => kontentFetcher.getSnippetsAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('collections'), fetch: () => kontentFetcher.getCollectionsAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('workflows'), fetch: () => kontentFetcher.getWorkflowsAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('webhooks'), fetch: () => kontentFetcher.getWebhooksAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('languages'), fetch: () => kontentFetcher.getLanguagesAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('taxonomies'), fetch: () => kontentFetcher.getTaxonomiesAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('contentTypes'), fetch: () => kontentFetcher.getTypesAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('snippets'), fetch: () => kontentFetcher.getSnippetsAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('collections'), fetch: () => kontentFetcher.getCollectionsAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('workflows'), fetch: () => kontentFetcher.getWorkflowsAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('webhooks'), fetch: () => kontentFetcher.getWebhooksAsync() }),
         fetchEntity({
-            canFetch: () => extendedEntityTypes.includes('assetFolders'),
+            canFetch: () => entitiesToFetch.includes('assetFolders'),
             fetch: () => kontentFetcher.getAssetFoldersAsync()
         }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('roles'), fetch: () => kontentFetcher.getRolesAsync() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('customApps'), fetch: () => kontentFetcher.getCustomApps() }),
-        fetchEntity({ canFetch: () => extendedEntityTypes.includes('spaces'), fetch: () => kontentFetcher.getSpaces() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('roles'), fetch: () => kontentFetcher.getRolesAsync() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('customApps'), fetch: () => kontentFetcher.getCustomApps() }),
+        fetchEntity({ canFetch: () => entitiesToFetch.includes('spaces'), fetch: () => kontentFetcher.getSpaces() }),
         fetchEntity({
-            canFetch: () => extendedEntityTypes.includes('previewUrls'),
+            canFetch: () => entitiesToFetch.includes('previewUrls'),
             fetch: () => kontentFetcher.getPreviewUrlConfiguration()
         })
     ]);
@@ -137,20 +139,19 @@ async function getEntitiesAsync({
     };
 }
 
-function getExtendedEntityTypes(entityTypes: readonly EnvironmentEntity[]): readonly EnvironmentEntity[] {
-    return match(entityTypes)
-        .returnType<readonly EnvironmentEntity[]>()
-        .when(
-            (m) => m.includes('snippets') || m.includes('contentTypes'),
+function getEntitiesToFetchFromApi(entityTypes: readonly EnvironmentEntity[]): readonly EnvironmentEntity[] {
+    return (
+        [
+            ...entityTypes,
             // when requesting snippets or content types, we need to fetch taxonomies & (snippets or types) as well
             // this is is because we need these entities to narrow down types for elements
-            (m) => {
-                const newEntities: readonly EnvironmentEntity[] = [...m, 'taxonomies', 'snippets', 'contentTypes'];
-
-                return newEntities.filter(uniqueFilter);
-            }
-        )
-        .otherwise((m) => m);
+            ...(entityTypes.includes('contentTypes') || entityTypes.includes('snippets')
+                ? (['taxonomies', 'snippets', 'contentTypes'] satisfies readonly EnvironmentEntity[])
+                : []),
+            // when requesting preview urls, we need to fetch spaces & content types as well
+            ...(entityTypes.includes('previewUrls') ? (['spaces', 'contentTypes'] satisfies readonly EnvironmentEntity[]) : [])
+        ] satisfies readonly EnvironmentEntity[]
+    ).filter(uniqueFilter);
 }
 
 function fetchEntity<T>({

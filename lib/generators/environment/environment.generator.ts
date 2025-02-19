@@ -16,7 +16,7 @@ import type {
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import type { FlattenedElement, GeneratedFile, GeneratedSet } from '../../core/core.models.js';
+import type { EnvironmentEntity, FlattenedElement, GeneratedFile, GeneratedSet } from '../../core/core.models.js';
 import { findRequired, getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { resolvePropertyName } from '../../core/resolvers.js';
@@ -27,7 +27,7 @@ type WorkflowStep = {
     readonly id: string;
 };
 
-export type EnvironmentEntities = {
+export type EnvironmentEntities = Record<EnvironmentEntity, unknown> & {
     readonly contentTypes: readonly Readonly<ContentTypeModels.ContentType>[] | undefined;
     readonly languages: readonly Readonly<LanguageModels.LanguageModel>[] | undefined;
     readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[] | undefined;
@@ -45,6 +45,7 @@ export type EnvironmentEntities = {
 export type EnvironmentGeneratorConfig = {
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
     readonly environmentEntities: EnvironmentEntities;
+    readonly entitiesToCreate: readonly EnvironmentEntity[];
 };
 
 export function environmentGenerator(config: EnvironmentGeneratorConfig) {
@@ -52,75 +53,111 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
         return {
             folderName: undefined,
             files: [
-                ...getEntityFiles<'languages'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'languages',
+                    entitiesProp: 'languages',
                     filename: 'languages.ts',
-                    propName: 'languages',
+                    exportedConstName: 'languages',
                     entities: config.environmentEntities.languages,
                     getCode: getLanguages
                 }),
-                ...getEntityFiles<'collections'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'collections',
+                    entitiesProp: 'collections',
                     filename: 'collections.ts',
-                    propName: 'collections',
+                    exportedConstName: 'collections',
                     entities: config.environmentEntities.collections,
                     getCode: getCollections
                 }),
-                ...getEntityFiles<'contentTypes'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'contentTypes',
+                    entitiesProp: 'contentTypes',
                     filename: 'contentTypes.ts',
-                    propName: 'contentTypes',
+                    exportedConstName: 'contentTypes',
                     entities: config.environmentEntities.contentTypes,
                     getCode: getContentTypes
                 }),
-                ...getEntityFiles<'snippets'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'snippets',
+                    entitiesProp: 'snippets',
                     filename: 'contentTypeSnippets.ts',
-                    propName: 'contentTypeSnippets',
+                    exportedConstName: 'contentTypeSnippets',
                     entities: config.environmentEntities.snippets,
                     getCode: getSnippets
                 }),
-                ...getEntityFiles<'workflows'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'workflows',
+                    entitiesProp: 'workflows',
                     filename: 'workflows.ts',
-                    propName: 'workflows',
+                    exportedConstName: 'workflows',
                     entities: config.environmentEntities.workflows,
                     getCode: getWorkflows
                 }),
-                ...getEntityFiles<'roles'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'roles',
+                    entitiesProp: 'roles',
                     filename: 'roles.ts',
-                    propName: 'roles',
+                    exportedConstName: 'roles',
                     entities: config.environmentEntities.roles,
                     getCode: getRoles
                 }),
-                ...getEntityFiles<'assetFolders'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'assetFolders',
+                    entitiesProp: 'assetFolders',
                     filename: 'assetFolders.ts',
-                    propName: 'assetFolders',
+                    exportedConstName: 'assetFolders',
                     entities: config.environmentEntities.assetFolders,
                     getCode: getAssetFolders
                 }),
-                ...getEntityFiles<'webhooks'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'webhooks',
+                    entitiesProp: 'webhooks',
                     filename: 'webhooks.ts',
-                    propName: 'webhooks',
+                    exportedConstName: 'webhooks',
                     entities: config.environmentEntities.webhooks,
                     getCode: getWebhooks
                 }),
-                ...getEntityFiles<'taxonomies'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'taxonomies',
+                    entitiesProp: 'taxonomies',
                     filename: 'taxonomies.ts',
-                    propName: 'taxonomies',
+                    exportedConstName: 'taxonomies',
                     entities: config.environmentEntities.taxonomies,
                     getCode: getTaxonomies
                 }),
-                ...getEntityFiles<'customApps'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'customApps',
+                    entitiesProp: 'customApps',
                     filename: 'customApps.ts',
-                    propName: 'customApps',
+                    exportedConstName: 'customApps',
                     entities: config.environmentEntities.customApps,
                     getCode: getCustomApps
                 }),
-                ...getEntityFiles<'spaces'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'spaces',
+                    entitiesProp: 'spaces',
                     filename: 'spaces.ts',
-                    propName: 'spaces',
+                    exportedConstName: 'spaces',
                     entities: config.environmentEntities.spaces,
                     getCode: getSpaces
                 }),
-                ...getEntityFiles<'previewUrls'>({
+                ...getEntityFiles({
+                    entitiesToCreate: config.entitiesToCreate,
+                    entityType: 'previewUrls',
+                    entitiesProp: 'previewUrls',
                     filename: 'previewUrls.ts',
-                    propName: 'previewUrls',
+                    exportedConstName: 'previewUrls',
                     entities: config.environmentEntities.previewUrls,
                     getCode: getPreviewUrls
                 })
@@ -132,21 +169,26 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
         entities,
         getCode,
         filename,
-        propName
+        entitiesToCreate,
+        exportedConstName,
+        entityType
     }: {
+        readonly entitiesToCreate: readonly EnvironmentEntity[];
+        readonly entitiesProp: TProp;
+        readonly entityType: EnvironmentEntity;
         readonly filename: string;
-        readonly propName: string;
+        readonly exportedConstName: string;
         readonly entities: EnvironmentEntities[TProp];
         readonly getCode: (entities: NonNullable<EnvironmentEntities[TProp]>) => string;
     }): readonly GeneratedFile[] => {
-        if (!entities) {
+        if (!entities || !entitiesToCreate.includes(entityType)) {
             return [];
         }
 
         return [
             {
                 filename: filename,
-                text: wrapInConst({ propName, text: getCode(entities) })
+                text: wrapInConst({ constName: exportedConstName, text: getCode(entities) })
             }
         ];
     };
@@ -501,8 +543,8 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
         }, ``)}}`;
     };
 
-    const wrapInConst = ({ propName, text }: { readonly propName: string; readonly text: string }): string => {
-        return `export const ${propName} = {
+    const wrapInConst = ({ constName, text }: { readonly constName: string; readonly text: string }): string => {
+        return `export const ${constName} = {
                     ${text}
                 } as const;`;
     };
