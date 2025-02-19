@@ -3,10 +3,10 @@
   { "filename": "collections.ts" },
   { "filename": "contentTypes.ts" },
   { "filename": "contentTypeSnippets.ts" },
-  { "filename": "taxonomies.ts" },
   { "filename": "workflows.ts" },
   { "filename": "roles.ts" },
   { "filename": "assetFolders.ts" },
   { "filename": "webhooks.ts" },
+  { "filename": "taxonomies.ts" },
   { "filename": "index.ts" }
 ]
