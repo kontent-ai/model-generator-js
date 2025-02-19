@@ -17,7 +17,7 @@ import type {
 import { match } from 'ts-pattern';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import type { EnvironmentEntity, FlattenedElement, GeneratedFile, GeneratedSet } from '../../core/core.models.js';
-import { findRequired, getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
+import { findRequired, getStringOrUndefinedAsPropertyValue, isNotUndefined, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { resolvePropertyName } from '../../core/resolvers.js';
 
@@ -53,7 +53,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
         return {
             folderName: undefined,
             files: [
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'languages',
                     entitiesProp: 'languages',
@@ -62,7 +62,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.languages,
                     getCode: getLanguages
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'collections',
                     entitiesProp: 'collections',
@@ -71,7 +71,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.collections,
                     getCode: getCollections
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'contentTypes',
                     entitiesProp: 'contentTypes',
@@ -80,7 +80,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.contentTypes,
                     getCode: getContentTypes
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'snippets',
                     entitiesProp: 'snippets',
@@ -89,7 +89,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.snippets,
                     getCode: getSnippets
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'workflows',
                     entitiesProp: 'workflows',
@@ -98,7 +98,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.workflows,
                     getCode: getWorkflows
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'roles',
                     entitiesProp: 'roles',
@@ -107,7 +107,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.roles,
                     getCode: getRoles
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'assetFolders',
                     entitiesProp: 'assetFolders',
@@ -116,7 +116,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.assetFolders,
                     getCode: getAssetFolders
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'webhooks',
                     entitiesProp: 'webhooks',
@@ -125,7 +125,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.webhooks,
                     getCode: getWebhooks
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'taxonomies',
                     entitiesProp: 'taxonomies',
@@ -134,7 +134,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.taxonomies,
                     getCode: getTaxonomies
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'customApps',
                     entitiesProp: 'customApps',
@@ -143,7 +143,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.customApps,
                     getCode: getCustomApps
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'spaces',
                     entitiesProp: 'spaces',
@@ -152,7 +152,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.spaces,
                     getCode: getSpaces
                 }),
-                ...getEntityFiles({
+                getEntityFile({
                     entitiesToCreate: config.entitiesToCreate,
                     entityType: 'previewUrls',
                     entitiesProp: 'previewUrls',
@@ -161,11 +161,11 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     entities: config.environmentEntities.previewUrls,
                     getCode: getPreviewUrls
                 })
-            ]
+            ].filter(isNotUndefined)
         };
     };
 
-    const getEntityFiles = <TProp extends keyof EnvironmentEntities>({
+    const getEntityFile = <TProp extends keyof EnvironmentEntities>({
         entities,
         getCode,
         filename,
@@ -180,17 +180,15 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
         readonly exportedConstName: string;
         readonly entities: EnvironmentEntities[TProp];
         readonly getCode: (entities: NonNullable<EnvironmentEntities[TProp]>) => string;
-    }): readonly GeneratedFile[] => {
+    }): GeneratedFile | undefined => {
         if (!entities || !entitiesToCreate.includes(entityType)) {
-            return [];
+            return undefined;
         }
 
-        return [
-            {
-                filename: filename,
-                text: wrapInConst({ constName: exportedConstName, text: getCode(entities) })
-            }
-        ];
+        return {
+            filename: filename,
+            text: wrapInConst({ constName: exportedConstName, text: getCode(entities) })
+        };
     };
 
     const getLanguages = (languages: readonly Readonly<LanguageModels.LanguageModel>[]): string => {
