@@ -96,3 +96,5 @@ export type ObjectWithCodename = {
 export type ObjectWithName = {
     readonly name: string;
 };
+
+export type ValidateKeys<Keys, T extends keyof T extends Keys ? (Keys extends keyof T ? unknown : never) : never> = T;
