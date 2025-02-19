@@ -8,7 +8,9 @@ import type {
     CustomAppModels,
     EnvironmentModels,
     LanguageModels,
+    PreviewModels,
     RoleModels,
+    SpaceModels,
     TaxonomyModels,
     WebhookModels,
     WorkflowModels
@@ -33,6 +35,8 @@ export type ManagementKontentFetcher = {
     getSnippetsAsync(): Promise<readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]>;
     getTaxonomiesAsync(): Promise<readonly Readonly<TaxonomyModels.Taxonomy>[]>;
     getCustomApps(): Promise<readonly Readonly<CustomAppModels.CustomApp>[]>;
+    getSpaces(): Promise<readonly Readonly<SpaceModels.Space>[]>;
+    getPreviewUrlConfiguration(): Promise<Readonly<PreviewModels.PreviewConfiguration>>;
 };
 
 export function managementKontentFetcher(config: {
@@ -132,6 +136,15 @@ export function managementKontentFetcher(config: {
                 fetch: async () => (await client.listCustomApps().toPromise()).data.items,
                 itemType: 'custom apps'
             });
+        },
+        async getSpaces(): Promise<readonly Readonly<SpaceModels.Space>[]> {
+            return await fetchItemsAsync({
+                fetch: async () => (await client.listSpaces().toPromise()).data,
+                itemType: 'spaces'
+            });
+        },
+        async getPreviewUrlConfiguration(): Promise<Readonly<PreviewModels.PreviewConfiguration>> {
+            return (await client.getPreviewConfiguration().toPromise()).data;
         }
     };
 }
@@ -148,6 +161,7 @@ async function fetchItemsAsync<T>({
         | 'types'
         | 'snippets'
         | 'languages'
+        | 'spaces'
         | 'webhooks'
         | 'collections'
         | 'custom apps'

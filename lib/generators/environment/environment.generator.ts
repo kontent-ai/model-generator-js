@@ -7,7 +7,9 @@ import type {
     CustomAppModels,
     EnvironmentModels,
     LanguageModels,
+    PreviewModels,
     RoleModels,
+    SpaceModels,
     TaxonomyModels,
     WebhookModels,
     WorkflowModels
@@ -15,7 +17,7 @@ import type {
 import { match } from 'ts-pattern';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import type { FlattenedElement, GeneratedFile, GeneratedSet } from '../../core/core.models.js';
-import { getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
+import { findRequired, getStringOrUndefinedAsPropertyValue, toSafePropertyValue } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { resolvePropertyName } from '../../core/resolvers.js';
 
@@ -36,6 +38,8 @@ export type EnvironmentEntities = {
     readonly snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[] | undefined;
     readonly webhooks: readonly Readonly<WebhookModels.Webhook>[] | undefined;
     readonly customApps: readonly Readonly<CustomAppModels.CustomApp>[] | undefined;
+    readonly spaces: readonly Readonly<SpaceModels.Space>[] | undefined;
+    readonly previewUrls: PreviewModels.PreviewConfiguration | undefined;
 };
 
 export type EnvironmentGeneratorConfig = {
@@ -107,6 +111,18 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     propName: 'customApps',
                     entities: config.environmentEntities.customApps,
                     getCode: getCustomApps
+                }),
+                ...getEntityFiles<'spaces'>({
+                    filename: 'spaces.ts',
+                    propName: 'spaces',
+                    entities: config.environmentEntities.spaces,
+                    getCode: getSpaces
+                }),
+                ...getEntityFiles<'previewUrls'>({
+                    filename: 'previewUrls.ts',
+                    propName: 'previewUrls',
+                    entities: config.environmentEntities.previewUrls,
+                    getCode: getPreviewUrls
                 })
             ]
         };
@@ -181,11 +197,86 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                 * ${customApp.name}
                 `)}
                 ${resolvePropertyName(customApp.codename)}: {
-                    codename: ${customApp.codename},
                     name: '${toSafePropertyValue(customApp.name)}',
+                    codename: ${customApp.codename},
                     sourceUrl: '${customApp.source_url}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
+    };
+
+    const getSpaces = (spaces: readonly Readonly<SpaceModels.Space>[]): string => {
+        return spaces.reduce((code, space, index) => {
+            const isLast = index === spaces.length - 1;
+
+            return `${code}\n
+                ${wrapComment(`
+                * ${space.name}
+                `)}
+                ${resolvePropertyName(space.codename)}: {
+                    name: '${toSafePropertyValue(space.name)}',
+                    codename: '${space.codename}',
+                    id: '${space.id}'
+                }${!isLast ? ',\n' : ''}`;
+        }, '');
+    };
+
+    const getPreviewUrls = (previewConfiguration: Readonly<PreviewModels.PreviewConfiguration>): string => {
+        const spaces = config.environmentEntities.spaces;
+        const contentTypes = config.environmentEntities.contentTypes;
+
+        if (!spaces) {
+            throw new Error('Spaces are expected to be present in the environment entities.');
+        }
+
+        if (!contentTypes) {
+            throw new Error('Content types are expected to be present in the environment entities.');
+        }
+
+        return `
+          ${wrapComment(`
+                * Preview configuration
+                `)}
+            spaceDomains: { ${previewConfiguration.spaceDomains.reduce((code, spaceDomain, index) => {
+                const isLast = index === previewConfiguration.spaceDomains.length - 1;
+                const space = findRequired(
+                    spaces,
+                    (m) => m.id === spaceDomain.space.id,
+                    `Space with id '${spaceDomain.space.id}' not found.`
+                );
+
+                return `${code}\n
+                ${space.codename}: {
+                    spaceName: '${toSafePropertyValue(space.name)}',
+                    spaceCodename: '${space.codename}',
+                    domain: '${spaceDomain.domain}'
+                }${!isLast ? ',\n' : ''}`;
+            }, '')} },
+              previewUrlPatterns: { ${previewConfiguration.previewUrlPatterns.reduce((code, previewUrlPattern, index) => {
+                  const isLast = index === previewConfiguration.previewUrlPatterns.length - 1;
+                  const contentType = findRequired(
+                      contentTypes,
+                      (m) => m.id === previewUrlPattern.contentType.id,
+                      `Content type with id '${previewUrlPattern.contentType.id}' not found.`
+                  );
+
+                  return `${code}\n
+                ${contentType.codename}: {
+                    contentTypeName: '${toSafePropertyValue(contentType.name)}',
+                    contentTypeCodename: '${contentType.codename}',
+                    urlPatterns: { ${previewUrlPattern.urlPatterns.reduce((code, urlPattern, index) => {
+                        const isLast = index === previewUrlPattern.urlPatterns.length - 1;
+                        const space = config.environmentEntities.spaces?.find((m) => m.id === urlPattern.space?.id);
+
+                        return `${code}\n
+                ${space?.codename ?? 'default'}: {
+                    spaceName: ${getStringOrUndefinedAsPropertyValue(space?.name)},
+                    spaceCodename: ${getStringOrUndefinedAsPropertyValue(space?.codename)},
+                    url: '${urlPattern.urlPattern}',
+                        }${!isLast ? ',\n' : ''}`;
+                    }, '')} }
+                }${!isLast ? ',\n' : ''}`;
+              }, '')} }
+        `;
     };
 
     const getAssetFolders = (assetFolders: readonly Readonly<AssetFolderModels.AssetFolder>[], isFirstLevel = true): string => {
@@ -334,9 +425,9 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                 * ${collection.name}
                 `)}
                 ${collection.codename}: {
+                    name: '${toSafePropertyValue(collection.name)}',
                     codename: '${collection.codename}',
-                    id: '${collection.id}',
-                    name: '${toSafePropertyValue(collection.name)}'
+                    id: '${collection.id}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -350,9 +441,9 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                 * ${role.name}
                 `)}
                 ${resolvePropertyName(role.codename ?? role.name)}: {
+                    name: '${toSafePropertyValue(role.name)}',
                     codename: ${getStringOrUndefinedAsPropertyValue(role.codename)},
-                    id: '${role.id}',
-                    name: '${toSafePropertyValue(role.name)}'
+                    id: '${role.id}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -366,9 +457,9 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                 * ${webhook.name}
                 `)}
                 ${resolvePropertyName(webhook.name)}: {
+                    name: '${toSafePropertyValue(webhook.name)}',
                     url: '${webhook.url}',
-                    id: '${webhook.id}',
-                    name: '${toSafePropertyValue(webhook.name)}'
+                    id: '${webhook.id}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
     };
@@ -383,10 +474,10 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                     * ${term.name}
                     `)}
                     ${term.codename}: {
+                        name: '${toSafePropertyValue(term.name)}',
                         codename: '${term.codename}',
                         id: '${term.id}',
                         externalId: ${getStringOrUndefinedAsPropertyValue(term.externalId)},
-                        name: '${toSafePropertyValue(term.name)}',
                         ${getTaxonomyTerms(term.terms)}
                     }${!isLast ? ',\n' : ''}`;
             }, 'terms: {') + '}'

@@ -22,7 +22,9 @@ export const environmentEntities = [
     'workflows',
     'assetFolders',
     'roles',
-    'customApps'
+    'customApps',
+    'previewUrls',
+    'spaces'
 ] as const;
 
 export type EnvironmentEntity = (typeof environmentEntities)[number];

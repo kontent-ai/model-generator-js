@@ -9,5 +9,7 @@
   { "filename": "webhooks.ts" },
   { "filename": "taxonomies.ts" },
   { "filename": "customApps.ts" },
+  { "filename": "spaces.ts" },
+  { "filename": "previewUrls.ts" },
   { "filename": "index.ts" }
 ]

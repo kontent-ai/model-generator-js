@@ -12,10 +12,10 @@ export const taxonomies = {
              * Student
              */
             student: {
+                name: 'Student',
                 codename: 'student',
                 id: 'b107e12c-124d-705f-1029-c0dfdd0b2438',
                 externalId: undefined,
-                name: 'Student',
                 terms: {}
             },
 
@@ -23,19 +23,19 @@ export const taxonomies = {
              * Film
              */
             film: {
+                name: 'Film',
                 codename: 'film',
                 id: '5a2a1927-41a4-294f-5d89-cf0cc045e943',
                 externalId: undefined,
-                name: 'Film',
                 terms: {
                     /**
                      * TV
                      */
                     tv: {
+                        name: 'TV',
                         codename: 'tv',
                         id: '47511b09-6c39-fa04-ff59-7c47551e827f',
                         externalId: undefined,
-                        name: 'TV',
                         terms: {}
                     },
 
@@ -43,10 +43,10 @@ export const taxonomies = {
                      * Blockbuster
                      */
                     blockbuster: {
+                        name: 'Blockbuster',
                         codename: 'blockbuster',
                         id: '875a4657-1dcd-0415-cb3a-892078f5991a',
                         externalId: undefined,
-                        name: 'Blockbuster',
                         terms: {}
                     },
 
@@ -54,10 +54,10 @@ export const taxonomies = {
                      * Cinema only
                      */
                     cinema_only: {
+                        name: 'Cinema only',
                         codename: 'cinema_only',
                         id: 'e15c4e32-ab7c-57a2-1b66-d8e3566a1dd2',
                         externalId: undefined,
-                        name: 'Cinema only',
                         terms: {}
                     }
                 }
@@ -78,10 +78,10 @@ export const taxonomies = {
              * Global release
              */
             global_release: {
+                name: 'Global release',
                 codename: 'global_release',
                 id: '4acaf439-9f3a-f34a-6211-d3fc6ec7152e',
                 externalId: undefined,
-                name: 'Global release',
                 terms: {}
             },
 
@@ -89,10 +89,10 @@ export const taxonomies = {
              * US only
              */
             us_only: {
+                name: 'US only',
                 codename: 'us_only',
                 id: 'b03d990a-55a9-601e-dd5c-aa2edc8698ca',
                 externalId: undefined,
-                name: 'US only',
                 terms: {}
             },
 
@@ -100,10 +100,10 @@ export const taxonomies = {
              * Local release
              */
             local_release: {
+                name: 'Local release',
                 codename: 'local_release',
                 id: '37e55484-f0dc-14eb-bf2a-b0293a0d1b1f',
                 externalId: undefined,
-                name: 'Local release',
                 terms: {}
             }
         }

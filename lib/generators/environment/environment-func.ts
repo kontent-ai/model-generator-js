@@ -87,22 +87,39 @@ async function getEntitiesAsync({
 }): Promise<EnvironmentEntities> {
     const extendedEntityTypes = getExtendedEntityTypes(entitiesConfig);
 
-    const [languages, taxonomies, contentTypes, snippets, collections, workflows, webhooks, assetFolders, roles, customApps] =
-        await Promise.all([
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('languages'), fetch: () => kontentFetcher.getLanguagesAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('taxonomies'), fetch: () => kontentFetcher.getTaxonomiesAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('contentTypes'), fetch: () => kontentFetcher.getTypesAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('snippets'), fetch: () => kontentFetcher.getSnippetsAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('collections'), fetch: () => kontentFetcher.getCollectionsAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('workflows'), fetch: () => kontentFetcher.getWorkflowsAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('webhooks'), fetch: () => kontentFetcher.getWebhooksAsync() }),
-            fetchEntity({
-                canFetch: () => extendedEntityTypes.includes('assetFolders'),
-                fetch: () => kontentFetcher.getAssetFoldersAsync()
-            }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('roles'), fetch: () => kontentFetcher.getRolesAsync() }),
-            fetchEntity({ canFetch: () => extendedEntityTypes.includes('customApps'), fetch: () => kontentFetcher.getCustomApps() })
-        ]);
+    const [
+        languages,
+        taxonomies,
+        contentTypes,
+        snippets,
+        collections,
+        workflows,
+        webhooks,
+        assetFolders,
+        roles,
+        customApps,
+        spaces,
+        previewUrls
+    ] = await Promise.all([
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('languages'), fetch: () => kontentFetcher.getLanguagesAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('taxonomies'), fetch: () => kontentFetcher.getTaxonomiesAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('contentTypes'), fetch: () => kontentFetcher.getTypesAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('snippets'), fetch: () => kontentFetcher.getSnippetsAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('collections'), fetch: () => kontentFetcher.getCollectionsAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('workflows'), fetch: () => kontentFetcher.getWorkflowsAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('webhooks'), fetch: () => kontentFetcher.getWebhooksAsync() }),
+        fetchEntity({
+            canFetch: () => extendedEntityTypes.includes('assetFolders'),
+            fetch: () => kontentFetcher.getAssetFoldersAsync()
+        }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('roles'), fetch: () => kontentFetcher.getRolesAsync() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('customApps'), fetch: () => kontentFetcher.getCustomApps() }),
+        fetchEntity({ canFetch: () => extendedEntityTypes.includes('spaces'), fetch: () => kontentFetcher.getSpaces() }),
+        fetchEntity({
+            canFetch: () => extendedEntityTypes.includes('previewUrls'),
+            fetch: () => kontentFetcher.getPreviewUrlConfiguration()
+        })
+    ]);
 
     return {
         assetFolders,
@@ -114,7 +131,9 @@ async function getEntitiesAsync({
         contentTypes,
         webhooks,
         workflows,
-        customApps
+        customApps,
+        previewUrls,
+        spaces
     };
 }
 
@@ -139,8 +158,8 @@ function fetchEntity<T>({
     fetch
 }: {
     canFetch: () => boolean;
-    fetch: () => Promise<readonly T[]>;
-}): Promise<readonly T[] | undefined> {
+    fetch: () => Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined>;
+}): Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined> {
     if (!canFetch()) {
         return Promise.resolve(undefined);
     }

@@ -30,3 +30,22 @@ export function toOutputDirPath(outputDir: string | undefined): string {
 export function singleItemToArray<T>(item: T | undefined): readonly T[] {
     return item ? [item] : [];
 }
+
+export function findRequired<T>(array: readonly T[], predicate: (item: T, index: number) => boolean, errorMessage: string): T;
+export function findRequired<T>(array: readonly T[], predicate: (item: T, index: number) => boolean, errorMessage: () => never): T;
+export function findRequired<T>(
+    array: readonly T[],
+    predicate: (item: T, index: number) => boolean,
+    errorMessage: string | (() => never)
+): T {
+    const item = array.find(predicate);
+
+    if (item) {
+        return item;
+    }
+
+    if (typeof errorMessage === 'string' || errorMessage instanceof String) {
+        throw Error(errorMessage.toString());
+    }
+    return errorMessage();
+}
