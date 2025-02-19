@@ -8,5 +8,6 @@
   { "filename": "assetFolders.ts" },
   { "filename": "webhooks.ts" },
   { "filename": "taxonomies.ts" },
+  { "filename": "customApps.ts" },
   { "filename": "index.ts" }
 ]
