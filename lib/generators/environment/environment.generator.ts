@@ -228,7 +228,7 @@ export function environmentGenerator(config: EnvironmentGeneratorConfig) {
                 `)}
                 ${resolvePropertyName(customApp.codename)}: {
                     name: '${toSafePropertyValue(customApp.name)}',
-                    codename: ${customApp.codename},
+                    codename: '${customApp.codename}',
                     sourceUrl: '${customApp.source_url}'
                 }${!isLast ? ',\n' : ''}`;
         }, '');
