@@ -3,45 +3,33 @@ export const previewUrls = {
      * Preview configuration
      */
     spaceDomains: {
-        movies: {
-            spaceName: 'Movies',
-            spaceCodename: 'movies',
-            domain: 'https://siteA.com'
+        default_space: {
+            spaceName: 'Default space',
+            spaceCodename: 'default_space',
+            domain: 'https://sample.com/A'
         },
 
-        global: {
-            spaceName: 'Global',
-            spaceCodename: 'global',
-            domain: 'https://siteB.com'
+        uk_space: {
+            spaceName: 'UK Space',
+            spaceCodename: 'uk_space',
+            domain: 'https://sample.com/B'
         }
     },
     previewUrlPatterns: {
-        actor: {
-            contentTypeName: 'Actor',
-            contentTypeCodename: 'actor',
+        content_type_with_all_elements: {
+            contentTypeName: 'Content type with all elements',
+            contentTypeCodename: 'content_type_with_all_elements',
             urlPatterns: {
-                default: {
-                    spaceName: undefined,
-                    spaceCodename: undefined,
+                uk_space: {
+                    spaceName: 'UK Space',
+                    spaceCodename: 'uk_space',
                     url: 'https://sample.com/{codename}'
-                }
-            }
-        },
-
-        movie: {
-            contentTypeName: 'Movie',
-            contentTypeCodename: 'movie',
-            urlPatterns: {
-                movies: {
-                    spaceName: 'Movies',
-                    spaceCodename: 'movies',
-                    url: 'https://sample.com/movieA/{itemId}'
                 },
 
-                global: {
-                    spaceName: 'Global',
-                    spaceCodename: 'global',
-                    url: 'https://sample.com/movieB/{itemId}'
+                default_space: {
+                    spaceName: 'Default space',
+                    spaceCodename: 'default_space',
+                    url: 'https://sample.com/default/{codename}'
                 }
             }
         }

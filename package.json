@@ -36,7 +36,7 @@
         "publish:beta": "npm publish --tag=next",
         "build": "npm run clean && npm run lint:fix && tsc --p tsconfig.build.json",
         "test": "vitest run --config=vitest.config.ts",
-        "update:snapshots": "vitest run --update",
+        "update:snapshots": "tsx scripts/clean-snapshots && vitest run --update",
         "sample:delivery": "tsx scripts/samples/delivery-sample",
         "sample:environment": "tsx scripts/samples/environment-sample",
         "sample:migration": "tsx scripts/samples/migration-sample",

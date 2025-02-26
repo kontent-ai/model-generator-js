@@ -14,6 +14,11 @@ type SnapshotModelsTest = {
     readonly getFilesAsync: () => Promise<readonly GeneratedFile[]>;
 };
 
+const integrationEnv = {
+    id: getEnvironmentRequiredValue('INTEGRATION_ENVIRONMENT_ID'),
+    apiKey: getEnvironmentRequiredValue('INTEGRATION_MANAGEMENT_API_KEY')
+} as const;
+
 const snapshotTests: readonly SnapshotModelsTest[] = [
     {
         cliAction: 'delivery-sdk',
@@ -21,8 +26,8 @@ const snapshotTests: readonly SnapshotModelsTest[] = [
             await generateDeliveryModelsAsync({
                 addTimestamp: false,
                 createFiles: false,
-                environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),
-                apiKey: getEnvironmentRequiredValue('MANAGEMENT_API_KEY'),
+                environmentId: integrationEnv.id,
+                apiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js'
             })
     },
@@ -32,8 +37,8 @@ const snapshotTests: readonly SnapshotModelsTest[] = [
             await generateEnvironmentModelsAsync({
                 addTimestamp: false,
                 createFiles: false,
-                environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),
-                apiKey: getEnvironmentRequiredValue('MANAGEMENT_API_KEY'),
+                environmentId: integrationEnv.id,
+                apiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js'
             })
     },
@@ -43,8 +48,8 @@ const snapshotTests: readonly SnapshotModelsTest[] = [
             await generateItemsAsync({
                 addTimestamp: false,
                 createFiles: false,
-                environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),
-                apiKey: getEnvironmentRequiredValue('MANAGEMENT_API_KEY'),
+                environmentId: integrationEnv.id,
+                apiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js',
                 apiMode: 'default',
                 filterByTypeCodenames: [],
@@ -58,8 +63,8 @@ const snapshotTests: readonly SnapshotModelsTest[] = [
             await generateMigrationModelsAsync({
                 addTimestamp: false,
                 createFiles: false,
-                environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),
-                apiKey: getEnvironmentRequiredValue('MANAGEMENT_API_KEY'),
+                environmentId: integrationEnv.id,
+                apiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js'
             })
     }

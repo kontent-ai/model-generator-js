@@ -6,8 +6,8 @@ on:
     pull_request:
 
 env:
-    ENVIRONMENT_ID: ${{ secrets.ENVIRONMENT_ID }}
-    MANAGEMENT_API_KEY: ${{ secrets.MANAGEMENT_API_KEY }}
+    INTEGRATION_MANAGEMENT_API_KEY: ${{ secrets.INTEGRATION_MANAGEMENT_API_KEY }}
+    INTEGRATION_ENVIRONMENT_ID: ${{ secrets.INTEGRATION_ENVIRONMENT_ID }}
 
 jobs:
     build:

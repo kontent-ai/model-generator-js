@@ -9,12 +9,12 @@ await runScriptAsync(async (config) => {
     await generateItemsAsync({
         createFiles: true,
         addTimestamp: false,
-        environmentId: config.environmentId,
-        apiKey: config.managementApiKey,
+        environmentId: config.sampleEnv.environmentId,
+        apiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
         outputDir: outputDir,
         apiMode: 'default',
-        deliveryApiKey: config.deliveryApiKey,
+        deliveryApiKey: config.sampleEnv.deliveryApiKey,
         filterByTypeCodenames: [],
         generateObjects: true,
         generateTypes: true

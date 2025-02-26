@@ -1,37 +1,19 @@
 export const roles = {
     /**
-     * Content contributor
-     */
-    contentContributor: {
-        name: 'Content contributor',
-        codename: undefined,
-        id: 'dca0ac85-274f-429e-b00e-6f74bf917051'
-    },
-
-    /**
-     * Reviewer
-     */
-    reviewer: {
-        name: 'Reviewer',
-        codename: undefined,
-        id: '94478afa-d898-45dd-8300-ba61b6e0eb4b'
-    },
-
-    /**
      * Project manager
      */
     projectManager: {
         name: 'Project manager',
         codename: 'project-manager',
-        id: 'af95ac37-4efa-4b92-aa26-db773cd172c6'
+        id: '11e8e88f-30a6-4b53-92d6-46f834753fe0'
     },
 
     /**
-     * Developer
+     * Editor
      */
-    developer: {
-        name: 'Developer',
+    editor: {
+        name: 'Editor',
         codename: undefined,
-        id: 'b3994090-0818-4969-816b-f4c5d3e526f3'
+        id: '1f84cb35-c8d1-4b08-b5ab-de222c0ee971'
     }
 } as const;

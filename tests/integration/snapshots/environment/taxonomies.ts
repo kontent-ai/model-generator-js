@@ -1,111 +1,78 @@
 export const taxonomies = {
     /**
-     * movietype
+     * taxonomy_a
      */
-    movietype: {
-        name: 'MovieType',
-        codename: 'movietype',
+    taxonomy_a: {
+        name: 'Taxonomy A',
+        codename: 'taxonomy_a',
         externalId: undefined,
-        id: '365a17e6-1929-27ab-9f67-a9273c846717',
+        id: 'bb37a632-3f78-48f8-ba25-7fa806d41a3e',
         terms: {
             /**
-             * Student
+             * Term 1
              */
-            student: {
-                name: 'Student',
-                codename: 'student',
-                id: 'b107e12c-124d-705f-1029-c0dfdd0b2438',
+            term_1: {
+                name: 'Term 1',
+                codename: 'term_1',
+                id: '548654a0-da85-4831-b3e5-8d555566868d',
+                externalId: undefined,
+                terms: {
+                    /**
+                     * Nested term 1
+                     */
+                    nested_term_1: {
+                        name: 'Nested term 1',
+                        codename: 'nested_term_1',
+                        id: 'a7b82db1-9c20-4d27-963e-66510a397ae0',
+                        externalId: undefined,
+                        terms: {
+                            /**
+                             * Nested term 2
+                             */
+                            nested_term_2: {
+                                name: 'Nested term 2',
+                                codename: 'nested_term_2',
+                                id: '1f511bde-5b82-4d3c-afda-8570c6d19d9d',
+                                externalId: undefined,
+                                terms: {}
+                            }
+                        }
+                    }
+                }
+            },
+
+            /**
+             * Term 2
+             */
+            term_2: {
+                name: 'Term 2',
+                codename: 'term_2',
+                id: '21be3ed9-10b8-435a-9820-09c1df84e6b3',
                 externalId: undefined,
                 terms: {}
             },
 
             /**
-             * Film
+             * Term 3
              */
-            film: {
-                name: 'Film',
-                codename: 'film',
-                id: '5a2a1927-41a4-294f-5d89-cf0cc045e943',
+            term_3: {
+                name: 'Term 3',
+                codename: 'term_3',
+                id: 'fa1e16a7-e0b1-4ac9-bdcb-9e8f6ef23593',
                 externalId: undefined,
-                terms: {
-                    /**
-                     * TV
-                     */
-                    tv: {
-                        name: 'TV',
-                        codename: 'tv',
-                        id: '47511b09-6c39-fa04-ff59-7c47551e827f',
-                        externalId: undefined,
-                        terms: {}
-                    },
-
-                    /**
-                     * Blockbuster
-                     */
-                    blockbuster: {
-                        name: 'Blockbuster',
-                        codename: 'blockbuster',
-                        id: '875a4657-1dcd-0415-cb3a-892078f5991a',
-                        externalId: undefined,
-                        terms: {}
-                    },
-
-                    /**
-                     * Cinema only
-                     */
-                    cinema_only: {
-                        name: 'Cinema only',
-                        codename: 'cinema_only',
-                        id: 'e15c4e32-ab7c-57a2-1b66-d8e3566a1dd2',
-                        externalId: undefined,
-                        terms: {}
-                    }
-                }
+                terms: {}
             }
         }
     },
 
     /**
-     * releasecategory
+     * taxonomy_without_terms
      */
-    releasecategory: {
-        name: 'ReleaseCategory',
-        codename: 'releasecategory',
+    taxonomy_without_terms: {
+        name: 'Taxonomy without terms',
+        codename: 'taxonomy_without_terms',
         externalId: undefined,
-        id: '09b6a348-0f86-7a68-4af3-7cab9a5c60b7',
-        terms: {
-            /**
-             * Global release
-             */
-            global_release: {
-                name: 'Global release',
-                codename: 'global_release',
-                id: '4acaf439-9f3a-f34a-6211-d3fc6ec7152e',
-                externalId: undefined,
-                terms: {}
-            },
-
-            /**
-             * US only
-             */
-            us_only: {
-                name: 'US only',
-                codename: 'us_only',
-                id: 'b03d990a-55a9-601e-dd5c-aa2edc8698ca',
-                externalId: undefined,
-                terms: {}
-            },
-
-            /**
-             * Local release
-             */
-            local_release: {
-                name: 'Local release',
-                codename: 'local_release',
-                id: '37e55484-f0dc-14eb-bf2a-b0293a0d1b1f',
-                externalId: undefined,
-                terms: {}
-            }
-        }
+        id: '01878d46-fcbc-4211-a801-676ad4e72cb2',
+        terms: {}
     }
 } as const;

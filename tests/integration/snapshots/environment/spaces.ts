@@ -1,19 +1,19 @@
 export const spaces = {
     /**
-     * Movies
+     * Default space
      */
-    movies: {
-        name: 'Movies',
-        codename: 'movies',
-        id: 'ae7187c1-b38b-4356-8ebc-4f9f4d84496a'
+    defaultSpace: {
+        name: 'Default space',
+        codename: 'default_space',
+        id: '425019d1-b896-4046-b181-7d7676cf5612'
     },
 
     /**
-     * Global
+     * UK Space
      */
-    global: {
-        name: 'Global',
-        codename: 'global',
-        id: '2de65a86-d41c-4fea-ba0b-9cf61584a6d5'
+    ukSpace: {
+        name: 'UK Space',
+        codename: 'uk_space',
+        id: '90ddee41-ed12-4ca6-95b7-4aa759b50bcc'
     }
 } as const;

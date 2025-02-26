@@ -1,71 +1,104 @@
 export const contentTypes = {
     /**
-     * Actor
+     * Content type with snippet only
      */
-    actor: {
-        name: 'Actor',
-        codename: 'actor',
-        id: '58099989-319f-495f-aa36-cb3710854e36',
+    content_type_with_snippet_only: {
+        name: 'Content type with snippet only',
+        codename: 'content_type_with_snippet_only',
+        id: '7fd86bef-8f30-4a02-a1c3-fb130f65e9b4',
         externalId: undefined,
         elements: {
             /**
-             * Url (url_slug)
+             * Linked items with specific types (modular_content)
              */
-            url: {
-                name: 'Url',
-                codename: 'url',
-                id: 'c8658782-f209-a573-9c85-430fb4e3e9f0',
+            snippet_a__linked_items_with_specific_types: {
+                name: 'Linked items with specific types',
+                codename: 'snippet_a__linked_items_with_specific_types',
+                id: '140130dc-84c1-455f-99ab-d31579cf90d1',
                 externalId: undefined,
                 required: false,
-                type: 'url_slug'
+                type: 'modular_content'
             },
 
             /**
-             * First name (text)
-             * Guidelines: This is the first name of the actor
+             * Text (text)
              */
-            first_name: {
-                name: 'First name',
-                codename: 'first_name',
-                id: '14dd70e5-c42d-f111-9640-c82b443edf1d',
+            snippet_a__text: {
+                name: 'Text',
+                codename: 'snippet_a__text',
+                id: '873e4a7a-e2ea-49a0-b88e-2ff7b6892f60',
                 externalId: undefined,
                 required: true,
                 type: 'text'
-            },
-
-            /**
-             * Last name (text)
-             */
-            last_name: {
-                name: 'Last name',
-                codename: 'last_name',
-                id: '9f7a0dd4-af3a-95ca-0358-400c14ce7075',
-                externalId: undefined,
-                required: true,
-                type: 'text'
-            },
-
-            /**
-             * Photo (asset)
-             */
-            photo: {
-                name: 'Photo',
-                codename: 'photo',
-                id: 'eaec9ba3-9624-6875-04ec-80d0b2e00781',
-                externalId: undefined,
-                required: false,
-                type: 'asset'
             }
         }
     },
 
     /**
-     * Movie
+     * 🐧 Content type with special chars #!_'
      */
-    movie: {
-        name: 'Movie',
-        codename: 'movie',
-        id: 'b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c',
+    _content_type_with_special_chars____: {
+        name: '🐧 Content type with special chars #!_',
+        codename: '_content_type_with_special_chars____',
+        id: '66bfcb40-edd7-4edf-8176-33517d0d6f80',
+        externalId: undefined,
+        elements: {
+            /**
+             * 🦜Parrot_emoji (text)
+             */
+            parrot__: {
+                name: '🦜Parrot_emoji',
+                codename: 'parrot__',
+                id: 'cafaa776-893d-4e8c-b460-9534ac2fe769',
+                externalId: undefined,
+                required: false,
+                type: 'text'
+            },
+
+            /**
+             * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~ (number)
+             */
+            _____numberelem_____________________: {
+                name: '!!!_$NumberElem<>-%@&{}()/§`?´=^*#~',
+                codename: '_____numberelem_____________________',
+                id: '3bb33958-71f3-4039-8594-5f0df9378dbb',
+                externalId: undefined,
+                required: false,
+                type: 'number'
+            }
+        }
+    },
+
+    /**
+     * Circular reference type A > B
+     */
+    circular_reference_type_a_b: {
+        name: 'Circular reference type A > B',
+        codename: 'circular_reference_type_a_b',
+        id: 'a58680f7-0667-4a0e-8dc2-889233bdbf71',
+        externalId: undefined,
+        elements: {
+            /**
+             * Items (modular_content)
+             */
+            items: {
+                name: 'Items',
+                codename: 'items',
+                id: '33ab92dd-e47d-45e2-a060-3b5df0754c24',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
+            }
+        }
+    },
+
+    /**
+     * Page
+     */
+    page: {
+        name: 'Page',
+        codename: 'page',
+        id: '4db6e2c7-c25b-4896-a05d-d20206234c04',
         externalId: undefined,
         elements: {
             /**
@@ -74,187 +107,348 @@ export const contentTypes = {
             title: {
                 name: 'Title',
                 codename: 'title',
-                id: '3473187e-dc78-eff2-7099-f690f7042d4a',
+                id: 'e9ad8c8f-6fb0-41d2-8caa-4e4e0ba24719',
                 externalId: undefined,
-                required: true,
+                required: false,
                 type: 'text'
             },
 
             /**
-             * Plot (rich_text)
+             * URL (url_slug)
              */
-            plot: {
-                name: 'Plot',
-                codename: 'plot',
-                id: 'f7ee4f27-27fd-a19b-3c5c-102aae1c50ce',
-                externalId: undefined,
-                required: false,
-                type: 'rich_text'
-            },
-
-            /**
-             * Released (date_time)
-             */
-            released: {
-                name: 'Released',
-                codename: 'released',
-                id: '5ccf4644-0d65-5d96-9a32-f4ea21974d51',
-                externalId: undefined,
-                required: false,
-                type: 'date_time'
-            },
-
-            /**
-             * Length (number)
-             */
-            length: {
-                name: 'Length',
-                codename: 'length',
-                id: '7e8ecfab-a419-27ee-d8ec-8adb76fd007c',
-                externalId: undefined,
-                required: false,
-                type: 'number'
-            },
-
-            /**
-             * Poster (asset)
-             */
-            poster: {
-                name: 'Poster',
-                codename: 'poster',
-                id: 'a39a7237-9503-a1ae-8431-5b6cdb85ae9d',
-                externalId: undefined,
-                required: false,
-                type: 'asset'
-            },
-
-            /**
-             * Category (multiple_choice)
-             */
-            category: {
-                name: 'Category',
-                codename: 'category',
-                id: '9821c252-6414-f549-c17f-cc171dd87713',
-                externalId: undefined,
-                required: false,
-                type: 'multiple_choice',
-                options: {
-                    /**
-                     * Sci-fi
-                     */
-                    sci_fi: {
-                        name: 'Sci-fi',
-                        id: 'b087f774-1f57-9aa8-dab5-2ca88a646824',
-                        codename: 'sci_fi',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Documentary
-                     */
-                    documentary: {
-                        name: 'Documentary',
-                        id: '19c5e959-c24a-4863-0b4d-453cdef8fe9d',
-                        codename: 'documentary',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Action
-                     */
-                    action: {
-                        name: 'Action',
-                        id: '7d453309-8d74-9607-80c4-36dcc1bd005f',
-                        codename: 'action',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Romance
-                     */
-                    romance: {
-                        name: 'Romance',
-                        id: '60550cc7-c986-a59f-b069-7565862fe1c1',
-                        codename: 'romance',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Animation
-                     */
-                    animation: {
-                        name: 'Animation',
-                        id: '54c0590d-6a94-a69a-902d-fceea4fa62f8',
-                        codename: 'animation',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Comedy
-                     */
-                    comedy: {
-                        name: 'Comedy',
-                        id: 'd2fe357f-894e-9bc3-550c-c2c400d99c6b',
-                        codename: 'comedy',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Adventure
-                     */
-                    adventure: {
-                        name: 'Adventure',
-                        id: 'cd8389b0-7628-7739-7b14-3225a50212c1',
-                        codename: 'adventure',
-                        externalId: undefined
-                    },
-
-                    /**
-                     * Drama
-                     */
-                    drama: {
-                        name: 'Drama',
-                        id: '051e74de-f2e0-f405-9ad5-5263221e46f2',
-                        codename: 'drama',
-                        externalId: undefined
-                    }
-                }
-            },
-
-            /**
-             * Stars (modular_content)
-             */
-            stars: {
-                name: 'Stars',
-                codename: 'stars',
-                id: 'aa26a55d-19f8-7501-fea3-b0d9b1eeac71',
-                externalId: undefined,
-                required: false,
-                type: 'modular_content'
-            },
-
-            /**
-             * SeoName (url_slug)
-             */
-            seoname: {
-                name: 'SeoName',
-                codename: 'seoname',
-                id: '756cc91a-a090-60f9-a7f0-f505bfbe046c',
+            url: {
+                name: 'URL',
+                codename: 'url',
+                id: 'e573bfc9-3193-4224-9d2a-9efb83da8849',
                 externalId: undefined,
                 required: false,
                 type: 'url_slug'
             },
 
             /**
-             * ReleaseCategory (taxonomy)
+             * Show in navigation (multiple_choice)
              */
-            releasecategory: {
-                name: 'ReleaseCategory',
-                codename: 'releasecategory',
-                id: '65f2fd44-1856-bc2b-17c2-decb0635e3d2',
+            show_in_navigation: {
+                name: 'Show in navigation',
+                codename: 'show_in_navigation',
+                id: '07889917-fdc5-4285-bc30-4fed2a218c89',
+                externalId: undefined,
+                required: false,
+                type: 'multiple_choice',
+                options: {
+                    /**
+                     * Yes
+                     */
+                    yes: {
+                        name: 'Yes',
+                        id: '0878b011-be8d-4a1e-9fc8-d79c9d9176a2',
+                        codename: 'yes',
+                        externalId: undefined
+                    },
+
+                    /**
+                     * No
+                     */
+                    no: {
+                        name: 'No',
+                        id: 'ae8520bf-72b3-4677-99de-fc99d743019b',
+                        codename: 'no',
+                        externalId: undefined
+                    }
+                }
+            },
+
+            /**
+             * Subpages (subpages)
+             */
+            subpages: {
+                name: 'Subpages',
+                codename: 'subpages',
+                id: 'b909dc5d-0efe-478a-9257-83e5c90e884d',
+                externalId: undefined,
+                required: false,
+                type: 'subpages'
+            },
+
+            /**
+             * Content (modular_content)
+             */
+            content: {
+                name: 'Content',
+                codename: 'content',
+                id: 'dfb0d07c-531e-4eaa-8f7d-e62671d4ca36',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
+            }
+        }
+    },
+
+    /**
+     * Content type with all elements
+     */
+    content_type_with_all_elements: {
+        name: 'Content type with all elements',
+        codename: 'content_type_with_all_elements',
+        id: '071c7591-e7f0-41ac-984f-7a3db35f97e8',
+        externalId: undefined,
+        elements: {
+            /**
+             * Text element (text)
+             * Guidelines: Simple text element guidelines
+             */
+            text_element: {
+                name: 'Text element',
+                codename: 'text_element',
+                id: 'cf24e550-3bbe-4e9d-aee6-e81b9b490228',
+                externalId: undefined,
+                required: true,
+                type: 'text'
+            },
+
+            /**
+             * Url slug element (url_slug)
+             */
+            url_slug_element: {
+                name: 'Url slug element',
+                codename: 'url_slug_element',
+                id: 'e117d1ae-d985-4df2-b6c7-b3aa03521a00',
+                externalId: undefined,
+                required: false,
+                type: 'url_slug'
+            },
+
+            /**
+             * Rich text element (rich_text)
+             */
+            rich_text_element: {
+                name: 'Rich text element',
+                codename: 'rich_text_element',
+                id: '81ee0883-8c1b-49cc-8d11-2fd1dcf75c5c',
+                externalId: undefined,
+                required: false,
+                type: 'rich_text'
+            },
+
+            /**
+             * Date & time element (date_time)
+             */
+            date___time_element: {
+                name: 'Date & time element',
+                codename: 'date___time_element',
+                id: '38d5d709-4152-445c-b1ef-333147bd656e',
+                externalId: undefined,
+                required: false,
+                type: 'date_time'
+            },
+
+            /**
+             * Custom element (custom)
+             */
+            custom_element: {
+                name: 'Custom element',
+                codename: 'custom_element',
+                id: '768581f2-7b56-4be3-a8a2-a1850dbe493e',
+                externalId: undefined,
+                required: false,
+                type: 'custom'
+            },
+
+            /**
+             * Linked items element (modular_content)
+             */
+            linked_items_element: {
+                name: 'Linked items element',
+                codename: 'linked_items_element',
+                id: '4631c94d-034c-428a-88bb-cae6d7985ff5',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
+            },
+
+            /**
+             * Asset element (asset)
+             */
+            asset_element: {
+                name: 'Asset element',
+                codename: 'asset_element',
+                id: 'fc99d625-106b-4f95-b37e-7f7be358d3d1',
+                externalId: undefined,
+                required: false,
+                type: 'asset'
+            },
+
+            /**
+             * Multiple choice element (multiple_choice)
+             */
+            multiple_choice_element: {
+                name: 'Multiple choice element',
+                codename: 'multiple_choice_element',
+                id: '709148dd-8c3f-4660-95b8-a72f386dd367',
+                externalId: undefined,
+                required: false,
+                type: 'multiple_choice',
+                options: {
+                    /**
+                     * Option A
+                     */
+                    option_a: {
+                        name: 'Option A',
+                        id: 'c3f7bfdf-62d8-433b-a3e7-0909bbb28ce1',
+                        codename: 'option_a',
+                        externalId: undefined
+                    },
+
+                    /**
+                     * Option B
+                     */
+                    option_b: {
+                        name: 'Option B',
+                        id: '66e1a3a8-25ae-4eb6-bbd8-0af6c77b432f',
+                        codename: 'option_b',
+                        externalId: undefined
+                    }
+                }
+            },
+
+            /**
+             * Number element (number)
+             */
+            number_element: {
+                name: 'Number element',
+                codename: 'number_element',
+                id: '7416ea32-3d33-45bb-bf2a-2226f658e953',
+                externalId: undefined,
+                required: false,
+                type: 'number'
+            },
+
+            /**
+             * Linked items with specific types (modular_content)
+             */
+            snippet_a__linked_items_with_specific_types: {
+                name: 'Linked items with specific types',
+                codename: 'snippet_a__linked_items_with_specific_types',
+                id: '140130dc-84c1-455f-99ab-d31579cf90d1',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
+            },
+
+            /**
+             * Text (text)
+             */
+            snippet_a__text: {
+                name: 'Text',
+                codename: 'snippet_a__text',
+                id: '873e4a7a-e2ea-49a0-b88e-2ff7b6892f60',
+                externalId: undefined,
+                required: true,
+                type: 'text'
+            },
+
+            /**
+             * Taxonomy A (taxonomy)
+             */
+            taxonomy_element: {
+                name: 'Taxonomy A',
+                codename: 'taxonomy_element',
+                id: '6073dec8-2489-479f-9916-abc055126e59',
                 externalId: undefined,
                 required: false,
                 type: 'taxonomy'
+            }
+        }
+    },
+
+    /**
+     * Content type with guidelines only
+     */
+    content_type_with_guidelines_only: {
+        name: 'Content type with guidelines only',
+        codename: 'content_type_with_guidelines_only',
+        id: '7e38a995-b4d7-46c9-92a4-4359241fa5ef',
+        externalId: undefined,
+        elements: {}
+    },
+
+    /**
+     * Circular reference type B -> A
+     */
+    circular_reference_type_b____a: {
+        name: 'Circular reference type B -> A',
+        codename: 'circular_reference_type_b____a',
+        id: '919bdcad-fe8e-4f56-9a63-346154b6f6e2',
+        externalId: undefined,
+        elements: {
+            /**
+             * Items (modular_content)
+             */
+            items: {
+                name: 'Items',
+                codename: 'items',
+                id: '019714f7-8c50-492b-8e5c-f7c3d7e2529b',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
+            }
+        }
+    },
+
+    /**
+     * Empty content type
+     */
+    empty_content_type: {
+        name: 'Empty content type',
+        codename: 'empty_content_type',
+        id: '4e41e105-6ec5-4a08-9680-b85e9cd8b14e',
+        externalId: undefined,
+        elements: {}
+    },
+
+    /**
+     * Web spotlight root
+     */
+    web_spotlight_root: {
+        name: 'Web spotlight root',
+        codename: 'web_spotlight_root',
+        id: '7e8ca9f3-7f06-44d6-b9db-ae4905531365',
+        externalId: undefined,
+        elements: {
+            /**
+             * Title (text)
+             */
+            title: {
+                name: 'Title',
+                codename: 'title',
+                id: 'e9d19fa4-4ad3-4b3f-998a-ca392651f7d0',
+                externalId: undefined,
+                required: false,
+                type: 'text'
+            },
+
+            /**
+             * Subpages (subpages)
+             */
+            subpages: {
+                name: 'Subpages',
+                codename: 'subpages',
+                id: 'e6702a6b-35b8-4a12-acca-1b1361fc926b',
+                externalId: undefined,
+                required: false,
+                type: 'subpages'
+            },
+
+            /**
+             * Content (modular_content)
+             */
+            content: {
+                name: 'Content',
+                codename: 'content',
+                id: 'ad185ebb-c7ec-4b89-bf89-4b415b5e0ca8',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
             }
         }
     }

@@ -10,8 +10,8 @@ await runScriptAsync(async (config) => {
         createFiles: true,
         entities: undefined,
         addTimestamp: false,
-        environmentId: config.environmentId,
-        apiKey: config.managementApiKey,
+        environmentId: config.sampleEnv.environmentId,
+        apiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
         outputDir: outputDir
     });

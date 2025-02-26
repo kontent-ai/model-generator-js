@@ -7,17 +7,30 @@ import { getEnvironmentRequiredValue } from './environment.utils.js';
 
 export async function runScriptAsync(
     func: (config: {
-        readonly managementApiKey: string;
-        readonly deliveryApiKey: string;
-        readonly environmentId: string;
+        readonly sampleEnv: {
+            readonly managementApiKey: string;
+            readonly deliveryApiKey: string;
+            readonly environmentId: string;
+        };
+        readonly integrationEnv: {
+            readonly managementApiKey: string;
+            readonly environmentId: string;
+        };
+
         readonly moduleFileExtension: ModuleFileExtension;
     }) => Promise<void>
 ): Promise<void> {
     try {
         await func({
-            deliveryApiKey: getEnvironmentRequiredValue('DELIVERY_API_KEY'),
-            environmentId: getEnvironmentRequiredValue('ENVIRONMENT_ID'),
-            managementApiKey: getEnvironmentRequiredValue('MANAGEMENT_API_KEY'),
+            sampleEnv: {
+                deliveryApiKey: getEnvironmentRequiredValue('SAMPLE_DELIVERY_API_KEY'),
+                environmentId: getEnvironmentRequiredValue('SAMPLE_ENVIRONMENT_ID'),
+                managementApiKey: getEnvironmentRequiredValue('SAMPLE_MANAGEMENT_API_KEY')
+            },
+            integrationEnv: {
+                environmentId: getEnvironmentRequiredValue('INTEGRATION_ENVIRONMENT_ID'),
+                managementApiKey: getEnvironmentRequiredValue('INTEGRATION_MANAGEMENT_API_KEY')
+            },
             moduleFileExtension: parseModuleFileExtension(getEnvironmentRequiredValue('MODULE_EXTENSION'))
         });
     } catch (error) {

@@ -9,8 +9,8 @@ await runScriptAsync(async (config) => {
     await generateMigrationModelsAsync({
         createFiles: true,
         addTimestamp: false,
-        environmentId: config.environmentId,
-        apiKey: config.managementApiKey,
+        environmentId: config.sampleEnv.environmentId,
+        apiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
         outputDir: outputDir
     });
