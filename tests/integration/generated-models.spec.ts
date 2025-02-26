@@ -71,8 +71,9 @@ const snapshotTests: readonly SnapshotModelsTest[] = [
 ];
 
 for (const snapshot of snapshotTests) {
-    describe(`Models - ${snapshot.cliAction}`, async () => {
+    describe(`Integration - ${snapshot.cliAction}`, async () => {
         const files = await snapshot.getFilesAsync();
+        const getSnapshotRelativePath = (file: GeneratedFile) => `./snapshots/${snapshot.cliAction}/${file.filename}`;
 
         it(`Number of generated files & names should match`, async () => {
             const filename = `./snapshots/${snapshot.cliAction}/_filesList.json`;
@@ -84,11 +85,15 @@ for (const snapshot of snapshotTests) {
             ).toMatchFileSnapshot(filename, `Invalid file '${filename}'`);
         });
 
-        it(`Code of generated models should match snapshots`, async () => {
-            for (const file of files) {
-                const filename = `./snapshots/${snapshot.cliAction}/${file.filename}`;
-                await expect(file.text).toMatchFileSnapshot(filename, `Invalid file '${filename}'`);
-            }
-        });
+        for (const file of files) {
+            it(`File '${file.filename}' should match snapshot`, async () => {
+                const filename = getSnapshotRelativePath(file);
+                await expect(file.text).toMatchFileSnapshot(filename);
+            });
+
+            it(`File '${file.filename}' code should format TS code without throwing exception`, async () => {
+                await expect(formatCodeAsync(file.text, { parser: 'typescript' })).resolves.toBeTruthy();
+            });
+        }
     });
 }
