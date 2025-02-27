@@ -7,6 +7,10 @@ export function importer(moduleFileExtension: ModuleFileExtension) {
 
     return {
         importType: (data: { readonly filePathOrPackage: LiteralUnion<LibraryType>; readonly importValue: string }): string => {
+            if (!data.importValue.length) {
+                return '';
+            }
+
             const isExternalLib = !data.filePathOrPackage.endsWith('.js') && !data.filePathOrPackage.endsWith('.ts');
             const resolvedFilePath = isExternalLib
                 ? data.filePathOrPackage

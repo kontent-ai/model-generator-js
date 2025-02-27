@@ -233,7 +233,10 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         return sortAlphabetically(
             [
                 ...(typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet ? [deliveryConfig.sdkTypes.snippet] : []),
-                ...(flattenedElements.length ? [deliveryConfig.sdkTypes.elements] : [])
+                // only import elements type if there is at least one element that is represented by property and is not from a snippet
+                ...(flattenedElements.filter((m) => m.isElementWithProperty && !m.fromSnippet).length
+                    ? [deliveryConfig.sdkTypes.elements]
+                    : [])
             ],
             (importValue) => importValue
         );

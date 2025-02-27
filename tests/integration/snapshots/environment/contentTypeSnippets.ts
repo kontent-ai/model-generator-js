@@ -32,5 +32,16 @@ export const contentTypeSnippets = {
                 type: 'text'
             }
         }
+    },
+
+    /**
+     * Empty snippet
+     */
+    empty_snippet: {
+        name: 'Empty snippet',
+        codename: 'empty_snippet',
+        id: '1d7e3745-3320-4107-996b-2c6b240df7ae',
+        externalId: undefined,
+        elements: {}
     }
 } as const;

@@ -7,6 +7,7 @@
   { "filename": "content-types/content_type_with_guidelines_only.ts" },
   { "filename": "content-types/circular_reference_type_b____a.ts" },
   { "filename": "content-types/empty_content_type.ts" },
+  { "filename": "content-types/type_with_empty_snippet.ts" },
   { "filename": "content-types/web_spotlight_root.ts" },
   { "filename": "content-types/index.ts" },
   { "filename": "migration.ts" },

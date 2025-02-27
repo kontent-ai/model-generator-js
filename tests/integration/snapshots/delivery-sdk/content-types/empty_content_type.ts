@@ -1,4 +1,3 @@
-import type {} from '@kontent-ai/delivery-sdk';
 import type { CoreContentType } from '../system/index.js';
 
 /**

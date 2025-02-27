@@ -407,6 +407,17 @@ export const contentTypes = {
     },
 
     /**
+     * Type with empty snippet
+     */
+    type_with_empty_snippet: {
+        name: 'Type with empty snippet',
+        codename: 'type_with_empty_snippet',
+        id: '11039462-1d7d-4673-9aa8-af07fb53985c',
+        externalId: undefined,
+        elements: {}
+    },
+
+    /**
      * Web spotlight root
      */
     web_spotlight_root: {

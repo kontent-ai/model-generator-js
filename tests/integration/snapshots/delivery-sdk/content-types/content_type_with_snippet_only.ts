@@ -1,4 +1,3 @@
-import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreContentType } from '../system/index.js';
 import type { SnippetA } from '../content-type-snippets/index.js';
 

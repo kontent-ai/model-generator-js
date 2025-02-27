@@ -77,6 +77,7 @@ export interface FlattenedElement {
     readonly assignedTaxonomy?: Readonly<TaxonomyModels.Taxonomy>;
     readonly fromSnippet?: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
     readonly multipleChoiceOptions?: readonly Readonly<MultipleChoiceOption>[];
+    readonly isElementWithProperty: boolean;
 }
 
 export interface GeneratedFile {

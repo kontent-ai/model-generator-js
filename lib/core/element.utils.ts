@@ -69,7 +69,11 @@ function getFlattenedElement(
         allowedContentTypes: extractLinkedItemsAllowedTypes(wrapper.element, types),
         assignedTaxonomy: extractTaxonomy(wrapper.element, taxonomies),
         fromSnippet: wrapper.fromSnippet,
-        multipleChoiceOptions: extractMultipleChoiceOptions(wrapper.element)
+        multipleChoiceOptions: extractMultipleChoiceOptions(wrapper.element),
+        isElementWithProperty: match(wrapper.element.type)
+            .returnType<boolean>()
+            .with('guidelines', () => false)
+            .otherwise(() => true)
     };
 }
 
