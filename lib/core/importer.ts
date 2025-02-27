@@ -2,7 +2,7 @@ import { parse } from 'path';
 import type { LibraryType, LiteralUnion, ModuleFileExtension } from './core.models.js';
 import { getFileNameWithoutExtension, sortAlphabetically } from './core.utils.js';
 
-export function importer(moduleFileExtension: ModuleFileExtension) {
+export function getImporter(moduleFileExtension: ModuleFileExtension) {
     const importExtension = moduleFileExtension === 'none' ? '' : `.${moduleFileExtension}`;
 
     return {

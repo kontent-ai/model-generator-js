@@ -13,7 +13,7 @@ export interface ItemGeneratorConfig {
     };
 }
 
-export function itemsGenerator(config: ItemGeneratorConfig) {
+export function getItemsGenerator(config: ItemGeneratorConfig) {
     const getItemCodenameType = (typeCodename: string, items: readonly Readonly<IContentItem>[]): string => {
         return `export type ${resolveCase(typeCodename, 'pascalCase')}Codenames = ${items.map((item) => `'${item.system.codename}'`).join(' | ')};`;
     };

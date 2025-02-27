@@ -6,7 +6,7 @@ import { coreConfig } from '../config.js';
 import type { DeliveryApiMode, GeneratorDeliveryClient } from '../core/core.models.js';
 import { sortAlphabetically } from '../core/core.utils.js';
 
-export function deliveryKontentFetcher(config: {
+export function getDeliveryKontentFetcher(config: {
     readonly environmentId: string;
     readonly apiKey: string | undefined;
     readonly baseUrl?: string;

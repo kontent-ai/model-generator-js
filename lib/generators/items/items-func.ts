@@ -10,10 +10,10 @@ import type {
     ModuleFileExtension
 } from '../../core/core.models.js';
 import { singleItemToArray } from '../../core/core.utils.js';
-import { deliveryKontentFetcher as _deliveryKontentFetcher } from '../../fetch/delivery-kontent-fetcher.js';
-import { managementKontentFetcher as _managementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
-import { fileManager as _fileManager } from '../../files/file-manager.js';
-import { itemsGenerator as _itemsGenerator } from './items.generator.js';
+import { getDeliveryKontentFetcher } from '../../fetch/delivery-kontent-fetcher.js';
+import { getManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
+import { getFileManager } from '../../files/file-manager.js';
+import { getItemsGenerator } from './items.generator.js';
 
 export type GenerateItemsModelsConfig = {
     readonly environmentId: string;
@@ -37,7 +37,7 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
 
     const { itemFiles, environmentInfo, codenameFiles } = await getFilesAsync(config);
 
-    const fileManager = _fileManager({
+    const fileManager = getFileManager({
         ...config,
         environmentInfo
     });
@@ -58,14 +58,14 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
     readonly codenameFiles: GeneratedSet | undefined;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
-    const deliveryKontentFetcher = _deliveryKontentFetcher({
+    const deliveryKontentFetcher = getDeliveryKontentFetcher({
         environmentId: config.environmentId,
         apiMode: config.apiMode,
         apiKey: config.deliveryApiKey,
         baseUrl: config.deliveryBaseUrl
     });
 
-    const managementKontentFetcher = _managementKontentFetcher({
+    const managementKontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl
@@ -78,7 +78,7 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
         managementKontentFetcher.getTypesAsync()
     ]);
 
-    const itemsGenerator = _itemsGenerator({
+    const itemsGenerator = getItemsGenerator({
         environmentData: {
             types: types,
             items: items

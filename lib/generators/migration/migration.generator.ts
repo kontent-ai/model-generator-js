@@ -12,7 +12,7 @@ import { migrationConfig, sharedTypesConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
-import { importer as _importer } from '../../core/importer.js';
+import { getImporter } from '../../core/importer.js';
 import { resolveCase } from '../../core/resolvers.js';
 import {
     getCollectionCodenamesType,
@@ -36,8 +36,8 @@ export interface MigrationGeneratorConfig {
     };
 }
 
-export function migrationGenerator(config: MigrationGeneratorConfig) {
-    const importer = _importer(config.moduleFileExtension);
+export function getMigrationGenerator(config: MigrationGeneratorConfig) {
+    const importer = getImporter(config.moduleFileExtension);
 
     const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
         const flattenedElements = getFlattenedElements({

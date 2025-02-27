@@ -2,9 +2,9 @@ import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
-import { fileManager as _fileManager } from '../../files/file-manager.js';
-import { migrationGenerator as _migrationGenerator } from './migration.generator.js';
+import { getManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
+import { getFileManager } from '../../files/file-manager.js';
+import { getMigrationGenerator } from './migration.generator.js';
 
 export type GenerateMigrationModelsConfig = {
     readonly environmentId: string;
@@ -22,7 +22,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 
     const { migrationItemFiles, migrationTypeFiles, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
-    const fileManager = _fileManager({
+    const fileManager = getFileManager({
         ...config,
         environmentInfo
     });
@@ -44,7 +44,7 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
     readonly environmentFiles: GeneratedSet;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
-    const kontentFetcher = _kontentFetcher({
+    const kontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl
@@ -61,7 +61,7 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
         kontentFetcher.getWorkflowsAsync()
     ]);
 
-    const migrationGenerator = _migrationGenerator({
+    const migrationGenerator = getMigrationGenerator({
         moduleFileExtension: config.moduleFileExtension,
         environmentData: {
             environment: environmentInfo,

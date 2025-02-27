@@ -12,9 +12,9 @@ import {
     type ModuleFileExtension
 } from '../../core/core.models.js';
 import { uniqueFilter } from '../../core/core.utils.js';
-import { managementKontentFetcher as _kontentFetcher, type ManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
-import { fileManager as _fileManager } from '../../files/file-manager.js';
-import { environmentGenerator as _environmentGenerator, type EnvironmentEntities } from './environment.generator.js';
+import { getManagementKontentFetcher, type ManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
+import { getFileManager } from '../../files/file-manager.js';
+import { getEnvironmentGenerator, type EnvironmentEntities } from './environment.generator.js';
 
 export type GenerateEnvironmentModelsConfig = {
     readonly environmentId: string;
@@ -33,7 +33,7 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 
     const { environmentFiles, environmentInfo } = await getModelsAsync(config);
 
-    const fileManager = _fileManager({
+    const fileManager = getFileManager({
         ...config,
         environmentInfo
     });
@@ -55,7 +55,7 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
     const moduleFileExtension: ModuleFileExtension = config.moduleFileExtension ?? defaultModuleFileExtension;
-    const kontentFetcher = _kontentFetcher({
+    const kontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl
@@ -71,7 +71,7 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
 
     return {
         environmentInfo,
-        environmentFiles: _environmentGenerator({
+        environmentFiles: getEnvironmentGenerator({
             environmentInfo,
             environmentEntities: entities,
             entitiesToCreate: entitiesToCreate

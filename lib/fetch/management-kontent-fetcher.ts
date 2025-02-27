@@ -39,7 +39,7 @@ export type ManagementKontentFetcher = {
     getPreviewUrlConfiguration(): Promise<Readonly<PreviewModels.PreviewConfiguration>>;
 };
 
-export function managementKontentFetcher(config: {
+export function getManagementKontentFetcher(config: {
     readonly environmentId: string;
     readonly apiKey: string;
     readonly baseUrl?: string;

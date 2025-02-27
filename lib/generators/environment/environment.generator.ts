@@ -51,7 +51,7 @@ export type EnvironmentGeneratorConfig = {
     readonly entitiesToCreate: readonly EnvironmentEntity[];
 };
 
-export function environmentGenerator(config: EnvironmentGeneratorConfig) {
+export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
     const generateEnvironmentModels = (): GeneratedSet => {
         return {
             folderName: undefined,

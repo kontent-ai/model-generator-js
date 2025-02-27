@@ -6,7 +6,7 @@ import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
-import { importer as _importer } from '../../core/importer.js';
+import { getImporter } from '../../core/importer.js';
 import type {
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
@@ -67,7 +67,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         taxonomy: mapFilename(config.fileResolvers?.taxonomy)
     };
 
-    const importer = _importer(config.moduleFileExtension);
+    const importer = getImporter(config.moduleFileExtension);
 
     const nameResolvers = {
         snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),

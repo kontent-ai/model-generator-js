@@ -10,8 +10,8 @@ import type {
     TaxonomyNameResolver,
     TaxonomyTypeFileNameResolver
 } from '../../core/resolvers.js';
-import { managementKontentFetcher as _kontentFetcher } from '../../fetch/management-kontent-fetcher.js';
-import { fileManager as _fileManager } from '../../files/file-manager.js';
+import { getManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
+import { getFileManager } from '../../files/file-manager.js';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
 import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 
@@ -43,7 +43,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 
     const { contentTypeFiles, snippetFiles, taxonomyFiles, environmentInfo, systemFiles } = await getFilesAsync(config);
 
-    const fileManager = _fileManager({
+    const fileManager = getFileManager({
         ...config,
         environmentInfo
     });
@@ -66,7 +66,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     readonly systemFiles: GeneratedSet;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
-    const kontentFetcher = _kontentFetcher({
+    const kontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
         apiKey: config.apiKey,
         baseUrl: config.baseUrl

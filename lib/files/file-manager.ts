@@ -7,10 +7,10 @@ import { coreConfig } from '../config.js';
 import { getEnvironmentInfoComment } from '../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../core/core.models.js';
 import { toOutputDirPath } from '../core/core.utils.js';
-import { importer as _importer } from '../core/importer.js';
+import { getImporter } from '../core/importer.js';
 import { formatCodeAsync } from '../format/formatter.js';
 
-export function fileManager(config: {
+export function getFileManager(config: {
     readonly moduleFileExtension: ModuleFileExtension;
     readonly outputDir?: string;
     readonly formatOptions?: Readonly<Options>;
@@ -18,7 +18,7 @@ export function fileManager(config: {
     readonly addTimestamp: boolean;
 }) {
     const fixedOutputDir = toOutputDirPath(config.outputDir);
-    const importer = _importer(config.moduleFileExtension);
+    const importer = getImporter(config.moduleFileExtension);
 
     const createFileOnFs = (text: string, filePath: string): void => {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
