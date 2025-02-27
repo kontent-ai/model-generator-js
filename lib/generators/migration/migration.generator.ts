@@ -40,13 +40,26 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
     const importer = _importer(config.moduleFileExtension);
 
     const getMigrationItemType = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
+        const flattenedElements = getFlattenedElements({
+            elements: type.elements,
+            snippets: config.environmentData.snippets,
+            taxonomies: config.environmentData.taxonomies,
+            types: config.environmentData.types
+        });
+
+        const importElementsType = flattenedElements.filter((m) => m.isElementWithProperty).length ? true : false;
+
         return {
             filename: `${type.codename}.ts`,
             text: `
-            ${importer.importType({
-                filePathOrPackage: migrationConfig.npmPackageName,
-                importValue: migrationConfig.sdkTypeNames.elementModels
-            })}
+            ${
+                importElementsType
+                    ? importer.importType({
+                          filePathOrPackage: migrationConfig.npmPackageName,
+                          importValue: migrationConfig.sdkTypeNames.elementModels
+                      })
+                    : ''
+            }
              ${importer.importType({
                  filePathOrPackage: `../${migrationConfig.migrationTypesFilename}.ts`,
                  importValue: migrationConfig.localTypeNames.item
@@ -60,29 +73,32 @@ export function migrationGenerator(config: MigrationGeneratorConfig) {
             `)}
             export type ${resolveCase(type.name, 'pascalCase')}Item = ${migrationConfig.localTypeNames.item}<
             '${type.codename}',
-            {
-                ${getFlattenedElements({
-                    elements: type.elements,
-                    snippets: config.environmentData.snippets,
-                    taxonomies: config.environmentData.taxonomies,
-                    types: config.environmentData.types
-                })
-                    .map((element) => {
-                        return `
-                            ${wrapComment(`
-                            * ${element.title}
-                            * 
-                            * Type: ${element.type} 
-                            * Required: ${element.isRequired ? 'true' : 'false'}
-                            * Codename: ${element.codename}
-                            * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                            `)}
-                            readonly ${element.codename}: ${getElementPropType(element)}`;
-                    })
-                    .join(',\n')},
-            }
+            ${getMigrationItemElementsCode(flattenedElements)}
             >;`
         };
+    };
+
+    const getMigrationItemElementsCode = (flattenedElements: readonly FlattenedElement[]): string => {
+        if (!flattenedElements.length) {
+            return 'Record<string, never>';
+        }
+
+        const elementsCode = flattenedElements
+            .map((element) => {
+                return `
+                    ${wrapComment(`
+                    * ${element.title}
+                    * 
+                    * Type: ${element.type} 
+                    * Required: ${element.isRequired ? 'true' : 'false'}
+                    * Codename: ${element.codename}
+                    * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
+                    `)}
+                    readonly ${element.codename}: ${getElementPropType(element)}`;
+            })
+            .join(',\n');
+
+        return `{${elementsCode}}`;
     };
 
     return {
