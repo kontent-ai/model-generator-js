@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { Item } from '../migration.js';
+import type { CoreMigrationItem } from '../migration.js';
 
 /**
  * Web spotlight root
@@ -7,7 +7,7 @@ import type { Item } from '../migration.js';
  * Codename: web_spotlight_root
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  */
-export type WebSpotlightRootItem = Item<
+export type WebSpotlightRootItem = CoreMigrationItem<
     'web_spotlight_root',
     {
         /**

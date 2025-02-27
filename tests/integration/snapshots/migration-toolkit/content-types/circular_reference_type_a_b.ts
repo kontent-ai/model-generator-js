@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { Item } from '../migration.js';
+import type { CoreMigrationItem } from '../migration.js';
 
 /**
  * Circular reference type A > B
@@ -7,7 +7,7 @@ import type { Item } from '../migration.js';
  * Codename: circular_reference_type_a_b
  * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
  */
-export type CircularReferenceTypeABItem = Item<
+export type CircularReferenceTypeABItem = CoreMigrationItem<
     'circular_reference_type_a_b',
     {
         /**

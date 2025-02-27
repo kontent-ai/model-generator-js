@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { Item } from '../migration.js';
+import type { CoreMigrationItem } from '../migration.js';
 
 /**
  * 🐧 Content type with special chars #!_'
@@ -7,7 +7,7 @@ import type { Item } from '../migration.js';
  * Codename: _content_type_with_special_chars____
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  */
-export type ContentTypeWithSpecialCharsItem = Item<
+export type ContentTypeWithSpecialCharsItem = CoreMigrationItem<
     '_content_type_with_special_chars____',
     {
         /**

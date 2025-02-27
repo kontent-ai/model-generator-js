@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { Item } from '../migration.js';
+import type { CoreMigrationItem } from '../migration.js';
 
 /**
  * Page
@@ -7,7 +7,7 @@ import type { Item } from '../migration.js';
  * Codename: page
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  */
-export type PageItem = Item<
+export type PageItem = CoreMigrationItem<
     'page',
     {
         /**
