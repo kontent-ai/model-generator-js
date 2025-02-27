@@ -10,7 +10,10 @@ import type {
 
 export type CliAction = 'delivery-sdk' | 'migration-toolkit' | 'environment' | 'items';
 export type LibraryType = '@kontent-ai/migration-toolkit' | '@kontent-ai/delivery-sdk';
-export type ModuleFileExtension = 'js' | 'ts' | 'mjs' | 'mts' | 'none';
+
+export const moduleFileExtensions = ['js', 'ts', 'mjs', 'mts', 'none'] as const;
+
+export type ModuleFileExtension = (typeof moduleFileExtensions)[number];
 
 export const environmentEntities = [
     'languages',

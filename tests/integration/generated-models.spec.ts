@@ -1,82 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import type { CliAction, GeneratedFile } from '../../lib/core/core.models.js';
+import type { GeneratedFile } from '../../lib/core/core.models.js';
 import { formatCodeAsync } from '../../lib/format/formatter.js';
-import {
-    generateDeliveryModelsAsync,
-    generateEnvironmentModelsAsync,
-    generateItemsAsync,
-    generateMigrationModelsAsync
-} from '../../lib/public_api.js';
-import { getEnvironmentRequiredValue } from '../../scripts/utils/environment.utils.js';
+import { deliverySdkSnapshots } from './test-cases/delivery-sdk-snapshots.js';
+import { environmentSnapshots } from './test-cases/environment-snapshots.js';
+import { itemsSnapshots } from './test-cases/items-snapshots.js';
+import { migrationToolkitSnapshots } from './test-cases/migration-toolkit-snapshots.js';
 
-type SnapshotModelsTest = {
-    readonly cliAction: CliAction;
-    readonly getFilesAsync: () => Promise<readonly GeneratedFile[]>;
-};
-
-const integrationEnv = {
-    id: getEnvironmentRequiredValue('INTEGRATION_ENVIRONMENT_ID'),
-    apiKey: getEnvironmentRequiredValue('INTEGRATION_MANAGEMENT_API_KEY')
-} as const;
-
-const snapshotTests: readonly SnapshotModelsTest[] = [
-    {
-        cliAction: 'delivery-sdk',
-        getFilesAsync: async () =>
-            await generateDeliveryModelsAsync({
-                addTimestamp: false,
-                createFiles: false,
-                environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
-                moduleFileExtension: 'js'
-            })
-    },
-    {
-        cliAction: 'environment',
-        getFilesAsync: async () =>
-            await generateEnvironmentModelsAsync({
-                addTimestamp: false,
-                createFiles: false,
-                environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
-                moduleFileExtension: 'js'
-            })
-    },
-    {
-        cliAction: 'items',
-        getFilesAsync: async () =>
-            await generateItemsAsync({
-                addTimestamp: false,
-                createFiles: false,
-                environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
-                moduleFileExtension: 'js',
-                apiMode: 'default',
-                filterByTypeCodenames: [],
-                generateObjects: true,
-                generateTypes: true
-            })
-    },
-    {
-        cliAction: 'migration-toolkit',
-        getFilesAsync: async () =>
-            await generateMigrationModelsAsync({
-                addTimestamp: false,
-                createFiles: false,
-                environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
-                moduleFileExtension: 'js'
-            })
-    }
-];
-
-for (const snapshot of snapshotTests) {
+for (const snapshot of [...deliverySdkSnapshots, ...environmentSnapshots, ...migrationToolkitSnapshots, ...itemsSnapshots]) {
     describe(`Integration - ${snapshot.cliAction}`, async () => {
         const files = await snapshot.getFilesAsync();
-        const getSnapshotRelativePath = (file: GeneratedFile) => `./snapshots/${snapshot.cliAction}/${file.filename}`;
+        const getSnapshotRelativePath = (file: GeneratedFile) => `./snapshots/${snapshot.cliAction}/${snapshot.folder}/${file.filename}`;
 
         it(`Number of generated files & names should match`, async () => {
-            const filename = `./snapshots/${snapshot.cliAction}/_filesList.json`;
+            const filename = `./snapshots/${snapshot.cliAction}/${snapshot.folder}/_filesList.json`;
 
             await expect(
                 await formatCodeAsync(JSON.stringify(files.map<{ filename: string }>((file) => ({ filename: file.filename }))), {
