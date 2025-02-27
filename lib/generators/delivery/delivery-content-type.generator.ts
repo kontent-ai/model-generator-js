@@ -337,7 +337,7 @@ ${getContentItemTypeGuardFunction(contentType)};
 
     const createSnippetModel = (type: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): GeneratedFile => {
         return {
-            filename: fileResolvers.contentType(type, true),
+            filename: fileResolvers.snippet(type, true),
             text: getSnippetCode(type)
         };
     };
