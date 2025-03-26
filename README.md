@@ -4,18 +4,28 @@
 
 # Kontent.ai Model Generator
 
-The purpose of this library is to help you write better code by using strongly typed objects or Typescript models. There are 4 types of
-models you can generate:
+The Kontent.ai Model Generator is a library designed to enhance your development experience by enabling the use of strongly typed objects
+and TypeScript models. It supports the generation of four distinct types of models:
 
-1. `delivery-sdk` - Typescript models for [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk) representing Content
-   types / taxonomies
-2. `migration-toolkit` - Typescript models [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit) helping you
-   write migration scripts easier
-3. `environment` - Strongly typed objects representing all structural objects within an environment (i.e. content types, workflows,
-   taxonomies ...). These models help you write scripts because they provide you a straightforward access to objects properties.
-4. `items` - Generates `Type` representing all available item codenames for each content type and object representing `id` and `codenames`
-   properties of all items. This makes it easy and convenient to reference items in your code.
-    > It is not recommended to use this if your environment contains high number of items.
+1. `delivery-sdk` - Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These
+   models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.
+
+> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type safety and
+> streamline development.
+
+2. `migration-toolkit` - Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit).
+   These models help simplify and standardize the process of writing migration scripts.
+3. `environment` - Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment—including
+   content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.
+
+> Note: Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
+
+4. `items` - Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is
+   particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings.
+
+> Caution: This option is not recommended for environments with a large volume of content items, as it may lead to performance or
+> scalability issues during code generation.
 
 ## Installation
 
@@ -29,9 +39,7 @@ npm i --save-dev @kontent-ai/model-generator
 npx @kontent-ai/model-generator@latest --help
 ```
 
-## Usage
-
-Go to folder where you want to create models and run:
+## CLI Usage
 
 ```bash
 # Models for Delivery SDK
