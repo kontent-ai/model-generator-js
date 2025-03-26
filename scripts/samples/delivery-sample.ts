@@ -7,12 +7,18 @@ await runScriptAsync(async (config) => {
     deleteFolderRecursive(outputDir);
 
     await generateDeliveryModelsAsync({
-        createFiles: true,
-        addTimestamp: false,
+        // required
         environmentId: config.sampleEnv.environmentId,
         apiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
-        outputDir: outputDir,
-        fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' }
+        createFiles: true,
+        addTimestamp: false,
+        outputDir: outputDir, // only required when createFiles is true
+
+        // optional
+        fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' },
+        nameResolvers: { contentType: 'pascalCase', snippet: 'pascalCase', taxonomy: 'pascalCase' },
+        formatOptions: undefined,
+        baseUrl: undefined
     });
 });

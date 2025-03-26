@@ -19,8 +19,8 @@ export type GenerateDeliveryModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
     readonly apiKey: string;
-
     readonly moduleFileExtension: ModuleFileExtension;
+
     readonly baseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 

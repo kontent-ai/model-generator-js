@@ -39,7 +39,7 @@ npm i --save-dev @kontent-ai/model-generator
 npx @kontent-ai/model-generator@latest --help
 ```
 
-## CLI Usage
+## Basic usage
 
 ```bash
 # Models for Delivery SDK
@@ -57,46 +57,180 @@ npx @kontent-ai/model-generator@latest environment --environmentId=x --managemen
 npx @kontent-ai/model-generator@latest items --environmentId=x --managementApiKey=y --deliveryApiKey=y --apiMode=preview --contentTypes=a,b,c
 ```
 
-Run with more options:
+### CLI Help
 
 ```bash
-npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y --moduleFileExtension=js --outputDir=kontent-models --addTimestamp=false
-```
-
-To learn what options are available use the `help` command:
-
-```bash
+# General help
 npx @kontent-ai/model-generator@latest  --help
 
-# or get help for specific command
+# Or get help for specific command
 npx @kontent-ai/model-generator@latest delivery-sdk --help
 ```
 
-## Use in code
+## Delivery SDK Models
+
+```bash
+npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y
+```
 
 ```typescript
-import { generateDeliveryModelsAsync, generateEnvironmentModelsAsync, generateMigrationModelsAsync, generateItemsAsync } from '@kontent-ai/model-generator';
+import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
 
-// delivery-sdk models
 await generateDeliveryModelsAsync({
-    ...
-});
+    // required
+    environmentId: 'x',
+    apiKey: 'y',
+    moduleFileExtension: 'js',
+    addTimestamp: false,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
 
-// migration-toolkit models
-await generateMigrationModelsAsync({
-    ...
-});
-
-// environment overview
-await generateEnvironmentModelsAsync({
-    ...
-});
-
-// items
-await generateItemsAsync({
-    ...
+    // optional
+    fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' },
+    nameResolvers: { contentType: (item) => `Company_${item.codename}`, snippet: 'pascalCase', taxonomy: 'pascalCase' },
+    formatOptions: { indentSize: 4, quote: 'single' },
+    baseUrl: undefined
 });
 ```
+
+Configuration
+
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `apiKey`              | Management API key                                                                                                             |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `fileResolvers`       | Can be used to customize the generated filenames                                                                               |
+| `nameResolvers`       | Can be used to customize names of generated types                                                                              |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Migration toolkit models
+
+```bash
+npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --managementApiKey=y
+```
+
+```typescript
+import { generateMigrationModelsAsync } from '@kontent-ai/model-generator';
+
+await generateMigrationModelsAsync({
+    // required
+    environmentId: 'x',
+    apiKey: 'y',
+    moduleFileExtension: 'js',
+    addTimestamp: false,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' }
+});
+```
+
+Configuration
+
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `apiKey`              | Management API key                                                                                                             |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Environment models
+
+```bash
+npx @kontent-ai/model-generator@latest environment --environmentId=x --managementApiKey=y
+```
+
+```typescript
+import { generateEnvironmentModelsAsync } from '@kontent-ai/model-generator';
+
+await generateEnvironmentModelsAsync({
+    // required
+    environmentId: 'x',
+    apiKey: 'y',
+    entities: [], // all entity types are exported by default
+    addTimestamp: false,
+    moduleFileExtension: 'js',
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' }
+});
+```
+
+Configuration
+
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `apiKey`              | Management API key                                                                                                             |
+| `entities`            | Array of entity types that will be exported                                                                                    |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Item models
+
+```bash
+# 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
+# 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
+npx @kontent-ai/model-generator@latest items --environmentId=x --managementApiKey=y --deliveryApiKey=y --apiMode=preview
+```
+
+```typescript
+import { generateItemsAsync } from '@kontent-ai/model-generator';
+
+await generateItemsAsync({
+    // required
+    environmentId: 'x',
+    apiKey: 'y',
+    deliveryApiKey: 'z', // only required when secure / api mode is used
+    addTimestamp: false,
+    moduleFileExtension: 'js',
+    apiMode: 'default',
+    filterByTypeCodenames: [],
+    generateObjects: true,
+    generateTypes: true,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' },
+    deliveryBaseUrl: undefined
+});
+```
+
+Configuration
+
+| Option                  | Description                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`         | Id of Kontent.ai environment                                                                                                   |
+| `apiKey`                | Management API key                                                                                                             |
+| `deliveryApiKey`        | Delivery API key required when the `apiMode` is using preview or secure mode                                                   |
+| `moduleFileExtension`   | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`          | Indicates if models contain timestamp                                                                                          |
+| `generateObjects`       | If enabled, javascript objects with codename / id will be generated                                                            |
+| `generateTypes`         | If enabled, typescript type representing codename will be generated                                                            |
+| `filterByTypeCodenames` | Array of content type codenames of which content items will be generated. Useful for narrowing down generated items            |
+| `apiMode`               | Delivery API mode for fetching content items. By default delivery (public) mode is used                                        |
+| `createFiles`           | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`             | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`         | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`               | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models
 

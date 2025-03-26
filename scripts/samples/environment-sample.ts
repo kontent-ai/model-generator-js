@@ -7,12 +7,16 @@ await runScriptAsync(async (config) => {
     deleteFolderRecursive(outputDir);
 
     await generateEnvironmentModelsAsync({
-        createFiles: true,
-        entities: undefined,
-        addTimestamp: false,
+        // required
         environmentId: config.sampleEnv.environmentId,
         apiKey: config.sampleEnv.managementApiKey,
+        entities: [], // all entity types are exported by default
+        addTimestamp: false,
         moduleFileExtension: config.moduleFileExtension,
-        outputDir: outputDir
+        createFiles: true,
+        outputDir: outputDir, // only required when createFiles is true
+        // optional
+        baseUrl: undefined,
+        formatOptions: undefined
     });
 });
