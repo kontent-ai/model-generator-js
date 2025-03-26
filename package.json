@@ -59,17 +59,17 @@
         "yargs": "17.7.2"
     },
     "devDependencies": {
-        "@eslint/js": "9.22.0",
-        "@kontent-ai/migration-toolkit": "2.6.0",
-        "@types/node": "22.13.10",
+        "@eslint/js": "9.23.0",
+        "@kontent-ai/migration-toolkit": "2.6.1",
+        "@types/node": "22.13.13",
         "@types/yargs": "17.0.33",
         "dotenv-cli": "8.0.0",
-        "eslint": "9.22.0",
+        "eslint": "9.23.0",
         "standard-version": "9.5.0",
         "tsx": "4.19.3",
         "typescript": "5.8.2",
-        "typescript-eslint": "8.26.1",
+        "typescript-eslint": "8.28.0",
         "vite-tsconfig-paths": "5.1.4",
-        "vitest": "3.0.8"
+        "vitest": "3.0.9"
     }
 }
