@@ -60,9 +60,26 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 > Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
 > safety and streamline development.
 
+Basic usage
+
 ```bash
-npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y
+npx @kontent-ai/model-generator@latest delivery  
+    --environmentId=x
+    --managementApiKey=y
 ```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest delivery  
+    --environmentId=y
+    --managementApiKey=y
+    --outputDir=kontent-models
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
+```
+
 
 ```typescript
 import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
@@ -101,8 +118,25 @@ Configuration
 
 ## Migration toolkit models
 
+
+Basic usage
+
 ```bash
-npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --managementApiKey=y
+npx @kontent-ai/model-generator@latest migration-toolkit 
+    --environmentId=x 
+    --managementApiKey=y
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest migration-toolkit
+    --environmentId=y
+    --managementApiKey=y
+    --outputDir=kontent-models
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
 ```
 
 ```typescript
@@ -142,8 +176,44 @@ Configuration
 > Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
 
+Basic usage
+
 ```bash
-npx @kontent-ai/model-generator@latest environment --environmentId=x --managementApiKey=y
+npx @kontent-ai/model-generator@latest environment
+    --environmentId=x
+    --managementApiKey=y
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest environment
+    --environmentId=y
+    --managementApiKey=y
+    --entities=contentTypes,taxonomies,languages
+    --outputDir=kontent-models
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
+```
+
+Available entities
+
+```typescript
+[
+    'languages',
+    'taxonomies',
+    'contentTypes',
+    'snippets',
+    'webhooks',
+    'collections',
+    'workflows',
+    'assetFolders',
+    'roles',
+    'customApps',
+    'previewUrls',
+    'spaces'
+]
 ```
 
 ```typescript
@@ -184,10 +254,32 @@ Configuration
 > This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
 > issues during code generation.
 
+Basic usage
+
 ```bash
 # 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
 # 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
-npx @kontent-ai/model-generator@latest items --environmentId=x --managementApiKey=y --deliveryApiKey=y --apiMode=preview
+npx @kontent-ai/model-generator@latest items 
+    --environmentId=x 
+    --managementApiKey=y 
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest items 
+    --environmentId=y
+    --managementApiKey=y
+     -deliveryApiKey=y 
+    --apiMode=<default, preview, secure>
+    --generateTypes=<true, false>
+    --generateObjects=<true, false>
+    --outputDir=kontent-models
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --filterByTypeCodenames=codenameA,codenameB
+    --managementBaseUrl=<proxyUrl>
+    --deliveryBaseUrl=<proxyUrl>
 ```
 
 ```typescript
