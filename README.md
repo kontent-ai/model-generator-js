@@ -56,8 +56,8 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 
 ## Delivery SDK Models
 
-> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type safety and
-> streamline development.
+> [!TIP] Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
+> safety and streamline development.
 
 ```bash
 npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y
@@ -137,7 +137,7 @@ Configuration
 
 ## Environment models
 
-> Note: Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> [!TIP] Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
 
 ```bash
@@ -178,8 +178,8 @@ Configuration
 
 ## Item models
 
-> Caution: This option is not recommended for environments with a large volume of content items, as it may lead to performance or
-> scalability issues during code generation.
+> [!TIP] This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
+> issues during code generation.
 
 ```bash
 # 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
