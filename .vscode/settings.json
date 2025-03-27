@@ -3,5 +3,8 @@
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.codeActionsOnSave": {
         "source.organizeImports": "explicit"
+    },
+    "[markdown]": {
+        "editor.formatOnSave": false
     }
 }
