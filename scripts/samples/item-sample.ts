@@ -10,7 +10,7 @@ await runScriptAsync(async (config) => {
         // required
         environmentId: config.sampleEnv.environmentId,
         addTimestamp: false,
-        apiKey: config.sampleEnv.managementApiKey,
+        managementApiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
         apiMode: 'default',
         deliveryApiKey: config.sampleEnv.deliveryApiKey,
@@ -20,7 +20,7 @@ await runScriptAsync(async (config) => {
         createFiles: true,
         outputDir: outputDir,
         // optional
-        baseUrl: undefined,
+        managementBaseUrl: undefined,
         formatOptions: undefined,
         deliveryBaseUrl: undefined
     });

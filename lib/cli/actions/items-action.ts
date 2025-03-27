@@ -8,12 +8,12 @@ export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise
         // required
         createFiles: true,
         environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
-        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
+        managementApiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
         // optional
         generateTypes: cliFetcher.getBooleanArgumentValue(commandOptions.generateTypes.name, false),
         generateObjects: cliFetcher.getBooleanArgumentValue(commandOptions.generateObjects.name, false),
         deliveryApiKey: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryApiKey.name),
-        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
+        managementBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
         deliveryBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryBaseUrl.name),
         outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),
         addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestamp.name, false),

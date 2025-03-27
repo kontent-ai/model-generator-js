@@ -10,7 +10,7 @@ export const environmentSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js'
             })
     },
@@ -22,7 +22,7 @@ export const environmentSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'ts'
             })
     },
@@ -34,7 +34,7 @@ export const environmentSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js',
                 entities: ['taxonomies']
             })
@@ -47,7 +47,7 @@ export const environmentSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js',
                 entities: ['contentTypes']
             })
@@ -60,7 +60,7 @@ export const environmentSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'ts',
                 entities: ['languages', 'snippets', 'workflows']
             })

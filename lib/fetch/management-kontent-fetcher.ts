@@ -41,12 +41,12 @@ export type ManagementKontentFetcher = {
 
 export function getManagementKontentFetcher(config: {
     readonly environmentId: string;
-    readonly apiKey: string;
+    readonly managementApiKey: string;
     readonly baseUrl?: string;
 }): ManagementKontentFetcher {
     const client: GeneratorManagementClient = createManagementClient({
         environmentId: config.environmentId,
-        apiKey: config.apiKey,
+        apiKey: config.managementApiKey,
         baseUrl: config.baseUrl,
         httpService: new HttpService({ logErrorsToConsole: false }),
         headers: [{ header: coreConfig.kontentTrackingHeaderName, value: coreConfig.kontentTrackingHeaderValue }]

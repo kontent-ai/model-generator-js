@@ -18,10 +18,10 @@ import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 export type GenerateDeliveryModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly apiKey: string;
+    readonly managementApiKey: string;
     readonly moduleFileExtension: ModuleFileExtension;
 
-    readonly baseUrl?: string;
+    readonly managementBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 
     readonly fileResolvers?: {
@@ -68,8 +68,8 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
 }> {
     const kontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
-        apiKey: config.apiKey,
-        baseUrl: config.baseUrl
+        managementApiKey: config.managementApiKey,
+        baseUrl: config.managementBaseUrl
     });
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();

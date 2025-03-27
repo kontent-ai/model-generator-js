@@ -11,12 +11,12 @@ await runScriptAsync(async (config) => {
         createFiles: true,
         addTimestamp: false,
         environmentId: config.sampleEnv.environmentId,
-        apiKey: config.sampleEnv.managementApiKey,
+        managementApiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
         outputDir: outputDir, // only required when createFiles is true
 
         // optional
-        baseUrl: undefined,
+        managementBaseUrl: undefined,
         formatOptions: undefined
     });
 });

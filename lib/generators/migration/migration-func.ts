@@ -9,10 +9,10 @@ import { getMigrationGenerator } from './migration.generator.js';
 export type GenerateMigrationModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly apiKey: string;
+    readonly managementApiKey: string;
     readonly moduleFileExtension: ModuleFileExtension;
 
-    readonly baseUrl?: string;
+    readonly managementBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 } & CreateFilesConfig;
 
@@ -46,8 +46,8 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
 }> {
     const kontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
-        apiKey: config.apiKey,
-        baseUrl: config.baseUrl
+        managementApiKey: config.managementApiKey,
+        baseUrl: config.managementBaseUrl
     });
 
     const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();

@@ -9,7 +9,7 @@ await runScriptAsync(async (config) => {
     await generateDeliveryModelsAsync({
         // required
         environmentId: config.sampleEnv.environmentId,
-        apiKey: config.sampleEnv.managementApiKey,
+        managementApiKey: config.sampleEnv.managementApiKey,
         moduleFileExtension: config.moduleFileExtension,
         createFiles: true,
         addTimestamp: false,
@@ -19,6 +19,6 @@ await runScriptAsync(async (config) => {
         fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' },
         nameResolvers: { contentType: 'pascalCase', snippet: 'pascalCase', taxonomy: 'pascalCase' },
         formatOptions: undefined,
-        baseUrl: undefined
+        managementBaseUrl: undefined
     });
 });

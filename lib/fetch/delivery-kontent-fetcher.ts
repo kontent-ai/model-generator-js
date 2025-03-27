@@ -8,7 +8,7 @@ import { sortAlphabetically } from '../core/core.utils.js';
 
 export function getDeliveryKontentFetcher(config: {
     readonly environmentId: string;
-    readonly apiKey: string | undefined;
+    readonly deliveryApiKey: string | undefined;
     readonly baseUrl?: string;
     readonly apiMode: DeliveryApiMode;
 }) {
@@ -24,8 +24,8 @@ export function getDeliveryKontentFetcher(config: {
                 }
             ]
         },
-        secureApiKey: config.apiMode === 'secure' ? config.apiKey : undefined,
-        previewApiKey: config.apiMode === 'preview' ? config.apiKey : undefined,
+        secureApiKey: config.apiMode === 'secure' ? config.deliveryApiKey : undefined,
+        previewApiKey: config.apiMode === 'preview' ? config.deliveryApiKey : undefined,
         proxy: {
             baseUrl: config.baseUrl
         },

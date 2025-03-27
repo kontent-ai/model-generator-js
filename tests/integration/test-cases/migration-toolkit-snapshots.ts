@@ -10,7 +10,7 @@ export const migrationToolkitSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js'
             })
     },
@@ -22,7 +22,7 @@ export const migrationToolkitSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'ts'
             })
     }

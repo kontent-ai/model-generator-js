@@ -9,10 +9,10 @@ export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): P
         // required
         createFiles: true,
         environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
-        apiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
+        managementApiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
         // optional
         entities: cliFetcher.getOptionalArgumentArrayValue(commandOptions.entities.name).filter(isEnvironmentEntity),
-        baseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
+        managementBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
         outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),
         addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestamp.name, false),
         moduleFileExtension: parseModuleFileExtension(cliFetcher.getOptionalArgumentValue(commandOptions.moduleFileExtension.name))

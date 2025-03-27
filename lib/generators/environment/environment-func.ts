@@ -19,11 +19,11 @@ import { getEnvironmentGenerator, type EnvironmentEntities } from './environment
 export type GenerateEnvironmentModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly apiKey: string;
+    readonly managementApiKey: string;
 
     readonly entities?: readonly EnvironmentEntity[];
     readonly moduleFileExtension: ModuleFileExtension;
-    readonly baseUrl?: string;
+    readonly managementBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 } & CreateFilesConfig;
 
@@ -57,8 +57,8 @@ async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<
     const moduleFileExtension: ModuleFileExtension = config.moduleFileExtension ?? defaultModuleFileExtension;
     const kontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
-        apiKey: config.apiKey,
-        baseUrl: config.baseUrl
+        managementApiKey: config.managementApiKey,
+        baseUrl: config.managementBaseUrl
     });
 
     const entitiesToCreate: readonly EnvironmentEntity[] = config.entities ?? environmentEntities; // default to all entities export

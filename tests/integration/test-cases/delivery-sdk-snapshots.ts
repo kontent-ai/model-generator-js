@@ -10,7 +10,7 @@ export const deliverySdkSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js'
             })
     },
@@ -22,7 +22,7 @@ export const deliverySdkSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'ts'
             })
     },
@@ -34,7 +34,7 @@ export const deliverySdkSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js',
                 nameResolvers: {
                     contentType: (item) => `ContentType_${item.codename}`,
@@ -56,7 +56,7 @@ export const deliverySdkSnapshots: readonly SnapshotModelsTest[] = [
                 addTimestamp: false,
                 createFiles: false,
                 environmentId: integrationEnv.id,
-                apiKey: integrationEnv.apiKey,
+                managementApiKey: integrationEnv.apiKey,
                 moduleFileExtension: 'js',
                 formatOptions: {
                     printWidth: 300,

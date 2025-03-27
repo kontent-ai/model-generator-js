@@ -87,7 +87,7 @@ import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
 await generateDeliveryModelsAsync({
     // required
     environmentId: 'x',
-    apiKey: 'y',
+    managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
     createFiles: true,
@@ -106,7 +106,7 @@ Configuration
 | Option                | Description                                                                                                                    |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`       | Id of Kontent.ai environment                                                                                                   |
-| `apiKey`              | Management API key                                                                                                             |
+| `managementApiKey`              | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
@@ -145,7 +145,7 @@ import { generateMigrationModelsAsync } from '@kontent-ai/model-generator';
 await generateMigrationModelsAsync({
     // required
     environmentId: 'x',
-    apiKey: 'y',
+    managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
     createFiles: true,
@@ -162,7 +162,7 @@ Configuration
 | Option                | Description                                                                                                                    |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`       | Id of Kontent.ai environment                                                                                                   |
-| `apiKey`              | Management API key                                                                                                             |
+| `managementApiKey`              | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
@@ -222,7 +222,7 @@ import { generateEnvironmentModelsAsync } from '@kontent-ai/model-generator';
 await generateEnvironmentModelsAsync({
     // required
     environmentId: 'x',
-    apiKey: 'y',
+    managementApiKey: 'y',
     entities: [], // all entity types are exported by default
     addTimestamp: false,
     moduleFileExtension: 'js',
@@ -239,7 +239,7 @@ Configuration
 | Option                | Description                                                                                                                    |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`       | Id of Kontent.ai environment                                                                                                   |
-| `apiKey`              | Management API key                                                                                                             |
+| `managementApiKey`              | Management API key                                                                                                             |
 | `entities`            | Array of entity types that will be exported                                                                                    |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
@@ -288,7 +288,7 @@ import { generateItemsAsync } from '@kontent-ai/model-generator';
 await generateItemsAsync({
     // required
     environmentId: 'x',
-    apiKey: 'y',
+    managementApiKey: 'y',
     deliveryApiKey: 'z', // only required when secure / api mode is used
     addTimestamp: false,
     moduleFileExtension: 'js',
@@ -310,7 +310,7 @@ Configuration
 | Option                  | Description                                                                                                                    |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`         | Id of Kontent.ai environment                                                                                                   |
-| `apiKey`                | Management API key                                                                                                             |
+| `managementApiKey`                | Management API key                                                                                                             |
 | `deliveryApiKey`        | Delivery API key required when the `apiMode` is using preview or secure mode                                                   |
 | `moduleFileExtension`   | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`          | Indicates if models contain timestamp                                                                                          |

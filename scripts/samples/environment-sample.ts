@@ -9,14 +9,14 @@ await runScriptAsync(async (config) => {
     await generateEnvironmentModelsAsync({
         // required
         environmentId: config.sampleEnv.environmentId,
-        apiKey: config.sampleEnv.managementApiKey,
+        managementApiKey: config.sampleEnv.managementApiKey,
         entities: [], // all entity types are exported by default
         addTimestamp: false,
         moduleFileExtension: config.moduleFileExtension,
         createFiles: true,
         outputDir: outputDir, // only required when createFiles is true
         // optional
-        baseUrl: undefined,
+        managementBaseUrl: undefined,
         formatOptions: undefined
     });
 });

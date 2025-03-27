@@ -18,7 +18,7 @@ import { getItemsGenerator } from './items.generator.js';
 export type GenerateItemsModelsConfig = {
     readonly environmentId: string;
     readonly addTimestamp: boolean;
-    readonly apiKey: string;
+    readonly managementApiKey: string;
     readonly moduleFileExtension: ModuleFileExtension;
     readonly apiMode: DeliveryApiMode;
     readonly filterByTypeCodenames: readonly string[];
@@ -26,7 +26,7 @@ export type GenerateItemsModelsConfig = {
     readonly generateObjects: boolean;
 
     readonly deliveryApiKey?: string;
-    readonly baseUrl?: string;
+    readonly managementBaseUrl?: string;
     readonly deliveryBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 } & CreateFilesConfig;
@@ -61,14 +61,14 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
     const deliveryKontentFetcher = getDeliveryKontentFetcher({
         environmentId: config.environmentId,
         apiMode: config.apiMode,
-        apiKey: config.deliveryApiKey,
+        deliveryApiKey: config.deliveryApiKey,
         baseUrl: config.deliveryBaseUrl
     });
 
     const managementKontentFetcher = getManagementKontentFetcher({
         environmentId: config.environmentId,
-        apiKey: config.apiKey,
-        baseUrl: config.baseUrl
+        managementApiKey: config.managementApiKey,
+        baseUrl: config.managementBaseUrl
     });
 
     const environmentInfo = await managementKontentFetcher.getEnvironmentInfoAsync();
