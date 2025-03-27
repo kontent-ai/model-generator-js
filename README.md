@@ -7,25 +7,12 @@
 The Kontent.ai Model Generator is a library designed to enhance your development experience by enabling the use of strongly typed objects
 and TypeScript models. It supports the generation of four distinct types of models:
 
-1. `delivery-sdk` - Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These
-   models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.
-
-> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type safety and
-> streamline development.
-
-2. `migration-toolkit` - Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit).
-   These models help simplify and standardize the process of writing migration scripts.
-3. `environment` - Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment—including
-   content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.
-
-> Note: Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
-> client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
-
-4. `items` - Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is
-   particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings.
-
-> Caution: This option is not recommended for environments with a large volume of content items, as it may lead to performance or
-> scalability issues during code generation.
+| Model type                                     | Description                                                                                                                                                                                                                                                    |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     |
+| [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       |
+| [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 |
+| [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. |
 
 ## Installation
 
@@ -68,6 +55,9 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 ```
 
 ## Delivery SDK Models
+
+> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type safety and
+> streamline development.
 
 ```bash
 npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y
@@ -147,6 +137,9 @@ Configuration
 
 ## Environment models
 
+> Note: Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
+
 ```bash
 npx @kontent-ai/model-generator@latest environment --environmentId=x --managementApiKey=y
 ```
@@ -184,6 +177,9 @@ Configuration
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Item models
+
+> Caution: This option is not recommended for environments with a large volume of content items, as it may lead to performance or
+> scalability issues during code generation.
 
 ```bash
 # 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
