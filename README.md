@@ -64,17 +64,17 @@ Basic usage
 
 ```bash
 npx @kontent-ai/model-generator@latest delivery  
-    --environmentId=x
-    --managementApiKey=y
+    --environmentId=<id>
+    --managementApiKey=<key>
 ```
 
 Usage with options
 
 ```bash
 npx @kontent-ai/model-generator@latest delivery  
-    --environmentId=y
-    --managementApiKey=y
-    --outputDir=kontent-models
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
     --managementBaseUrl=<proxyUrl>
@@ -123,17 +123,17 @@ Basic usage
 
 ```bash
 npx @kontent-ai/model-generator@latest migration-toolkit 
-    --environmentId=x 
-    --managementApiKey=y
+    --environmentId=<id>
+    --managementApiKey=<key>
 ```
 
 Usage with options
 
 ```bash
 npx @kontent-ai/model-generator@latest migration-toolkit
-    --environmentId=y
-    --managementApiKey=y
-    --outputDir=kontent-models
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
     --managementBaseUrl=<proxyUrl>
@@ -180,18 +180,18 @@ Basic usage
 
 ```bash
 npx @kontent-ai/model-generator@latest environment
-    --environmentId=x
-    --managementApiKey=y
+    --environmentId=<id>
+    --managementApiKey=<key>
 ```
 
 Usage with options
 
 ```bash
 npx @kontent-ai/model-generator@latest environment
-    --environmentId=y
-    --managementApiKey=y
-    --entities=contentTypes,taxonomies,languages
-    --outputDir=kontent-models
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --entities=<contentTypes,taxonomies,languages>
+    --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
     --managementBaseUrl=<proxyUrl>
@@ -260,24 +260,24 @@ Basic usage
 # 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
 # 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
 npx @kontent-ai/model-generator@latest items 
-    --environmentId=x 
-    --managementApiKey=y 
+    --environmentId=<id>
+    --managementApiKey=<key>
 ```
 
 Usage with options
 
 ```bash
 npx @kontent-ai/model-generator@latest items 
-    --environmentId=y
-    --managementApiKey=y
-     -deliveryApiKey=y 
+    --environmentId=<id>
+    --managementApiKey=<key>
+     -deliveryApiKey=<key>
     --apiMode=<default, preview, secure>
     --generateTypes=<true, false>
     --generateObjects=<true, false>
-    --outputDir=kontent-models
+    --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
-    --filterByTypeCodenames=codenameA,codenameB
+    --filterByTypeCodenames=<codenameA,codenameB>
     --managementBaseUrl=<proxyUrl>
     --deliveryBaseUrl=<proxyUrl>
 ```
