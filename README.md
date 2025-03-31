@@ -26,24 +26,6 @@ npm i --save-dev @kontent-ai/model-generator
 npx @kontent-ai/model-generator@latest --help
 ```
 
-## Basic usage
-
-```bash
-# Models for Delivery SDK
-npx @kontent-ai/model-generator@latest delivery --environmentId=x --managementApiKey=y
-
-# Models for Migration Toolkit
-npx @kontent-ai/model-generator@latest migration-toolkit --environmentId=x --managementApiKey=y
-
-# Environment models used for scripting and strongly typed access to environment objects
-npx @kontent-ai/model-generator@latest environment --environmentId=x --managementApiKey=y
-
-# Items overview with ids / codenames and Types representing available item codenames
-# 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
-# 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
-npx @kontent-ai/model-generator@latest items --environmentId=x --managementApiKey=y --deliveryApiKey=y --apiMode=preview --contentTypes=a,b,c
-```
-
 ### CLI Help
 
 ```bash
@@ -63,7 +45,7 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 Basic usage
 
 ```bash
-npx @kontent-ai/model-generator@latest delivery  
+npx @kontent-ai/model-generator@latest delivery-sdk  
     --environmentId=<id>
     --managementApiKey=<key>
 ```
@@ -71,7 +53,7 @@ npx @kontent-ai/model-generator@latest delivery
 Usage with options
 
 ```bash
-npx @kontent-ai/model-generator@latest delivery  
+npx @kontent-ai/model-generator@latest delivery-sdk  
     --environmentId=<id>
     --managementApiKey=<key>
     --outputDir=<path>
