@@ -16,10 +16,13 @@ and TypeScript models. It supports the generation of four distinct types of mode
 
 ## Installation
 
-Install as a `dev dependency` to your project or use `npx`
+Install `globally`, as a `devDependency` or just use `npx` for simplicity
 
 ```bash
-# Install as dev dependency
+# Install globally 
+npm i -g @kontent-ai/model-generator
+
+# Install as dev dependency and use in your code
 npm i --save-dev @kontent-ai/model-generator
 
 # Run with npx
