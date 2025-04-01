@@ -5,8 +5,7 @@
 
 # Kontent.ai Model Generator
 
-The Kontent.ai Model Generator is a library designed to enhance your development experience by enabling the use of strongly typed objects
-and TypeScript models. It supports the generation of four distinct types of models:
+The Kontent.ai Model Generator is a developer tool that streamlines working with Kontent.ai by generating strongly typed objects and TypeScript models. It supports the generation of four distinct model types, each tailored to specific use cases:
 
 | Model type                                     | Description                                                                                                                                                                                                                                                    | Compatibility                                                      |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
@@ -17,14 +16,14 @@ and TypeScript models. It supports the generation of four distinct types of mode
 
 ## Installation
 
-Install `globally`, as a `devDependency` or just use `npx` for simplicity
+You can install the generator globally, add it as a development dependency, or simply run it using npx for convenience.
 
 ```bash
 # Install globally
-npm i -g @kontent-ai/model-generator@latest
+npm i @kontent-ai/model-generator@latest -g
 
 # Install as dev dependency and use in your code
-npm i --save-dev @kontent-ai/model-generator@latest
+npm i @kontent-ai/model-generator@latest --save-dev 
 
 # Run with npx
 npx @kontent-ai/model-generator@latest --help
@@ -42,7 +41,8 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 
 ## Delivery SDK Models
 
-> [!TIP] Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
+> [!TIP]
+> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
 > safety and streamline development.
 
 Basic usage
@@ -155,7 +155,8 @@ Configuration
 
 ## Environment models
 
-> [!TIP] Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> [!TIP]
+> Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
 
 Basic usage
@@ -232,7 +233,8 @@ Configuration
 
 ## Item models
 
-> [!TIP] This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
+> [!TIP]
+> This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
 > issues during code generation.
 
 Basic usage
