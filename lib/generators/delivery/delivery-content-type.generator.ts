@@ -145,7 +145,10 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
         ];
     };
 
-    const getReferencedTaxonomyImports = (elements: readonly FlattenedElement[]): readonly string[] => {
+    const getReferencedTaxonomyImports = (
+        typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>,
+        elements: readonly FlattenedElement[]
+    ): readonly string[] => {
         const taxonomyTypeNames = elements
             // only take elements that are not from snippets
             .filter((m) => !m.fromSnippet)
@@ -154,7 +157,16 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                     .returnType<string | undefined>()
                     .with({ type: 'taxonomy' }, (taxonomyElement) => {
                         if (!taxonomyElement.assignedTaxonomy) {
-                            throw Error(`Invalid taxonomy for element '${taxonomyElement.codename}'`);
+                            const usedIn = match(typeOrSnippet)
+                                .returnType<string>()
+                                .with(P.instanceOf(ContentTypeSnippetModels.ContentTypeSnippet), (m) => `snippet '${m.codename}'`)
+                                .otherwise(() => `content type '${typeOrSnippet.codename}'`);
+
+                            console.warn(
+                                `Skipping invalid taxonomy for element '${taxonomyElement.codename}' used in ${usedIn}. This reference has to be fixed in your Kontent project.`
+                            );
+
+                            return undefined;
                         }
 
                         return nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy);
@@ -187,7 +199,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                 [
                     ...getContentTypeSystemImports(),
                     ...getReferencedTypeImports(data.contentType, data.flattenedElements),
-                    ...getReferencedTaxonomyImports(data.flattenedElements),
+                    ...getReferencedTaxonomyImports(data.contentType, data.flattenedElements),
                     ...getSnippetImports(snippets)
                 ]
                     .filter(isNotUndefined)
@@ -214,7 +226,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             imports: sortAlphabetically(
                 [
                     ...getReferencedTypeImports(data.snippet, data.flattenedElements),
-                    ...getReferencedTaxonomyImports(data.flattenedElements),
+                    ...getReferencedTaxonomyImports(data.snippet, data.flattenedElements),
                     ...getSnippetImports(snippets)
                 ]
                     .filter(isNotUndefined)
