@@ -4,234 +4,316 @@
 
 # Kontent.ai Model Generator
 
-The purpose of this project is to help you generate `Typescript models` based on [Kontent.ai](https://kontent.ai) item
-types. These models can be used with the [Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk) and
-enhances your experience by providing strongly typed models.
+The Kontent.ai Model Generator is a library designed to enhance your development experience by enabling the use of strongly typed objects
+and TypeScript models. It supports the generation of four distinct types of models:
+
+| Model type                                     | Description                                                                                                                                                                                                                                                    | Compatibility                                                      |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     | `@kontent-ai/delivery-sdk` on version `>=16.0.0`                   |
+| [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       | `@kontent-ai/migration-toolkit` on version `>=2.6.0`               |
+| [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 | Can be used in any project. No external dependencies are required. |
+| [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. | Can be used in any project. No external dependencies are required. |
 
 ## Installation
 
-Install package globally so you can use it anywhere:
+Install `globally`, as a `devDependency` or just use `npx` for simplicity
 
-`npm i @kontent-ai/model-generator -g`
+```bash
+# Install globally
+npm i -g @kontent-ai/model-generator@latest
 
-## Generate models with CLI
+# Install as dev dependency and use in your code
+npm i --save-dev @kontent-ai/model-generator@latest
 
-Go to folder where you want to create models and run:
+# Run with npx
+npx @kontent-ai/model-generator@latest --help
+```
 
-`kontent-generate --environmentId=xxx --apiKey=yyy`
+### CLI Help
 
-You may specify other options like:
+```bash
+# General help
+npx @kontent-ai/model-generator@latest  --help
 
-`kontent-generate --environmentId=xxx --apiKey=yyy --addTimestamp=false --elementResolver=camelCase`
+# Or get help for specific command
+npx @kontent-ai/model-generator@latest delivery-sdk --help
+```
 
-## Generate models in code
+## Delivery SDK Models
 
-Apart from generating models via CLI, you may also generate models in code which also gives you some additional
-configuration options (such as using custom name resolver).
+> [!TIP]
+> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
+> safety and streamline development.
+
+Basic usage
+
+```bash
+npx @kontent-ai/model-generator@latest delivery-sdk
+    --environmentId=<id>
+    --managementApiKey=<key>
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest delivery-sdk
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --outputDir=<path>
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
+```
 
 ```typescript
-import { generateModelsAsync } from '@kontent-ai/model-generator';
+import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
 
-await generateModelsAsync({
-    sdkType: 'delivery',
-    environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
-    isEnterpriseSubscription: true,
-    apiKey: 'yyy',
-    addTimestamp: true,
-    moduleResolution: 'nodeNext',
-    addEnvironmentInfo: true,
-    elementResolver: 'camelCase',
-    sortConfig: {
-        sortTaxonomyTerms: true
-    }
+await generateDeliveryModelsAsync({
+    // required
+    environmentId: 'x',
+    managementApiKey: 'y',
+    moduleFileExtension: 'js',
+    addTimestamp: false,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+
+    // optional
+    fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' },
+    nameResolvers: { contentType: (item) => `Company_${item.codename}`, snippet: 'pascalCase', taxonomy: 'pascalCase' },
+    formatOptions: { indentSize: 4, quote: 'single' },
+    baseUrl: undefined
 });
 ```
 
-### Customizing generated file names
+Configuration
 
-You may customize the way filenames are stored on file system using the `contentTypeFileResolver` and / or
-`taxonomyTypeFileResolver` configuration option:
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `managementApiKey`    | Management API key                                                                                                             |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `fileResolvers`       | Can be used to customize the generated filenames                                                                               |
+| `nameResolvers`       | Can be used to customize names of generated types                                                                              |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Migration toolkit models
+
+Basic usage
+
+```bash
+npx @kontent-ai/model-generator@latest migration-toolkit
+    --environmentId=<id>
+    --managementApiKey=<key>
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest migration-toolkit
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --outputDir=<path>
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
+```
 
 ```typescript
-await generateModelsAsync({
-    sdkType: 'delivery',
-    environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
-    isEnterpriseSubscription: true,
-    addEnvironmentInfo: true,
-    apiKey: 'yyy',
-    moduleResolution: 'nodeNext',
-    addTimestamp: true,
-    elementResolver: 'camelCase',
-    contentTypeFileResolver: (type) => `content_type_${type.codename}`,
-    taxonomyTypeFileResolver: (taxonomy) => `taxonomy_${taxonomy.codename}`
+import { generateMigrationModelsAsync } from '@kontent-ai/model-generator';
+
+await generateMigrationModelsAsync({
+    // required
+    environmentId: 'x',
+    managementApiKey: 'y',
+    moduleFileExtension: 'js',
+    addTimestamp: false,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' }
 });
 ```
 
-### Customizing generated content type names
+Configuration
 
-You may customize name of content types using the `contentTypeResolver` configuration option and taxonomy types with the
-`taxonomyTypeResolver` option:
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `managementApiKey`    | Management API key                                                                                                             |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Environment models
+
+> [!TIP]
+> Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
+
+Basic usage
+
+```bash
+npx @kontent-ai/model-generator@latest environment
+    --environmentId=<id>
+    --managementApiKey=<key>
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest environment
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --entities=<contentTypes,taxonomies,languages>
+    --outputDir=<path>
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
+```
+
+Available entities
 
 ```typescript
-await generateModelsAsync({
-    sdkType: 'delivery',
-    environmentId: 'da5abe9f-fdad-4168-97cd-b3464be2ccb9',
-    isEnterpriseSubscription: true,
-    apiKey: 'yyy',
-    moduleResolution: 'nodeNext',
-    addTimestamp: true,
-    addEnvironmentInfo: true,
-    elementResolver: 'camelCase',
-    contentTypeResolver: (type) => `${textHelper.toPascalCase(type.codename)}Model`,
-    taxonomyTypeResolver: (taxonomy) => `${textHelper.toPascalCase(taxonomy.codename)}Taxonomy`
+[
+    'languages',
+    'taxonomies',
+    'contentTypes',
+    'snippets',
+    'webhooks',
+    'collections',
+    'workflows',
+    'assetFolders',
+    'roles',
+    'customApps',
+    'previewUrls',
+    'spaces'
+];
+```
+
+```typescript
+import { generateEnvironmentModelsAsync } from '@kontent-ai/model-generator';
+
+await generateEnvironmentModelsAsync({
+    // required
+    environmentId: 'x',
+    managementApiKey: 'y',
+    entities: [], // all entity types are exported by default
+    addTimestamp: false,
+    moduleFileExtension: 'js',
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' }
 });
 ```
 
-## FAQ
+Configuration
 
--   If you are getting the `The Subscription API is not supported in your plan` error, set the
-    `isEnterpriseSubscription` option to false
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `managementApiKey`    | Management API key                                                                                                             |
+| `entities`            | Array of entity types that will be exported                                                                                    |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
-## CLI Configuration
+## Item models
 
--   `environmentId` - Id of the Kontent.ai environment
--   `apiKey`- Management API Key
--   `outputDir`- Directory where files will be created. Defaults to current directory - `--outputDir=./`. Some other
-    examples: `--outputDir=./sample`
--   `isEnterpriseSubscription` - Indicates if enterprise subscription endpoint can be used to export data.
--   `addTimestamp`- Indicates if timestamp is added to generated models
--   `addEnvironmentInfo`- Indicates if environment info stamp is added to generated models
--   `elementResolver`- Name resolver for elements. Available options are: `camelCase`, `pascalCase`, `snakeCase`
--   `contentTypeFileResolver`- Name resolver for content type filenames. Available options are: `camelCase`,
-    `pascalCase`, `snakeCase`
--   `contentTypeSnippetFileResolver`- Name resolver for content type snippet filenames. Available options are:
-    `camelCase`, `pascalCase`, `snakeCase`
--   `taxonomyTypeFileResolver`- Name resolver for taxonomy filenames. Available options are: `camelCase`, `pascalCase`,
-    `snakeCase`
--   `contentTypeResolver`- Name resolver for content type names. Available options are: `camelCase`, `pascalCase`,
-    `snakeCase`
--   `contentTypeSnippetResolver`- Name resolver for content type snippet names. Available options are: `camelCase`,
-    `pascalCase`, `snakeCase`
--   `taxonomyTypeResolver`- Name resolver for taxonomy type names. Available options are: `camelCase`, `pascalCase`,
-    `snakeCase`
--   `sdkType`- Type of sdk for which models are generated. Available options are: `delivery`
--   `exportWebhooks` - Indicates if webhooks are exported
--   `exportWorkflows` - Indicates if workflows are exported
--   `exportAssetFolders` - Indicates if asset folders are exported
--   `exportCollections` - Indicates if collections are exported
--   `exportLanguages` - Indicates if languages are exported
--   `exportRoles` - Indicates if roles are exported. \* Only available for Enterprise subscription plans
--   `managementApiUrl` - Sets the url of Management API.
--   `moduleResolution` - Module resolution for imports. Available options are: `node`, `nodeNext`
+> [!TIP]
+> This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
+> issues during code generation.
 
-## Example models
+Basic usage
 
-Generator creates file for each content type in your project. For example:
-
-`movie.ts`
-
-```typescript
-import { IContentItem, Elements } from '@kontent-ai/delivery-sdk';
-import { Actor } from './actor';
-import { ReleaseCategory } from '../taxonomies/releasecategory';
-
-/**
- * Generated by '@kontent-ai/model-generator@5.0.0-3' at 'Thu, 14 Jul 2022 13:58:53 GMT'
- *
- * Movie
- * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
- * Codename: movie
- */
-export type Movie = IContentItem<{
-    /**
-     * Title (text)
-     * Required: true
-     * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
-     * Codename: title
-     */
-    title: Elements.TextElement;
-
-    /**
-     * Plot (rich_text)
-     * Required: false
-     * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
-     * Codename: plot
-     */
-    plot: Elements.RichTextElement;
-
-    /**
-     * Released (date_time)
-     * Required: false
-     * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
-     * Codename: released
-     */
-    released: Elements.DateTimeElement;
-
-    /**
-     * Length (number)
-     * Required: false
-     * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
-     * Codename: length
-     */
-    length: Elements.NumberElement;
-
-    /**
-     * Poster (asset)
-     * Required: false
-     * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
-     * Codename: poster
-     */
-    poster: Elements.AssetsElement;
-
-    /**
-     * Category (multiple_choice)
-     * Required: false
-     * Id: 9821c252-6414-f549-c17f-cc171dd87713
-     * Codename: category
-     */
-    category: Elements.MultipleChoiceElement;
-
-    /**
-     * Stars (modular_content)
-     * Required: false
-     * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
-     * Codename: stars
-     */
-    stars: Elements.LinkedItemsElement<Actor | Movie>;
-
-    /**
-     * SeoName (url_slug)
-     * Required: false
-     * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
-     * Codename: seoname
-     */
-    seoname: Elements.UrlSlugElement;
-
-    /**
-     * ReleaseCategory (taxonomy)
-     * Required: false
-     * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
-     * Codename: releasecategory
-     */
-    releasecategory: Elements.TaxonomyElement<ReleaseCategory>;
-}>;
+```bash
+# 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
+# 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
+npx @kontent-ai/model-generator@latest items
+    --environmentId=<id>
+    --managementApiKey=<key>
 ```
 
-`movietype.ts`
+Usage with options
 
-```typescript
-/**
- * Generated by '@kontent-ai/model-generator@5.0.0' at 'Mon, 28 Mar 2022 14:36:32 GMT'
- *
- * MovieType
- * Id: 365a17e6-1929-27ab-9f67-a9273c846717
- * Codename: movietype
- */
-export type MovieType = 'student' | 'film' | 'tv' | 'blockbuster' | 'cinema_only';
+```bash
+npx @kontent-ai/model-generator@latest items
+    --environmentId=<id>
+    --managementApiKey=<key>
+     -deliveryApiKey=<key>
+    --apiMode=<default, preview, secure>
+    --generateTypes=<true, false>
+    --generateObjects=<true, false>
+    --outputDir=<path>
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --filterByTypeCodenames=<codenameA,codenameB>
+    --managementBaseUrl=<proxyUrl>
+    --deliveryBaseUrl=<proxyUrl>
 ```
 
-To learn the complete generator output, see the following folder:
-https://github.com/kontent-ai/model-generator-js/tree/master/sample
+```typescript
+import { generateItemsAsync } from '@kontent-ai/model-generator';
+
+await generateItemsAsync({
+    // required
+    environmentId: 'x',
+    managementApiKey: 'y',
+    deliveryApiKey: 'z', // only required when secure / api mode is used
+    addTimestamp: false,
+    moduleFileExtension: 'js',
+    apiMode: 'default',
+    filterByTypeCodenames: [],
+    generateObjects: true,
+    generateTypes: true,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' },
+    deliveryBaseUrl: undefined
+});
+```
+
+Configuration
+
+| Option                  | Description                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`         | Id of Kontent.ai environment                                                                                                   |
+| `managementApiKey`      | Management API key                                                                                                             |
+| `deliveryApiKey`        | Delivery API key required when the `apiMode` is using preview or secure mode                                                   |
+| `moduleFileExtension`   | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`          | Indicates if models contain timestamp                                                                                          |
+| `generateObjects`       | If enabled, javascript objects with codename / id will be generated                                                            |
+| `generateTypes`         | If enabled, typescript type representing codename will be generated                                                            |
+| `filterByTypeCodenames` | Array of content type codenames of which content items will be generated. Useful for narrowing down generated items            |
+| `apiMode`               | Delivery API mode for fetching content items. By default delivery (public) mode is used                                        |
+| `createFiles`           | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`             | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`         | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`               | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Sample models
+
+To see how models are generated have a look at following sample generated models:
+
+1. `delivery-sdk` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/delivery>
+2. `migration-toolkit` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/migration>
+3. `environment` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/environment>
+4. `items` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/items>
 
 ## Contribution & Feedback
 

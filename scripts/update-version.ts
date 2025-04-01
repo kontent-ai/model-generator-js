@@ -1,8 +1,10 @@
-import { createVersionFile } from './file-version-script.js';
+import packageJson from '../package.json' with { type: 'json' };
+import { createVersionFile } from './utils/script.utils.js';
 
-const date = new Date();
-
-const versionFilePath = './lib/meta/metadata.ts';
-const versionProp = 'libMetadata';
-
-createVersionFile(date, versionFilePath, versionProp);
+createVersionFile({
+    date: new Date(),
+    filePath: './lib/meta/metadata.ts',
+    propertyName: 'libMetadata',
+    packageName: packageJson.name,
+    packageVersion: packageJson.version
+});
