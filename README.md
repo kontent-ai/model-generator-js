@@ -20,10 +20,10 @@ Install `globally`, as a `devDependency` or just use `npx` for simplicity
 
 ```bash
 # Install globally 
-npm i -g @kontent-ai/model-generator
+npm i -g @kontent-ai/model-generator@latest
 
 # Install as dev dependency and use in your code
-npm i --save-dev @kontent-ai/model-generator
+npm i --save-dev @kontent-ai/model-generator@latest
 
 # Run with npx
 npx @kontent-ai/model-generator@latest --help
