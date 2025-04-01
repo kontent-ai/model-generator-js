@@ -41,7 +41,8 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 
 ## Delivery SDK Models
 
-> [!TIP] Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
+> [!TIP]
+> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
 > safety and streamline development.
 
 Basic usage
@@ -154,7 +155,8 @@ Configuration
 
 ## Environment models
 
-> [!TIP] Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> [!TIP]
+> Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
 
 Basic usage
@@ -231,7 +233,8 @@ Configuration
 
 ## Item models
 
-> [!TIP] This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
+> [!TIP]
+> This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
 > issues during code generation.
 
 Basic usage
