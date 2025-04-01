@@ -1,5 +1,6 @@
 [![npm version](https://badge.fury.io/js/%40kontent-ai%2Fmodel-generator.svg)](https://badge.fury.io/js/%40kontent-ai%2Fmodel-generator)
-[![Build](https://github.com/kontent-ai/model-generator-js/actions/workflows/main.yml/badge.svg)](https://github.com/kontent-ai/model-generator-js/actions/workflows/main.yml)
+[![Build](https://github.com/kontent-ai/model-generator-js/actions/workflows/build.yml/badge.svg)](https://github.com/kontent-ai/model-generator-js/actions/workflows/build.yml)
+[![Build](https://github.com/kontent-ai/model-generator-js/actions/workflows/build.yml/tests.svg)](https://github.com/kontent-ai/model-generator-js/actions/workflows/tests.yml)
 [![GitHub license](https://img.shields.io/github/license/kontent-ai/model-generator-js.svg)](https://github.com/kontent-ai/model-generator-js)
 
 # Kontent.ai Model Generator
