@@ -7,19 +7,19 @@
 The Kontent.ai Model Generator is a library designed to enhance your development experience by enabling the use of strongly typed objects
 and TypeScript models. It supports the generation of four distinct types of models:
 
-| Model type                                     | Description                                                                                                                                                                                                                                                    |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     |
-| [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       |
-| [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 |
-| [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. |
+| Model type                                     | Description                                                                                                                                                                                                                                                    | Compatibility                                                      |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     | `@kontent-ai/delivery-sdk` on version `>=16.0.0`                   |
+| [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       | `@kontent-ai/migration-toolkit` on version `>=2.6.0`               |
+| [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 | Can be used in any project. No external dependencies are required. |
+| [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. | Can be used in any project. No external dependencies are required. |
 
 ## Installation
 
 Install `globally`, as a `devDependency` or just use `npx` for simplicity
 
 ```bash
-# Install globally 
+# Install globally
 npm i -g @kontent-ai/model-generator@latest
 
 # Install as dev dependency and use in your code
@@ -41,14 +41,13 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 
 ## Delivery SDK Models
 
-> [!TIP]
-> Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
+> [!TIP] Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
 > safety and streamline development.
 
 Basic usage
 
 ```bash
-npx @kontent-ai/model-generator@latest delivery-sdk  
+npx @kontent-ai/model-generator@latest delivery-sdk
     --environmentId=<id>
     --managementApiKey=<key>
 ```
@@ -56,7 +55,7 @@ npx @kontent-ai/model-generator@latest delivery-sdk
 Usage with options
 
 ```bash
-npx @kontent-ai/model-generator@latest delivery-sdk  
+npx @kontent-ai/model-generator@latest delivery-sdk
     --environmentId=<id>
     --managementApiKey=<key>
     --outputDir=<path>
@@ -64,7 +63,6 @@ npx @kontent-ai/model-generator@latest delivery-sdk
     --addTimestamp=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
-
 
 ```typescript
 import { generateDeliveryModelsAsync } from '@kontent-ai/model-generator';
@@ -91,7 +89,7 @@ Configuration
 | Option                | Description                                                                                                                    |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`       | Id of Kontent.ai environment                                                                                                   |
-| `managementApiKey`              | Management API key                                                                                                             |
+| `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
@@ -103,11 +101,10 @@ Configuration
 
 ## Migration toolkit models
 
-
 Basic usage
 
 ```bash
-npx @kontent-ai/model-generator@latest migration-toolkit 
+npx @kontent-ai/model-generator@latest migration-toolkit
     --environmentId=<id>
     --managementApiKey=<key>
 ```
@@ -147,7 +144,7 @@ Configuration
 | Option                | Description                                                                                                                    |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`       | Id of Kontent.ai environment                                                                                                   |
-| `managementApiKey`              | Management API key                                                                                                             |
+| `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
@@ -157,8 +154,7 @@ Configuration
 
 ## Environment models
 
-> [!TIP] 
-> Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
+> [!TIP] Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
 
 Basic usage
@@ -198,7 +194,7 @@ Available entities
     'customApps',
     'previewUrls',
     'spaces'
-]
+];
 ```
 
 ```typescript
@@ -224,7 +220,7 @@ Configuration
 | Option                | Description                                                                                                                    |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`       | Id of Kontent.ai environment                                                                                                   |
-| `managementApiKey`              | Management API key                                                                                                             |
+| `managementApiKey`    | Management API key                                                                                                             |
 | `entities`            | Array of entity types that will be exported                                                                                    |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
@@ -235,8 +231,7 @@ Configuration
 
 ## Item models
 
-> [!TIP] 
-> This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
+> [!TIP] This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
 > issues during code generation.
 
 Basic usage
@@ -244,7 +239,7 @@ Basic usage
 ```bash
 # 'deliveryApiKey' option is required for 'preview' or 'secure' api modes
 # 'contentTypes' option is CSV of content type codenames and can be used to narrow down generated items
-npx @kontent-ai/model-generator@latest items 
+npx @kontent-ai/model-generator@latest items
     --environmentId=<id>
     --managementApiKey=<key>
 ```
@@ -252,7 +247,7 @@ npx @kontent-ai/model-generator@latest items
 Usage with options
 
 ```bash
-npx @kontent-ai/model-generator@latest items 
+npx @kontent-ai/model-generator@latest items
     --environmentId=<id>
     --managementApiKey=<key>
      -deliveryApiKey=<key>
@@ -295,7 +290,7 @@ Configuration
 | Option                  | Description                                                                                                                    |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | `environmentId`         | Id of Kontent.ai environment                                                                                                   |
-| `managementApiKey`                | Management API key                                                                                                             |
+| `managementApiKey`      | Management API key                                                                                                             |
 | `deliveryApiKey`        | Delivery API key required when the `apiMode` is using preview or secure mode                                                   |
 | `moduleFileExtension`   | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`          | Indicates if models contain timestamp                                                                                          |
@@ -312,10 +307,10 @@ Configuration
 
 To see how models are generated have a look at following sample generated models:
 
-1. `delivery-sdk` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/delivery
-2. `migration-toolkit` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/migration
-3. `environment` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/environment
-4. `items` -> https://github.com/kontent-ai/model-generator-js/tree/master/sample/items
+1. `delivery-sdk` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/delivery>
+2. `migration-toolkit` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/migration>
+3. `environment` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/environment>
+4. `items` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/items>
 
 ## Contribution & Feedback
 
