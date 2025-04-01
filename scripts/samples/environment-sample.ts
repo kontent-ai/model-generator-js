@@ -10,7 +10,7 @@ await runScriptAsync(async (config) => {
         // required
         environmentId: config.sampleEnv.environmentId,
         managementApiKey: config.sampleEnv.managementApiKey,
-        entities: [], // all entity types are exported by default
+        entities: undefined, // all entity types are exported by default
         addTimestamp: false,
         moduleFileExtension: config.moduleFileExtension,
         createFiles: true,

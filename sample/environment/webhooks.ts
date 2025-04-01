@@ -13,4 +13,4 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './environment.js';
+export const webhooks = {} as const;
