@@ -1,7 +1,18 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See
-[standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [8.1.0](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0...v8.1.0) (2025-04-08)
+
+
+### Features
+
+* updates deps ([1fef000](https://github.com/kontent-ai/model-generator-js/commit/1fef0002792c59be1e9163bf0fd1aaf4e6b13d53))
+
+
+### Bug Fixes
+
+* Skips invalid reference to taxonomies. Usually caused by deleting a taxonomy and not updating it's references in content types / snippets ([598bad3](https://github.com/kontent-ai/model-generator-js/commit/598bad338139f3d87750ab7bcb903e5d00cb15da))
 
 ## [8.0.0-0](https://github.com/kontent-ai/model-generator-js/compare/v7.4.0...v8.0.0-0) (2024-09-16)
 
