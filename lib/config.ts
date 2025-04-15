@@ -17,7 +17,7 @@ export const sharedTypesConfig = {
 
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
-    migrationItemsFolderName: `content-types`,
+    migrationItemsFolderName: `contentTypes`,
     environmentFolderName: `environment`,
     migrationTypesFilename: `migration`,
     environmentFilename: `environment`,
@@ -44,7 +44,7 @@ export const deliveryConfig = {
     systemTypesFolderName: 'system',
     coreCodenamesFilename: 'delivery.codenames',
     coreTypeFilename: 'core.type',
-    coreContentTypeName: 'CoreContentType',
+    coreContentTypeName: 'CoreItem',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
     coreDeliveryClientTypesTypeName: 'CoreClientTypes',
 
