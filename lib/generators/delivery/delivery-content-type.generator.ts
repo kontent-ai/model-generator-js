@@ -8,31 +8,48 @@ import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/cor
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { getImporter } from '../../core/importer.js';
 import type {
+    CollectionNameResolver,
+    CollectionTypeFileNameResolver,
     ContentTypeFileNameResolver,
     ContentTypeNameResolver,
     ContentTypeSnippetFileNameResolver,
     ContentTypeSnippetNameResolver,
+    LanguageNameResolver,
+    LanguageTypeFileNameResolver,
     TaxonomyNameResolver,
-    TaxonomyTypeFileNameResolver
+    TaxonomyTypeFileNameResolver,
+    WorkflowNameResolver,
+    WorkflowTypeFileNameResolver
 } from '../../core/resolvers.js';
 import { mapFilename, mapName } from '../../core/resolvers.js';
-import {
-    getCollectionCodenamesType,
-    getContentTypeCodenamesType,
-    getElementCodenamesType,
-    getLanguageCodenamesType,
-    getTaxonomyCodenamesType,
-    getWorkflowCodenamesType,
-    getWorkflowStepCodenamesType
-} from '../shared/type-codename.generator.js';
+import { getElementCodenamesType, getWorkflowStepCodenamesType } from '../shared/type-codename.generator.js';
+import { getDeliveryEntityGenerator } from './delivery-entity.generator.js';
 
-interface ExtractImportsResult {
+type ExtractImportsResult = {
     readonly typeName: string;
     readonly imports: readonly string[];
     readonly contentTypeExtends: string | undefined;
-}
+};
 
 type ContentTypeOrSnippet = Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>;
+
+export type DeliveryFileResolvers = {
+    readonly contentType?: ContentTypeFileNameResolver;
+    readonly snippet?: ContentTypeSnippetFileNameResolver;
+    readonly taxonomy?: TaxonomyTypeFileNameResolver;
+    readonly language?: LanguageTypeFileNameResolver;
+    readonly collection?: CollectionTypeFileNameResolver;
+    readonly workflow?: WorkflowTypeFileNameResolver;
+};
+
+export type DeliveryNameResolvers = {
+    readonly contentType?: ContentTypeNameResolver;
+    readonly snippet?: ContentTypeSnippetNameResolver;
+    readonly taxonomy?: TaxonomyNameResolver;
+    readonly language?: LanguageNameResolver;
+    readonly collection?: CollectionNameResolver;
+    readonly workflow?: WorkflowNameResolver;
+};
 
 export interface DeliveryContentTypeGeneratorConfig {
     readonly moduleFileExtension: ModuleFileExtension;
@@ -47,32 +64,59 @@ export interface DeliveryContentTypeGeneratorConfig {
         readonly taxonomies: readonly Readonly<TaxonomyModels.Taxonomy>[];
     };
 
-    readonly fileResolvers?: {
-        readonly contentType?: ContentTypeFileNameResolver;
-        readonly snippet?: ContentTypeSnippetFileNameResolver;
-        readonly taxonomy?: TaxonomyTypeFileNameResolver;
-    };
-
-    readonly nameResolvers?: {
-        readonly contentType?: ContentTypeNameResolver;
-        readonly snippet?: ContentTypeSnippetNameResolver;
-        readonly taxonomy?: TaxonomyNameResolver;
-    };
+    readonly fileResolvers?: DeliveryFileResolvers;
+    readonly nameResolvers?: DeliveryNameResolvers;
 }
 
 export function deliveryContentTypeGenerator(config: DeliveryContentTypeGeneratorConfig) {
     const fileResolvers = {
         snippet: mapFilename(config.fileResolvers?.snippet),
-        contentType: mapFilename(config.fileResolvers?.contentType),
-        taxonomy: mapFilename(config.fileResolvers?.taxonomy)
+        contentType: mapFilename(config.fileResolvers?.contentType)
     };
 
     const importer = getImporter(config.moduleFileExtension);
 
     const nameResolvers = {
         snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),
-        contentType: mapName(config.nameResolvers?.contentType, 'pascalCase'),
-        taxonomy: mapName(config.nameResolvers?.taxonomy, 'pascalCase')
+        contentType: mapName(config.nameResolvers?.contentType, 'pascalCase')
+    };
+
+    const entityGenerators = {
+        collections: getDeliveryEntityGenerator<CollectionModels.Collection>({
+            entities: config.environmentData.collections,
+            entityType: 'Collection',
+            fileResolver: config.fileResolvers?.collection,
+            nameResolver: config.nameResolvers?.collection,
+            moduleFileExtension: config.moduleFileExtension
+        }),
+        languages: getDeliveryEntityGenerator<LanguageModels.LanguageModel>({
+            entities: config.environmentData.languages,
+            entityType: 'Language',
+            fileResolver: config.fileResolvers?.language,
+            nameResolver: config.nameResolvers?.language,
+            moduleFileExtension: config.moduleFileExtension
+        }),
+        workflows: getDeliveryEntityGenerator<WorkflowModels.Workflow>({
+            entities: config.environmentData.workflows,
+            entityType: 'Workflow',
+            fileResolver: config.fileResolvers?.workflow,
+            nameResolver: config.nameResolvers?.workflow,
+            moduleFileExtension: config.moduleFileExtension
+        }),
+        taxonomies: getDeliveryEntityGenerator<TaxonomyModels.Taxonomy>({
+            entities: config.environmentData.taxonomies,
+            entityType: 'Taxonomy',
+            fileResolver: config.fileResolvers?.taxonomy,
+            nameResolver: config.nameResolvers?.taxonomy,
+            moduleFileExtension: config.moduleFileExtension
+        }),
+        contentType: getDeliveryEntityGenerator<ContentTypeModels.ContentType>({
+            entities: config.environmentData.types,
+            entityType: 'ContentType',
+            fileResolver: config.fileResolvers?.contentType,
+            nameResolver: config.nameResolvers?.contentType,
+            moduleFileExtension: config.moduleFileExtension
+        })
     };
 
     const getContentTypeSystemImports = (): readonly string[] => {
@@ -91,7 +135,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.contentTypeSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
+                filePathOrPackage: `../${deliveryConfig.itemSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
                 importValue: snippets
                     .map((snippet) => nameResolvers.snippet(snippet))
                     .map((m) => m)
@@ -138,7 +182,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             importer.importType({
                 filePathOrPackage:
                     typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
-                        ? `../${deliveryConfig.contentTypesFolderName}/${coreConfig.barrelExportFilename}`
+                        ? `../${deliveryConfig.itemTypesFolderName}/${coreConfig.barrelExportFilename}`
                         : `./${coreConfig.barrelExportFilename}`,
                 importValue: referencedTypeNames.join(', ')
             })
@@ -169,7 +213,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
                             return undefined;
                         }
 
-                        return nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy);
+                        return entityGenerators.taxonomies.getEntityName(taxonomyElement.assignedTaxonomy);
                     })
                     .otherwise(() => undefined);
             })
@@ -182,7 +226,7 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
 
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.taxonomiesFolderName}/${coreConfig.barrelExportFilename}`,
+                filePathOrPackage: `../${entityGenerators.taxonomies.entityFolderName}/${coreConfig.barrelExportFilename}`,
                 importValue: taxonomyTypeNames.join(', ')
             })
         ];
@@ -440,7 +484,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     return `TaxonomyElement`;
                 }
 
-                return `TaxonomyElement<${nameResolvers.taxonomy(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
+                return `TaxonomyElement<${entityGenerators.taxonomies.getEntityName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
             })
             .with({ type: 'custom' }, () => 'CustomElement')
             .otherwise(() => undefined);
@@ -461,15 +505,7 @@ ${getContentItemTypeGuardFunction(contentType)};
             deliveryConfig.sdkTypes.deliveryClient
         ] as const;
 
-        const codenameImports = [
-            sharedTypesConfig.contentTypeCodenames,
-            sharedTypesConfig.collectionCodenames,
-            sharedTypesConfig.languageCodenames,
-            sharedTypesConfig.workflowCodenames,
-            sharedTypesConfig.workflowStepCodenames,
-            sharedTypesConfig.elementCodenames,
-            sharedTypesConfig.taxonomyCodenames
-        ] as const;
+        const codenameImports = [sharedTypesConfig.workflowStepCodenames, sharedTypesConfig.elementCodenames] as const;
 
         const contentTypeGenericArgName: string = 'TContentTypeCodename';
         const elementsGenericArgName: string = 'TElements';
@@ -486,30 +522,38 @@ ${getContentItemTypeGuardFunction(contentType)};
                     filePathOrPackage: `./${deliveryConfig.coreCodenamesFilename}.ts`,
                     importValue: `${codenameImports.join(', ')}`
                 })}
+                ${Object.values(entityGenerators)
+                    .map((generator) =>
+                        importer.importType({
+                            filePathOrPackage: `../${generator.entityFolderName}/${generator.coreEntityFilename}`,
+                            importValue: `${generator.entityCodenamesTypeName}`
+                        })
+                    )
+                    .join('\n')}
 
                 ${wrapComment(`\n * Core content type used in favor of default '${deliveryConfig.sdkTypes.contentItem}'\n`)}
                 export type ${deliveryConfig.coreContentTypeName}<
                         ${elementCodenamesGenericArgName} extends string = string,
                         ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
-                        ${contentTypeGenericArgName} extends ${sharedTypesConfig.contentTypeCodenames} = ${sharedTypesConfig.contentTypeCodenames}
+                        ${contentTypeGenericArgName} extends ${entityGenerators.contentType.entityCodenamesTypeName} = ${entityGenerators.contentType.entityCodenamesTypeName}
                     > = ${deliveryConfig.sdkTypes.contentItem}<
                     ${elementsGenericArgName},
                     ${contentTypeGenericArgName},
-                    ${sharedTypesConfig.languageCodenames},
-                    ${sharedTypesConfig.collectionCodenames},
-                    ${sharedTypesConfig.workflowCodenames},
+                    ${entityGenerators.languages.entityCodenamesTypeName},
+                    ${entityGenerators.collections.entityCodenamesTypeName},
+                    ${entityGenerators.workflows.entityCodenamesTypeName},
                     ${sharedTypesConfig.workflowStepCodenames}
                 >;
 
                 ${wrapComment(`\n * Core types for '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
-                    readonly collectionCodenames: ${sharedTypesConfig.collectionCodenames};
+                    readonly collectionCodenames: ${entityGenerators.collections.entityCodenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
-                    readonly contentTypeCodenames: ${sharedTypesConfig.contentTypeCodenames};
+                    readonly contentTypeCodenames: ${entityGenerators.contentType.entityCodenamesTypeName};
                     readonly elementCodenames: ${sharedTypesConfig.elementCodenames};
-                    readonly languageCodenames: ${sharedTypesConfig.languageCodenames};
-                    readonly taxonomyCodenames: ${sharedTypesConfig.taxonomyCodenames};
-                    readonly workflowCodenames: ${sharedTypesConfig.workflowCodenames};
+                    readonly languageCodenames: ${entityGenerators.languages.entityCodenamesTypeName};
+                    readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityCodenamesTypeName};
+                    readonly workflowCodenames: ${entityGenerators.workflows.entityCodenamesTypeName};
                     readonly worfklowStepCodenames: ${sharedTypesConfig.workflowStepCodenames};
                 };
 
@@ -523,21 +567,6 @@ ${getContentItemTypeGuardFunction(contentType)};
         return {
             filename: `${deliveryConfig.coreCodenamesFilename}.ts`,
             text: `
-                ${wrapComment(`\n * Type representing all languages\n`)}
-                ${getLanguageCodenamesType(config.environmentData.languages)}
-
-                ${wrapComment(`\n * Type representing all content types\n`)}
-                ${getContentTypeCodenamesType(config.environmentData.types)}
-
-                ${wrapComment(`\n * Type representing all collections\n`)}
-                ${getCollectionCodenamesType(config.environmentData.collections)}
-
-                ${wrapComment(`\n * Type representing all workflows\n`)}
-                ${getWorkflowCodenamesType(config.environmentData.workflows)}
-
-                ${wrapComment(`\n * Type representing all taxonomies\n`)}
-                ${getTaxonomyCodenamesType(config.environmentData.taxonomies)}
-
                 ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
 
@@ -567,14 +596,17 @@ ${getContentItemTypeGuardFunction(contentType)};
         } => {
             return {
                 contentTypeFiles: {
-                    folderName: deliveryConfig.contentTypesFolderName,
+                    folderName: deliveryConfig.itemTypesFolderName,
                     files: config.environmentData.types.map((type) => createTypeModel(type))
                 },
                 snippetFiles: {
-                    folderName: deliveryConfig.contentTypeSnippetsFolderName,
+                    folderName: deliveryConfig.itemSnippetsFolderName,
                     files: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
                 }
             };
+        },
+        getEntitySets(): readonly GeneratedSet[] {
+            return Object.values(entityGenerators).map((generator) => generator.generateEntityTypes());
         },
         getSystemFiles(): GeneratedSet {
             return {

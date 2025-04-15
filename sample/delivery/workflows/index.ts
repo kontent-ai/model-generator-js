@@ -13,6 +13,5 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.taxonomy.js';
-export * from './movietype.js';
-export * from './releasecategory.js';
+export * from './core.workflow.js';
+export * from './default.js';

@@ -1,4 +1,12 @@
-import type { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from '@kontent-ai/management-sdk';
+import type {
+    CollectionModels,
+    ContentTypeElements,
+    ContentTypeModels,
+    ContentTypeSnippetModels,
+    LanguageModels,
+    TaxonomyModels,
+    WorkflowModels
+} from '@kontent-ai/management-sdk';
 import { createHash } from 'crypto';
 import { match, P } from 'ts-pattern';
 import type { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
@@ -7,28 +15,43 @@ import type { CaseType, ObjectWithCodename, ObjectWithName } from './core.models
 export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
 export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T, addExtension: boolean) => string;
 
-export type ContentTypeFileNameResolver = FilenameResolver<ContentTypeModels.ContentType>;
-export type ContentTypeSnippetFileNameResolver = FilenameResolver<ContentTypeSnippetModels.ContentTypeSnippet>;
-export type TaxonomyTypeFileNameResolver = FilenameResolver<TaxonomyModels.Taxonomy>;
-
+export type ContentTypeFileNameResolver = FilenameResolver<Readonly<ContentTypeModels.ContentType>>;
+export type ContentTypeSnippetFileNameResolver = FilenameResolver<Readonly<ContentTypeSnippetModels.ContentTypeSnippet>>;
+export type TaxonomyTypeFileNameResolver = FilenameResolver<Readonly<TaxonomyModels.Taxonomy>>;
+export type LanguageTypeFileNameResolver = FilenameResolver<Readonly<LanguageModels.LanguageModel>>;
+export type CollectionTypeFileNameResolver = FilenameResolver<Readonly<CollectionModels.Collection>>;
+export type WorkflowTypeFileNameResolver = FilenameResolver<Readonly<WorkflowModels.Workflow>>;
 /** Name resolvers */
 export type NameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithName) => string);
 export type MapObjectToName<T extends Readonly<ObjectWithName> = ObjectWithName> = (item: T) => string;
 
-export type ElementNameResolver = (element: Readonly<ContentTypeElements.ContentTypeElementModel>) => string | undefined;
-export type ContentTypeNameResolver = NameResolver<ContentTypeModels.ContentType>;
-export type ContentTypeSnippetNameResolver = NameResolver<ContentTypeSnippetModels.ContentTypeSnippet>;
-export type TaxonomyNameResolver = NameResolver<TaxonomyModels.Taxonomy>;
+export type ElementNameResolver = (element: Readonly<Readonly<ContentTypeElements.ContentTypeElementModel>>) => string | undefined;
+export type ContentTypeNameResolver = NameResolver<Readonly<ContentTypeModels.ContentType>>;
+export type ContentTypeSnippetNameResolver = NameResolver<Readonly<ContentTypeSnippetModels.ContentTypeSnippet>>;
+export type TaxonomyNameResolver = NameResolver<Readonly<TaxonomyModels.Taxonomy>>;
+export type LanguageNameResolver = NameResolver<Readonly<LanguageModels.LanguageModel>>;
+export type CollectionNameResolver = NameResolver<Readonly<CollectionModels.Collection>>;
+export type WorkflowNameResolver = NameResolver<Readonly<WorkflowModels.Workflow>>;
 
-export function mapFilename<T extends ObjectWithCodename>(resolver: FilenameResolver<T>): MapObjectToFileName<T> {
+export function mapFilename<T extends ObjectWithCodename>(
+    resolver: FilenameResolver<T>,
+    options?: {
+        readonly prefix?: string;
+        readonly suffix?: string;
+    }
+): MapObjectToFileName<T> {
     return (item, addExtension) => {
-        return addExtensionToFilename(
-            match(resolver)
-                .returnType<string>()
-                .with(P.instanceOf(Function), (resolver) => resolver(item))
-                .with(undefined, () => item.codename)
-                .otherwise((resolverType) => resolveCase(item.codename, resolverType)),
-            addExtension
+        return (
+            (options?.prefix ? options.prefix : '') +
+            addExtensionToFilename(
+                match(resolver)
+                    .returnType<string>()
+                    .with(P.instanceOf(Function), (resolver) => resolver(item))
+                    .with(undefined, () => resolveCase(item.codename, 'camelCase'))
+                    .otherwise((resolverType) => resolveCase(item.codename, resolverType)),
+                addExtension
+            ) +
+            (options?.suffix ? options.suffix : '')
         );
     };
 }

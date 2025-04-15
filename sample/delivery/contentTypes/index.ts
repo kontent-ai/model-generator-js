@@ -13,6 +13,6 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.taxonomy.js';
-export * from './movietype.js';
-export * from './releasecategory.js';
+export * from './actor.js';
+export * from './core.contentType.js';
+export * from './movie.js';

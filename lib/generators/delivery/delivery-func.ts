@@ -2,18 +2,10 @@ import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import chalk from 'chalk';
 import type { Options } from 'prettier';
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import type {
-    ContentTypeFileNameResolver,
-    ContentTypeNameResolver,
-    ContentTypeSnippetFileNameResolver,
-    ContentTypeSnippetNameResolver,
-    TaxonomyNameResolver,
-    TaxonomyTypeFileNameResolver
-} from '../../core/resolvers.js';
 import { getManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { getFileManager } from '../../files/file-manager.js';
+import type { DeliveryFileResolvers, DeliveryNameResolvers } from './delivery-content-type.generator.js';
 import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
-import { deliveryTaxonomyGenerator } from './delivery-taxonomy.generator.js';
 
 export type GenerateDeliveryModelsConfig = {
     readonly environmentId: string;
@@ -24,31 +16,22 @@ export type GenerateDeliveryModelsConfig = {
     readonly managementBaseUrl?: string;
     readonly formatOptions?: Readonly<Options>;
 
-    readonly fileResolvers?: {
-        readonly taxonomy?: TaxonomyTypeFileNameResolver;
-        readonly contentType?: ContentTypeFileNameResolver;
-        readonly snippet?: ContentTypeSnippetFileNameResolver;
-    };
-
-    readonly nameResolvers?: {
-        readonly contentType?: ContentTypeNameResolver;
-        readonly snippet?: ContentTypeSnippetNameResolver;
-        readonly taxonomy?: TaxonomyNameResolver;
-    };
+    readonly fileResolvers?: DeliveryFileResolvers;
+    readonly nameResolvers?: DeliveryNameResolvers;
 } & CreateFilesConfig;
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<readonly GeneratedFile[]> {
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery-sdk' satisfies CliAction)}' models\n`);
 
-    const { contentTypeFiles, snippetFiles, taxonomyFiles, environmentInfo, systemFiles } = await getFilesAsync(config);
+    const { contentTypeFiles, snippetFiles, entitySets, environmentInfo, systemFiles } = await getFilesAsync(config);
 
     const fileManager = getFileManager({
         ...config,
         environmentInfo
     });
 
-    const setFiles = await fileManager.getSetFilesAsync([contentTypeFiles, snippetFiles, taxonomyFiles, systemFiles]);
+    const setFiles = await fileManager.getSetFilesAsync([contentTypeFiles, snippetFiles, systemFiles, ...entitySets]);
 
     if (config.createFiles) {
         fileManager.createFiles(setFiles);
@@ -62,7 +45,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
     readonly contentTypeFiles: GeneratedSet;
     readonly snippetFiles: GeneratedSet;
-    readonly taxonomyFiles: GeneratedSet;
+    readonly entitySets: readonly GeneratedSet[];
     readonly systemFiles: GeneratedSet;
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
@@ -100,21 +83,11 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
 
     const { contentTypeFiles, snippetFiles } = deliveryGenerator.generateModels();
 
-    const taxonomyFiles = deliveryTaxonomyGenerator({
-        moduleFileExtension: config.moduleFileExtension,
-        environmentData: {
-            environment: environmentInfo,
-            taxonomies: taxonomies
-        },
-        fileResolvers: config.fileResolvers,
-        nameResolvers: config.nameResolvers
-    }).generateTaxonomyTypes();
-
     return {
         contentTypeFiles,
         snippetFiles,
-        taxonomyFiles,
         environmentInfo,
-        systemFiles: deliveryGenerator.getSystemFiles()
+        systemFiles: deliveryGenerator.getSystemFiles(),
+        entitySets: deliveryGenerator.getEntitySets()
     };
 }

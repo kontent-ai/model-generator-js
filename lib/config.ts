@@ -11,12 +11,7 @@ export const coreConfig = {
 } as const;
 
 export const sharedTypesConfig = {
-    languageCodenames: 'LanguageCodenames',
-    collectionCodenames: 'CollectionCodenames',
-    workflowCodenames: 'WorkflowCodenames',
     workflowStepCodenames: 'WorkflowStepCodenames',
-    contentTypeCodenames: 'ContentTypeCodenames',
-    taxonomyCodenames: 'TaxonomyCodenames',
     elementCodenames: 'ElementCodenames'
 } as const;
 
@@ -44,10 +39,8 @@ export const migrationConfig = {
 
 export const deliveryConfig = {
     npmPackageName: '@kontent-ai/delivery-sdk',
-    contentTypesFolderName: `content-types`,
-    contentTypeSnippetsFolderName: `content-type-snippets`,
-    taxonomiesFolderName: `taxonomies`,
-    typeGuardsFileName: 'delivery.type-guards',
+    itemTypesFolderName: `itemTypes`,
+    itemSnippetsFolderName: `itemSnippets`,
     systemTypesFolderName: 'system',
     coreCodenamesFilename: 'delivery.codenames',
     coreTypeFilename: 'core.type',
