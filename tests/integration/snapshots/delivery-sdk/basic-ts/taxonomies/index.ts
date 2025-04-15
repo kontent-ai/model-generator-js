@@ -1,2 +1,3 @@
-export * from './taxonomy_a.ts';
-export * from './taxonomy_without_terms.ts';
+export * from './_taxonomies.ts';
+export * from './taxonomyA.taxonomy.ts';
+export * from './taxonomyWithoutTerms.taxonomy.ts';
