@@ -29,3 +29,20 @@ export type WorkflowCodenames = (typeof workflowCodenames)[number];
 export function isWorkflowCodename(value: string | undefined | null): value is WorkflowCodenames {
     return typeof value === 'string' && (workflowCodenames as readonly string[]).includes(value);
 }
+
+/**
+ * Object with all values of workflow step codenames in Workflow
+ */
+export const workflowStepCodenames = ['draft', 'review', 'ready_to_publish', 'published', 'archived', 'scheduled'] as const;
+
+/**
+ * Type representing workflow step codenames in Workflow
+ */
+export type WorkflowStepCodenames = (typeof workflowStepCodenames)[number];
+
+/**
+ * Type guard for workflow step codenames in Workflow
+ */
+export function isWorkflowStepCodename(value: string | undefined | null): value is WorkflowStepCodenames {
+    return typeof value === 'string' && (workflowStepCodenames as readonly string[]).includes(value);
+}

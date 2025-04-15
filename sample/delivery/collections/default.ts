@@ -16,7 +16,7 @@
 import type { CollectionCodenames } from './core.collection.js';
 
 /**
- * Type representing Collection entities
+ * Type representing codename of Default entity
  *
  * Codename: default
  * Id: 00000000-0000-0000-0000-000000000000

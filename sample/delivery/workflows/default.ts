@@ -16,7 +16,7 @@
 import type { WorkflowCodenames } from './core.workflow.js';
 
 /**
- * Type representing Workflow entities
+ * Type representing codename of Default entity
  *
  * Codename: default
  * Id: 00000000-0000-0000-0000-000000000000
@@ -34,6 +34,18 @@ export function isDefaultWorkflowCodename(value: string | undefined | null): val
 }
 
 /**
- * Type representing workflow step codenames in Default workflow
+ * Object with all values of workflow step codenames in Default
  */
-export type DefaultWorkflowCodenameStepCodenames = 'draft' | 'ready_to_publish' | 'review';
+export const defaultWorkflowStepCodenames = ['draft', 'review', 'ready_to_publish', 'published', 'archived', 'scheduled'] as const;
+
+/**
+ * Type representing workflow step codenames in Default
+ */
+export type DefaultWorkflowStepCodenames = (typeof defaultWorkflowStepCodenames)[number];
+
+/**
+ * Type guard for workflow step codenames in Default
+ */
+export function isDefaultWorkflowStepCodename(value: string | undefined | null): value is DefaultWorkflowStepCodenames {
+    return typeof value === 'string' && (defaultWorkflowStepCodenames as readonly string[]).includes(value);
+}

@@ -22,7 +22,7 @@ import type {
     WorkflowTypeFileNameResolver
 } from '../../core/resolvers.js';
 import { mapFilename, mapName } from '../../core/resolvers.js';
-import { getElementCodenamesType, getWorkflowStepCodenamesType } from '../shared/type-codename.generator.js';
+import { getElementCodenamesType } from '../shared/type-codename.generator.js';
 import { getDeliveryEntityGenerator } from './delivery-entity.generator.js';
 
 type ExtractImportsResult = {
@@ -505,7 +505,7 @@ ${getContentItemTypeGuardFunction(contentType)};
             deliveryConfig.sdkTypes.deliveryClient
         ] as const;
 
-        const codenameImports = [sharedTypesConfig.workflowStepCodenames, sharedTypesConfig.elementCodenames] as const;
+        const codenameImports = [sharedTypesConfig.elementCodenames] as const;
 
         const contentTypeGenericArgName: string = 'TContentTypeCodename';
         const elementsGenericArgName: string = 'TElements';
@@ -523,12 +523,19 @@ ${getContentItemTypeGuardFunction(contentType)};
                     importValue: `${codenameImports.join(', ')}`
                 })}
                 ${Object.values(entityGenerators)
-                    .map((generator) =>
-                        importer.importType({
+                    .map((generator) => {
+                        const importValues: readonly string[] = [
+                            generator.entityCodenamesTypeName,
+                            ...match(generator.entityType)
+                                .with('Workflow', () => [deliveryConfig.workflowStepCodenames])
+                                .otherwise(() => [])
+                        ];
+
+                        return importer.importType({
                             filePathOrPackage: `../${generator.entityFolderName}/${generator.coreEntityFilename}`,
-                            importValue: `${generator.entityCodenamesTypeName}`
-                        })
-                    )
+                            importValue: `${importValues.join(', ')}`
+                        });
+                    })
                     .join('\n')}
 
                 ${wrapComment(`\n * Core content type used in favor of default '${deliveryConfig.sdkTypes.contentItem}'\n`)}
@@ -542,7 +549,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     ${entityGenerators.languages.entityCodenamesTypeName},
                     ${entityGenerators.collections.entityCodenamesTypeName},
                     ${entityGenerators.workflows.entityCodenamesTypeName},
-                    ${sharedTypesConfig.workflowStepCodenames}
+                    ${deliveryConfig.workflowStepCodenames}
                 >;
 
                 ${wrapComment(`\n * Core types for '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
@@ -554,7 +561,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     readonly languageCodenames: ${entityGenerators.languages.entityCodenamesTypeName};
                     readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityCodenamesTypeName};
                     readonly workflowCodenames: ${entityGenerators.workflows.entityCodenamesTypeName};
-                    readonly worfklowStepCodenames: ${sharedTypesConfig.workflowStepCodenames};
+                    readonly worfklowStepCodenames: ${deliveryConfig.workflowStepCodenames};
                 };
 
                 ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
@@ -567,9 +574,6 @@ ${getContentItemTypeGuardFunction(contentType)};
         return {
             filename: `${deliveryConfig.coreCodenamesFilename}.ts`,
             text: `
-                ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
-                ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
-
                  ${wrapComment(`\n * Type representing all element codenames across all content types\n`)}
                 ${getElementCodenamesType(config.environmentData.types, config.environmentData.snippets)}
             `

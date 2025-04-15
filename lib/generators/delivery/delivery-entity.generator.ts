@@ -3,10 +3,10 @@ import { TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import { isNotUndefined } from '../../core/core.utils.js';
 import { getImporter } from '../../core/importer.js';
 import type { FilenameResolver, MapObjectToName, NameResolver } from '../../core/resolvers.js';
 import { mapFilename, mapName, resolveCase } from '../../core/resolvers.js';
-import { getTypeWithCodenames } from '../shared/type-codename.generator.js';
 
 export type DeliveryEntity =
     | Readonly<LanguageModels.LanguageModel>
@@ -26,7 +26,7 @@ export type DeliveryEntityGeneratorConfig<TEntity extends DeliveryEntity> = {
 };
 
 export type DeliveryEntityGenerator<TEntity extends DeliveryEntity> = {
-    readonly entityName: DeliveryEntityType;
+    readonly entityType: DeliveryEntityType;
     readonly coreEntityFilename: string;
     readonly entityFolderName: string;
     readonly entityCodenamesTypeName: string;
@@ -39,6 +39,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
 ): DeliveryEntityGenerator<TEntity> {
     const importer = getImporter(config.moduleFileExtension);
     const filenameMap = mapFilename(config.fileResolver);
+    const nameMapWithoutSuffix = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
     const nameMap = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` });
     const valuesName = mapName('camelCase', 'camelCase', { suffix: 'Codenames' })({ name: `${config.entityType}` });
     const getEntityTypeGuardFunctionName = mapName(config.nameResolver, 'pascalCase', {
@@ -105,6 +106,7 @@ export type ${entityCodenamesTypeName} = typeof ${valuesName}[number];
  * Type guard for ${config.entityType} codenames
 `)}
 ${getEntitiesTypeGuardFunction()}
+${getCoreEntitySpecificCode()}
 `;
     };
 
@@ -116,7 +118,7 @@ ${importer.importType({
 })}
     
  ${wrapComment(`
- * Type representing ${config.entityType} entities
+ * Type representing codename of ${entity.name} entity
  * 
 ${getEntityInfoComment(entity)}
 `)}
@@ -128,7 +130,7 @@ ${wrapComment(`
 ${getEntityInfoComment(entity)}
 `)}
 ${getEntityTypeGuardFunction(entity)}
-${getEntitySpecificCode(entity, nameMap(entity))}
+${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
 `;
     };
 
@@ -148,70 +150,120 @@ ${getEntitySpecificCode(entity, nameMap(entity))}
         };
     };
 
-    const getEntitySpecificCode = (entity: DeliveryEntity, resolvedName: string): string => {
-        return match(entity)
+    const getCoreEntitySpecificCode = (): string => {
+        return match(config.entityType)
             .returnType<string>()
-            .with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
-                return `
- ${wrapComment(`
- * Type representing workflow step codenames in ${workflow.name} workflow 
-`)}
-${getTypeWithCodenames(`${resolvedName}StepCodenames`, workflow.steps)};
-`;
-            })
-            .with(P.instanceOf(TaxonomyModels.Taxonomy), (taxonomy) => {
-                const termValuesPropertyName = mapName('camelCase', 'camelCase', {
-                    suffix: `${config.entityType}TermCodenames`
-                })({ name: taxonomy.name });
-                const termsCodenamesTypeName = resolveCase(termValuesPropertyName, 'pascalCase');
-                const termsTypeGuardFunctionName = mapName('pascalCase', 'pascalCase', {
-                    prefix: 'is',
-                    suffix: `${config.entityType}TermCodename`
-                })({ name: taxonomy.name });
+            .with('Workflow', () => {
+                const workflowSteps: readonly string[] = config.entities
+                    .filter((m) => m instanceof WorkflowModels.Workflow)
+                    .flatMap((workflow) =>
+                        [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep].filter(isNotUndefined)
+                    )
+                    .map((m) => m.codename);
 
-                const getTaxonomyTermGuardFunction = (): string => {
-                    return `export function ${termsTypeGuardFunctionName}(value: string | undefined | null): value is ${termsCodenamesTypeName} {
-                return typeof value === 'string' && (${termValuesPropertyName} as readonly string[]).includes(value);
-            }`;
-                };
-
-                const getTaxonomyTermValuesCode = (): string => {
-                    return `export const ${termValuesPropertyName} = [${getTaxonomyTermCodenames(taxonomy.terms)
-                        .map((m) => `'${m}'`)
-                        .join(', ')}] as const;`;
-                };
-
-                const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
-                    return taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
-                        return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
-                    }, []);
-                };
-
-                return `
-${wrapComment(`
- * Type representing taxonomy term codenames in ${taxonomy.name} taxonomy
-`)}
-${getTaxonomyTermValuesCode()};
-
-${wrapComment(`
- * Type representing ${taxonomy.name} taxonomy terms
- * 
- * Codename: ${taxonomy.codename}
- * Id: ${taxonomy.id}
-`)}
-export type ${termsCodenamesTypeName} = typeof ${termValuesPropertyName}[number];
-
-${wrapComment(`
- * Type guard for ${taxonomy.name} taxonomy term codenames
-`)}
-${getTaxonomyTermGuardFunction()};
-`;
+                return getCodeForSpecificEntity({
+                    codenames: workflowSteps,
+                    originalName: 'Workflow',
+                    resolvedName: 'Workflow',
+                    type: 'workflow step',
+                    propertySuffix: 'StepCodenames',
+                    typeGuardSuffix: 'StepCodename'
+                });
             })
             .otherwise(() => '');
     };
 
+    const getEntitySpecificCode = (entity: DeliveryEntity, resolvedName: string): string => {
+        return match(entity)
+            .returnType<string>()
+            .with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
+                return getCodeForSpecificEntity({
+                    codenames: [
+                        ...workflow.steps.map((m) => m.codename),
+                        workflow.publishedStep?.codename,
+                        workflow.archivedStep?.codename,
+                        workflow.scheduledStep?.codename
+                    ].filter(isNotUndefined),
+                    originalName: workflow.name,
+                    resolvedName: resolvedName,
+                    type: 'workflow step',
+                    propertySuffix: 'StepCodenames',
+                    typeGuardSuffix: 'StepCodename'
+                });
+            })
+            .with(P.instanceOf(TaxonomyModels.Taxonomy), (taxonomy) => {
+                return getCodeForSpecificEntity({
+                    codenames: getTaxonomyTermCodenames(taxonomy.terms),
+                    originalName: taxonomy.name,
+                    resolvedName: resolvedName,
+                    type: 'taxonomy term',
+                    propertySuffix: 'TermCodenames',
+                    typeGuardSuffix: 'TermCodename'
+                });
+            })
+            .otherwise(() => '');
+    };
+
+    const getCodeForSpecificEntity = ({
+        originalName,
+        resolvedName,
+        type,
+        propertySuffix,
+        typeGuardSuffix,
+        codenames
+    }: {
+        readonly resolvedName: string;
+        readonly originalName: string;
+        readonly type: 'taxonomy term' | 'workflow step';
+        readonly codenames: readonly string[];
+        readonly propertySuffix: string;
+        readonly typeGuardSuffix: string;
+    }): string => {
+        const valuesPropertyName = mapName('camelCase', 'camelCase', {
+            suffix: `${propertySuffix}`
+        })({ name: resolvedName });
+        const codenamesTypeName = resolveCase(valuesPropertyName, 'pascalCase');
+        const typeGuardFunctionName = mapName('pascalCase', 'pascalCase', {
+            prefix: 'is',
+            suffix: `${typeGuardSuffix}`
+        })({ name: resolvedName });
+
+        const getTypeGuardFunction = (): string => {
+            return `export function ${typeGuardFunctionName}(value: string | undefined | null): value is ${codenamesTypeName} {
+                return typeof value === 'string' && (${valuesPropertyName} as readonly string[]).includes(value);
+            }`;
+        };
+
+        const getValuesCode = (): string => {
+            return `export const ${valuesPropertyName} = [${codenames.map((m) => `'${m}'`).join(', ')}] as const;`;
+        };
+
+        return `
+${wrapComment(`
+ * Object with all values of ${type} codenames in ${originalName}
+`)}
+${getValuesCode()};
+
+${wrapComment(`
+ * Type representing ${type} codenames in ${originalName}
+`)}
+export type ${codenamesTypeName} = typeof ${valuesPropertyName}[number];
+
+${wrapComment(`
+ * Type guard for ${type} codenames in ${originalName}
+`)}
+${getTypeGuardFunction()};
+`;
+    };
+
+    const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
+        return taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
+            return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
+        }, []);
+    };
+
     return {
-        entityName: config.entityType,
+        entityType: config.entityType,
         coreEntityFilename,
         entityFolderName,
         entityCodenamesTypeName: entityCodenamesTypeName,

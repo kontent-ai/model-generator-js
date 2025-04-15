@@ -16,7 +16,7 @@
 import type { LanguageCodenames } from './core.language.js';
 
 /**
- * Type representing Language entities
+ * Type representing codename of cz entity
  *
  * Codename: cz
  * Id: 41ccb26f-ceab-04d0-6ffa-9c7c5358aa8f

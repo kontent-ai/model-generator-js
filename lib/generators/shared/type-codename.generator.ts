@@ -1,15 +1,8 @@
-import type { ContentTypeModels, ContentTypeSnippetModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import type { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { sharedTypesConfig } from '../../config.js';
 import type { ObjectWithCodename } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
-
-export function getWorkflowStepCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
-    return getTypeWithCodenames(
-        sharedTypesConfig.workflowStepCodenames,
-        workflows.flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep])
-    );
-}
 
 export function getElementCodenamesType(
     types: readonly Readonly<ContentTypeModels.ContentType>[],

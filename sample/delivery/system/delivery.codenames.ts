@@ -14,11 +14,6 @@
 **/
 
 /**
- * Type representing all worksflow steps across all workflows
- */
-export type WorkflowStepCodenames = 'archived' | 'draft' | 'published' | 'ready_to_publish' | 'review' | 'scheduled';
-
-/**
  * Type representing all element codenames across all content types
  */
 export type ElementCodenames =

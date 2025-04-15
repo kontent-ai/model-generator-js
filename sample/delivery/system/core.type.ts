@@ -14,10 +14,10 @@
 **/
 
 import type { IContentItem, IContentItemElements, IDeliveryClient } from '@kontent-ai/delivery-sdk';
-import type { WorkflowStepCodenames, ElementCodenames } from './delivery.codenames.js';
+import type { ElementCodenames } from './delivery.codenames.js';
 import type { CollectionCodenames } from '../collections/core.collection.js';
 import type { LanguageCodenames } from '../languages/core.language.js';
-import type { WorkflowCodenames } from '../workflows/core.workflow.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../workflows/core.workflow.js';
 import type { TaxonomyCodenames } from '../taxonomies/core.taxonomy.js';
 import type { ContentTypeCodenames } from '../contentTypes/core.contentType.js';
 

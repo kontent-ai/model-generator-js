@@ -16,7 +16,7 @@
 import type { ContentTypeCodenames } from './core.contentType.js';
 
 /**
- * Type representing ContentType entities
+ * Type representing codename of Actor entity
  *
  * Codename: actor
  * Id: 58099989-319f-495f-aa36-cb3710854e36

@@ -16,7 +16,7 @@
 import type { LanguageCodenames } from './core.language.js';
 
 /**
- * Type representing Language entities
+ * Type representing codename of English entity
  *
  * Codename: en
  * Id: 00000000-0000-0000-0000-000000000000

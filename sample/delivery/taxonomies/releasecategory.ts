@@ -16,7 +16,7 @@
 import type { TaxonomyCodenames } from './core.taxonomy.js';
 
 /**
- * Type representing Taxonomy entities
+ * Type representing codename of ReleaseCategory entity
  *
  * Codename: releasecategory
  * Id: 09b6a348-0f86-7a68-4af3-7cab9a5c60b7
@@ -34,20 +34,17 @@ export function isReleaseCategoryTaxonomyCodename(value: string | undefined | nu
 }
 
 /**
- * Type representing taxonomy term codenames in ReleaseCategory taxonomy
+ * Object with all values of taxonomy term codenames in ReleaseCategory
  */
 export const releaseCategoryTaxonomyTermCodenames = ['global_release', 'us_only', 'local_release'] as const;
 
 /**
- * Type representing ReleaseCategory taxonomy terms
- *
- * Codename: releasecategory
- * Id: 09b6a348-0f86-7a68-4af3-7cab9a5c60b7
+ * Type representing taxonomy term codenames in ReleaseCategory
  */
 export type ReleaseCategoryTaxonomyTermCodenames = (typeof releaseCategoryTaxonomyTermCodenames)[number];
 
 /**
- * Type guard for ReleaseCategory taxonomy term codenames
+ * Type guard for taxonomy term codenames in ReleaseCategory
  */
 export function isReleaseCategoryTaxonomyTermCodename(value: string | undefined | null): value is ReleaseCategoryTaxonomyTermCodenames {
     return typeof value === 'string' && (releaseCategoryTaxonomyTermCodenames as readonly string[]).includes(value);

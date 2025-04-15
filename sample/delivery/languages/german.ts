@@ -16,7 +16,7 @@
 import type { LanguageCodenames } from './core.language.js';
 
 /**
- * Type representing Language entities
+ * Type representing codename of German entity
  *
  * Codename: German
  * Id: 14f7bcc0-4fd6-4b77-8c22-70e5ccfdae1d

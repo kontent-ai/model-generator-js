@@ -11,7 +11,6 @@ export const coreConfig = {
 } as const;
 
 export const sharedTypesConfig = {
-    workflowStepCodenames: 'WorkflowStepCodenames',
     elementCodenames: 'ElementCodenames'
 } as const;
 
@@ -21,6 +20,13 @@ export const migrationConfig = {
     environmentFolderName: `environment`,
     migrationTypesFilename: `migration`,
     environmentFilename: `environment`,
+
+    workflowStepCodenames: 'WorkflowStepCodenames',
+    languageCodenames: 'LanguageCodenames',
+    contentTypeCodenames: 'ContentTypeCodenames',
+    workflowCodenames: 'WorkflowCodenames',
+    taxonomyCodenames: 'TaxonomyCodenames',
+    collectionCodenames: 'CollectionCodenames',
 
     sdkTypeNames: {
         system: 'MigrationItemSystem',
@@ -47,6 +53,7 @@ export const deliveryConfig = {
     coreContentTypeName: 'CoreItem',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
     coreDeliveryClientTypesTypeName: 'CoreClientTypes',
+    workflowStepCodenames: 'WorkflowStepCodenames',
 
     sdkTypes: {
         contentItem: 'IContentItem',
