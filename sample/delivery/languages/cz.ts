@@ -21,7 +21,7 @@ import type { LanguageCodenames } from './core.language.js';
  * Codename: cz
  * Id: 41ccb26f-ceab-04d0-6ffa-9c7c5358aa8f
  */
-export type CzLanguage = Extract<LanguageCodenames, 'cz'>;
+export type CzLanguageCodename = Extract<LanguageCodenames, 'cz'>;
 
 /**
  * Type guard for cz entity
@@ -29,6 +29,6 @@ export type CzLanguage = Extract<LanguageCodenames, 'cz'>;
  * Codename: cz
  * Id: 41ccb26f-ceab-04d0-6ffa-9c7c5358aa8f
  */
-export function isCzLanguage(value: string | undefined | null): value is CzLanguage {
-    return typeof value === 'string' && value === ('cz' satisfies CzLanguage);
+export function isCzLanguageCodename(value: string | undefined | null): value is CzLanguageCodename {
+    return typeof value === 'string' && value === ('cz' satisfies CzLanguageCodename);
 }

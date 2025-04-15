@@ -16,16 +16,16 @@
 /**
  * Object containing all Taxonomy codenames
  */
-export const taxonomyValues = ['movietype', 'releasecategory'] as const;
+export const taxonomyCodenames = ['movietype', 'releasecategory'] as const;
 
 /**
  * Type representing Taxonomy codenames
  */
-export type TaxonomyCodenames = (typeof taxonomyValues)[number];
+export type TaxonomyCodenames = (typeof taxonomyCodenames)[number];
 
 /**
  * Type guard for Taxonomy codenames
  */
-export function isTaxonomy(value: string | undefined | null): value is TaxonomyCodenames {
-    return typeof value === 'string' && (taxonomyValues as readonly string[]).includes(value);
+export function isTaxonomyCodename(value: string | undefined | null): value is TaxonomyCodenames {
+    return typeof value === 'string' && (taxonomyCodenames as readonly string[]).includes(value);
 }

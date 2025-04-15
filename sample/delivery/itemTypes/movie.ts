@@ -15,8 +15,8 @@
 
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { Actor } from './index.js';
-import type { CoreContentType } from '../system/index.js';
-import type { ReleaseCategoryTaxonomy } from '../taxonomies/index.js';
+import type { CoreItem } from '../system/index.js';
+import type { ReleaseCategoryTaxonomyCodename } from '../taxonomies/index.js';
 
 /**
  * Movie
@@ -24,7 +24,7 @@ import type { ReleaseCategoryTaxonomy } from '../taxonomies/index.js';
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export type Movie = CoreContentType<
+export type Movie = CoreItem<
     MovieElementCodenames,
     {
         /**
@@ -44,7 +44,7 @@ export type Movie = CoreContentType<
          * Codename: plot
          * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
          */
-        readonly plot: Elements.RichTextElement<CoreContentType>;
+        readonly plot: Elements.RichTextElement<CoreItem>;
         /**
          * Released
          *
@@ -109,7 +109,7 @@ export type Movie = CoreContentType<
          * Codename: releasecategory
          * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
          */
-        readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTaxonomy, 'releasecategory'>;
+        readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTaxonomyCodename, 'releasecategory'>;
     },
     'movie'
 >;
@@ -134,6 +134,6 @@ export type MovieElementCodenames =
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export function isMovie(item: CoreContentType | undefined | null): item is Movie {
+export function isMovieItem(item: CoreItem | undefined | null): item is Movie {
     return item?.system?.type === 'movie';
 }

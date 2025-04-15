@@ -16,16 +16,16 @@
 /**
  * Object containing all Language codenames
  */
-export const languageValues = ['en', 'cz', 'German'] as const;
+export const languageCodenames = ['en', 'cz', 'German'] as const;
 
 /**
  * Type representing Language codenames
  */
-export type LanguageCodenames = (typeof languageValues)[number];
+export type LanguageCodenames = (typeof languageCodenames)[number];
 
 /**
  * Type guard for Language codenames
  */
-export function isLanguage(value: string | undefined | null): value is LanguageCodenames {
-    return typeof value === 'string' && (languageValues as readonly string[]).includes(value);
+export function isLanguageCodename(value: string | undefined | null): value is LanguageCodenames {
+    return typeof value === 'string' && (languageCodenames as readonly string[]).includes(value);
 }

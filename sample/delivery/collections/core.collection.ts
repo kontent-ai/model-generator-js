@@ -16,16 +16,16 @@
 /**
  * Object containing all Collection codenames
  */
-export const collectionValues = ['default'] as const;
+export const collectionCodenames = ['default'] as const;
 
 /**
  * Type representing Collection codenames
  */
-export type CollectionCodenames = (typeof collectionValues)[number];
+export type CollectionCodenames = (typeof collectionCodenames)[number];
 
 /**
  * Type guard for Collection codenames
  */
-export function isCollection(value: string | undefined | null): value is CollectionCodenames {
-    return typeof value === 'string' && (collectionValues as readonly string[]).includes(value);
+export function isCollectionCodename(value: string | undefined | null): value is CollectionCodenames {
+    return typeof value === 'string' && (collectionCodenames as readonly string[]).includes(value);
 }

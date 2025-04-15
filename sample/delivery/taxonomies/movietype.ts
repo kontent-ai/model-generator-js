@@ -21,7 +21,7 @@ import type { TaxonomyCodenames } from './core.taxonomy.js';
  * Codename: movietype
  * Id: 365a17e6-1929-27ab-9f67-a9273c846717
  */
-export type MovieTypeTaxonomy = Extract<TaxonomyCodenames, 'movietype'>;
+export type MovieTypeTaxonomyCodename = Extract<TaxonomyCodenames, 'movietype'>;
 
 /**
  * Type guard for MovieType entity
@@ -29,6 +29,26 @@ export type MovieTypeTaxonomy = Extract<TaxonomyCodenames, 'movietype'>;
  * Codename: movietype
  * Id: 365a17e6-1929-27ab-9f67-a9273c846717
  */
-export function isMovieTypeTaxonomy(value: string | undefined | null): value is MovieTypeTaxonomy {
-    return typeof value === 'string' && value === ('movietype' satisfies MovieTypeTaxonomy);
+export function isMovieTypeTaxonomyCodename(value: string | undefined | null): value is MovieTypeTaxonomyCodename {
+    return typeof value === 'string' && value === ('movietype' satisfies MovieTypeTaxonomyCodename);
+}
+
+/**
+ * Type representing taxonomy term codenames in MovieType taxonomy
+ */
+export const movieTypeTaxonomyTermCodenames = ['student', 'tv', 'blockbuster', 'cinema_only', 'film'] as const;
+
+/**
+ * Type representing MovieType taxonomy terms
+ *
+ * Codename: movietype
+ * Id: 365a17e6-1929-27ab-9f67-a9273c846717
+ */
+export type MovieTypeTaxonomyTermCodenames = (typeof movieTypeTaxonomyTermCodenames)[number];
+
+/**
+ * Type guard for MovieType taxonomy term codenames
+ */
+export function isMovieTypeTaxonomyTermCodename(value: string | undefined | null): value is MovieTypeTaxonomyTermCodenames {
+    return typeof value === 'string' && (movieTypeTaxonomyTermCodenames as readonly string[]).includes(value);
 }

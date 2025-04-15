@@ -16,16 +16,16 @@
 /**
  * Object containing all Workflow codenames
  */
-export const workflowValues = ['default'] as const;
+export const workflowCodenames = ['default'] as const;
 
 /**
  * Type representing Workflow codenames
  */
-export type WorkflowCodenames = (typeof workflowValues)[number];
+export type WorkflowCodenames = (typeof workflowCodenames)[number];
 
 /**
  * Type guard for Workflow codenames
  */
-export function isWorkflow(value: string | undefined | null): value is WorkflowCodenames {
-    return typeof value === 'string' && (workflowValues as readonly string[]).includes(value);
+export function isWorkflowCodename(value: string | undefined | null): value is WorkflowCodenames {
+    return typeof value === 'string' && (workflowCodenames as readonly string[]).includes(value);
 }

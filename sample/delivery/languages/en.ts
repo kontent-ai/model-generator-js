@@ -21,7 +21,7 @@ import type { LanguageCodenames } from './core.language.js';
  * Codename: en
  * Id: 00000000-0000-0000-0000-000000000000
  */
-export type EnglishLanguage = Extract<LanguageCodenames, 'en'>;
+export type EnglishLanguageCodename = Extract<LanguageCodenames, 'en'>;
 
 /**
  * Type guard for English entity
@@ -29,6 +29,6 @@ export type EnglishLanguage = Extract<LanguageCodenames, 'en'>;
  * Codename: en
  * Id: 00000000-0000-0000-0000-000000000000
  */
-export function isEnglishLanguage(value: string | undefined | null): value is EnglishLanguage {
-    return typeof value === 'string' && value === ('en' satisfies EnglishLanguage);
+export function isEnglishLanguageCodename(value: string | undefined | null): value is EnglishLanguageCodename {
+    return typeof value === 'string' && value === ('en' satisfies EnglishLanguageCodename);
 }

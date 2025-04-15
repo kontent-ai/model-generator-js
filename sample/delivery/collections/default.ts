@@ -21,7 +21,7 @@ import type { CollectionCodenames } from './core.collection.js';
  * Codename: default
  * Id: 00000000-0000-0000-0000-000000000000
  */
-export type DefaultCollection = Extract<CollectionCodenames, 'default'>;
+export type DefaultCollectionCodename = Extract<CollectionCodenames, 'default'>;
 
 /**
  * Type guard for Default entity
@@ -29,6 +29,6 @@ export type DefaultCollection = Extract<CollectionCodenames, 'default'>;
  * Codename: default
  * Id: 00000000-0000-0000-0000-000000000000
  */
-export function isDefaultCollection(value: string | undefined | null): value is DefaultCollection {
-    return typeof value === 'string' && value === ('default' satisfies DefaultCollection);
+export function isDefaultCollectionCodename(value: string | undefined | null): value is DefaultCollectionCodename {
+    return typeof value === 'string' && value === ('default' satisfies DefaultCollectionCodename);
 }

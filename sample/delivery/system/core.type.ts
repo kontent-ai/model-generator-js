@@ -24,7 +24,7 @@ import type { ContentTypeCodenames } from '../contentTypes/core.contentType.js';
 /**
  * Core content type used in favor of default 'IContentItem'
  */
-export type CoreContentType<
+export type CoreItem<
     TElementCodenames extends string = string,
     TElements extends IContentItemElements<TElementCodenames> = IContentItemElements<TElementCodenames>,
     TContentTypeCodename extends ContentTypeCodenames = ContentTypeCodenames
@@ -35,7 +35,7 @@ export type CoreContentType<
  */
 export type CoreClientTypes = {
     readonly collectionCodenames: CollectionCodenames;
-    readonly contentItemType: CoreContentType;
+    readonly contentItemType: CoreItem;
     readonly contentTypeCodenames: ContentTypeCodenames;
     readonly elementCodenames: ElementCodenames;
     readonly languageCodenames: LanguageCodenames;

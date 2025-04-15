@@ -16,16 +16,16 @@
 /**
  * Object containing all ContentType codenames
  */
-export const contentTypeValues = ['actor', 'movie'] as const;
+export const contentTypeCodenames = ['actor', 'movie'] as const;
 
 /**
  * Type representing ContentType codenames
  */
-export type ContentTypeCodenames = (typeof contentTypeValues)[number];
+export type ContentTypeCodenames = (typeof contentTypeCodenames)[number];
 
 /**
  * Type guard for ContentType codenames
  */
-export function isContentType(value: string | undefined | null): value is ContentTypeCodenames {
-    return typeof value === 'string' && (contentTypeValues as readonly string[]).includes(value);
+export function isContentTypeCodename(value: string | undefined | null): value is ContentTypeCodenames {
+    return typeof value === 'string' && (contentTypeCodenames as readonly string[]).includes(value);
 }

@@ -14,7 +14,7 @@
 **/
 
 import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { CoreContentType } from '../system/index.js';
+import type { CoreItem } from '../system/index.js';
 
 /**
  * Actor
@@ -22,7 +22,7 @@ import type { CoreContentType } from '../system/index.js';
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export type Actor = CoreContentType<
+export type Actor = CoreItem<
     ActorElementCodenames,
     {
         /**
@@ -77,6 +77,6 @@ export type ActorElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo'
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export function isActor(item: CoreContentType | undefined | null): item is Actor {
+export function isActorItem(item: CoreItem | undefined | null): item is Actor {
     return item?.system?.type === 'actor';
 }

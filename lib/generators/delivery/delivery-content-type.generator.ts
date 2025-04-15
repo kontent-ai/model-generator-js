@@ -579,7 +579,8 @@ ${getContentItemTypeGuardFunction(contentType)};
     const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
         const nameResolvers = {
             contentItemTypeGuardFunctionName: mapName(config.nameResolvers?.contentType, 'pascalCase', {
-                prefix: 'is'
+                prefix: 'is',
+                suffix: 'Item'
             }),
             contentItemTypeName: mapName(config.nameResolvers?.contentType, 'pascalCase')
         };
