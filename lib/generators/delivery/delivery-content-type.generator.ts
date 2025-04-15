@@ -519,7 +519,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                   importValue: `${sdkImports.join(', ')}`
               })}
                 ${importer.importType({
-                    filePathOrPackage: `./${deliveryConfig.coreCodenamesFilename}.ts`,
+                    filePathOrPackage: `./${deliveryConfig.elementCodenamesFilename}.ts`,
                     importValue: `${codenameImports.join(', ')}`
                 })}
                 ${Object.values(entityGenerators)
@@ -570,9 +570,9 @@ ${getContentItemTypeGuardFunction(contentType)};
         };
     };
 
-    const getCodenamesFile = (): GeneratedFile => {
+    const getElementCodenamesFile = (): GeneratedFile => {
         return {
-            filename: `${deliveryConfig.coreCodenamesFilename}.ts`,
+            filename: `${deliveryConfig.elementCodenamesFilename}.ts`,
             text: `
                  ${wrapComment(`\n * Type representing all element codenames across all content types\n`)}
                 ${getElementCodenamesType(config.environmentData.types, config.environmentData.snippets)}
@@ -616,7 +616,7 @@ ${getContentItemTypeGuardFunction(contentType)};
         getSystemFiles(): GeneratedSet {
             return {
                 folderName: deliveryConfig.systemTypesFolderName,
-                files: [getCoreContentTypeFile(), getCodenamesFile()]
+                files: [getCoreContentTypeFile(), getElementCodenamesFile()]
             };
         }
     };

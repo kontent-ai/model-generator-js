@@ -48,7 +48,7 @@ export const deliveryConfig = {
     itemTypesFolderName: `itemTypes`,
     itemSnippetsFolderName: `itemSnippets`,
     systemTypesFolderName: 'system',
-    coreCodenamesFilename: 'delivery.codenames',
+    elementCodenamesFilename: 'element.codenames',
     coreTypeFilename: 'core.type',
     coreContentTypeName: 'CoreItem',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
