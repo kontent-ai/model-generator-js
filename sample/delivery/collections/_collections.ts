@@ -14,17 +14,17 @@
 **/
 
 /**
- * Object with all values of Collection codenames in Collection
+ * Object with all values of Collection codenames
  */
 export const collectionCodenames = ['default'] as const;
 
 /**
- * Type representing Collection codenames in Collection
+ * Type representing Collection codenames
  */
 export type CollectionCodenames = (typeof collectionCodenames)[number];
 
 /**
- * Type guard for Collection codenames in Collection
+ * Type guard for Collection codenames
  */
 export function isCollectionCodename(value: string | undefined | null): value is CollectionCodenames {
     return typeof value === 'string' && (collectionCodenames as readonly string[]).includes(value);

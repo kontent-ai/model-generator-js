@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { LanguageCodenames } from './core.language.js';
+import type { LanguageCodenames } from './_languages.js';
 
 /**
- * Type representing codename of cz entity
+ * Type representing codename of cz Language
  *
  * Codename: cz
- * Id: 41ccb26f-ceab-04d0-6ffa-9c7c5358aa8f
  */
 export type CzLanguageCodename = Extract<LanguageCodenames, 'cz'>;
 
@@ -27,7 +26,6 @@ export type CzLanguageCodename = Extract<LanguageCodenames, 'cz'>;
  * Type guard for cz entity
  *
  * Codename: cz
- * Id: 41ccb26f-ceab-04d0-6ffa-9c7c5358aa8f
  */
 export function isCzLanguageCodename(value: string | undefined | null): value is CzLanguageCodename {
     return typeof value === 'string' && value === ('cz' satisfies CzLanguageCodename);

@@ -4,8 +4,8 @@ import type { Options } from 'prettier';
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { getManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { getFileManager } from '../../files/file-manager.js';
-import type { DeliveryFileResolvers, DeliveryNameResolvers } from './delivery-content-type.generator.js';
-import { deliveryContentTypeGenerator } from './delivery-content-type.generator.js';
+import type { DeliveryFileResolvers, DeliveryNameResolvers } from './delivery-type.generator.js';
+import { deliveryTypeGenerator } from './delivery-type.generator.js';
 
 export type GenerateDeliveryModelsConfig = {
     readonly environmentId: string;
@@ -66,7 +66,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         kontentFetcher.getWorkflowsAsync()
     ]);
 
-    const deliveryGenerator = deliveryContentTypeGenerator({
+    const deliveryGenerator = deliveryTypeGenerator({
         moduleFileExtension: config.moduleFileExtension,
         environmentData: {
             environment: environmentInfo,

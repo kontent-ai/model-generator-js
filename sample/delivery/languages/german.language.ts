@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { LanguageCodenames } from './core.language.js';
+import type { LanguageCodenames } from './_languages.js';
 
 /**
- * Type representing codename of German entity
+ * Type representing codename of German Language
  *
  * Codename: German
- * Id: 14f7bcc0-4fd6-4b77-8c22-70e5ccfdae1d
  */
 export type GermanLanguageCodename = Extract<LanguageCodenames, 'German'>;
 
@@ -27,7 +26,6 @@ export type GermanLanguageCodename = Extract<LanguageCodenames, 'German'>;
  * Type guard for German entity
  *
  * Codename: German
- * Id: 14f7bcc0-4fd6-4b77-8c22-70e5ccfdae1d
  */
 export function isGermanLanguageCodename(value: string | undefined | null): value is GermanLanguageCodename {
     return typeof value === 'string' && value === ('German' satisfies GermanLanguageCodename);

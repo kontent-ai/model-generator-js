@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { WorkflowCodenames } from './core.workflow.js';
+import type { WorkflowCodenames } from './_workflows.js';
 
 /**
- * Type representing codename of Default entity
+ * Type representing codename of Default Workflow
  *
  * Codename: default
- * Id: 00000000-0000-0000-0000-000000000000
  */
 export type DefaultWorkflowCodename = Extract<WorkflowCodenames, 'default'>;
 
@@ -27,7 +26,6 @@ export type DefaultWorkflowCodename = Extract<WorkflowCodenames, 'default'>;
  * Type guard for Default entity
  *
  * Codename: default
- * Id: 00000000-0000-0000-0000-000000000000
  */
 export function isDefaultWorkflowCodename(value: string | undefined | null): value is DefaultWorkflowCodename {
     return typeof value === 'string' && value === ('default' satisfies DefaultWorkflowCodename);

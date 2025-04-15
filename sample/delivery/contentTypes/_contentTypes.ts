@@ -14,17 +14,17 @@
 **/
 
 /**
- * Object with all values of ContentType codenames in ContentType
+ * Object with all values of ContentType codenames
  */
 export const contentTypeCodenames = ['actor', 'movie'] as const;
 
 /**
- * Type representing ContentType codenames in ContentType
+ * Type representing ContentType codenames
  */
 export type ContentTypeCodenames = (typeof contentTypeCodenames)[number];
 
 /**
- * Type guard for ContentType codenames in ContentType
+ * Type guard for ContentType codenames
  */
 export function isContentTypeCodename(value: string | undefined | null): value is ContentTypeCodenames {
     return typeof value === 'string' && (contentTypeCodenames as readonly string[]).includes(value);

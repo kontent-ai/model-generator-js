@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { ContentTypeCodenames } from './core.contentType.js';
+import type { ContentTypeCodenames } from './_contentTypes.js';
 
 /**
- * Type representing codename of Actor entity
+ * Type representing codename of Actor ContentType
  *
  * Codename: actor
- * Id: 58099989-319f-495f-aa36-cb3710854e36
  */
 export type ActorContentTypeCodename = Extract<ContentTypeCodenames, 'actor'>;
 
@@ -27,7 +26,6 @@ export type ActorContentTypeCodename = Extract<ContentTypeCodenames, 'actor'>;
  * Type guard for Actor entity
  *
  * Codename: actor
- * Id: 58099989-319f-495f-aa36-cb3710854e36
  */
 export function isActorContentTypeCodename(value: string | undefined | null): value is ActorContentTypeCodename {
     return typeof value === 'string' && value === ('actor' satisfies ActorContentTypeCodename);

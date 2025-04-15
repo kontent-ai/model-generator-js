@@ -14,12 +14,12 @@
 **/
 
 import type { IContentItem, IContentItemElements, IDeliveryClient } from '@kontent-ai/delivery-sdk';
-import type { ElementCodenames } from './element.codenames.js';
-import type { CollectionCodenames } from '../collections/core.collection.js';
-import type { LanguageCodenames } from '../languages/core.language.js';
-import type { WorkflowCodenames, WorkflowStepCodenames } from '../workflows/core.workflow.js';
-import type { TaxonomyCodenames } from '../taxonomies/core.taxonomy.js';
-import type { ContentTypeCodenames } from '../contentTypes/core.contentType.js';
+import type { CollectionCodenames } from '../collections/_collections.js';
+import type { LanguageCodenames } from '../languages/_languages.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../workflows/_workflows.js';
+import type { TaxonomyCodenames } from '../taxonomies/_taxonomies.js';
+import type { ContentTypeCodenames } from '../contentTypes/_contentTypes.js';
+import type { ElementCodenames } from '../elements/_elements.js';
 
 /**
  * Core content type used in favor of default 'IContentItem'

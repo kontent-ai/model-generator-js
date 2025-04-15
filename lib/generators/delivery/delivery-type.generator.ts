@@ -1,7 +1,7 @@
 import type { CollectionModels, EnvironmentModels, LanguageModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
-import { coreConfig, deliveryConfig, sharedTypesConfig } from '../../config.js';
+import { coreConfig, deliveryConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
@@ -22,7 +22,7 @@ import type {
     WorkflowTypeFileNameResolver
 } from '../../core/resolvers.js';
 import { mapFilename, mapName } from '../../core/resolvers.js';
-import { getElementCodenamesType } from '../shared/type-codename.generator.js';
+import type { DeliveryElement } from './delivery-entity.generator.js';
 import { getDeliveryEntityGenerator } from './delivery-entity.generator.js';
 
 type ExtractImportsResult = {
@@ -51,7 +51,7 @@ export type DeliveryNameResolvers = {
     readonly workflow?: WorkflowNameResolver;
 };
 
-export interface DeliveryContentTypeGeneratorConfig {
+export interface DeliveryTypeGeneratorConfig {
     readonly moduleFileExtension: ModuleFileExtension;
 
     readonly environmentData: {
@@ -68,7 +68,7 @@ export interface DeliveryContentTypeGeneratorConfig {
     readonly nameResolvers?: DeliveryNameResolvers;
 }
 
-export function deliveryContentTypeGenerator(config: DeliveryContentTypeGeneratorConfig) {
+export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
     const fileResolvers = {
         snippet: mapFilename(config.fileResolvers?.snippet),
         contentType: mapFilename(config.fileResolvers?.contentType)
@@ -79,6 +79,30 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
     const nameResolvers = {
         snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),
         contentType: mapName(config.nameResolvers?.contentType, 'pascalCase')
+    };
+
+    const getUniqueDeliveryElements = (): readonly Readonly<DeliveryElement>[] => {
+        const flattenedElements = getFlattenedElements({
+            elements: [
+                ...config.environmentData.types.flatMap((type) => type.elements),
+                ...config.environmentData.snippets.flatMap((snippet) => snippet.elements)
+            ],
+            snippets: config.environmentData.snippets,
+            taxonomies: config.environmentData.taxonomies,
+            types: config.environmentData.types
+        });
+
+        const uniqueElementCodenames: readonly string[] = flattenedElements
+            .map((element) => element.codename)
+            .filter(isNotUndefined)
+            .filter(uniqueFilter);
+
+        return flattenedElements
+            .filter((element) => uniqueElementCodenames.includes(element.codename))
+            .map<DeliveryElement>((m) => ({
+                codename: m.codename,
+                name: m.title
+            }));
     };
 
     const entityGenerators = {
@@ -115,6 +139,13 @@ export function deliveryContentTypeGenerator(config: DeliveryContentTypeGenerato
             entityType: 'ContentType',
             fileResolver: config.fileResolvers?.contentType,
             nameResolver: config.nameResolvers?.contentType,
+            moduleFileExtension: config.moduleFileExtension
+        }),
+        elements: getDeliveryEntityGenerator<DeliveryElement>({
+            entities: getUniqueDeliveryElements(),
+            entityType: 'Element',
+            fileResolver: undefined,
+            nameResolver: undefined,
             moduleFileExtension: config.moduleFileExtension
         })
     };
@@ -505,8 +536,6 @@ ${getContentItemTypeGuardFunction(contentType)};
             deliveryConfig.sdkTypes.deliveryClient
         ] as const;
 
-        const codenameImports = [sharedTypesConfig.elementCodenames] as const;
-
         const contentTypeGenericArgName: string = 'TContentTypeCodename';
         const elementsGenericArgName: string = 'TElements';
         const elementCodenamesGenericArgName: string = 'TElementCodenames';
@@ -518,10 +547,6 @@ ${getContentItemTypeGuardFunction(contentType)};
                   filePathOrPackage: deliveryConfig.npmPackageName,
                   importValue: `${sdkImports.join(', ')}`
               })}
-                ${importer.importType({
-                    filePathOrPackage: `./${deliveryConfig.elementCodenamesFilename}.ts`,
-                    importValue: `${codenameImports.join(', ')}`
-                })}
                 ${Object.values(entityGenerators)
                     .map((generator) => {
                         const importValues: readonly string[] = [
@@ -557,7 +582,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     readonly collectionCodenames: ${entityGenerators.collections.entityCodenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
                     readonly contentTypeCodenames: ${entityGenerators.contentType.entityCodenamesTypeName};
-                    readonly elementCodenames: ${sharedTypesConfig.elementCodenames};
+                    readonly elementCodenames: ${entityGenerators.elements.entityCodenamesTypeName};
                     readonly languageCodenames: ${entityGenerators.languages.entityCodenamesTypeName};
                     readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityCodenamesTypeName};
                     readonly workflowCodenames: ${entityGenerators.workflows.entityCodenamesTypeName};
@@ -566,16 +591,6 @@ ${getContentItemTypeGuardFunction(contentType)};
 
                 ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
                 export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<${deliveryConfig.coreDeliveryClientTypesTypeName}>;
-            `
-        };
-    };
-
-    const getElementCodenamesFile = (): GeneratedFile => {
-        return {
-            filename: `${deliveryConfig.elementCodenamesFilename}.ts`,
-            text: `
-                 ${wrapComment(`\n * Type representing all element codenames across all content types\n`)}
-                ${getElementCodenamesType(config.environmentData.types, config.environmentData.snippets)}
             `
         };
     };
@@ -616,7 +631,7 @@ ${getContentItemTypeGuardFunction(contentType)};
         getSystemFiles(): GeneratedSet {
             return {
                 folderName: deliveryConfig.systemTypesFolderName,
-                files: [getCoreContentTypeFile(), getElementCodenamesFile()]
+                files: [getCoreContentTypeFile()]
             };
         }
     };

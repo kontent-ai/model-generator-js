@@ -8,14 +8,20 @@ import { getImporter } from '../../core/importer.js';
 import type { FilenameResolver, MapObjectToName, NameResolver } from '../../core/resolvers.js';
 import { mapFilename, mapName, resolveCase } from '../../core/resolvers.js';
 
+export type DeliveryElement = {
+    readonly codename: string;
+    readonly name: string;
+};
+
 export type DeliveryEntity =
     | Readonly<LanguageModels.LanguageModel>
     | Readonly<CollectionModels.Collection>
     | Readonly<WorkflowModels.Workflow>
     | Readonly<TaxonomyModels.Taxonomy>
+    | DeliveryElement
     | Readonly<ContentTypeModels.ContentType>;
 
-export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'ContentType';
+export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'ContentType' | 'Element';
 
 export type DeliveryEntityGeneratorConfig<TEntity extends DeliveryEntity> = {
     readonly moduleFileExtension: ModuleFileExtension;
@@ -38,7 +44,17 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     config: DeliveryEntityGeneratorConfig<TEntity>
 ): DeliveryEntityGenerator<TEntity> {
     const importer = getImporter(config.moduleFileExtension);
-    const filenameMap = mapFilename(config.fileResolver);
+
+    const getPluralEntityName = (entityName: DeliveryEntityType): string => {
+        return match(entityName)
+            .returnType<string>()
+            .with('Taxonomy', () => 'Taxonomies')
+            .otherwise(() => `${entityName}s`);
+    };
+
+    const filenameMap = mapFilename(config.fileResolver, {
+        suffix: `.${resolveCase(config.entityType, 'camelCase')}`
+    });
     const nameMapWithoutSuffix = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
     const nameMap = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` });
     const getEntityTypeGuardFunctionName = mapName(config.nameResolver, 'pascalCase', {
@@ -47,16 +63,9 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     });
 
     const coreEntityFilename = mapFilename('camelCase', {
-        prefix: 'core.'
-    })({ codename: `${config.entityType}` }, true);
+        prefix: '_'
+    })({ codename: `${getPluralEntityName(config.entityType)}` }, true);
     const entityCodenamesTypeName = `${config.entityType}Codenames`;
-
-    const getPluralEntityName = (entityName: DeliveryEntityType): string => {
-        return match(entityName)
-            .returnType<string>()
-            .with('Taxonomy', () => 'Taxonomies')
-            .otherwise(() => `${entityName}s`);
-    };
 
     const entityFolderName = `${resolveCase(getPluralEntityName(config.entityType), 'camelCase')}`;
 
@@ -67,15 +76,14 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     };
 
     const getEntityInfoComment = (entity: Readonly<TEntity>): string => {
-        return `* Codename: ${entity.codename}
- * Id: ${entity.id}`;
+        return `* Codename: ${entity.codename}`;
     };
 
     const getCoreEntityCode = (): string => {
         return `
 ${getCodeForSpecificEntity({
     codenames: config.entities.map((m) => m.codename),
-    originalName: config.entityType,
+    originalName: undefined,
     resolvedName: config.entityType,
     type: config.entityType,
     propertySuffix: 'Codenames',
@@ -93,7 +101,7 @@ ${importer.importType({
 })}
     
  ${wrapComment(`
- * Type representing codename of ${entity.name} entity
+ * Type representing codename of ${entity.name} ${config.entityType}
  * 
 ${getEntityInfoComment(entity)}
 `)}
@@ -118,9 +126,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
 
     const generateCoreEntityFile = (): GeneratedFile => {
         return {
-            filename: mapFilename('camelCase', {
-                prefix: 'core.'
-            })({ codename: config.entityType }, true),
+            filename: coreEntityFilename,
             text: getCoreEntityCode()
         };
     };
@@ -188,7 +194,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
         codenames
     }: {
         readonly resolvedName: string;
-        readonly originalName: string;
+        readonly originalName: string | undefined;
         readonly type: 'taxonomy term' | 'workflow step' | DeliveryEntityType;
         readonly codenames: readonly string[];
         readonly propertySuffix: string;
@@ -215,17 +221,17 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
 
         return `
 ${wrapComment(`
- * Object with all values of ${type} codenames in ${originalName}
+ * Object with all values of ${type} codenames ${originalName ? `in ${originalName}` : ''}
 `)}
 ${getValuesCode()};
 
 ${wrapComment(`
- * Type representing ${type} codenames in ${originalName}
+ * Type representing ${type} codenames ${originalName ? `in ${originalName}` : ''}
 `)}
 export type ${codenamesTypeName} = typeof ${valuesPropertyName}[number];
 
 ${wrapComment(`
- * Type guard for ${type} codenames in ${originalName}
+ * Type guard for ${type} codenames ${originalName ? `in ${originalName}` : ''}
 `)}
 ${getTypeGuardFunction()};
 `;

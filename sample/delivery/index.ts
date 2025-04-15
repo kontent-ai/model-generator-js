@@ -15,6 +15,7 @@
 
 export * from './collections/index.js';
 export * from './contentTypes/index.js';
+export * from './elements/index.js';
 export * from './itemSnippets/index.js';
 export * from './itemTypes/index.js';
 export * from './languages/index.js';

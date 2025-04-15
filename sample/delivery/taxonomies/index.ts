@@ -13,6 +13,6 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.taxonomy.js';
-export * from './movietype.js';
-export * from './releasecategory.js';
+export * from './_taxonomies.js';
+export * from './movietype.taxonomy.js';
+export * from './releasecategory.taxonomy.js';

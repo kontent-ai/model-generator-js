@@ -13,6 +13,6 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './actor.js';
-export * from './core.contentType.js';
-export * from './movie.js';
+export * from './_contentTypes.js';
+export * from './actor.contentType.js';
+export * from './movie.contentType.js';

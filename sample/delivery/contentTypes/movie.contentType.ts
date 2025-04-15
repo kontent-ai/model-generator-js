@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { ContentTypeCodenames } from './core.contentType.js';
+import type { ContentTypeCodenames } from './_contentTypes.js';
 
 /**
- * Type representing codename of Movie entity
+ * Type representing codename of Movie ContentType
  *
  * Codename: movie
- * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  */
 export type MovieContentTypeCodename = Extract<ContentTypeCodenames, 'movie'>;
 
@@ -27,7 +26,6 @@ export type MovieContentTypeCodename = Extract<ContentTypeCodenames, 'movie'>;
  * Type guard for Movie entity
  *
  * Codename: movie
- * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  */
 export function isMovieContentTypeCodename(value: string | undefined | null): value is MovieContentTypeCodename {
     return typeof value === 'string' && value === ('movie' satisfies MovieContentTypeCodename);

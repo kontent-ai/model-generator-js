@@ -13,5 +13,4 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.type.js';
-export * from './element.codenames.js';
+export * from './core.item.js';

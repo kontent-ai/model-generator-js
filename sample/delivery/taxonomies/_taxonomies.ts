@@ -14,17 +14,17 @@
 **/
 
 /**
- * Object with all values of Taxonomy codenames in Taxonomy
+ * Object with all values of Taxonomy codenames
  */
 export const taxonomyCodenames = ['movietype', 'releasecategory'] as const;
 
 /**
- * Type representing Taxonomy codenames in Taxonomy
+ * Type representing Taxonomy codenames
  */
 export type TaxonomyCodenames = (typeof taxonomyCodenames)[number];
 
 /**
- * Type guard for Taxonomy codenames in Taxonomy
+ * Type guard for Taxonomy codenames
  */
 export function isTaxonomyCodename(value: string | undefined | null): value is TaxonomyCodenames {
     return typeof value === 'string' && (taxonomyCodenames as readonly string[]).includes(value);

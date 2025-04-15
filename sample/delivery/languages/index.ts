@@ -13,7 +13,7 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.language.js';
-export * from './cz.js';
-export * from './en.js';
-export * from './german.js';
+export * from './_languages.js';
+export * from './cz.language.js';
+export * from './en.language.js';
+export * from './german.language.js';

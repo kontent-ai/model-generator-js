@@ -13,5 +13,5 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.workflow.js';
-export * from './default.js';
+export * from './_workflows.js';
+export * from './default.workflow.js';

@@ -1,29 +1,5 @@
-import type { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/management-sdk';
-import { match, P } from 'ts-pattern';
-import { sharedTypesConfig } from '../../config.js';
 import type { ObjectWithCodename } from '../../core/core.models.js';
-import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
-
-export function getElementCodenamesType(
-    types: readonly Readonly<ContentTypeModels.ContentType>[],
-    snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]
-): string {
-    return getTypeWithCodenames(
-        sharedTypesConfig.elementCodenames,
-        [...types, ...snippets].flatMap((type) =>
-            type.elements
-                .map((element) =>
-                    match(element)
-                        .returnType<ObjectWithCodename | undefined>()
-                        .with({ codename: P.nonNullable }, (elementWithCodename) => {
-                            return elementWithCodename;
-                        })
-                        .otherwise(() => undefined)
-                )
-                .filter(isNotUndefined)
-        )
-    );
-}
+import { sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 
 export function getTypeWithCodenames(typeName: string, items: readonly ObjectWithCodename[]): string {
     if (!items.length) {

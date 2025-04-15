@@ -13,5 +13,5 @@
 * -------------------------------------------------------------------------------
 **/
 
-export * from './core.collection.js';
-export * from './default.js';
+export * from './_collections.js';
+export * from './default.collection.js';

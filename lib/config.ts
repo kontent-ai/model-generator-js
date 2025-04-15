@@ -10,10 +10,6 @@ export const coreConfig = {
     kontentTrackingHeaderValue: `${libMetadata.name};${libMetadata.version}`
 } as const;
 
-export const sharedTypesConfig = {
-    elementCodenames: 'ElementCodenames'
-} as const;
-
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
     migrationItemsFolderName: `contentTypes`,
@@ -48,8 +44,7 @@ export const deliveryConfig = {
     itemTypesFolderName: `itemTypes`,
     itemSnippetsFolderName: `itemSnippets`,
     systemTypesFolderName: 'system',
-    elementCodenamesFilename: 'element.codenames',
-    coreTypeFilename: 'core.type',
+    coreTypeFilename: 'core.item',
     coreContentTypeName: 'CoreItem',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
     coreDeliveryClientTypesTypeName: 'CoreClientTypes',

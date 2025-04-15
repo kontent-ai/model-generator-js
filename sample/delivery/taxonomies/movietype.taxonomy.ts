@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { TaxonomyCodenames } from './core.taxonomy.js';
+import type { TaxonomyCodenames } from './_taxonomies.js';
 
 /**
- * Type representing codename of MovieType entity
+ * Type representing codename of MovieType Taxonomy
  *
  * Codename: movietype
- * Id: 365a17e6-1929-27ab-9f67-a9273c846717
  */
 export type MovieTypeTaxonomyCodename = Extract<TaxonomyCodenames, 'movietype'>;
 
@@ -27,7 +26,6 @@ export type MovieTypeTaxonomyCodename = Extract<TaxonomyCodenames, 'movietype'>;
  * Type guard for MovieType entity
  *
  * Codename: movietype
- * Id: 365a17e6-1929-27ab-9f67-a9273c846717
  */
 export function isMovieTypeTaxonomyCodename(value: string | undefined | null): value is MovieTypeTaxonomyCodename {
     return typeof value === 'string' && value === ('movietype' satisfies MovieTypeTaxonomyCodename);

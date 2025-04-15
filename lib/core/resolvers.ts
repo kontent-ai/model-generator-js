@@ -48,10 +48,9 @@ export function mapFilename<T extends ObjectWithCodename>(
                     .returnType<string>()
                     .with(P.instanceOf(Function), (resolver) => resolver(item))
                     .with(undefined, () => resolveCase(item.codename, 'camelCase'))
-                    .otherwise((resolverType) => resolveCase(item.codename, resolverType)),
+                    .otherwise((resolverType) => resolveCase(item.codename, resolverType)) + (options?.suffix ? options.suffix : ''),
                 addExtension
-            ) +
-            (options?.suffix ? options.suffix : '')
+            )
         );
     };
 }

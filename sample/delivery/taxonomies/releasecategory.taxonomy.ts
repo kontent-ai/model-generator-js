@@ -13,13 +13,12 @@
 * -------------------------------------------------------------------------------
 **/
 
-import type { TaxonomyCodenames } from './core.taxonomy.js';
+import type { TaxonomyCodenames } from './_taxonomies.js';
 
 /**
- * Type representing codename of ReleaseCategory entity
+ * Type representing codename of ReleaseCategory Taxonomy
  *
  * Codename: releasecategory
- * Id: 09b6a348-0f86-7a68-4af3-7cab9a5c60b7
  */
 export type ReleaseCategoryTaxonomyCodename = Extract<TaxonomyCodenames, 'releasecategory'>;
 
@@ -27,7 +26,6 @@ export type ReleaseCategoryTaxonomyCodename = Extract<TaxonomyCodenames, 'releas
  * Type guard for ReleaseCategory entity
  *
  * Codename: releasecategory
- * Id: 09b6a348-0f86-7a68-4af3-7cab9a5c60b7
  */
 export function isReleaseCategoryTaxonomyCodename(value: string | undefined | null): value is ReleaseCategoryTaxonomyCodename {
     return typeof value === 'string' && value === ('releasecategory' satisfies ReleaseCategoryTaxonomyCodename);
