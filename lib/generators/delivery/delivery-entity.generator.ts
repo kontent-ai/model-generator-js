@@ -41,14 +41,11 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     const filenameMap = mapFilename(config.fileResolver);
     const nameMapWithoutSuffix = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
     const nameMap = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` });
-    const valuesName = mapName('camelCase', 'camelCase', { suffix: 'Codenames' })({ name: `${config.entityType}` });
     const getEntityTypeGuardFunctionName = mapName(config.nameResolver, 'pascalCase', {
         prefix: 'is',
         suffix: `${config.entityType}Codename`
     });
-    const entitiesTypeGuardFunctionName = mapName('pascalCase', 'pascalCase', {
-        prefix: 'is'
-    })({ name: `${config.entityType}Codename` });
+
     const coreEntityFilename = mapFilename('camelCase', {
         prefix: 'core.'
     })({ codename: `${config.entityType}` }, true);
@@ -63,20 +60,10 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
 
     const entityFolderName = `${resolveCase(getPluralEntityName(config.entityType), 'camelCase')}`;
 
-    const getCodenames = (entities: readonly Readonly<TEntity>[]): readonly string[] => {
-        return entities.map((m) => m.codename);
-    };
-
     const getEntityTypeGuardFunction = (entity: Readonly<TEntity>): string => {
         return `export function ${getEntityTypeGuardFunctionName(entity)}(value: string | undefined | null): value is ${nameMap(entity)} {
                 return typeof value === 'string' && value === ('${entity.codename}' satisfies ${nameMap(entity)});
             }`;
-    };
-
-    const getEntitiesTypeGuardFunction = (): string => {
-        return `export function ${entitiesTypeGuardFunctionName}(value: string | undefined | null): value is ${entityCodenamesTypeName} {
-    return typeof value === 'string' && (${valuesName} as readonly string[]).includes(value);
-}`;
     };
 
     const getEntityInfoComment = (entity: Readonly<TEntity>): string => {
@@ -84,28 +71,16 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
  * Id: ${entity.id}`;
     };
 
-    const getEntityValuesCode = (): string => {
-        return `export const ${valuesName} = [${getCodenames(config.entities)
-            .map((m) => `'${m}'`)
-            .join(', ')}] as const;`;
-    };
-
     const getCoreEntityCode = (): string => {
         return `
-${wrapComment(`
- * Object containing all ${config.entityType} codenames
-`)}
- ${getEntityValuesCode()}
-
- ${wrapComment(`
- * Type representing ${config.entityType} codenames
-`)}
-export type ${entityCodenamesTypeName} = typeof ${valuesName}[number];
-
- ${wrapComment(`
- * Type guard for ${config.entityType} codenames
-`)}
-${getEntitiesTypeGuardFunction()}
+${getCodeForSpecificEntity({
+    codenames: config.entities.map((m) => m.codename),
+    originalName: config.entityType,
+    resolvedName: config.entityType,
+    type: config.entityType,
+    propertySuffix: 'Codenames',
+    typeGuardSuffix: 'Codename'
+})}
 ${getCoreEntitySpecificCode()}
 `;
     };
@@ -214,7 +189,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
     }: {
         readonly resolvedName: string;
         readonly originalName: string;
-        readonly type: 'taxonomy term' | 'workflow step';
+        readonly type: 'taxonomy term' | 'workflow step' | DeliveryEntityType;
         readonly codenames: readonly string[];
         readonly propertySuffix: string;
         readonly typeGuardSuffix: string;
