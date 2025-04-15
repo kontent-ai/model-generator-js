@@ -10,22 +10,19 @@ export const coreConfig = {
     kontentTrackingHeaderValue: `${libMetadata.name};${libMetadata.version}`
 } as const;
 
-export const sharedTypesConfig = {
-    languageCodenames: 'LanguageCodenames',
-    collectionCodenames: 'CollectionCodenames',
-    workflowCodenames: 'WorkflowCodenames',
-    workflowStepCodenames: 'WorkflowStepCodenames',
-    contentTypeCodenames: 'ContentTypeCodenames',
-    taxonomyCodenames: 'TaxonomyCodenames',
-    elementCodenames: 'ElementCodenames'
-} as const;
-
 export const migrationConfig = {
     npmPackageName: '@kontent-ai/migration-toolkit',
-    migrationItemsFolderName: `content-types`,
+    migrationItemsFolderName: `contentTypes`,
     environmentFolderName: `environment`,
     migrationTypesFilename: `migration`,
     environmentFilename: `environment`,
+
+    workflowStepCodenames: 'WorkflowStepCodenames',
+    languageCodenames: 'LanguageCodenames',
+    contentTypeCodenames: 'ContentTypeCodenames',
+    workflowCodenames: 'WorkflowCodenames',
+    taxonomyCodenames: 'TaxonomyCodenames',
+    collectionCodenames: 'CollectionCodenames',
 
     sdkTypeNames: {
         system: 'MigrationItemSystem',
@@ -44,16 +41,14 @@ export const migrationConfig = {
 
 export const deliveryConfig = {
     npmPackageName: '@kontent-ai/delivery-sdk',
-    contentTypesFolderName: `content-types`,
-    contentTypeSnippetsFolderName: `content-type-snippets`,
-    taxonomiesFolderName: `taxonomies`,
-    typeGuardsFileName: 'delivery.type-guards',
+    itemTypesFolderName: `itemTypes`,
+    itemSnippetsFolderName: `itemSnippets`,
     systemTypesFolderName: 'system',
-    coreCodenamesFilename: 'delivery.codenames',
-    coreTypeFilename: 'core.type',
-    coreContentTypeName: 'CoreContentType',
+    coreTypeFilename: 'core.item',
+    coreContentTypeName: 'CoreItem',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
     coreDeliveryClientTypesTypeName: 'CoreClientTypes',
+    workflowStepCodenames: 'WorkflowStepCodenames',
 
     sdkTypes: {
         contentItem: 'IContentItem',
