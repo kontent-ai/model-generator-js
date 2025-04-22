@@ -13,16 +13,3 @@
  */
 
 export * from './_elements.js';
-export * from './category.element.js';
-export * from './firstName.element.js';
-export * from './lastName.element.js';
-export * from './length.element.js';
-export * from './photo.element.js';
-export * from './plot.element.js';
-export * from './poster.element.js';
-export * from './releasecategory.element.js';
-export * from './released.element.js';
-export * from './seoname.element.js';
-export * from './stars.element.js';
-export * from './title.element.js';
-export * from './url.element.js';
