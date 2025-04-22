@@ -32,5 +32,5 @@
                  /**
  * Type representing all element codenames across all content types
 */
-                export type ElementCodenames = '_____numberelem_____________________' | 'asset_element' | 'content' | 'custom_element' | 'date___time_element' | 'empty_snippet' | 'guidelines' | 'items' | 'linked_items_element' | 'multiple_choice_element' | 'number_element' | 'parrot__' | 'rich_text_element' | 'show_in_navigation' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__text' | 'snippet_a' | 'subpages' | 'taxonomy_element' | 'text_element' | 'title' | 'url_slug_element' | 'url';
+                export type ElementCodenames = '_____numberelem_____________________' | 'asset_element' | 'content' | 'custom_element' | 'date___time_element' | 'empty_snippet' | 'guidelines' | 'items' | 'linked_items_element' | 'multiple_choice_element' | 'number_element' | 'parrot__' | 'rich_text_element' | 'show_in_navigation' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__rich_text_with_all_allowed_item_types' | 'snippet_a__text' | 'snippet_a' | 'subpages' | 'taxonomy_element' | 'text_element' | 'title' | 'url_slug_element' | 'url';
             

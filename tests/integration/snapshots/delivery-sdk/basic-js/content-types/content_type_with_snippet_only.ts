@@ -16,7 +16,10 @@ export type ContentTypeWithSnippetOnly = CoreContentType<
 /**
  * Type representing all available element codenames for Content type with snippet only
  */
-export type ContentTypeWithSnippetOnlyElementCodenames = 'snippet_a__linked_items_with_specific_types' | 'snippet_a__text';
+export type ContentTypeWithSnippetOnlyElementCodenames =
+    | 'snippet_a__rich_text_with_all_allowed_item_types'
+    | 'snippet_a__linked_items_with_specific_types'
+    | 'snippet_a__text';
 
 /**
  * Type guard for Content type with snippet only

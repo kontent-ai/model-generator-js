@@ -57,6 +57,7 @@ export type ElementCodenames =
     | 'rich_text_element'
     | 'show_in_navigation'
     | 'snippet_a__linked_items_with_specific_types'
+    | 'snippet_a__rich_text_with_all_allowed_item_types'
     | 'snippet_a__text'
     | 'snippet_a'
     | 'subpages'

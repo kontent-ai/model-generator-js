@@ -11,6 +11,16 @@ export type ContentTypeWithSnippetOnlyItem = CoreMigrationItem<
     'content_type_with_snippet_only',
     {
         /**
+         * Rich text with all allowed item types
+         *
+         * Type: rich_text
+         * Required: false
+         * Codename: snippet_a__rich_text_with_all_allowed_item_types
+         * Id: 72cdc4e7-dead-4baf-99bf-91d8fe62351f
+         */
+        readonly snippet_a__rich_text_with_all_allowed_item_types: MigrationElementModels.RichTextElement;
+
+        /**
          * Linked items with specific types
          *
          * Type: modular_content

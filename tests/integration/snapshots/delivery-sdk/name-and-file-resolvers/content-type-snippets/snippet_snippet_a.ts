@@ -1,5 +1,6 @@
 import type { Elements, Snippet } from '@kontent-ai/delivery-sdk';
 import type { ContentType_content_type_with_all_elements } from '../content-types/index.js';
+import type { CoreContentType } from '../system/index.js';
 
 /**
  * Snippet A
@@ -10,6 +11,15 @@ import type { ContentType_content_type_with_all_elements } from '../content-type
 export type Snippet_snippet_a = Snippet<
     Snippet_snippet_aElementCodenames,
     {
+        /**
+         * Rich text with all allowed item types
+         *
+         * Type: rich_text
+         * Required: false
+         * Codename: snippet_a__rich_text_with_all_allowed_item_types
+         * Id: 72cdc4e7-dead-4baf-99bf-91d8fe62351f
+         */
+        readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichTextElement<CoreContentType>;
         /**
          * Linked items with specific types
          *
@@ -34,4 +44,7 @@ export type Snippet_snippet_a = Snippet<
 /**
  * Type representing all available element codenames for Snippet A
  */
-export type Snippet_snippet_aElementCodenames = 'snippet_a__linked_items_with_specific_types' | 'snippet_a__text';
+export type Snippet_snippet_aElementCodenames =
+    | 'snippet_a__rich_text_with_all_allowed_item_types'
+    | 'snippet_a__linked_items_with_specific_types'
+    | 'snippet_a__text';
