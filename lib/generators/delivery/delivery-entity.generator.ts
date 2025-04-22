@@ -254,9 +254,11 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
             return {
                 folderName: entityFolderName,
                 files: [
-                    ...config.entities.map<GeneratedFile>((entity) => {
-                        return getEntityFile(entity);
-                    }),
+                    ...(config.generateOnlyCoreFile
+                        ? []
+                        : config.entities.map<GeneratedFile>((entity) => {
+                              return getEntityFile(entity);
+                          })),
                     generateCoreEntityFile()
                 ]
             };
