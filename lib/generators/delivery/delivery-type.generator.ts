@@ -111,42 +111,48 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
             entityType: 'Collection',
             fileResolver: config.fileResolvers?.collection,
             nameResolver: config.nameResolvers?.collection,
-            moduleFileExtension: config.moduleFileExtension
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: false
         }),
         languages: getDeliveryEntityGenerator<LanguageModels.LanguageModel>({
             entities: config.environmentData.languages,
             entityType: 'Language',
             fileResolver: config.fileResolvers?.language,
             nameResolver: config.nameResolvers?.language,
-            moduleFileExtension: config.moduleFileExtension
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: false
         }),
         workflows: getDeliveryEntityGenerator<WorkflowModels.Workflow>({
             entities: config.environmentData.workflows,
             entityType: 'Workflow',
             fileResolver: config.fileResolvers?.workflow,
             nameResolver: config.nameResolvers?.workflow,
-            moduleFileExtension: config.moduleFileExtension
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: false
         }),
         taxonomies: getDeliveryEntityGenerator<TaxonomyModels.Taxonomy>({
             entities: config.environmentData.taxonomies,
             entityType: 'Taxonomy',
             fileResolver: config.fileResolvers?.taxonomy,
             nameResolver: config.nameResolvers?.taxonomy,
-            moduleFileExtension: config.moduleFileExtension
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: false
         }),
         contentType: getDeliveryEntityGenerator<ContentTypeModels.ContentType>({
             entities: config.environmentData.types,
             entityType: 'ContentType',
             fileResolver: config.fileResolvers?.contentType,
             nameResolver: config.nameResolvers?.contentType,
-            moduleFileExtension: config.moduleFileExtension
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: false
         }),
         elements: getDeliveryEntityGenerator<DeliveryElement>({
             entities: getUniqueDeliveryElements(),
             entityType: 'Element',
             fileResolver: undefined,
             nameResolver: undefined,
-            moduleFileExtension: config.moduleFileExtension
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: true
         })
     };
 

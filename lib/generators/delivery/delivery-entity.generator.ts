@@ -29,6 +29,7 @@ export type DeliveryEntityGeneratorConfig<TEntity extends DeliveryEntity> = {
     readonly entities: readonly Readonly<TEntity>[];
     readonly fileResolver: FilenameResolver<Readonly<TEntity>>;
     readonly nameResolver: NameResolver<Readonly<TEntity>>;
+    readonly generateOnlyCoreFile: boolean;
 };
 
 export type DeliveryEntityGenerator<TEntity extends DeliveryEntity> = {
@@ -45,33 +46,29 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
 ): DeliveryEntityGenerator<TEntity> {
     const importer = getImporter(config.moduleFileExtension);
 
-    const getPluralEntityName = (entityName: DeliveryEntityType): string => {
+    const getPluralName = (entityName: DeliveryEntityType): string => {
         return match(entityName)
             .returnType<string>()
             .with('Taxonomy', () => 'Taxonomies')
             .otherwise(() => `${entityName}s`);
     };
 
-    const filenameMap = mapFilename(config.fileResolver, {
-        suffix: `.${resolveCase(config.entityType, 'camelCase')}`
-    });
-    const nameMapWithoutSuffix = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
-    const nameMap = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` });
-    const getEntityTypeGuardFunctionName = mapName(config.nameResolver, 'pascalCase', {
+    const entityCodenamesTypeName = `${config.entityType}Codenames`;
+    const coreEntityFilename = mapFilename('camelCase', {
+        prefix: '_'
+    })({ codename: `${getPluralName(config.entityType)}` }, true);
+
+    const entityFolderName = `${resolveCase(getPluralName(config.entityType), 'camelCase')}`;
+
+    const getName = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` });
+    const getTypeGuardName = mapName(config.nameResolver, 'pascalCase', {
         prefix: 'is',
         suffix: `${config.entityType}Codename`
     });
 
-    const coreEntityFilename = mapFilename('camelCase', {
-        prefix: '_'
-    })({ codename: `${getPluralEntityName(config.entityType)}` }, true);
-    const entityCodenamesTypeName = `${config.entityType}Codenames`;
-
-    const entityFolderName = `${resolveCase(getPluralEntityName(config.entityType), 'camelCase')}`;
-
     const getEntityTypeGuardFunction = (entity: Readonly<TEntity>): string => {
-        return `export function ${getEntityTypeGuardFunctionName(entity)}(value: string | undefined | null): value is ${nameMap(entity)} {
-                return typeof value === 'string' && value === ('${entity.codename}' satisfies ${nameMap(entity)});
+        return `export function ${getTypeGuardName(entity)}(value: string | undefined | null): value is ${getName(entity)} {
+                return typeof value === 'string' && value === ('${entity.codename}' satisfies ${getName(entity)});
             }`;
     };
 
@@ -81,43 +78,48 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
 
     const getCoreEntityCode = (): string => {
         return `
-${getCodeForSpecificEntity({
-    codenames: config.entities.map((m) => m.codename),
-    originalName: undefined,
-    resolvedName: config.entityType,
-    type: config.entityType,
-    propertySuffix: 'Codenames',
-    typeGuardSuffix: 'Codename'
-})}
-${getCoreEntitySpecificCode()}
-`;
+            ${getCodeForEntity({
+                codenames: config.entities.map((m) => m.codename),
+                originalName: undefined,
+                resolvedName: config.entityType,
+                type: config.entityType,
+                propertySuffix: 'Codenames',
+                typeGuardSuffix: 'Codename'
+            })}
+            ${getCoreEntityExtraCode()}`;
     };
 
     const getEntityCode = (entity: Readonly<TEntity>): string => {
-        return `
-${importer.importType({
-    filePathOrPackage: `./${coreEntityFilename}`,
-    importValue: `${entityCodenamesTypeName}`
-})}
-    
- ${wrapComment(`
- * Type representing codename of ${entity.name} ${config.entityType}
- * 
-${getEntityInfoComment(entity)}
-`)}
-export type ${nameMap(entity)} = Extract<${entityCodenamesTypeName}, '${entity.codename}'>;
+        const nameMapWithoutSuffix = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
 
-${wrapComment(`
- * Type guard for ${entity.name} entity
- * 
-${getEntityInfoComment(entity)}
-`)}
-${getEntityTypeGuardFunction(entity)}
-${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
-`;
+        return `
+            ${importer.importType({
+                filePathOrPackage: `./${coreEntityFilename}`,
+                importValue: `${entityCodenamesTypeName}`
+            })}
+    
+            ${wrapComment(`
+                * Type representing codename of ${entity.name}
+                * 
+                ${getEntityInfoComment(entity)}
+                `)}
+            export type ${getName(entity)} = Extract<${entityCodenamesTypeName}, '${entity.codename}'>;
+
+            ${wrapComment(`
+                * Type guard for ${entity.name} entity
+                * 
+                ${getEntityInfoComment(entity)}
+            `)}
+            ${getEntityTypeGuardFunction(entity)}
+            ${getEntityExtraCode(entity, nameMapWithoutSuffix(entity))}
+            `;
     };
 
     const getEntityFile = (entity: Readonly<TEntity>): GeneratedFile => {
+        const filenameMap = mapFilename(config.fileResolver, {
+            suffix: `.${resolveCase(config.entityType, 'camelCase')}`
+        });
+
         return {
             filename: filenameMap(entity, true),
             text: getEntityCode(entity)
@@ -131,7 +133,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
         };
     };
 
-    const getCoreEntitySpecificCode = (): string => {
+    const getCoreEntityExtraCode = (): string => {
         return match(config.entityType)
             .returnType<string>()
             .with('Workflow', () => {
@@ -142,7 +144,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
                     )
                     .map((m) => m.codename);
 
-                return getCodeForSpecificEntity({
+                return getCodeForEntity({
                     codenames: workflowSteps,
                     originalName: 'Workflow',
                     resolvedName: 'Workflow',
@@ -154,11 +156,11 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
             .otherwise(() => '');
     };
 
-    const getEntitySpecificCode = (entity: DeliveryEntity, resolvedName: string): string => {
+    const getEntityExtraCode = (entity: DeliveryEntity, resolvedName: string): string => {
         return match(entity)
             .returnType<string>()
             .with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
-                return getCodeForSpecificEntity({
+                return getCodeForEntity({
                     codenames: [
                         ...workflow.steps.map((m) => m.codename),
                         workflow.publishedStep?.codename,
@@ -173,7 +175,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
                 });
             })
             .with(P.instanceOf(TaxonomyModels.Taxonomy), (taxonomy) => {
-                return getCodeForSpecificEntity({
+                return getCodeForEntity({
                     codenames: getTaxonomyTermCodenames(taxonomy.terms),
                     originalName: taxonomy.name,
                     resolvedName: resolvedName,
@@ -185,7 +187,7 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
             .otherwise(() => '');
     };
 
-    const getCodeForSpecificEntity = ({
+    const getCodeForEntity = ({
         originalName,
         resolvedName,
         type,
@@ -220,21 +222,20 @@ ${getEntitySpecificCode(entity, nameMapWithoutSuffix(entity))}
         };
 
         return `
-${wrapComment(`
- * Object with all values of ${type} codenames ${originalName ? `in ${originalName}` : ''}
-`)}
-${getValuesCode()};
+            ${wrapComment(`
+                * Object with all values of ${type} codenames ${originalName ? `in ${originalName}` : ''}
+            `)}
+            ${getValuesCode()};
 
-${wrapComment(`
- * Type representing ${type} codenames ${originalName ? `in ${originalName}` : ''}
-`)}
-export type ${codenamesTypeName} = typeof ${valuesPropertyName}[number];
+            ${wrapComment(`
+                * Type representing ${type} codenames ${originalName ? `in ${originalName}` : ''}
+            `)}
+            export type ${codenamesTypeName} = typeof ${valuesPropertyName}[number];
 
-${wrapComment(`
- * Type guard for ${type} codenames ${originalName ? `in ${originalName}` : ''}
-`)}
-${getTypeGuardFunction()};
-`;
+            ${wrapComment(`
+                * Type guard for ${type} codenames ${originalName ? `in ${originalName}` : ''}
+            `)}
+            ${getTypeGuardFunction()};`;
     };
 
     const getTaxonomyTermCodenames = (taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] => {
@@ -248,7 +249,7 @@ ${getTypeGuardFunction()};
         coreEntityFilename,
         entityFolderName,
         entityCodenamesTypeName: entityCodenamesTypeName,
-        getEntityName: nameMap,
+        getEntityName: getName,
         generateEntityTypes: (): GeneratedSet => {
             return {
                 folderName: entityFolderName,
