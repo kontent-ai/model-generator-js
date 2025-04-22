@@ -1,7 +1,16 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See
-[standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [9.0.0-1](https://github.com/kontent-ai/model-generator-js/compare/v8.1.1...v9.0.0-1) (2025-04-22)
+
+## [9.0.0-0](https://github.com/kontent-ai/model-generator-js/compare/v8.1.0...v9.0.0-0) (2025-04-15)
+
+
+### Features
+
+* Extends support for types / type guards for Delivery for more entity types (i.e. collections. languages, workflows...) ([613648e](https://github.com/kontent-ai/model-generator-js/commit/613648ed4cdbcf2cd5462282275ad51007386622))
+* updates deps ([6d87a64](https://github.com/kontent-ai/model-generator-js/commit/6d87a64aeba93f59627e11f54e1956e3b6208eb9))
 
 ## [9.0.0-0](https://github.com/kontent-ai/model-generator-js/compare/v8.1.0...v9.0.0-0) (2025-04-15)
 
