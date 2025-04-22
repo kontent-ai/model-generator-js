@@ -150,13 +150,28 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
         })
     };
 
-    const getContentTypeSystemImports = (): readonly string[] => {
+    const getCoreTypeImports = (): readonly string[] => {
         return [
             importer.importType({
                 filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${coreConfig.barrelExportFilename}`,
                 importValue: [deliveryConfig.coreContentTypeName].join(', ')
             })
         ];
+    };
+
+    const shouldImportCoreTypeInSnippet = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): boolean => {
+        return snippet.elements
+            .map<boolean>((m) =>
+                match(m)
+                    .returnType<boolean>()
+                    .with(
+                        P.union({ type: 'modular_content' }, { type: 'subpages' }, { type: 'rich_text' }),
+                        (elementWithAllowedContentTypes) =>
+                            (elementWithAllowedContentTypes.allowed_content_types?.length ?? 0) > 0 ? false : true
+                    )
+                    .otherwise(() => false)
+            )
+            .some((m) => m === true);
     };
 
     const getSnippetImports = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): readonly string[] => {
@@ -169,7 +184,6 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
                 filePathOrPackage: `../${deliveryConfig.itemSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
                 importValue: snippets
                     .map((snippet) => nameResolvers.snippet(snippet))
-                    .map((m) => m)
                     .filter(uniqueFilter)
                     .join(', ')
             })
@@ -272,7 +286,7 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
         return {
             imports: sortAlphabetically(
                 [
-                    ...getContentTypeSystemImports(),
+                    ...getCoreTypeImports(),
                     ...getReferencedTypeImports(data.contentType, data.flattenedElements),
                     ...getReferencedTaxonomyImports(data.contentType, data.flattenedElements),
                     ...getSnippetImports(snippets)
@@ -300,6 +314,7 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
         return {
             imports: sortAlphabetically(
                 [
+                    ...(shouldImportCoreTypeInSnippet(data.snippet) ? getCoreTypeImports() : []),
                     ...getReferencedTypeImports(data.snippet, data.flattenedElements),
                     ...getReferencedTaxonomyImports(data.snippet, data.flattenedElements),
                     ...getSnippetImports(snippets)

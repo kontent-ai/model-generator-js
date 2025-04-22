@@ -9,6 +9,18 @@ export const contentTypeSnippets = {
         externalId: undefined,
         elements: {
             /**
+             * Rich text with all allowed item types (rich_text)
+             */
+            snippet_a__rich_text_with_all_allowed_item_types: {
+                name: 'Rich text with all allowed item types',
+                codename: 'snippet_a__rich_text_with_all_allowed_item_types',
+                id: '72cdc4e7-dead-4baf-99bf-91d8fe62351f',
+                externalId: undefined,
+                required: false,
+                type: 'rich_text'
+            },
+
+            /**
              * Linked items with specific types (modular_content)
              */
             snippet_a__linked_items_with_specific_types: {

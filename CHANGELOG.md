@@ -1,26 +1,33 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See
+[standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 ## [9.0.0-0](https://github.com/kontent-ai/model-generator-js/compare/v8.1.0...v9.0.0-0) (2025-04-15)
 
-
 ### Features
 
-* Extends support for types / type guards for Delivery for more entity types (i.e. collections. languages, workflows...) ([613648e](https://github.com/kontent-ai/model-generator-js/commit/613648ed4cdbcf2cd5462282275ad51007386622))
-* updates deps ([6d87a64](https://github.com/kontent-ai/model-generator-js/commit/6d87a64aeba93f59627e11f54e1956e3b6208eb9))
+- Extends support for types / type guards for Delivery for more entity types (i.e. collections. languages, workflows...)
+  ([613648e](https://github.com/kontent-ai/model-generator-js/commit/613648ed4cdbcf2cd5462282275ad51007386622))
+- updates deps ([6d87a64](https://github.com/kontent-ai/model-generator-js/commit/6d87a64aeba93f59627e11f54e1956e3b6208eb9))
 
-## [8.1.0](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0...v8.1.0) (2025-04-08)
-
-
-### Features
-
-* updates deps ([1fef000](https://github.com/kontent-ai/model-generator-js/commit/1fef0002792c59be1e9163bf0fd1aaf4e6b13d53))
-
+### [8.1.1](https://github.com/kontent-ai/model-generator-js/compare/v8.1.0...v8.1.1) (2025-04-22)
 
 ### Bug Fixes
 
-* Skips invalid reference to taxonomies. Usually caused by deleting a taxonomy and not updating it's references in content types / snippets ([598bad3](https://github.com/kontent-ai/model-generator-js/commit/598bad338139f3d87750ab7bcb903e5d00cb15da))
+- Correctly imports CoreContentType in snippet when all types are allowed in RTE, linkes items or subpages element
+  ([96f33c7](https://github.com/kontent-ai/model-generator-js/commit/96f33c7ac84c09edd7ff2983aa35b9227f881c2e))
+
+## [8.1.0](https://github.com/kontent-ai/model-generator-js/compare/v8.0.0...v8.1.0) (2025-04-08)
+
+### Features
+
+- updates deps ([1fef000](https://github.com/kontent-ai/model-generator-js/commit/1fef0002792c59be1e9163bf0fd1aaf4e6b13d53))
+
+### Bug Fixes
+
+- Skips invalid reference to taxonomies. Usually caused by deleting a taxonomy and not updating it's references in content types / snippets
+  ([598bad3](https://github.com/kontent-ai/model-generator-js/commit/598bad338139f3d87750ab7bcb903e5d00cb15da))
 
 ## [8.0.0-0](https://github.com/kontent-ai/model-generator-js/compare/v7.4.0...v8.0.0-0) (2024-09-16)
 

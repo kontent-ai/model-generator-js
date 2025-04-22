@@ -109,7 +109,7 @@ ContentTypeWithAllElementsElementCodenames,
 /**
 * Type representing all available element codenames for Content type with all elements
 */
-export type ContentTypeWithAllElementsElementCodenames = 'text_element' | 'url_slug_element' | 'rich_text_element' | 'date___time_element' | 'custom_element' | 'linked_items_element' | 'asset_element' | 'multiple_choice_element' | 'number_element' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__text' | 'taxonomy_element';;
+export type ContentTypeWithAllElementsElementCodenames = 'text_element' | 'url_slug_element' | 'rich_text_element' | 'date___time_element' | 'custom_element' | 'linked_items_element' | 'asset_element' | 'multiple_choice_element' | 'number_element' | 'snippet_a__rich_text_with_all_allowed_item_types' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__text' | 'taxonomy_element';;
 
 /**
 * Type guard for Content type with all elements
