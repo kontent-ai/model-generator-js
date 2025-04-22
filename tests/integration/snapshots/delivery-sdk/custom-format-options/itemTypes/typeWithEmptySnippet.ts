@@ -2,7 +2,7 @@
 
 import type { CoreItem } from '../system/index.js';
 
-/**
+/*
 * Type with empty snippet
 * 
 * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
@@ -13,12 +13,12 @@ TypeWithEmptySnippetElementCodenames,
 Record<string, never>, 
 'type_with_empty_snippet'>
 
-/**
+/*
 * Type representing all available element codenames for Type with empty snippet
 */
 export type TypeWithEmptySnippetElementCodenames = never;
 
-/**
+/*
 * Type guard for Type with empty snippet
 *
 * Id: 11039462-1d7d-4673-9aa8-af07fb53985c

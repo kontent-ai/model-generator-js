@@ -1,19 +1,20 @@
 
-import type { CollectionCodenames } from './_collections.js';
+            import type { CollectionCodenames } from './_collections.js';
     
- /**
- * Type representing codename of Legacy collection Collection
- * 
-* Codename: legacy_collection
-*/
-export type LegacyCollectionCollectionCodename = Extract<CollectionCodenames, 'legacy_collection'>;
+            /*
+                * Type representing codename of Legacy collection
+                * 
+                * Codename: legacy_collection
+                */
+            export type LegacyCollectionCollectionCodename = Extract<CollectionCodenames, 'legacy_collection'>;
 
-/**
- * Type guard for Legacy collection entity
- * 
-* Codename: legacy_collection
-*/
-export function isLegacyCollectionCollectionCodename(value: string | undefined | null): value is LegacyCollectionCollectionCodename {
+            /*
+                * Type guard for Legacy collection entity
+                * 
+                * Codename: legacy_collection
+            */
+            export function isLegacyCollectionCollectionCodename(value: string | undefined | null): value is LegacyCollectionCollectionCodename {
                 return typeof value === 'string' && value === ('legacy_collection' satisfies LegacyCollectionCollectionCodename);
             }
-
+            
+            

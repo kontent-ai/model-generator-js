@@ -2,7 +2,7 @@
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreItem } from '../system/index.js';
 
-/**
+/*
 * 🐧 Content type with special chars #!_'
 * 
 * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
@@ -11,7 +11,7 @@ import type { CoreItem } from '../system/index.js';
 export type ContentTypeWithSpecialChars = CoreItem<
 ContentTypeWithSpecialCharsElementCodenames,
 {
-                /**
+                /*
                 * 🦜Parrot_emoji
                 * 
                 * Type: text
@@ -20,7 +20,7 @@ ContentTypeWithSpecialCharsElementCodenames,
                 * Id: cafaa776-893d-4e8c-b460-9534ac2fe769
                 */ 
                 readonly parrot__: Elements.TextElement;
-                /**
+                /*
                 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
                 * 
                 * Type: number
@@ -31,12 +31,12 @@ ContentTypeWithSpecialCharsElementCodenames,
                 readonly _____numberelem_____________________: Elements.NumberElement;}, 
 '_content_type_with_special_chars____'>
 
-/**
+/*
 * Type representing all available element codenames for 🐧 Content type with special chars #!_'
 */
 export type ContentTypeWithSpecialCharsElementCodenames = 'parrot__' | '_____numberelem_____________________';;
 
-/**
+/*
 * Type guard for 🐧 Content type with special chars #!_'
 *
 * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80

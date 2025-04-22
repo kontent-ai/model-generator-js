@@ -1,6 +1,6 @@
 import type { CoreMigrationItem } from '../migration.js';
 
-/**
+/*
  * Empty content type
  *
  * Codename: empty_content_type

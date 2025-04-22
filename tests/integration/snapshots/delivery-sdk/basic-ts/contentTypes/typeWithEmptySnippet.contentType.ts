@@ -1,19 +1,19 @@
 import type { ContentTypeCodenames } from './_contentTypes.ts';
 
-/**
- * Type representing codename of Type with empty snippet ContentType
+/*
+ * Type representing codename of Type with empty snippet
  *
  * Codename: type_with_empty_snippet
  */
 export type TypeWithEmptySnippetContentTypeCodename = Extract<ContentTypeCodenames, 'type_with_empty_snippet'>;
 
-/**
+/*
  * Type guard for Type with empty snippet entity
  *
  * Codename: type_with_empty_snippet
  */
 export function isTypeWithEmptySnippetContentTypeCodename(
-    value: string | undefined | null
+	value: string | undefined | null
 ): value is TypeWithEmptySnippetContentTypeCodename {
-    return typeof value === 'string' && value === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetContentTypeCodename);
+	return typeof value === 'string' && value === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetContentTypeCodename);
 }

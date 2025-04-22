@@ -1,4 +1,4 @@
-/**
+/*
  * Type representing available item codenames
  *
  * Content type with all elements

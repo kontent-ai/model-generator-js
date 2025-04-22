@@ -7,7 +7,7 @@ import type { TaxonomyCodenames } from '../taxonomies/_taxonomies.js';
 import type { ContentTypeCodenames } from '../contentTypes/_contentTypes.js';
 import type { ElementCodenames } from '../elements/_elements.js';
 
-                /**
+                /*
  * Core content type used in favor of default 'IContentItem'
 */
                 export type CoreItem<
@@ -23,7 +23,7 @@ import type { ElementCodenames } from '../elements/_elements.js';
                     WorkflowStepCodenames
                 >;
 
-                /**
+                /*
  * Core types for 'IDeliveryClient'
 */
                 export type CoreClientTypes = {
@@ -37,7 +37,7 @@ import type { ElementCodenames } from '../elements/_elements.js';
                     readonly worfklowStepCodenames: WorkflowStepCodenames;
                 };
 
-                /**
+                /*
  * Typed delivery client in favor of default 'IDeliveryClient'
 */
                 export type CoreDeliveryClient = IDeliveryClient<CoreClientTypes>;

@@ -1,6 +1,6 @@
 import type { CoreMigrationItem } from '../migration.js';
 
-/**
+/*
  * Content type with guidelines only
  *
  * Codename: content_type_with_guidelines_only

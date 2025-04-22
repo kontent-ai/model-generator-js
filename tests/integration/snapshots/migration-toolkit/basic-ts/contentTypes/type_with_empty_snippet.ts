@@ -1,6 +1,6 @@
 import type { CoreMigrationItem } from '../migration.ts';
 
-/**
+/*
  * Type with empty snippet
  *
  * Codename: type_with_empty_snippet

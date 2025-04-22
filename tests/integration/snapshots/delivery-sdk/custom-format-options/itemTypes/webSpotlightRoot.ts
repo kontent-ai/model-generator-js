@@ -3,7 +3,7 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreItem } from '../system/index.js';
 import type { Page } from './index.js';
 
-/**
+/*
 * Web spotlight root
 * 
 * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
@@ -12,7 +12,7 @@ import type { Page } from './index.js';
 export type WebSpotlightRoot = CoreItem<
 WebSpotlightRootElementCodenames,
 {
-                /**
+                /*
                 * Title
                 * 
                 * Type: text
@@ -21,7 +21,7 @@ WebSpotlightRootElementCodenames,
                 * Id: e9d19fa4-4ad3-4b3f-998a-ca392651f7d0
                 */ 
                 readonly title: Elements.TextElement;
-                /**
+                /*
                 * Subpages
                 * 
                 * Type: subpages
@@ -30,7 +30,7 @@ WebSpotlightRootElementCodenames,
                 * Id: e6702a6b-35b8-4a12-acca-1b1361fc926b
                 */ 
                 readonly subpages: Elements.LinkedItemsElement<Page>;
-                /**
+                /*
                 * Content
                 * 
                 * Type: modular_content
@@ -41,12 +41,12 @@ WebSpotlightRootElementCodenames,
                 readonly content: Elements.LinkedItemsElement<CoreItem>;}, 
 'web_spotlight_root'>
 
-/**
+/*
 * Type representing all available element codenames for Web spotlight root
 */
 export type WebSpotlightRootElementCodenames = 'title' | 'subpages' | 'content';;
 
-/**
+/*
 * Type guard for Web spotlight root
 *
 * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365

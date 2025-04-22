@@ -3,7 +3,7 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CircularReferenceTypeBA } from './index.js';
 import type { CoreItem } from '../system/index.js';
 
-/**
+/*
 * Circular reference type A > B
 * 
 * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
@@ -12,7 +12,7 @@ import type { CoreItem } from '../system/index.js';
 export type CircularReferenceTypeAB = CoreItem<
 CircularReferenceTypeABElementCodenames,
 {
-                /**
+                /*
                 * Items
                 * 
                 * Type: modular_content
@@ -23,12 +23,12 @@ CircularReferenceTypeABElementCodenames,
                 readonly items: Elements.LinkedItemsElement<CircularReferenceTypeBA>;}, 
 'circular_reference_type_a_b'>
 
-/**
+/*
 * Type representing all available element codenames for Circular reference type A > B
 */
 export type CircularReferenceTypeABElementCodenames = 'items';;
 
-/**
+/*
 * Type guard for Circular reference type A > B
 *
 * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
