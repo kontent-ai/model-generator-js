@@ -106,7 +106,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
             export type ${getName(entity)} = Extract<${entityCodenamesTypeName}, '${entity.codename}'>;
 
             ${wrapComment(`
-                * Type guard for ${entity.name} entity
+                * Type guard for ${entity.name}
                 * 
                 ${getEntityInfoComment(entity)}
             `)}

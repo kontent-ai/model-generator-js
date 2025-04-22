@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.ts';
 export type ContentTypeWithSnippetOnlyContentTypeCodename = Extract<ContentTypeCodenames, 'content_type_with_snippet_only'>;
 
 /*
- * Type guard for Content type with snippet only entity
+ * Type guard for Content type with snippet only
  *
  * Codename: content_type_with_snippet_only
  */

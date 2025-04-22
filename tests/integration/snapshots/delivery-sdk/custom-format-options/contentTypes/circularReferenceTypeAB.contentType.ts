@@ -9,7 +9,7 @@
             export type CircularReferenceTypeABContentTypeCodename = Extract<ContentTypeCodenames, 'circular_reference_type_a_b'>;
 
             /*
-                * Type guard for Circular reference type A > B entity
+                * Type guard for Circular reference type A > B
                 * 
                 * Codename: circular_reference_type_a_b
             */

@@ -11,7 +11,7 @@ export type ContentType_content_type_with_guidelines_onlyContentTypeCodename = E
 >;
 
 /*
- * Type guard for Content type with guidelines only entity
+ * Type guard for Content type with guidelines only
  *
  * Codename: content_type_with_guidelines_only
  */

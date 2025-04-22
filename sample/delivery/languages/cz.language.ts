@@ -22,7 +22,7 @@ import type { LanguageCodenames } from './_languages.js';
 export type CzLanguageCodename = Extract<LanguageCodenames, 'cz'>;
 
 /*
- * Type guard for cz entity
+ * Type guard for cz
  *
  * Codename: cz
  */

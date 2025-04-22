@@ -8,7 +8,7 @@ import type { TaxonomyCodenames } from './_taxonomies.ts';
 export type TaxonomyATaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_a'>;
 
 /*
- * Type guard for Taxonomy A entity
+ * Type guard for Taxonomy A
  *
  * Codename: taxonomy_a
  */

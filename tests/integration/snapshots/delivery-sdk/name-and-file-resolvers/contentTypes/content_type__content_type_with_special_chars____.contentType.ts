@@ -11,7 +11,7 @@ export type ContentType__content_type_with_special_chars____ContentTypeCodename 
 >;
 
 /*
- * Type guard for 🐧 Content type with special chars #!_' entity
+ * Type guard for 🐧 Content type with special chars #!_'
  *
  * Codename: _content_type_with_special_chars____
  */

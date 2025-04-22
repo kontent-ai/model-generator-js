@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type ContentTypeWithAllElementsContentTypeCodename = Extract<ContentTypeCodenames, 'content_type_with_all_elements'>;
 
 /*
- * Type guard for Content type with all elements entity
+ * Type guard for Content type with all elements
  *
  * Codename: content_type_with_all_elements
  */

@@ -8,7 +8,7 @@ import type { TaxonomyCodenames } from './_taxonomies.js';
 export type Taxonomy_taxonomy_aTaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_a'>;
 
 /*
- * Type guard for Taxonomy A entity
+ * Type guard for Taxonomy A
  *
  * Codename: taxonomy_a
  */

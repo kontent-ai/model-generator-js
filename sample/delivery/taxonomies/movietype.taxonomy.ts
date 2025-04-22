@@ -22,7 +22,7 @@ import type { TaxonomyCodenames } from './_taxonomies.js';
 export type MovieTypeTaxonomyCodename = Extract<TaxonomyCodenames, 'movietype'>;
 
 /*
- * Type guard for MovieType entity
+ * Type guard for MovieType
  *
  * Codename: movietype
  */

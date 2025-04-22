@@ -22,7 +22,7 @@ import type { WorkflowCodenames } from './_workflows.js';
 export type DefaultWorkflowCodename = Extract<WorkflowCodenames, 'default'>;
 
 /*
- * Type guard for Default entity
+ * Type guard for Default
  *
  * Codename: default
  */

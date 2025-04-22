@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type TypeWithEmptySnippetContentTypeCodename = Extract<ContentTypeCodenames, 'type_with_empty_snippet'>;
 
 /*
- * Type guard for Type with empty snippet entity
+ * Type guard for Type with empty snippet
  *
  * Codename: type_with_empty_snippet
  */

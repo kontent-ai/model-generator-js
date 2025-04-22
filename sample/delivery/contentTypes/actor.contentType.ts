@@ -22,7 +22,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type ActorContentTypeCodename = Extract<ContentTypeCodenames, 'actor'>;
 
 /*
- * Type guard for Actor entity
+ * Type guard for Actor
  *
  * Codename: actor
  */

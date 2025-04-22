@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.ts';
 export type ContentTypeWithGuidelinesOnlyContentTypeCodename = Extract<ContentTypeCodenames, 'content_type_with_guidelines_only'>;
 
 /*
- * Type guard for Content type with guidelines only entity
+ * Type guard for Content type with guidelines only
  *
  * Codename: content_type_with_guidelines_only
  */

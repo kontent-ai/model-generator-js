@@ -22,7 +22,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type MovieContentTypeCodename = Extract<ContentTypeCodenames, 'movie'>;
 
 /*
- * Type guard for Movie entity
+ * Type guard for Movie
  *
  * Codename: movie
  */

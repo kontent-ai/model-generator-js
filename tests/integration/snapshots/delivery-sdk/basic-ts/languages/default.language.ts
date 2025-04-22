@@ -8,7 +8,7 @@ import type { LanguageCodenames } from './_languages.ts';
 export type DefaultProjectLanguageLanguageCodename = Extract<LanguageCodenames, 'default'>;
 
 /*
- * Type guard for Default project language entity
+ * Type guard for Default project language
  *
  * Codename: default
  */

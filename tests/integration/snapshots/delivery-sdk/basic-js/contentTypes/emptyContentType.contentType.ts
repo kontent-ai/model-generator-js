@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type EmptyContentTypeContentTypeCodename = Extract<ContentTypeCodenames, 'empty_content_type'>;
 
 /*
- * Type guard for Empty content type entity
+ * Type guard for Empty content type
  *
  * Codename: empty_content_type
  */

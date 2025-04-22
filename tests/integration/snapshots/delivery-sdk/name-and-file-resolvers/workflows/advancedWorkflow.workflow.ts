@@ -8,7 +8,7 @@ import type { WorkflowCodenames } from './_workflows.js';
 export type AdvancedWorkflowWorkflowCodename = Extract<WorkflowCodenames, 'advanced_workflow'>;
 
 /*
- * Type guard for Advanced workflow entity
+ * Type guard for Advanced workflow
  *
  * Codename: advanced_workflow
  */

@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type ContentType_pageContentTypeCodename = Extract<ContentTypeCodenames, 'page'>;
 
 /*
- * Type guard for Page entity
+ * Type guard for Page
  *
  * Codename: page
  */

@@ -8,7 +8,7 @@ import type { ContentTypeCodenames } from './_contentTypes.js';
 export type ContentTypeWithSpecialCharsContentTypeCodename = Extract<ContentTypeCodenames, '_content_type_with_special_chars____'>;
 
 /*
- * Type guard for 🐧 Content type with special chars #!_' entity
+ * Type guard for 🐧 Content type with special chars #!_'
  *
  * Codename: _content_type_with_special_chars____
  */

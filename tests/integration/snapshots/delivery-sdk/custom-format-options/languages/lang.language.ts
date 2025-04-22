@@ -9,7 +9,7 @@
             export type LangLanguageCodename = Extract<LanguageCodenames, '🦉Lang'>;
 
             /*
-                * Type guard for 🦉Lang entity
+                * Type guard for 🦉Lang
                 * 
                 * Codename: 🦉Lang
             */

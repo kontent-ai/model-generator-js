@@ -8,7 +8,7 @@ import type { LanguageCodenames } from './_languages.js';
 export type JpLanguageCodename = Extract<LanguageCodenames, '__jp'>;
 
 /*
- * Type guard for __jp entity
+ * Type guard for __jp
  *
  * Codename: __jp
  */

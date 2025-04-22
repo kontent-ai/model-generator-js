@@ -22,7 +22,7 @@ import type { LanguageCodenames } from './_languages.js';
 export type GermanLanguageCodename = Extract<LanguageCodenames, 'German'>;
 
 /*
- * Type guard for German entity
+ * Type guard for German
  *
  * Codename: German
  */

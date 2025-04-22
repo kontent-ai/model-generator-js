@@ -22,7 +22,7 @@ import type { TaxonomyCodenames } from './_taxonomies.js';
 export type ReleaseCategoryTaxonomyCodename = Extract<TaxonomyCodenames, 'releasecategory'>;
 
 /*
- * Type guard for ReleaseCategory entity
+ * Type guard for ReleaseCategory
  *
  * Codename: releasecategory
  */

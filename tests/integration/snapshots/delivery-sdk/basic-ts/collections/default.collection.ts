@@ -8,7 +8,7 @@ import type { CollectionCodenames } from './_collections.ts';
 export type DefaultCollectionCodename = Extract<CollectionCodenames, 'default'>;
 
 /*
- * Type guard for Default entity
+ * Type guard for Default
  *
  * Codename: default
  */
