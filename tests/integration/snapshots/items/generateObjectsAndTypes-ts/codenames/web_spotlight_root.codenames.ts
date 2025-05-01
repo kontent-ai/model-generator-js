@@ -1,4 +1,4 @@
-/**
+/*
  * Type representing available item codenames
  *
  * Web spotlight root

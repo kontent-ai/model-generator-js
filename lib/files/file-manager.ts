@@ -22,10 +22,12 @@ export function getFileManager(config: {
 
     const createFileOnFs = (text: string, filePath: string): void => {
         const fullFilePath = `${fixedOutputDir.endsWith('/') ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
-        const fileContent = `${getEnvironmentInfoComment({
-            environmentInfo: config.environmentInfo,
-            timestampDate: config.addTimestamp ? new Date() : undefined
-        })}\n\n${text}`;
+        const fileContent = removeFirstEmptyLine(
+            `${getEnvironmentInfoComment({
+                environmentInfo: config.environmentInfo,
+                timestampDate: config.addTimestamp ? new Date() : undefined
+            })}\n\n${text}`
+        );
 
         ensureDirectoryExistence(fullFilePath);
         fs.writeFileSync('./' + fullFilePath, fileContent, {});
@@ -42,6 +44,13 @@ export function getFileManager(config: {
             console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier.`);
             return code;
         }
+    };
+
+    const removeFirstEmptyLine = (code: string): string => {
+        if (code.startsWith('\n')) {
+            return code.substring(1);
+        }
+        return code;
     };
 
     const ensureDirectoryExistence = (filePath: string): void => {

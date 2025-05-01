@@ -8,19 +8,13 @@ import type {
     WorkflowModels
 } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
-import { migrationConfig, sharedTypesConfig } from '../../config.js';
+import { migrationConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
 import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { getImporter } from '../../core/importer.js';
 import { resolveCase } from '../../core/resolvers.js';
-import {
-    getCollectionCodenamesType,
-    getContentTypeCodenamesType,
-    getLanguageCodenamesType,
-    getWorkflowCodenamesType,
-    getWorkflowStepCodenamesType
-} from '../shared/type-codename.generator.js';
+import { getTypeWithCodenames } from '../shared/type-codename.generator.js';
 
 export interface MigrationGeneratorConfig {
     readonly moduleFileExtension: ModuleFileExtension;
@@ -141,7 +135,7 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
                   })}
                    ${importer.importType({
                        filePathOrPackage: `./${migrationConfig.environmentFolderName}/${migrationConfig.environmentFilename}.ts`,
-                       importValue: `${sharedTypesConfig.collectionCodenames}, ${sharedTypesConfig.contentTypeCodenames}, ${sharedTypesConfig.languageCodenames}, ${sharedTypesConfig.workflowCodenames}, ${sharedTypesConfig.workflowStepCodenames}`
+                       importValue: `${migrationConfig.collectionCodenames}, ${migrationConfig.contentTypeCodenames}, ${migrationConfig.languageCodenames}, ${migrationConfig.workflowCodenames}, ${migrationConfig.workflowStepCodenames}`
                    })}
 
                 ${wrapComment('\n * System object shared by all individual content type models\n')}
@@ -188,16 +182,39 @@ function getElementPropType(element: Readonly<FlattenedElement>): string {
 
 function getItemType(): string {
     return `export type ${migrationConfig.localTypeNames.item}<
-        ${migrationConfig.localTypeNames.codename} extends ${sharedTypesConfig.contentTypeCodenames},
+        ${migrationConfig.localTypeNames.codename} extends ${migrationConfig.contentTypeCodenames},
         ${migrationConfig.localTypeNames.elements} extends ${migrationConfig.sdkTypeNames.elements} = ${migrationConfig.sdkTypeNames.elements},
-    > = ${migrationConfig.sdkTypeNames.item}<${migrationConfig.localTypeNames.elements}, ${migrationConfig.localTypeNames.system}<${migrationConfig.localTypeNames.codename}>, ${sharedTypesConfig.workflowStepCodenames}>;`;
+    > = ${migrationConfig.sdkTypeNames.item}<${migrationConfig.localTypeNames.elements}, ${migrationConfig.localTypeNames.system}<${migrationConfig.localTypeNames.codename}>, ${migrationConfig.workflowStepCodenames}>;`;
 }
 
 function getSystemType(): string {
-    return `export type ${migrationConfig.localTypeNames.system}<${migrationConfig.localTypeNames.codename} extends ${sharedTypesConfig.contentTypeCodenames}> = ${migrationConfig.sdkTypeNames.system}<
+    return `export type ${migrationConfig.localTypeNames.system}<${migrationConfig.localTypeNames.codename} extends ${migrationConfig.contentTypeCodenames}> = ${migrationConfig.sdkTypeNames.system}<
     ${migrationConfig.localTypeNames.codename},
-    ${sharedTypesConfig.languageCodenames},
-    ${sharedTypesConfig.collectionCodenames},
-    ${sharedTypesConfig.workflowCodenames}
+    ${migrationConfig.languageCodenames},
+    ${migrationConfig.collectionCodenames},
+    ${migrationConfig.workflowCodenames}
 >;`;
+}
+
+function getLanguageCodenamesType(languages: readonly Readonly<LanguageModels.LanguageModel>[]): string {
+    return getTypeWithCodenames(migrationConfig.languageCodenames, languages);
+}
+
+function getContentTypeCodenamesType(types: readonly Readonly<ContentTypeModels.ContentType>[]): string {
+    return getTypeWithCodenames(migrationConfig.contentTypeCodenames, types);
+}
+
+function getWorkflowCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
+    return getTypeWithCodenames(migrationConfig.workflowCodenames, workflows);
+}
+
+function getCollectionCodenamesType(collections: readonly Readonly<CollectionModels.Collection>[]): string {
+    return getTypeWithCodenames(migrationConfig.collectionCodenames, collections);
+}
+
+export function getWorkflowStepCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
+    return getTypeWithCodenames(
+        migrationConfig.workflowStepCodenames,
+        workflows.flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep])
+    );
 }

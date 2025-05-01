@@ -1,4 +1,4 @@
-/**
+/*
  * Type representing available item codenames
  *
  * 🐧 Content type with special chars #!_'
