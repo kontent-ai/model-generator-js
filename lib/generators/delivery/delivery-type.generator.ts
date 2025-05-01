@@ -607,7 +607,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     readonly languageCodenames: ${entityGenerators.languages.entityCodenamesTypeName};
                     readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityCodenamesTypeName};
                     readonly workflowCodenames: ${entityGenerators.workflows.entityCodenamesTypeName};
-                    readonly worfklowStepCodenames: ${deliveryConfig.workflowStepCodenames};
+                    readonly workflowStepCodenames: ${deliveryConfig.workflowStepCodenames};
                 };
 
                 ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
