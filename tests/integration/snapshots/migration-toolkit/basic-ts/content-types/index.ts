@@ -6,5 +6,6 @@ export * from './content_type_with_guidelines_only.ts';
 export * from './content_type_with_snippet_only.ts';
 export * from './empty_content_type.ts';
 export * from './page.ts';
+export * from './type_referencing_deleted_type.ts';
 export * from './type_with_empty_snippet.ts';
 export * from './web_spotlight_root.ts';

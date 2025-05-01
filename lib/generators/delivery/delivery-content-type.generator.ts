@@ -525,7 +525,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     readonly languageCodenames: ${sharedTypesConfig.languageCodenames};
                     readonly taxonomyCodenames: ${sharedTypesConfig.taxonomyCodenames};
                     readonly workflowCodenames: ${sharedTypesConfig.workflowCodenames};
-                    readonly worfklowStepCodenames: ${sharedTypesConfig.workflowStepCodenames};
+                    readonly workflowStepCodenames: ${sharedTypesConfig.workflowStepCodenames};
                 };
 
                 ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}

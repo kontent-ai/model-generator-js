@@ -7,7 +7,7 @@
                 /**
  * Type representing all content types
 */
-                export type ContentTypeCodenames = '_content_type_with_special_chars____' | 'circular_reference_type_a_b' | 'circular_reference_type_b____a' | 'content_type_with_all_elements' | 'content_type_with_guidelines_only' | 'content_type_with_snippet_only' | 'empty_content_type' | 'page' | 'type_with_empty_snippet' | 'web_spotlight_root';
+                export type ContentTypeCodenames = '_content_type_with_special_chars____' | 'circular_reference_type_a_b' | 'circular_reference_type_b____a' | 'content_type_with_all_elements' | 'content_type_with_guidelines_only' | 'content_type_with_snippet_only' | 'empty_content_type' | 'page' | 'type_referencing_deleted_type' | 'type_with_empty_snippet' | 'web_spotlight_root';
 
                 /**
  * Type representing all collections
@@ -32,5 +32,5 @@
                  /**
  * Type representing all element codenames across all content types
 */
-                export type ElementCodenames = '_____numberelem_____________________' | 'asset_element' | 'content' | 'custom_element' | 'date___time_element' | 'empty_snippet' | 'guidelines' | 'items' | 'linked_items_element' | 'multiple_choice_element' | 'number_element' | 'parrot__' | 'rich_text_element' | 'show_in_navigation' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__rich_text_with_all_allowed_item_types' | 'snippet_a__text' | 'snippet_a' | 'subpages' | 'taxonomy_element' | 'text_element' | 'title' | 'url_slug_element' | 'url';
+                export type ElementCodenames = '_____numberelem_____________________' | 'asset_element' | 'content' | 'custom_element' | 'date___time_element' | 'empty_snippet' | 'guidelines' | 'items' | 'linked_items_element' | 'linked_items_with_invalid_type' | 'multiple_choice_element' | 'number_element' | 'parrot__' | 'rich_text_element' | 'rich_text_with_invalid_type' | 'show_in_navigation' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__rich_text_with_all_allowed_item_types' | 'snippet_a__text' | 'snippet_a' | 'subpages' | 'taxonomy_element' | 'text_element' | 'title' | 'url_slug_element' | 'url';
             

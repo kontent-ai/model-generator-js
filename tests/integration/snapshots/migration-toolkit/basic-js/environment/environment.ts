@@ -15,6 +15,7 @@ export type ContentTypeCodenames =
     | 'content_type_with_snippet_only'
     | 'empty_content_type'
     | 'page'
+    | 'type_referencing_deleted_type'
     | 'type_with_empty_snippet'
     | 'web_spotlight_root';
 

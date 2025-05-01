@@ -486,5 +486,40 @@ export const contentTypes = {
                 type: 'modular_content'
             }
         }
+    },
+
+    /**
+     * Type referencing deleted type
+     */
+    type_referencing_deleted_type: {
+        name: 'Type referencing deleted type',
+        codename: 'type_referencing_deleted_type',
+        id: 'f7562083-7230-4c20-9136-620ee7a92534',
+        externalId: undefined,
+        elements: {
+            /**
+             * Rich text with invalid type (rich_text)
+             */
+            rich_text_with_invalid_type: {
+                name: 'Rich text with invalid type',
+                codename: 'rich_text_with_invalid_type',
+                id: '03df7457-fb30-4d4e-aee2-06b0e1f218a2',
+                externalId: undefined,
+                required: false,
+                type: 'rich_text'
+            },
+
+            /**
+             * Linked items with invalid type (modular_content)
+             */
+            linked_items_with_invalid_type: {
+                name: 'Linked items with invalid type',
+                codename: 'linked_items_with_invalid_type',
+                id: 'cc310017-de8b-42f1-962b-63959367d29a',
+                externalId: undefined,
+                required: false,
+                type: 'modular_content'
+            }
+        }
     }
 } as const;

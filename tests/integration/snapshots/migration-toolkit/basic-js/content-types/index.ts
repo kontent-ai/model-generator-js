@@ -6,5 +6,6 @@ export * from './content_type_with_guidelines_only.js';
 export * from './content_type_with_snippet_only.js';
 export * from './empty_content_type.js';
 export * from './page.js';
+export * from './type_referencing_deleted_type.js';
 export * from './type_with_empty_snippet.js';
 export * from './web_spotlight_root.js';

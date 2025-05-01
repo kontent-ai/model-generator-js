@@ -15,6 +15,7 @@ export type ContentTypeCodenames =
     | 'content_type_with_snippet_only'
     | 'empty_content_type'
     | 'page'
+    | 'type_referencing_deleted_type'
     | 'type_with_empty_snippet'
     | 'web_spotlight_root';
 
@@ -51,10 +52,12 @@ export type ElementCodenames =
     | 'guidelines'
     | 'items'
     | 'linked_items_element'
+    | 'linked_items_with_invalid_type'
     | 'multiple_choice_element'
     | 'number_element'
     | 'parrot__'
     | 'rich_text_element'
+    | 'rich_text_with_invalid_type'
     | 'show_in_navigation'
     | 'snippet_a__linked_items_with_specific_types'
     | 'snippet_a__rich_text_with_all_allowed_item_types'
