@@ -1,0 +1,7 @@
+[
+  { "filename": "items/content_type_with_all_elements.items.ts" },
+  { "filename": "items/index.ts" },
+  { "filename": "codenames/content_type_with_all_elements.codenames.ts" },
+  { "filename": "codenames/index.ts" },
+  { "filename": "index.ts" }
+]
