@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [8.1.2](https://github.com/kontent-ai/model-generator-js/compare/v8.1.1...v8.1.2) (2025-05-01)
+
+
+### Bug Fixes
+
+* Fixes typo in `CoreClientTypes` & updates deps with samples ([85a9ca9](https://github.com/kontent-ai/model-generator-js/commit/85a9ca9826507f299fc1a8d28798dd51ce03d8c9))
+
 ### [8.1.1](https://github.com/kontent-ai/model-generator-js/compare/v8.1.0...v8.1.1) (2025-04-22)
 
 
