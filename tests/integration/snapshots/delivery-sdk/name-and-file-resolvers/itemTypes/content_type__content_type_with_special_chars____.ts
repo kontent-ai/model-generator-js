@@ -43,7 +43,7 @@ export type ContentType__content_type_with_special_chars____ElementCodenames = '
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export function isContentType__content_type_with_special_chars____Item(
+export function isContentType__content_type_with_special_chars____(
 	item: CoreItem | undefined | null
 ): item is ContentType__content_type_with_special_chars____ {
 	return item?.system?.type === '_content_type_with_special_chars____';

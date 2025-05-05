@@ -60,15 +60,16 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
 
     const entityFolderName = `${resolveCase(getPluralName(config.entityType), 'camelCase')}`;
 
-    const getName = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` });
+    const getEntityName = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
+    const getCodenameTypeName = (entity: Readonly<TEntity>): string => `${getEntityName(entity)}Codename`;
     const getTypeGuardName = mapName(config.nameResolver, 'pascalCase', {
         prefix: 'is',
         suffix: `${config.entityType}Codename`
     });
 
     const getEntityTypeGuardFunction = (entity: Readonly<TEntity>): string => {
-        return `export function ${getTypeGuardName(entity)}(value: string | undefined | null): value is ${getName(entity)} {
-                return typeof value === 'string' && value === ('${entity.codename}' satisfies ${getName(entity)});
+        return `export function ${getTypeGuardName(entity)}(value: string | undefined | null): value is ${getCodenameTypeName(entity)} {
+                return typeof value === 'string' && value === ('${entity.codename}' satisfies ${getCodenameTypeName(entity)});
             }`;
     };
 
@@ -103,7 +104,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
                 * 
                 ${getEntityInfoComment(entity)}
                 `)}
-            export type ${getName(entity)} = Extract<${entityCodenamesTypeName}, '${entity.codename}'>;
+            export type ${getCodenameTypeName(entity)} = Extract<${entityCodenamesTypeName}, '${entity.codename}'>;
 
             ${wrapComment(`
                 * Type guard for ${entity.name}
@@ -245,11 +246,11 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     };
 
     return {
-        entityType: config.entityType,
         coreEntityFilename,
         entityFolderName,
+        getEntityName,
+        entityType: config.entityType,
         entityCodenamesTypeName: entityCodenamesTypeName,
-        getEntityName: getName,
         generateEntityTypes: (): GeneratedSet => {
             return {
                 folderName: entityFolderName,

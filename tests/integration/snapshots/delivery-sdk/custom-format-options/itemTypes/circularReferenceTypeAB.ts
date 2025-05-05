@@ -34,6 +34,6 @@ export type CircularReferenceTypeABElementCodenames = 'items';;
 * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
 * Codename: circular_reference_type_a_b
 */
-export function isCircularReferenceTypeABItem(item: CoreItem | undefined | null): item is CircularReferenceTypeAB {
+export function isCircularReferenceTypeAB(item: CoreItem | undefined | null): item is CircularReferenceTypeAB {
                 return item?.system?.type === 'circular_reference_type_a_b';
             };

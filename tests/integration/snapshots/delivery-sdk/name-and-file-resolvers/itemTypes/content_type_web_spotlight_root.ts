@@ -53,6 +53,6 @@ export type ContentType_web_spotlight_rootElementCodenames = 'title' | 'subpages
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export function isContentType_web_spotlight_rootItem(item: CoreItem | undefined | null): item is ContentType_web_spotlight_root {
+export function isContentType_web_spotlight_root(item: CoreItem | undefined | null): item is ContentType_web_spotlight_root {
 	return item?.system?.type === 'web_spotlight_root';
 }

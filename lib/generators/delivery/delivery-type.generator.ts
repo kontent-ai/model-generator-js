@@ -264,7 +264,7 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
                             return undefined;
                         }
 
-                        return entityGenerators.taxonomies.getEntityName(taxonomyElement.assignedTaxonomy);
+                        return getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy);
                     })
                     .otherwise(() => undefined);
             })
@@ -281,6 +281,10 @@ export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
                 importValue: taxonomyTypeNames.join(', ')
             })
         ];
+    };
+
+    const getTaxonomyTermCodenamesTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
+        return `${entityGenerators.taxonomies.getEntityName(taxonomy)}TermCodenames`;
     };
 
     const getContentTypeModelImports = (data: {
@@ -536,7 +540,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                     return `TaxonomyElement`;
                 }
 
-                return `TaxonomyElement<${entityGenerators.taxonomies.getEntityName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
+                return `TaxonomyElement<${getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
             })
             .with({ type: 'custom' }, () => 'CustomElement')
             .otherwise(() => undefined);
@@ -620,7 +624,7 @@ ${getContentItemTypeGuardFunction(contentType)};
         const nameResolvers = {
             contentItemTypeGuardFunctionName: mapName(config.nameResolvers?.contentType, 'pascalCase', {
                 prefix: 'is',
-                suffix: 'Item'
+                suffix: undefined
             }),
             contentItemTypeName: mapName(config.nameResolvers?.contentType, 'pascalCase')
         };

@@ -43,6 +43,6 @@ export type TypeReferencingDeletedTypeElementCodenames = 'rich_text_with_invalid
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  * Codename: type_referencing_deleted_type
  */
-export function isTypeReferencingDeletedTypeItem(item: CoreItem | undefined | null): item is TypeReferencingDeletedType {
+export function isTypeReferencingDeletedType(item: CoreItem | undefined | null): item is TypeReferencingDeletedType {
 	return item?.system?.type === 'type_referencing_deleted_type';
 }

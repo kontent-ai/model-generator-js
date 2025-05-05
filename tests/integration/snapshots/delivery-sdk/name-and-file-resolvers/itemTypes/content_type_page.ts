@@ -70,6 +70,6 @@ export type ContentType_pageElementCodenames = 'title' | 'url' | 'show_in_naviga
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isContentType_pageItem(item: CoreItem | undefined | null): item is ContentType_page {
+export function isContentType_page(item: CoreItem | undefined | null): item is ContentType_page {
 	return item?.system?.type === 'page';
 }

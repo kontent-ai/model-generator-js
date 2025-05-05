@@ -52,6 +52,6 @@ export type WebSpotlightRootElementCodenames = 'title' | 'subpages' | 'content';
 * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
 * Codename: web_spotlight_root
 */
-export function isWebSpotlightRootItem(item: CoreItem | undefined | null): item is WebSpotlightRoot {
+export function isWebSpotlightRoot(item: CoreItem | undefined | null): item is WebSpotlightRoot {
                 return item?.system?.type === 'web_spotlight_root';
             };

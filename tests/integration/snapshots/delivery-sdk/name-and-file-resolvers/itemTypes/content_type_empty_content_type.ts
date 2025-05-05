@@ -23,6 +23,6 @@ export type ContentType_empty_content_typeElementCodenames = never;
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export function isContentType_empty_content_typeItem(item: CoreItem | undefined | null): item is ContentType_empty_content_type {
+export function isContentType_empty_content_type(item: CoreItem | undefined | null): item is ContentType_empty_content_type {
 	return item?.system?.type === 'empty_content_type';
 }

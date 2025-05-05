@@ -35,7 +35,7 @@ export type ContentType_circular_reference_type_b____aElementCodenames = 'items'
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export function isContentType_circular_reference_type_b____aItem(
+export function isContentType_circular_reference_type_b____a(
 	item: CoreItem | undefined | null
 ): item is ContentType_circular_reference_type_b____a {
 	return item?.system?.type === 'circular_reference_type_b____a';

@@ -69,6 +69,6 @@ export type PageElementCodenames = 'title' | 'url' | 'show_in_navigation' | 'sub
 * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
 * Codename: page
 */
-export function isPageItem(item: CoreItem | undefined | null): item is Page {
+export function isPage(item: CoreItem | undefined | null): item is Page {
                 return item?.system?.type === 'page';
             };

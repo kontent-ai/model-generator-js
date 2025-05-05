@@ -1,7 +1,7 @@
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreItem } from '../system/index.js';
 import type { SnippetA } from '../itemSnippets/index.js';
-import type { TaxonomyATaxonomyCodename } from '../taxonomies/index.js';
+import type { TaxonomyATaxonomyTermCodenames } from '../taxonomies/index.js';
 
 /*
  * Content type with all elements
@@ -102,7 +102,7 @@ export type ContentTypeWithAllElements = CoreItem<
 		 * Codename: taxonomy_element
 		 * Id: 6073dec8-2489-479f-9916-abc055126e59
 		 */
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATaxonomyCodename, 'taxonomy_element'>;
+		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATaxonomyTermCodenames, 'taxonomy_element'>;
 	} & SnippetA,
 	'content_type_with_all_elements'
 >;
@@ -131,6 +131,6 @@ export type ContentTypeWithAllElementsElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeWithAllElementsItem(item: CoreItem | undefined | null): item is ContentTypeWithAllElements {
+export function isContentTypeWithAllElements(item: CoreItem | undefined | null): item is ContentTypeWithAllElements {
 	return item?.system?.type === 'content_type_with_all_elements';
 }

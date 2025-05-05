@@ -27,7 +27,7 @@ export type ContentType_content_type_with_snippet_onlyElementCodenames =
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export function isContentType_content_type_with_snippet_onlyItem(
+export function isContentType_content_type_with_snippet_only(
 	item: CoreItem | undefined | null
 ): item is ContentType_content_type_with_snippet_only {
 	return item?.system?.type === 'content_type_with_snippet_only';

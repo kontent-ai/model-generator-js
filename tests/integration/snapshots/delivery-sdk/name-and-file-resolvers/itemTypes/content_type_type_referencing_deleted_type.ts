@@ -43,7 +43,7 @@ export type ContentType_type_referencing_deleted_typeElementCodenames = 'rich_te
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  * Codename: type_referencing_deleted_type
  */
-export function isContentType_type_referencing_deleted_typeItem(
+export function isContentType_type_referencing_deleted_type(
 	item: CoreItem | undefined | null
 ): item is ContentType_type_referencing_deleted_type {
 	return item?.system?.type === 'type_referencing_deleted_type';
