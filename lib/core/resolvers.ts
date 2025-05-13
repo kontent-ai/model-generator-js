@@ -1,37 +1,14 @@
-import type {
-    CollectionModels,
-    ContentTypeElements,
-    ContentTypeModels,
-    ContentTypeSnippetModels,
-    LanguageModels,
-    TaxonomyModels,
-    WorkflowModels
-} from '@kontent-ai/management-sdk';
 import { createHash } from 'crypto';
 import { match, P } from 'ts-pattern';
 import type { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
 
 /** File name resolvers */
-export type FilenameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithCodename) => string);
+export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | CaseType | ((item: T) => string);
 export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T, addExtension: boolean) => string;
 
-export type ContentTypeFileNameResolver = FilenameResolver<Readonly<ContentTypeModels.ContentType>>;
-export type ContentTypeSnippetFileNameResolver = FilenameResolver<Readonly<ContentTypeSnippetModels.ContentTypeSnippet>>;
-export type TaxonomyTypeFileNameResolver = FilenameResolver<Readonly<TaxonomyModels.Taxonomy>>;
-export type LanguageTypeFileNameResolver = FilenameResolver<Readonly<LanguageModels.LanguageModel>>;
-export type CollectionTypeFileNameResolver = FilenameResolver<Readonly<CollectionModels.Collection>>;
-export type WorkflowTypeFileNameResolver = FilenameResolver<Readonly<WorkflowModels.Workflow>>;
 /** Name resolvers */
-export type NameResolver<T extends Readonly<object>> = undefined | CaseType | ((item: T & ObjectWithName) => string);
+export type NameResolver<T extends Readonly<ObjectWithName>> = undefined | CaseType | ((item: T) => string);
 export type MapObjectToName<T extends Readonly<ObjectWithName> = ObjectWithName> = (item: T) => string;
-
-export type ElementNameResolver = (element: Readonly<Readonly<ContentTypeElements.ContentTypeElementModel>>) => string | undefined;
-export type ContentTypeNameResolver = NameResolver<Readonly<ContentTypeModels.ContentType>>;
-export type ContentTypeSnippetNameResolver = NameResolver<Readonly<ContentTypeSnippetModels.ContentTypeSnippet>>;
-export type TaxonomyNameResolver = NameResolver<Readonly<TaxonomyModels.Taxonomy>>;
-export type LanguageNameResolver = NameResolver<Readonly<LanguageModels.LanguageModel>>;
-export type CollectionNameResolver = NameResolver<Readonly<CollectionModels.Collection>>;
-export type WorkflowNameResolver = NameResolver<Readonly<WorkflowModels.Workflow>>;
 
 export function mapFilename<T extends ObjectWithCodename>(
     resolver: FilenameResolver<T>,

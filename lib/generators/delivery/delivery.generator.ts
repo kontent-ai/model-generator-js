@@ -1,54 +1,39 @@
-import type { CollectionModels, EnvironmentModels, LanguageModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
-import { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/management-sdk';
-import { match, P } from 'ts-pattern';
-import { coreConfig, deliveryConfig } from '../../config.js';
-import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
-import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
+import type {
+    CollectionModels,
+    ContentTypeModels,
+    ContentTypeSnippetModels,
+    EnvironmentModels,
+    LanguageModels,
+    TaxonomyModels,
+    WorkflowModels
+} from '@kontent-ai/management-sdk';
+import { match } from 'ts-pattern';
+import { deliveryConfig } from '../../config.js';
+import { wrapComment } from '../../core/comment.utils.js';
+import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import { isNotUndefined, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { getImporter } from '../../core/importer.js';
-import type {
-    CollectionNameResolver,
-    CollectionTypeFileNameResolver,
-    ContentTypeFileNameResolver,
-    ContentTypeNameResolver,
-    ContentTypeSnippetFileNameResolver,
-    ContentTypeSnippetNameResolver,
-    LanguageNameResolver,
-    LanguageTypeFileNameResolver,
-    TaxonomyNameResolver,
-    TaxonomyTypeFileNameResolver,
-    WorkflowNameResolver,
-    WorkflowTypeFileNameResolver
-} from '../../core/resolvers.js';
-import { mapFilename, mapName } from '../../core/resolvers.js';
+import type { FilenameResolver, NameResolver } from '../../core/resolvers.js';
 import type { DeliveryElement } from './delivery-entity.generator.js';
 import { getDeliveryEntityGenerator } from './delivery-entity.generator.js';
 
-type ExtractImportsResult = {
-    readonly typeName: string;
-    readonly imports: readonly string[];
-    readonly contentTypeExtends: string | undefined;
-};
-
-type ContentTypeOrSnippet = Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>;
-
 export type DeliveryFileResolvers = {
-    readonly contentType?: ContentTypeFileNameResolver;
-    readonly snippet?: ContentTypeSnippetFileNameResolver;
-    readonly taxonomy?: TaxonomyTypeFileNameResolver;
-    readonly language?: LanguageTypeFileNameResolver;
-    readonly collection?: CollectionTypeFileNameResolver;
-    readonly workflow?: WorkflowTypeFileNameResolver;
+    readonly contentType?: FilenameResolver<ContentTypeModels.ContentType>;
+    readonly snippet?: FilenameResolver<ContentTypeSnippetModels.ContentTypeSnippet>;
+    readonly taxonomy?: FilenameResolver<TaxonomyModels.Taxonomy>;
+    readonly language?: FilenameResolver<LanguageModels.LanguageModel>;
+    readonly collection?: FilenameResolver<CollectionModels.Collection>;
+    readonly workflow?: FilenameResolver<WorkflowModels.Workflow>;
 };
 
 export type DeliveryNameResolvers = {
-    readonly contentType?: ContentTypeNameResolver;
-    readonly snippet?: ContentTypeSnippetNameResolver;
-    readonly taxonomy?: TaxonomyNameResolver;
-    readonly language?: LanguageNameResolver;
-    readonly collection?: CollectionNameResolver;
-    readonly workflow?: WorkflowNameResolver;
+    readonly contentType?: NameResolver<ContentTypeModels.ContentType>;
+    readonly snippet?: NameResolver<ContentTypeSnippetModels.ContentTypeSnippet>;
+    readonly taxonomy?: NameResolver<TaxonomyModels.Taxonomy>;
+    readonly language?: NameResolver<LanguageModels.LanguageModel>;
+    readonly collection?: NameResolver<CollectionModels.Collection>;
+    readonly workflow?: NameResolver<WorkflowModels.Workflow>;
 };
 
 export interface DeliveryGeneratorConfig {
@@ -69,17 +54,7 @@ export interface DeliveryGeneratorConfig {
 }
 
 export function deliveryGenerator(config: DeliveryGeneratorConfig) {
-    const fileResolvers = {
-        snippet: mapFilename(config.fileResolvers?.snippet),
-        contentType: mapFilename(config.fileResolvers?.contentType)
-    };
-
     const importer = getImporter(config.moduleFileExtension);
-
-    const nameResolvers = {
-        snippet: mapName(config.nameResolvers?.snippet, 'pascalCase'),
-        contentType: mapName(config.nameResolvers?.contentType, 'pascalCase')
-    };
 
     const getUniqueDeliveryElements = (): readonly Readonly<DeliveryElement>[] => {
         const flattenedElements = getFlattenedElements({
@@ -106,455 +81,51 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
     };
 
     const entityGenerators = {
-        collections: getDeliveryEntityGenerator<CollectionModels.Collection>({
+        collections: getDeliveryEntityGenerator({
+            ...config,
             entities: config.environmentData.collections,
             entityType: 'Collection',
-            fileResolver: config.fileResolvers?.collection,
-            nameResolver: config.nameResolvers?.collection,
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: false
         }),
-        languages: getDeliveryEntityGenerator<LanguageModels.LanguageModel>({
+        languages: getDeliveryEntityGenerator({
+            ...config,
             entities: config.environmentData.languages,
             entityType: 'Language',
-            fileResolver: config.fileResolvers?.language,
-            nameResolver: config.nameResolvers?.language,
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: false
         }),
-        workflows: getDeliveryEntityGenerator<WorkflowModels.Workflow>({
+        workflows: getDeliveryEntityGenerator({
+            ...config,
             entities: config.environmentData.workflows,
             entityType: 'Workflow',
-            fileResolver: config.fileResolvers?.workflow,
-            nameResolver: config.nameResolvers?.workflow,
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: false
         }),
-        taxonomies: getDeliveryEntityGenerator<TaxonomyModels.Taxonomy>({
+        taxonomies: getDeliveryEntityGenerator({
+            ...config,
             entities: config.environmentData.taxonomies,
             entityType: 'Taxonomy',
-            fileResolver: config.fileResolvers?.taxonomy,
-            nameResolver: config.nameResolvers?.taxonomy,
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: false
         }),
-        contentType: getDeliveryEntityGenerator<ContentTypeModels.ContentType>({
+        contentType: getDeliveryEntityGenerator({
+            ...config,
             entities: config.environmentData.types,
             entityType: 'ContentType',
-            fileResolver: config.fileResolvers?.contentType,
-            nameResolver: config.nameResolvers?.contentType,
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: false
         }),
-        elements: getDeliveryEntityGenerator<DeliveryElement>({
+        elements: getDeliveryEntityGenerator({
+            ...config,
             entities: getUniqueDeliveryElements(),
             entityType: 'Element',
-            fileResolver: undefined,
-            nameResolver: undefined,
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: true
         })
     };
 
-    const getCoreTypeImports = (): readonly string[] => {
-        return [
-            importer.importType({
-                filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${coreConfig.barrelExportFilename}`,
-                importValue: [deliveryConfig.coreContentTypeName].join(', ')
-            })
-        ];
-    };
-
-    const shouldImportCoreTypeInSnippet = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): boolean => {
-        return snippet.elements
-            .map<boolean>((m) =>
-                match(m)
-                    .returnType<boolean>()
-                    .with(
-                        P.union({ type: 'modular_content' }, { type: 'subpages' }, { type: 'rich_text' }),
-                        (elementWithAllowedContentTypes) =>
-                            (elementWithAllowedContentTypes.allowed_content_types?.length ?? 0) > 0 ? false : true
-                    )
-                    .otherwise(() => false)
-            )
-            .some((m) => m === true);
-    };
-
-    const getSnippetImports = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): readonly string[] => {
-        if (snippets.length === 0) {
-            return [];
-        }
-
-        return [
-            importer.importType({
-                filePathOrPackage: `../${deliveryConfig.itemSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
-                importValue: snippets
-                    .map((snippet) => nameResolvers.snippet(snippet))
-                    .filter(uniqueFilter)
-                    .join(', ')
-            })
-        ];
-    };
-
-    const getReferencedTypeImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
-        const referencedTypeNames = elements
-            // only take elements that are not from snippets
-            .filter((m) => !m.fromSnippet)
-            .map((flattenedElement) => {
-                return match(flattenedElement)
-                    .returnType<string | string[]>()
-                    .with(
-                        P.union({ type: 'modular_content' }, { type: 'subpages' }, { type: 'rich_text' }),
-                        (alementWithAllowedContentTypes) => {
-                            return (alementWithAllowedContentTypes.allowedContentTypes ?? [])
-                                .filter((allowedContentType) => {
-                                    // filter self-referencing types as they do not need to be importer
-                                    if (allowedContentType.codename === typeOrSnippet.codename) {
-                                        return false;
-                                    }
-                                    return true;
-                                })
-                                .map((allowedContentType) => {
-                                    return nameResolvers.contentType(allowedContentType);
-                                });
-                        }
-                    )
-                    .otherwise(() => []);
-            })
-            .flatMap((m) => m)
-            .filter(isNotUndefined)
-            .filter(uniqueFilter);
-
-        if (referencedTypeNames.length === 0) {
-            return [];
-        }
-
-        return [
-            importer.importType({
-                filePathOrPackage:
-                    typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
-                        ? `../${deliveryConfig.itemTypesFolderName}/${coreConfig.barrelExportFilename}`
-                        : `./${coreConfig.barrelExportFilename}`,
-                importValue: referencedTypeNames.join(', ')
-            })
-        ];
-    };
-
-    const getReferencedTaxonomyImports = (
-        typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>,
-        elements: readonly FlattenedElement[]
-    ): readonly string[] => {
-        const taxonomyTypeNames = elements
-            // only take elements that are not from snippets
-            .filter((m) => !m.fromSnippet)
-            .map((flattenedElement) => {
-                return match(flattenedElement)
-                    .returnType<string | undefined>()
-                    .with({ type: 'taxonomy' }, (taxonomyElement) => {
-                        if (!taxonomyElement.assignedTaxonomy) {
-                            const usedIn = match(typeOrSnippet)
-                                .returnType<string>()
-                                .with(P.instanceOf(ContentTypeSnippetModels.ContentTypeSnippet), (m) => `snippet '${m.codename}'`)
-                                .otherwise(() => `content type '${typeOrSnippet.codename}'`);
-
-                            console.warn(
-                                `Skipping invalid taxonomy for element '${taxonomyElement.codename}' used in ${usedIn}. This reference has to be fixed in your Kontent project.`
-                            );
-
-                            return undefined;
-                        }
-
-                        return getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy);
-                    })
-                    .otherwise(() => undefined);
-            })
-            .filter(isNotUndefined)
-            .filter(uniqueFilter);
-
-        if (taxonomyTypeNames.length === 0) {
-            return [];
-        }
-
-        return [
-            importer.importType({
-                filePathOrPackage: `../${entityGenerators.taxonomies.entityFolderName}/${coreConfig.barrelExportFilename}`,
-                importValue: taxonomyTypeNames.join(', ')
-            })
-        ];
-    };
-
-    const getTaxonomyTermCodenamesTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        return `${entityGenerators.taxonomies.getEntityName(taxonomy)}${deliveryConfig.taxonomyTermCodenamesSuffix}`;
-    };
-
-    const getContentTypeModelImports = (data: {
-        readonly contentType: Readonly<ContentTypeModels.ContentType>;
-        readonly flattenedElements: readonly FlattenedElement[];
-    }): ExtractImportsResult => {
-        const snippets = data.flattenedElements.map((flattenedElement) => flattenedElement.fromSnippet).filter(isNotUndefined);
-
-        return {
-            imports: sortAlphabetically(
-                [
-                    ...getCoreTypeImports(),
-                    ...getReferencedTypeImports(data.contentType, data.flattenedElements),
-                    ...getReferencedTaxonomyImports(data.contentType, data.flattenedElements),
-                    ...getSnippetImports(snippets)
-                ]
-                    .filter(isNotUndefined)
-                    .filter(uniqueFilter),
-                (importValue) => importValue
-            ),
-            contentTypeExtends: snippets.length
-                ? `& ${sortAlphabetically(
-                      snippets.map((snippet) => nameResolvers.snippet(snippet)).filter(uniqueFilter),
-                      (snippetName) => snippetName
-                  ).join(' & ')}`
-                : undefined,
-            typeName: nameResolvers.contentType(data.contentType)
-        };
-    };
-
-    const getSnippetModelImports = (data: {
-        readonly snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
-        readonly flattenedElements: readonly FlattenedElement[];
-    }): ExtractImportsResult => {
-        const snippets = data.flattenedElements.map((flattenedElement) => flattenedElement.fromSnippet).filter(isNotUndefined);
-
-        return {
-            imports: sortAlphabetically(
-                [
-                    ...(shouldImportCoreTypeInSnippet(data.snippet) ? getCoreTypeImports() : []),
-                    ...getReferencedTypeImports(data.snippet, data.flattenedElements),
-                    ...getReferencedTaxonomyImports(data.snippet, data.flattenedElements),
-                    ...getSnippetImports(snippets)
-                ]
-                    .filter(isNotUndefined)
-                    .filter(uniqueFilter),
-                (importValue) => importValue
-            ),
-            contentTypeExtends: undefined,
-            typeName: nameResolvers.snippet(data.snippet)
-        };
-    };
-
-    const getTypeDeliverySdkImports = (
-        typeOrSnippet: ContentTypeOrSnippet,
-        flattenedElements: readonly FlattenedElement[]
-    ): readonly string[] => {
-        return sortAlphabetically(
-            [
-                ...(typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet ? [deliveryConfig.sdkTypes.snippet] : []),
-                // only import elements type if there is at least one element that is represented by property and is not from a snippet
-                ...(flattenedElements.filter((m) => m.isElementWithProperty && !m.fromSnippet).length
-                    ? [deliveryConfig.sdkTypes.elements]
-                    : [])
-            ],
-            (importValue) => importValue
-        );
-    };
-
-    const getSnippetCode = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): string => {
-        const flattenedElements = getFlattenedElements({
-            elements: snippet.elements,
-            snippets: config.environmentData.snippets,
-            taxonomies: config.environmentData.taxonomies,
-            types: config.environmentData.types
-        });
-
-        const importsResult = getSnippetModelImports({
-            snippet,
-            flattenedElements
-        });
-
-        const nameOfTypeRepresentingAllElementCodenames = getNameOfTypeRepresentingAllElementCodenames(snippet);
-
-        return `
-${importer.importType({
-    filePathOrPackage: deliveryConfig.npmPackageName,
-    importValue: `${getTypeDeliverySdkImports(snippet, flattenedElements).join(', ')}`
-})}
-${importsResult.imports.join('\n')}
-
-${wrapComment(`
-* ${snippet.name}
-* 
-* Id: ${snippet.id}
-* Codename: ${snippet.codename}    
-`)}
-export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
-${getElementsCode(flattenedElements)}>;
-
-${wrapComment(`
-* Type representing all available element codenames for ${snippet.name}
-`)}
-${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
-`;
-    };
-
-    const getContentTypeCode = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
-        const flattenedElements = getFlattenedElements({
-            elements: contentType.elements,
-            snippets: config.environmentData.snippets,
-            taxonomies: config.environmentData.taxonomies,
-            types: config.environmentData.types
-        });
-
-        const importsResult = getContentTypeModelImports({
-            contentType,
-            flattenedElements
-        });
-
-        const nameOfTypeRepresentingAllElementCodenames = getNameOfTypeRepresentingAllElementCodenames(contentType);
-
-        return `
-${importer.importType({
-    filePathOrPackage: deliveryConfig.npmPackageName,
-    importValue: `${getTypeDeliverySdkImports(contentType, flattenedElements).join(', ')}`
-})}
-${importsResult.imports.join('\n')}
-
-${wrapComment(`
-* ${contentType.name}
-* 
-* Id: ${contentType.id}
-* Codename: ${contentType.codename}    
-`)}
-export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
-${nameOfTypeRepresentingAllElementCodenames},
-${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
-'${contentType.codename}'>
-
-${wrapComment(`
-* Type representing all available element codenames for ${contentType.name}
-`)}
-${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
-
-${wrapComment(`
-* Type guard for ${contentType.name}
-*
-* Id: ${contentType.id}
-* Codename: ${contentType.codename}
-`)}
-${getContentItemTypeGuardFunction(contentType)};
-`;
-    };
-
-    const createTypeModel = (type: Readonly<ContentTypeModels.ContentType>): GeneratedFile => {
-        return {
-            filename: fileResolvers.contentType(type, true),
-            text: getContentTypeCode(type)
-        };
-    };
-
-    const createSnippetModel = (type: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): GeneratedFile => {
-        return {
-            filename: fileResolvers.snippet(type, true),
-            text: getSnippetCode(type)
-        };
-    };
-
-    const getElementsCode = (flattenedElements: readonly FlattenedElement[]): string => {
-        const filteredElements = flattenedElements
-            // filter out elements that are from snippets
-            .filter((m) => !m.fromSnippet);
-
-        if (filteredElements.length === 0) {
-            return `Record<string, never>`;
-        }
-
-        return (
-            filteredElements.reduce<string>((code, element) => {
-                const mappedType = mapElementType(element);
-
-                if (!mappedType) {
-                    return code;
-                }
-
-                return (code += `
-                ${wrapComment(`
-                * ${element.title}
-                * 
-                * Type: ${element.type}
-                * Required: ${element.isRequired ? 'true' : 'false'}
-                * Codename: ${element.codename}
-                * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                `)} 
-                readonly ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
-            }, '{') + '}'
-        );
-    };
-
-    const getNameOfTypeRepresentingAllElementCodenames = (typeOrSnippet: ContentTypeOrSnippet): string => {
-        return `${
-            typeOrSnippet instanceof ContentTypeModels.ContentType
-                ? nameResolvers.contentType(typeOrSnippet)
-                : nameResolvers.snippet(typeOrSnippet)
-        }ElementCodenames`;
-    };
-
-    const getContentTypeElementCodenamesType = (typeName: string, flattenedElements: readonly FlattenedElement[]): string => {
-        if (flattenedElements.length === 0) {
-            return `export type ${typeName} = never`;
-        }
-        return `export type ${typeName} = ${flattenedElements.map((element) => `'${element.codename}'`).join(' | ')};`;
-    };
-
-    const mapElementType = (element: FlattenedElement): string | undefined => {
-        return match(element)
-            .returnType<string | undefined>()
-            .with({ type: 'text' }, () => 'TextElement')
-            .with({ type: 'number' }, () => 'NumberElement')
-            .with({ type: 'modular_content' }, (linkedItemsElement) => {
-                return `LinkedItemsElement<${
-                    linkedItemsElement.allowedContentTypes?.length
-                        ? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(' | ')
-                        : deliveryConfig.coreContentTypeName
-                }>`;
-            })
-            .with({ type: 'subpages' }, (linkedItemsElement) => {
-                return `LinkedItemsElement<${
-                    linkedItemsElement.allowedContentTypes?.length
-                        ? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(' | ')
-                        : deliveryConfig.coreContentTypeName
-                }>`;
-            })
-            .with({ type: 'asset' }, () => 'AssetsElement')
-            .with({ type: 'date_time' }, () => 'DateTimeElement')
-            .with({ type: 'rich_text' }, (richTextElement) => {
-                return `RichTextElement<${
-                    richTextElement.allowedContentTypes?.length
-                        ? getLinkedItemsAllowedTypes(richTextElement.allowedContentTypes).join(' | ')
-                        : deliveryConfig.coreContentTypeName
-                }>`;
-            })
-            .with({ type: 'multiple_choice' }, (multipleChoiceElement) => {
-                if (!multipleChoiceElement.multipleChoiceOptions?.length) {
-                    return 'MultipleChoiceElement';
-                }
-                return `MultipleChoiceElement<${multipleChoiceElement.multipleChoiceOptions.map((option) => `'${option.codename}'`).join(' | ')}>`;
-            })
-            .with({ type: 'url_slug' }, () => 'UrlSlugElement')
-            .with({ type: 'taxonomy' }, (taxonomyElement) => {
-                if (!taxonomyElement.assignedTaxonomy) {
-                    return `TaxonomyElement`;
-                }
-
-                return `TaxonomyElement<${getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
-            })
-            .with({ type: 'custom' }, () => 'CustomElement')
-            .otherwise(() => undefined);
-    };
-
-    const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {
-        if (!types.length) {
-            return [deliveryConfig.sdkTypes.contentItem];
-        }
-
-        return types.map((type) => nameResolvers.contentType(type));
-    };
-
-    const getCoreContentTypeFile = (): GeneratedFile => {
+    const getDeliverySystemFile = (): GeneratedFile => {
         const sdkImports = [
             deliveryConfig.sdkTypes.contentItem,
             deliveryConfig.sdkTypes.contentItemElements,
@@ -575,14 +146,14 @@ ${getContentItemTypeGuardFunction(contentType)};
                 ${Object.values(entityGenerators)
                     .map((generator) => {
                         const importValues: readonly string[] = [
-                            generator.entityCodenamesTypeName,
+                            generator.entityNames.entityCodenamesTypeName,
                             ...match(generator.entityType)
                                 .with('Workflow', () => [deliveryConfig.workflowStepCodenames])
                                 .otherwise(() => [])
                         ];
 
                         return importer.importType({
-                            filePathOrPackage: `../${generator.entityFolderName}/${generator.mainEntityFilename}`,
+                            filePathOrPackage: `../${generator.entityNames.entityFolderName}/${generator.entityNames.mainEntityFilename}`,
                             importValue: `${importValues.join(', ')}`
                         });
                     })
@@ -592,25 +163,25 @@ ${getContentItemTypeGuardFunction(contentType)};
                 export type ${deliveryConfig.coreContentTypeName}<
                         ${elementCodenamesGenericArgName} extends string = string,
                         ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
-                        ${contentTypeGenericArgName} extends ${entityGenerators.contentType.entityCodenamesTypeName} = ${entityGenerators.contentType.entityCodenamesTypeName}
+                        ${contentTypeGenericArgName} extends ${entityGenerators.contentType.entityNames.entityCodenamesTypeName} = ${entityGenerators.contentType.entityNames.entityCodenamesTypeName}
                     > = ${deliveryConfig.sdkTypes.contentItem}<
                     ${elementsGenericArgName},
                     ${contentTypeGenericArgName},
-                    ${entityGenerators.languages.entityCodenamesTypeName},
-                    ${entityGenerators.collections.entityCodenamesTypeName},
-                    ${entityGenerators.workflows.entityCodenamesTypeName},
+                    ${entityGenerators.languages.entityNames.entityCodenamesTypeName},
+                    ${entityGenerators.collections.entityNames.entityCodenamesTypeName},
+                    ${entityGenerators.workflows.entityNames.entityCodenamesTypeName},
                     ${deliveryConfig.workflowStepCodenames}
                 >;
 
                 ${wrapComment(`\n * Core types for '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
-                    readonly collectionCodenames: ${entityGenerators.collections.entityCodenamesTypeName};
+                    readonly collectionCodenames: ${entityGenerators.collections.entityNames.entityCodenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
-                    readonly contentTypeCodenames: ${entityGenerators.contentType.entityCodenamesTypeName};
-                    readonly elementCodenames: ${entityGenerators.elements.entityCodenamesTypeName};
-                    readonly languageCodenames: ${entityGenerators.languages.entityCodenamesTypeName};
-                    readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityCodenamesTypeName};
-                    readonly workflowCodenames: ${entityGenerators.workflows.entityCodenamesTypeName};
+                    readonly contentTypeCodenames: ${entityGenerators.contentType.entityNames.entityCodenamesTypeName};
+                    readonly elementCodenames: ${entityGenerators.elements.entityNames.entityCodenamesTypeName};
+                    readonly languageCodenames: ${entityGenerators.languages.entityNames.entityCodenamesTypeName};
+                    readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityNames.entityCodenamesTypeName};
+                    readonly workflowCodenames: ${entityGenerators.workflows.entityNames.entityCodenamesTypeName};
                     readonly workflowStepCodenames: ${deliveryConfig.workflowStepCodenames};
                 };
 
@@ -620,38 +191,14 @@ ${getContentItemTypeGuardFunction(contentType)};
         };
     };
 
-    const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
-        const nameResolvers = {
-            contentItemTypeGuardFunctionName: mapName(config.nameResolvers?.contentType, 'pascalCase', {
-                prefix: 'is',
-                suffix: undefined
-            }),
-            contentItemTypeName: mapName(config.nameResolvers?.contentType, 'pascalCase')
-        };
-
-        return `export function ${nameResolvers.contentItemTypeGuardFunctionName(contentType)}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${nameResolvers.contentItemTypeName(contentType)} {
-                return item?.system?.type === '${contentType.codename}';
-            }`;
-    };
-
     return {
         getTypeFiles: (): readonly GeneratedSet[] => {
-            return [
-                {
-                    folderName: deliveryConfig.itemTypesFolderName,
-                    files: config.environmentData.types.map((type) => createTypeModel(type))
-                },
-                {
-                    folderName: deliveryConfig.itemSnippetsFolderName,
-                    files: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
-                },
-                ...Object.values(entityGenerators).map((generator) => generator.generateEntityTypes())
-            ];
+            return Object.values(entityGenerators).map((generator) => generator.generateEntityTypes());
         },
         getSystemFiles(): GeneratedSet {
             return {
                 folderName: deliveryConfig.systemTypesFolderName,
-                files: [getCoreContentTypeFile()]
+                files: [getDeliverySystemFile()]
             };
         }
     };

@@ -1,4 +1,4 @@
-import type { CollectionModels, ContentTypeModels, LanguageModels } from '@kontent-ai/management-sdk';
+import type { CollectionModels, ContentTypeModels, ContentTypeSnippetModels, LanguageModels } from '@kontent-ai/management-sdk';
 import { TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { deliveryConfig } from '../../config.js';
@@ -6,8 +6,9 @@ import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined } from '../../core/core.utils.js';
 import { getImporter } from '../../core/importer.js';
-import type { FilenameResolver, MapObjectToName, NameResolver } from '../../core/resolvers.js';
-import { mapFilename, mapName, resolveCase } from '../../core/resolvers.js';
+import type { DeliveryEntityName } from './delivery-entity-name.generator.js';
+import { getDeliveryEntityNamesGenerator } from './delivery-entity-name.generator.js';
+import type { DeliveryGeneratorConfig } from './delivery.generator.js';
 import { deliveryEntityUtils } from './utils/delivery-entity.utils.js';
 
 export type DeliveryElement = {
@@ -21,60 +22,41 @@ export type DeliveryEntity =
     | Readonly<WorkflowModels.Workflow>
     | Readonly<TaxonomyModels.Taxonomy>
     | DeliveryElement
-    | Readonly<ContentTypeModels.ContentType>;
+    | Readonly<ContentTypeModels.ContentType>
+    | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
 
-export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'ContentType' | 'Element';
+export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'ContentType' | 'Element' | 'Snippet';
 
-export type DeliveryEntityGeneratorConfig<TEntity extends DeliveryEntity> = {
+export type DeliveryEntityGeneratorConfig = {
     readonly moduleFileExtension: ModuleFileExtension;
     readonly entityType: DeliveryEntityType;
-    readonly entities: readonly Readonly<TEntity>[];
-    readonly fileResolver: FilenameResolver<Readonly<TEntity>>;
-    readonly nameResolver: NameResolver<Readonly<TEntity>>;
+    readonly entities: readonly Readonly<DeliveryEntity>[];
     readonly generateOnlyCoreFile: boolean;
-};
+} & Pick<DeliveryGeneratorConfig, 'nameResolvers' | 'fileResolvers'>;
 
-export type DeliveryEntityGenerator<TEntity extends DeliveryEntity> = {
+export type DeliveryEntityGenerator = {
     readonly entityType: DeliveryEntityType;
-    readonly mainEntityFilename: string;
-    readonly entityFolderName: string;
-    readonly entityCodenamesTypeName: string;
     readonly generateEntityTypes: () => GeneratedSet;
-    readonly getEntityName: MapObjectToName<TEntity>;
+    readonly entityNames: DeliveryEntityName;
 };
 
-export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
-    config: DeliveryEntityGeneratorConfig<TEntity>
-): DeliveryEntityGenerator<TEntity> {
+export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig): DeliveryEntityGenerator {
     const importer = getImporter(config.moduleFileExtension);
     const deliveryUtils = deliveryEntityUtils();
+    const entityNames = getDeliveryEntityNamesGenerator({
+        ...config,
+        entityType: config.entityType
+    }).getEntityNames();
 
-    const resolvedNames = {
-        entityCodenamesTypeName: `${config.entityType}Codenames`,
-        mainEntityFilename: mapFilename('camelCase', {
-            prefix: '_'
-        })({ codename: `${deliveryUtils.getPluralName(config.entityType)}` }, true),
-        entityFolderName: `${resolveCase(deliveryUtils.getPluralName(config.entityType), 'camelCase')}`
-    };
-
-    const nameResolvers = {
-        getEntityName: mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` }),
-        getCodenameTypeName: mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}Codename` }),
-        getTypeGuardName: mapName(config.nameResolver, 'pascalCase', {
-            prefix: 'is',
-            suffix: `${config.entityType}Codename`
-        })
-    };
-
-    const getEntityTypeGuardFunction = (entity: Readonly<TEntity>): string => {
+    const getEntityTypeGuardFunction = (entity: Readonly<DeliveryEntity>): string => {
         return deliveryUtils.getTypeGuardCode({
-            codenameTypeName: nameResolvers.getCodenameTypeName(entity),
-            typeGuardName: nameResolvers.getTypeGuardName(entity),
+            codenameTypeName: entityNames.getCodenameTypeName(entity),
+            typeGuardName: entityNames.getTypeGuardName(entity),
             entity
         });
     };
 
-    const getEntityInfoComment = (entity: Readonly<TEntity>): string => {
+    const getEntityInfoComment = (entity: Readonly<DeliveryEntity>): string => {
         return `* Codename: ${entity.codename}`;
     };
 
@@ -91,13 +73,11 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
             ${getMainFileExtraCode()}`;
     };
 
-    const getEntityCode = (entity: Readonly<TEntity>): string => {
-        const nameMapWithoutSuffix = mapName(config.nameResolver, 'pascalCase', { suffix: `${config.entityType}` });
-
+    const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
         return `
             ${importer.importType({
-                filePathOrPackage: `./${resolvedNames.mainEntityFilename}`,
-                importValue: `${resolvedNames.entityCodenamesTypeName}`
+                filePathOrPackage: `./${entityNames.mainEntityFilename}`,
+                importValue: `${entityNames.entityCodenamesTypeName}`
             })}
     
             ${wrapComment(`
@@ -105,7 +85,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
                 * 
                 ${getEntityInfoComment(entity)}
                 `)}
-            export type ${nameResolvers.getCodenameTypeName(entity)} = Extract<${resolvedNames.entityCodenamesTypeName}, '${entity.codename}'>;
+            export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.entityCodenamesTypeName}, '${entity.codename}'>;
 
             ${wrapComment(`
                 * Type guard for ${entity.name}
@@ -113,24 +93,20 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
                 ${getEntityInfoComment(entity)}
             `)}
             ${getEntityTypeGuardFunction(entity)}
-            ${getEntityExtraCode(entity, nameMapWithoutSuffix(entity))}
+            ${getEntityExtraCode(entity, entityNames.getNameWithoutSuffix(entity))}
             `;
     };
 
-    const getEntityFile = (entity: Readonly<TEntity>): GeneratedFile => {
-        const filenameMap = mapFilename(config.fileResolver, {
-            suffix: `.${resolveCase(config.entityType, 'camelCase')}`
-        });
-
+    const getEntityFile = (entity: Readonly<DeliveryEntity>): GeneratedFile => {
         return {
-            filename: filenameMap(entity, true),
+            filename: entityNames.getEntityFilename(entity, true),
             text: getEntityCode(entity)
         };
     };
 
     const getMainEntityFile = (): GeneratedFile => {
         return {
-            filename: resolvedNames.mainEntityFilename,
+            filename: entityNames.mainEntityFilename,
             text: getMainFileCode()
         };
     };
@@ -139,7 +115,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
         return match(config.entityType)
             .returnType<string>()
             .with('Workflow', () => {
-                const workflowSteps: readonly string[] = config.entities
+                const workflowStepCodenames: readonly string[] = config.entities
                     .filter((m) => m instanceof WorkflowModels.Workflow)
                     .flatMap((workflow) =>
                         [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep].filter(isNotUndefined)
@@ -147,7 +123,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
                     .map((m) => m.codename);
 
                 return deliveryUtils.getCodeOfDeliveryEntity({
-                    codenames: workflowSteps,
+                    codenames: workflowStepCodenames,
                     originalName: 'Workflow',
                     resolvedName: 'Workflow',
                     type: 'workflow step',
@@ -190,14 +166,11 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     };
 
     return {
-        mainEntityFilename: resolvedNames.mainEntityFilename,
-        entityFolderName: resolvedNames.entityFolderName,
-        getEntityName: nameResolvers.getEntityName,
+        entityNames,
         entityType: config.entityType,
-        entityCodenamesTypeName: resolvedNames.entityCodenamesTypeName,
         generateEntityTypes: (): GeneratedSet => {
             return {
-                folderName: resolvedNames.entityFolderName,
+                folderName: entityNames.entityFolderName,
                 files: [
                     ...(config.generateOnlyCoreFile
                         ? []
