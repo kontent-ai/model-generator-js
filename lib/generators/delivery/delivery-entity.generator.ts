@@ -1,6 +1,7 @@
 import type { CollectionModels, ContentTypeModels, LanguageModels } from '@kontent-ai/management-sdk';
 import { TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
+import { deliveryConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined } from '../../core/core.utils.js';
@@ -35,7 +36,7 @@ export type DeliveryEntityGeneratorConfig<TEntity extends DeliveryEntity> = {
 
 export type DeliveryEntityGenerator<TEntity extends DeliveryEntity> = {
     readonly entityType: DeliveryEntityType;
-    readonly coreEntityFilename: string;
+    readonly mainEntityFilename: string;
     readonly entityFolderName: string;
     readonly entityCodenamesTypeName: string;
     readonly generateEntityTypes: () => GeneratedSet;
@@ -181,7 +182,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
                     originalName: taxonomy.name,
                     resolvedName: resolvedName,
                     type: 'taxonomy term',
-                    propertySuffix: 'TermCodenames',
+                    propertySuffix: deliveryConfig.taxonomyTermCodenamesSuffix,
                     typeGuardSuffix: 'TermCodename'
                 });
             })
@@ -189,7 +190,7 @@ export function getDeliveryEntityGenerator<TEntity extends DeliveryEntity>(
     };
 
     return {
-        coreEntityFilename: resolvedNames.mainEntityFilename,
+        mainEntityFilename: resolvedNames.mainEntityFilename,
         entityFolderName: resolvedNames.entityFolderName,
         getEntityName: nameResolvers.getEntityName,
         entityType: config.entityType,

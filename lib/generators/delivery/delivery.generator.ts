@@ -284,7 +284,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
     };
 
     const getTaxonomyTermCodenamesTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        return `${entityGenerators.taxonomies.getEntityName(taxonomy)}TermCodenames`;
+        return `${entityGenerators.taxonomies.getEntityName(taxonomy)}${deliveryConfig.taxonomyTermCodenamesSuffix}`;
     };
 
     const getContentTypeModelImports = (data: {
@@ -582,7 +582,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                         ];
 
                         return importer.importType({
-                            filePathOrPackage: `../${generator.entityFolderName}/${generator.coreEntityFilename}`,
+                            filePathOrPackage: `../${generator.entityFolderName}/${generator.mainEntityFilename}`,
                             importValue: `${importValues.join(', ')}`
                         });
                     })
