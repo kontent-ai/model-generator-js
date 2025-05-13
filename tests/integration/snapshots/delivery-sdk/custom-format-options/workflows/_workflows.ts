@@ -20,7 +20,7 @@
             /*
                 * Object with all values of workflow step codenames in Workflow
             */
-            export const workflowStepCodenames = ['draft', 'published', 'archived', 'scheduled', 'draft_b42a7f1', 'step_1', 'step_2', 'published', 'archived', 'scheduled'] as const;;
+            export const workflowStepCodenames = ['draft', 'published', 'archived', 'scheduled', 'draft_b42a7f1', 'step_1', 'step_2'] as const;;
 
             /*
                 * Type representing workflow step codenames in Workflow

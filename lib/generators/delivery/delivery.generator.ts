@@ -51,7 +51,7 @@ export type DeliveryNameResolvers = {
     readonly workflow?: WorkflowNameResolver;
 };
 
-export interface DeliveryTypeGeneratorConfig {
+export interface DeliveryGeneratorConfig {
     readonly moduleFileExtension: ModuleFileExtension;
 
     readonly environmentData: {
@@ -68,7 +68,7 @@ export interface DeliveryTypeGeneratorConfig {
     readonly nameResolvers?: DeliveryNameResolvers;
 }
 
-export function deliveryTypeGenerator(config: DeliveryTypeGeneratorConfig) {
+export function deliveryGenerator(config: DeliveryGeneratorConfig) {
     const fileResolvers = {
         snippet: mapFilename(config.fileResolvers?.snippet),
         contentType: mapFilename(config.fileResolvers?.contentType)
@@ -635,23 +635,18 @@ ${getContentItemTypeGuardFunction(contentType)};
     };
 
     return {
-        generateModels: (): {
-            readonly contentTypeFiles: GeneratedSet;
-            readonly snippetFiles: GeneratedSet;
-        } => {
-            return {
-                contentTypeFiles: {
+        getTypeFiles: (): readonly GeneratedSet[] => {
+            return [
+                {
                     folderName: deliveryConfig.itemTypesFolderName,
                     files: config.environmentData.types.map((type) => createTypeModel(type))
                 },
-                snippetFiles: {
+                {
                     folderName: deliveryConfig.itemSnippetsFolderName,
                     files: config.environmentData.snippets.map((contentTypeSnippet) => createSnippetModel(contentTypeSnippet))
-                }
-            };
-        },
-        getEntitySets(): readonly GeneratedSet[] {
-            return Object.values(entityGenerators).map((generator) => generator.generateEntityTypes());
+                },
+                ...Object.values(entityGenerators).map((generator) => generator.generateEntityTypes())
+            ];
         },
         getSystemFiles(): GeneratedSet {
             return {

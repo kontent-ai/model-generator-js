@@ -22,19 +22,9 @@ export const elementCodenames = [
 	'asset_element',
 	'multiple_choice_element',
 	'number_element',
-	'snippet_a__rich_text_with_all_allowed_item_types',
-	'snippet_a__linked_items_with_specific_types',
-	'snippet_a__text',
 	'taxonomy_element',
-	'items',
-	'title',
-	'subpages',
-	'content',
 	'rich_text_with_invalid_type',
-	'linked_items_with_invalid_type',
-	'snippet_a__rich_text_with_all_allowed_item_types',
-	'snippet_a__linked_items_with_specific_types',
-	'snippet_a__text'
+	'linked_items_with_invalid_type'
 ] as const;
 
 /*

@@ -4,8 +4,7 @@ import type { Options } from 'prettier';
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
 import { getManagementKontentFetcher } from '../../fetch/management-kontent-fetcher.js';
 import { getFileManager } from '../../files/file-manager.js';
-import type { DeliveryFileResolvers, DeliveryNameResolvers } from './delivery-type.generator.js';
-import { deliveryTypeGenerator } from './delivery-type.generator.js';
+import { deliveryGenerator, type DeliveryFileResolvers, type DeliveryNameResolvers } from './delivery.generator.js';
 
 export type GenerateDeliveryModelsConfig = {
     readonly environmentId: string;
@@ -24,14 +23,14 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
     console.log(chalk.green(`Model generator started \n`));
     console.log(`Generating '${chalk.yellow('delivery-sdk' satisfies CliAction)}' models\n`);
 
-    const { contentTypeFiles, snippetFiles, entitySets, environmentInfo, systemFiles } = await getFilesAsync(config);
+    const { environmentInfo, files } = await getFilesAsync(config);
 
     const fileManager = getFileManager({
         ...config,
         environmentInfo
     });
 
-    const setFiles = await fileManager.getSetFilesAsync([contentTypeFiles, snippetFiles, systemFiles, ...entitySets]);
+    const setFiles = await fileManager.getSetFilesAsync(files);
 
     if (config.createFiles) {
         fileManager.createFiles(setFiles);
@@ -43,10 +42,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 }
 
 async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
-    readonly contentTypeFiles: GeneratedSet;
-    readonly snippetFiles: GeneratedSet;
-    readonly entitySets: readonly GeneratedSet[];
-    readonly systemFiles: GeneratedSet;
+    readonly files: readonly GeneratedSet[];
     readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
     const kontentFetcher = getManagementKontentFetcher({
@@ -66,7 +62,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         kontentFetcher.getWorkflowsAsync()
     ]);
 
-    const deliveryGenerator = deliveryTypeGenerator({
+    const generator = deliveryGenerator({
         moduleFileExtension: config.moduleFileExtension,
         environmentData: {
             environment: environmentInfo,
@@ -81,13 +77,8 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
         nameResolvers: config.nameResolvers
     });
 
-    const { contentTypeFiles, snippetFiles } = deliveryGenerator.generateModels();
-
     return {
-        contentTypeFiles,
-        snippetFiles,
-        environmentInfo,
-        systemFiles: deliveryGenerator.getSystemFiles(),
-        entitySets: deliveryGenerator.getEntitySets()
+        files: [...generator.getTypeFiles(), generator.getSystemFiles()],
+        environmentInfo
     };
 }
