@@ -82,46 +82,46 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 
     const entityGenerators = {
         collections: getDeliveryEntityGenerator({
-            ...config,
             entities: config.environmentData.collections,
             entityType: 'Collection',
             moduleFileExtension: config.moduleFileExtension,
-            generateOnlyCoreFile: false
+            generateOnlyCoreFile: false,
+            deliveryGeneratorConfig: config
         }),
         languages: getDeliveryEntityGenerator({
-            ...config,
             entities: config.environmentData.languages,
             entityType: 'Language',
             moduleFileExtension: config.moduleFileExtension,
-            generateOnlyCoreFile: false
+            generateOnlyCoreFile: false,
+            deliveryGeneratorConfig: config
         }),
         workflows: getDeliveryEntityGenerator({
-            ...config,
             entities: config.environmentData.workflows,
             entityType: 'Workflow',
             moduleFileExtension: config.moduleFileExtension,
-            generateOnlyCoreFile: false
+            generateOnlyCoreFile: false,
+            deliveryGeneratorConfig: config
         }),
         taxonomies: getDeliveryEntityGenerator({
-            ...config,
             entities: config.environmentData.taxonomies,
             entityType: 'Taxonomy',
             moduleFileExtension: config.moduleFileExtension,
-            generateOnlyCoreFile: false
+            generateOnlyCoreFile: false,
+            deliveryGeneratorConfig: config
         }),
         contentType: getDeliveryEntityGenerator({
-            ...config,
             entities: config.environmentData.types,
-            entityType: 'ContentType',
+            entityType: 'Type',
             moduleFileExtension: config.moduleFileExtension,
-            generateOnlyCoreFile: false
+            generateOnlyCoreFile: false,
+            deliveryGeneratorConfig: config
         }),
         elements: getDeliveryEntityGenerator({
-            ...config,
             entities: getUniqueDeliveryElements(),
             entityType: 'Element',
             moduleFileExtension: config.moduleFileExtension,
-            generateOnlyCoreFile: true
+            generateOnlyCoreFile: true,
+            deliveryGeneratorConfig: config
         })
     };
 
@@ -137,7 +137,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
         const elementCodenamesGenericArgName: string = 'TElementCodenames';
 
         return {
-            filename: `${deliveryConfig.coreTypeFilename}.ts`,
+            filename: `${deliveryConfig.mainSystemFilename}.ts`,
             text: `
               ${importer.importType({
                   filePathOrPackage: deliveryConfig.npmPackageName,

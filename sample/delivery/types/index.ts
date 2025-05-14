@@ -12,6 +12,6 @@
  * -------------------------------------------------------------------------------
  */
 
-export * from './_contentTypes.js';
-export * from './actor.contentType.js';
-export * from './movie.contentType.js';
+export * from './_types.js';
+export * from './actor.type.js';
+export * from './movie.type.js';

@@ -3,11 +3,10 @@ import { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/managem
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import type { FlattenedElement } from '../../core/core.models.js';
+import type { FlattenedElement, GeneratedTypeModel } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { getImporter } from '../../core/importer.js';
-import { mapName } from '../../core/resolvers.js';
 import { getDeliveryEntityNamesGenerator } from './delivery-entity-name.generator.js';
 import type { DeliveryGeneratorConfig } from './delivery.generator.js';
 
@@ -17,22 +16,16 @@ type ExtractImportsResult = {
     readonly contentTypeExtends: string | undefined;
 };
 
-type GeneratedTypeModel = {
-    readonly imports: readonly string[];
-    readonly code: string;
-};
-
 type ContentTypeOrSnippet = Readonly<ContentTypeModels.ContentType | ContentTypeSnippetModels.ContentTypeSnippet>;
 
-export type DeliveryTypeAndSnippetGeneratorConfig = DeliveryGeneratorConfig &
-    Pick<DeliveryGeneratorConfig, 'nameResolvers' | 'fileResolvers'> & {};
+export type DeliveryTypeAndSnippetGeneratorConfig = DeliveryGeneratorConfig;
 
 export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippetGeneratorConfig) {
     const importer = getImporter(config.moduleFileExtension);
     const contentTypeNames = getDeliveryEntityNamesGenerator({
         nameResolvers: config.nameResolvers,
         fileResolvers: config.fileResolvers,
-        entityType: 'ContentType'
+        entityType: 'Type'
     }).getEntityNames();
 
     const snippetNames = getDeliveryEntityNamesGenerator({
@@ -438,15 +431,10 @@ ${getContentItemTypeGuardFunction(contentType)};
     };
 
     const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
-        const nameResolvers = {
-            contentItemTypeGuardFunctionName: mapName(config.nameResolvers?.contentType, 'pascalCase', {
-                prefix: 'is',
-                suffix: undefined
-            }),
-            contentItemTypeName: mapName(config.nameResolvers?.contentType, 'pascalCase')
-        };
+        const contentItemTypeName = contentTypeNames.getEntityName(contentType);
+        const typeGuardFunctionName = `is${contentItemTypeName}`;
 
-        return `export function ${nameResolvers.contentItemTypeGuardFunctionName(contentType)}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${nameResolvers.contentItemTypeName(contentType)} {
+        return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${contentItemTypeName} {
                 return item?.system?.type === '${contentType.codename}';
             }`;
     };

@@ -30,7 +30,7 @@ export function getDeliveryEntityNamesGenerator(
                     readonly nameResolver: NameResolver<DeliveryEntity> | undefined;
                     readonly filenameResolver: FilenameResolver<DeliveryEntity> | undefined;
                 }>()
-                .with('ContentType', () => ({
+                .with('Type', () => ({
                     nameResolver: config.nameResolvers?.contentType
                         ? (config.nameResolvers.contentType as NameResolver<DeliveryEntity>)
                         : undefined,

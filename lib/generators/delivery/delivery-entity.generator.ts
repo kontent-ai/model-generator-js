@@ -1,13 +1,14 @@
-import type { CollectionModels, ContentTypeModels, ContentTypeSnippetModels, LanguageModels } from '@kontent-ai/management-sdk';
-import { TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import type { CollectionModels, ContentTypeSnippetModels, LanguageModels } from '@kontent-ai/management-sdk';
+import { ContentTypeModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { deliveryConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
-import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from '../../core/core.models.js';
+import type { GeneratedFile, GeneratedSet, GeneratedTypeModel, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined } from '../../core/core.utils.js';
 import { getImporter } from '../../core/importer.js';
 import type { DeliveryEntityName } from './delivery-entity-name.generator.js';
 import { getDeliveryEntityNamesGenerator } from './delivery-entity-name.generator.js';
+import { getDeliveryTypeAndSnippetGenerator } from './delivery-type-and-snippet.generator.js';
 import type { DeliveryGeneratorConfig } from './delivery.generator.js';
 import { deliveryEntityUtils } from './utils/delivery-entity.utils.js';
 
@@ -25,14 +26,15 @@ export type DeliveryEntity =
     | Readonly<ContentTypeModels.ContentType>
     | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>;
 
-export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'ContentType' | 'Element' | 'Snippet';
+export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'Type' | 'Element' | 'Snippet';
 
 export type DeliveryEntityGeneratorConfig = {
     readonly moduleFileExtension: ModuleFileExtension;
     readonly entityType: DeliveryEntityType;
     readonly entities: readonly Readonly<DeliveryEntity>[];
     readonly generateOnlyCoreFile: boolean;
-} & Pick<DeliveryGeneratorConfig, 'nameResolvers' | 'fileResolvers'>;
+    readonly deliveryGeneratorConfig: DeliveryGeneratorConfig;
+};
 
 export type DeliveryEntityGenerator = {
     readonly entityType: DeliveryEntityType;
@@ -74,11 +76,14 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
     };
 
     const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
+        const extraCode = getEntityExtraCode(entity, entityNames.getNameWithoutSuffix(entity));
+
         return `
             ${importer.importType({
                 filePathOrPackage: `./${entityNames.mainEntityFilename}`,
                 importValue: `${entityNames.entityCodenamesTypeName}`
-            })}
+            })}${extraCode?.imports?.length ? `\n${extraCode.imports.join('\n')}` : ''}
+           
     
             ${wrapComment(`
                 * Type representing codename of ${entity.name}
@@ -92,8 +97,8 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
                 * 
                 ${getEntityInfoComment(entity)}
             `)}
-            ${getEntityTypeGuardFunction(entity)}
-            ${getEntityExtraCode(entity, entityNames.getNameWithoutSuffix(entity))}
+            ${getEntityTypeGuardFunction(entity)}${extraCode ? `\n${extraCode.code}` : ''}
+            
             `;
     };
 
@@ -134,35 +139,44 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
             .otherwise(() => '');
     };
 
-    const getEntityExtraCode = (entity: DeliveryEntity, resolvedName: string): string => {
+    const getEntityExtraCode = (entity: DeliveryEntity, resolvedName: string): GeneratedTypeModel | undefined => {
         return match(entity)
-            .returnType<string>()
+            .returnType<GeneratedTypeModel | undefined>()
             .with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
-                return deliveryUtils.getCodeOfDeliveryEntity({
-                    codenames: [
-                        ...workflow.steps.map((m) => m.codename),
-                        workflow.publishedStep?.codename,
-                        workflow.archivedStep?.codename,
-                        workflow.scheduledStep?.codename
-                    ].filter(isNotUndefined),
-                    originalName: workflow.name,
-                    resolvedName: resolvedName,
-                    type: 'workflow step',
-                    propertySuffix: 'StepCodenames',
-                    typeGuardSuffix: 'StepCodename'
-                });
+                return {
+                    imports: [],
+                    code: deliveryUtils.getCodeOfDeliveryEntity({
+                        codenames: [
+                            ...workflow.steps.map((m) => m.codename),
+                            workflow.publishedStep?.codename,
+                            workflow.archivedStep?.codename,
+                            workflow.scheduledStep?.codename
+                        ].filter(isNotUndefined),
+                        originalName: workflow.name,
+                        resolvedName: resolvedName,
+                        type: 'workflow step',
+                        propertySuffix: 'StepCodenames',
+                        typeGuardSuffix: 'StepCodename'
+                    })
+                };
             })
             .with(P.instanceOf(TaxonomyModels.Taxonomy), (taxonomy) => {
-                return deliveryUtils.getCodeOfDeliveryEntity({
-                    codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
-                    originalName: taxonomy.name,
-                    resolvedName: resolvedName,
-                    type: 'taxonomy term',
-                    propertySuffix: deliveryConfig.taxonomyTermCodenamesSuffix,
-                    typeGuardSuffix: 'TermCodename'
-                });
+                return {
+                    imports: [],
+                    code: deliveryUtils.getCodeOfDeliveryEntity({
+                        codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
+                        originalName: taxonomy.name,
+                        resolvedName: resolvedName,
+                        type: 'taxonomy term',
+                        propertySuffix: deliveryConfig.taxonomyTermCodenamesSuffix,
+                        typeGuardSuffix: 'TermCodename'
+                    })
+                };
             })
-            .otherwise(() => '');
+            .with(P.instanceOf(ContentTypeModels.ContentType), (contentType) =>
+                getDeliveryTypeAndSnippetGenerator(config.deliveryGeneratorConfig).generateTypeModel(contentType)
+            )
+            .otherwise(() => undefined);
     };
 
     return {
