@@ -146,14 +146,14 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                 ${Object.values(entityGenerators)
                     .map((generator) => {
                         const importValues: readonly string[] = [
-                            generator.entityNames.entityCodenamesTypeName,
+                            generator.entityNames.codenamesTypeName,
                             ...match(generator.entityType)
-                                .with('Workflow', () => [deliveryConfig.workflowStepCodenames])
+                                .with('Workflow', () => [entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName])
                                 .otherwise(() => [])
                         ];
 
                         return importer.importType({
-                            filePathOrPackage: `../${generator.entityNames.entityFolderName}/${generator.entityNames.mainEntityFilename}`,
+                            filePathOrPackage: `../${generator.entityNames.folderName}/${generator.entityNames.mainFilename}`,
                             importValue: `${importValues.join(', ')}`
                         });
                     })
@@ -163,26 +163,26 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                 export type ${deliveryConfig.coreContentTypeName}<
                         ${elementCodenamesGenericArgName} extends string = string,
                         ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
-                        ${contentTypeGenericArgName} extends ${entityGenerators.contentType.entityNames.entityCodenamesTypeName} = ${entityGenerators.contentType.entityNames.entityCodenamesTypeName}
+                        ${contentTypeGenericArgName} extends ${entityGenerators.contentType.entityNames.codenamesTypeName} = ${entityGenerators.contentType.entityNames.codenamesTypeName}
                     > = ${deliveryConfig.sdkTypes.contentItem}<
                     ${elementsGenericArgName},
                     ${contentTypeGenericArgName},
-                    ${entityGenerators.languages.entityNames.entityCodenamesTypeName},
-                    ${entityGenerators.collections.entityNames.entityCodenamesTypeName},
-                    ${entityGenerators.workflows.entityNames.entityCodenamesTypeName},
-                    ${deliveryConfig.workflowStepCodenames}
+                    ${entityGenerators.languages.entityNames.codenamesTypeName},
+                    ${entityGenerators.collections.entityNames.codenamesTypeName},
+                    ${entityGenerators.workflows.entityNames.codenamesTypeName},
+                    ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName}
                 >;
 
                 ${wrapComment(`\n * Core types for '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
-                    readonly collectionCodenames: ${entityGenerators.collections.entityNames.entityCodenamesTypeName};
+                    readonly collectionCodenames: ${entityGenerators.collections.entityNames.codenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
-                    readonly contentTypeCodenames: ${entityGenerators.contentType.entityNames.entityCodenamesTypeName};
-                    readonly elementCodenames: ${entityGenerators.elements.entityNames.entityCodenamesTypeName};
-                    readonly languageCodenames: ${entityGenerators.languages.entityNames.entityCodenamesTypeName};
-                    readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityNames.entityCodenamesTypeName};
-                    readonly workflowCodenames: ${entityGenerators.workflows.entityNames.entityCodenamesTypeName};
-                    readonly workflowStepCodenames: ${deliveryConfig.workflowStepCodenames};
+                    readonly contentTypeCodenames: ${entityGenerators.contentType.entityNames.codenamesTypeName};
+                    readonly elementCodenames: ${entityGenerators.elements.entityNames.codenamesTypeName};
+                    readonly languageCodenames: ${entityGenerators.languages.entityNames.codenamesTypeName};
+                    readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityNames.codenamesTypeName};
+                    readonly workflowCodenames: ${entityGenerators.workflows.entityNames.codenamesTypeName};
+                    readonly workflowStepCodenames: ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName};
                 };
 
                 ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}

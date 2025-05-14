@@ -31,18 +31,18 @@ export function isReleaseCategoryTaxonomyCodename(value: string | undefined | nu
 }
 
 /*
- * Object with all values of taxonomy term codenames in ReleaseCategory
+ * Object with all values of Taxonomy codenames in ReleaseCategory Term
  */
-export const releaseCategoryTaxonomyTermCodenames = ['global_release', 'us_only', 'local_release'] as const;
+export const releaseCategoryTermCodenames = ['global_release', 'us_only', 'local_release'] as const;
 
 /*
- * Type representing taxonomy term codenames in ReleaseCategory
+ * Type representing Taxonomy codenames in ReleaseCategory Term
  */
-export type ReleaseCategoryTaxonomyTermCodenames = (typeof releaseCategoryTaxonomyTermCodenames)[number];
+export type ReleaseCategoryTermCodenames = (typeof releaseCategoryTermCodenames)[number];
 
 /*
- * Type guard for taxonomy term codenames in ReleaseCategory
+ * Type guard for Taxonomy codenames in ReleaseCategory Term
  */
-export function isReleaseCategoryTaxonomyTermCodename(value: string | undefined | null): value is ReleaseCategoryTaxonomyTermCodenames {
-	return typeof value === 'string' && (releaseCategoryTaxonomyTermCodenames as readonly string[]).includes(value);
+export function isReleaseCategoryTermCodename(value: string | undefined | null): value is ReleaseCategoryTermCodenames {
+	return typeof value === 'string' && (releaseCategoryTermCodenames as readonly string[]).includes(value);
 }

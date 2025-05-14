@@ -39,6 +39,10 @@ export type GeneratorDeliveryClient = Readonly<IDeliveryClient>;
 export type LiteralUnion<T extends string | undefined> = T | (string & NonNullable<unknown>);
 export type CreateFilesConfig = { readonly createFiles: true; readonly outputDir?: string } | { readonly createFiles: false };
 
+export type DeepPartial<T> = {
+    [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
 export interface ErrorData {
     readonly message: string;
     readonly isMapiError: boolean;

@@ -79,7 +79,7 @@ export type ActorType = CoreType<
 		 */
 		readonly photo: Elements.AssetsElement;
 	},
-	'actor'
+	ActorTypeCodename
 >;
 
 /*

@@ -31,18 +31,18 @@ export function isMovieTypeTaxonomyCodename(value: string | undefined | null): v
 }
 
 /*
- * Object with all values of taxonomy term codenames in MovieType
+ * Object with all values of Taxonomy codenames in MovieType Term
  */
-export const movieTypeTaxonomyTermCodenames = ['student', 'tv', 'blockbuster', 'cinema_only', 'film'] as const;
+export const movieTypeTermCodenames = ['student', 'tv', 'blockbuster', 'cinema_only', 'film'] as const;
 
 /*
- * Type representing taxonomy term codenames in MovieType
+ * Type representing Taxonomy codenames in MovieType Term
  */
-export type MovieTypeTaxonomyTermCodenames = (typeof movieTypeTaxonomyTermCodenames)[number];
+export type MovieTypeTermCodenames = (typeof movieTypeTermCodenames)[number];
 
 /*
- * Type guard for taxonomy term codenames in MovieType
+ * Type guard for Taxonomy codenames in MovieType Term
  */
-export function isMovieTypeTaxonomyTermCodename(value: string | undefined | null): value is MovieTypeTaxonomyTermCodenames {
-	return typeof value === 'string' && (movieTypeTaxonomyTermCodenames as readonly string[]).includes(value);
+export function isMovieTypeTermCodename(value: string | undefined | null): value is MovieTypeTermCodenames {
+	return typeof value === 'string' && (movieTypeTermCodenames as readonly string[]).includes(value);
 }

@@ -1,7 +1,6 @@
 import type { TaxonomyModels } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { wrapComment } from '../../../core/comment.utils.js';
-import { mapName, resolveCase } from '../../../core/resolvers.js';
 import type { DeliveryEntity, DeliveryEntityType } from '../delivery-entity.generator.js';
 
 export function deliveryEntityUtils() {
@@ -44,38 +43,29 @@ function getPluralName(entityName: DeliveryEntityType): string {
 
 function getCodeOfDeliveryEntity({
     originalName,
-    resolvedName,
     type,
-    propertySuffix,
-    typeGuardSuffix,
-    codenames
+    codenames,
+    names
 }: {
-    readonly resolvedName: string;
+    readonly names: {
+        readonly codenamesTypeName: string;
+        readonly valuesPropertyName: string;
+        readonly typeGuardFunctionName: string;
+    };
     readonly originalName: string | undefined;
-    readonly type: 'taxonomy term' | 'workflow step' | DeliveryEntityType;
+    readonly type: DeliveryEntityType;
     readonly codenames: readonly string[];
-    readonly propertySuffix: string;
-    readonly typeGuardSuffix: string;
 }): string {
-    const valuesPropertyName = mapName('camelCase', 'camelCase', {
-        suffix: `${propertySuffix}`
-    })({ name: resolvedName });
-    const codenamesTypeName = resolveCase(valuesPropertyName, 'pascalCase');
-    const typeGuardFunctionName = mapName('pascalCase', 'pascalCase', {
-        prefix: 'is',
-        suffix: `${typeGuardSuffix}`
-    })({ name: resolvedName });
-
     const uniqueCodenames: readonly string[] = [...new Set(codenames)];
 
     const getTypeGuardFunction = (): string => {
-        return `export function ${typeGuardFunctionName}(value: string | undefined | null): value is ${codenamesTypeName} {
-                return typeof value === 'string' && (${valuesPropertyName} as readonly string[]).includes(value);
+        return `export function ${names.typeGuardFunctionName}(value: string | undefined | null): value is ${names.codenamesTypeName} {
+                return typeof value === 'string' && (${names.valuesPropertyName} as readonly string[]).includes(value);
             }`;
     };
 
     const getValuesCode = (): string => {
-        return `export const ${valuesPropertyName} = [${uniqueCodenames.map((m) => `'${m}'`).join(', ')}] as const;`;
+        return `export const ${names.valuesPropertyName} = [${uniqueCodenames.map((m) => `'${m}'`).join(', ')}] as const;`;
     };
 
     return `
@@ -87,7 +77,7 @@ function getCodeOfDeliveryEntity({
             ${wrapComment(`
                 * Type representing ${type} codenames ${originalName ? `in ${originalName}` : ''}
             `)}
-            export type ${codenamesTypeName} = typeof ${valuesPropertyName}[number];
+            export type ${names.codenamesTypeName} = typeof ${names.valuesPropertyName}[number];
 
             ${wrapComment(`
                 * Type guard for ${type} codenames ${originalName ? `in ${originalName}` : ''}

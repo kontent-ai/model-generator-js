@@ -127,7 +127,7 @@ export type MovieType = CoreType<
 		 */
 		readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTermCodenames, 'releasecategory'>;
 	},
-	'movie'
+	MovieTypeCodename
 >;
 
 /*

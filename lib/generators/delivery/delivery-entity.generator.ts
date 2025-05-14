@@ -1,12 +1,11 @@
 import type { CollectionModels, ContentTypeSnippetModels, LanguageModels } from '@kontent-ai/management-sdk';
 import { ContentTypeModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
-import { deliveryConfig } from '../../config.js';
 import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, GeneratedTypeModel, ModuleFileExtension } from '../../core/core.models.js';
 import { isNotUndefined } from '../../core/core.utils.js';
 import { getImporter } from '../../core/importer.js';
-import type { DeliveryEntityName } from './delivery-entity-name.generator.js';
+import type { DeliveryEntityNames } from './delivery-entity-name.generator.js';
 import { getDeliveryEntityNamesGenerator } from './delivery-entity-name.generator.js';
 import { getDeliveryTypeAndSnippetGenerator } from './delivery-type-and-snippet.generator.js';
 import type { DeliveryGeneratorConfig } from './delivery.generator.js';
@@ -28,21 +27,23 @@ export type DeliveryEntity =
 
 export type DeliveryEntityType = 'Language' | 'Collection' | 'Workflow' | 'Taxonomy' | 'Type' | 'Element' | 'Snippet';
 
-export type DeliveryEntityGeneratorConfig = {
+export type DeliveryEntityGeneratorConfig<T extends DeliveryEntityType> = {
     readonly moduleFileExtension: ModuleFileExtension;
-    readonly entityType: DeliveryEntityType;
+    readonly entityType: T;
     readonly entities: readonly Readonly<DeliveryEntity>[];
     readonly generateOnlyCoreFile: boolean;
     readonly deliveryGeneratorConfig: DeliveryGeneratorConfig;
 };
 
-export type DeliveryEntityGenerator = {
-    readonly entityType: DeliveryEntityType;
+export type DeliveryEntityGenerator<T extends DeliveryEntityType> = {
+    readonly entityType: T;
     readonly generateEntityTypes: () => GeneratedSet;
-    readonly entityNames: DeliveryEntityName;
+    readonly entityNames: DeliveryEntityNames<T>;
 };
 
-export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig): DeliveryEntityGenerator {
+export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
+    config: DeliveryEntityGeneratorConfig<T>
+): DeliveryEntityGenerator<T> {
     const importer = getImporter(config.moduleFileExtension);
     const deliveryUtils = deliveryEntityUtils();
     const entityNames = getDeliveryEntityNamesGenerator({
@@ -53,7 +54,7 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
     const getEntityTypeGuardFunction = (entity: Readonly<DeliveryEntity>): string => {
         return deliveryUtils.getTypeGuardCode({
             codenameTypeName: entityNames.getCodenameTypeName(entity),
-            typeGuardName: entityNames.getTypeGuardName(entity),
+            typeGuardName: entityNames.getTypeguardFunctionName(entity),
             entity
         });
     };
@@ -67,21 +68,23 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
             ${deliveryUtils.getCodeOfDeliveryEntity({
                 codenames: config.entities.map((m) => m.codename),
                 originalName: undefined,
-                resolvedName: config.entityType,
-                type: config.entityType,
-                propertySuffix: 'Codenames',
-                typeGuardSuffix: 'Codename'
+                names: {
+                    codenamesTypeName: entityNames.codenamesTypeName,
+                    typeGuardFunctionName: entityNames.codenamesTypeguardFunctionName,
+                    valuesPropertyName: entityNames.codenamesValuePropertyName
+                },
+                type: config.entityType
             })}
             ${getMainFileExtraCode()}`;
     };
 
     const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
-        const extraCode = getEntityExtraCode(entity, entityNames.getNameWithoutSuffix(entity));
+        const extraCode = getEntityExtraCode(entity);
 
         return `
             ${importer.importType({
-                filePathOrPackage: `./${entityNames.mainEntityFilename}`,
-                importValue: `${entityNames.entityCodenamesTypeName}`
+                filePathOrPackage: `./${entityNames.mainFilename}`,
+                importValue: `${entityNames.codenamesTypeName}`
             })}${extraCode?.imports?.length ? `\n${extraCode.imports.join('\n')}` : ''}
            
     
@@ -90,7 +93,7 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
                 * 
                 ${getEntityInfoComment(entity)}
                 `)}
-            export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.entityCodenamesTypeName}, '${entity.codename}'>;
+            export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.codenamesTypeName}, '${entity.codename}'>;
 
             ${wrapComment(`
                 * Type guard for ${entity.name}
@@ -111,13 +114,13 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
 
     const getMainEntityFile = (): GeneratedFile => {
         return {
-            filename: entityNames.mainEntityFilename,
+            filename: entityNames.mainFilename,
             text: getMainFileCode()
         };
     };
 
     const getMainFileExtraCode = (): string => {
-        return match(config.entityType)
+        return match<DeliveryEntityType>(config.entityType)
             .returnType<string>()
             .with('Workflow', () => {
                 const workflowStepCodenames: readonly string[] = config.entities
@@ -127,22 +130,34 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
                     )
                     .map((m) => m.codename);
 
+                const worfklowStepNames = getDeliveryEntityNamesGenerator({
+                    ...config,
+                    entityType: 'Workflow'
+                }).getEntityNames();
+
                 return deliveryUtils.getCodeOfDeliveryEntity({
                     codenames: workflowStepCodenames,
+                    names: {
+                        codenamesTypeName: worfklowStepNames.allStepsNames.codenamesTypeName,
+                        typeGuardFunctionName: worfklowStepNames.allStepsNames.typeguardFunctionName,
+                        valuesPropertyName: worfklowStepNames.allStepsNames.valuesPropertyName
+                    },
                     originalName: 'Workflow',
-                    resolvedName: 'Workflow',
-                    type: 'workflow step',
-                    propertySuffix: 'StepCodenames',
-                    typeGuardSuffix: 'StepCodename'
+                    type: 'Workflow'
                 });
             })
             .otherwise(() => '');
     };
 
-    const getEntityExtraCode = (entity: DeliveryEntity, resolvedName: string): GeneratedTypeModel | undefined => {
+    const getEntityExtraCode = (entity: DeliveryEntity): GeneratedTypeModel | undefined => {
         return match(entity)
             .returnType<GeneratedTypeModel | undefined>()
             .with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
+                const worfklowStepNames = getDeliveryEntityNamesGenerator({
+                    ...config,
+                    entityType: 'Workflow'
+                }).getEntityNames();
+
                 return {
                     imports: [],
                     code: deliveryUtils.getCodeOfDeliveryEntity({
@@ -153,23 +168,32 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
                             workflow.scheduledStep?.codename
                         ].filter(isNotUndefined),
                         originalName: workflow.name,
-                        resolvedName: resolvedName,
-                        type: 'workflow step',
-                        propertySuffix: 'StepCodenames',
-                        typeGuardSuffix: 'StepCodename'
+                        names: {
+                            codenamesTypeName: worfklowStepNames.stepsNames.codenamesTypeName(workflow),
+                            typeGuardFunctionName: worfklowStepNames.stepsNames.typeguardFunctionName(workflow),
+                            valuesPropertyName: worfklowStepNames.stepsNames.valuesPropertyName(workflow)
+                        },
+                        type: 'Workflow'
                     })
                 };
             })
             .with(P.instanceOf(TaxonomyModels.Taxonomy), (taxonomy) => {
+                const termEntityNames = getDeliveryEntityNamesGenerator({
+                    ...config,
+                    entityType: 'Taxonomy'
+                }).getEntityNames();
+
                 return {
                     imports: [],
                     code: deliveryUtils.getCodeOfDeliveryEntity({
                         codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
-                        originalName: taxonomy.name,
-                        resolvedName: resolvedName,
-                        type: 'taxonomy term',
-                        propertySuffix: deliveryConfig.taxonomyTermCodenamesSuffix,
-                        typeGuardSuffix: 'TermCodename'
+                        originalName: `${taxonomy.name} Term`,
+                        names: {
+                            codenamesTypeName: termEntityNames.termsNames.codenamesTypeName(taxonomy),
+                            typeGuardFunctionName: termEntityNames.termsNames.typeguardFunctionName(taxonomy),
+                            valuesPropertyName: termEntityNames.termsNames.valuesPropertyName(taxonomy)
+                        },
+                        type: 'Taxonomy'
                     })
                 };
             })
@@ -184,7 +208,7 @@ export function getDeliveryEntityGenerator(config: DeliveryEntityGeneratorConfig
         entityType: config.entityType,
         generateEntityTypes: (): GeneratedSet => {
             return {
-                folderName: entityNames.entityFolderName,
+                folderName: entityNames.folderName,
                 files: [
                     ...(config.generateOnlyCoreFile
                         ? []

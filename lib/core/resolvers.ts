@@ -3,11 +3,11 @@ import { match, P } from 'ts-pattern';
 import type { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
 
 /** File name resolvers */
-export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | CaseType | ((item: T) => string);
+export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | ((item: T) => string);
 export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T, addExtension: boolean) => string;
 
 /** Name resolvers */
-export type NameResolver<T extends Readonly<ObjectWithName>> = undefined | CaseType | ((item: T) => string);
+export type NameResolver<T extends Readonly<ObjectWithName>> = undefined | ((item: T) => string);
 export type MapObjectToName<T extends Readonly<ObjectWithName> = ObjectWithName> = (item: T) => string;
 
 export function mapFilename<T extends ObjectWithCodename>(
@@ -21,11 +21,13 @@ export function mapFilename<T extends ObjectWithCodename>(
         return (
             (options?.prefix ? options.prefix : '') +
             addExtensionToFilename(
-                match(resolver)
-                    .returnType<string>()
-                    .with(P.instanceOf(Function), (resolver) => resolver(item))
-                    .with(undefined, () => resolveCase(item.codename, 'camelCase'))
-                    .otherwise((resolverType) => resolveCase(item.codename, resolverType)) + (options?.suffix ? options.suffix : ''),
+                resolveCase(
+                    match(resolver)
+                        .returnType<string>()
+                        .with(P.instanceOf(Function), (resolver) => resolver(item))
+                        .otherwise(() => item.codename),
+                    'camelCase'
+                ) + (options?.suffix ? options.suffix : ''),
                 addExtension
             )
         );
@@ -34,7 +36,7 @@ export function mapFilename<T extends ObjectWithCodename>(
 
 export function mapName<T extends ObjectWithName>(
     resolver: NameResolver<T>,
-    defaultCase: CaseType,
+    caseType: CaseType,
     options?: {
         readonly prefix?: string;
         readonly suffix?: string;
@@ -42,11 +44,13 @@ export function mapName<T extends ObjectWithName>(
 ): MapObjectToName<T> {
     return (item) =>
         (options?.prefix ? options.prefix : '') +
-        match(resolver)
-            .returnType<string>()
-            .with(P.instanceOf(Function), (resolver) => resolver(item))
-            .with(undefined, () => resolveCase(item.name, defaultCase))
-            .otherwise((resolverType) => resolveCase(item.name, resolverType)) +
+        resolveCase(
+            match(resolver)
+                .returnType<string>()
+                .with(P.instanceOf(Function), (resolver) => resolver(item))
+                .otherwise(() => item.name),
+            caseType
+        ) +
         (options?.suffix ? options.suffix : '');
 }
 

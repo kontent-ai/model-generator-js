@@ -31,18 +31,18 @@ export function isDefaultWorkflowCodename(value: string | undefined | null): val
 }
 
 /*
- * Object with all values of workflow step codenames in Default
+ * Object with all values of Workflow codenames in Default
  */
-export const defaultWorkflowStepCodenames = ['draft', 'review', 'ready_to_publish', 'published', 'archived', 'scheduled'] as const;
+export const defaultStepCodenames = ['draft', 'review', 'ready_to_publish', 'published', 'archived', 'scheduled'] as const;
 
 /*
- * Type representing workflow step codenames in Default
+ * Type representing Workflow codenames in Default
  */
-export type DefaultWorkflowStepCodenames = (typeof defaultWorkflowStepCodenames)[number];
+export type DefaultStepCodenames = (typeof defaultStepCodenames)[number];
 
 /*
- * Type guard for workflow step codenames in Default
+ * Type guard for Workflow codenames in Default
  */
-export function isDefaultWorkflowStepCodename(value: string | undefined | null): value is DefaultWorkflowStepCodenames {
-	return typeof value === 'string' && (defaultWorkflowStepCodenames as readonly string[]).includes(value);
+export function isDefaultStepCodename(value: string | undefined | null): value is DefaultStepCodenames {
+	return typeof value === 'string' && (defaultStepCodenames as readonly string[]).includes(value);
 }

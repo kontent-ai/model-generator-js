@@ -161,14 +161,14 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 
         return [
             importer.importType({
-                filePathOrPackage: `../${taxonomyNames.entityFolderName}/${coreConfig.barrelExportFilename}`,
+                filePathOrPackage: `../${taxonomyNames.folderName}/${coreConfig.barrelExportFilename}`,
                 importValue: taxonomyTypeNames.join(', ')
             })
         ];
     };
 
     const getTaxonomyTermCodenamesTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {
-        return taxonomyNames.taxonomyTermCodenamesTypeName(taxonomy);
+        return taxonomyNames.termsNames.codenamesTypeName(taxonomy);
     };
 
     const getContentTypeModelImports = (data: {
@@ -312,7 +312,7 @@ ${wrapComment(`
 export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
 ${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
-'${contentType.codename}'>
+${contentTypeNames.getCodenameTypeName(contentType)}>
 
 ${wrapComment(`
 * Type representing all available element codenames for ${contentType.name}

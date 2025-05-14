@@ -48,8 +48,6 @@ export const deliveryConfig = {
     coreContentTypeName: 'CoreType',
     coreDeliveryClientTypeName: 'CoreDeliveryClient',
     coreDeliveryClientTypesTypeName: 'CoreClientTypes',
-    workflowStepCodenames: 'WorkflowStepCodenames',
-    taxonomyTermCodenamesSuffix: 'TermCodenames',
 
     sdkTypes: {
         contentItem: 'IContentItem',
