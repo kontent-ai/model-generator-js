@@ -1,1 +1,1 @@
-export * from './core.item.ts';
+export * from './main.system.ts';

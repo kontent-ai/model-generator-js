@@ -17,18 +17,18 @@ export function isAdvancedWorkflowWorkflowCodename(value: string | undefined | n
 }
 
 /*
- * Object with all values of workflow step codenames in Advanced workflow
+ * Object with all values of Workflow codenames in Advanced workflow
  */
-export const advancedWorkflowWorkflowStepCodenames = ['draft_b42a7f1', 'step_1', 'step_2', 'published', 'archived', 'scheduled'] as const;
+export const advancedWorkflowStepCodenames = ['draft_b42a7f1', 'step_1', 'step_2', 'published', 'archived', 'scheduled'] as const;
 
 /*
- * Type representing workflow step codenames in Advanced workflow
+ * Type representing Workflow codenames in Advanced workflow
  */
-export type AdvancedWorkflowWorkflowStepCodenames = (typeof advancedWorkflowWorkflowStepCodenames)[number];
+export type AdvancedWorkflowStepCodenames = (typeof advancedWorkflowStepCodenames)[number];
 
 /*
- * Type guard for workflow step codenames in Advanced workflow
+ * Type guard for Workflow codenames in Advanced workflow
  */
-export function isAdvancedWorkflowWorkflowStepCodename(value: string | undefined | null): value is AdvancedWorkflowWorkflowStepCodenames {
-	return typeof value === 'string' && (advancedWorkflowWorkflowStepCodenames as readonly string[]).includes(value);
+export function isAdvancedWorkflowStepCodename(value: string | undefined | null): value is AdvancedWorkflowStepCodenames {
+	return typeof value === 'string' && (advancedWorkflowStepCodenames as readonly string[]).includes(value);
 }

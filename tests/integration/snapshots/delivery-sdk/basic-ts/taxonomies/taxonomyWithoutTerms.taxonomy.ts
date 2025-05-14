@@ -17,20 +17,18 @@ export function isTaxonomyWithoutTermsTaxonomyCodename(value: string | undefined
 }
 
 /*
- * Object with all values of taxonomy term codenames in Taxonomy without terms
+ * Object with all values of Taxonomy codenames in Taxonomy without terms Term
  */
-export const taxonomyWithoutTermsTaxonomyTermCodenames = [] as const;
+export const taxonomyWithoutTermsTermCodenames = [] as const;
 
 /*
- * Type representing taxonomy term codenames in Taxonomy without terms
+ * Type representing Taxonomy codenames in Taxonomy without terms Term
  */
-export type TaxonomyWithoutTermsTaxonomyTermCodenames = (typeof taxonomyWithoutTermsTaxonomyTermCodenames)[number];
+export type TaxonomyWithoutTermsTermCodenames = (typeof taxonomyWithoutTermsTermCodenames)[number];
 
 /*
- * Type guard for taxonomy term codenames in Taxonomy without terms
+ * Type guard for Taxonomy codenames in Taxonomy without terms Term
  */
-export function isTaxonomyWithoutTermsTaxonomyTermCodename(
-	value: string | undefined | null
-): value is TaxonomyWithoutTermsTaxonomyTermCodenames {
-	return typeof value === 'string' && (taxonomyWithoutTermsTaxonomyTermCodenames as readonly string[]).includes(value);
+export function isTaxonomyWithoutTermsTermCodename(value: string | undefined | null): value is TaxonomyWithoutTermsTermCodenames {
+	return typeof value === 'string' && (taxonomyWithoutTermsTermCodenames as readonly string[]).includes(value);
 }

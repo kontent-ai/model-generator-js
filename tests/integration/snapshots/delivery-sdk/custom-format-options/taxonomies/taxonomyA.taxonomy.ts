@@ -1,5 +1,6 @@
 
             import type { TaxonomyCodenames } from './_taxonomies.js';
+           
     
             /*
                 * Type representing codename of Taxonomy A
@@ -16,21 +17,22 @@
             export function isTaxonomyATaxonomyCodename(value: string | undefined | null): value is TaxonomyATaxonomyCodename {
                 return typeof value === 'string' && value === ('taxonomy_a' satisfies TaxonomyATaxonomyCodename);
             }
-            
-            /*
-                * Object with all values of taxonomy term codenames in Taxonomy A
-            */
-            export const taxonomyATaxonomyTermCodenames = ['nested_term_2', 'nested_term_1', 'term_1', 'term_2', 'term_3'] as const;;
 
             /*
-                * Type representing taxonomy term codenames in Taxonomy A
+                * Object with all values of Taxonomy codenames in Taxonomy A Term
             */
-            export type TaxonomyATaxonomyTermCodenames = typeof taxonomyATaxonomyTermCodenames[number];
+            export const taxonomyATermCodenames = ['nested_term_2', 'nested_term_1', 'term_1', 'term_2', 'term_3'] as const;;
 
             /*
-                * Type guard for taxonomy term codenames in Taxonomy A
+                * Type representing Taxonomy codenames in Taxonomy A Term
             */
-            export function isTaxonomyATaxonomyTermCodename(value: string | undefined | null): value is TaxonomyATaxonomyTermCodenames {
-                return typeof value === 'string' && (taxonomyATaxonomyTermCodenames as readonly string[]).includes(value);
+            export type TaxonomyATermCodenames = typeof taxonomyATermCodenames[number];
+
+            /*
+                * Type guard for Taxonomy codenames in Taxonomy A Term
+            */
+            export function isTaxonomyATermCodename(value: string | undefined | null): value is TaxonomyATermCodenames {
+                return typeof value === 'string' && (taxonomyATermCodenames as readonly string[]).includes(value);
             };
+            
             

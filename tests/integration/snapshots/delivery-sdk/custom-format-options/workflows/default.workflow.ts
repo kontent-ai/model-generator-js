@@ -1,5 +1,6 @@
 
             import type { WorkflowCodenames } from './_workflows.js';
+           
     
             /*
                 * Type representing codename of Default
@@ -16,21 +17,22 @@
             export function isDefaultWorkflowCodename(value: string | undefined | null): value is DefaultWorkflowCodename {
                 return typeof value === 'string' && value === ('default' satisfies DefaultWorkflowCodename);
             }
-            
-            /*
-                * Object with all values of workflow step codenames in Default
-            */
-            export const defaultWorkflowStepCodenames = ['draft', 'published', 'archived', 'scheduled'] as const;;
 
             /*
-                * Type representing workflow step codenames in Default
+                * Object with all values of Workflow codenames in Default
             */
-            export type DefaultWorkflowStepCodenames = typeof defaultWorkflowStepCodenames[number];
+            export const defaultStepCodenames = ['draft', 'published', 'archived', 'scheduled'] as const;;
 
             /*
-                * Type guard for workflow step codenames in Default
+                * Type representing Workflow codenames in Default
             */
-            export function isDefaultWorkflowStepCodename(value: string | undefined | null): value is DefaultWorkflowStepCodenames {
-                return typeof value === 'string' && (defaultWorkflowStepCodenames as readonly string[]).includes(value);
+            export type DefaultStepCodenames = typeof defaultStepCodenames[number];
+
+            /*
+                * Type guard for Workflow codenames in Default
+            */
+            export function isDefaultStepCodename(value: string | undefined | null): value is DefaultStepCodenames {
+                return typeof value === 'string' && (defaultStepCodenames as readonly string[]).includes(value);
             };
+            
             

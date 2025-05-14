@@ -1,5 +1,6 @@
 
             import type { CollectionCodenames } from './_collections.js';
+           
     
             /*
                 * Type representing codename of Legacy collection

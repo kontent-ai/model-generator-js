@@ -109,9 +109,16 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
             generateOnlyCoreFile: false,
             deliveryGeneratorConfig: config
         }),
-        contentType: getDeliveryEntityGenerator({
+        contentTypes: getDeliveryEntityGenerator({
             entities: config.environmentData.types,
             entityType: 'Type',
+            moduleFileExtension: config.moduleFileExtension,
+            generateOnlyCoreFile: false,
+            deliveryGeneratorConfig: config
+        }),
+        snippets: getDeliveryEntityGenerator({
+            entities: config.environmentData.snippets,
+            entityType: 'Snippet',
             moduleFileExtension: config.moduleFileExtension,
             generateOnlyCoreFile: false,
             deliveryGeneratorConfig: config
@@ -144,6 +151,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                   importValue: `${sdkImports.join(', ')}`
               })}
                 ${Object.values(entityGenerators)
+                    .filter((generator) => generator.entityType !== 'Snippet') // snippets are not needed in the system file
                     .map((generator) => {
                         const importValues: readonly string[] = [
                             generator.entityNames.codenamesTypeName,
@@ -163,7 +171,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                 export type ${deliveryConfig.coreContentTypeName}<
                         ${elementCodenamesGenericArgName} extends string = string,
                         ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
-                        ${contentTypeGenericArgName} extends ${entityGenerators.contentType.entityNames.codenamesTypeName} = ${entityGenerators.contentType.entityNames.codenamesTypeName}
+                        ${contentTypeGenericArgName} extends ${entityGenerators.contentTypes.entityNames.codenamesTypeName} = ${entityGenerators.contentTypes.entityNames.codenamesTypeName}
                     > = ${deliveryConfig.sdkTypes.contentItem}<
                     ${elementsGenericArgName},
                     ${contentTypeGenericArgName},
@@ -177,7 +185,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
                     readonly collectionCodenames: ${entityGenerators.collections.entityNames.codenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
-                    readonly contentTypeCodenames: ${entityGenerators.contentType.entityNames.codenamesTypeName};
+                    readonly contentTypeCodenames: ${entityGenerators.contentTypes.entityNames.codenamesTypeName};
                     readonly elementCodenames: ${entityGenerators.elements.entityNames.codenamesTypeName};
                     readonly languageCodenames: ${entityGenerators.languages.entityNames.codenamesTypeName};
                     readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityNames.codenamesTypeName};
