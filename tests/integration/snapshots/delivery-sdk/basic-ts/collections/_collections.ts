@@ -1,15 +1,21 @@
 /*
- * Object with all values of Collection codenames
+ * Array of all codenames
+ *
+ * Type: Collection
  */
 export const collectionCodenames = ['legacy_collection', 'default'] as const;
 
 /*
- * Type representing Collection codenames
+ * Type representing all codenames
+ *
+ * Type: Collection
  */
 export type CollectionCodenames = (typeof collectionCodenames)[number];
 
 /*
- * Type guard for Collection codenames
+ * Typeguard for codename
+ *
+ * Type: Collection
  */
 export function isCollectionCodename(value: string | undefined | null): value is CollectionCodenames {
 	return typeof value === 'string' && (collectionCodenames as readonly string[]).includes(value);

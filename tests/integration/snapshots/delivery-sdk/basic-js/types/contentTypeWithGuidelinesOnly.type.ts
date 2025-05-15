@@ -3,16 +3,20 @@ import type { TypeCodenames } from './_types.js';
 import type { CoreType } from '../system/index.js';
 
 /*
- * Type representing codename of Content type with guidelines only
+ * Type representing codename of entity
  *
+ * Name: Content type with guidelines only
  * Codename: content_type_with_guidelines_only
+ * Type: Type
  */
 export type ContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
 
 /*
  * Type guard for Content type with guidelines only
  *
+ * Name: Content type with guidelines only
  * Codename: content_type_with_guidelines_only
+ * Type: Type
  */
 export function isContentTypeWithGuidelinesOnlyTypeCodename(
 	value: string | undefined | null

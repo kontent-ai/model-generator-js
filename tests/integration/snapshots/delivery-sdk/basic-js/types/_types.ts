@@ -1,5 +1,7 @@
 /*
- * Object with all values of Type codenames
+ * Array of all codenames
+ *
+ * Type: Type
  */
 export const typeCodenames = [
 	'content_type_with_snippet_only',
@@ -16,12 +18,16 @@ export const typeCodenames = [
 ] as const;
 
 /*
- * Type representing Type codenames
+ * Type representing all codenames
+ *
+ * Type: Type
  */
 export type TypeCodenames = (typeof typeCodenames)[number];
 
 /*
- * Type guard for Type codenames
+ * Typeguard for codename
+ *
+ * Type: Type
  */
 export function isTypeCodename(value: string | undefined | null): value is TypeCodenames {
 	return typeof value === 'string' && (typeCodenames as readonly string[]).includes(value);

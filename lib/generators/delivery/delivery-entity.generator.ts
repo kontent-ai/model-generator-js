@@ -60,20 +60,22 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
     };
 
     const getEntityInfoComment = (entity: Readonly<DeliveryEntity>): string => {
-        return `* Codename: ${entity.codename}`;
+        return `* Name: ${entity.name}
+        * Codename: ${entity.codename}
+        * Type: ${config.entityType}`;
     };
 
     const getMainFileCode = (): string => {
         return `
             ${deliveryUtils.getCodeOfDeliveryEntity({
                 codenames: config.entities.map((m) => m.codename),
-                originalName: undefined,
+                entityName: undefined,
                 names: {
                     codenamesTypeName: entityNames.codenamesTypeName,
                     typeGuardFunctionName: entityNames.codenamesTypeguardFunctionName,
                     valuesPropertyName: entityNames.codenamesValuePropertyName
                 },
-                type: config.entityType
+                extendedType: config.entityType
             })}
             ${getMainFileExtraCode()}`;
     };
@@ -89,7 +91,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
            
     
             ${wrapComment(`
-                * Type representing codename of ${entity.name}
+                * Type representing codename of entity
                 * 
                 ${getEntityInfoComment(entity)}
                 `)}
@@ -142,8 +144,8 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                         typeGuardFunctionName: worfklowStepNames.allStepsNames.typeguardFunctionName,
                         valuesPropertyName: worfklowStepNames.allStepsNames.valuesPropertyName
                     },
-                    originalName: 'Workflow',
-                    type: 'Workflow'
+                    entityName: undefined,
+                    extendedType: 'Workflow'
                 });
             })
             .otherwise(() => '');
@@ -167,13 +169,13 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                             workflow.archivedStep?.codename,
                             workflow.scheduledStep?.codename
                         ].filter(isNotUndefined),
-                        originalName: workflow.name,
+                        entityName: workflow.name,
                         names: {
                             codenamesTypeName: worfklowStepNames.stepsNames.codenamesTypeName(workflow),
                             typeGuardFunctionName: worfklowStepNames.stepsNames.typeguardFunctionName(workflow),
                             valuesPropertyName: worfklowStepNames.stepsNames.valuesPropertyName(workflow)
                         },
-                        type: 'Workflow'
+                        extendedType: 'Workflow step'
                     })
                 };
             })
@@ -187,13 +189,13 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                     imports: [],
                     code: deliveryUtils.getCodeOfDeliveryEntity({
                         codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
-                        originalName: `${taxonomy.name} Term`,
+                        entityName: taxonomy.name,
                         names: {
                             codenamesTypeName: termEntityNames.termsNames.codenamesTypeName(taxonomy),
                             typeGuardFunctionName: termEntityNames.termsNames.typeguardFunctionName(taxonomy),
                             valuesPropertyName: termEntityNames.termsNames.valuesPropertyName(taxonomy)
                         },
-                        type: 'Taxonomy'
+                        extendedType: 'Taxonomy term'
                     })
                 };
             })

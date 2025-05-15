@@ -5,16 +5,20 @@ import type { CoreType } from '../system/index.js';
            
     
             /*
-                * Type representing codename of 🐧 Content type with special chars #!_'
+                * Type representing codename of entity
                 * 
-                * Codename: _content_type_with_special_chars____
+                * Name: 🐧 Content type with special chars #!_'
+        * Codename: _content_type_with_special_chars____
+        * Type: Type
                 */
             export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_content_type_with_special_chars____'>;
 
             /*
                 * Type guard for 🐧 Content type with special chars #!_'
                 * 
-                * Codename: _content_type_with_special_chars____
+                * Name: 🐧 Content type with special chars #!_'
+        * Codename: _content_type_with_special_chars____
+        * Type: Type
             */
             export function isContentTypeWithSpecialCharsTypeCodename(value: string | undefined | null): value is ContentTypeWithSpecialCharsTypeCodename {
                 return typeof value === 'string' && value === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename);

@@ -15,33 +15,46 @@
 import type { TaxonomyCodenames } from './_taxonomies.js';
 
 /*
- * Type representing codename of ReleaseCategory
+ * Type representing codename of entity
  *
+ * Name: ReleaseCategory
  * Codename: releasecategory
+ * Type: Taxonomy
  */
 export type ReleaseCategoryTaxonomyCodename = Extract<TaxonomyCodenames, 'releasecategory'>;
 
 /*
  * Type guard for ReleaseCategory
  *
+ * Name: ReleaseCategory
  * Codename: releasecategory
+ * Type: Taxonomy
  */
 export function isReleaseCategoryTaxonomyCodename(value: string | undefined | null): value is ReleaseCategoryTaxonomyCodename {
 	return typeof value === 'string' && value === ('releasecategory' satisfies ReleaseCategoryTaxonomyCodename);
 }
 
 /*
- * Object with all values of Taxonomy codenames in ReleaseCategory Term
+ * Array of all codenames
+ *
+ * Name: ReleaseCategory
+ * Type: Taxonomy term
  */
 export const releaseCategoryTermCodenames = ['global_release', 'us_only', 'local_release'] as const;
 
 /*
- * Type representing Taxonomy codenames in ReleaseCategory Term
+ * Type representing all codenames
+ *
+ * Name: ReleaseCategory
+ * Type: Taxonomy term
  */
 export type ReleaseCategoryTermCodenames = (typeof releaseCategoryTermCodenames)[number];
 
 /*
- * Type guard for Taxonomy codenames in ReleaseCategory Term
+ * Typeguard for codename
+ *
+ * Name: ReleaseCategory
+ * Type: Taxonomy term
  */
 export function isReleaseCategoryTermCodename(value: string | undefined | null): value is ReleaseCategoryTermCodenames {
 	return typeof value === 'string' && (releaseCategoryTermCodenames as readonly string[]).includes(value);

@@ -15,33 +15,46 @@
 import type { TaxonomyCodenames } from './_taxonomies.js';
 
 /*
- * Type representing codename of MovieType
+ * Type representing codename of entity
  *
+ * Name: MovieType
  * Codename: movietype
+ * Type: Taxonomy
  */
 export type MovieTypeTaxonomyCodename = Extract<TaxonomyCodenames, 'movietype'>;
 
 /*
  * Type guard for MovieType
  *
+ * Name: MovieType
  * Codename: movietype
+ * Type: Taxonomy
  */
 export function isMovieTypeTaxonomyCodename(value: string | undefined | null): value is MovieTypeTaxonomyCodename {
 	return typeof value === 'string' && value === ('movietype' satisfies MovieTypeTaxonomyCodename);
 }
 
 /*
- * Object with all values of Taxonomy codenames in MovieType Term
+ * Array of all codenames
+ *
+ * Name: MovieType
+ * Type: Taxonomy term
  */
 export const movieTypeTermCodenames = ['student', 'tv', 'blockbuster', 'cinema_only', 'film'] as const;
 
 /*
- * Type representing Taxonomy codenames in MovieType Term
+ * Type representing all codenames
+ *
+ * Name: MovieType
+ * Type: Taxonomy term
  */
 export type MovieTypeTermCodenames = (typeof movieTypeTermCodenames)[number];
 
 /*
- * Type guard for Taxonomy codenames in MovieType Term
+ * Typeguard for codename
+ *
+ * Name: MovieType
+ * Type: Taxonomy term
  */
 export function isMovieTypeTermCodename(value: string | undefined | null): value is MovieTypeTermCodenames {
 	return typeof value === 'string' && (movieTypeTermCodenames as readonly string[]).includes(value);

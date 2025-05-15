@@ -5,16 +5,20 @@ import type { SnippetASnippet } from '../snippets/index.ts';
 import type { TaxonomyATermCodenames } from '../taxonomies/index.ts';
 
 /*
- * Type representing codename of Content type with all elements
+ * Type representing codename of entity
  *
+ * Name: Content type with all elements
  * Codename: content_type_with_all_elements
+ * Type: Type
  */
 export type ContentTypeWithAllElementsTypeCodename = Extract<TypeCodenames, 'content_type_with_all_elements'>;
 
 /*
  * Type guard for Content type with all elements
  *
+ * Name: Content type with all elements
  * Codename: content_type_with_all_elements
+ * Type: Type
  */
 export function isContentTypeWithAllElementsTypeCodename(
 	value: string | undefined | null

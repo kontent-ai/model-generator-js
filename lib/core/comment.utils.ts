@@ -1,8 +1,23 @@
 import type { EnvironmentModels } from '@kontent-ai/management-sdk';
 import { libMetadata } from '../meta/metadata.js';
 
-export function wrapComment(comment: string): string {
-    return `/*${toSafeComment(comment)}*/`;
+export type CommentLine = {
+    readonly name: string;
+    readonly value: string | undefined;
+};
+
+export function wrapComment(comment: string, options?: { readonly lines?: readonly CommentLine[] }): string {
+    const nonEmptyLines = options?.lines?.filter((m) => m.value);
+
+    if (!nonEmptyLines) {
+        return `/*${toSafeComment(comment)}*/`;
+    }
+
+    return `/*
+    * ${toSafeComment(comment)}
+    *
+    ${nonEmptyLines.map((m) => `* ${m.name}: ${m.value}`).join('\n')}
+    */`;
 }
 
 export function toSafeComment(text: string): string {

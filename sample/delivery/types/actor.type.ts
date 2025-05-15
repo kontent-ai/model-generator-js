@@ -17,16 +17,20 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
 
 /*
- * Type representing codename of Actor
+ * Type representing codename of entity
  *
+ * Name: Actor
  * Codename: actor
+ * Type: Type
  */
 export type ActorTypeCodename = Extract<TypeCodenames, 'actor'>;
 
 /*
  * Type guard for Actor
  *
+ * Name: Actor
  * Codename: actor
+ * Type: Type
  */
 export function isActorTypeCodename(value: string | undefined | null): value is ActorTypeCodename {
 	return typeof value === 'string' && value === ('actor' satisfies ActorTypeCodename);

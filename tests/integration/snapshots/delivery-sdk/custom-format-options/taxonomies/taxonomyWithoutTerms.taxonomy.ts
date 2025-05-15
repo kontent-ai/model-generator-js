@@ -3,34 +3,47 @@
            
     
             /*
-                * Type representing codename of Taxonomy without terms
+                * Type representing codename of entity
                 * 
-                * Codename: taxonomy_without_terms
+                * Name: Taxonomy without terms
+        * Codename: taxonomy_without_terms
+        * Type: Taxonomy
                 */
             export type TaxonomyWithoutTermsTaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_without_terms'>;
 
             /*
                 * Type guard for Taxonomy without terms
                 * 
-                * Codename: taxonomy_without_terms
+                * Name: Taxonomy without terms
+        * Codename: taxonomy_without_terms
+        * Type: Taxonomy
             */
             export function isTaxonomyWithoutTermsTaxonomyCodename(value: string | undefined | null): value is TaxonomyWithoutTermsTaxonomyCodename {
                 return typeof value === 'string' && value === ('taxonomy_without_terms' satisfies TaxonomyWithoutTermsTaxonomyCodename);
             }
 
             /*
-                * Object with all values of Taxonomy codenames in Taxonomy without terms Term
-            */
+    * Array of all codenames
+    *
+    * Name: Taxonomy without terms
+* Type: Taxonomy term
+    */
             export const taxonomyWithoutTermsTermCodenames = [] as const;;
-
+           
             /*
-                * Type representing Taxonomy codenames in Taxonomy without terms Term
-            */
+    * Type representing all codenames
+    *
+    * Name: Taxonomy without terms
+* Type: Taxonomy term
+    */
             export type TaxonomyWithoutTermsTermCodenames = typeof taxonomyWithoutTermsTermCodenames[number];
 
             /*
-                * Type guard for Taxonomy codenames in Taxonomy without terms Term
-            */
+    * Typeguard for codename
+    *
+    * Name: Taxonomy without terms
+* Type: Taxonomy term
+    */
             export function isTaxonomyWithoutTermsTermCodename(value: string | undefined | null): value is TaxonomyWithoutTermsTermCodenames {
                 return typeof value === 'string' && (taxonomyWithoutTermsTermCodenames as readonly string[]).includes(value);
             };

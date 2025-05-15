@@ -3,16 +3,20 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
 
 /*
- * Type representing codename of Type referencing deleted type
+ * Type representing codename of entity
  *
+ * Name: Type referencing deleted type
  * Codename: type_referencing_deleted_type
+ * Type: Type
  */
 export type TypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, 'type_referencing_deleted_type'>;
 
 /*
  * Type guard for Type referencing deleted type
  *
+ * Name: Type referencing deleted type
  * Codename: type_referencing_deleted_type
+ * Type: Type
  */
 export function isTypeReferencingDeletedTypeTypeCodename(
 	value: string | undefined | null

@@ -5,16 +5,20 @@ import type { CoreType } from '../system/index.js';
            
     
             /*
-                * Type representing codename of Type referencing deleted type
+                * Type representing codename of entity
                 * 
-                * Codename: type_referencing_deleted_type
+                * Name: Type referencing deleted type
+        * Codename: type_referencing_deleted_type
+        * Type: Type
                 */
             export type TypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, 'type_referencing_deleted_type'>;
 
             /*
                 * Type guard for Type referencing deleted type
                 * 
-                * Codename: type_referencing_deleted_type
+                * Name: Type referencing deleted type
+        * Codename: type_referencing_deleted_type
+        * Type: Type
             */
             export function isTypeReferencingDeletedTypeTypeCodename(value: string | undefined | null): value is TypeReferencingDeletedTypeTypeCodename {
                 return typeof value === 'string' && value === ('type_referencing_deleted_type' satisfies TypeReferencingDeletedTypeTypeCodename);

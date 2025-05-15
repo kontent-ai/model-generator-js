@@ -3,16 +3,20 @@
            
     
             /*
-                * Type representing codename of Legacy collection
+                * Type representing codename of entity
                 * 
-                * Codename: legacy_collection
+                * Name: Legacy collection
+        * Codename: legacy_collection
+        * Type: Collection
                 */
             export type LegacyCollectionCollectionCodename = Extract<CollectionCodenames, 'legacy_collection'>;
 
             /*
                 * Type guard for Legacy collection
                 * 
-                * Codename: legacy_collection
+                * Name: Legacy collection
+        * Codename: legacy_collection
+        * Type: Collection
             */
             export function isLegacyCollectionCollectionCodename(value: string | undefined | null): value is LegacyCollectionCollectionCodename {
                 return typeof value === 'string' && value === ('legacy_collection' satisfies LegacyCollectionCollectionCodename);

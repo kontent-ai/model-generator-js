@@ -19,16 +19,20 @@ import type { CoreType } from '../system/index.js';
 import type { ReleaseCategoryTermCodenames } from '../taxonomies/index.js';
 
 /*
- * Type representing codename of Movie
+ * Type representing codename of entity
  *
+ * Name: Movie
  * Codename: movie
+ * Type: Type
  */
 export type MovieTypeCodename = Extract<TypeCodenames, 'movie'>;
 
 /*
  * Type guard for Movie
  *
+ * Name: Movie
  * Codename: movie
+ * Type: Type
  */
 export function isMovieTypeCodename(value: string | undefined | null): value is MovieTypeCodename {
 	return typeof value === 'string' && value === ('movie' satisfies MovieTypeCodename);

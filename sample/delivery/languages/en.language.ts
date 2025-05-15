@@ -15,16 +15,20 @@
 import type { LanguageCodenames } from './_languages.js';
 
 /*
- * Type representing codename of English
+ * Type representing codename of entity
  *
+ * Name: English
  * Codename: en
+ * Type: Language
  */
 export type EnglishLanguageCodename = Extract<LanguageCodenames, 'en'>;
 
 /*
  * Type guard for English
  *
+ * Name: English
  * Codename: en
+ * Type: Language
  */
 export function isEnglishLanguageCodename(value: string | undefined | null): value is EnglishLanguageCodename {
 	return typeof value === 'string' && value === ('en' satisfies EnglishLanguageCodename);

@@ -4,16 +4,20 @@ import type { ContentTypeWithAllElementsType } from '../types/index.ts';
 import type { CoreType } from '../system/index.ts';
 
 /*
- * Type representing codename of Snippet A
+ * Type representing codename of entity
  *
+ * Name: Snippet A
  * Codename: snippet_a
+ * Type: Snippet
  */
 export type SnippetASnippetCodename = Extract<SnippetCodenames, 'snippet_a'>;
 
 /*
  * Type guard for Snippet A
  *
+ * Name: Snippet A
  * Codename: snippet_a
+ * Type: Snippet
  */
 export function isSnippetASnippetCodename(value: string | undefined | null): value is SnippetASnippetCodename {
 	return typeof value === 'string' && value === ('snippet_a' satisfies SnippetASnippetCodename);

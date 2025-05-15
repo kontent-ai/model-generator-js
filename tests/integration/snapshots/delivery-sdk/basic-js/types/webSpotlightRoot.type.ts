@@ -4,16 +4,20 @@ import type { CoreType } from '../system/index.js';
 import type { PageType } from './index.js';
 
 /*
- * Type representing codename of Web spotlight root
+ * Type representing codename of entity
  *
+ * Name: Web spotlight root
  * Codename: web_spotlight_root
+ * Type: Type
  */
 export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, 'web_spotlight_root'>;
 
 /*
  * Type guard for Web spotlight root
  *
+ * Name: Web spotlight root
  * Codename: web_spotlight_root
+ * Type: Type
  */
 export function isWebSpotlightRootTypeCodename(value: string | undefined | null): value is WebSpotlightRootTypeCodename {
 	return typeof value === 'string' && value === ('web_spotlight_root' satisfies WebSpotlightRootTypeCodename);

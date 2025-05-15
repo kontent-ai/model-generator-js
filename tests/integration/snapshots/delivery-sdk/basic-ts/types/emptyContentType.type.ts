@@ -3,16 +3,20 @@ import type { TypeCodenames } from './_types.ts';
 import type { CoreType } from '../system/index.ts';
 
 /*
- * Type representing codename of Empty content type
+ * Type representing codename of entity
  *
+ * Name: Empty content type
  * Codename: empty_content_type
+ * Type: Type
  */
 export type EmptyContentTypeTypeCodename = Extract<TypeCodenames, 'empty_content_type'>;
 
 /*
  * Type guard for Empty content type
  *
+ * Name: Empty content type
  * Codename: empty_content_type
+ * Type: Type
  */
 export function isEmptyContentTypeTypeCodename(value: string | undefined | null): value is EmptyContentTypeTypeCodename {
 	return typeof value === 'string' && value === ('empty_content_type' satisfies EmptyContentTypeTypeCodename);

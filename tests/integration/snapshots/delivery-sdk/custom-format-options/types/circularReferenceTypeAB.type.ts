@@ -6,16 +6,20 @@ import type { CoreType } from '../system/index.js';
            
     
             /*
-                * Type representing codename of Circular reference type A > B
+                * Type representing codename of entity
                 * 
-                * Codename: circular_reference_type_a_b
+                * Name: Circular reference type A > B
+        * Codename: circular_reference_type_a_b
+        * Type: Type
                 */
             export type CircularReferenceTypeABTypeCodename = Extract<TypeCodenames, 'circular_reference_type_a_b'>;
 
             /*
                 * Type guard for Circular reference type A > B
                 * 
-                * Codename: circular_reference_type_a_b
+                * Name: Circular reference type A > B
+        * Codename: circular_reference_type_a_b
+        * Type: Type
             */
             export function isCircularReferenceTypeABTypeCodename(value: string | undefined | null): value is CircularReferenceTypeABTypeCodename {
                 return typeof value === 'string' && value === ('circular_reference_type_a_b' satisfies CircularReferenceTypeABTypeCodename);

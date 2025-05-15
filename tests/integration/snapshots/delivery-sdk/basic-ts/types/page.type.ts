@@ -3,16 +3,20 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.ts';
 
 /*
- * Type representing codename of Page
+ * Type representing codename of entity
  *
+ * Name: Page
  * Codename: page
+ * Type: Type
  */
 export type PageTypeCodename = Extract<TypeCodenames, 'page'>;
 
 /*
  * Type guard for Page
  *
+ * Name: Page
  * Codename: page
+ * Type: Type
  */
 export function isPageTypeCodename(value: string | undefined | null): value is PageTypeCodename {
 	return typeof value === 'string' && value === ('page' satisfies PageTypeCodename);

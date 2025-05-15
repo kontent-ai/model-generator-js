@@ -4,16 +4,20 @@ import type { Snippet } from '@kontent-ai/delivery-sdk';
            
     
             /*
-                * Type representing codename of Empty snippet
+                * Type representing codename of entity
                 * 
-                * Codename: empty_snippet
+                * Name: Empty snippet
+        * Codename: empty_snippet
+        * Type: Snippet
                 */
             export type EmptySnippetSnippetCodename = Extract<SnippetCodenames, 'empty_snippet'>;
 
             /*
                 * Type guard for Empty snippet
                 * 
-                * Codename: empty_snippet
+                * Name: Empty snippet
+        * Codename: empty_snippet
+        * Type: Snippet
             */
             export function isEmptySnippetSnippetCodename(value: string | undefined | null): value is EmptySnippetSnippetCodename {
                 return typeof value === 'string' && value === ('empty_snippet' satisfies EmptySnippetSnippetCodename);

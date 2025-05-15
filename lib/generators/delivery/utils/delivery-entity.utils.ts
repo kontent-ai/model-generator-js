@@ -34,16 +34,16 @@ function getTaxonomyTermCodenames(taxonomyTerms: readonly Readonly<TaxonomyModel
     return [...new Set(termCodenames)];
 }
 
-function getPluralName(entityName: DeliveryEntityType): string {
-    return match(entityName)
+function getPluralName(entityType: DeliveryEntityType): string {
+    return match(entityType)
         .returnType<string>()
         .with('Taxonomy', () => 'Taxonomies')
-        .otherwise(() => `${entityName}s`);
+        .otherwise(() => `${entityType}s`);
 }
 
 function getCodeOfDeliveryEntity({
-    originalName,
-    type,
+    entityName,
+    extendedType,
     codenames,
     names
 }: {
@@ -52,8 +52,9 @@ function getCodeOfDeliveryEntity({
         readonly valuesPropertyName: string;
         readonly typeGuardFunctionName: string;
     };
-    readonly originalName: string | undefined;
-    readonly type: DeliveryEntityType;
+    readonly subtype?: 'Term' | 'Step';
+    readonly entityName: string | undefined;
+    readonly extendedType: DeliveryEntityType | 'Workflow step' | 'Taxonomy term';
     readonly codenames: readonly string[];
 }): string {
     const uniqueCodenames: readonly string[] = [...new Set(codenames)];
@@ -68,19 +69,28 @@ function getCodeOfDeliveryEntity({
         return `export const ${names.valuesPropertyName} = [${uniqueCodenames.map((m) => `'${m}'`).join(', ')}] as const;`;
     };
 
-    return `
-            ${wrapComment(`
-                * Object with all values of ${type} codenames ${originalName ? `in ${originalName}` : ''}
-            `)}
-            ${getValuesCode()};
+    const getComment = (title: string): string => {
+        return wrapComment(title, {
+            lines: [
+                {
+                    name: 'Name',
+                    value: entityName
+                },
+                {
+                    name: 'Type',
+                    value: extendedType
+                }
+            ]
+        });
+    };
 
-            ${wrapComment(`
-                * Type representing ${type} codenames ${originalName ? `in ${originalName}` : ''}
-            `)}
+    return `
+            ${getComment('Array of all codenames')}
+            ${getValuesCode()};
+           
+            ${getComment('Type representing all codenames')}
             export type ${names.codenamesTypeName} = typeof ${names.valuesPropertyName}[number];
 
-            ${wrapComment(`
-                * Type guard for ${type} codenames ${originalName ? `in ${originalName}` : ''}
-            `)}
+            ${getComment('Typeguard for codename')}
             ${getTypeGuardFunction()};`;
 }

@@ -3,16 +3,20 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.ts';
 
 /*
- * Type representing codename of 🐧 Content type with special chars #!_'
+ * Type representing codename of entity
  *
+ * Name: 🐧 Content type with special chars #!_'
  * Codename: _content_type_with_special_chars____
+ * Type: Type
  */
 export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_content_type_with_special_chars____'>;
 
 /*
  * Type guard for 🐧 Content type with special chars #!_'
  *
+ * Name: 🐧 Content type with special chars #!_'
  * Codename: _content_type_with_special_chars____
+ * Type: Type
  */
 export function isContentTypeWithSpecialCharsTypeCodename(
 	value: string | undefined | null

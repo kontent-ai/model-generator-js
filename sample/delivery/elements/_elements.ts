@@ -13,7 +13,9 @@
  */
 
 /*
- * Object with all values of Element codenames
+ * Array of all codenames
+ *
+ * Type: Element
  */
 export const elementCodenames = [
 	'url',
@@ -32,12 +34,16 @@ export const elementCodenames = [
 ] as const;
 
 /*
- * Type representing Element codenames
+ * Type representing all codenames
+ *
+ * Type: Element
  */
 export type ElementCodenames = (typeof elementCodenames)[number];
 
 /*
- * Type guard for Element codenames
+ * Typeguard for codename
+ *
+ * Type: Element
  */
 export function isElementCodename(value: string | undefined | null): value is ElementCodenames {
 	return typeof value === 'string' && (elementCodenames as readonly string[]).includes(value);

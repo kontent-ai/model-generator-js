@@ -6,16 +6,20 @@ import type { CoreType } from '../system/index.js';
            
     
             /*
-                * Type representing codename of Snippet A
+                * Type representing codename of entity
                 * 
-                * Codename: snippet_a
+                * Name: Snippet A
+        * Codename: snippet_a
+        * Type: Snippet
                 */
             export type SnippetASnippetCodename = Extract<SnippetCodenames, 'snippet_a'>;
 
             /*
                 * Type guard for Snippet A
                 * 
-                * Codename: snippet_a
+                * Name: Snippet A
+        * Codename: snippet_a
+        * Type: Snippet
             */
             export function isSnippetASnippetCodename(value: string | undefined | null): value is SnippetASnippetCodename {
                 return typeof value === 'string' && value === ('snippet_a' satisfies SnippetASnippetCodename);

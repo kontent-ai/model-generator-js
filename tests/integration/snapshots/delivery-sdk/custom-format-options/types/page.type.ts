@@ -5,16 +5,20 @@ import type { CoreType } from '../system/index.js';
            
     
             /*
-                * Type representing codename of Page
+                * Type representing codename of entity
                 * 
-                * Codename: page
+                * Name: Page
+        * Codename: page
+        * Type: Type
                 */
             export type PageTypeCodename = Extract<TypeCodenames, 'page'>;
 
             /*
                 * Type guard for Page
                 * 
-                * Codename: page
+                * Name: Page
+        * Codename: page
+        * Type: Type
             */
             export function isPageTypeCodename(value: string | undefined | null): value is PageTypeCodename {
                 return typeof value === 'string' && value === ('page' satisfies PageTypeCodename);
