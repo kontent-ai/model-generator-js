@@ -78,8 +78,8 @@ await generateDeliveryModelsAsync({
     outputDir: '/', // only required when createFiles is true
 
     // optional
-    fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' },
-    nameResolvers: { contentType: (item) => `Company_${item.codename}`, snippet: 'pascalCase', taxonomy: 'pascalCase' },
+    fileResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet: (snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
+    nameResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet:(snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
     formatOptions: { indentSize: 4, quote: 'single' },
     baseUrl: undefined
 });

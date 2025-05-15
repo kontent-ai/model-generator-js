@@ -16,8 +16,16 @@ await runScriptAsync(async (config) => {
         outputDir: outputDir, // only required when createFiles is true
 
         // optional
-        fileResolvers: { contentType: 'camelCase', snippet: 'camelCase', taxonomy: 'camelCase' },
-        nameResolvers: { contentType: 'pascalCase', snippet: 'pascalCase', taxonomy: 'pascalCase' },
+        fileResolvers: {
+            contentType: undefined,
+            snippet: undefined,
+            taxonomy: undefined
+        },
+        nameResolvers: {
+            contentType: undefined,
+            snippet: undefined,
+            taxonomy: undefined
+        },
         formatOptions: undefined,
         managementBaseUrl: undefined
     });
