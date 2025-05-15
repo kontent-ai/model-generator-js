@@ -3,10 +3,11 @@ import { ContentTypeModels, ContentTypeSnippetModels } from '@kontent-ai/managem
 import { match, P } from 'ts-pattern';
 import { coreConfig, deliveryConfig } from '../../config.js';
 import { toGuidelinesComment, wrapComment } from '../../core/comment.utils.js';
-import type { FlattenedElement, GeneratedTypeModel } from '../../core/core.models.js';
+import type { FlattenedElement, GeneratedTypeModel, MultipleChoiceOption } from '../../core/core.models.js';
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from '../../core/core.utils.js';
 import { getFlattenedElements } from '../../core/element.utils.js';
 import { getImporter } from '../../core/importer.js';
+import { resolveCase } from '../../core/resolvers.js';
 import { getDeliveryEntityNamesGenerator } from './delivery-entity-name.generator.js';
 import type { DeliveryGeneratorConfig } from './delivery.generator.js';
 
@@ -269,12 +270,14 @@ ${wrapComment(`
 * Codename: ${snippet.codename}    
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
-${getElementsCode(flattenedElements)}>;
+${getElementsCode(snippet, flattenedElements)}>;
 
 ${wrapComment(`
 * Type representing all available element codenames for ${snippet.name}
 `)}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
+
+${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
 `
         };
     };
@@ -311,7 +314,7 @@ ${wrapComment(`
 `)}
 export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
 ${nameOfTypeRepresentingAllElementCodenames},
-${getElementsCode(flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
+${getElementsCode(contentType, flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
 ${contentTypeNames.getCodenameTypeName(contentType)}>
 
 ${wrapComment(`
@@ -326,11 +329,52 @@ ${wrapComment(`
 * Codename: ${contentType.codename}
 `)}
 ${getContentItemTypeGuardFunction(contentType)};
+
+${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 `
         };
     };
 
-    const getElementsCode = (flattenedElements: readonly FlattenedElement[]): string => {
+    const getMultipleChoiceTypeName = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): string => {
+        const typeOrSnippetName =
+            typeOrSnippet instanceof ContentTypeModels.ContentType
+                ? contentTypeNames.getEntityName(typeOrSnippet)
+                : snippetNames.getEntityName(typeOrSnippet);
+
+        return `${typeOrSnippetName}${resolveCase(element.title, 'pascalCase')}MultipleChoiceOptions`;
+    };
+
+    const getMultipleChoiceTypeCode = (
+        typeOrSnippet: ContentTypeOrSnippet,
+        flattenedElement: FlattenedElement,
+        options: readonly MultipleChoiceOption[]
+    ): string => {
+        return `export type ${getMultipleChoiceTypeName(typeOrSnippet, flattenedElement)} = ${options
+            .map((option) => option.codename)
+            .filter(isNotUndefined)
+            .map((codename) => `'${codename}'`)
+            .join(' | ')}`;
+    };
+
+    const getAllMultipleChoiceTypeCodes = (typeOrSnippet: ContentTypeOrSnippet, flattenedElements: readonly FlattenedElement[]): string => {
+        return flattenedElements
+            .map((element) => {
+                return match(element)
+                    .returnType<string | undefined>()
+                    .with({ type: 'multiple_choice' }, (multipleChoiceElement) => {
+                        return getMultipleChoiceTypeCode(
+                            typeOrSnippet,
+                            multipleChoiceElement,
+                            multipleChoiceElement.multipleChoiceOptions ?? []
+                        );
+                    })
+                    .otherwise(() => undefined);
+            })
+            .filter(isNotUndefined)
+            .join('\n\n');
+    };
+
+    const getElementsCode = (typeOrSnippet: ContentTypeOrSnippet, flattenedElements: readonly FlattenedElement[]): string => {
         const filteredElements = flattenedElements
             // filter out elements that are from snippets
             .filter((m) => !m.fromSnippet);
@@ -341,7 +385,7 @@ ${getContentItemTypeGuardFunction(contentType)};
 
         return (
             filteredElements.reduce<string>((code, element) => {
-                const mappedType = mapElementType(element);
+                const mappedType = mapElementType(typeOrSnippet, element);
 
                 if (!mappedType) {
                     return code;
@@ -376,7 +420,7 @@ ${getContentItemTypeGuardFunction(contentType)};
         return `export type ${typeName} = ${flattenedElements.map((element) => `'${element.codename}'`).join(' | ')};`;
     };
 
-    const mapElementType = (element: FlattenedElement): string | undefined => {
+    const mapElementType = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): string | undefined => {
         return match(element)
             .returnType<string | undefined>()
             .with({ type: 'text' }, () => 'TextElement')
@@ -408,7 +452,7 @@ ${getContentItemTypeGuardFunction(contentType)};
                 if (!multipleChoiceElement.multipleChoiceOptions?.length) {
                     return 'MultipleChoiceElement';
                 }
-                return `MultipleChoiceElement<${multipleChoiceElement.multipleChoiceOptions.map((option) => `'${option.codename}'`).join(' | ')}>`;
+                return `MultipleChoiceElement<${getMultipleChoiceTypeName(typeOrSnippet, multipleChoiceElement)}>`;
             })
             .with({ type: 'url_slug' }, () => 'UrlSlugElement')
             .with({ type: 'taxonomy' }, (taxonomyElement) => {

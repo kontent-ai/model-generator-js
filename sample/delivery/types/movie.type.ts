@@ -100,9 +100,7 @@ export type MovieType = CoreType<
 		 * Codename: category
 		 * Id: 9821c252-6414-f549-c17f-cc171dd87713
 		 */
-		readonly category: Elements.MultipleChoiceElement<
-			'sci_fi' | 'documentary' | 'action' | 'romance' | 'animation' | 'comedy' | 'adventure' | 'drama'
-		>;
+		readonly category: Elements.MultipleChoiceElement<MovieTypeCategoryMultipleChoiceOptions>;
 		/*
 		 * Stars
 		 *
@@ -157,3 +155,13 @@ export type MovieTypeElementCodenames =
 export function isMovieType(item: CoreType | undefined | null): item is MovieType {
 	return item?.system?.type === 'movie';
 }
+
+export type MovieTypeCategoryMultipleChoiceOptions =
+	| 'sci_fi'
+	| 'documentary'
+	| 'action'
+	| 'romance'
+	| 'animation'
+	| 'comedy'
+	| 'adventure'
+	| 'drama';
