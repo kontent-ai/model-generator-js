@@ -41,8 +41,6 @@ export const migrationConfig = {
 
 export const deliveryConfig = {
     npmPackageName: '@kontent-ai/delivery-sdk',
-    itemTypesFolderName: `itemTypes`,
-    itemSnippetsFolderName: `itemSnippets`,
     systemTypesFolderName: 'system',
     mainSystemFilename: 'main.system',
     coreContentTypeName: 'CoreType',

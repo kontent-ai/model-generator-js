@@ -2,7 +2,7 @@
             import type { TypeCodenames } from './_types.js';
 
 import type { CoreType } from '../system/index.js';
-import type { SnippetASnippet } from '../itemSnippets/index.js';
+import type { SnippetASnippet } from '../snippets/index.js';
            
     
             /*

@@ -1,7 +1,7 @@
 import type { TypeCodenames } from './_types.ts';
 
 import type { CoreType } from '../system/index.ts';
-import type { SnippetASnippet } from '../itemSnippets/index.ts';
+import type { SnippetASnippet } from '../snippets/index.ts';
 
 /*
  * Type representing codename of Content type with snippet only

@@ -1,7 +1,7 @@
 import type { TypeCodenames } from './_types.js';
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
-import type { SnippetASnippet } from '../itemSnippets/index.js';
+import type { SnippetASnippet } from '../snippets/index.js';
 import type { TaxonomyATermCodenames } from '../taxonomies/index.js';
 
 /*

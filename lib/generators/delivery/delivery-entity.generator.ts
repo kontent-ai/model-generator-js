@@ -1,5 +1,5 @@
-import type { CollectionModels, ContentTypeSnippetModels, LanguageModels } from '@kontent-ai/management-sdk';
-import { ContentTypeModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import type { CollectionModels, LanguageModels } from '@kontent-ai/management-sdk';
+import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match, P } from 'ts-pattern';
 import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedFile, GeneratedSet, GeneratedTypeModel, ModuleFileExtension } from '../../core/core.models.js';
@@ -199,6 +199,9 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
             })
             .with(P.instanceOf(ContentTypeModels.ContentType), (contentType) =>
                 getDeliveryTypeAndSnippetGenerator(config.deliveryGeneratorConfig).generateTypeModel(contentType)
+            )
+            .with(P.instanceOf(ContentTypeSnippetModels.ContentTypeSnippet), (contentTypeSnippet) =>
+                getDeliveryTypeAndSnippetGenerator(config.deliveryGeneratorConfig).generateSnippetModel(contentTypeSnippet)
             )
             .otherwise(() => undefined);
     };

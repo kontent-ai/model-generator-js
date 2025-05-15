@@ -1,7 +1,7 @@
 import type { TypeCodenames } from './_types.js';
 
 import type { CoreType } from '../system/index.js';
-import type { SnippetSnippetASnippet } from '../itemSnippets/index.js';
+import type { SnippetSnippetASnippet } from '../snippets/index.js';
 
 /*
  * Type representing codename of Content type with snippet only

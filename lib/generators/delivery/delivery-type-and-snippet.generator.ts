@@ -71,7 +71,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 
         return [
             importer.importType({
-                filePathOrPackage: `../${deliveryConfig.itemSnippetsFolderName}/${coreConfig.barrelExportFilename}`,
+                filePathOrPackage: `../${snippetNames.folderName}/${coreConfig.barrelExportFilename}`,
                 importValue: snippets
                     .map((snippet) => snippetNames.getEntityName(snippet))
                     .filter(uniqueFilter)
@@ -117,7 +117,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
             importer.importType({
                 filePathOrPackage:
                     typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
-                        ? `../${deliveryConfig.itemTypesFolderName}/${coreConfig.barrelExportFilename}`
+                        ? `../${contentTypeNames.folderName}/${coreConfig.barrelExportFilename}`
                         : `./${coreConfig.barrelExportFilename}`,
                 importValue: referencedTypeNames.join(', ')
             })

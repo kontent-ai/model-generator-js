@@ -1,7 +1,7 @@
 import type { TypeCodenames } from './_types.ts';
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.ts';
-import type { SnippetASnippet } from '../itemSnippets/index.ts';
+import type { SnippetASnippet } from '../snippets/index.ts';
 import type { TaxonomyATermCodenames } from '../taxonomies/index.ts';
 
 /*
