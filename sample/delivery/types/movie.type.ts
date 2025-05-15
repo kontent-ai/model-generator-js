@@ -16,7 +16,7 @@ import type { TypeCodenames } from './_types.js';
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { ActorType } from './index.js';
 import type { CoreType } from '../system/index.js';
-import type { ReleaseCategoryTermCodenames } from '../taxonomies/index.js';
+import type { ReleaseCategoryTermCodenames, ReleaseCategoryTaxonomyCodename } from '../taxonomies/index.js';
 
 /*
  * Type representing codename of entity
@@ -127,7 +127,7 @@ export type MovieType = CoreType<
 		 * Codename: releasecategory
 		 * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
 		 */
-		readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTermCodenames, 'releasecategory'>;
+		readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTermCodenames, ReleaseCategoryTaxonomyCodename>;
 	},
 	MovieTypeCodename
 >;

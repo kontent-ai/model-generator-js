@@ -134,7 +134,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
             .filter((m) => !m.fromSnippet)
             .map((flattenedElement) => {
                 return match(flattenedElement)
-                    .returnType<string | undefined>()
+                    .returnType<readonly string[] | undefined>()
                     .with({ type: 'taxonomy' }, (taxonomyElement) => {
                         if (!taxonomyElement.assignedTaxonomy) {
                             const usedIn = match(typeOrSnippet)
@@ -149,11 +149,15 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
                             return undefined;
                         }
 
-                        return getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy);
+                        return [
+                            getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy),
+                            taxonomyNames.getCodenameTypeName(taxonomyElement.assignedTaxonomy)
+                        ];
                     })
                     .otherwise(() => undefined);
             })
             .filter(isNotUndefined)
+            .flatMap((m) => m)
             .filter(uniqueFilter);
 
         if (taxonomyTypeNames.length === 0) {
@@ -460,7 +464,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
                     return `TaxonomyElement`;
                 }
 
-                return `TaxonomyElement<${getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.codename}'>`;
+                return `TaxonomyElement<${getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy)}, ${taxonomyNames.getCodenameTypeName(taxonomyElement.assignedTaxonomy)}>`;
             })
             .with({ type: 'custom' }, () => 'CustomElement')
             .otherwise(() => undefined);
