@@ -481,9 +481,10 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
     const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
         const contentItemTypeName = contentTypeNames.getEntityName(contentType);
         const typeGuardFunctionName = `is${contentItemTypeName}`;
+        const contentTypeCodename = contentTypeNames.getCodenameTypeName(contentType);
 
         return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${contentItemTypeName} {
-                return item?.system?.type === '${contentType.codename}';
+                return item?.system?.type === ('${contentType.codename}' satisfies ${contentTypeCodename});
             }`;
     };
 

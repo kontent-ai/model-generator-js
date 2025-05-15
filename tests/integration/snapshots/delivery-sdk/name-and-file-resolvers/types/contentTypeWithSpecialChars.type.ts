@@ -71,5 +71,5 @@ export type ContentTypeContentTypeWithSpecialCharsTypeElementCodenames = 'parrot
 export function isContentTypeContentTypeWithSpecialCharsType(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithSpecialCharsType {
-	return item?.system?.type === '_content_type_with_special_chars____';
+	return item?.system?.type === ('_content_type_with_special_chars____' satisfies ContentTypeContentTypeWithSpecialCharsTypeCodename);
 }

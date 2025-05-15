@@ -48,8 +48,10 @@ export type ContentTypeWithSnippetOnlyTypeElementCodenames = 'snippet_a__rich_te
 * Codename: content_type_with_snippet_only
 */
 export function isContentTypeWithSnippetOnlyType(item: CoreType | undefined | null): item is ContentTypeWithSnippetOnlyType {
-                return item?.system?.type === 'content_type_with_snippet_only';
+                return item?.system?.type === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
             };
+
+
 
             
             

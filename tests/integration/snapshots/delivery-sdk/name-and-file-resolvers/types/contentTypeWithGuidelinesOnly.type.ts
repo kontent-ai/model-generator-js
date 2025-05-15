@@ -50,5 +50,5 @@ export type ContentTypeContentTypeWithGuidelinesOnlyTypeElementCodenames = never
 export function isContentTypeContentTypeWithGuidelinesOnlyType(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithGuidelinesOnlyType {
-	return item?.system?.type === 'content_type_with_guidelines_only';
+	return item?.system?.type === ('content_type_with_guidelines_only' satisfies ContentTypeContentTypeWithGuidelinesOnlyTypeCodename);
 }

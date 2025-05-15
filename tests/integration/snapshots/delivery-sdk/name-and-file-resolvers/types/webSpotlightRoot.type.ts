@@ -75,5 +75,5 @@ export type ContentTypeWebSpotlightRootTypeElementCodenames = 'title' | 'subpage
  * Codename: web_spotlight_root
  */
 export function isContentTypeWebSpotlightRootType(item: CoreType | undefined | null): item is ContentTypeWebSpotlightRootType {
-	return item?.system?.type === 'web_spotlight_root';
+	return item?.system?.type === ('web_spotlight_root' satisfies ContentTypeWebSpotlightRootTypeCodename);
 }

@@ -153,7 +153,7 @@ export type MovieTypeElementCodenames =
  * Codename: movie
  */
 export function isMovieType(item: CoreType | undefined | null): item is MovieType {
-	return item?.system?.type === 'movie';
+	return item?.system?.type === ('movie' satisfies MovieTypeCodename);
 }
 
 export type MovieTypeCategoryMultipleChoiceOptions =

@@ -54,5 +54,5 @@ export type ContentTypeContentTypeWithSnippetOnlyTypeElementCodenames =
 export function isContentTypeContentTypeWithSnippetOnlyType(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithSnippetOnlyType {
-	return item?.system?.type === 'content_type_with_snippet_only';
+	return item?.system?.type === ('content_type_with_snippet_only' satisfies ContentTypeContentTypeWithSnippetOnlyTypeCodename);
 }

@@ -59,5 +59,5 @@ export type ContentTypeCircularReferenceTypeBATypeElementCodenames = 'items';
 export function isContentTypeCircularReferenceTypeBAType(
 	item: CoreType | undefined | null
 ): item is ContentTypeCircularReferenceTypeBAType {
-	return item?.system?.type === 'circular_reference_type_b____a';
+	return item?.system?.type === ('circular_reference_type_b____a' satisfies ContentTypeCircularReferenceTypeBATypeCodename);
 }

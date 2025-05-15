@@ -2,7 +2,7 @@ import type { TypeCodenames } from './_types.js';
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
 import type { SnippetASnippet } from '../snippets/index.js';
-import type { TaxonomyATermCodenames } from '../taxonomies/index.js';
+import type { TaxonomyATermCodenames, TaxonomyATaxonomyCodename } from '../taxonomies/index.js';
 
 /*
  * Type representing codename of entity
@@ -107,7 +107,7 @@ export type ContentTypeWithAllElementsType = CoreType<
 		 * Codename: multiple_choice_element
 		 * Id: 709148dd-8c3f-4660-95b8-a72f386dd367
 		 */
-		readonly multiple_choice_element: Elements.MultipleChoiceElement<'option_a' | 'option_b'>;
+		readonly multiple_choice_element: Elements.MultipleChoiceElement<ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions>;
 		/*
 		 * Number element
 		 *
@@ -125,7 +125,7 @@ export type ContentTypeWithAllElementsType = CoreType<
 		 * Codename: taxonomy_element
 		 * Id: 6073dec8-2489-479f-9916-abc055126e59
 		 */
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATermCodenames, 'taxonomy_element'>;
+		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATermCodenames, TaxonomyATaxonomyCodename>;
 	} & SnippetASnippet,
 	ContentTypeWithAllElementsTypeCodename
 >;
@@ -155,5 +155,7 @@ export type ContentTypeWithAllElementsTypeElementCodenames =
  * Codename: content_type_with_all_elements
  */
 export function isContentTypeWithAllElementsType(item: CoreType | undefined | null): item is ContentTypeWithAllElementsType {
-	return item?.system?.type === 'content_type_with_all_elements';
+	return item?.system?.type === ('content_type_with_all_elements' satisfies ContentTypeWithAllElementsTypeCodename);
 }
+
+export type ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions = 'option_a' | 'option_b';

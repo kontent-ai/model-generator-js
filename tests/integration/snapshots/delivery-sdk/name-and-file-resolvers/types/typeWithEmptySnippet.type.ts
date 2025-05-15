@@ -46,5 +46,5 @@ export type ContentTypeTypeWithEmptySnippetTypeElementCodenames = never;
  * Codename: type_with_empty_snippet
  */
 export function isContentTypeTypeWithEmptySnippetType(item: CoreType | undefined | null): item is ContentTypeTypeWithEmptySnippetType {
-	return item?.system?.type === 'type_with_empty_snippet';
+	return item?.system?.type === ('type_with_empty_snippet' satisfies ContentTypeTypeWithEmptySnippetTypeCodename);
 }

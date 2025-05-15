@@ -57,7 +57,7 @@ export type PageType = CoreType<
 		 * Codename: show_in_navigation
 		 * Id: 07889917-fdc5-4285-bc30-4fed2a218c89
 		 */
-		readonly show_in_navigation: Elements.MultipleChoiceElement<'yes' | 'no'>;
+		readonly show_in_navigation: Elements.MultipleChoiceElement<PageTypeShowInNavigationMultipleChoiceOptions>;
 		/*
 		 * Subpages
 		 *
@@ -92,5 +92,7 @@ export type PageTypeElementCodenames = 'title' | 'url' | 'show_in_navigation' | 
  * Codename: page
  */
 export function isPageType(item: CoreType | undefined | null): item is PageType {
-	return item?.system?.type === 'page';
+	return item?.system?.type === ('page' satisfies PageTypeCodename);
 }
+
+export type PageTypeShowInNavigationMultipleChoiceOptions = 'yes' | 'no';

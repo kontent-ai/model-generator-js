@@ -98,5 +98,5 @@ export type ActorTypeElementCodenames = 'url' | 'first_name' | 'last_name' | 'ph
  * Codename: actor
  */
 export function isActorType(item: CoreType | undefined | null): item is ActorType {
-	return item?.system?.type === 'actor';
+	return item?.system?.type === ('actor' satisfies ActorTypeCodename);
 }

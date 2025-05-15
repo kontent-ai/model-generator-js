@@ -69,5 +69,5 @@ export type ContentTypeTypeReferencingDeletedTypeTypeElementCodenames = 'rich_te
 export function isContentTypeTypeReferencingDeletedTypeType(
 	item: CoreType | undefined | null
 ): item is ContentTypeTypeReferencingDeletedTypeType {
-	return item?.system?.type === 'type_referencing_deleted_type';
+	return item?.system?.type === ('type_referencing_deleted_type' satisfies ContentTypeTypeReferencingDeletedTypeTypeCodename);
 }

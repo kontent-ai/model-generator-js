@@ -67,5 +67,5 @@ export type TypeReferencingDeletedTypeTypeElementCodenames = 'rich_text_with_inv
  * Codename: type_referencing_deleted_type
  */
 export function isTypeReferencingDeletedTypeType(item: CoreType | undefined | null): item is TypeReferencingDeletedTypeType {
-	return item?.system?.type === 'type_referencing_deleted_type';
+	return item?.system?.type === ('type_referencing_deleted_type' satisfies TypeReferencingDeletedTypeTypeCodename);
 }
