@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.0.0-4](https://github.com/kontent-ai/model-generator-js/compare/v9.0.0-3...v9.0.0-4) (2025-05-16)
+
+
+### Features
+
+* Extracts multiple choice option values into type ([81efa75](https://github.com/kontent-ai/model-generator-js/commit/81efa75c75f19259c3fce717d971d90e86896b9a))
+
 ## [9.0.0-3](https://github.com/kontent-ai/model-generator-js/compare/v9.0.0-2...v9.0.0-3) (2025-05-05)
 
 ## [9.0.0-2](https://github.com/kontent-ai/model-generator-js/compare/v9.0.0-1...v9.0.0-2) (2025-05-01)
