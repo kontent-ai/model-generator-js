@@ -47,7 +47,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
     const importer = getImporter(config.moduleFileExtension);
     const deliveryUtils = deliveryEntityUtils();
     const entityNames = getDeliveryEntityNamesGenerator({
-        ...config,
+        ...{
+            nameResolvers: config.deliveryGeneratorConfig.nameResolvers,
+            fileResolvers: config.deliveryGeneratorConfig.fileResolvers
+        },
         entityType: config.entityType
     }).getEntityNames();
 
@@ -57,12 +60,6 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
             typeGuardName: entityNames.getTypeguardFunctionName(entity),
             entity
         });
-    };
-
-    const getEntityInfoComment = (entity: Readonly<DeliveryEntity>): string => {
-        return `* Name: ${entity.name}
-        * Codename: ${entity.codename}
-        * Type: ${config.entityType}`;
     };
 
     const getMainFileCode = (): string => {
@@ -83,27 +80,36 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
     const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
         const extraCode = getEntityExtraCode(entity);
 
+        const getEntityComment: (title: string) => string = (title) => {
+            return wrapComment(title, {
+                lines: [
+                    {
+                        name: 'Name',
+                        value: entity.name
+                    },
+                    {
+                        name: 'Codename',
+                        value: entity.codename
+                    },
+                    {
+                        name: 'Type',
+                        value: config.entityType
+                    }
+                ]
+            });
+        };
+
         return `
             ${importer.importType({
                 filePathOrPackage: `./${entityNames.mainFilename}`,
                 importValue: `${entityNames.codenamesTypeName}`
             })}${extraCode?.imports?.length ? `\n${extraCode.imports.join('\n')}` : ''}
            
-    
-            ${wrapComment(`
-                * Type representing codename of entity
-                * 
-                ${getEntityInfoComment(entity)}
-                `)}
+            ${getEntityComment(`Type representing codename of entity`)}
             export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.codenamesTypeName}, '${entity.codename}'>;
 
-            ${wrapComment(`
-                * Type guard for ${entity.name}
-                * 
-                ${getEntityInfoComment(entity)}
-            `)}
+            ${getEntityComment(`Typeguard function for entity`)}
             ${getEntityTypeGuardFunction(entity)}${extraCode ? `\n${extraCode.code}` : ''}
-            
             `;
     };
 
@@ -133,7 +139,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                     .map((m) => m.codename);
 
                 const worfklowStepNames = getDeliveryEntityNamesGenerator({
-                    ...config,
+                    ...{
+                        nameResolvers: config.deliveryGeneratorConfig.nameResolvers ?? undefined,
+                        fileResolvers: config.deliveryGeneratorConfig.fileResolvers ?? undefined
+                    },
                     entityType: 'Workflow'
                 }).getEntityNames();
 
@@ -156,7 +165,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
             .returnType<GeneratedTypeModel | undefined>()
             .with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
                 const worfklowStepNames = getDeliveryEntityNamesGenerator({
-                    ...config,
+                    ...{
+                        nameResolvers: config.deliveryGeneratorConfig.nameResolvers ?? undefined,
+                        fileResolvers: config.deliveryGeneratorConfig.fileResolvers ?? undefined
+                    },
                     entityType: 'Workflow'
                 }).getEntityNames();
 
@@ -181,7 +193,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
             })
             .with(P.instanceOf(TaxonomyModels.Taxonomy), (taxonomy) => {
                 const termEntityNames = getDeliveryEntityNamesGenerator({
-                    ...config,
+                    ...{
+                        nameResolvers: config.deliveryGeneratorConfig.nameResolvers ?? undefined,
+                        fileResolvers: config.deliveryGeneratorConfig.fileResolvers ?? undefined
+                    },
                     entityType: 'Taxonomy'
                 }).getEntityNames();
 

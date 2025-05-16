@@ -26,7 +26,7 @@ import type { CoreType } from '../system/index.js';
 export type ActorTypeCodename = Extract<TypeCodenames, 'actor'>;
 
 /*
- * Type guard for Actor
+ * Typeguard function for entity
  *
  * Name: Actor
  * Codename: actor
@@ -97,6 +97,6 @@ export type ActorTypeElementCodenames = 'url' | 'first_name' | 'last_name' | 'ph
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export function isActorType(item: CoreType | undefined | null): item is ActorType {
+export function isActor(item: CoreType | undefined | null): item is ActorType {
 	return item?.system?.type === ('actor' satisfies ActorTypeCodename);
 }

@@ -28,7 +28,7 @@ import type { ReleaseCategoryTermCodenames, ReleaseCategoryTaxonomyCodename } fr
 export type MovieTypeCodename = Extract<TypeCodenames, 'movie'>;
 
 /*
- * Type guard for Movie
+ * Typeguard function for entity
  *
  * Name: Movie
  * Codename: movie
@@ -152,7 +152,7 @@ export type MovieTypeElementCodenames =
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export function isMovieType(item: CoreType | undefined | null): item is MovieType {
+export function isMovie(item: CoreType | undefined | null): item is MovieType {
 	return item?.system?.type === ('movie' satisfies MovieTypeCodename);
 }
 

@@ -24,7 +24,7 @@ import type { LanguageCodenames } from './_languages.js';
 export type EnglishLanguageCodename = Extract<LanguageCodenames, 'en'>;
 
 /*
- * Type guard for English
+ * Typeguard function for entity
  *
  * Name: English
  * Codename: en

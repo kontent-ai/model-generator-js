@@ -1,4 +1,4 @@
-import type { TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
+import type { ContentTypeModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
 import { mapFilename, mapName, resolveCase, type FilenameResolver, type NameResolver } from '../../core/resolvers.js';
 import type { DeliveryEntity, DeliveryEntityType } from './delivery-entity.generator.js';
@@ -40,11 +40,19 @@ export type AdditionalEntityNames<T> = T extends 'Taxonomy'
                 readonly typeguardFunctionName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
             };
         }
-      : NonNullable<unknown>;
+      : T extends 'Type'
+        ? {
+              readonly typeNames: {
+                  readonly contentItemTypeguardFunctionName: (type: Readonly<ContentTypeModels.ContentType>) => string;
+              };
+          }
+        : NonNullable<unknown>;
 
-export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(
-    config: Pick<DeliveryGeneratorConfig, 'nameResolvers' | 'fileResolvers'> & { readonly entityType: T }
-) {
+export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(config: {
+    readonly nameResolvers: Pick<DeliveryGeneratorConfig, 'nameResolvers'>['nameResolvers'];
+    readonly fileResolvers: Pick<DeliveryGeneratorConfig, 'fileResolvers'>['fileResolvers'];
+    readonly entityType: T;
+}) {
     const deliveryUtils = deliveryEntityUtils();
 
     return {
@@ -129,17 +137,17 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(
                 termsNames:
                     config.entityType === 'Taxonomy'
                         ? {
-                              valuesPropertyName: mapName(undefined, 'camelCase', { suffix: `TermCodenames` }),
-                              codenamesTypeName: mapName(undefined, 'pascalCase', { suffix: `TermCodenames` }),
-                              typeguardFunctionName: mapName(undefined, 'pascalCase', { prefix: 'is', suffix: `TermCodename` })
+                              valuesPropertyName: mapName(nameResolver, 'camelCase', { suffix: `TermCodenames` }),
+                              codenamesTypeName: mapName(nameResolver, 'pascalCase', { suffix: `TermCodenames` }),
+                              typeguardFunctionName: mapName(nameResolver, 'pascalCase', { prefix: 'is', suffix: `TermCodename` })
                           }
                         : undefined,
                 stepsNames:
                     config.entityType === 'Workflow'
                         ? {
-                              valuesPropertyName: mapName(undefined, 'camelCase', { suffix: `StepCodenames` }),
-                              codenamesTypeName: mapName(undefined, 'pascalCase', { suffix: `StepCodenames` }),
-                              typeguardFunctionName: mapName(undefined, 'pascalCase', { prefix: 'is', suffix: `StepCodename` })
+                              valuesPropertyName: mapName(nameResolver, 'camelCase', { suffix: `StepCodenames` }),
+                              codenamesTypeName: mapName(nameResolver, 'pascalCase', { suffix: `StepCodenames` }),
+                              typeguardFunctionName: mapName(nameResolver, 'pascalCase', { prefix: 'is', suffix: `StepCodename` })
                           }
                         : undefined,
                 allStepsNames:
@@ -148,6 +156,12 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(
                               valuesPropertyName: resolveCase('workflowStepCodenames', 'camelCase'),
                               codenamesTypeName: resolveCase('workflowStepCodenames', 'pascalCase'),
                               typeguardFunctionName: resolveCase('isWorkflowStepCodename', 'camelCase')
+                          }
+                        : undefined,
+                typeNames:
+                    config.entityType === 'Type'
+                        ? {
+                              contentItemTypeguardFunctionName: mapName(nameResolver, 'pascalCase', { prefix: 'is' })
                           }
                         : undefined
             };

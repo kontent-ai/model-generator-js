@@ -267,12 +267,18 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
                 ...importsResult.imports
             ],
             code: `
-${wrapComment(`
-* ${snippet.name}
-* 
-* Id: ${snippet.id}
-* Codename: ${snippet.codename}    
-`)}
+${wrapComment(snippet.name, {
+    lines: [
+        {
+            name: 'Id',
+            value: snippet.id
+        },
+        {
+            name: 'Codename',
+            value: snippet.codename
+        }
+    ]
+})}
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(snippet, flattenedElements)}>;
 
@@ -310,12 +316,18 @@ ${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
                 ...importsResult.imports
             ],
             code: `
-${wrapComment(`
-* ${contentType.name}
-* 
-* Id: ${contentType.id}
-* Codename: ${contentType.codename}    
-`)}
+${wrapComment(contentType.name, {
+    lines: [
+        {
+            name: 'Id',
+            value: contentType.id
+        },
+        {
+            name: 'Codename',
+            value: contentType.codename
+        }
+    ]
+})}
 export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
 ${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(contentType, flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
@@ -326,12 +338,18 @@ ${wrapComment(`
 `)}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
 
-${wrapComment(`
-* Type guard for ${contentType.name}
-*
-* Id: ${contentType.id}
-* Codename: ${contentType.codename}
-`)}
+${wrapComment(`Type guard for ${contentType.name}`, {
+    lines: [
+        {
+            name: 'Id',
+            value: contentType.id
+        },
+        {
+            name: 'Codename',
+            value: contentType.codename
+        }
+    ]
+})}
 ${getContentItemTypeGuardFunction(contentType)};
 
 ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
@@ -396,14 +414,30 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
                 }
 
                 return (code += `
-                ${wrapComment(`
-                * ${element.title}
-                * 
-                * Type: ${element.type}
-                * Required: ${element.isRequired ? 'true' : 'false'}
-                * Codename: ${element.codename}
-                * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                `)} 
+                ${wrapComment(element.title, {
+                    lines: [
+                        {
+                            name: 'Type',
+                            value: element.type
+                        },
+                        {
+                            name: 'Required',
+                            value: element.isRequired ? 'true' : 'false'
+                        },
+                        {
+                            name: 'Codename',
+                            value: element.codename
+                        },
+                        {
+                            name: 'Id',
+                            value: element.id
+                        },
+                        {
+                            name: 'Guidelines',
+                            value: element.guidelines ? toGuidelinesComment(element.guidelines) : undefined
+                        }
+                    ]
+                })}
                 readonly ${element.codename}: ${deliveryConfig.sdkTypes.elements}.${mappedType};`);
             }, '{') + '}'
         );
@@ -480,7 +514,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 
     const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
         const contentItemTypeName = contentTypeNames.getEntityName(contentType);
-        const typeGuardFunctionName = `is${contentItemTypeName}`;
+        const typeGuardFunctionName = contentTypeNames.typeNames.contentItemTypeguardFunctionName(contentType);
         const contentTypeCodename = contentTypeNames.getCodenameTypeName(contentType);
 
         return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${contentItemTypeName} {

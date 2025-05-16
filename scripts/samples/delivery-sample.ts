@@ -19,12 +19,18 @@ await runScriptAsync(async (config) => {
         fileResolvers: {
             contentType: undefined,
             snippet: undefined,
-            taxonomy: undefined
+            taxonomy: undefined,
+            collection: undefined,
+            language: undefined,
+            workflow: undefined
         },
         nameResolvers: {
             contentType: undefined,
             snippet: undefined,
-            taxonomy: undefined
+            taxonomy: undefined,
+            collection: undefined,
+            language: undefined,
+            workflow: undefined
         },
         formatOptions: undefined,
         managementBaseUrl: undefined
