@@ -8,17 +8,17 @@ import type { Snippet } from '@kontent-ai/delivery-sdk';
  * Codename: empty_snippet
  * Type: Snippet
  */
-export type EmptySnippetSnippetCodename = Extract<SnippetCodenames, 'empty_snippet'>;
+export type SnippetEmptySnippetSnippetCodename = Extract<SnippetCodenames, 'empty_snippet'>;
 
 /*
- * Type guard for Empty snippet
+ * Typeguard function for entity
  *
  * Name: Empty snippet
  * Codename: empty_snippet
  * Type: Snippet
  */
-export function isEmptySnippetSnippetCodename(value: string | undefined | null): value is EmptySnippetSnippetCodename {
-	return typeof value === 'string' && value === ('empty_snippet' satisfies EmptySnippetSnippetCodename);
+export function isSnippetEmptySnippetSnippetCodename(value: string | undefined | null): value is SnippetEmptySnippetSnippetCodename {
+	return typeof value === 'string' && value === ('empty_snippet' satisfies SnippetEmptySnippetSnippetCodename);
 }
 
 /*

@@ -13,7 +13,7 @@ import type { PageType } from './index.ts';
 export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, 'web_spotlight_root'>;
 
 /*
- * Type guard for Web spotlight root
+ * Typeguard function for entity
  *
  * Name: Web spotlight root
  * Codename: web_spotlight_root
@@ -74,6 +74,6 @@ export type WebSpotlightRootTypeElementCodenames = 'title' | 'subpages' | 'conte
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export function isWebSpotlightRootType(item: CoreType | undefined | null): item is WebSpotlightRootType {
+export function isWebSpotlightRoot(item: CoreType | undefined | null): item is WebSpotlightRootType {
 	return item?.system?.type === ('web_spotlight_root' satisfies WebSpotlightRootTypeCodename);
 }

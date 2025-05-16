@@ -12,7 +12,7 @@
     *
     * Type: Workflow
     */
-            export type WorkflowCodenames = typeof workflowCodenames[number];
+            export type WorkflowCodenames = typeof workflowCodenames[number];;
 
             /*
     * Typeguard for codename
@@ -35,7 +35,7 @@
     *
     * Type: Workflow
     */
-            export type WorkflowStepCodenames = typeof workflowStepCodenames[number];
+            export type WorkflowStepCodenames = typeof workflowStepCodenames[number];;
 
             /*
     * Typeguard for codename

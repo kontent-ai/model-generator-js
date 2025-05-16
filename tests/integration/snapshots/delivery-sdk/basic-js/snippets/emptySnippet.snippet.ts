@@ -11,7 +11,7 @@ import type { Snippet } from '@kontent-ai/delivery-sdk';
 export type EmptySnippetSnippetCodename = Extract<SnippetCodenames, 'empty_snippet'>;
 
 /*
- * Type guard for Empty snippet
+ * Typeguard function for entity
  *
  * Name: Empty snippet
  * Codename: empty_snippet

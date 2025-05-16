@@ -10,7 +10,7 @@ import type { LanguageCodenames } from './_languages.js';
 export type SpanishLanguageCodename = Extract<LanguageCodenames, 'es-ES'>;
 
 /*
- * Type guard for Spanish
+ * Typeguard function for entity
  *
  * Name: Spanish
  * Codename: es-ES

@@ -10,17 +10,17 @@ import type { CoreType } from '../system/index.js';
  * Codename: snippet_a
  * Type: Snippet
  */
-export type SnippetASnippetCodename = Extract<SnippetCodenames, 'snippet_a'>;
+export type SnippetSnippetASnippetCodename = Extract<SnippetCodenames, 'snippet_a'>;
 
 /*
- * Type guard for Snippet A
+ * Typeguard function for entity
  *
  * Name: Snippet A
  * Codename: snippet_a
  * Type: Snippet
  */
-export function isSnippetASnippetCodename(value: string | undefined | null): value is SnippetASnippetCodename {
-	return typeof value === 'string' && value === ('snippet_a' satisfies SnippetASnippetCodename);
+export function isSnippetSnippetASnippetCodename(value: string | undefined | null): value is SnippetSnippetASnippetCodename {
+	return typeof value === 'string' && value === ('snippet_a' satisfies SnippetSnippetASnippetCodename);
 }
 
 /*

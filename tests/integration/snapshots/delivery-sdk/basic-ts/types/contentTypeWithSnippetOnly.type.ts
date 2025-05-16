@@ -13,7 +13,7 @@ import type { SnippetASnippet } from '../snippets/index.ts';
 export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_snippet_only'>;
 
 /*
- * Type guard for Content type with snippet only
+ * Typeguard function for entity
  *
  * Name: Content type with snippet only
  * Codename: content_type_with_snippet_only
@@ -51,6 +51,6 @@ export type ContentTypeWithSnippetOnlyTypeElementCodenames =
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export function isContentTypeWithSnippetOnlyType(item: CoreType | undefined | null): item is ContentTypeWithSnippetOnlyType {
+export function isContentTypeWithSnippetOnly(item: CoreType | undefined | null): item is ContentTypeWithSnippetOnlyType {
 	return item?.system?.type === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
 }

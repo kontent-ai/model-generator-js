@@ -10,7 +10,7 @@ import type { LanguageCodenames } from './_languages.ts';
 export type LangLanguageCodename = Extract<LanguageCodenames, '🦉Lang'>;
 
 /*
- * Type guard for 🦉Lang
+ * Typeguard function for entity
  *
  * Name: 🦉Lang
  * Codename: 🦉Lang

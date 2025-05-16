@@ -12,7 +12,7 @@
     *
     * Type: Collection
     */
-            export type CollectionCodenames = typeof collectionCodenames[number];
+            export type CollectionCodenames = typeof collectionCodenames[number];;
 
             /*
     * Typeguard for codename

@@ -10,19 +10,22 @@ import type { SnippetSnippetASnippet } from '../snippets/index.js';
  * Codename: content_type_with_snippet_only
  * Type: Type
  */
-export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_snippet_only'>;
+export type ContentTypeContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_snippet_only'>;
 
 /*
- * Type guard for Content type with snippet only
+ * Typeguard function for entity
  *
  * Name: Content type with snippet only
  * Codename: content_type_with_snippet_only
  * Type: Type
  */
-export function isContentTypeWithSnippetOnlyTypeCodename(
+export function isContentTypeContentTypeWithSnippetOnlyTypeCodename(
 	value: string | undefined | null
-): value is ContentTypeWithSnippetOnlyTypeCodename {
-	return typeof value === 'string' && value === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
+): value is ContentTypeContentTypeWithSnippetOnlyTypeCodename {
+	return (
+		typeof value === 'string' &&
+		value === ('content_type_with_snippet_only' satisfies ContentTypeContentTypeWithSnippetOnlyTypeCodename)
+	);
 }
 
 /*
@@ -51,7 +54,7 @@ export type ContentTypeContentTypeWithSnippetOnlyTypeElementCodenames =
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export function isContentTypeContentTypeWithSnippetOnlyType(
+export function isContentTypeContentTypeWithSnippetOnly(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithSnippetOnlyType {
 	return item?.system?.type === ('content_type_with_snippet_only' satisfies ContentTypeContentTypeWithSnippetOnlyTypeCodename);

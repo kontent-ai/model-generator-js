@@ -9,17 +9,19 @@ import type { CoreType } from '../system/index.js';
  * Codename: type_with_empty_snippet
  * Type: Type
  */
-export type TypeWithEmptySnippetTypeCodename = Extract<TypeCodenames, 'type_with_empty_snippet'>;
+export type ContentTypeTypeWithEmptySnippetTypeCodename = Extract<TypeCodenames, 'type_with_empty_snippet'>;
 
 /*
- * Type guard for Type with empty snippet
+ * Typeguard function for entity
  *
  * Name: Type with empty snippet
  * Codename: type_with_empty_snippet
  * Type: Type
  */
-export function isTypeWithEmptySnippetTypeCodename(value: string | undefined | null): value is TypeWithEmptySnippetTypeCodename {
-	return typeof value === 'string' && value === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetTypeCodename);
+export function isContentTypeTypeWithEmptySnippetTypeCodename(
+	value: string | undefined | null
+): value is ContentTypeTypeWithEmptySnippetTypeCodename {
+	return typeof value === 'string' && value === ('type_with_empty_snippet' satisfies ContentTypeTypeWithEmptySnippetTypeCodename);
 }
 
 /*
@@ -45,6 +47,6 @@ export type ContentTypeTypeWithEmptySnippetTypeElementCodenames = never;
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export function isContentTypeTypeWithEmptySnippetType(item: CoreType | undefined | null): item is ContentTypeTypeWithEmptySnippetType {
+export function isContentTypeTypeWithEmptySnippet(item: CoreType | undefined | null): item is ContentTypeTypeWithEmptySnippetType {
 	return item?.system?.type === ('type_with_empty_snippet' satisfies ContentTypeTypeWithEmptySnippetTypeCodename);
 }

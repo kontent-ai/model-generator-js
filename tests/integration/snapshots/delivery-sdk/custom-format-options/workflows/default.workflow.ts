@@ -1,23 +1,22 @@
 
             import type { WorkflowCodenames } from './_workflows.js';
            
-    
             /*
-                * Type representing codename of entity
-                * 
-                * Name: Default
-        * Codename: default
-        * Type: Workflow
-                */
+    * Type representing codename of entity
+    *
+    * Name: Default
+* Codename: default
+* Type: Workflow
+    */
             export type DefaultWorkflowCodename = Extract<WorkflowCodenames, 'default'>;
 
             /*
-                * Type guard for Default
-                * 
-                * Name: Default
-        * Codename: default
-        * Type: Workflow
-            */
+    * Typeguard function for entity
+    *
+    * Name: Default
+* Codename: default
+* Type: Workflow
+    */
             export function isDefaultWorkflowCodename(value: string | undefined | null): value is DefaultWorkflowCodename {
                 return typeof value === 'string' && value === ('default' satisfies DefaultWorkflowCodename);
             }
@@ -36,7 +35,7 @@
     * Name: Default
 * Type: Workflow step
     */
-            export type DefaultStepCodenames = typeof defaultStepCodenames[number];
+            export type DefaultStepCodenames = typeof defaultStepCodenames[number];;
 
             /*
     * Typeguard for codename
@@ -47,5 +46,4 @@
             export function isDefaultStepCodename(value: string | undefined | null): value is DefaultStepCodenames {
                 return typeof value === 'string' && (defaultStepCodenames as readonly string[]).includes(value);
             };
-            
             

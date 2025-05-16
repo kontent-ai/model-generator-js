@@ -14,7 +14,7 @@ import type { TaxonomyATermCodenames, TaxonomyATaxonomyCodename } from '../taxon
 export type ContentTypeWithAllElementsTypeCodename = Extract<TypeCodenames, 'content_type_with_all_elements'>;
 
 /*
- * Type guard for Content type with all elements
+ * Typeguard function for entity
  *
  * Name: Content type with all elements
  * Codename: content_type_with_all_elements
@@ -154,7 +154,7 @@ export type ContentTypeWithAllElementsTypeElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeWithAllElementsType(item: CoreType | undefined | null): item is ContentTypeWithAllElementsType {
+export function isContentTypeWithAllElements(item: CoreType | undefined | null): item is ContentTypeWithAllElementsType {
 	return item?.system?.type === ('content_type_with_all_elements' satisfies ContentTypeWithAllElementsTypeCodename);
 }
 

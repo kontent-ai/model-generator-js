@@ -1,3 +1,3 @@
 export * from './_snippets.js';
-export * from './emptySnippet.snippet.js';
-export * from './snippetA.snippet.js';
+export * from './snippetEmptySnippet.snippet.js';
+export * from './snippetSnippetA.snippet.js';

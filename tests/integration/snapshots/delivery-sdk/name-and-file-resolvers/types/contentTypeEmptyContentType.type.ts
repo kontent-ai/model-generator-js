@@ -9,17 +9,19 @@ import type { CoreType } from '../system/index.js';
  * Codename: empty_content_type
  * Type: Type
  */
-export type EmptyContentTypeTypeCodename = Extract<TypeCodenames, 'empty_content_type'>;
+export type ContentTypeEmptyContentTypeTypeCodename = Extract<TypeCodenames, 'empty_content_type'>;
 
 /*
- * Type guard for Empty content type
+ * Typeguard function for entity
  *
  * Name: Empty content type
  * Codename: empty_content_type
  * Type: Type
  */
-export function isEmptyContentTypeTypeCodename(value: string | undefined | null): value is EmptyContentTypeTypeCodename {
-	return typeof value === 'string' && value === ('empty_content_type' satisfies EmptyContentTypeTypeCodename);
+export function isContentTypeEmptyContentTypeTypeCodename(
+	value: string | undefined | null
+): value is ContentTypeEmptyContentTypeTypeCodename {
+	return typeof value === 'string' && value === ('empty_content_type' satisfies ContentTypeEmptyContentTypeTypeCodename);
 }
 
 /*
@@ -45,6 +47,6 @@ export type ContentTypeEmptyContentTypeTypeElementCodenames = never;
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export function isContentTypeEmptyContentTypeType(item: CoreType | undefined | null): item is ContentTypeEmptyContentTypeType {
+export function isContentTypeEmptyContentType(item: CoreType | undefined | null): item is ContentTypeEmptyContentTypeType {
 	return item?.system?.type === ('empty_content_type' satisfies ContentTypeEmptyContentTypeTypeCodename);
 }

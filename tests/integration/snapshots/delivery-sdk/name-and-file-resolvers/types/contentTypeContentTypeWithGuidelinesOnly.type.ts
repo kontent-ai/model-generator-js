@@ -9,19 +9,22 @@ import type { CoreType } from '../system/index.js';
  * Codename: content_type_with_guidelines_only
  * Type: Type
  */
-export type ContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
+export type ContentTypeContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
 
 /*
- * Type guard for Content type with guidelines only
+ * Typeguard function for entity
  *
  * Name: Content type with guidelines only
  * Codename: content_type_with_guidelines_only
  * Type: Type
  */
-export function isContentTypeWithGuidelinesOnlyTypeCodename(
+export function isContentTypeContentTypeWithGuidelinesOnlyTypeCodename(
 	value: string | undefined | null
-): value is ContentTypeWithGuidelinesOnlyTypeCodename {
-	return typeof value === 'string' && value === ('content_type_with_guidelines_only' satisfies ContentTypeWithGuidelinesOnlyTypeCodename);
+): value is ContentTypeContentTypeWithGuidelinesOnlyTypeCodename {
+	return (
+		typeof value === 'string' &&
+		value === ('content_type_with_guidelines_only' satisfies ContentTypeContentTypeWithGuidelinesOnlyTypeCodename)
+	);
 }
 
 /*
@@ -47,7 +50,7 @@ export type ContentTypeContentTypeWithGuidelinesOnlyTypeElementCodenames = never
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export function isContentTypeContentTypeWithGuidelinesOnlyType(
+export function isContentTypeContentTypeWithGuidelinesOnly(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithGuidelinesOnlyType {
 	return item?.system?.type === ('content_type_with_guidelines_only' satisfies ContentTypeContentTypeWithGuidelinesOnlyTypeCodename);

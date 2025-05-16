@@ -10,7 +10,7 @@ import type { WorkflowCodenames } from './_workflows.js';
 export type DefaultWorkflowCodename = Extract<WorkflowCodenames, 'default'>;
 
 /*
- * Type guard for Default
+ * Typeguard function for entity
  *
  * Name: Default
  * Codename: default

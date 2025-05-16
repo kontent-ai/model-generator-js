@@ -2,7 +2,7 @@ import type { TypeCodenames } from './_types.js';
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
 import type { SnippetSnippetASnippet } from '../snippets/index.js';
-import type { TaxonomyATermCodenames, TaxonomyTaxonomyATaxonomyCodename } from '../taxonomies/index.js';
+import type { TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyATaxonomyCodename } from '../taxonomies/index.js';
 
 /*
  * Type representing codename of entity
@@ -11,19 +11,22 @@ import type { TaxonomyATermCodenames, TaxonomyTaxonomyATaxonomyCodename } from '
  * Codename: content_type_with_all_elements
  * Type: Type
  */
-export type ContentTypeWithAllElementsTypeCodename = Extract<TypeCodenames, 'content_type_with_all_elements'>;
+export type ContentTypeContentTypeWithAllElementsTypeCodename = Extract<TypeCodenames, 'content_type_with_all_elements'>;
 
 /*
- * Type guard for Content type with all elements
+ * Typeguard function for entity
  *
  * Name: Content type with all elements
  * Codename: content_type_with_all_elements
  * Type: Type
  */
-export function isContentTypeWithAllElementsTypeCodename(
+export function isContentTypeContentTypeWithAllElementsTypeCodename(
 	value: string | undefined | null
-): value is ContentTypeWithAllElementsTypeCodename {
-	return typeof value === 'string' && value === ('content_type_with_all_elements' satisfies ContentTypeWithAllElementsTypeCodename);
+): value is ContentTypeContentTypeWithAllElementsTypeCodename {
+	return (
+		typeof value === 'string' &&
+		value === ('content_type_with_all_elements' satisfies ContentTypeContentTypeWithAllElementsTypeCodename)
+	);
 }
 
 /*
@@ -125,7 +128,7 @@ export type ContentTypeContentTypeWithAllElementsType = CoreType<
 		 * Codename: taxonomy_element
 		 * Id: 6073dec8-2489-479f-9916-abc055126e59
 		 */
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATermCodenames, TaxonomyTaxonomyATaxonomyCodename>;
+		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyATaxonomyCodename>;
 	} & SnippetSnippetASnippet,
 	ContentTypeContentTypeWithAllElementsTypeCodename
 >;
@@ -154,7 +157,7 @@ export type ContentTypeContentTypeWithAllElementsTypeElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeContentTypeWithAllElementsType(
+export function isContentTypeContentTypeWithAllElements(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithAllElementsType {
 	return item?.system?.type === ('content_type_with_all_elements' satisfies ContentTypeContentTypeWithAllElementsTypeCodename);

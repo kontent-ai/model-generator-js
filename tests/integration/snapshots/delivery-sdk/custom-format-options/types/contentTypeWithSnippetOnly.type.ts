@@ -4,33 +4,32 @@
 import type { CoreType } from '../system/index.js';
 import type { SnippetASnippet } from '../snippets/index.js';
            
-    
             /*
-                * Type representing codename of entity
-                * 
-                * Name: Content type with snippet only
-        * Codename: content_type_with_snippet_only
-        * Type: Type
-                */
+    * Type representing codename of entity
+    *
+    * Name: Content type with snippet only
+* Codename: content_type_with_snippet_only
+* Type: Type
+    */
             export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_snippet_only'>;
 
             /*
-                * Type guard for Content type with snippet only
-                * 
-                * Name: Content type with snippet only
-        * Codename: content_type_with_snippet_only
-        * Type: Type
-            */
+    * Typeguard function for entity
+    *
+    * Name: Content type with snippet only
+* Codename: content_type_with_snippet_only
+* Type: Type
+    */
             export function isContentTypeWithSnippetOnlyTypeCodename(value: string | undefined | null): value is ContentTypeWithSnippetOnlyTypeCodename {
                 return typeof value === 'string' && value === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
             }
 
 /*
-* Content type with snippet only
-* 
-* Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
-* Codename: content_type_with_snippet_only    
-*/
+    * Content type with snippet only
+    *
+    * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
+* Codename: content_type_with_snippet_only
+    */
 export type ContentTypeWithSnippetOnlyType = CoreType<
 ContentTypeWithSnippetOnlyTypeElementCodenames,
 Record<string, never> & SnippetASnippet, 
@@ -42,16 +41,15 @@ ContentTypeWithSnippetOnlyTypeCodename>
 export type ContentTypeWithSnippetOnlyTypeElementCodenames = 'snippet_a__rich_text_with_all_allowed_item_types' | 'snippet_a__linked_items_with_specific_types' | 'snippet_a__text';;
 
 /*
-* Type guard for Content type with snippet only
-*
-* Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
+    * Type guard for Content type with snippet only
+    *
+    * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
 * Codename: content_type_with_snippet_only
-*/
-export function isContentTypeWithSnippetOnlyType(item: CoreType | undefined | null): item is ContentTypeWithSnippetOnlyType {
+    */
+export function isContentTypeWithSnippetOnly(item: CoreType | undefined | null): item is ContentTypeWithSnippetOnlyType {
                 return item?.system?.type === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
             };
 
 
 
-            
             

@@ -1,23 +1,22 @@
 
             import type { TaxonomyCodenames } from './_taxonomies.js';
            
-    
             /*
-                * Type representing codename of entity
-                * 
-                * Name: Taxonomy A
-        * Codename: taxonomy_a
-        * Type: Taxonomy
-                */
+    * Type representing codename of entity
+    *
+    * Name: Taxonomy A
+* Codename: taxonomy_a
+* Type: Taxonomy
+    */
             export type TaxonomyATaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_a'>;
 
             /*
-                * Type guard for Taxonomy A
-                * 
-                * Name: Taxonomy A
-        * Codename: taxonomy_a
-        * Type: Taxonomy
-            */
+    * Typeguard function for entity
+    *
+    * Name: Taxonomy A
+* Codename: taxonomy_a
+* Type: Taxonomy
+    */
             export function isTaxonomyATaxonomyCodename(value: string | undefined | null): value is TaxonomyATaxonomyCodename {
                 return typeof value === 'string' && value === ('taxonomy_a' satisfies TaxonomyATaxonomyCodename);
             }
@@ -36,7 +35,7 @@
     * Name: Taxonomy A
 * Type: Taxonomy term
     */
-            export type TaxonomyATermCodenames = typeof taxonomyATermCodenames[number];
+            export type TaxonomyATermCodenames = typeof taxonomyATermCodenames[number];;
 
             /*
     * Typeguard for codename
@@ -47,5 +46,4 @@
             export function isTaxonomyATermCodename(value: string | undefined | null): value is TaxonomyATermCodenames {
                 return typeof value === 'string' && (taxonomyATermCodenames as readonly string[]).includes(value);
             };
-            
             

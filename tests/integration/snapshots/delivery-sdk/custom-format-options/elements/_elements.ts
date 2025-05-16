@@ -12,7 +12,7 @@
     *
     * Type: Element
     */
-            export type ElementCodenames = typeof elementCodenames[number];
+            export type ElementCodenames = typeof elementCodenames[number];;
 
             /*
     * Typeguard for codename

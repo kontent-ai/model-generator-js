@@ -10,7 +10,7 @@ import type { WorkflowCodenames } from './_workflows.ts';
 export type AdvancedWorkflowWorkflowCodename = Extract<WorkflowCodenames, 'advanced_workflow'>;
 
 /*
- * Type guard for Advanced workflow
+ * Typeguard function for entity
  *
  * Name: Advanced workflow
  * Codename: advanced_workflow

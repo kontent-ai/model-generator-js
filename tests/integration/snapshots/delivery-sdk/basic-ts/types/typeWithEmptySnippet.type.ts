@@ -12,7 +12,7 @@ import type { CoreType } from '../system/index.ts';
 export type TypeWithEmptySnippetTypeCodename = Extract<TypeCodenames, 'type_with_empty_snippet'>;
 
 /*
- * Type guard for Type with empty snippet
+ * Typeguard function for entity
  *
  * Name: Type with empty snippet
  * Codename: type_with_empty_snippet
@@ -45,6 +45,6 @@ export type TypeWithEmptySnippetTypeElementCodenames = never;
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export function isTypeWithEmptySnippetType(item: CoreType | undefined | null): item is TypeWithEmptySnippetType {
+export function isTypeWithEmptySnippet(item: CoreType | undefined | null): item is TypeWithEmptySnippetType {
 	return item?.system?.type === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetTypeCodename);
 }

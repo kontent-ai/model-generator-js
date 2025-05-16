@@ -12,7 +12,7 @@ import type { CoreType } from '../system/index.ts';
 export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_content_type_with_special_chars____'>;
 
 /*
- * Type guard for 🐧 Content type with special chars #!_'
+ * Typeguard function for entity
  *
  * Name: 🐧 Content type with special chars #!_'
  * Codename: _content_type_with_special_chars____
@@ -68,6 +68,6 @@ export type ContentTypeWithSpecialCharsTypeElementCodenames = 'parrot__' | '____
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export function isContentTypeWithSpecialCharsType(item: CoreType | undefined | null): item is ContentTypeWithSpecialCharsType {
+export function isContentTypeWithSpecialChars(item: CoreType | undefined | null): item is ContentTypeWithSpecialCharsType {
 	return item?.system?.type === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename);
 }

@@ -12,7 +12,7 @@
     *
     * Type: Snippet
     */
-            export type SnippetCodenames = typeof snippetCodenames[number];
+            export type SnippetCodenames = typeof snippetCodenames[number];;
 
             /*
     * Typeguard for codename

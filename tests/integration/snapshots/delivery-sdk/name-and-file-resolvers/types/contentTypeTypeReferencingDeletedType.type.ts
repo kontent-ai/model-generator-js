@@ -9,19 +9,21 @@ import type { CoreType } from '../system/index.js';
  * Codename: type_referencing_deleted_type
  * Type: Type
  */
-export type TypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, 'type_referencing_deleted_type'>;
+export type ContentTypeTypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, 'type_referencing_deleted_type'>;
 
 /*
- * Type guard for Type referencing deleted type
+ * Typeguard function for entity
  *
  * Name: Type referencing deleted type
  * Codename: type_referencing_deleted_type
  * Type: Type
  */
-export function isTypeReferencingDeletedTypeTypeCodename(
+export function isContentTypeTypeReferencingDeletedTypeTypeCodename(
 	value: string | undefined | null
-): value is TypeReferencingDeletedTypeTypeCodename {
-	return typeof value === 'string' && value === ('type_referencing_deleted_type' satisfies TypeReferencingDeletedTypeTypeCodename);
+): value is ContentTypeTypeReferencingDeletedTypeTypeCodename {
+	return (
+		typeof value === 'string' && value === ('type_referencing_deleted_type' satisfies ContentTypeTypeReferencingDeletedTypeTypeCodename)
+	);
 }
 
 /*
@@ -66,7 +68,7 @@ export type ContentTypeTypeReferencingDeletedTypeTypeElementCodenames = 'rich_te
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  * Codename: type_referencing_deleted_type
  */
-export function isContentTypeTypeReferencingDeletedTypeType(
+export function isContentTypeTypeReferencingDeletedType(
 	item: CoreType | undefined | null
 ): item is ContentTypeTypeReferencingDeletedTypeType {
 	return item?.system?.type === ('type_referencing_deleted_type' satisfies ContentTypeTypeReferencingDeletedTypeTypeCodename);

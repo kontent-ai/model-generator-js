@@ -13,7 +13,7 @@ import type { CoreType } from '../system/index.ts';
 export type CircularReferenceTypeBATypeCodename = Extract<TypeCodenames, 'circular_reference_type_b____a'>;
 
 /*
- * Type guard for Circular reference type B -> A
+ * Typeguard function for entity
  *
  * Name: Circular reference type B -> A
  * Codename: circular_reference_type_b____a
@@ -56,6 +56,6 @@ export type CircularReferenceTypeBATypeElementCodenames = 'items';
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export function isCircularReferenceTypeBAType(item: CoreType | undefined | null): item is CircularReferenceTypeBAType {
+export function isCircularReferenceTypeBA(item: CoreType | undefined | null): item is CircularReferenceTypeBAType {
 	return item?.system?.type === ('circular_reference_type_b____a' satisfies CircularReferenceTypeBATypeCodename);
 }

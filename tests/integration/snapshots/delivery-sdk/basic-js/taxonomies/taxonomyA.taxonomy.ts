@@ -10,7 +10,7 @@ import type { TaxonomyCodenames } from './_taxonomies.js';
 export type TaxonomyATaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_a'>;
 
 /*
- * Type guard for Taxonomy A
+ * Typeguard function for entity
  *
  * Name: Taxonomy A
  * Codename: taxonomy_a

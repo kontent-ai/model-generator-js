@@ -9,20 +9,21 @@ import type { CoreType } from '../system/index.js';
  * Codename: _content_type_with_special_chars____
  * Type: Type
  */
-export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_content_type_with_special_chars____'>;
+export type ContentTypeContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_content_type_with_special_chars____'>;
 
 /*
- * Type guard for 🐧 Content type with special chars #!_'
+ * Typeguard function for entity
  *
  * Name: 🐧 Content type with special chars #!_'
  * Codename: _content_type_with_special_chars____
  * Type: Type
  */
-export function isContentTypeWithSpecialCharsTypeCodename(
+export function isContentTypeContentTypeWithSpecialCharsTypeCodename(
 	value: string | undefined | null
-): value is ContentTypeWithSpecialCharsTypeCodename {
+): value is ContentTypeContentTypeWithSpecialCharsTypeCodename {
 	return (
-		typeof value === 'string' && value === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename)
+		typeof value === 'string' &&
+		value === ('_content_type_with_special_chars____' satisfies ContentTypeContentTypeWithSpecialCharsTypeCodename)
 	);
 }
 
@@ -68,7 +69,7 @@ export type ContentTypeContentTypeWithSpecialCharsTypeElementCodenames = 'parrot
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export function isContentTypeContentTypeWithSpecialCharsType(
+export function isContentTypeContentTypeWithSpecialChars(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithSpecialCharsType {
 	return item?.system?.type === ('_content_type_with_special_chars____' satisfies ContentTypeContentTypeWithSpecialCharsTypeCodename);

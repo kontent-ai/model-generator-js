@@ -10,7 +10,7 @@ import type { LanguageCodenames } from './_languages.ts';
 export type EnglishLanguageCodename = Extract<LanguageCodenames, 'en-US'>;
 
 /*
- * Type guard for English
+ * Typeguard function for entity
  *
  * Name: English
  * Codename: en-US

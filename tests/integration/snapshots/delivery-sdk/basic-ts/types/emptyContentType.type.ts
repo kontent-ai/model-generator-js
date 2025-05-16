@@ -12,7 +12,7 @@ import type { CoreType } from '../system/index.ts';
 export type EmptyContentTypeTypeCodename = Extract<TypeCodenames, 'empty_content_type'>;
 
 /*
- * Type guard for Empty content type
+ * Typeguard function for entity
  *
  * Name: Empty content type
  * Codename: empty_content_type
@@ -41,6 +41,6 @@ export type EmptyContentTypeTypeElementCodenames = never;
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export function isEmptyContentTypeType(item: CoreType | undefined | null): item is EmptyContentTypeType {
+export function isEmptyContentType(item: CoreType | undefined | null): item is EmptyContentTypeType {
 	return item?.system?.type === ('empty_content_type' satisfies EmptyContentTypeTypeCodename);
 }

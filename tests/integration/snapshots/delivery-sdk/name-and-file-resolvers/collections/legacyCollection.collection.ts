@@ -10,7 +10,7 @@ import type { CollectionCodenames } from './_collections.js';
 export type LegacyCollectionCollectionCodename = Extract<CollectionCodenames, 'legacy_collection'>;
 
 /*
- * Type guard for Legacy collection
+ * Typeguard function for entity
  *
  * Name: Legacy collection
  * Codename: legacy_collection

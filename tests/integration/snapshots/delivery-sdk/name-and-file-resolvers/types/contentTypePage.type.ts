@@ -9,17 +9,17 @@ import type { CoreType } from '../system/index.js';
  * Codename: page
  * Type: Type
  */
-export type PageTypeCodename = Extract<TypeCodenames, 'page'>;
+export type ContentTypePageTypeCodename = Extract<TypeCodenames, 'page'>;
 
 /*
- * Type guard for Page
+ * Typeguard function for entity
  *
  * Name: Page
  * Codename: page
  * Type: Type
  */
-export function isPageTypeCodename(value: string | undefined | null): value is PageTypeCodename {
-	return typeof value === 'string' && value === ('page' satisfies PageTypeCodename);
+export function isContentTypePageTypeCodename(value: string | undefined | null): value is ContentTypePageTypeCodename {
+	return typeof value === 'string' && value === ('page' satisfies ContentTypePageTypeCodename);
 }
 
 /*
@@ -91,7 +91,7 @@ export type ContentTypePageTypeElementCodenames = 'title' | 'url' | 'show_in_nav
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isContentTypePageType(item: CoreType | undefined | null): item is ContentTypePageType {
+export function isContentTypePage(item: CoreType | undefined | null): item is ContentTypePageType {
 	return item?.system?.type === ('page' satisfies ContentTypePageTypeCodename);
 }
 

@@ -12,7 +12,7 @@
     *
     * Type: Taxonomy
     */
-            export type TaxonomyCodenames = typeof taxonomyCodenames[number];
+            export type TaxonomyCodenames = typeof taxonomyCodenames[number];;
 
             /*
     * Typeguard for codename

@@ -10,17 +10,19 @@ import type { CoreType } from '../system/index.js';
  * Codename: web_spotlight_root
  * Type: Type
  */
-export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, 'web_spotlight_root'>;
+export type ContentTypeWebSpotlightRootTypeCodename = Extract<TypeCodenames, 'web_spotlight_root'>;
 
 /*
- * Type guard for Web spotlight root
+ * Typeguard function for entity
  *
  * Name: Web spotlight root
  * Codename: web_spotlight_root
  * Type: Type
  */
-export function isWebSpotlightRootTypeCodename(value: string | undefined | null): value is WebSpotlightRootTypeCodename {
-	return typeof value === 'string' && value === ('web_spotlight_root' satisfies WebSpotlightRootTypeCodename);
+export function isContentTypeWebSpotlightRootTypeCodename(
+	value: string | undefined | null
+): value is ContentTypeWebSpotlightRootTypeCodename {
+	return typeof value === 'string' && value === ('web_spotlight_root' satisfies ContentTypeWebSpotlightRootTypeCodename);
 }
 
 /*
@@ -74,6 +76,6 @@ export type ContentTypeWebSpotlightRootTypeElementCodenames = 'title' | 'subpage
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export function isContentTypeWebSpotlightRootType(item: CoreType | undefined | null): item is ContentTypeWebSpotlightRootType {
+export function isContentTypeWebSpotlightRoot(item: CoreType | undefined | null): item is ContentTypeWebSpotlightRootType {
 	return item?.system?.type === ('web_spotlight_root' satisfies ContentTypeWebSpotlightRootTypeCodename);
 }

@@ -10,17 +10,19 @@ import type { CoreType } from '../system/index.js';
  * Codename: circular_reference_type_a_b
  * Type: Type
  */
-export type CircularReferenceTypeABTypeCodename = Extract<TypeCodenames, 'circular_reference_type_a_b'>;
+export type ContentTypeCircularReferenceTypeABTypeCodename = Extract<TypeCodenames, 'circular_reference_type_a_b'>;
 
 /*
- * Type guard for Circular reference type A > B
+ * Typeguard function for entity
  *
  * Name: Circular reference type A > B
  * Codename: circular_reference_type_a_b
  * Type: Type
  */
-export function isCircularReferenceTypeABTypeCodename(value: string | undefined | null): value is CircularReferenceTypeABTypeCodename {
-	return typeof value === 'string' && value === ('circular_reference_type_a_b' satisfies CircularReferenceTypeABTypeCodename);
+export function isContentTypeCircularReferenceTypeABTypeCodename(
+	value: string | undefined | null
+): value is ContentTypeCircularReferenceTypeABTypeCodename {
+	return typeof value === 'string' && value === ('circular_reference_type_a_b' satisfies ContentTypeCircularReferenceTypeABTypeCodename);
 }
 
 /*
@@ -56,8 +58,6 @@ export type ContentTypeCircularReferenceTypeABTypeElementCodenames = 'items';
  * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
  * Codename: circular_reference_type_a_b
  */
-export function isContentTypeCircularReferenceTypeABType(
-	item: CoreType | undefined | null
-): item is ContentTypeCircularReferenceTypeABType {
+export function isContentTypeCircularReferenceTypeAB(item: CoreType | undefined | null): item is ContentTypeCircularReferenceTypeABType {
 	return item?.system?.type === ('circular_reference_type_a_b' satisfies ContentTypeCircularReferenceTypeABTypeCodename);
 }

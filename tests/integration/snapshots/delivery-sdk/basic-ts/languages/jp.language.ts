@@ -10,7 +10,7 @@ import type { LanguageCodenames } from './_languages.ts';
 export type JpLanguageCodename = Extract<LanguageCodenames, '__jp'>;
 
 /*
- * Type guard for __jp
+ * Typeguard function for entity
  *
  * Name: __jp
  * Codename: __jp

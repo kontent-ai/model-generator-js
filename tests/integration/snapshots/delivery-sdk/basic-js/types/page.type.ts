@@ -12,7 +12,7 @@ import type { CoreType } from '../system/index.js';
 export type PageTypeCodename = Extract<TypeCodenames, 'page'>;
 
 /*
- * Type guard for Page
+ * Typeguard function for entity
  *
  * Name: Page
  * Codename: page
@@ -91,7 +91,7 @@ export type PageTypeElementCodenames = 'title' | 'url' | 'show_in_navigation' | 
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isPageType(item: CoreType | undefined | null): item is PageType {
+export function isPage(item: CoreType | undefined | null): item is PageType {
 	return item?.system?.type === ('page' satisfies PageTypeCodename);
 }
 

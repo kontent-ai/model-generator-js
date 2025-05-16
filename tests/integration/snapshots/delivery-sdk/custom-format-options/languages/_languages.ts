@@ -12,7 +12,7 @@
     *
     * Type: Language
     */
-            export type LanguageCodenames = typeof languageCodenames[number];
+            export type LanguageCodenames = typeof languageCodenames[number];;
 
             /*
     * Typeguard for codename

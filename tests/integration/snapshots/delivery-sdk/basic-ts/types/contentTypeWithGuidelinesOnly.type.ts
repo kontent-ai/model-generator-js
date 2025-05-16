@@ -12,7 +12,7 @@ import type { CoreType } from '../system/index.ts';
 export type ContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
 
 /*
- * Type guard for Content type with guidelines only
+ * Typeguard function for entity
  *
  * Name: Content type with guidelines only
  * Codename: content_type_with_guidelines_only
@@ -47,6 +47,6 @@ export type ContentTypeWithGuidelinesOnlyTypeElementCodenames = never;
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export function isContentTypeWithGuidelinesOnlyType(item: CoreType | undefined | null): item is ContentTypeWithGuidelinesOnlyType {
+export function isContentTypeWithGuidelinesOnly(item: CoreType | undefined | null): item is ContentTypeWithGuidelinesOnlyType {
 	return item?.system?.type === ('content_type_with_guidelines_only' satisfies ContentTypeWithGuidelinesOnlyTypeCodename);
 }

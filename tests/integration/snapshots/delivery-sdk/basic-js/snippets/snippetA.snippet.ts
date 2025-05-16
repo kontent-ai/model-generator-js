@@ -13,7 +13,7 @@ import type { CoreType } from '../system/index.js';
 export type SnippetASnippetCodename = Extract<SnippetCodenames, 'snippet_a'>;
 
 /*
- * Type guard for Snippet A
+ * Typeguard function for entity
  *
  * Name: Snippet A
  * Codename: snippet_a
