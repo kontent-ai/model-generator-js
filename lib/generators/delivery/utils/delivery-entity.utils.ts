@@ -42,7 +42,6 @@ function getPluralName(entityType: DeliveryEntityType): string {
 }
 
 function getCodeOfDeliveryEntity({
-    entityName,
     extendedType,
     codenames,
     names
@@ -53,7 +52,6 @@ function getCodeOfDeliveryEntity({
         readonly typeGuardFunctionName: string;
     };
     readonly subtype?: 'Term' | 'Step';
-    readonly entityName: string | undefined;
     readonly extendedType: DeliveryEntityType | 'Workflow step' | 'Taxonomy term';
     readonly codenames: readonly string[];
 }): string {
@@ -75,26 +73,19 @@ function getCodeOfDeliveryEntity({
 
     const getComment = (title: string): string => {
         return wrapComment(title, {
-            lines: [
-                {
-                    name: 'Name',
-                    value: entityName
-                },
-                {
-                    name: 'Type',
-                    value: extendedType
-                }
-            ]
+            lines: []
         });
     };
 
+    const getEntityTypeNameForComments = (): string => `${extendedType.toLowerCase()}`;
+
     return `
-            ${getComment('Array of all codenames')}
+            ${getComment(`Array of all ${getEntityTypeNameForComments()} codenames`)}
             ${getValuesCode()};
            
-            ${getComment('Type representing all codenames')}
+            ${getComment(`Type representing all ${getEntityTypeNameForComments()} codenames`)}
             ${getCodenamesTypeCode()};
 
-            ${getComment('Typeguard for codename')}
+            ${getComment(`Typeguard for ${getEntityTypeNameForComments()} codename`)}
             ${getCodenameTypeguardFunctionCode()};`;
 }

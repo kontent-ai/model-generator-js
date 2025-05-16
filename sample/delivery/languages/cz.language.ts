@@ -15,20 +15,12 @@
 import type { LanguageCodenames } from './_languages.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: cz
- * Codename: cz
- * Type: Language
+ * Type representing codename of 'cz' language
  */
 export type CzLanguageCodename = Extract<LanguageCodenames, 'cz'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: cz
- * Codename: cz
- * Type: Language
+ * Typeguard for codename of 'cz' language
  */
 export function isCzLanguageCodename(value: string | undefined | null): value is CzLanguageCodename {
 	return typeof value === 'string' && value === ('cz' satisfies CzLanguageCodename);

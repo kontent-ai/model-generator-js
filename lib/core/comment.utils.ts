@@ -7,10 +7,10 @@ export type CommentLine = {
 };
 
 export function wrapComment(comment: string, options?: { readonly lines?: readonly CommentLine[] }): string {
-    const nonEmptyLines = options?.lines?.filter((m) => m.value);
+    const nonEmptyLines = options?.lines?.filter((m) => m.value) ?? [];
 
-    if (!nonEmptyLines) {
-        return `/*${toSafeComment(comment)}*/`;
+    if (!nonEmptyLines.length) {
+        return `/*\n* ${toSafeComment(comment)}\n*/`;
     }
 
     return `/*

@@ -13,23 +13,17 @@
  */
 
 /*
- * Array of all codenames
- *
- * Type: Type
+ * Array of all type codenames
  */
 export const typeCodenames = ['actor', 'movie'] as const;
 
 /*
- * Type representing all codenames
- *
- * Type: Type
+ * Type representing all type codenames
  */
 export type TypeCodenames = (typeof typeCodenames)[number];
 
 /*
- * Typeguard for codename
- *
- * Type: Type
+ * Typeguard for type codename
  */
 export function isTypeCodename(value: string | undefined | null): value is TypeCodenames {
 	return typeof value === 'string' && (typeCodenames as readonly string[]).includes(value);

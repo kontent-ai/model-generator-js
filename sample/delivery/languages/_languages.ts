@@ -13,23 +13,17 @@
  */
 
 /*
- * Array of all codenames
- *
- * Type: Language
+ * Array of all language codenames
  */
 export const languageCodenames = ['en', 'cz', 'German'] as const;
 
 /*
- * Type representing all codenames
- *
- * Type: Language
+ * Type representing all language codenames
  */
 export type LanguageCodenames = (typeof languageCodenames)[number];
 
 /*
- * Typeguard for codename
- *
- * Type: Language
+ * Typeguard for language codename
  */
 export function isLanguageCodename(value: string | undefined | null): value is LanguageCodenames {
 	return typeof value === 'string' && (languageCodenames as readonly string[]).includes(value);

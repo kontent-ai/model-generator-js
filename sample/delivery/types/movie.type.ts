@@ -19,20 +19,12 @@ import type { CoreType } from '../system/index.js';
 import type { ReleaseCategoryTermCodenames, ReleaseCategoryTaxonomyCodename } from '../taxonomies/index.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Movie
- * Codename: movie
- * Type: Type
+ * Type representing codename of 'Movie' type
  */
 export type MovieTypeCodename = Extract<TypeCodenames, 'movie'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Movie
- * Codename: movie
- * Type: Type
+ * Typeguard for codename of 'Movie' type
  */
 export function isMovieTypeCodename(value: string | undefined | null): value is MovieTypeCodename {
 	return typeof value === 'string' && value === ('movie' satisfies MovieTypeCodename);
@@ -133,8 +125,10 @@ export type MovieType = CoreType<
 >;
 
 /*
- * Type representing all available element codenames for Movie
- */
+* 
+* Type representing all available element codenames for Movie
+
+*/
 export type MovieTypeElementCodenames =
 	| 'title'
 	| 'plot'

@@ -15,46 +15,29 @@
 import type { TaxonomyCodenames } from './_taxonomies.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: ReleaseCategory
- * Codename: releasecategory
- * Type: Taxonomy
+ * Type representing codename of 'ReleaseCategory' taxonomy
  */
 export type ReleaseCategoryTaxonomyCodename = Extract<TaxonomyCodenames, 'releasecategory'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: ReleaseCategory
- * Codename: releasecategory
- * Type: Taxonomy
+ * Typeguard for codename of 'ReleaseCategory' taxonomy
  */
 export function isReleaseCategoryTaxonomyCodename(value: string | undefined | null): value is ReleaseCategoryTaxonomyCodename {
 	return typeof value === 'string' && value === ('releasecategory' satisfies ReleaseCategoryTaxonomyCodename);
 }
 
 /*
- * Array of all codenames
- *
- * Name: ReleaseCategory
- * Type: Taxonomy term
+ * Array of all taxonomy term codenames
  */
 export const releaseCategoryTermCodenames = ['global_release', 'us_only', 'local_release'] as const;
 
 /*
- * Type representing all codenames
- *
- * Name: ReleaseCategory
- * Type: Taxonomy term
+ * Type representing all taxonomy term codenames
  */
 export type ReleaseCategoryTermCodenames = (typeof releaseCategoryTermCodenames)[number];
 
 /*
- * Typeguard for codename
- *
- * Name: ReleaseCategory
- * Type: Taxonomy term
+ * Typeguard for taxonomy term codename
  */
 export function isReleaseCategoryTermCodename(value: string | undefined | null): value is ReleaseCategoryTermCodenames {
 	return typeof value === 'string' && (releaseCategoryTermCodenames as readonly string[]).includes(value);

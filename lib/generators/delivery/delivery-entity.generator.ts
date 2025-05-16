@@ -54,6 +54,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
         entityType: config.entityType
     }).getEntityNames();
 
+    const getEntityTypeNameForComment = (): string => {
+        return config.entityType.toLowerCase();
+    };
+
     const getEntityTypeGuardFunction = (entity: Readonly<DeliveryEntity>): string => {
         return deliveryUtils.getCodenameTypeguardFunctionCode({
             codenameTypeName: entityNames.getCodenameTypeName(entity),
@@ -66,7 +70,6 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
         return `
             ${deliveryUtils.getCodeOfDeliveryEntity({
                 codenames: config.entities.map((m) => m.codename),
-                entityName: undefined,
                 names: {
                     codenamesTypeName: entityNames.codenamesTypeName,
                     typeGuardFunctionName: entityNames.codenamesTypeguardFunctionName,
@@ -81,22 +84,11 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
         const extraCode = getEntityExtraCode(entity);
 
         const getEntityComment: (title: string) => string = (title) => {
-            return wrapComment(title, {
-                lines: [
-                    {
-                        name: 'Name',
-                        value: entity.name
-                    },
-                    {
-                        name: 'Codename',
-                        value: entity.codename
-                    },
-                    {
-                        name: 'Type',
-                        value: config.entityType
-                    }
-                ]
-            });
+            return wrapComment(title);
+        };
+
+        const getEntityTypeCode = (): string => {
+            return `export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.codenamesTypeName}, '${entity.codename}'>;`;
         };
 
         return `
@@ -105,10 +97,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                 importValue: `${entityNames.codenamesTypeName}`
             })}${extraCode?.imports?.length ? `\n${extraCode.imports.join('\n')}` : ''}
            
-            ${getEntityComment(`Type representing codename of entity`)}
-            export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.codenamesTypeName}, '${entity.codename}'>;
+            ${getEntityComment(`Type representing codename of '${entity.name}' ${getEntityTypeNameForComment()}`)}
+            ${getEntityTypeCode()}
 
-            ${getEntityComment(`Typeguard function for entity`)}
+            ${getEntityComment(`Typeguard for codename of '${entity.name}' ${getEntityTypeNameForComment()}`)}
             ${getEntityTypeGuardFunction(entity)}${extraCode ? `\n${extraCode.code}` : ''}
             `;
     };
@@ -153,7 +145,6 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                         typeGuardFunctionName: worfklowStepNames.allStepsNames.typeguardFunctionName,
                         valuesPropertyName: worfklowStepNames.allStepsNames.valuesPropertyName
                     },
-                    entityName: undefined,
                     extendedType: 'Workflow'
                 });
             })
@@ -181,7 +172,6 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                             workflow.archivedStep?.codename,
                             workflow.scheduledStep?.codename
                         ].filter(isNotUndefined),
-                        entityName: workflow.name,
                         names: {
                             codenamesTypeName: worfklowStepNames.stepsNames.codenamesTypeName(workflow),
                             typeGuardFunctionName: worfklowStepNames.stepsNames.typeguardFunctionName(workflow),
@@ -204,7 +194,6 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
                     imports: [],
                     code: deliveryUtils.getCodeOfDeliveryEntity({
                         codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
-                        entityName: taxonomy.name,
                         names: {
                             codenamesTypeName: termEntityNames.termsNames.codenamesTypeName(taxonomy),
                             typeGuardFunctionName: termEntityNames.termsNames.typeguardFunctionName(taxonomy),

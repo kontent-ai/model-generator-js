@@ -13,23 +13,17 @@
  */
 
 /*
- * Array of all codenames
- *
- * Type: Snippet
+ * Array of all snippet codenames
  */
 export const snippetCodenames = [] as const;
 
 /*
- * Type representing all codenames
- *
- * Type: Snippet
+ * Type representing all snippet codenames
  */
 export type SnippetCodenames = (typeof snippetCodenames)[number];
 
 /*
- * Typeguard for codename
- *
- * Type: Snippet
+ * Typeguard for snippet codename
  */
 export function isSnippetCodename(value: string | undefined | null): value is SnippetCodenames {
 	return typeof value === 'string' && (snippetCodenames as readonly string[]).includes(value);

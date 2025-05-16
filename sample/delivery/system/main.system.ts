@@ -21,8 +21,10 @@ import type { TypeCodenames } from '../types/_types.js';
 import type { ElementCodenames } from '../elements/_elements.js';
 
 /*
+* 
  * Core content type used in favor of default 'IContentItem'
- */
+
+*/
 export type CoreType<
 	TElementCodenames extends string = string,
 	TElements extends IContentItemElements<TElementCodenames> = IContentItemElements<TElementCodenames>,
@@ -30,8 +32,10 @@ export type CoreType<
 > = IContentItem<TElements, TContentTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>;
 
 /*
+* 
  * Core types for 'IDeliveryClient'
- */
+
+*/
 export type CoreClientTypes = {
 	readonly collectionCodenames: CollectionCodenames;
 	readonly contentItemType: CoreType;
@@ -44,6 +48,8 @@ export type CoreClientTypes = {
 };
 
 /*
+* 
  * Typed delivery client in favor of default 'IDeliveryClient'
- */
+
+*/
 export type CoreDeliveryClient = IDeliveryClient<CoreClientTypes>;

@@ -17,20 +17,12 @@ import type { Elements } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Actor
- * Codename: actor
- * Type: Type
+ * Type representing codename of 'Actor' type
  */
 export type ActorTypeCodename = Extract<TypeCodenames, 'actor'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Actor
- * Codename: actor
- * Type: Type
+ * Typeguard for codename of 'Actor' type
  */
 export function isActorTypeCodename(value: string | undefined | null): value is ActorTypeCodename {
 	return typeof value === 'string' && value === ('actor' satisfies ActorTypeCodename);
@@ -87,8 +79,10 @@ export type ActorType = CoreType<
 >;
 
 /*
- * Type representing all available element codenames for Actor
- */
+* 
+* Type representing all available element codenames for Actor
+
+*/
 export type ActorTypeElementCodenames = 'url' | 'first_name' | 'last_name' | 'photo';
 
 /*
