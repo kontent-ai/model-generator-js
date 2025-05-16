@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [9.0.0-5](https://github.com/kontent-ai/model-generator-js/compare/v9.0.0-4...v9.0.0-5) (2025-05-16)
+
+
+### Features
+
+* change name/file resolvers to not include entity type name if custom function is provided ([065d730](https://github.com/kontent-ai/model-generator-js/commit/065d730c1a44304a30b5a35805359e9418131c4b))
+
 ## [9.0.0-4](https://github.com/kontent-ai/model-generator-js/compare/v9.0.0-3...v9.0.0-4) (2025-05-16)
 
 ### Features
