@@ -1,5 +1,6 @@
 import type { ContentTypeModels, TaxonomyModels, WorkflowModels } from '@kontent-ai/management-sdk';
 import { match } from 'ts-pattern';
+import type { ObjectWithCodename } from '../../core/core.models.js';
 import { mapFilename, mapName, resolveCase, type FilenameResolver, type NameResolver } from '../../core/resolvers.js';
 import type { DeliveryEntity, DeliveryEntityType } from './delivery-entity.generator.js';
 import type { DeliveryGeneratorConfig } from './delivery.generator.js';
@@ -70,7 +71,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
                 codenamesValuePropertyName: `${entityTypeName.camelCase}Codenames`,
                 codenamesTypeguardFunctionName: `is${entityTypeName.pascalCase}Codename`,
 
-                mainFilename: mapFilename(undefined, {
+                mainFilename: mapFilename<ObjectWithCodename>((c) => c.codename, {
                     prefix: '_'
                 })({ codename: entityTypeName.pluralCamelCase }, true),
                 folderName: entityTypeName.pluralCamelCase,

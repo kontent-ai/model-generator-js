@@ -2,21 +2,16 @@ import { createHash } from 'crypto';
 import { match, P } from 'ts-pattern';
 import type { CaseType, ObjectWithCodename, ObjectWithName } from './core.models.js';
 
-/** File name resolvers */
-export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | ((item: T) => string);
-export type MapObjectToFileName<T extends Readonly<ObjectWithCodename> = ObjectWithCodename> = (item: T, addExtension: boolean) => string;
-
-/** Name resolvers */
+export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | ((item: T, addExtension: boolean) => string);
 export type NameResolver<T extends Readonly<ObjectWithName>> = undefined | ((item: T) => string);
-export type MapObjectToName<T extends Readonly<ObjectWithName> = ObjectWithName> = (item: T) => string;
 
 export function mapFilename<T extends ObjectWithCodename>(
-    resolver: FilenameResolver<T>,
+    resolver: NonNullable<FilenameResolver<T>>,
     options?: {
         readonly prefix?: string;
         readonly suffix?: string;
     }
-): MapObjectToFileName<T> {
+): NonNullable<FilenameResolver<T>> {
     return (item, addExtension) => {
         return (
             (options?.prefix ? options.prefix : '') +
@@ -24,7 +19,7 @@ export function mapFilename<T extends ObjectWithCodename>(
                 resolveCase(
                     match(resolver)
                         .returnType<string>()
-                        .with(P.instanceOf(Function), (resolver) => resolver(item))
+                        .with(P.instanceOf(Function), (resolver) => resolver(item, addExtension))
                         .otherwise(() => item.codename),
                     'camelCase'
                 ) + (options?.suffix ? options.suffix : ''),
@@ -35,13 +30,13 @@ export function mapFilename<T extends ObjectWithCodename>(
 }
 
 export function mapName<T extends ObjectWithName>(
-    resolver: NonNullable<NameResolver<T>>,
+    resolver: NameResolver<T>,
     caseType: CaseType,
     options?: {
         readonly prefix?: string;
         readonly suffix?: string;
     }
-): MapObjectToName<T> {
+): NonNullable<NameResolver<T>> {
     return (item) =>
         (options?.prefix ? options.prefix : '') +
         resolveCase(
