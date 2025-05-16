@@ -8,11 +8,11 @@ export function deliveryEntityUtils() {
         getPluralName,
         getCodeOfDeliveryEntity,
         getTaxonomyTermCodenames,
-        getTypeGuardCode
+        getCodenameTypeguardFunctionCode
     };
 }
 
-function getTypeGuardCode({
+function getCodenameTypeguardFunctionCode({
     codenameTypeName,
     entity,
     typeGuardName
@@ -59,7 +59,7 @@ function getCodeOfDeliveryEntity({
 }): string {
     const uniqueCodenames: readonly string[] = [...new Set(codenames)];
 
-    const getTypeGuardFunction = (): string => {
+    const getCodenameTypeguardFunctionCode = (): string => {
         return `export function ${names.typeGuardFunctionName}(value: string | undefined | null): value is ${names.codenamesTypeName} {
                 return typeof value === 'string' && (${names.valuesPropertyName} as readonly string[]).includes(value);
             }`;
@@ -67,6 +67,10 @@ function getCodeOfDeliveryEntity({
 
     const getValuesCode = (): string => {
         return `export const ${names.valuesPropertyName} = [${uniqueCodenames.map((m) => `'${m}'`).join(', ')}] as const;`;
+    };
+
+    const getCodenamesTypeCode = (): string => {
+        return `export type ${names.codenamesTypeName} = typeof ${names.valuesPropertyName}[number];`;
     };
 
     const getComment = (title: string): string => {
@@ -89,8 +93,8 @@ function getCodeOfDeliveryEntity({
             ${getValuesCode()};
            
             ${getComment('Type representing all codenames')}
-            export type ${names.codenamesTypeName} = typeof ${names.valuesPropertyName}[number];
+            ${getCodenamesTypeCode()};
 
             ${getComment('Typeguard for codename')}
-            ${getTypeGuardFunction()};`;
+            ${getCodenameTypeguardFunctionCode()};`;
 }

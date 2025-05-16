@@ -55,7 +55,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
     }).getEntityNames();
 
     const getEntityTypeGuardFunction = (entity: Readonly<DeliveryEntity>): string => {
-        return deliveryUtils.getTypeGuardCode({
+        return deliveryUtils.getCodenameTypeguardFunctionCode({
             codenameTypeName: entityNames.getCodenameTypeName(entity),
             typeGuardName: entityNames.getTypeguardFunctionName(entity),
             entity

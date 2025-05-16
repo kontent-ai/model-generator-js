@@ -57,64 +57,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 
     return {
         getEntityNames: (): DeliveryEntityNames<T> => {
-            const { filenameResolver, nameResolver } = match<DeliveryEntityType>(config.entityType)
-                .returnType<{
-                    readonly nameResolver: NameResolver<DeliveryEntity> | undefined;
-                    readonly filenameResolver: FilenameResolver<DeliveryEntity> | undefined;
-                }>()
-                .with('Type', () => ({
-                    nameResolver: config.nameResolvers?.contentType
-                        ? (config.nameResolvers.contentType as NameResolver<DeliveryEntity>)
-                        : undefined,
-                    filenameResolver: config.fileResolvers?.contentType
-                        ? (config.fileResolvers.contentType as FilenameResolver<DeliveryEntity>)
-                        : undefined
-                }))
-                .with('Snippet', () => ({
-                    nameResolver: config.nameResolvers?.snippet
-                        ? (config.nameResolvers.snippet as NameResolver<DeliveryEntity>)
-                        : undefined,
-                    filenameResolver: config.fileResolvers?.snippet
-                        ? (config.fileResolvers.snippet as FilenameResolver<DeliveryEntity>)
-                        : undefined
-                }))
-                .with('Taxonomy', () => ({
-                    nameResolver: config.nameResolvers?.taxonomy
-                        ? (config.nameResolvers.taxonomy as NameResolver<DeliveryEntity>)
-                        : undefined,
-                    filenameResolver: config.fileResolvers?.taxonomy
-                        ? (config.fileResolvers.taxonomy as FilenameResolver<DeliveryEntity>)
-                        : undefined
-                }))
-                .with('Language', () => ({
-                    nameResolver: config.nameResolvers?.language
-                        ? (config.nameResolvers.language as NameResolver<DeliveryEntity>)
-                        : undefined,
-                    filenameResolver: config.fileResolvers?.language
-                        ? (config.fileResolvers.language as FilenameResolver<DeliveryEntity>)
-                        : undefined
-                }))
-                .with('Workflow', () => ({
-                    nameResolver: config.nameResolvers?.workflow
-                        ? (config.nameResolvers.workflow as NameResolver<DeliveryEntity>)
-                        : undefined,
-                    filenameResolver: config.fileResolvers?.workflow
-                        ? (config.fileResolvers.workflow as FilenameResolver<DeliveryEntity>)
-                        : undefined
-                }))
-                .with('Collection', () => ({
-                    nameResolver: config.nameResolvers?.collection
-                        ? (config.nameResolvers.collection as NameResolver<DeliveryEntity>)
-                        : undefined,
-                    filenameResolver: config.fileResolvers?.collection
-                        ? (config.fileResolvers.collection as FilenameResolver<DeliveryEntity>)
-                        : undefined
-                }))
-                .with('Element', () => ({
-                    nameResolver: (item) => item.codename,
-                    filenameResolver: (item) => item.codename
-                }))
-                .exhaustive();
+            const { filenameResolver, nameResolver } = getNameAndFilenameResolver(config);
 
             const entityNames: DeliveryEntityNames<DeliveryEntityType> = {
                 codenamesTypeName: `${resolveCase(config.entityType, 'pascalCase')}Codenames`,
@@ -169,4 +112,57 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
             return entityNames as DeliveryEntityNames<T>;
         }
     };
+}
+
+function getNameAndFilenameResolver<T extends DeliveryEntityType>(config: {
+    readonly nameResolvers: Pick<DeliveryGeneratorConfig, 'nameResolvers'>['nameResolvers'];
+    readonly fileResolvers: Pick<DeliveryGeneratorConfig, 'fileResolvers'>['fileResolvers'];
+    readonly entityType: T;
+}) {
+    return match<DeliveryEntityType>(config.entityType)
+        .returnType<{
+            readonly nameResolver: NameResolver<DeliveryEntity> | undefined;
+            readonly filenameResolver: FilenameResolver<DeliveryEntity> | undefined;
+        }>()
+        .with('Type', () => ({
+            nameResolver: config.nameResolvers?.contentType
+                ? (config.nameResolvers.contentType as NameResolver<DeliveryEntity>)
+                : undefined,
+            filenameResolver: config.fileResolvers?.contentType
+                ? (config.fileResolvers.contentType as FilenameResolver<DeliveryEntity>)
+                : undefined
+        }))
+        .with('Snippet', () => ({
+            nameResolver: config.nameResolvers?.snippet ? (config.nameResolvers.snippet as NameResolver<DeliveryEntity>) : undefined,
+            filenameResolver: config.fileResolvers?.snippet ? (config.fileResolvers.snippet as FilenameResolver<DeliveryEntity>) : undefined
+        }))
+        .with('Taxonomy', () => ({
+            nameResolver: config.nameResolvers?.taxonomy ? (config.nameResolvers.taxonomy as NameResolver<DeliveryEntity>) : undefined,
+            filenameResolver: config.fileResolvers?.taxonomy
+                ? (config.fileResolvers.taxonomy as FilenameResolver<DeliveryEntity>)
+                : undefined
+        }))
+        .with('Language', () => ({
+            nameResolver: config.nameResolvers?.language ? (config.nameResolvers.language as NameResolver<DeliveryEntity>) : undefined,
+            filenameResolver: config.fileResolvers?.language
+                ? (config.fileResolvers.language as FilenameResolver<DeliveryEntity>)
+                : undefined
+        }))
+        .with('Workflow', () => ({
+            nameResolver: config.nameResolvers?.workflow ? (config.nameResolvers.workflow as NameResolver<DeliveryEntity>) : undefined,
+            filenameResolver: config.fileResolvers?.workflow
+                ? (config.fileResolvers.workflow as FilenameResolver<DeliveryEntity>)
+                : undefined
+        }))
+        .with('Collection', () => ({
+            nameResolver: config.nameResolvers?.collection ? (config.nameResolvers.collection as NameResolver<DeliveryEntity>) : undefined,
+            filenameResolver: config.fileResolvers?.collection
+                ? (config.fileResolvers.collection as FilenameResolver<DeliveryEntity>)
+                : undefined
+        }))
+        .with('Element', () => ({
+            nameResolver: (item) => item.codename,
+            filenameResolver: (item) => item.codename
+        }))
+        .exhaustive();
 }
