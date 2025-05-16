@@ -15,11 +15,8 @@
 /*
  * Type representing available item codenames
  *
- * Actor
- *
- * Codename: actor
- * Id: 58099989-319f-495f-aa36-cb3710854e36
- * Codename: actor
+ * Type name: Actor
+ * Type codename: actor
  */
 export type ActorCodenames =
 	| 'anne_hathaway'

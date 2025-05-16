@@ -14,7 +14,7 @@
 
 export const taxonomies = {
 	/*
-	 * movietype
+	 * MovieType
 	 */
 	movietype: {
 		name: 'MovieType',
@@ -80,7 +80,7 @@ export const taxonomies = {
 	},
 
 	/*
-	 * releasecategory
+	 * ReleaseCategory
 	 */
 	releasecategory: {
 		name: 'ReleaseCategory',

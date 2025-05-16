@@ -2,20 +2,12 @@ import type { SnippetCodenames } from './_snippets.ts';
 import type { Snippet } from '@kontent-ai/delivery-sdk';
 
 /*
- * Type representing codename of entity
- *
- * Name: Empty snippet
- * Codename: empty_snippet
- * Type: Snippet
+ * Type representing codename of 'Empty snippet' snippet
  */
 export type EmptySnippetSnippetCodename = Extract<SnippetCodenames, 'empty_snippet'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Empty snippet
- * Codename: empty_snippet
- * Type: Snippet
+ * Typeguard for codename of 'Empty snippet' snippet
  */
 export function isEmptySnippetSnippetCodename(value: string | undefined | null): value is EmptySnippetSnippetCodename {
 	return typeof value === 'string' && value === ('empty_snippet' satisfies EmptySnippetSnippetCodename);

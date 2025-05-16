@@ -282,9 +282,7 @@ ${wrapComment(snippet.name, {
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(snippet, flattenedElements)}>;
 
-${wrapComment(`
-* Type representing all available element codenames for ${snippet.name}
-`)}
+${wrapComment(`Type representing all available element codenames for ${snippet.name}`)}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
 
 ${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
@@ -325,6 +323,10 @@ ${wrapComment(contentType.name, {
         {
             name: 'Codename',
             value: contentType.codename
+        },
+        {
+            name: 'External Id',
+            value: contentType.externalId
         }
     ]
 })}
@@ -333,9 +335,7 @@ ${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(contentType, flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ''}, 
 ${contentTypeNames.getCodenameTypeName(contentType)}>
 
-${wrapComment(`
-* Type representing all available element codenames for ${contentType.name}
-`)}
+${wrapComment(`Type representing all available element codenames for ${contentType.name}`)}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
 
 ${wrapComment(`Type guard for ${contentType.name}`, {
@@ -347,6 +347,10 @@ ${wrapComment(`Type guard for ${contentType.name}`, {
         {
             name: 'Codename',
             value: contentType.codename
+        },
+        {
+            name: 'External Id',
+            value: contentType.externalId
         }
     ]
 })}
@@ -406,24 +410,16 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
         }
 
         return (
-            filteredElements.reduce<string>((code, element) => {
+            filteredElements.reduce<string>((code, element, index) => {
                 const mappedType = mapElementType(typeOrSnippet, element);
+                const isFirstElement = index === 0;
 
                 if (!mappedType) {
                     return code;
                 }
 
-                return (code += `
-                ${wrapComment(element.title, {
+                return (code += `\n${isFirstElement ? '' : '\n'}${wrapComment(element.title, {
                     lines: [
-                        {
-                            name: 'Type',
-                            value: element.type
-                        },
-                        {
-                            name: 'Required',
-                            value: element.isRequired ? 'true' : 'false'
-                        },
                         {
                             name: 'Codename',
                             value: element.codename
@@ -433,8 +429,32 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
                             value: element.id
                         },
                         {
+                            name: 'External Id',
+                            value: element.externalId
+                        },
+                        {
+                            name: 'Type',
+                            value: element.type
+                        },
+                        {
+                            name: 'Required',
+                            value: element.isRequired ? 'true' : 'false'
+                        },
+                        {
+                            name: 'From snippet',
+                            value: element.fromSnippet ? element.fromSnippet.codename : undefined
+                        },
+                        {
+                            name: 'Taxonomy',
+                            value: element.assignedTaxonomy ? element.assignedTaxonomy.codename : undefined
+                        },
+                        {
+                            name: 'Allowed content types',
+                            value: element.allowedContentTypes ? element.allowedContentTypes.map((m) => m.codename).join(', ') : undefined
+                        },
+                        {
                             name: 'Guidelines',
-                            value: element.guidelines ? toGuidelinesComment(element.guidelines) : undefined
+                            value: element.guidelines ? toGuidelinesComment(element.guidelines) : ''
                         }
                     ]
                 })}

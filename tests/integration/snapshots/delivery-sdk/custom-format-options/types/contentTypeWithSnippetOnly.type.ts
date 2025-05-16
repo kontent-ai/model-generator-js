@@ -5,21 +5,13 @@ import type { CoreType } from '../system/index.js';
 import type { SnippetASnippet } from '../snippets/index.js';
            
             /*
-    * Type representing codename of entity
-    *
-    * Name: Content type with snippet only
-* Codename: content_type_with_snippet_only
-* Type: Type
-    */
+* Type representing codename of 'Content type with snippet only' type
+*/
             export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_snippet_only'>;
 
             /*
-    * Typeguard function for entity
-    *
-    * Name: Content type with snippet only
-* Codename: content_type_with_snippet_only
-* Type: Type
-    */
+* Typeguard for codename of 'Content type with snippet only' type
+*/
             export function isContentTypeWithSnippetOnlyTypeCodename(value: string | undefined | null): value is ContentTypeWithSnippetOnlyTypeCodename {
                 return typeof value === 'string' && value === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
             }

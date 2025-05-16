@@ -4,8 +4,8 @@ import { formatCodeAsync } from '../../lib/format/formatter.js';
 import { libMetadata } from '../../lib/meta/metadata.js';
 
 describe(`Comments - wrapComment`, () => {
-    it('Text should be wrapped in JS comments', () => {
-        expect(wrapComment(`Hello`)).toStrictEqual(`/*Hello*/`);
+    it('Text should be wrapped in JS comments and correctly spaced', () => {
+        expect(wrapComment(`Hello`)).toStrictEqual(`/*\n* Hello\n*/`);
     });
 });
 

@@ -4,20 +4,12 @@ import type { CircularReferenceTypeABType } from './index.ts';
 import type { CoreType } from '../system/index.ts';
 
 /*
- * Type representing codename of entity
- *
- * Name: Circular reference type B -> A
- * Codename: circular_reference_type_b____a
- * Type: Type
+ * Type representing codename of 'Circular reference type B -> A' type
  */
 export type CircularReferenceTypeBATypeCodename = Extract<TypeCodenames, 'circular_reference_type_b____a'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Circular reference type B -> A
- * Codename: circular_reference_type_b____a
- * Type: Type
+ * Typeguard for codename of 'Circular reference type B -> A' type
  */
 export function isCircularReferenceTypeBATypeCodename(value: string | undefined | null): value is CircularReferenceTypeBATypeCodename {
 	return typeof value === 'string' && value === ('circular_reference_type_b____a' satisfies CircularReferenceTypeBATypeCodename);
@@ -35,10 +27,11 @@ export type CircularReferenceTypeBAType = CoreType<
 		/*
 		 * Items
 		 *
-		 * Type: modular_content
-		 * Required: false
 		 * Codename: items
 		 * Id: 019714f7-8c50-492b-8e5c-f7c3d7e2529b
+		 * Type: modular_content
+		 * Required: false
+		 * Allowed content types: circular_reference_type_a_b
 		 */
 		readonly items: Elements.LinkedItemsElement<CircularReferenceTypeABType>;
 	},

@@ -23,7 +23,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Url (url_slug)
+			 * Url
 			 */
 			url: {
 				name: 'Url',
@@ -35,7 +35,8 @@ export const contentTypes = {
 			},
 
 			/*
-			 * First name (text)
+			 * First name
+			 *
 			 * Guidelines: This is the first name of the actor
 			 */
 			first_name: {
@@ -48,7 +49,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Last name (text)
+			 * Last name
 			 */
 			last_name: {
 				name: 'Last name',
@@ -60,7 +61,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Photo (asset)
+			 * Photo
 			 */
 			photo: {
 				name: 'Photo',
@@ -83,7 +84,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Title (text)
+			 * Title
 			 */
 			title: {
 				name: 'Title',
@@ -95,7 +96,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Plot (rich_text)
+			 * Plot
 			 */
 			plot: {
 				name: 'Plot',
@@ -107,7 +108,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Released (date_time)
+			 * Released
 			 */
 			released: {
 				name: 'Released',
@@ -119,7 +120,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Length (number)
+			 * Length
 			 */
 			length: {
 				name: 'Length',
@@ -131,7 +132,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Poster (asset)
+			 * Poster
 			 */
 			poster: {
 				name: 'Poster',
@@ -143,7 +144,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Category (multiple_choice)
+			 * Category
 			 */
 			category: {
 				name: 'Category',
@@ -236,7 +237,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Stars (modular_content)
+			 * Stars
 			 */
 			stars: {
 				name: 'Stars',
@@ -248,7 +249,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * SeoName (url_slug)
+			 * SeoName
 			 */
 			seoname: {
 				name: 'SeoName',
@@ -260,7 +261,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * ReleaseCategory (taxonomy)
+			 * ReleaseCategory
 			 */
 			releasecategory: {
 				name: 'ReleaseCategory',

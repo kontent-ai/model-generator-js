@@ -1,6 +1,6 @@
 export const taxonomies = {
 	/*
-	 * taxonomy_a
+	 * Taxonomy A
 	 */
 	taxonomy_a: {
 		name: 'Taxonomy A',
@@ -66,7 +66,7 @@ export const taxonomies = {
 	},
 
 	/*
-	 * taxonomy_without_terms
+	 * Taxonomy without terms
 	 */
 	taxonomy_without_terms: {
 		name: 'Taxonomy without terms',

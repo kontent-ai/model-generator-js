@@ -4,21 +4,13 @@
 import type { CoreType } from '../system/index.js';
            
             /*
-    * Type representing codename of entity
-    *
-    * Name: Content type with guidelines only
-* Codename: content_type_with_guidelines_only
-* Type: Type
-    */
+* Type representing codename of 'Content type with guidelines only' type
+*/
             export type ContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
 
             /*
-    * Typeguard function for entity
-    *
-    * Name: Content type with guidelines only
-* Codename: content_type_with_guidelines_only
-* Type: Type
-    */
+* Typeguard for codename of 'Content type with guidelines only' type
+*/
             export function isContentTypeWithGuidelinesOnlyTypeCodename(value: string | undefined | null): value is ContentTypeWithGuidelinesOnlyTypeCodename {
                 return typeof value === 'string' && value === ('content_type_with_guidelines_only' satisfies ContentTypeWithGuidelinesOnlyTypeCodename);
             }

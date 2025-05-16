@@ -59,12 +59,22 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
                  importValue: migrationConfig.localTypeNames.item
              })}
 
-            ${wrapComment(`
-            * ${type.name}
-            * 
-            * Codename: ${type.codename}
-            * Id: ${type.id}
-            `)}
+            ${wrapComment(type.name, {
+                lines: [
+                    {
+                        name: 'Codename',
+                        value: type.codename
+                    },
+                    {
+                        name: 'Id',
+                        value: type.id
+                    },
+                    {
+                        name: 'External Id',
+                        value: type.externalId
+                    }
+                ]
+            })}
             export type ${resolveCase(type.name, 'pascalCase')}Item = ${migrationConfig.localTypeNames.item}<
             '${type.codename}',
             ${getMigrationItemElementsCode(flattenedElements)}
@@ -78,16 +88,48 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
         }
 
         const elementsCode = flattenedElements
-            .map((element) => {
-                return `
-                    ${wrapComment(`
-                    * ${element.title}
-                    * 
-                    * Type: ${element.type} 
-                    * Required: ${element.isRequired ? 'true' : 'false'}
-                    * Codename: ${element.codename}
-                    * Id: ${element.id}${element.guidelines ? `\n* Guidelines: ${toGuidelinesComment(element.guidelines)}` : ''}
-                    `)}
+            .map((element, index) => {
+                const isFirstElement = index === 0;
+                return `\n${isFirstElement ? '' : '\n'}${wrapComment(element.title, {
+                    lines: [
+                        {
+                            name: 'Codename',
+                            value: element.codename
+                        },
+                        {
+                            name: 'Id',
+                            value: element.id
+                        },
+                        {
+                            name: 'External Id',
+                            value: element.externalId
+                        },
+                        {
+                            name: 'Type',
+                            value: element.type
+                        },
+                        {
+                            name: 'Required',
+                            value: element.isRequired ? 'true' : 'false'
+                        },
+                        {
+                            name: 'From snippet',
+                            value: element.fromSnippet ? element.fromSnippet.codename : undefined
+                        },
+                        {
+                            name: 'Taxonomy',
+                            value: element.assignedTaxonomy ? element.assignedTaxonomy.codename : undefined
+                        },
+                        {
+                            name: 'Allowed content types',
+                            value: element.allowedContentTypes ? element.allowedContentTypes.map((m) => m.codename).join(', ') : undefined
+                        },
+                        {
+                            name: 'Guidelines',
+                            value: element.guidelines ? toGuidelinesComment(element.guidelines) : ''
+                        }
+                    ]
+                })}
                     readonly ${element.codename}: ${getElementPropType(element)}`;
             })
             .join(',\n');
@@ -103,19 +145,19 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
                     {
                         filename: `${migrationConfig.environmentFilename}.ts`,
                         text: `
-                ${wrapComment(`\n * Type representing all languages\n`)}
+                ${wrapComment(`Type representing all languages`)}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
-                ${wrapComment(`\n * Type representing all content types\n`)}
+                ${wrapComment(`Type representing all content types`)}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
 
-                ${wrapComment(`\n * Type representing all collections\n`)}
+                ${wrapComment(`Type representing all collections`)}
                 ${getCollectionCodenamesType(config.environmentData.collections)}
 
-                ${wrapComment(`\n * Type representing all workflows\n`)}
+                ${wrapComment(`Type representing all workflows`)}
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
 
-                ${wrapComment(`\n * Type representing all worksflow steps across all workflows\n`)}
+                ${wrapComment(`Type representing all worksflow steps across all workflows`)}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
             `
                     }
@@ -138,10 +180,10 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
                        importValue: `${migrationConfig.collectionCodenames}, ${migrationConfig.contentTypeCodenames}, ${migrationConfig.languageCodenames}, ${migrationConfig.workflowCodenames}, ${migrationConfig.workflowStepCodenames}`
                    })}
 
-                ${wrapComment('\n * System object shared by all individual content type models\n')}
+                ${wrapComment(`System object shared by all individual content type models`)}
                 ${getSystemType()}
 
-                ${wrapComment('\n * Item object shared by all individual content type models\n')}
+                ${wrapComment(`Item object shared by all individual content type models`)}
                 ${getItemType()}
             `
                     }

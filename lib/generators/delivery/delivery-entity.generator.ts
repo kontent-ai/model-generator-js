@@ -14,6 +14,7 @@ import { deliveryEntityUtils } from './utils/delivery-entity.utils.js';
 export type DeliveryElement = {
     readonly codename: string;
     readonly name: string;
+    readonly externalId: string | undefined;
 };
 
 export type DeliveryEntity =
@@ -84,7 +85,9 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
         const extraCode = getEntityExtraCode(entity);
 
         const getEntityComment: (title: string) => string = (title) => {
-            return wrapComment(title);
+            return wrapComment(title, {
+                lines: []
+            });
         };
 
         const getEntityTypeCode = (): string => {

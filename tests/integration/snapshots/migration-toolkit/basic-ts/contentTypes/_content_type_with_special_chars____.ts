@@ -13,20 +13,20 @@ export type ContentTypeWithSpecialCharsItem = CoreMigrationItem<
 		/*
 		 * 🦜Parrot_emoji
 		 *
-		 * Type: text
-		 * Required: false
 		 * Codename: parrot__
 		 * Id: cafaa776-893d-4e8c-b460-9534ac2fe769
+		 * Type: text
+		 * Required: false
 		 */
 		readonly parrot__: MigrationElementModels.TextElement;
 
 		/*
 		 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
 		 *
-		 * Type: number
-		 * Required: false
 		 * Codename: _____numberelem_____________________
 		 * Id: 3bb33958-71f3-4039-8594-5f0df9378dbb
+		 * Type: number
+		 * Required: false
 		 */
 		readonly _____numberelem_____________________: MigrationElementModels.NumberElement;
 	}

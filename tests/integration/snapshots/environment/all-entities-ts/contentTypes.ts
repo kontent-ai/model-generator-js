@@ -9,7 +9,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Rich text with all allowed item types (rich_text)
+			 * Rich text with all allowed item types
 			 */
 			snippet_a__rich_text_with_all_allowed_item_types: {
 				name: 'Rich text with all allowed item types',
@@ -21,7 +21,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Linked items with specific types (modular_content)
+			 * Linked items with specific types
 			 */
 			snippet_a__linked_items_with_specific_types: {
 				name: 'Linked items with specific types',
@@ -33,7 +33,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Text (text)
+			 * Text
 			 */
 			snippet_a__text: {
 				name: 'Text',
@@ -56,7 +56,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * 🦜Parrot_emoji (text)
+			 * 🦜Parrot_emoji
 			 */
 			parrot__: {
 				name: '🦜Parrot_emoji',
@@ -68,7 +68,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~ (number)
+			 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
 			 */
 			_____numberelem_____________________: {
 				name: '!!!_$NumberElem<>-%@&{}()/§`?´=^*#~',
@@ -91,7 +91,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Items (modular_content)
+			 * Items
 			 */
 			items: {
 				name: 'Items',
@@ -114,7 +114,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Title (text)
+			 * Title
 			 */
 			title: {
 				name: 'Title',
@@ -126,7 +126,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * URL (url_slug)
+			 * URL
 			 */
 			url: {
 				name: 'URL',
@@ -138,7 +138,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Show in navigation (multiple_choice)
+			 * Show in navigation
 			 */
 			show_in_navigation: {
 				name: 'Show in navigation',
@@ -171,7 +171,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Subpages (subpages)
+			 * Subpages
 			 */
 			subpages: {
 				name: 'Subpages',
@@ -183,7 +183,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Content (modular_content)
+			 * Content
 			 */
 			content: {
 				name: 'Content',
@@ -206,7 +206,8 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Text element (text)
+			 * Text element
+			 *
 			 * Guidelines: Simple text element guidelines
 			 */
 			text_element: {
@@ -219,7 +220,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Url slug element (url_slug)
+			 * Url slug element
 			 */
 			url_slug_element: {
 				name: 'Url slug element',
@@ -231,7 +232,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Rich text element (rich_text)
+			 * Rich text element
 			 */
 			rich_text_element: {
 				name: 'Rich text element',
@@ -243,7 +244,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Date & time element (date_time)
+			 * Date & time element
 			 */
 			date___time_element: {
 				name: 'Date & time element',
@@ -255,7 +256,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Custom element (custom)
+			 * Custom element
 			 */
 			custom_element: {
 				name: 'Custom element',
@@ -267,7 +268,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Linked items element (modular_content)
+			 * Linked items element
 			 */
 			linked_items_element: {
 				name: 'Linked items element',
@@ -279,7 +280,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Asset element (asset)
+			 * Asset element
 			 */
 			asset_element: {
 				name: 'Asset element',
@@ -291,7 +292,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Multiple choice element (multiple_choice)
+			 * Multiple choice element
 			 */
 			multiple_choice_element: {
 				name: 'Multiple choice element',
@@ -324,7 +325,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Number element (number)
+			 * Number element
 			 */
 			number_element: {
 				name: 'Number element',
@@ -336,7 +337,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Rich text with all allowed item types (rich_text)
+			 * Rich text with all allowed item types
 			 */
 			snippet_a__rich_text_with_all_allowed_item_types: {
 				name: 'Rich text with all allowed item types',
@@ -348,7 +349,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Linked items with specific types (modular_content)
+			 * Linked items with specific types
 			 */
 			snippet_a__linked_items_with_specific_types: {
 				name: 'Linked items with specific types',
@@ -360,7 +361,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Text (text)
+			 * Text
 			 */
 			snippet_a__text: {
 				name: 'Text',
@@ -372,7 +373,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Taxonomy A (taxonomy)
+			 * Taxonomy A
 			 */
 			taxonomy_element: {
 				name: 'Taxonomy A',
@@ -406,7 +407,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Items (modular_content)
+			 * Items
 			 */
 			items: {
 				name: 'Items',
@@ -451,7 +452,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Title (text)
+			 * Title
 			 */
 			title: {
 				name: 'Title',
@@ -463,7 +464,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Subpages (subpages)
+			 * Subpages
 			 */
 			subpages: {
 				name: 'Subpages',
@@ -475,7 +476,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Content (modular_content)
+			 * Content
 			 */
 			content: {
 				name: 'Content',
@@ -498,7 +499,7 @@ export const contentTypes = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Rich text with invalid type (rich_text)
+			 * Rich text with invalid type
 			 */
 			rich_text_with_invalid_type: {
 				name: 'Rich text with invalid type',
@@ -510,7 +511,7 @@ export const contentTypes = {
 			},
 
 			/*
-			 * Linked items with invalid type (modular_content)
+			 * Linked items with invalid type
 			 */
 			linked_items_with_invalid_type: {
 				name: 'Linked items with invalid type',

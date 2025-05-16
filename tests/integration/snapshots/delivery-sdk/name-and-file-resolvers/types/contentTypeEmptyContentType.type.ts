@@ -3,20 +3,12 @@ import type { TypeCodenames } from './_types.js';
 import type { CoreType } from '../system/index.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Empty content type
- * Codename: empty_content_type
- * Type: Type
+ * Type representing codename of 'Empty content type' type
  */
 export type ContentTypeEmptyContentTypeTypeCodename = Extract<TypeCodenames, 'empty_content_type'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Empty content type
- * Codename: empty_content_type
- * Type: Type
+ * Typeguard for codename of 'Empty content type' type
  */
 export function isContentTypeEmptyContentTypeTypeCodename(
 	value: string | undefined | null

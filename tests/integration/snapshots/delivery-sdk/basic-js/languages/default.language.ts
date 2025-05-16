@@ -1,20 +1,12 @@
 import type { LanguageCodenames } from './_languages.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Default project language
- * Codename: default
- * Type: Language
+ * Type representing codename of 'Default project language' language
  */
 export type DefaultProjectLanguageLanguageCodename = Extract<LanguageCodenames, 'default'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Default project language
- * Codename: default
- * Type: Language
+ * Typeguard for codename of 'Default project language' language
  */
 export function isDefaultProjectLanguageLanguageCodename(
 	value: string | undefined | null

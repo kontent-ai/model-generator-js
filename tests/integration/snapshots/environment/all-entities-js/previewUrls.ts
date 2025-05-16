@@ -1,7 +1,4 @@
 export const previewUrls = {
-	/*
-	 * Preview configuration
-	 */
 	spaceDomains: {
 		default_space: {
 			spaceName: 'Default space',

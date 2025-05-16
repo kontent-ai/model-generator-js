@@ -76,7 +76,8 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
             .filter((element) => uniqueElementCodenames.includes(element.codename))
             .map<DeliveryElement>((m) => ({
                 codename: m.codename,
-                name: m.title
+                name: m.title,
+                externalId: m.externalId
             }));
     };
 
@@ -167,7 +168,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                     })
                     .join('\n')}
 
-                ${wrapComment(`\n * Core content type used in favor of default '${deliveryConfig.sdkTypes.contentItem}'\n`)}
+                ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}'`)}
                 export type ${deliveryConfig.coreContentTypeName}<
                         ${elementCodenamesGenericArgName} extends string = string,
                         ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
@@ -181,7 +182,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                     ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName}
                 >;
 
-                ${wrapComment(`\n * Core types for '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
+                ${wrapComment(`Core types for '${deliveryConfig.sdkTypes.deliveryClient}'`)}
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
                     readonly collectionCodenames: ${entityGenerators.collections.entityNames.codenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
@@ -193,7 +194,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                     readonly workflowStepCodenames: ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName};
                 };
 
-                ${wrapComment(`\n * Typed delivery client in favor of default '${deliveryConfig.sdkTypes.deliveryClient}'\n`)}
+                ${wrapComment(`Typed delivery client. Use this instead of '${deliveryConfig.sdkTypes.deliveryClient}'`)}
                 export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<${deliveryConfig.coreDeliveryClientTypesTypeName}>;
             `
         };

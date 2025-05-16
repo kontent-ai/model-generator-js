@@ -3,20 +3,12 @@ import type { TypeCodenames } from './_types.js';
 import type { CoreType } from '../system/index.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Type with empty snippet
- * Codename: type_with_empty_snippet
- * Type: Type
+ * Type representing codename of 'Type with empty snippet' type
  */
 export type TypeWithEmptySnippetTypeCodename = Extract<TypeCodenames, 'type_with_empty_snippet'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Type with empty snippet
- * Codename: type_with_empty_snippet
- * Type: Type
+ * Typeguard for codename of 'Type with empty snippet' type
  */
 export function isTypeWithEmptySnippetTypeCodename(value: string | undefined | null): value is TypeWithEmptySnippetTypeCodename {
 	return typeof value === 'string' && value === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetTypeCodename);

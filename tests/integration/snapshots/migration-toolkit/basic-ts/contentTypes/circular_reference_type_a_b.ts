@@ -13,10 +13,11 @@ export type CircularReferenceTypeABItem = CoreMigrationItem<
 		/*
 		 * Items
 		 *
-		 * Type: modular_content
-		 * Required: false
 		 * Codename: items
 		 * Id: 33ab92dd-e47d-45e2-a060-3b5df0754c24
+		 * Type: modular_content
+		 * Required: false
+		 * Allowed content types: circular_reference_type_b____a
 		 */
 		readonly items: MigrationElementModels.LinkedItemsElement;
 	}

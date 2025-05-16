@@ -2,21 +2,13 @@
             import type { LanguageCodenames } from './_languages.js';
            
             /*
-    * Type representing codename of entity
-    *
-    * Name: 🦉Lang
-* Codename: 🦉Lang
-* Type: Language
-    */
+* Type representing codename of '🦉Lang' language
+*/
             export type LangLanguageCodename = Extract<LanguageCodenames, '🦉Lang'>;
 
             /*
-    * Typeguard function for entity
-    *
-    * Name: 🦉Lang
-* Codename: 🦉Lang
-* Type: Language
-    */
+* Typeguard for codename of '🦉Lang' language
+*/
             export function isLangLanguageCodename(value: string | undefined | null): value is LangLanguageCodename {
                 return typeof value === 'string' && value === ('🦉Lang' satisfies LangLanguageCodename);
             }

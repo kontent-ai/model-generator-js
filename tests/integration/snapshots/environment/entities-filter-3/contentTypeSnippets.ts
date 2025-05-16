@@ -9,7 +9,7 @@ export const contentTypeSnippets = {
 		externalId: undefined,
 		elements: {
 			/*
-			 * Rich text with all allowed item types (rich_text)
+			 * Rich text with all allowed item types
 			 */
 			snippet_a__rich_text_with_all_allowed_item_types: {
 				name: 'Rich text with all allowed item types',
@@ -21,7 +21,7 @@ export const contentTypeSnippets = {
 			},
 
 			/*
-			 * Linked items with specific types (modular_content)
+			 * Linked items with specific types
 			 */
 			snippet_a__linked_items_with_specific_types: {
 				name: 'Linked items with specific types',
@@ -33,7 +33,7 @@ export const contentTypeSnippets = {
 			},
 
 			/*
-			 * Text (text)
+			 * Text
 			 */
 			snippet_a__text: {
 				name: 'Text',

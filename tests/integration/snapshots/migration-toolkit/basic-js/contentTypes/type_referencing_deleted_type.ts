@@ -13,20 +13,20 @@ export type TypeReferencingDeletedTypeItem = CoreMigrationItem<
 		/*
 		 * Rich text with invalid type
 		 *
-		 * Type: rich_text
-		 * Required: false
 		 * Codename: rich_text_with_invalid_type
 		 * Id: 03df7457-fb30-4d4e-aee2-06b0e1f218a2
+		 * Type: rich_text
+		 * Required: false
 		 */
 		readonly rich_text_with_invalid_type: MigrationElementModels.RichTextElement;
 
 		/*
 		 * Linked items with invalid type
 		 *
-		 * Type: modular_content
-		 * Required: false
 		 * Codename: linked_items_with_invalid_type
 		 * Id: cc310017-de8b-42f1-962b-63959367d29a
+		 * Type: modular_content
+		 * Required: false
 		 */
 		readonly linked_items_with_invalid_type: MigrationElementModels.LinkedItemsElement;
 	}

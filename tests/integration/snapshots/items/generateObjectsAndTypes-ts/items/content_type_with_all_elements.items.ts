@@ -1,11 +1,9 @@
 /*
  * Object representing identifiers of available items
  *
- * Content type with all elements
- *
+ * Type name: Content type with all elements
  * Codename: content_type_with_all_elements
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
- * Codename: content_type_with_all_elements
  */
 export const content_type_with_all_elementsItems = {
 	/*

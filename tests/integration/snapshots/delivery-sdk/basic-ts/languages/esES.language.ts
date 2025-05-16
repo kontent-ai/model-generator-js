@@ -1,20 +1,12 @@
 import type { LanguageCodenames } from './_languages.ts';
 
 /*
- * Type representing codename of entity
- *
- * Name: Spanish
- * Codename: es-ES
- * Type: Language
+ * Type representing codename of 'Spanish' language
  */
 export type SpanishLanguageCodename = Extract<LanguageCodenames, 'es-ES'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Spanish
- * Codename: es-ES
- * Type: Language
+ * Typeguard for codename of 'Spanish' language
  */
 export function isSpanishLanguageCodename(value: string | undefined | null): value is SpanishLanguageCodename {
 	return typeof value === 'string' && value === ('es-ES' satisfies SpanishLanguageCodename);

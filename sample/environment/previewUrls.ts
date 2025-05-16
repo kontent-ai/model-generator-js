@@ -13,9 +13,6 @@
  */
 
 export const previewUrls = {
-	/*
-	 * Preview configuration
-	 */
 	spaceDomains: {
 		movies: {
 			spaceName: 'Movies',

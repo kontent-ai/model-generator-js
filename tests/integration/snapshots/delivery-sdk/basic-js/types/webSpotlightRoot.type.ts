@@ -4,20 +4,12 @@ import type { CoreType } from '../system/index.js';
 import type { PageType } from './index.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Web spotlight root
- * Codename: web_spotlight_root
- * Type: Type
+ * Type representing codename of 'Web spotlight root' type
  */
 export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, 'web_spotlight_root'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Web spotlight root
- * Codename: web_spotlight_root
- * Type: Type
+ * Typeguard for codename of 'Web spotlight root' type
  */
 export function isWebSpotlightRootTypeCodename(value: string | undefined | null): value is WebSpotlightRootTypeCodename {
 	return typeof value === 'string' && value === ('web_spotlight_root' satisfies WebSpotlightRootTypeCodename);
@@ -35,28 +27,31 @@ export type WebSpotlightRootType = CoreType<
 		/*
 		 * Title
 		 *
-		 * Type: text
-		 * Required: false
 		 * Codename: title
 		 * Id: e9d19fa4-4ad3-4b3f-998a-ca392651f7d0
+		 * Type: text
+		 * Required: false
 		 */
 		readonly title: Elements.TextElement;
+
 		/*
 		 * Subpages
 		 *
-		 * Type: subpages
-		 * Required: false
 		 * Codename: subpages
 		 * Id: e6702a6b-35b8-4a12-acca-1b1361fc926b
+		 * Type: subpages
+		 * Required: false
+		 * Allowed content types: page
 		 */
 		readonly subpages: Elements.LinkedItemsElement<PageType>;
+
 		/*
 		 * Content
 		 *
-		 * Type: modular_content
-		 * Required: false
 		 * Codename: content
 		 * Id: ad185ebb-c7ec-4b89-bf89-4b415b5e0ca8
+		 * Type: modular_content
+		 * Required: false
 		 */
 		readonly content: Elements.LinkedItemsElement<CoreType>;
 	},

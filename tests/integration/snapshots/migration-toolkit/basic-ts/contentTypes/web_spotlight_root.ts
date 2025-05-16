@@ -13,30 +13,31 @@ export type WebSpotlightRootItem = CoreMigrationItem<
 		/*
 		 * Title
 		 *
-		 * Type: text
-		 * Required: false
 		 * Codename: title
 		 * Id: e9d19fa4-4ad3-4b3f-998a-ca392651f7d0
+		 * Type: text
+		 * Required: false
 		 */
 		readonly title: MigrationElementModels.TextElement;
 
 		/*
 		 * Subpages
 		 *
-		 * Type: subpages
-		 * Required: false
 		 * Codename: subpages
 		 * Id: e6702a6b-35b8-4a12-acca-1b1361fc926b
+		 * Type: subpages
+		 * Required: false
+		 * Allowed content types: page
 		 */
 		readonly subpages: MigrationElementModels.SubpagesElement;
 
 		/*
 		 * Content
 		 *
-		 * Type: modular_content
-		 * Required: false
 		 * Codename: content
 		 * Id: ad185ebb-c7ec-4b89-bf89-4b415b5e0ca8
+		 * Type: modular_content
+		 * Required: false
 		 */
 		readonly content: MigrationElementModels.LinkedItemsElement;
 	}

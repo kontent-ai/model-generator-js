@@ -1,20 +1,12 @@
 import type { TaxonomyCodenames } from './_taxonomies.js';
 
 /*
- * Type representing codename of entity
- *
- * Name: Taxonomy without terms
- * Codename: taxonomy_without_terms
- * Type: Taxonomy
+ * Type representing codename of 'Taxonomy without terms' taxonomy
  */
 export type TaxonomyTaxonomyWithoutTermsTaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_without_terms'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Taxonomy without terms
- * Codename: taxonomy_without_terms
- * Type: Taxonomy
+ * Typeguard for codename of 'Taxonomy without terms' taxonomy
  */
 export function isTaxonomyTaxonomyWithoutTermsTaxonomyCodename(
 	value: string | undefined | null
@@ -23,26 +15,17 @@ export function isTaxonomyTaxonomyWithoutTermsTaxonomyCodename(
 }
 
 /*
- * Array of all codenames
- *
- * Name: Taxonomy without terms
- * Type: Taxonomy term
+ * Array of all taxonomy term codenames
  */
 export const taxonomyTaxonomyWithoutTermsTermCodenames = [] as const;
 
 /*
- * Type representing all codenames
- *
- * Name: Taxonomy without terms
- * Type: Taxonomy term
+ * Type representing all taxonomy term codenames
  */
 export type TaxonomyTaxonomyWithoutTermsTermCodenames = (typeof taxonomyTaxonomyWithoutTermsTermCodenames)[number];
 
 /*
- * Typeguard for codename
- *
- * Name: Taxonomy without terms
- * Type: Taxonomy term
+ * Typeguard for taxonomy term codename
  */
 export function isTaxonomyTaxonomyWithoutTermsTermCodename(
 	value: string | undefined | null

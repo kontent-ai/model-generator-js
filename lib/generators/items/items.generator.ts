@@ -2,7 +2,7 @@ import type { IContentItem } from '@kontent-ai/delivery-sdk';
 import type { ContentTypeModels } from '@kontent-ai/management-sdk';
 import Chalk from 'chalk';
 import { itemsConfig } from '../../config.js';
-import { toSafeComment, wrapComment } from '../../core/comment.utils.js';
+import { wrapComment } from '../../core/comment.utils.js';
 import type { GeneratedSet } from '../../core/core.models.js';
 import { resolveCase } from '../../core/resolvers.js';
 
@@ -23,9 +23,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
             const isLast = index === items.length - 1;
 
             return `${code}\n
-                ${wrapComment(`
-                * ${item.system.name}
-                `)}
+                ${wrapComment(item.system.name)}
                 ${item.system.codename}: {
                     codename: '${item.system.codename}',
                     id: '${item.system.id}'
@@ -63,14 +61,22 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 
                     return {
                         filename: `${typeCodename}.items.ts`,
-                        text: `
-                    ${wrapComment(`\n * Object representing identifiers of available items
-                   *
-                    * ${toSafeComment(type.name)}
-                    *
-                    * Codename: ${type.codename}
-                    * Id: ${type.id}
-                    * Codename: ${typeCodename}\n`)}
+                        text: `${wrapComment('Object representing identifiers of available items', {
+                            lines: [
+                                {
+                                    name: 'Type name',
+                                    value: type.name
+                                },
+                                {
+                                    name: 'Codename',
+                                    value: type.codename
+                                },
+                                {
+                                    name: 'Id',
+                                    value: type.id
+                                }
+                            ]
+                        })}
                     ${getItemCodenamesProp(typeCodename, items)}`
                     };
                 })
@@ -88,14 +94,18 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 
                     return {
                         filename: `${typeCodename}.codenames.ts`,
-                        text: `
-                    ${wrapComment(`\n * Type representing available item codenames
-                    *
-                    * ${toSafeComment(type.name)}
-                    *
-                    * Codename: ${type.codename}
-                    * Id: ${type.id}
-                    * Codename: ${typeCodename}\n`)}
+                        text: `${wrapComment('Type representing available item codenames', {
+                            lines: [
+                                {
+                                    name: 'Type name',
+                                    value: type.name
+                                },
+                                {
+                                    name: 'Type codename',
+                                    value: type.codename
+                                }
+                            ]
+                        })}
                     ${getItemCodenameType(typeCodename, items)}`
                     };
                 })

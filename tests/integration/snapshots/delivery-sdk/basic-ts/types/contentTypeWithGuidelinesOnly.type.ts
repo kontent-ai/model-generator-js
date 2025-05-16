@@ -3,20 +3,12 @@ import type { TypeCodenames } from './_types.ts';
 import type { CoreType } from '../system/index.ts';
 
 /*
- * Type representing codename of entity
- *
- * Name: Content type with guidelines only
- * Codename: content_type_with_guidelines_only
- * Type: Type
+ * Type representing codename of 'Content type with guidelines only' type
  */
 export type ContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
 
 /*
- * Typeguard function for entity
- *
- * Name: Content type with guidelines only
- * Codename: content_type_with_guidelines_only
- * Type: Type
+ * Typeguard for codename of 'Content type with guidelines only' type
  */
 export function isContentTypeWithGuidelinesOnlyTypeCodename(
 	value: string | undefined | null
