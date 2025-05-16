@@ -35,7 +35,7 @@ export function mapFilename<T extends ObjectWithCodename>(
 }
 
 export function mapName<T extends ObjectWithName>(
-    resolver: NameResolver<T>,
+    resolver: NonNullable<NameResolver<T>>,
     caseType: CaseType,
     options?: {
         readonly prefix?: string;
