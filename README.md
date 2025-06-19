@@ -155,7 +155,7 @@ Configuration
 
 ## Environment models
 
-> [!WARN]
+> [!WARNING]
 > Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
 
