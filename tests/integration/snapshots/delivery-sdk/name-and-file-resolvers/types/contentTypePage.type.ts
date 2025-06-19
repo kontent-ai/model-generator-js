@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 
 /*
@@ -87,7 +87,7 @@ export type ContentTypePageElementCodenames = "title" | "url" | "show_in_navigat
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isContentTypePage(item: CoreType | undefined | null): item is ContentTypePage {
+export function isContentTypePage(item: IContentItem | undefined | null): item is ContentTypePage {
 	return item?.system.type === ("page" satisfies ContentTypePageCodename)
 }
 

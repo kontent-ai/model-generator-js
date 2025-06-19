@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { ContentTypeCircularReferenceTypeAB } from "./index.js"
 import type { CoreType } from "../system/index.js"
 
@@ -51,6 +51,6 @@ export type ContentTypeCircularReferenceTypeBAElementCodenames = "items"
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export function isContentTypeCircularReferenceTypeBA(item: CoreType | undefined | null): item is ContentTypeCircularReferenceTypeBA {
+export function isContentTypeCircularReferenceTypeBA(item: IContentItem | undefined | null): item is ContentTypeCircularReferenceTypeBA {
 	return item?.system.type === ("circular_reference_type_b____a" satisfies ContentTypeCircularReferenceTypeBACodename)
 }

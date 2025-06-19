@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-
+import type { IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 import type { SnippetSnippetA } from "../snippets/index.js"
 
@@ -43,6 +43,8 @@ export type ContentTypeContentTypeWithSnippetOnlyElementCodenames =
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export function isContentTypeContentTypeWithSnippetOnly(item: CoreType | undefined | null): item is ContentTypeContentTypeWithSnippetOnly {
+export function isContentTypeContentTypeWithSnippetOnly(
+	item: IContentItem | undefined | null
+): item is ContentTypeContentTypeWithSnippetOnly {
 	return item?.system.type === ("content_type_with_snippet_only" satisfies ContentTypeContentTypeWithSnippetOnlyCodename)
 }

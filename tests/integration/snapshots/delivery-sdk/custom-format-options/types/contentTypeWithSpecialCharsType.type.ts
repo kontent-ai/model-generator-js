@@ -1,6 +1,6 @@
 
             import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
+import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/index.js';
            
             /*
@@ -56,7 +56,7 @@ export type ContentTypeWithSpecialCharsTypeElementCodenames = 'parrot__' | '____
     * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
 * Codename: _content_type_with_special_chars____
     */
-export function isContentTypeWithSpecialCharsType(item: CoreType | undefined | null): item is ContentTypeWithSpecialCharsType {
+export function isContentTypeWithSpecialCharsType(item: IContentItem | undefined | null): item is ContentTypeWithSpecialCharsType {
                 return item?.system.type === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename);
             };
 

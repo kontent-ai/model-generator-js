@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 
 /*
@@ -63,7 +63,7 @@ export type ContentTypeContentTypeWithSpecialCharsElementCodenames = "parrot__" 
  * Codename: _content_type_with_special_chars____
  */
 export function isContentTypeContentTypeWithSpecialChars(
-	item: CoreType | undefined | null
+	item: IContentItem | undefined | null
 ): item is ContentTypeContentTypeWithSpecialChars {
 	return item?.system.type === ("_content_type_with_special_chars____" satisfies ContentTypeContentTypeWithSpecialCharsCodename)
 }

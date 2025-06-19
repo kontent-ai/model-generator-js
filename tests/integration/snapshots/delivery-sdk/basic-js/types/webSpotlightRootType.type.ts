@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 import type { PageType } from "./index.js"
 
@@ -69,6 +69,6 @@ export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "conte
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export function isWebSpotlightRootType(item: CoreType | undefined | null): item is WebSpotlightRootType {
+export function isWebSpotlightRootType(item: IContentItem | undefined | null): item is WebSpotlightRootType {
 	return item?.system.type === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename)
 }

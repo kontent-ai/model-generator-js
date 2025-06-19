@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 
 /*
@@ -59,6 +59,8 @@ export type ContentTypeTypeReferencingDeletedTypeElementCodenames = "rich_text_w
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  * Codename: type_referencing_deleted_type
  */
-export function isContentTypeTypeReferencingDeletedType(item: CoreType | undefined | null): item is ContentTypeTypeReferencingDeletedType {
+export function isContentTypeTypeReferencingDeletedType(
+	item: IContentItem | undefined | null
+): item is ContentTypeTypeReferencingDeletedType {
 	return item?.system.type === ("type_referencing_deleted_type" satisfies ContentTypeTypeReferencingDeletedTypeCodename)
 }

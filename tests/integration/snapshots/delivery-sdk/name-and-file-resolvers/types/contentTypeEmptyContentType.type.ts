@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-
+import type { IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 
 /*
@@ -37,6 +37,6 @@ export type ContentTypeEmptyContentTypeElementCodenames = never
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export function isContentTypeEmptyContentType(item: CoreType | undefined | null): item is ContentTypeEmptyContentType {
+export function isContentTypeEmptyContentType(item: IContentItem | undefined | null): item is ContentTypeEmptyContentType {
 	return item?.system.type === ("empty_content_type" satisfies ContentTypeEmptyContentTypeCodename)
 }

@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-
+import type { IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 
 /*
@@ -37,6 +37,6 @@ export type TypeWithEmptySnippetTypeElementCodenames = never
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export function isTypeWithEmptySnippetType(item: CoreType | undefined | null): item is TypeWithEmptySnippetType {
+export function isTypeWithEmptySnippetType(item: IContentItem | undefined | null): item is TypeWithEmptySnippetType {
 	return item?.system.type === ("type_with_empty_snippet" satisfies TypeWithEmptySnippetTypeCodename)
 }

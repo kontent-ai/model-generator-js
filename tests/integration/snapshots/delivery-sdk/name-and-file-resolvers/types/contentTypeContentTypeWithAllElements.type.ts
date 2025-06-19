@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 import type { SnippetSnippetA } from "../snippets/index.js"
 import type { TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename } from "../taxonomies/index.js"
@@ -157,7 +157,9 @@ export type ContentTypeContentTypeWithAllElementsElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeContentTypeWithAllElements(item: CoreType | undefined | null): item is ContentTypeContentTypeWithAllElements {
+export function isContentTypeContentTypeWithAllElements(
+	item: IContentItem | undefined | null
+): item is ContentTypeContentTypeWithAllElements {
 	return item?.system.type === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename)
 }
 

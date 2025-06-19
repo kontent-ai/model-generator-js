@@ -1,5 +1,5 @@
 import type { TypeCodenames } from "./_types.js"
-
+import type { IContentItem } from "@kontent-ai/delivery-sdk"
 import type { CoreType } from "../system/index.js"
 
 /*
@@ -43,7 +43,7 @@ export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never
  * Codename: content_type_with_guidelines_only
  */
 export function isContentTypeContentTypeWithGuidelinesOnly(
-	item: CoreType | undefined | null
+	item: IContentItem | undefined | null
 ): item is ContentTypeContentTypeWithGuidelinesOnly {
 	return item?.system.type === ("content_type_with_guidelines_only" satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename)
 }

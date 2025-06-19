@@ -231,7 +231,9 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 	): readonly string[] => {
 		return sortAlphabetically(
 			[
-				...(typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet ? [deliveryConfig.sdkTypes.snippet] : []),
+				...(typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
+					? [deliveryConfig.sdkTypes.snippet]
+					: [deliveryConfig.sdkTypes.contentItem]),
 				// only import elements type if there is at least one element that is represented by property and is not from a snippet
 				...(flattenedElements.filter((m) => m.isElementWithProperty && !m.fromSnippet).length
 					? [deliveryConfig.sdkTypes.elements]
@@ -533,7 +535,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 		const typeGuardFunctionName = contentTypeNames.typeNames.contentItemTypeguardFunctionName(contentType);
 		const contentTypeCodename = contentTypeNames.getCodenameTypeName(contentType);
 
-		return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.coreContentTypeName} | undefined | null): item is ${contentItemTypeName} {
+		return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.sdkTypes.contentItem} | undefined | null): item is ${contentItemTypeName} {
                 return item?.system.type === ('${contentType.codename}' satisfies ${contentTypeCodename});
             }`;
 	};
