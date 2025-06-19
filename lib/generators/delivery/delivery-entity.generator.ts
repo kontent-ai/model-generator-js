@@ -91,7 +91,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		};
 
 		const getEntityTypeCode = (): string => {
-			return `export type ${entityNames.getCodenameTypeName(entity)} = Extract<${entityNames.codenamesTypeName}, '${entity.codename}'>;`;
+			return `export type ${entityNames.getCodenameTypeName(entity)} = keyof Pick<Record<${entityNames.codenamesTypeName}, null>, "${entity.codename}">;`;
 		};
 
 		return `

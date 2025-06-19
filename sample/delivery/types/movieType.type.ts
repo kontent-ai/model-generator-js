@@ -21,7 +21,7 @@ import type { ReleasecategoryTaxonomyTermCodenames, ReleasecategoryTaxonomyCoden
 /*
  * Type representing codename of 'Movie' type
  */
-export type MovieTypeCodename = Extract<TypeCodenames, "movie">
+export type MovieTypeCodename = keyof Pick<Record<TypeCodenames, null>, "movie">
 
 /*
  * Typeguard for codename of 'Movie' type

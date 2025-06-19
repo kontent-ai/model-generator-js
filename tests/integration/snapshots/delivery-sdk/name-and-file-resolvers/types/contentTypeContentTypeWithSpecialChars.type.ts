@@ -5,7 +5,7 @@ import type { CoreType } from "../system/index.js"
 /*
  * Type representing codename of '🐧 Content type with special chars #!_'' type
  */
-export type ContentTypeContentTypeWithSpecialCharsCodename = Extract<TypeCodenames, "_content_type_with_special_chars____">
+export type ContentTypeContentTypeWithSpecialCharsCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">
 
 /*
  * Typeguard for codename of '🐧 Content type with special chars #!_'' type

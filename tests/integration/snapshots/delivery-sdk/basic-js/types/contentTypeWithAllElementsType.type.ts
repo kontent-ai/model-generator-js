@@ -7,7 +7,7 @@ import type { TaxonomyATaxonomyTermCodenames, TaxonomyATaxonomyCodename } from "
 /*
  * Type representing codename of 'Content type with all elements' type
  */
-export type ContentTypeWithAllElementsTypeCodename = Extract<TypeCodenames, "content_type_with_all_elements">
+export type ContentTypeWithAllElementsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">
 
 /*
  * Typeguard for codename of 'Content type with all elements' type

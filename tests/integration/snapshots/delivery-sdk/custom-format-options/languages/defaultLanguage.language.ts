@@ -4,7 +4,7 @@
             /*
 * Type representing codename of 'Default project language' language
 */
-            export type DefaultLanguageCodename = Extract<LanguageCodenames, 'default'>;
+            export type DefaultLanguageCodename = keyof Pick<Record<LanguageCodenames, null>, "default">;
 
             /*
 * Typeguard for codename of 'Default project language' language

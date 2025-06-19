@@ -5,7 +5,7 @@ import type { CoreType } from "../system/index.js"
 /*
  * Type representing codename of 'Page' type
  */
-export type ContentTypePageCodename = Extract<TypeCodenames, "page">
+export type ContentTypePageCodename = keyof Pick<Record<TypeCodenames, null>, "page">
 
 /*
  * Typeguard for codename of 'Page' type

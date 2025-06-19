@@ -3,7 +3,7 @@ import type { CollectionCodenames } from "./_collections.js"
 /*
  * Type representing codename of 'Legacy collection' collection
  */
-export type LegacyCollectionCollectionCodename = Extract<CollectionCodenames, "legacy_collection">
+export type LegacyCollectionCollectionCodename = keyof Pick<Record<CollectionCodenames, null>, "legacy_collection">
 
 /*
  * Typeguard for codename of 'Legacy collection' collection

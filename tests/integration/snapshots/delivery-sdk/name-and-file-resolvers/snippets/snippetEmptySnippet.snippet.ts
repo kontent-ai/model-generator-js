@@ -4,7 +4,7 @@ import type { Snippet } from "@kontent-ai/delivery-sdk"
 /*
  * Type representing codename of 'Empty snippet' snippet
  */
-export type SnippetEmptySnippetCodename = Extract<SnippetCodenames, "empty_snippet">
+export type SnippetEmptySnippetCodename = keyof Pick<Record<SnippetCodenames, null>, "empty_snippet">
 
 /*
  * Typeguard for codename of 'Empty snippet' snippet

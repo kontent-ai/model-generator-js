@@ -6,7 +6,7 @@ import type { CoreType } from "../system/index.js"
 /*
  * Type representing codename of 'Snippet A' snippet
  */
-export type SnippetASnippetCodename = Extract<SnippetCodenames, "snippet_a">
+export type SnippetASnippetCodename = keyof Pick<Record<SnippetCodenames, null>, "snippet_a">
 
 /*
  * Typeguard for codename of 'Snippet A' snippet

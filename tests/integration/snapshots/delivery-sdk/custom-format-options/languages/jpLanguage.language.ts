@@ -4,7 +4,7 @@
             /*
 * Type representing codename of '__jp' language
 */
-            export type JpLanguageCodename = Extract<LanguageCodenames, '__jp'>;
+            export type JpLanguageCodename = keyof Pick<Record<LanguageCodenames, null>, "__jp">;
 
             /*
 * Typeguard for codename of '__jp' language

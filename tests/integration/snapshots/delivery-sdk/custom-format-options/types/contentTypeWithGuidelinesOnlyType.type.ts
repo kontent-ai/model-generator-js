@@ -6,7 +6,7 @@ import type { CoreType } from '../system/index.js';
             /*
 * Type representing codename of 'Content type with guidelines only' type
 */
-            export type ContentTypeWithGuidelinesOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
+            export type ContentTypeWithGuidelinesOnlyTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_guidelines_only">;
 
             /*
 * Typeguard for codename of 'Content type with guidelines only' type

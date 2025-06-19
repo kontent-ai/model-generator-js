@@ -17,7 +17,7 @@ import type { TaxonomyCodenames } from "./_taxonomies.js"
 /*
  * Type representing codename of 'MovieType' taxonomy
  */
-export type MovietypeTaxonomyCodename = Extract<TaxonomyCodenames, "movietype">
+export type MovietypeTaxonomyCodename = keyof Pick<Record<TaxonomyCodenames, null>, "movietype">
 
 /*
  * Typeguard for codename of 'MovieType' taxonomy

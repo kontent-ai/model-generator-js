@@ -3,7 +3,7 @@ import type { LanguageCodenames } from "./_languages.js"
 /*
  * Type representing codename of '🦉Lang' language
  */
-export type LangLanguageCodename = Extract<LanguageCodenames, "🦉Lang">
+export type LangLanguageCodename = keyof Pick<Record<LanguageCodenames, null>, "🦉Lang">
 
 /*
  * Typeguard for codename of '🦉Lang' language

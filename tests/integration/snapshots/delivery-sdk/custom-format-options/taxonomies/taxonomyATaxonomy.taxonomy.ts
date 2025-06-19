@@ -4,7 +4,7 @@
             /*
 * Type representing codename of 'Taxonomy A' taxonomy
 */
-            export type TaxonomyATaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_a'>;
+            export type TaxonomyATaxonomyCodename = keyof Pick<Record<TaxonomyCodenames, null>, "taxonomy_a">;
 
             /*
 * Typeguard for codename of 'Taxonomy A' taxonomy

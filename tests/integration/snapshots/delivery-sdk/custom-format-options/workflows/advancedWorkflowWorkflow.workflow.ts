@@ -4,7 +4,7 @@
             /*
 * Type representing codename of 'Advanced workflow' workflow
 */
-            export type AdvancedWorkflowWorkflowCodename = Extract<WorkflowCodenames, 'advanced_workflow'>;
+            export type AdvancedWorkflowWorkflowCodename = keyof Pick<Record<WorkflowCodenames, null>, "advanced_workflow">;
 
             /*
 * Typeguard for codename of 'Advanced workflow' workflow

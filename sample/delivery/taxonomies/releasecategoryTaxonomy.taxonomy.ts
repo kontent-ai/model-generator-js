@@ -17,7 +17,7 @@ import type { TaxonomyCodenames } from "./_taxonomies.js"
 /*
  * Type representing codename of 'ReleaseCategory' taxonomy
  */
-export type ReleasecategoryTaxonomyCodename = Extract<TaxonomyCodenames, "releasecategory">
+export type ReleasecategoryTaxonomyCodename = keyof Pick<Record<TaxonomyCodenames, null>, "releasecategory">
 
 /*
  * Typeguard for codename of 'ReleaseCategory' taxonomy

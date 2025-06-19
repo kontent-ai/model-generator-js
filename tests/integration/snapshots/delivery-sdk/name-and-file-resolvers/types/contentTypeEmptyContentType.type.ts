@@ -5,7 +5,7 @@ import type { CoreType } from "../system/index.js"
 /*
  * Type representing codename of 'Empty content type' type
  */
-export type ContentTypeEmptyContentTypeCodename = Extract<TypeCodenames, "empty_content_type">
+export type ContentTypeEmptyContentTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">
 
 /*
  * Typeguard for codename of 'Empty content type' type

@@ -5,7 +5,7 @@ import type { CoreType } from "../system/index.js"
 /*
  * Type representing codename of 'Type referencing deleted type' type
  */
-export type ContentTypeTypeReferencingDeletedTypeCodename = Extract<TypeCodenames, "type_referencing_deleted_type">
+export type ContentTypeTypeReferencingDeletedTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">
 
 /*
  * Typeguard for codename of 'Type referencing deleted type' type

@@ -3,7 +3,7 @@ import type { WorkflowCodenames } from "./_workflows.js"
 /*
  * Type representing codename of 'Default' workflow
  */
-export type DefaultWorkflowCodename = Extract<WorkflowCodenames, "default">
+export type DefaultWorkflowCodename = keyof Pick<Record<WorkflowCodenames, null>, "default">
 
 /*
  * Typeguard for codename of 'Default' workflow

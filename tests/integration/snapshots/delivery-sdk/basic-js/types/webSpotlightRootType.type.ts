@@ -6,7 +6,7 @@ import type { PageType } from "./index.js"
 /*
  * Type representing codename of 'Web spotlight root' type
  */
-export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, "web_spotlight_root">
+export type WebSpotlightRootTypeCodename = keyof Pick<Record<TypeCodenames, null>, "web_spotlight_root">
 
 /*
  * Typeguard for codename of 'Web spotlight root' type

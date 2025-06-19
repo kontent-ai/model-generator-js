@@ -4,7 +4,7 @@
             /*
 * Type representing codename of 'English' language
 */
-            export type EnUSLanguageCodename = Extract<LanguageCodenames, 'en-US'>;
+            export type EnUSLanguageCodename = keyof Pick<Record<LanguageCodenames, null>, "en-US">;
 
             /*
 * Typeguard for codename of 'English' language

@@ -3,7 +3,7 @@ import type { TaxonomyCodenames } from "./_taxonomies.js"
 /*
  * Type representing codename of 'Taxonomy without terms' taxonomy
  */
-export type TaxonomyWithoutTermsTaxonomyCodename = Extract<TaxonomyCodenames, "taxonomy_without_terms">
+export type TaxonomyWithoutTermsTaxonomyCodename = keyof Pick<Record<TaxonomyCodenames, null>, "taxonomy_without_terms">
 
 /*
  * Typeguard for codename of 'Taxonomy without terms' taxonomy

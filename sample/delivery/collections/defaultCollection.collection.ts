@@ -17,7 +17,7 @@ import type { CollectionCodenames } from "./_collections.js"
 /*
  * Type representing codename of 'Default' collection
  */
-export type DefaultCollectionCodename = Extract<CollectionCodenames, "default">
+export type DefaultCollectionCodename = keyof Pick<Record<CollectionCodenames, null>, "default">
 
 /*
  * Typeguard for codename of 'Default' collection

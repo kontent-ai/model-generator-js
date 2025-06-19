@@ -7,7 +7,7 @@ import type { CoreType } from '../system/index.js';
             /*
 * Type representing codename of 'Circular reference type A > B' type
 */
-            export type CircularReferenceTypeABTypeCodename = Extract<TypeCodenames, 'circular_reference_type_a_b'>;
+            export type CircularReferenceTypeABTypeCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_a_b">;
 
             /*
 * Typeguard for codename of 'Circular reference type A > B' type

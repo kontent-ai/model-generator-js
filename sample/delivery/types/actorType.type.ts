@@ -19,7 +19,7 @@ import type { CoreType } from "../system/index.js"
 /*
  * Type representing codename of 'Actor' type
  */
-export type ActorTypeCodename = Extract<TypeCodenames, "actor">
+export type ActorTypeCodename = keyof Pick<Record<TypeCodenames, null>, "actor">
 
 /*
  * Typeguard for codename of 'Actor' type

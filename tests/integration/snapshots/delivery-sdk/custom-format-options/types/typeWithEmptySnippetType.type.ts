@@ -6,7 +6,7 @@ import type { CoreType } from '../system/index.js';
             /*
 * Type representing codename of 'Type with empty snippet' type
 */
-            export type TypeWithEmptySnippetTypeCodename = Extract<TypeCodenames, 'type_with_empty_snippet'>;
+            export type TypeWithEmptySnippetTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_with_empty_snippet">;
 
             /*
 * Typeguard for codename of 'Type with empty snippet' type

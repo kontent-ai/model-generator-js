@@ -6,7 +6,7 @@ import type { SnippetSnippetA } from "../snippets/index.js"
 /*
  * Type representing codename of 'Content type with snippet only' type
  */
-export type ContentTypeContentTypeWithSnippetOnlyCodename = Extract<TypeCodenames, "content_type_with_snippet_only">
+export type ContentTypeContentTypeWithSnippetOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_snippet_only">
 
 /*
  * Typeguard for codename of 'Content type with snippet only' type
