@@ -50,6 +50,21 @@ export const cliArgs = argumentsSetter()
 		],
 	})
 	.withCommand({
+		name: "sync-sdk",
+		description: `Generates models for '${"@kontent-ai/sync-sdk" satisfies LibraryType}' library`,
+		examples: [
+			`kontent-generate ${"sync-sdk" satisfies CliAction} --${commandOptions.environmentId.name}=x --${commandOptions.managementApiKey.name}=x`,
+		],
+		options: [
+			commandOptions.environmentId,
+			commandOptions.managementApiKey,
+			commandOptions.addTimestamp,
+			commandOptions.moduleFileExtension,
+			commandOptions.outputDir,
+			commandOptions.managementBaseUrl,
+		],
+	})
+	.withCommand({
 		name: "items",
 		description: "Overview of all items in the environment and their ids/codenames as well as Type representing all item codenames.",
 		examples: [
