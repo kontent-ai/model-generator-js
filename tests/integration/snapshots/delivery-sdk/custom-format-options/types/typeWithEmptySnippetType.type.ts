@@ -38,7 +38,7 @@ export type TypeWithEmptySnippetTypeElementCodenames = never;
 * Codename: type_with_empty_snippet
     */
 export function isTypeWithEmptySnippetType(item: CoreType | undefined | null): item is TypeWithEmptySnippetType {
-                return item?.system?.type === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetTypeCodename);
+                return item?.system.type === ('type_with_empty_snippet' satisfies TypeWithEmptySnippetTypeCodename);
             };
 
 

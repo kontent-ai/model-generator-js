@@ -1,11 +1,11 @@
-import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/index.js';
+import type { TypeCodenames } from "./_types.js"
+import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of '🐧 Content type with special chars #!_'' type
  */
-export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_content_type_with_special_chars____'>;
+export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, "_content_type_with_special_chars____">
 
 /*
  * Typeguard for codename of '🐧 Content type with special chars #!_'' type
@@ -13,9 +13,7 @@ export type ContentTypeWithSpecialCharsTypeCodename = Extract<TypeCodenames, '_c
 export function isContentTypeWithSpecialCharsTypeCodename(
 	value: string | undefined | null
 ): value is ContentTypeWithSpecialCharsTypeCodename {
-	return (
-		typeof value === 'string' && value === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename)
-	);
+	return typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename)
 }
 
 /*
@@ -35,7 +33,7 @@ export type ContentTypeWithSpecialCharsType = CoreType<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly parrot__: Elements.TextElement;
+		readonly parrot__: Elements.TextElement
 
 		/*
 		 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
@@ -45,15 +43,15 @@ export type ContentTypeWithSpecialCharsType = CoreType<
 		 * Type: number
 		 * Required: false
 		 */
-		readonly _____numberelem_____________________: Elements.NumberElement;
+		readonly _____numberelem_____________________: Elements.NumberElement
 	},
 	ContentTypeWithSpecialCharsTypeCodename
->;
+>
 
 /*
  * Type representing all available element codenames for 🐧 Content type with special chars #!_'
  */
-export type ContentTypeWithSpecialCharsTypeElementCodenames = 'parrot__' | '_____numberelem_____________________';
+export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "_____numberelem_____________________"
 
 /*
  * Type guard for 🐧 Content type with special chars #!_'
@@ -62,5 +60,5 @@ export type ContentTypeWithSpecialCharsTypeElementCodenames = 'parrot__' | '____
  * Codename: _content_type_with_special_chars____
  */
 export function isContentTypeWithSpecialCharsType(item: CoreType | undefined | null): item is ContentTypeWithSpecialCharsType {
-	return item?.system?.type === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename);
+	return item?.system.type === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename)
 }

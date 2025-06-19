@@ -38,7 +38,7 @@ export type EmptyContentTypeTypeElementCodenames = never;
 * Codename: empty_content_type
     */
 export function isEmptyContentTypeType(item: CoreType | undefined | null): item is EmptyContentTypeType {
-                return item?.system?.type === ('empty_content_type' satisfies EmptyContentTypeTypeCodename);
+                return item?.system.type === ('empty_content_type' satisfies EmptyContentTypeTypeCodename);
             };
 
 

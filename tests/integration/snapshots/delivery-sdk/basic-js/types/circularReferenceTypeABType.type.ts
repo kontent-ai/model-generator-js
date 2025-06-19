@@ -1,18 +1,18 @@
-import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { CircularReferenceTypeBAType } from './index.js';
-import type { CoreType } from '../system/index.js';
+import type { TypeCodenames } from "./_types.js"
+import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { CircularReferenceTypeBAType } from "./index.js"
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of 'Circular reference type A > B' type
  */
-export type CircularReferenceTypeABTypeCodename = Extract<TypeCodenames, 'circular_reference_type_a_b'>;
+export type CircularReferenceTypeABTypeCodename = Extract<TypeCodenames, "circular_reference_type_a_b">
 
 /*
  * Typeguard for codename of 'Circular reference type A > B' type
  */
 export function isCircularReferenceTypeABTypeCodename(value: string | undefined | null): value is CircularReferenceTypeABTypeCodename {
-	return typeof value === 'string' && value === ('circular_reference_type_a_b' satisfies CircularReferenceTypeABTypeCodename);
+	return typeof value === "string" && value === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename)
 }
 
 /*
@@ -33,15 +33,15 @@ export type CircularReferenceTypeABType = CoreType<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_b____a
 		 */
-		readonly items: Elements.LinkedItemsElement<CircularReferenceTypeBAType>;
+		readonly items: Elements.LinkedItemsElement<CircularReferenceTypeBAType>
 	},
 	CircularReferenceTypeABTypeCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Circular reference type A > B
  */
-export type CircularReferenceTypeABTypeElementCodenames = 'items';
+export type CircularReferenceTypeABTypeElementCodenames = "items"
 
 /*
  * Type guard for Circular reference type A > B
@@ -50,5 +50,5 @@ export type CircularReferenceTypeABTypeElementCodenames = 'items';
  * Codename: circular_reference_type_a_b
  */
 export function isCircularReferenceTypeABType(item: CoreType | undefined | null): item is CircularReferenceTypeABType {
-	return item?.system?.type === ('circular_reference_type_a_b' satisfies CircularReferenceTypeABTypeCodename);
+	return item?.system.type === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename)
 }

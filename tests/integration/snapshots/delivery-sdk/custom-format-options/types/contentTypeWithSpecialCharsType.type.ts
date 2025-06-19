@@ -57,7 +57,7 @@ export type ContentTypeWithSpecialCharsTypeElementCodenames = 'parrot__' | '____
 * Codename: _content_type_with_special_chars____
     */
 export function isContentTypeWithSpecialCharsType(item: CoreType | undefined | null): item is ContentTypeWithSpecialCharsType {
-                return item?.system?.type === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename);
+                return item?.system.type === ('_content_type_with_special_chars____' satisfies ContentTypeWithSpecialCharsTypeCodename);
             };
 
 

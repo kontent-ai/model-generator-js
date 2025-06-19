@@ -1,10 +1,4 @@
-import packageJson from '../package.json' with { type: 'json' };
-import { createVersionFile } from './utils/script.utils.js';
+import { replaceSdkVersionPlaceholder } from "@kontent-ai/core-sdk/devkit";
+import packageJson from "../package.json" with { type: "json" };
 
-createVersionFile({
-    date: new Date(),
-    filePath: './lib/meta/metadata.ts',
-    propertyName: 'libMetadata',
-    packageName: packageJson.name,
-    packageVersion: packageJson.version
-});
+replaceSdkVersionPlaceholder("./dist/sdk-info.js", packageJson.version);

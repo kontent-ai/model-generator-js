@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { CoreMigrationItem } from '../migration.js';
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
+import type { CoreMigrationItem } from "../migration.js"
 
 /*
  * Content type with all elements
@@ -8,7 +8,7 @@ import type { CoreMigrationItem } from '../migration.js';
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  */
 export type ContentTypeWithAllElementsItem = CoreMigrationItem<
-	'content_type_with_all_elements',
+	"content_type_with_all_elements",
 	{
 		/*
 		 * Text element
@@ -19,7 +19,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Required: true
 		 * Guidelines: Simple text element guidelines
 		 */
-		readonly text_element: MigrationElementModels.TextElement;
+		readonly text_element: MigrationElementModels.TextElement
 
 		/*
 		 * Url slug element
@@ -29,7 +29,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url_slug_element: MigrationElementModels.UrlSlugElement;
+		readonly url_slug_element: MigrationElementModels.UrlSlugElement
 
 		/*
 		 * Rich text element
@@ -39,7 +39,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: MigrationElementModels.RichTextElement;
+		readonly rich_text_element: MigrationElementModels.RichTextElement
 
 		/*
 		 * Date & time element
@@ -49,7 +49,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: date_time
 		 * Required: false
 		 */
-		readonly date___time_element: MigrationElementModels.DateTimeElement;
+		readonly date___time_element: MigrationElementModels.DateTimeElement
 
 		/*
 		 * Custom element
@@ -59,7 +59,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: custom
 		 * Required: false
 		 */
-		readonly custom_element: MigrationElementModels.CustomElement;
+		readonly custom_element: MigrationElementModels.CustomElement
 
 		/*
 		 * Linked items element
@@ -70,7 +70,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly linked_items_element: MigrationElementModels.LinkedItemsElement;
+		readonly linked_items_element: MigrationElementModels.LinkedItemsElement
 
 		/*
 		 * Asset element
@@ -80,7 +80,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: asset
 		 * Required: false
 		 */
-		readonly asset_element: MigrationElementModels.AssetElement;
+		readonly asset_element: MigrationElementModels.AssetElement
 
 		/*
 		 * Multiple choice element
@@ -90,7 +90,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly multiple_choice_element: MigrationElementModels.MultipleChoiceElement;
+		readonly multiple_choice_element: MigrationElementModels.MultipleChoiceElement
 
 		/*
 		 * Number element
@@ -100,7 +100,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Type: number
 		 * Required: false
 		 */
-		readonly number_element: MigrationElementModels.NumberElement;
+		readonly number_element: MigrationElementModels.NumberElement
 
 		/*
 		 * Rich text with all allowed item types
@@ -111,7 +111,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Required: false
 		 * From snippet: snippet_a
 		 */
-		readonly snippet_a__rich_text_with_all_allowed_item_types: MigrationElementModels.RichTextElement;
+		readonly snippet_a__rich_text_with_all_allowed_item_types: MigrationElementModels.RichTextElement
 
 		/*
 		 * Linked items with specific types
@@ -123,7 +123,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * From snippet: snippet_a
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly snippet_a__linked_items_with_specific_types: MigrationElementModels.LinkedItemsElement;
+		readonly snippet_a__linked_items_with_specific_types: MigrationElementModels.LinkedItemsElement
 
 		/*
 		 * Text
@@ -134,7 +134,7 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Required: true
 		 * From snippet: snippet_a
 		 */
-		readonly snippet_a__text: MigrationElementModels.TextElement;
+		readonly snippet_a__text: MigrationElementModels.TextElement
 
 		/*
 		 * Taxonomy A
@@ -145,6 +145,6 @@ export type ContentTypeWithAllElementsItem = CoreMigrationItem<
 		 * Required: false
 		 * Taxonomy: taxonomy_a
 		 */
-		readonly taxonomy_element: MigrationElementModels.TaxonomyElement;
+		readonly taxonomy_element: MigrationElementModels.TaxonomyElement
 	}
->;
+>

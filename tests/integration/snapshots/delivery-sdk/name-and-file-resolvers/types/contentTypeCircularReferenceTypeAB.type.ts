@@ -1,12 +1,12 @@
-import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { ContentTypeCircularReferenceTypeBA } from './index.js';
-import type { CoreType } from '../system/index.js';
+import type { TypeCodenames } from "./_types.js"
+import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { ContentTypeCircularReferenceTypeBA } from "./index.js"
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of 'Circular reference type A > B' type
  */
-export type ContentTypeCircularReferenceTypeABCodename = Extract<TypeCodenames, 'circular_reference_type_a_b'>;
+export type ContentTypeCircularReferenceTypeABCodename = Extract<TypeCodenames, "circular_reference_type_a_b">
 
 /*
  * Typeguard for codename of 'Circular reference type A > B' type
@@ -14,7 +14,7 @@ export type ContentTypeCircularReferenceTypeABCodename = Extract<TypeCodenames, 
 export function isContentTypeCircularReferenceTypeABCodename(
 	value: string | undefined | null
 ): value is ContentTypeCircularReferenceTypeABCodename {
-	return typeof value === 'string' && value === ('circular_reference_type_a_b' satisfies ContentTypeCircularReferenceTypeABCodename);
+	return typeof value === "string" && value === ("circular_reference_type_a_b" satisfies ContentTypeCircularReferenceTypeABCodename)
 }
 
 /*
@@ -35,15 +35,15 @@ export type ContentTypeCircularReferenceTypeAB = CoreType<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_b____a
 		 */
-		readonly items: Elements.LinkedItemsElement<ContentTypeCircularReferenceTypeBA>;
+		readonly items: Elements.LinkedItemsElement<ContentTypeCircularReferenceTypeBA>
 	},
 	ContentTypeCircularReferenceTypeABCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Circular reference type A > B
  */
-export type ContentTypeCircularReferenceTypeABElementCodenames = 'items';
+export type ContentTypeCircularReferenceTypeABElementCodenames = "items"
 
 /*
  * Type guard for Circular reference type A > B
@@ -52,5 +52,5 @@ export type ContentTypeCircularReferenceTypeABElementCodenames = 'items';
  * Codename: circular_reference_type_a_b
  */
 export function isContentTypeCircularReferenceTypeAB(item: CoreType | undefined | null): item is ContentTypeCircularReferenceTypeAB {
-	return item?.system?.type === ('circular_reference_type_a_b' satisfies ContentTypeCircularReferenceTypeABCodename);
+	return item?.system.type === ("circular_reference_type_a_b" satisfies ContentTypeCircularReferenceTypeABCodename)
 }

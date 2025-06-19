@@ -87,7 +87,7 @@ export type PageTypeElementCodenames = 'title' | 'url' | 'show_in_navigation' | 
 * Codename: page
     */
 export function isPageType(item: CoreType | undefined | null): item is PageType {
-                return item?.system?.type === ('page' satisfies PageTypeCodename);
+                return item?.system.type === ('page' satisfies PageTypeCodename);
             };
 
 export type PageTypeShowInNavigationMultipleChoiceOptions = 'yes' | 'no'

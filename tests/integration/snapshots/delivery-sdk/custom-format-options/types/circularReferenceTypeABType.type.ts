@@ -49,7 +49,7 @@ export type CircularReferenceTypeABTypeElementCodenames = 'items';;
 * Codename: circular_reference_type_a_b
     */
 export function isCircularReferenceTypeABType(item: CoreType | undefined | null): item is CircularReferenceTypeABType {
-                return item?.system?.type === ('circular_reference_type_a_b' satisfies CircularReferenceTypeABTypeCodename);
+                return item?.system.type === ('circular_reference_type_a_b' satisfies CircularReferenceTypeABTypeCodename);
             };
 
 

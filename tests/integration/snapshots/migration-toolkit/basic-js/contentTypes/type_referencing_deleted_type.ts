@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { CoreMigrationItem } from '../migration.js';
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
+import type { CoreMigrationItem } from "../migration.js"
 
 /*
  * Type referencing deleted type
@@ -8,7 +8,7 @@ import type { CoreMigrationItem } from '../migration.js';
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  */
 export type TypeReferencingDeletedTypeItem = CoreMigrationItem<
-	'type_referencing_deleted_type',
+	"type_referencing_deleted_type",
 	{
 		/*
 		 * Rich text with invalid type
@@ -18,7 +18,7 @@ export type TypeReferencingDeletedTypeItem = CoreMigrationItem<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_with_invalid_type: MigrationElementModels.RichTextElement;
+		readonly rich_text_with_invalid_type: MigrationElementModels.RichTextElement
 
 		/*
 		 * Linked items with invalid type
@@ -28,6 +28,6 @@ export type TypeReferencingDeletedTypeItem = CoreMigrationItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly linked_items_with_invalid_type: MigrationElementModels.LinkedItemsElement;
+		readonly linked_items_with_invalid_type: MigrationElementModels.LinkedItemsElement
 	}
->;
+>

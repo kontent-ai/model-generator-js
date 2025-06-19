@@ -1,12 +1,12 @@
-import type { TypeCodenames } from './_types.js';
+import type { TypeCodenames } from "./_types.js"
 
-import type { CoreType } from '../system/index.js';
-import type { SnippetASnippet } from '../snippets/index.js';
+import type { CoreType } from "../system/index.js"
+import type { SnippetASnippet } from "../snippets/index.js"
 
 /*
  * Type representing codename of 'Content type with snippet only' type
  */
-export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'content_type_with_snippet_only'>;
+export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, "content_type_with_snippet_only">
 
 /*
  * Typeguard for codename of 'Content type with snippet only' type
@@ -14,7 +14,7 @@ export type ContentTypeWithSnippetOnlyTypeCodename = Extract<TypeCodenames, 'con
 export function isContentTypeWithSnippetOnlyTypeCodename(
 	value: string | undefined | null
 ): value is ContentTypeWithSnippetOnlyTypeCodename {
-	return typeof value === 'string' && value === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
+	return typeof value === "string" && value === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyTypeCodename)
 }
 
 /*
@@ -27,15 +27,15 @@ export type ContentTypeWithSnippetOnlyType = CoreType<
 	ContentTypeWithSnippetOnlyTypeElementCodenames,
 	Record<string, never> & SnippetASnippet,
 	ContentTypeWithSnippetOnlyTypeCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Content type with snippet only
  */
 export type ContentTypeWithSnippetOnlyTypeElementCodenames =
-	| 'snippet_a__rich_text_with_all_allowed_item_types'
-	| 'snippet_a__linked_items_with_specific_types'
-	| 'snippet_a__text';
+	| "snippet_a__rich_text_with_all_allowed_item_types"
+	| "snippet_a__linked_items_with_specific_types"
+	| "snippet_a__text"
 
 /*
  * Type guard for Content type with snippet only
@@ -44,5 +44,5 @@ export type ContentTypeWithSnippetOnlyTypeElementCodenames =
  * Codename: content_type_with_snippet_only
  */
 export function isContentTypeWithSnippetOnlyType(item: CoreType | undefined | null): item is ContentTypeWithSnippetOnlyType {
-	return item?.system?.type === ('content_type_with_snippet_only' satisfies ContentTypeWithSnippetOnlyTypeCodename);
+	return item?.system.type === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyTypeCodename)
 }

@@ -142,7 +142,7 @@ export type ContentTypeWithAllElementsTypeElementCodenames = 'text_element' | 'u
 * Codename: content_type_with_all_elements
     */
 export function isContentTypeWithAllElementsType(item: CoreType | undefined | null): item is ContentTypeWithAllElementsType {
-                return item?.system?.type === ('content_type_with_all_elements' satisfies ContentTypeWithAllElementsTypeCodename);
+                return item?.system.type === ('content_type_with_all_elements' satisfies ContentTypeWithAllElementsTypeCodename);
             };
 
 export type ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions = 'option_a' | 'option_b'

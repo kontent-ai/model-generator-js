@@ -1,17 +1,17 @@
-import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/index.js';
+import type { TypeCodenames } from "./_types.js"
+import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of 'Page' type
  */
-export type ContentTypePageCodename = Extract<TypeCodenames, 'page'>;
+export type ContentTypePageCodename = Extract<TypeCodenames, "page">
 
 /*
  * Typeguard for codename of 'Page' type
  */
 export function isContentTypePageCodename(value: string | undefined | null): value is ContentTypePageCodename {
-	return typeof value === 'string' && value === ('page' satisfies ContentTypePageCodename);
+	return typeof value === "string" && value === ("page" satisfies ContentTypePageCodename)
 }
 
 /*
@@ -31,7 +31,7 @@ export type ContentTypePage = CoreType<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: Elements.TextElement;
+		readonly title: Elements.TextElement
 
 		/*
 		 * URL
@@ -41,7 +41,7 @@ export type ContentTypePage = CoreType<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url: Elements.UrlSlugElement;
+		readonly url: Elements.UrlSlugElement
 
 		/*
 		 * Show in navigation
@@ -51,7 +51,7 @@ export type ContentTypePage = CoreType<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly show_in_navigation: Elements.MultipleChoiceElement<ContentTypePageShowInNavigationMultipleChoiceOptions>;
+		readonly show_in_navigation: Elements.MultipleChoiceElement<ContentTypePageShowInNavigationMultipleChoiceOptions>
 
 		/*
 		 * Subpages
@@ -61,7 +61,7 @@ export type ContentTypePage = CoreType<
 		 * Type: subpages
 		 * Required: false
 		 */
-		readonly subpages: Elements.LinkedItemsElement<CoreType>;
+		readonly subpages: Elements.LinkedItemsElement<CoreType>
 
 		/*
 		 * Content
@@ -71,15 +71,15 @@ export type ContentTypePage = CoreType<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>;
+		readonly content: Elements.LinkedItemsElement<CoreType>
 	},
 	ContentTypePageCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Page
  */
-export type ContentTypePageElementCodenames = 'title' | 'url' | 'show_in_navigation' | 'subpages' | 'content';
+export type ContentTypePageElementCodenames = "title" | "url" | "show_in_navigation" | "subpages" | "content"
 
 /*
  * Type guard for Page
@@ -88,7 +88,7 @@ export type ContentTypePageElementCodenames = 'title' | 'url' | 'show_in_navigat
  * Codename: page
  */
 export function isContentTypePage(item: CoreType | undefined | null): item is ContentTypePage {
-	return item?.system?.type === ('page' satisfies ContentTypePageCodename);
+	return item?.system.type === ("page" satisfies ContentTypePageCodename)
 }
 
-export type ContentTypePageShowInNavigationMultipleChoiceOptions = 'yes' | 'no';
+export type ContentTypePageShowInNavigationMultipleChoiceOptions = "yes" | "no"

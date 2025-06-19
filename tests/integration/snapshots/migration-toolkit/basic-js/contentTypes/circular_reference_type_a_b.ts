@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { CoreMigrationItem } from '../migration.js';
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
+import type { CoreMigrationItem } from "../migration.js"
 
 /*
  * Circular reference type A > B
@@ -8,7 +8,7 @@ import type { CoreMigrationItem } from '../migration.js';
  * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
  */
 export type CircularReferenceTypeABItem = CoreMigrationItem<
-	'circular_reference_type_a_b',
+	"circular_reference_type_a_b",
 	{
 		/*
 		 * Items
@@ -19,6 +19,6 @@ export type CircularReferenceTypeABItem = CoreMigrationItem<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_b____a
 		 */
-		readonly items: MigrationElementModels.LinkedItemsElement;
+		readonly items: MigrationElementModels.LinkedItemsElement
 	}
->;
+>

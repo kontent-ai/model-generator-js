@@ -1,3 +1,3 @@
-export * from './contentTypeSnippets.ts';
-export * from './languages.ts';
-export * from './workflows.ts';
+export * from "./contentTypeSnippets.js"
+export * from "./languages.js"
+export * from "./workflows.js"

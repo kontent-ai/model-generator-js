@@ -1,18 +1,18 @@
-import type { SnippetCodenames } from './_snippets.js';
-import type { Elements, Snippet } from '@kontent-ai/delivery-sdk';
-import type { ContentTypeContentTypeWithAllElements } from '../types/index.js';
-import type { CoreType } from '../system/index.js';
+import type { SnippetCodenames } from "./_snippets.js"
+import type { Elements, Snippet } from "@kontent-ai/delivery-sdk"
+import type { ContentTypeContentTypeWithAllElements } from "../types/index.js"
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of 'Snippet A' snippet
  */
-export type SnippetSnippetACodename = Extract<SnippetCodenames, 'snippet_a'>;
+export type SnippetSnippetACodename = Extract<SnippetCodenames, "snippet_a">
 
 /*
  * Typeguard for codename of 'Snippet A' snippet
  */
 export function isSnippetSnippetACodename(value: string | undefined | null): value is SnippetSnippetACodename {
-	return typeof value === 'string' && value === ('snippet_a' satisfies SnippetSnippetACodename);
+	return typeof value === "string" && value === ("snippet_a" satisfies SnippetSnippetACodename)
 }
 
 /*
@@ -32,7 +32,7 @@ export type SnippetSnippetA = Snippet<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichTextElement<CoreType>;
+		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichTextElement<CoreType>
 
 		/*
 		 * Linked items with specific types
@@ -43,7 +43,7 @@ export type SnippetSnippetA = Snippet<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly snippet_a__linked_items_with_specific_types: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>;
+		readonly snippet_a__linked_items_with_specific_types: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>
 
 		/*
 		 * Text
@@ -53,14 +53,14 @@ export type SnippetSnippetA = Snippet<
 		 * Type: text
 		 * Required: true
 		 */
-		readonly snippet_a__text: Elements.TextElement;
+		readonly snippet_a__text: Elements.TextElement
 	}
->;
+>
 
 /*
  * Type representing all available element codenames for Snippet A
  */
 export type SnippetSnippetAElementCodenames =
-	| 'snippet_a__rich_text_with_all_allowed_item_types'
-	| 'snippet_a__linked_items_with_specific_types'
-	| 'snippet_a__text';
+	| "snippet_a__rich_text_with_all_allowed_item_types"
+	| "snippet_a__linked_items_with_specific_types"
+	| "snippet_a__text"

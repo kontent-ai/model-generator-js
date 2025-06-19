@@ -1,11 +1,11 @@
-import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/index.js';
+import type { TypeCodenames } from "./_types.js"
+import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of 'Type referencing deleted type' type
  */
-export type TypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, 'type_referencing_deleted_type'>;
+export type TypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, "type_referencing_deleted_type">
 
 /*
  * Typeguard for codename of 'Type referencing deleted type' type
@@ -13,7 +13,7 @@ export type TypeReferencingDeletedTypeTypeCodename = Extract<TypeCodenames, 'typ
 export function isTypeReferencingDeletedTypeTypeCodename(
 	value: string | undefined | null
 ): value is TypeReferencingDeletedTypeTypeCodename {
-	return typeof value === 'string' && value === ('type_referencing_deleted_type' satisfies TypeReferencingDeletedTypeTypeCodename);
+	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename)
 }
 
 /*
@@ -33,7 +33,7 @@ export type TypeReferencingDeletedTypeType = CoreType<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_with_invalid_type: Elements.RichTextElement<CoreType>;
+		readonly rich_text_with_invalid_type: Elements.RichTextElement<CoreType>
 
 		/*
 		 * Linked items with invalid type
@@ -43,15 +43,15 @@ export type TypeReferencingDeletedTypeType = CoreType<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly linked_items_with_invalid_type: Elements.LinkedItemsElement<CoreType>;
+		readonly linked_items_with_invalid_type: Elements.LinkedItemsElement<CoreType>
 	},
 	TypeReferencingDeletedTypeTypeCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Type referencing deleted type
  */
-export type TypeReferencingDeletedTypeTypeElementCodenames = 'rich_text_with_invalid_type' | 'linked_items_with_invalid_type';
+export type TypeReferencingDeletedTypeTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type"
 
 /*
  * Type guard for Type referencing deleted type
@@ -60,5 +60,5 @@ export type TypeReferencingDeletedTypeTypeElementCodenames = 'rich_text_with_inv
  * Codename: type_referencing_deleted_type
  */
 export function isTypeReferencingDeletedTypeType(item: CoreType | undefined | null): item is TypeReferencingDeletedTypeType {
-	return item?.system?.type === ('type_referencing_deleted_type' satisfies TypeReferencingDeletedTypeTypeCodename);
+	return item?.system.type === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename)
 }

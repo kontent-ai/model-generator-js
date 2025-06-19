@@ -1,30 +1,30 @@
-import type { TaxonomyCodenames } from './_taxonomies.js';
+import type { TaxonomyCodenames } from "./_taxonomies.js"
 
 /*
  * Type representing codename of 'Taxonomy A' taxonomy
  */
-export type TaxonomyATaxonomyCodename = Extract<TaxonomyCodenames, 'taxonomy_a'>;
+export type TaxonomyATaxonomyCodename = Extract<TaxonomyCodenames, "taxonomy_a">
 
 /*
  * Typeguard for codename of 'Taxonomy A' taxonomy
  */
 export function isTaxonomyATaxonomyCodename(value: string | undefined | null): value is TaxonomyATaxonomyCodename {
-	return typeof value === 'string' && value === ('taxonomy_a' satisfies TaxonomyATaxonomyCodename);
+	return typeof value === "string" && value === ("taxonomy_a" satisfies TaxonomyATaxonomyCodename)
 }
 
 /*
  * Array of all taxonomy term codenames
  */
-export const taxonomyATaxonomyTermCodenames = ['nested_term_2', 'nested_term_1', 'term_1', 'term_2', 'term_3'] as const;
+export const taxonomyATaxonomyTermCodenames = ["nested_term_2", "nested_term_1", "term_1", "term_2", "term_3"] as const
 
 /*
  * Type representing all taxonomy term codenames
  */
-export type TaxonomyATaxonomyTermCodenames = (typeof taxonomyATaxonomyTermCodenames)[number];
+export type TaxonomyATaxonomyTermCodenames = (typeof taxonomyATaxonomyTermCodenames)[number]
 
 /*
  * Typeguard for taxonomy term codename
  */
 export function isTaxonomyATaxonomyTermCodename(value: string | undefined | null): value is TaxonomyATaxonomyTermCodenames {
-	return typeof value === 'string' && (taxonomyATaxonomyTermCodenames as readonly string[]).includes(value);
+	return typeof value === "string" && (taxonomyATaxonomyTermCodenames as readonly string[]).includes(value)
 }

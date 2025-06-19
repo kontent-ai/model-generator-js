@@ -10,7 +10,7 @@ export const web_spotlight_rootItems = {
 	 * WSL root
 	 */
 	wsl_root: {
-		codename: 'wsl_root',
-		id: 'c2d52eb8-30a3-4838-b20c-6ca5aab7e094'
+		codename: "wsl_root",
+		id: "c2d52eb8-30a3-4838-b20c-6ca5aab7e094"
 	}
-} as const;
+} as const

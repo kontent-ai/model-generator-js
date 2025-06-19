@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from '@kontent-ai/migration-toolkit';
-import type { CoreMigrationItem } from '../migration.js';
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
+import type { CoreMigrationItem } from "../migration.js"
 
 /*
  * Page
@@ -8,7 +8,7 @@ import type { CoreMigrationItem } from '../migration.js';
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  */
 export type PageItem = CoreMigrationItem<
-	'page',
+	"page",
 	{
 		/*
 		 * Title
@@ -18,7 +18,7 @@ export type PageItem = CoreMigrationItem<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: MigrationElementModels.TextElement;
+		readonly title: MigrationElementModels.TextElement
 
 		/*
 		 * URL
@@ -28,7 +28,7 @@ export type PageItem = CoreMigrationItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url: MigrationElementModels.UrlSlugElement;
+		readonly url: MigrationElementModels.UrlSlugElement
 
 		/*
 		 * Show in navigation
@@ -38,7 +38,7 @@ export type PageItem = CoreMigrationItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly show_in_navigation: MigrationElementModels.MultipleChoiceElement;
+		readonly show_in_navigation: MigrationElementModels.MultipleChoiceElement
 
 		/*
 		 * Subpages
@@ -48,7 +48,7 @@ export type PageItem = CoreMigrationItem<
 		 * Type: subpages
 		 * Required: false
 		 */
-		readonly subpages: MigrationElementModels.SubpagesElement;
+		readonly subpages: MigrationElementModels.SubpagesElement
 
 		/*
 		 * Content
@@ -58,6 +58,6 @@ export type PageItem = CoreMigrationItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: MigrationElementModels.LinkedItemsElement;
+		readonly content: MigrationElementModels.LinkedItemsElement
 	}
->;
+>

@@ -10,7 +10,7 @@ export const content_type_with_all_elementsItems = {
 	 * Item A
 	 */
 	item_a: {
-		codename: 'item_a',
-		id: 'c9084218-1d6a-4346-8042-f0dff2a4251a'
+		codename: "item_a",
+		id: "c9084218-1d6a-4346-8042-f0dff2a4251a"
 	}
-} as const;
+} as const

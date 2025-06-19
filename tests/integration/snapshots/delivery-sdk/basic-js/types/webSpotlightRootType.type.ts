@@ -1,18 +1,18 @@
-import type { TypeCodenames } from './_types.js';
-import type { Elements } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/index.js';
-import type { PageType } from './index.js';
+import type { TypeCodenames } from "./_types.js"
+import type { Elements } from "@kontent-ai/delivery-sdk"
+import type { CoreType } from "../system/index.js"
+import type { PageType } from "./index.js"
 
 /*
  * Type representing codename of 'Web spotlight root' type
  */
-export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, 'web_spotlight_root'>;
+export type WebSpotlightRootTypeCodename = Extract<TypeCodenames, "web_spotlight_root">
 
 /*
  * Typeguard for codename of 'Web spotlight root' type
  */
 export function isWebSpotlightRootTypeCodename(value: string | undefined | null): value is WebSpotlightRootTypeCodename {
-	return typeof value === 'string' && value === ('web_spotlight_root' satisfies WebSpotlightRootTypeCodename);
+	return typeof value === "string" && value === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename)
 }
 
 /*
@@ -32,7 +32,7 @@ export type WebSpotlightRootType = CoreType<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: Elements.TextElement;
+		readonly title: Elements.TextElement
 
 		/*
 		 * Subpages
@@ -43,7 +43,7 @@ export type WebSpotlightRootType = CoreType<
 		 * Required: false
 		 * Allowed content types: page
 		 */
-		readonly subpages: Elements.LinkedItemsElement<PageType>;
+		readonly subpages: Elements.LinkedItemsElement<PageType>
 
 		/*
 		 * Content
@@ -53,15 +53,15 @@ export type WebSpotlightRootType = CoreType<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>;
+		readonly content: Elements.LinkedItemsElement<CoreType>
 	},
 	WebSpotlightRootTypeCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Web spotlight root
  */
-export type WebSpotlightRootTypeElementCodenames = 'title' | 'subpages' | 'content';
+export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "content"
 
 /*
  * Type guard for Web spotlight root
@@ -70,5 +70,5 @@ export type WebSpotlightRootTypeElementCodenames = 'title' | 'subpages' | 'conte
  * Codename: web_spotlight_root
  */
 export function isWebSpotlightRootType(item: CoreType | undefined | null): item is WebSpotlightRootType {
-	return item?.system?.type === ('web_spotlight_root' satisfies WebSpotlightRootTypeCodename);
+	return item?.system.type === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename)
 }

@@ -1,13 +1,13 @@
-import type { LanguageCodenames } from './_languages.js';
+import type { LanguageCodenames } from "./_languages.js"
 
 /*
  * Type representing codename of '🦉Lang' language
  */
-export type LangLanguageCodename = Extract<LanguageCodenames, '🦉Lang'>;
+export type LangLanguageCodename = Extract<LanguageCodenames, "🦉Lang">
 
 /*
  * Typeguard for codename of '🦉Lang' language
  */
 export function isLangLanguageCodename(value: string | undefined | null): value is LangLanguageCodename {
-	return typeof value === 'string' && value === ('🦉Lang' satisfies LangLanguageCodename);
+	return typeof value === "string" && value === ("🦉Lang" satisfies LangLanguageCodename)
 }

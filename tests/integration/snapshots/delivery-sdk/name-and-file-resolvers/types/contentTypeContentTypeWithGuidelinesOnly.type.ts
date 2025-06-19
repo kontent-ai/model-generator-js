@@ -1,11 +1,11 @@
-import type { TypeCodenames } from './_types.js';
+import type { TypeCodenames } from "./_types.js"
 
-import type { CoreType } from '../system/index.js';
+import type { CoreType } from "../system/index.js"
 
 /*
  * Type representing codename of 'Content type with guidelines only' type
  */
-export type ContentTypeContentTypeWithGuidelinesOnlyCodename = Extract<TypeCodenames, 'content_type_with_guidelines_only'>;
+export type ContentTypeContentTypeWithGuidelinesOnlyCodename = Extract<TypeCodenames, "content_type_with_guidelines_only">
 
 /*
  * Typeguard for codename of 'Content type with guidelines only' type
@@ -14,9 +14,9 @@ export function isContentTypeContentTypeWithGuidelinesOnlyCodename(
 	value: string | undefined | null
 ): value is ContentTypeContentTypeWithGuidelinesOnlyCodename {
 	return (
-		typeof value === 'string' &&
-		value === ('content_type_with_guidelines_only' satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename)
-	);
+		typeof value === "string" &&
+		value === ("content_type_with_guidelines_only" satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename)
+	)
 }
 
 /*
@@ -29,12 +29,12 @@ export type ContentTypeContentTypeWithGuidelinesOnly = CoreType<
 	ContentTypeContentTypeWithGuidelinesOnlyElementCodenames,
 	Record<string, never>,
 	ContentTypeContentTypeWithGuidelinesOnlyCodename
->;
+>
 
 /*
  * Type representing all available element codenames for Content type with guidelines only
  */
-export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never;
+export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never
 
 /*
  * Type guard for Content type with guidelines only
@@ -45,5 +45,5 @@ export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never;
 export function isContentTypeContentTypeWithGuidelinesOnly(
 	item: CoreType | undefined | null
 ): item is ContentTypeContentTypeWithGuidelinesOnly {
-	return item?.system?.type === ('content_type_with_guidelines_only' satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename);
+	return item?.system.type === ("content_type_with_guidelines_only" satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename)
 }

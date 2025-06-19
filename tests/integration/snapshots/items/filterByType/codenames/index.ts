@@ -1,1 +1,1 @@
-export * from './content_type_with_all_elements.codenames.js';
+export * from "./content_type_with_all_elements.codenames.js"

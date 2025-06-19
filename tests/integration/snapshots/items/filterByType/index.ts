@@ -1,2 +1,2 @@
-export * from './codenames/index.js';
-export * from './items/index.js';
+export * from "./codenames/index.js"
+export * from "./items/index.js"
