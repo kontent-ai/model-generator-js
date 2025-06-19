@@ -1,59 +1,59 @@
-import chalk from 'chalk';
-import { match } from 'ts-pattern';
-import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
-import type { CliAction, LiteralUnion } from '../../core/core.models.js';
-import type { CliArgumentsFetcher } from '../cli.models.js';
+import chalk from "chalk";
+import { match } from "ts-pattern";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+import type { CliAction, LiteralUnion } from "../../core/core.models.js";
+import type { CliArgumentsFetcher } from "../cli.models.js";
 
 type ArgvResult = {
-    readonly [x: string]: unknown;
-    readonly _: readonly (string | number)[];
-    readonly $0: string;
+	readonly [x: string]: unknown;
+	readonly _: readonly (string | number)[];
+	readonly $0: string;
 };
 
 export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
-    const argv = yargs(hideBin(process.argv));
-    const resolvedArgv: ArgvResult = await argv.argv;
+	const argv = yargs(hideBin(process.argv));
+	const resolvedArgv: ArgvResult = await argv.argv;
 
-    const getOptionalArgumentValue = (argName: string) => {
-        return resolvedArgv[argName]?.toString();
-    };
+	const getOptionalArgumentValue = (argName: string) => {
+		return resolvedArgv[argName]?.toString();
+	};
 
-    return {
-        getCliAction(): CliAction {
-            const command = resolvedArgv._?.[0]?.toString()?.toLowerCase() as LiteralUnion<CliAction>;
+	return {
+		getCliAction(): CliAction {
+			const command = resolvedArgv._[0]?.toString()?.toLowerCase() as LiteralUnion<CliAction>;
 
-            return match(command)
-                .returnType<CliAction>()
-                .with('delivery-sdk', () => 'delivery-sdk')
-                .with('migration-toolkit', () => 'migration-toolkit')
-                .with('environment', () => 'environment')
-                .with('items', () => 'items')
-                .otherwise(() => {
-                    throw Error(`Unsupported command '${chalk.red(command)}'`);
-                });
-        },
-        getOptionalArgumentValue,
-        getRequiredArgumentValue(argName: string): string {
-            const value = getOptionalArgumentValue(argName);
+			return match(command)
+				.returnType<CliAction>()
+				.with("delivery-sdk", () => "delivery-sdk")
+				.with("migration-toolkit", () => "migration-toolkit")
+				.with("environment", () => "environment")
+				.with("items", () => "items")
+				.otherwise(() => {
+					throw new Error(`Unsupported command '${chalk.red(command)}'`);
+				});
+		},
+		getOptionalArgumentValue,
+		getRequiredArgumentValue(argName: string): string {
+			const value = getOptionalArgumentValue(argName);
 
-            if (!value) {
-                throw Error(`Missing '${chalk.yellow(argName)}' argument value`);
-            }
+			if (!value) {
+				throw new Error(`Missing '${chalk.yellow(argName)}' argument value`);
+			}
 
-            return value;
-        },
-        getBooleanArgumentValue(argName: string, defaultValue: boolean): boolean {
-            const value = getOptionalArgumentValue(argName);
+			return value;
+		},
+		getBooleanArgumentValue(argName: string, defaultValue: boolean): boolean {
+			const value = getOptionalArgumentValue(argName);
 
-            if (!value) {
-                return defaultValue;
-            }
+			if (!value) {
+				return defaultValue;
+			}
 
-            return value.toLowerCase() === 'true'.toLowerCase();
-        },
-        getOptionalArgumentArrayValue(argName: string): readonly string[] {
-            return getOptionalArgumentValue(argName)?.split(',') ?? [];
-        }
-    };
+			return value.toLowerCase() === "true".toLowerCase();
+		},
+		getOptionalArgumentArrayValue(argName: string): readonly string[] {
+			return getOptionalArgumentValue(argName)?.split(",") ?? [];
+		},
+	};
 }

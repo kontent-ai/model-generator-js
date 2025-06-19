@@ -1,1 +1,1 @@
-export * from './taxonomies.js';
+export * from "./taxonomies.js"

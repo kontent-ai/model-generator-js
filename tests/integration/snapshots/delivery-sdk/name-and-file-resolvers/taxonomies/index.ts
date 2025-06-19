@@ -1,2 +1,3 @@
-export * from './taxonomy_taxonomy_a.js';
-export * from './taxonomy_taxonomy_without_terms.js';
+export * from "./_taxonomies.js"
+export * from "./taxonomyTaxonomyA.taxonomy.js"
+export * from "./taxonomyTaxonomyWithoutTerms.taxonomy.js"

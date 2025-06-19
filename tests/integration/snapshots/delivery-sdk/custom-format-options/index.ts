@@ -1,1 +1,1 @@
- export * from './content-type-snippets/index.js'; export * from './content-types/index.js'; export * from './system/index.js'; export * from './taxonomies/index.js';
+ export * from './collections/index.js'; export * from './elements/index.js'; export * from './languages/index.js'; export * from './snippets/index.js'; export * from './system/index.js'; export * from './taxonomies/index.js'; export * from './types/index.js'; export * from './workflows/index.js';
