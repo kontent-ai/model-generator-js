@@ -5,8 +5,15 @@ import { deliverySdkSnapshots } from "./test-cases/delivery-sdk-snapshots.js";
 import { environmentSnapshots } from "./test-cases/environment-snapshots.js";
 import { itemsSnapshots } from "./test-cases/items-snapshots.js";
 import { migrationToolkitSnapshots } from "./test-cases/migration-toolkit-snapshots.js";
+import { syncSdkSnapshots } from "./test-cases/sync-sdk-snapshots.js";
 
-for (const snapshot of [...deliverySdkSnapshots, ...environmentSnapshots, ...migrationToolkitSnapshots, ...itemsSnapshots]) {
+for (const snapshot of [
+	...deliverySdkSnapshots,
+	...environmentSnapshots,
+	...migrationToolkitSnapshots,
+	...itemsSnapshots,
+	...syncSdkSnapshots,
+]) {
 	describe(`Integration - ${snapshot.cliAction}`, async () => {
 		const files = await snapshot.getFilesAsync();
 		const getSnapshotRelativePath = (file: GeneratedFile) => `./snapshots/${snapshot.cliAction}/${snapshot.folder}/${file.filename}`;
