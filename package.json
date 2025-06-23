@@ -56,7 +56,7 @@
 		"@kontent-ai/sync-sdk": "0.0.1",
 		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.11.0",
 		"chalk": "5.4.1",
-		"prettier": "3.5.3",
+		"prettier": "3.6.0",
 		"ts-pattern": "5.7.1",
 		"yargs": "18.0.0"
 	},
