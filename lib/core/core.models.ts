@@ -8,8 +8,8 @@ import type {
 	TaxonomyModels,
 } from "@kontent-ai/management-sdk";
 
-export type CliAction = "delivery-sdk" | "migration-toolkit" | "environment" | "items";
-export type LibraryType = "@kontent-ai/migration-toolkit" | "@kontent-ai/delivery-sdk";
+export type CliAction = "delivery-sdk" | "migration-toolkit" | "environment" | "items" | "sync-sdk";
+export type LibraryType = "@kontent-ai/migration-toolkit" | "@kontent-ai/delivery-sdk" | "@kontent-ai/sync-sdk";
 
 export const moduleFileExtensions = ["js", "ts", "mjs", "mts", "none"] as const;
 

@@ -6,6 +6,7 @@ import { deliveryActionAsync } from "./actions/delivery-action.js";
 import { environmentActionAsync } from "./actions/environment-action.js";
 import { itemsActionAsync } from "./actions/items-action.js";
 import { migrateActionAsync } from "./actions/migrate-action.js";
+import { syncActionAsync } from "./actions/sync-action.js";
 import { argumentsFetcherAsync } from "./args/args-fetcher.js";
 import { cliArgs } from "./commands.js";
 
@@ -21,6 +22,7 @@ try {
 		.with("migration-toolkit", async () => await migrateActionAsync(argsFetcher))
 		.with("environment", async () => await environmentActionAsync(argsFetcher))
 		.with("items", async () => await itemsActionAsync(argsFetcher))
+		.with("sync-sdk", async () => await syncActionAsync(argsFetcher))
 		.otherwise((action) => {
 			throw new Error(`Invalid action '${chalk.red(action)}'`);
 		});
