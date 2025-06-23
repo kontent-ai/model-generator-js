@@ -1,4 +1,4 @@
-import type { DeliveryApiMode, ModuleFileExtension } from "./core/core.models.js";
+import type { DeliveryApiMode, LibraryType, ModuleFileExtension } from "./core/core.models.js";
 import { sdkInfo } from "./sdk-info.js";
 
 export const defaultModuleFileExtension: ModuleFileExtension = "js";
@@ -10,8 +10,19 @@ export const coreConfig = {
 	kontentTrackingHeaderValue: `${sdkInfo.name};${sdkInfo.version}`,
 } as const;
 
+export const syncConfig = {
+	npmPackageName: "@kontent-ai/sync-sdk" satisfies LibraryType,
+	coreTypesFilename: "sync.models",
+	coreClientTypesTypeName: "CoreSyncClientTypes",
+	coreClientTypeName: "CoreSyncClient",
+	sdkTypes: {
+		syncClientTypes: "SyncClientTypes",
+		syncClient: "SyncClient",
+	},
+} as const;
+
 export const migrationConfig = {
-	npmPackageName: "@kontent-ai/migration-toolkit",
+	npmPackageName: "@kontent-ai/migration-toolkit" satisfies LibraryType,
 	migrationItemsFolderName: "contentTypes",
 	environmentFolderName: "environment",
 	migrationTypesFilename: "migration",
@@ -40,7 +51,7 @@ export const migrationConfig = {
 } as const;
 
 export const deliveryConfig = {
-	npmPackageName: "@kontent-ai/delivery-sdk",
+	npmPackageName: "@kontent-ai/delivery-sdk" satisfies LibraryType,
 	systemTypesFolderName: "system",
 	mainSystemFilename: "main.system",
 	coreContentTypeName: "CoreType",

@@ -6,12 +6,13 @@
 
 # Kontent.ai Model Generator
 
-The Kontent.ai Model Generator is a developer tool that streamlines working with Kontent.ai by generating strongly typed objects and TypeScript models. It supports the generation of four distinct model types, each tailored to specific use cases:
+The Kontent.ai Model Generator is a developer tool that streamlines working with Kontent.ai by generating strongly typed objects and TypeScript models. It supports the generation of five distinct model types, each tailored to specific use cases:
 
 | Model type                                     | Description                                                                                                                                                                                                                                                    | Compatibility                                                      |
 | ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     | `@kontent-ai/delivery-sdk` version `16.0.0` or higher              |
 | [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       | `@kontent-ai/migration-toolkit` version `2.6.0` or higher          |
+| [sync-sdk](#sync-sdk-models)                   | Generates TypeScript models for the [Sync SDK](https://www.npmjs.com/package/@kontent-ai/sync-sdk). These models provide type-safe access to environment metadata including languages, content types, workflows, collections, and taxonomies.                  | `@kontent-ai/sync-sdk` version `1.0.0` or higher                   |
 | [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 | Can be used in any project. No external dependencies are required. |
 | [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. | Can be used in any project. No external dependencies are required. |
 
@@ -127,6 +128,63 @@ npx @kontent-ai/model-generator@latest migration-toolkit
 import { generateMigrationModelsAsync } from '@kontent-ai/model-generator';
 
 await generateMigrationModelsAsync({
+    // required
+    environmentId: 'x',
+    managementApiKey: 'y',
+    moduleFileExtension: 'js',
+    addTimestamp: false,
+    createFiles: true,
+    outputDir: '/', // only required when createFiles is true
+
+    // optional
+    baseUrl: undefined,
+    formatOptions: { indentSize: 4, quote: 'single' }
+});
+```
+
+Configuration
+
+| Option                | Description                                                                                                                    |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `environmentId`       | Id of Kontent.ai environment                                                                                                   |
+| `managementApiKey`    | Management API key                                                                                                             |
+| `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
+| `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
+| `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
+| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
+
+## Sync SDK models
+
+> [!TIP]
+> Recommended: Using these models is highly encouraged when working with the Sync SDK, as they provide robust type
+> safety and streamline development.
+
+Basic usage
+
+```bash
+npx @kontent-ai/model-generator@latest sync-sdk
+    --environmentId=<id>
+    --managementApiKey=<key>
+```
+
+Usage with options
+
+```bash
+npx @kontent-ai/model-generator@latest sync-sdk
+    --environmentId=<id>
+    --managementApiKey=<key>
+    --outputDir=<path>
+    --moduleFileExtension=<js | ts | none | mts | mjs>
+    --addTimestamp=<true, false>
+    --managementBaseUrl=<proxyUrl>
+```
+
+```typescript
+import { generateSyncModelsAsync } from '@kontent-ai/model-generator';
+
+await generateSyncModelsAsync({
     // required
     environmentId: 'x',
     managementApiKey: 'y',
@@ -313,8 +371,9 @@ To see how models are generated have a look at following sample generated models
 
 1. `delivery-sdk` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/delivery>
 2. `migration-toolkit` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/migration>
-3. `environment` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/environment>
-4. `items` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/items>
+3. `sync-sdk` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/sync>
+4. `environment` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/environment>
+5. `items` -> <https://github.com/kontent-ai/model-generator-js/tree/master/sample/items>
 
 ## Contribution & Feedback
 
