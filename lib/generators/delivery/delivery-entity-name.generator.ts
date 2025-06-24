@@ -83,7 +83,6 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 					suffix: "Codename",
 				}),
 				getEntityFilename: mapFilename(filenameResolver, {
-					suffix: `.${entityTypeName.camelCase}`,
 				}),
 				termsNames:
 					config.entityType === "Taxonomy"

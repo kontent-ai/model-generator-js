@@ -32,7 +32,7 @@ export const environmentEntities = [
 
 export type EnvironmentEntity = (typeof environmentEntities)[number];
 
-export type CaseType = "camelCase" | "pascalCase";
+export type CaseType = "camelCase" | "pascalCase" | "kebabCase";
 export type DeliveryApiMode = "preview" | "secure" | "default";
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
 export type GeneratorDeliveryClient = Readonly<IDeliveryClient>;

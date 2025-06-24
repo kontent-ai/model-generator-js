@@ -8,7 +8,7 @@ for (const moduleFileExtension of ["js", "ts", "mjs", "mts", "none"] satisfies M
 		const importer = getImporter(moduleFileExtension);
 		const expectedExtension = moduleFileExtension === "none" ? "" : `.${moduleFileExtension}`;
 
-		it("Empty barrel code", () => {
+		it(`Empty barrel code (${moduleFileExtension})`, () => {
 			expect(importer.getBarrelExportCode([])).toStrictEqual("export {}");
 		});
 
@@ -43,7 +43,7 @@ export * from './dir/fileC${expectedExtension}';
 						filePathOrPackage: filesToImport,
 						importValue: "Item",
 					}),
-				).toStrictEqual(`import type { Item } from '${fileWithoutExtension}${expectedExtension}';`);
+				).toStrictEqual(`import type { Item } from '${fileWithoutExtension}.generated${expectedExtension}';`);
 			});
 		}
 	});

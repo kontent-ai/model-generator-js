@@ -89,7 +89,7 @@ export function getFileManager(config: {
 			...setFiles,
 			{
 				filename: `${setFolder}${coreConfig.barrelExportFilename}`,
-				text: importer.getBarrelExportCode(set.files.map((m) => `./${m.filename}`)),
+				text: importer.getBarrelExportCode(set.files.map((m) => importer.getGeneratedFilename(`./${m.filename}`))),
 			},
 		];
 	};
@@ -101,10 +101,10 @@ export function getFileManager(config: {
 				sets.flatMap((set) => {
 					if (!set.folderName) {
 						// include file paths themselves if there is no folder
-						return set.files.map((file) => `./${file.filename}`);
+						return set.files.map((file) => importer.getGeneratedFilename(`./${file.filename}`));
 					}
 
-					return `./${getSetFolder(set)}${coreConfig.barrelExportFilename}`;
+					return importer.getGeneratedFilename(`./${getSetFolder(set)}${coreConfig.barrelExportFilename}`);
 				}),
 			),
 		};
@@ -114,9 +114,10 @@ export function getFileManager(config: {
 		getSetFilesAsync: async (sets: readonly GeneratedSet[]): Promise<readonly GeneratedFile[]> => {
 			return await Promise.all(
 				[...sets.flatMap((set) => getSetFiles(set)), getSetsBarrelExportFiles(sets)].map<Promise<GeneratedFile>>(async (file) => {
+					const generatedFilename = importer.getGeneratedFilename(file.filename);
 					return {
-						filename: file.filename,
-						text: await getFormattedCodeAsync(file.text, file.filename),
+						filename: generatedFilename,
+						text: await getFormattedCodeAsync(file.text, generatedFilename),
 					};
 				}),
 			);

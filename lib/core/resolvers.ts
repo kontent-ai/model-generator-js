@@ -21,7 +21,7 @@ export function mapFilename<T extends ObjectWithCodename>(
 						.returnType<string>()
 						.with(P.instanceOf(Function), (resolver) => resolver(item, addExtension))
 						.otherwise(() => item.codename),
-					"camelCase",
+					"kebabCase",
 				) + (options?.suffix ? options.suffix : ""),
 				addExtension,
 			)
@@ -54,6 +54,7 @@ export function resolveCase(text: string, resolverType: CaseType): string {
 		.returnType<string>()
 		.with("camelCase", () => toCamelCase(text))
 		.with("pascalCase", () => toPascalCase(text))
+		.with("kebabCase", () => toKebabCase(text))
 		.exhaustive();
 }
 
@@ -72,15 +73,24 @@ function addExtensionToFilename(filename: string, addExtension: boolean): string
 	return `${filename}${addExtension ? ".ts" : ""}`;
 }
 
-function toPascalCase(text: string): string {
+function transformCase(text: string, transform: (letter: string, index: number) => string, allowHyphen: boolean): string {
 	return prefixWithUnderscoreWhenStartsWithNonAlpha(
 		toSafeStringCode(
 			text
 				.replace(/[_-]+/g, " ")
-				.replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match, index) => (index === 0 ? match.toUpperCase() : match.toUpperCase()))
+				.replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match, index) => transform(match, index))
 				.replace(/\s+/g, ""),
+			allowHyphen,
 		),
 	);
+}
+
+function toPascalCase(text: string): string {
+	return transformCase(text, (letter) => letter.toUpperCase(), false);
+}
+
+function toKebabCase(text: string): string {
+	return transformCase(text, (letter, index) => (index === 0 ? letter.toLowerCase() : `-${letter.toLowerCase()}`), true);
 }
 
 function toCamelCase(text: string): string {
@@ -93,13 +103,18 @@ function getPropertyStringHash(text: string): string {
 	return `_${hash.digest("hex")}`.slice(0, 10);
 }
 
-function toSafeStringCode(text: string): string {
+function toSafeStringCode(text: string, allowHyphen: boolean): string {
 	const replaceWith = "";
+
+	if (allowHyphen) {
+		return text.replace(/[^a-zA-Z0-9_-]/g, replaceWith);
+	}
+
 	return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
 }
 
 function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string {
-	if (/^[^a-zA-Z]/.test(text)) {
+	if (/^[^a-zA-Z-]/.test(text)) {
 		return `_${text.replace(/^_+/, "")}`;
 	}
 	return text;

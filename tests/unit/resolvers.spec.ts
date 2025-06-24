@@ -64,8 +64,8 @@ describe("Resolvers - mapFilename", () => {
 		expect(mapFilename((item) => `${item.codename}`)({ codename: "x" }, false)).toStrictEqual("x");
 	});
 
-	it("Filename should be in camelCase", () => {
-		expect(mapFilename((m) => m.codename)({ codename: "FirstName" }, true)).toStrictEqual("firstName.ts");
+	it("Filename should be in kebab case", () => {
+		expect(mapFilename((m) => m.codename)({ codename: "FirstName" }, true)).toStrictEqual("first-name.ts");
 	});
 
 	it("Custom name should be used instead of codename", () => {
