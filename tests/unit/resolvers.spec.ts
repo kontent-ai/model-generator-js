@@ -5,6 +5,7 @@ type CaseResolverTest = {
 	readonly text: string;
 	readonly pascalCase: string;
 	readonly camelCase: string;
+	readonly kebabCase: string;
 };
 
 describe("Resolvers - mapName", () => {
@@ -79,51 +80,61 @@ describe("Case resolvers", () => {
 			text: "First Name",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 		{
 			text: "first_name",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 		{
 			text: "first-name",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 		{
 			text: "FirstName",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 		{
 			text: "FIRSTNAME",
 			camelCase: "fIRSTNAME",
 			pascalCase: "FIRSTNAME",
+			kebabCase: "first-name",
 		},
 		{
 			text: "firstName",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 		{
 			text: "first@name",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 		{
 			text: "first1name",
 			camelCase: "first1Name",
 			pascalCase: "First1Name",
+			kebabCase: "first-1-name",
 		},
 		{
 			text: "first name@last",
 			camelCase: "firstNameLast",
 			pascalCase: "FirstNameLast",
+			kebabCase: "first-name-last",
 		},
 		{
 			text: "✏️ first name ✏️ ",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
+			kebabCase: "first-name",
 		},
 	];
 
