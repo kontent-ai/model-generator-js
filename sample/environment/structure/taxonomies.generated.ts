@@ -14,17 +14,6 @@
 
 export const taxonomies = {
 	/*
-	 * Movie Type 2
-	 */
-	my_taxonomy_with_spaces: {
-		name: "Movie Type 2",
-		codename: "my_taxonomy_with_spaces",
-		externalId: undefined,
-		id: "dc400eec-d596-495d-9f84-05b765277e71",
-		terms: {}
-	},
-
-	/*
 	 * Movie Type
 	 */
 	movietype: {
