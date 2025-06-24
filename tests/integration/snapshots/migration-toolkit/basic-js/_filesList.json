@@ -1,0 +1,18 @@
+[
+  { "filename": "contentTypes/content_type_with_snippet_only.generated.ts" },
+  {
+    "filename": "contentTypes/_content_type_with_special_chars____.generated.ts"
+  },
+  { "filename": "contentTypes/circular_reference_type_a_b.generated.ts" },
+  { "filename": "contentTypes/page.generated.ts" },
+  { "filename": "contentTypes/content_type_with_all_elements.generated.ts" },
+  { "filename": "contentTypes/content_type_with_guidelines_only.generated.ts" },
+  { "filename": "contentTypes/circular_reference_type_b____a.generated.ts" },
+  { "filename": "contentTypes/empty_content_type.generated.ts" },
+  { "filename": "contentTypes/type_with_empty_snippet.generated.ts" },
+  { "filename": "contentTypes/web_spotlight_root.generated.ts" },
+  { "filename": "contentTypes/type_referencing_deleted_type.generated.ts" },
+  { "filename": "migration.generated.ts" },
+  { "filename": "environment/environment.generated.ts" },
+  { "filename": "index.ts" }
+]

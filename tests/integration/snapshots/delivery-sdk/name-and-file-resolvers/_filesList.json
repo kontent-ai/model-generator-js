@@ -1,0 +1,45 @@
+[
+  { "filename": "collections/legacy-collection-collection.generated.ts" },
+  { "filename": "collections/default-collection.generated.ts" },
+  { "filename": "collections/_collections.generated.ts" },
+  { "filename": "languages/default-project-language-language.generated.ts" },
+  { "filename": "languages/english-language.generated.ts" },
+  { "filename": "languages/spanish-language.generated.ts" },
+  { "filename": "languages/jp-language.generated.ts" },
+  { "filename": "languages/lang-language.generated.ts" },
+  { "filename": "languages/_languages.generated.ts" },
+  { "filename": "workflows/default-workflow.generated.ts" },
+  { "filename": "workflows/advanced-workflow-workflow.generated.ts" },
+  { "filename": "workflows/_workflows.generated.ts" },
+  { "filename": "taxonomies/taxonomy-taxonomy-a.generated.ts" },
+  { "filename": "taxonomies/taxonomy-taxonomy-without-terms.generated.ts" },
+  { "filename": "taxonomies/_taxonomies.generated.ts" },
+  {
+    "filename": "types/content-type-content-type-with-snippet-only.generated.ts"
+  },
+  {
+    "filename": "types/content-type-content-type-with-special-chars.generated.ts"
+  },
+  { "filename": "types/content-type-circular-reference-type-a-b.generated.ts" },
+  { "filename": "types/content-type-page.generated.ts" },
+  {
+    "filename": "types/content-type-content-type-with-all-elements.generated.ts"
+  },
+  {
+    "filename": "types/content-type-content-type-with-guidelines-only.generated.ts"
+  },
+  { "filename": "types/content-type-circular-reference-type-b-a.generated.ts" },
+  { "filename": "types/content-type-empty-content-type.generated.ts" },
+  { "filename": "types/content-type-type-with-empty-snippet.generated.ts" },
+  { "filename": "types/content-type-web-spotlight-root.generated.ts" },
+  {
+    "filename": "types/content-type-type-referencing-deleted-type.generated.ts"
+  },
+  { "filename": "types/_types.generated.ts" },
+  { "filename": "snippets/snippet-snippet-a.generated.ts" },
+  { "filename": "snippets/snippet-empty-snippet.generated.ts" },
+  { "filename": "snippets/_snippets.generated.ts" },
+  { "filename": "elements/_elements.generated.ts" },
+  { "filename": "system/main.system.generated.ts" },
+  { "filename": "index.ts" }
+]
