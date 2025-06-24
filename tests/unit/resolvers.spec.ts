@@ -95,6 +95,18 @@ describe("Case resolvers", () => {
 			kebabCase: "first-name",
 		},
 		{
+			text: "first---name",
+			camelCase: "firstName",
+			pascalCase: "FirstName",
+			kebabCase: "first-name",
+		},
+		{
+			text: "first.name",
+			camelCase: "firstName",
+			pascalCase: "FirstName",
+			kebabCase: "first-name",
+		},
+		{
 			text: "FirstName",
 			camelCase: "firstName",
 			pascalCase: "FirstName",
@@ -104,7 +116,7 @@ describe("Case resolvers", () => {
 			text: "FIRSTNAME",
 			camelCase: "fIRSTNAME",
 			pascalCase: "FIRSTNAME",
-			kebabCase: "first-name",
+			kebabCase: "firstname",
 		},
 		{
 			text: "firstName",
@@ -122,7 +134,7 @@ describe("Case resolvers", () => {
 			text: "first1name",
 			camelCase: "first1Name",
 			pascalCase: "First1Name",
-			kebabCase: "first-1-name",
+			kebabCase: "first1-name",
 		},
 		{
 			text: "first name@last",
@@ -145,6 +157,10 @@ describe("Case resolvers", () => {
 
 		it("Should resolve to valid pascal case format", () => {
 			expect(resolveCase(testCase.text, "pascalCase")).toStrictEqual(testCase.pascalCase);
+		});
+
+		it("Should resolve to valid kebab case format", () => {
+			expect(resolveCase(testCase.text, "kebabCase")).toStrictEqual(testCase.kebabCase);
 		});
 	}
 });

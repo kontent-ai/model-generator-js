@@ -106,7 +106,7 @@ export type MovieItem = CoreMigrationItem<
 		readonly seoname: MigrationElementModels.UrlSlugElement
 
 		/*
-		 * ReleaseCategory
+		 * Release Category
 		 *
 		 * Codename: releasecategory
 		 * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2

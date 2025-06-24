@@ -17,9 +17,9 @@ import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { ActorType } from "../types/actor-type.generated.js"
 import type { CoreType } from "../system/main.system.generated.js"
 import type {
-	ReleasecategoryTaxonomyTermCodenames,
-	ReleasecategoryTaxonomyCodename
-} from "../taxonomies/releasecategory-taxonomy.generated.js"
+	ReleaseCategoryTaxonomyTermCodenames,
+	ReleaseCategoryTaxonomyCodename
+} from "../taxonomies/release-category-taxonomy.generated.js"
 
 /*
  * Type representing codename of 'Movie' type
@@ -124,7 +124,7 @@ export type MovieType = CoreType<
 		readonly seoname: Elements.UrlSlugElement
 
 		/*
-		 * ReleaseCategory
+		 * Release Category
 		 *
 		 * Codename: releasecategory
 		 * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
@@ -132,7 +132,7 @@ export type MovieType = CoreType<
 		 * Required: false
 		 * Taxonomy: releasecategory
 		 */
-		readonly releasecategory: Elements.TaxonomyElement<ReleasecategoryTaxonomyTermCodenames, ReleasecategoryTaxonomyCodename>
+		readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTaxonomyTermCodenames, ReleaseCategoryTaxonomyCodename>
 	},
 	MovieTypeCodename
 >

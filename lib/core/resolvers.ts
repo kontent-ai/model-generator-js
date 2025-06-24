@@ -73,24 +73,26 @@ function addExtensionToFilename(filename: string, addExtension: boolean): string
 	return `${filename}${addExtension ? ".ts" : ""}`;
 }
 
-function transformCase(text: string, transform: (letter: string, index: number) => string, allowHyphen: boolean): string {
+function toPascalCase(text: string): string {
 	return prefixWithUnderscoreWhenStartsWithNonAlpha(
 		toSafeStringCode(
 			text
 				.replace(/[_-]+/g, " ")
-				.replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match, index) => transform(match, index))
+				.replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match) => match.toUpperCase())
 				.replace(/\s+/g, ""),
-			allowHyphen,
+			false,
 		),
 	);
 }
 
-function toPascalCase(text: string): string {
-	return transformCase(text, (letter) => letter.toUpperCase(), false);
-}
-
 function toKebabCase(text: string): string {
-	return transformCase(text, (letter, index) => (index === 0 ? letter.toLowerCase() : `-${letter.toLowerCase()}`), true);
+	const matchResult = text.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
+
+	if (!matchResult) {
+		throw new Error(`Failed to convert text to kebab case: ${text}`);
+	}
+
+	return matchResult.join("-").toLowerCase();
 }
 
 function toCamelCase(text: string): string {
@@ -105,12 +107,9 @@ function getPropertyStringHash(text: string): string {
 
 function toSafeStringCode(text: string, allowHyphen: boolean): string {
 	const replaceWith = "";
+	const pattern = allowHyphen ? /[^a-zA-Z0-9_-]/g : /[^a-zA-Z0-9_]/g;
 
-	if (allowHyphen) {
-		return text.replace(/[^a-zA-Z0-9_-]/g, replaceWith);
-	}
-
-	return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
+	return text.replace(pattern, replaceWith);
 }
 
 function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string {

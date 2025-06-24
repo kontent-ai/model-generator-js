@@ -14,10 +14,21 @@
 
 export const taxonomies = {
 	/*
-	 * MovieType
+	 * Movie Type 2
+	 */
+	my_taxonomy_with_spaces: {
+		name: "Movie Type 2",
+		codename: "my_taxonomy_with_spaces",
+		externalId: undefined,
+		id: "dc400eec-d596-495d-9f84-05b765277e71",
+		terms: {}
+	},
+
+	/*
+	 * Movie Type
 	 */
 	movietype: {
-		name: "MovieType",
+		name: "Movie Type",
 		codename: "movietype",
 		externalId: undefined,
 		id: "365a17e6-1929-27ab-9f67-a9273c846717",
@@ -80,10 +91,10 @@ export const taxonomies = {
 	},
 
 	/*
-	 * ReleaseCategory
+	 * Release Category
 	 */
 	releasecategory: {
-		name: "ReleaseCategory",
+		name: "Release Category",
 		codename: "releasecategory",
 		externalId: undefined,
 		id: "09b6a348-0f86-7a68-4af3-7cab9a5c60b7",

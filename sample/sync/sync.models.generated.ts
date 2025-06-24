@@ -23,7 +23,7 @@ export type CoreSyncClientTypes = SyncClientTypes & {
 	readonly workflowCodenames: "default"
 	readonly workflowStepCodenames: "draft" | "ready_to_publish" | "review"
 	readonly collectionCodenames: "default"
-	readonly taxonomyCodenames: "movietype" | "releasecategory"
+	readonly taxonomyCodenames: "movietype" | "my_taxonomy_with_spaces" | "releasecategory"
 }
 
 /*

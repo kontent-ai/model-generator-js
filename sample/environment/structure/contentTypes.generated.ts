@@ -261,10 +261,10 @@ export const contentTypes = {
 			},
 
 			/*
-			 * ReleaseCategory
+			 * Release Category
 			 */
 			releasecategory: {
-				name: "ReleaseCategory",
+				name: "Release Category",
 				codename: "releasecategory",
 				id: "65f2fd44-1856-bc2b-17c2-decb0635e3d2",
 				externalId: undefined,
