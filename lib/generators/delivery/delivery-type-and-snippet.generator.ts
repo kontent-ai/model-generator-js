@@ -1,7 +1,7 @@
 import type { TaxonomyModels } from "@kontent-ai/management-sdk";
 import { ContentTypeModels, ContentTypeSnippetModels } from "@kontent-ai/management-sdk";
 import { P, match } from "ts-pattern";
-import { coreConfig, deliveryConfig } from "../../config.js";
+import { deliveryConfig } from "../../config.js";
 import { toGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
 import type { FlattenedElement, GeneratedTypeModel, MultipleChoiceOption } from "../../core/core.models.js";
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from "../../core/core.utils.js";
@@ -44,7 +44,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 	const getCoreTypeImports = (): readonly string[] => {
 		return [
 			importer.importType({
-				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${coreConfig.barrelExportFilename}`,
+				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.mainSystemFilename}.ts`,
 				importValue: [deliveryConfig.coreContentTypeName].join(", "),
 			}),
 		];
@@ -69,70 +69,67 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			return [];
 		}
 
-		return [
+		return snippets.map((snippet) =>
 			importer.importType({
-				filePathOrPackage: `../${snippetNames.folderName}/${coreConfig.barrelExportFilename}`,
-				importValue: snippets
-					.map((snippet) => snippetNames.getEntityName(snippet))
-					.filter(uniqueFilter)
-					.join(", "),
+				filePathOrPackage: `../${snippetNames.folderName}/${snippetNames.getEntityFilename(snippet, true)}`,
+				importValue: snippetNames.getEntityName(snippet),
 			}),
-		];
+		);
 	};
 
 	const getReferencedTypeImports = (typeOrSnippet: ContentTypeOrSnippet, elements: readonly FlattenedElement[]): readonly string[] => {
-		const referencedTypeNames = elements
-			// only take elements that are not from snippets
+		const filteredTypesToImport: readonly Readonly<ContentTypeModels.ContentType>[] = elements
 			.filter((m) => !m.fromSnippet)
 			.flatMap((flattenedElement) => {
 				return match(flattenedElement)
-					.returnType<string | string[]>()
+					.returnType<readonly Readonly<ContentTypeModels.ContentType>[]>()
 					.with(
 						P.union({ type: "modular_content" }, { type: "subpages" }, { type: "rich_text" }),
 						(alementWithAllowedContentTypes) => {
-							return (alementWithAllowedContentTypes.allowedContentTypes ?? [])
-								.filter((allowedContentType) => {
-									// filter self-referencing types as they do not need to be importer
-									if (allowedContentType.codename === typeOrSnippet.codename) {
-										return false;
-									}
-									return true;
-								})
-								.map((allowedContentType) => {
-									return contentTypeNames.getEntityName(allowedContentType);
-								});
+							return (alementWithAllowedContentTypes.allowedContentTypes ?? []).filter((allowedContentType) => {
+								// filter self-referencing types as they do not need to be importer
+								if (allowedContentType.codename === typeOrSnippet.codename) {
+									return false;
+								}
+								return true;
+							});
 						},
 					)
 					.otherwise(() => []);
 			})
 			.filter(isNotUndefined)
-			.filter(uniqueFilter);
+			.reduce<Readonly<ContentTypeModels.ContentType>[]>((uniqueTypes, type) => {
+				if (uniqueTypes.some((m) => m.codename === type.codename)) {
+					return uniqueTypes;
+				}
 
-		if (referencedTypeNames.length === 0) {
+				uniqueTypes.push(type);
+
+				return uniqueTypes;
+			}, []);
+
+		if (filteredTypesToImport.length === 0) {
 			return [];
 		}
 
-		return [
-			importer.importType({
-				filePathOrPackage:
-					typeOrSnippet instanceof ContentTypeSnippetModels.ContentTypeSnippet
-						? `../${contentTypeNames.folderName}/${coreConfig.barrelExportFilename}`
-						: `./${coreConfig.barrelExportFilename}`,
-				importValue: referencedTypeNames.join(", "),
-			}),
-		];
+		return filteredTypesToImport.map((type) => {
+			return importer.importType({
+				filePathOrPackage: `../${contentTypeNames.folderName}/${contentTypeNames.getEntityFilename(type, true)}`,
+				importValue: contentTypeNames.getEntityName(type),
+			});
+		});
 	};
 
 	const getReferencedTaxonomyImports = (
 		typeOrSnippet: Readonly<ContentTypeModels.ContentType> | Readonly<ContentTypeSnippetModels.ContentTypeSnippet>,
 		elements: readonly FlattenedElement[],
 	): readonly string[] => {
-		const taxonomyTypeNames = elements
+		const filteredTaxonomiesToImport: readonly Readonly<TaxonomyModels.Taxonomy>[] = elements
 			// only take elements that are not from snippets
 			.filter((m) => !m.fromSnippet)
 			.map((flattenedElement) => {
 				return match(flattenedElement)
-					.returnType<readonly string[] | undefined>()
+					.returnType<Readonly<TaxonomyModels.Taxonomy> | undefined>()
 					.with({ type: "taxonomy" }, (taxonomyElement) => {
 						if (!taxonomyElement.assignedTaxonomy) {
 							const usedIn = match(typeOrSnippet)
@@ -147,27 +144,31 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 							return undefined;
 						}
 
-						return [
-							getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy),
-							taxonomyNames.getCodenameTypeName(taxonomyElement.assignedTaxonomy),
-						];
+						return taxonomyElement.assignedTaxonomy;
 					})
 					.otherwise(() => undefined);
 			})
 			.filter(isNotUndefined)
-			.flat()
-			.filter(uniqueFilter);
+			.reduce<Readonly<TaxonomyModels.Taxonomy>[]>((uniqueTaxonomies, taxonomy) => {
+				if (uniqueTaxonomies.some((m) => m.codename === taxonomy.codename)) {
+					return uniqueTaxonomies;
+				}
 
-		if (taxonomyTypeNames.length === 0) {
+				uniqueTaxonomies.push(taxonomy);
+
+				return uniqueTaxonomies;
+			}, []);
+
+		if (filteredTaxonomiesToImport.length === 0) {
 			return [];
 		}
 
-		return [
-			importer.importType({
-				filePathOrPackage: `../${taxonomyNames.folderName}/${coreConfig.barrelExportFilename}`,
-				importValue: taxonomyTypeNames.join(", "),
-			}),
-		];
+		return filteredTaxonomiesToImport.map((taxonomy) => {
+			return importer.importType({
+				filePathOrPackage: `../${taxonomyNames.folderName}/${taxonomyNames.getEntityFilename(taxonomy, true)}`,
+				importValue: [getTaxonomyTermCodenamesTypeName(taxonomy), taxonomyNames.getCodenameTypeName(taxonomy)],
+			});
+		});
 	};
 
 	const getTaxonomyTermCodenamesTypeName = (taxonomy: Readonly<TaxonomyModels.Taxonomy>): string => {

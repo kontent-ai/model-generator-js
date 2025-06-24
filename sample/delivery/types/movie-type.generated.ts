@@ -14,9 +14,12 @@
 
 import type { TypeCodenames } from "./_types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { ActorType } from "./index.generated.js"
-import type { CoreType } from "../system/index.generated.js"
-import type { ReleasecategoryTaxonomyTermCodenames, ReleasecategoryTaxonomyCodename } from "../taxonomies/index.generated.js"
+import type { ActorType } from "../types/actor-type.generated.js"
+import type { CoreType } from "../system/main.system.generated.js"
+import type {
+	ReleasecategoryTaxonomyTermCodenames,
+	ReleasecategoryTaxonomyCodename
+} from "../taxonomies/releasecategory-taxonomy.generated.js"
 
 /*
  * Type representing codename of 'Movie' type

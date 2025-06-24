@@ -14,7 +14,7 @@
 
 import type { TypeCodenames } from "./_types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/index.generated.js"
+import type { CoreType } from "../system/main.system.generated.js"
 
 /*
  * Type representing codename of 'Actor' type

@@ -1,4 +1,5 @@
 import { parse } from "node:path";
+import { coreConfig } from "../config.js";
 import type { LibraryType, LiteralUnion, ModuleFileExtension } from "./core.models.js";
 import { getFileNameWithoutExtension, sortAlphabetically } from "./core.utils.js";
 
@@ -14,13 +15,20 @@ export function getImporter(moduleFileExtension: ModuleFileExtension) {
 	};
 
 	const getGeneratedFilename = (filename: string): string => {
+		if (filename.toLowerCase() === coreConfig.barrelExportFilename.toLowerCase()) {
+			// do not add .generated to barrel export filename
+			return filename;
+		}
 		const { filenameWithoutExtension, extension } = getFilenameAndExtension(filename);
 		return `${filenameWithoutExtension}.generated.${extension}`;
 	};
 
 	return {
 		getGeneratedFilename,
-		importType: (data: { readonly filePathOrPackage: LiteralUnion<LibraryType>; readonly importValue: string | readonly string[] }): string => {
+		importType: (data: {
+			readonly filePathOrPackage: LiteralUnion<LibraryType>;
+			readonly importValue: string | readonly string[];
+		}): string => {
 			if (!data.importValue.length) {
 				return "";
 			}

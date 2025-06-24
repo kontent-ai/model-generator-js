@@ -12,5 +12,4 @@
  * -------------------------------------------------------------------------------
  */
 
-export * from "./_collections.generated.js"
-export * from "./default-collection.generated.js"
+export * from "./sync.models.generated.js"

@@ -81,17 +81,7 @@ export function getFileManager(config: {
 			};
 		});
 
-		if (!set.folderName) {
-			return setFiles;
-		}
-
-		return [
-			...setFiles,
-			{
-				filename: `${setFolder}${coreConfig.barrelExportFilename}`,
-				text: importer.getBarrelExportCode(set.files.map((m) => importer.getGeneratedFilename(`./${m.filename}`))),
-			},
-		];
+		return setFiles;
 	};
 
 	const getSetsBarrelExportFiles = (sets: readonly GeneratedSet[]): GeneratedFile => {
@@ -99,12 +89,7 @@ export function getFileManager(config: {
 			filename: coreConfig.barrelExportFilename,
 			text: importer.getBarrelExportCode(
 				sets.flatMap((set) => {
-					if (!set.folderName) {
-						// include file paths themselves if there is no folder
-						return set.files.map((file) => importer.getGeneratedFilename(`./${file.filename}`));
-					}
-
-					return importer.getGeneratedFilename(`./${getSetFolder(set)}${coreConfig.barrelExportFilename}`);
+					return set.files.map((file) => importer.getGeneratedFilename(`./${getSetFolder(set)}${file.filename}`));
 				}),
 			),
 		};

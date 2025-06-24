@@ -12,5 +12,7 @@
  * -------------------------------------------------------------------------------
  */
 
-export * from "./_workflows.generated.js"
-export * from "./default-workflow.generated.js"
+export * from "./contentTypes/actor.generated.js"
+export * from "./contentTypes/movie.generated.js"
+export * from "./environment/environment.generated.js"
+export * from "./migration.generated.js"
