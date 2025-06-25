@@ -1,1 +1,1 @@
-export * from "./taxonomies.js"
+export * from "./structure/taxonomies.generated.js"

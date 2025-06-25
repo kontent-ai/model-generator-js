@@ -11,7 +11,7 @@ export type DeliveryEntityNames<T extends DeliveryEntityType> = {
 	readonly codenamesTypeName: string;
 	readonly codenamesTypeguardFunctionName: string;
 
-	readonly mainFilename: string;
+	readonly overviewFilename: string;
 	readonly folderName: string;
 
 	readonly getEntityName: (entity: Readonly<DeliveryEntity>) => string;
@@ -71,9 +71,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				codenamesValuePropertyName: `${entityTypeName.camelCase}Codenames`,
 				codenamesTypeguardFunctionName: `is${entityTypeName.pascalCase}Codename`,
 
-				mainFilename: mapFilename<ObjectWithCodename>((c) => c.codename, {
-					prefix: "_",
-				})({ codename: entityTypeName.pluralCamelCase }, true),
+				overviewFilename: mapFilename<ObjectWithCodename>((c) => c.codename)({ codename: entityTypeName.pluralCamelCase }, true),
 				folderName: entityTypeName.pluralCamelCase,
 
 				getEntityName: mapName(nameResolver, "pascalCase"),
@@ -82,9 +80,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 					prefix: "is",
 					suffix: "Codename",
 				}),
-				getEntityFilename: mapFilename(filenameResolver, {
-					suffix: `.${entityTypeName.camelCase}`,
-				}),
+				getEntityFilename: mapFilename(filenameResolver, {}),
 				termsNames:
 					config.entityType === "Taxonomy"
 						? {
@@ -130,8 +126,8 @@ function getNameAndFilenameResolver<T extends DeliveryEntityType>(config: {
 	readonly nameResolver: NonNullable<NameResolver<DeliveryEntity>>;
 	readonly filenameResolver: NonNullable<FilenameResolver<DeliveryEntity>>;
 } {
-	const defaultNameResolver = (item: DeliveryEntity) => `${item.codename}${config.entityType}`;
-	const defaultFilenameResolver = (item: DeliveryEntity) => `${item.codename}.${config.entityType}`;
+	const defaultNameResolver = (item: DeliveryEntity) => `${item.name}${config.entityType}`;
+	const defaultFilenameResolver = (item: DeliveryEntity) => `${item.name}.${config.entityType}`;
 
 	return match<DeliveryEntityType>(config.entityType)
 		.returnType<{

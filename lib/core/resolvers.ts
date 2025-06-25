@@ -21,7 +21,7 @@ export function mapFilename<T extends ObjectWithCodename>(
 						.returnType<string>()
 						.with(P.instanceOf(Function), (resolver) => resolver(item, addExtension))
 						.otherwise(() => item.codename),
-					"camelCase",
+					"kebabCase",
 				) + (options?.suffix ? options.suffix : ""),
 				addExtension,
 			)
@@ -54,6 +54,7 @@ export function resolveCase(text: string, resolverType: CaseType): string {
 		.returnType<string>()
 		.with("camelCase", () => toCamelCase(text))
 		.with("pascalCase", () => toPascalCase(text))
+		.with("kebabCase", () => toKebabCase(text))
 		.exhaustive();
 }
 
@@ -77,10 +78,21 @@ function toPascalCase(text: string): string {
 		toSafeStringCode(
 			text
 				.replace(/[_-]+/g, " ")
-				.replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match, index) => (index === 0 ? match.toUpperCase() : match.toUpperCase()))
+				.replace(/(?:^\w|[A-Z]|\b\w|\s+|\d\w)/g, (match) => match.toUpperCase())
 				.replace(/\s+/g, ""),
+			false,
 		),
 	);
+}
+
+function toKebabCase(text: string): string {
+	const matchResult = text.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
+
+	if (!matchResult) {
+		throw new Error(`Failed to convert text to kebab case: ${text}`);
+	}
+
+	return matchResult.join("-").toLowerCase();
 }
 
 function toCamelCase(text: string): string {
@@ -93,13 +105,15 @@ function getPropertyStringHash(text: string): string {
 	return `_${hash.digest("hex")}`.slice(0, 10);
 }
 
-function toSafeStringCode(text: string): string {
+function toSafeStringCode(text: string, allowHyphen: boolean): string {
 	const replaceWith = "";
-	return text.replace(/[\s-]/g, replaceWith).replace(/[^a-zA-Z0-9_]/g, replaceWith);
+	const pattern = allowHyphen ? /[^a-zA-Z0-9_-]/g : /[^a-zA-Z0-9_]/g;
+
+	return text.replace(pattern, replaceWith);
 }
 
 function prefixWithUnderscoreWhenStartsWithNonAlpha(text: string): string {
-	if (/^[^a-zA-Z]/.test(text)) {
+	if (/^[^a-zA-Z-]/.test(text)) {
 		return `_${text.replace(/^_+/, "")}`;
 	}
 	return text;

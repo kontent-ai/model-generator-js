@@ -12,6 +12,7 @@
  * -------------------------------------------------------------------------------
  */
 
-export * from "./contentTypes/index.js"
-export * from "./environment/index.js"
-export * from "./migration.js"
+export * from "./contentTypes/actor.generated.js"
+export * from "./contentTypes/movie.generated.js"
+export * from "./environment/environment.generated.js"
+export * from "./migration.generated.js"

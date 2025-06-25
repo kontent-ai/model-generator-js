@@ -1,12 +1,34 @@
 import { parse } from "node:path";
+import { coreConfig } from "../config.js";
 import type { LibraryType, LiteralUnion, ModuleFileExtension } from "./core.models.js";
 import { getFileNameWithoutExtension, sortAlphabetically } from "./core.utils.js";
 
 export function getImporter(moduleFileExtension: ModuleFileExtension) {
 	const importExtension = moduleFileExtension === "none" ? "" : `.${moduleFileExtension}`;
 
+	const getFilenameAndExtension = (filename: string): { readonly filenameWithoutExtension: string; readonly extension: string } => {
+		const extension = filename.split(".").pop();
+		if (!extension) {
+			throw new Error(`File ${filename} has no extension`);
+		}
+		return { filenameWithoutExtension: filename.slice(0, -extension.length - 1), extension };
+	};
+
+	const getGeneratedFilename = (filename: string): string => {
+		if (filename.toLowerCase() === coreConfig.barrelExportFilename.toLowerCase()) {
+			// do not add .generated to barrel export filename
+			return filename;
+		}
+		const { filenameWithoutExtension, extension } = getFilenameAndExtension(filename);
+		return `${filenameWithoutExtension}.generated.${extension}`;
+	};
+
 	return {
-		importType: (data: { readonly filePathOrPackage: LiteralUnion<LibraryType>; readonly importValue: string | string[] }): string => {
+		getGeneratedFilename,
+		importType: (data: {
+			readonly filePathOrPackage: LiteralUnion<LibraryType>;
+			readonly importValue: string | readonly string[];
+		}): string => {
 			if (!data.importValue.length) {
 				return "";
 			}
@@ -14,7 +36,7 @@ export function getImporter(moduleFileExtension: ModuleFileExtension) {
 			const isExternalLib = !(data.filePathOrPackage.endsWith(".js") || data.filePathOrPackage.endsWith(".ts"));
 			const resolvedFilePath = isExternalLib
 				? data.filePathOrPackage
-				: `${getFileNameWithoutExtension(data.filePathOrPackage)}${importExtension}`;
+				: `${getFileNameWithoutExtension(getGeneratedFilename(data.filePathOrPackage))}${importExtension}`;
 			const importValues = Array.isArray(data.importValue) ? data.importValue : [data.importValue];
 
 			return `import type { ${importValues.join(", ")} } from '${resolvedFilePath}';`;

@@ -1,1 +1,4 @@
-[{ "filename": "contentTypes.ts" }, { "filename": "index.ts" }]
+[
+  { "filename": "structure/contentTypes.generated.ts" },
+  { "filename": "index.ts" }
+]

@@ -1,3 +1,3 @@
-export * from "./contentTypeSnippets.js"
-export * from "./languages.js"
-export * from "./workflows.js"
+export * from "./structure/contentTypeSnippets.generated.js"
+export * from "./structure/languages.generated.js"
+export * from "./structure/workflows.generated.js"

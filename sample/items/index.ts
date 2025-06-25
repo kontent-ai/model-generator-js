@@ -12,5 +12,7 @@
  * -------------------------------------------------------------------------------
  */
 
-export * from "./codenames/index.js"
-export * from "./items/index.js"
+export * from "./codenames/actor.codenames.generated.js"
+export * from "./codenames/movie.codenames.generated.js"
+export * from "./items/actor.items.generated.js"
+export * from "./items/movie.items.generated.js"

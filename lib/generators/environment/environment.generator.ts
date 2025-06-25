@@ -54,7 +54,7 @@ export type EnvironmentGeneratorConfig = {
 export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 	const generateEnvironmentModels = (): GeneratedSet => {
 		return {
-			folderName: undefined,
+			folderName: "structure",
 			files: [
 				getEntityFile({
 					entitiesToCreate: config.entitiesToCreate,

@@ -1,1 +1,4 @@
-[{ "filename": "taxonomies.ts" }, { "filename": "index.ts" }]
+[
+  { "filename": "structure/taxonomies.generated.ts" },
+  { "filename": "index.ts" }
+]

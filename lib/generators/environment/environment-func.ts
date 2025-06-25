@@ -30,7 +30,7 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 	console.log(chalk.green("Model generator started \n"));
 	console.log(`Generating '${chalk.yellow("environment" satisfies CliAction)}' models\n`);
 
-	const { environmentFiles, environmentInfo } = await getModelsAsync(config);
+	const { environmentFiles, environmentInfo } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
 		...config,
@@ -48,7 +48,7 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 	return setFiles;
 }
 
-async function getModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<{
+async function getFilesAsync(config: GenerateEnvironmentModelsConfig): Promise<{
 	readonly environmentFiles: GeneratedSet;
 	readonly moduleFileExtension: ModuleFileExtension;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
