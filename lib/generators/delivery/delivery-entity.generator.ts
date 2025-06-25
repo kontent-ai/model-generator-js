@@ -1,6 +1,7 @@
 import type { CollectionModels, LanguageModels } from "@kontent-ai/management-sdk";
 import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels, WorkflowModels } from "@kontent-ai/management-sdk";
 import { P, match } from "ts-pattern";
+import { deliveryConfig } from "../../config.js";
 import { wrapComment } from "../../core/comment.utils.js";
 import type { GeneratedFile, GeneratedSet, GeneratedTypeModel, ModuleFileExtension } from "../../core/core.models.js";
 import { isNotUndefined } from "../../core/core.utils.js";
@@ -32,7 +33,7 @@ export type DeliveryEntityGeneratorConfig<T extends DeliveryEntityType> = {
 	readonly moduleFileExtension: ModuleFileExtension;
 	readonly entityType: T;
 	readonly entities: readonly Readonly<DeliveryEntity>[];
-	readonly generateOnlyCoreFile: boolean;
+	readonly generateOnlyOverviewFile: boolean;
 	readonly deliveryGeneratorConfig: DeliveryGeneratorConfig;
 };
 
@@ -40,6 +41,7 @@ export type DeliveryEntityGenerator<T extends DeliveryEntityType> = {
 	readonly entityType: T;
 	readonly generateEntityTypes: () => GeneratedSet;
 	readonly entityNames: DeliveryEntityNames<T>;
+	readonly generateOverviewFile: () => GeneratedFile;
 };
 
 export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
@@ -67,7 +69,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		});
 	};
 
-	const getMainFileCode = (): string => {
+	const getOverviewFileCode = (): string => {
 		return `
             ${deliveryUtils.getCodeOfDeliveryEntity({
 				codenames: config.entities.map((m) => m.codename),
@@ -78,7 +80,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 				},
 				extendedType: config.entityType,
 			})}
-            ${getMainFileExtraCode()}`;
+            ${getOverviewFileExtraCode()}`;
 	};
 
 	const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
@@ -96,7 +98,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 
 		return `
             ${importer.importType({
-				filePathOrPackage: `./${entityNames.mainFilename}`,
+				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${entityNames.overviewFilename}`,
 				importValue: `${entityNames.codenamesTypeName}`,
 			})}${extraCode?.imports.length ? `\n${extraCode.imports.join("\n")}` : ""}
            
@@ -115,14 +117,14 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		};
 	};
 
-	const getMainEntityFile = (): GeneratedFile => {
+	const getOverviewEntityFile = (): GeneratedFile => {
 		return {
-			filename: entityNames.mainFilename,
-			text: getMainFileCode(),
+			filename: entityNames.overviewFilename,
+			text: getOverviewFileCode(),
 		};
 	};
 
-	const getMainFileExtraCode = (): string => {
+	const getOverviewFileExtraCode = (): string => {
 		return match<DeliveryEntityType>(config.entityType)
 			.returnType<string>()
 			.with("Workflow", () => {
@@ -218,16 +220,18 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 	return {
 		entityNames,
 		entityType: config.entityType,
+		generateOverviewFile: (): GeneratedFile => {
+			return getOverviewEntityFile();
+		},
 		generateEntityTypes: (): GeneratedSet => {
 			return {
 				folderName: entityNames.folderName,
 				files: [
-					...(config.generateOnlyCoreFile
+					...(config.generateOnlyOverviewFile
 						? []
 						: config.entities.map<GeneratedFile>((entity) => {
 								return getEntityFile(entity);
 							})),
-					getMainEntityFile(),
 				],
 			};
 		},

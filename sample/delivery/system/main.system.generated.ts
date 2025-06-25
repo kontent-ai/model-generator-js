@@ -13,12 +13,12 @@
  */
 
 import type { IContentItem, IContentItemElements, IDeliveryClient } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../collections/_collections.generated.js"
-import type { LanguageCodenames } from "../languages/_languages.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../workflows/_workflows.generated.js"
-import type { TaxonomyCodenames } from "../taxonomies/_taxonomies.generated.js"
-import type { TypeCodenames } from "../types/_types.generated.js"
-import type { ElementCodenames } from "../elements/_elements.generated.js"
+import type { CollectionCodenames } from "./collections.generated.js"
+import type { LanguageCodenames } from "./languages.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "./workflows.generated.js"
+import type { TaxonomyCodenames } from "./taxonomies.generated.js"
+import type { TypeCodenames } from "./types.generated.js"
+import type { ElementCodenames } from "./elements.generated.js"
 
 /*
  * Core content type with narrowed types. Use this instead of'IContentItem'

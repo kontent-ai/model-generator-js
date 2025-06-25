@@ -11,7 +11,7 @@ export type DeliveryEntityNames<T extends DeliveryEntityType> = {
 	readonly codenamesTypeName: string;
 	readonly codenamesTypeguardFunctionName: string;
 
-	readonly mainFilename: string;
+	readonly overviewFilename: string;
 	readonly folderName: string;
 
 	readonly getEntityName: (entity: Readonly<DeliveryEntity>) => string;
@@ -71,9 +71,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				codenamesValuePropertyName: `${entityTypeName.camelCase}Codenames`,
 				codenamesTypeguardFunctionName: `is${entityTypeName.pascalCase}Codename`,
 
-				mainFilename: mapFilename<ObjectWithCodename>((c) => c.codename, {
-					prefix: "_",
-				})({ codename: entityTypeName.pluralCamelCase }, true),
+				overviewFilename: mapFilename<ObjectWithCodename>((c) => c.codename)({ codename: entityTypeName.pluralCamelCase }, true),
 				folderName: entityTypeName.pluralCamelCase,
 
 				getEntityName: mapName(nameResolver, "pascalCase"),

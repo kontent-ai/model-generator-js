@@ -1,5 +1,5 @@
 
-            import type { TypeCodenames } from './_types.generated.js';
+            import type { TypeCodenames } from '../system/types.generated.js';
 import type { IContentItem } from '@kontent-ai/delivery-sdk';
 import type { CoreType } from '../system/main.system.generated.js';
            

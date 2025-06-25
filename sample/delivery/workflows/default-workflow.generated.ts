@@ -12,7 +12,7 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { WorkflowCodenames } from "./_workflows.generated.js"
+import type { WorkflowCodenames } from "../system/workflows.generated.js"
 
 /*
  * Type representing codename of 'Default' workflow

@@ -1,5 +1,5 @@
 
-            import type { TaxonomyCodenames } from './_taxonomies.generated.js';
+            import type { TaxonomyCodenames } from '../system/taxonomies.generated.js';
            
             /*
 * Type representing codename of 'Taxonomy without terms' taxonomy

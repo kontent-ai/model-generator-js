@@ -1,5 +1,5 @@
 
-            import type { LanguageCodenames } from './_languages.generated.js';
+            import type { LanguageCodenames } from '../system/languages.generated.js';
            
             /*
 * Type representing codename of 'English' language

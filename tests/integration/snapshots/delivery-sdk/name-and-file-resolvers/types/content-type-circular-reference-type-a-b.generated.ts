@@ -1,4 +1,4 @@
-import type { TypeCodenames } from "./_types.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { ContentTypeCircularReferenceTypeBA } from "../types/content-type-circular-reference-type-b-a.generated.js"
 import type { CoreType } from "../system/main.system.generated.js"

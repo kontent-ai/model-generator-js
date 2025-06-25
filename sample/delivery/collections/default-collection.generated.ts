@@ -12,7 +12,7 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { CollectionCodenames } from "./_collections.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
 
 /*
  * Type representing codename of 'Default' collection

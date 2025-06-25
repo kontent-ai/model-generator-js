@@ -86,49 +86,49 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			entities: config.environmentData.collections,
 			entityType: "Collection",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: false,
+			generateOnlyOverviewFile: false,
 			deliveryGeneratorConfig: config,
 		}),
 		languages: getDeliveryEntityGenerator({
 			entities: config.environmentData.languages,
 			entityType: "Language",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: false,
+			generateOnlyOverviewFile: false,
 			deliveryGeneratorConfig: config,
 		}),
 		workflows: getDeliveryEntityGenerator({
 			entities: config.environmentData.workflows,
 			entityType: "Workflow",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: false,
+			generateOnlyOverviewFile: false,
 			deliveryGeneratorConfig: config,
 		}),
 		taxonomies: getDeliveryEntityGenerator({
 			entities: config.environmentData.taxonomies,
 			entityType: "Taxonomy",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: false,
+			generateOnlyOverviewFile: false,
 			deliveryGeneratorConfig: config,
 		}),
 		contentTypes: getDeliveryEntityGenerator({
 			entities: config.environmentData.types,
 			entityType: "Type",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: false,
+			generateOnlyOverviewFile: false,
 			deliveryGeneratorConfig: config,
 		}),
 		snippets: getDeliveryEntityGenerator({
 			entities: config.environmentData.snippets,
 			entityType: "Snippet",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: false,
+			generateOnlyOverviewFile: false,
 			deliveryGeneratorConfig: config,
 		}),
 		elements: getDeliveryEntityGenerator({
 			entities: getUniqueDeliveryElements(),
 			entityType: "Element",
 			moduleFileExtension: config.moduleFileExtension,
-			generateOnlyCoreFile: true,
+			generateOnlyOverviewFile: true,
 			deliveryGeneratorConfig: config,
 		}),
 	};
@@ -162,7 +162,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 						];
 
 						return importer.importType({
-							filePathOrPackage: `../${generator.entityNames.folderName}/${generator.entityNames.mainFilename}`,
+							filePathOrPackage: `./${generator.entityNames.overviewFilename}`,
 							importValue: `${importValues.join(", ")}`,
 						});
 					})
@@ -207,7 +207,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 		getSystemFiles(): GeneratedSet {
 			return {
 				folderName: deliveryConfig.systemTypesFolderName,
-				files: [getDeliverySystemFile()],
+				files: [getDeliverySystemFile(), ...Object.values(entityGenerators).map((generator) => generator.generateOverviewFile())],
 			};
 		},
 	};

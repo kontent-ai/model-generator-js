@@ -1,4 +1,4 @@
-import type { SnippetCodenames } from "./_snippets.generated.js"
+import type { SnippetCodenames } from "../system/snippets.generated.js"
 import type { Snippet } from "@kontent-ai/delivery-sdk"
 
 /*

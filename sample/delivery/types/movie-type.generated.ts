@@ -12,7 +12,7 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { TypeCodenames } from "./_types.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
 import type { ActorType } from "../types/actor-type.generated.js"
 import type { CoreType } from "../system/main.system.generated.js"
