@@ -7,3 +7,4 @@ export { generateDeliveryModelsAsync, type GenerateDeliveryModelsConfig } from "
 export { generateEnvironmentModelsAsync, type GenerateEnvironmentModelsConfig } from "./generators/environment/environment-func.js";
 export { generateItemsAsync, type GenerateItemsModelsConfig } from "./generators/items/items-func.js";
 export { generateMigrationModelsAsync, type GenerateMigrationModelsConfig } from "./generators/migration/migration-func.js";
+export { generateSyncModelsAsync, type GenerateSyncModelsConfig } from "./generators/sync/sync-func.js";
