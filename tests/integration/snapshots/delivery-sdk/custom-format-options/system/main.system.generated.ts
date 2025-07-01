@@ -1,28 +1,26 @@
+import type { IDeliveryClient } from "@kontent-ai/delivery-sdk"
+import type { CollectionCodenames } from "./collections.generated.js"
+import type { ElementCodenames } from "./elements.generated.js"
+import type { LanguageCodenames } from "./languages.generated.js"
+import type { TaxonomyCodenames } from "./taxonomies.generated.js"
+import type { CoreType, TypeCodenames } from "./types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "./workflows.generated.js"
 
-              import type { IDeliveryClient } from '@kontent-ai/delivery-sdk';
-                import type { CollectionCodenames } from './collections.generated.js';
-import type { LanguageCodenames } from './languages.generated.js';
-import type { WorkflowCodenames, WorkflowStepCodenames } from './workflows.generated.js';
-import type { TaxonomyCodenames } from './taxonomies.generated.js';
-import type { TypeCodenames, CoreType } from './types.generated.js';
-import type { ElementCodenames } from './elements.generated.js';          
+/*
+ * Core types for 'IDeliveryClient'
+ */
+export type CoreClientTypes = {
+	readonly collectionCodenames: CollectionCodenames
+	readonly contentItemType: CoreType
+	readonly contentTypeCodenames: TypeCodenames
+	readonly elementCodenames: ElementCodenames
+	readonly languageCodenames: LanguageCodenames
+	readonly taxonomyCodenames: TaxonomyCodenames
+	readonly workflowCodenames: WorkflowCodenames
+	readonly workflowStepCodenames: WorkflowStepCodenames
+}
 
-                /*
-* Core types for 'IDeliveryClient'
-*/
-                export type CoreClientTypes = {
-                    readonly collectionCodenames: CollectionCodenames;
-                    readonly contentItemType: CoreType;
-                    readonly contentTypeCodenames: TypeCodenames;
-                    readonly elementCodenames: ElementCodenames;
-                    readonly languageCodenames: LanguageCodenames;
-                    readonly taxonomyCodenames: TaxonomyCodenames;
-                    readonly workflowCodenames: WorkflowCodenames;
-                    readonly workflowStepCodenames: WorkflowStepCodenames;
-                };
-
-                /*
-* Typed delivery client. Use this instead of 'IDeliveryClient'
-*/
-                export type CoreDeliveryClient = IDeliveryClient<CoreClientTypes>;
-            
+/*
+ * Typed delivery client. Use this instead of 'IDeliveryClient'
+ */
+export type CoreDeliveryClient = IDeliveryClient<CoreClientTypes>

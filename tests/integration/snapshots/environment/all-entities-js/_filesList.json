@@ -1,15 +1,15 @@
 [
-  { "filename": "structure/languages.generated.ts" },
-  { "filename": "structure/collections.generated.ts" },
-  { "filename": "structure/contentTypes.generated.ts" },
-  { "filename": "structure/contentTypeSnippets.generated.ts" },
-  { "filename": "structure/workflows.generated.ts" },
-  { "filename": "structure/roles.generated.ts" },
-  { "filename": "structure/assetFolders.generated.ts" },
-  { "filename": "structure/webhooks.generated.ts" },
-  { "filename": "structure/taxonomies.generated.ts" },
-  { "filename": "structure/customApps.generated.ts" },
-  { "filename": "structure/spaces.generated.ts" },
-  { "filename": "structure/previewUrls.generated.ts" },
-  { "filename": "index.ts" }
+	{ "filename": "structure/languages.generated.ts" },
+	{ "filename": "structure/collections.generated.ts" },
+	{ "filename": "structure/contentTypes.generated.ts" },
+	{ "filename": "structure/contentTypeSnippets.generated.ts" },
+	{ "filename": "structure/workflows.generated.ts" },
+	{ "filename": "structure/roles.generated.ts" },
+	{ "filename": "structure/assetFolders.generated.ts" },
+	{ "filename": "structure/webhooks.generated.ts" },
+	{ "filename": "structure/taxonomies.generated.ts" },
+	{ "filename": "structure/customApps.generated.ts" },
+	{ "filename": "structure/spaces.generated.ts" },
+	{ "filename": "structure/previewUrls.generated.ts" },
+	{ "filename": "index.ts" }
 ]
