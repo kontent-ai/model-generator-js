@@ -16,7 +16,7 @@
             export function isWorkflowCodename(value: string | undefined | null): value is WorkflowCodenames {
                 return typeof value === 'string' && (workflowCodenames as readonly string[]).includes(value);
             };
-            
+
             /*
 * Array of all workflow codenames
 */

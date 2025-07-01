@@ -1,15 +1,47 @@
 import type { TaxonomyModels } from "@kontent-ai/management-sdk";
 import { match } from "ts-pattern";
 import { wrapComment } from "../../../core/comment.utils.js";
+import { resolveCase } from "../../../core/resolvers.js";
 import type { DeliveryEntity, DeliveryEntityType } from "../delivery-entity.generator.js";
+
+export type TypeMappingItem = {
+	readonly codename: string;
+	readonly typeName: string;
+};
 
 export function deliveryEntityUtils() {
 	return {
 		getPluralName,
+		getTypeMapping,
+		getTypeMappingItem,
 		getCodeOfDeliveryEntity,
 		getTaxonomyTermCodenames,
 		getCodenameTypeguardFunctionCode,
 	};
+}
+
+function getTypeMappingTypeName(entityType: DeliveryEntityType): string {
+	return `Codename${resolveCase(entityType, "pascalCase")}Mapping`;
+}
+
+function getTypeMapping(entityType: DeliveryEntityType, items: readonly TypeMappingItem[]): string {
+	return `export type ${getTypeMappingTypeName(entityType)} = {
+	${items.map((item) => `readonly ${item.codename}: ${item.typeName},`).join("\n")}
+};`;
+}
+
+function getTypeMappingItem({
+	codenamesTypeName,
+	defaultTypeName,
+	entityType,
+}: {
+	readonly entityType: DeliveryEntityType;
+	readonly codenamesTypeName: string;
+	readonly defaultTypeName: string;
+}): string {
+	const codenameGenericName = `T${resolveCase(entityType, "pascalCase")}Codename`;
+	const typedItemTypeName = `Codename${resolveCase(entityType, "pascalCase")}Mapper`;
+	return `export type ${typedItemTypeName}<${codenameGenericName} extends ${codenamesTypeName}> = ${codenameGenericName} extends keyof ${getTypeMappingTypeName(entityType)} ? ${getTypeMappingTypeName(entityType)}[${codenameGenericName}] : ${defaultTypeName};`;
 }
 
 function getCodenameTypeguardFunctionCode({

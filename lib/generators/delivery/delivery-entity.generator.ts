@@ -57,6 +57,12 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		entityType: config.entityType,
 	}).getEntityNames();
 
+	const getEntityComment: (title: string) => string = (title) => {
+		return wrapComment(title, {
+			lines: [],
+		});
+	};
+
 	const getEntityTypeNameForComment = (): string => {
 		return config.entityType.toLowerCase();
 	};
@@ -70,8 +76,10 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 	};
 
 	const getOverviewFileCode = (): string => {
+		const { imports, code: extraCode } = getOverviewFileExtraCode() ?? {};
+
 		return `
-            ${deliveryUtils.getCodeOfDeliveryEntity({
+            ${imports?.length ? `${imports.join("\n")}\n` : ""}${deliveryUtils.getCodeOfDeliveryEntity({
 				codenames: config.entities.map((m) => m.codename),
 				names: {
 					codenamesTypeName: entityNames.codenamesTypeName,
@@ -79,18 +87,11 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					valuesPropertyName: entityNames.codenamesValuePropertyName,
 				},
 				extendedType: config.entityType,
-			})}
-            ${getOverviewFileExtraCode()}`;
+			})}${extraCode?.length ? `\n${extraCode}` : ""}`;
 	};
 
 	const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
 		const extraCode = getEntityExtraCode(entity);
-
-		const getEntityComment: (title: string) => string = (title) => {
-			return wrapComment(title, {
-				lines: [],
-			});
-		};
 
 		const getEntityTypeCode = (): string => {
 			return `export type ${entityNames.getCodenameTypeName(entity)} = keyof Pick<Record<${entityNames.codenamesTypeName}, null>, "${entity.codename}">;`;
@@ -124,10 +125,21 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		};
 	};
 
-	const getOverviewFileExtraCode = (): string => {
+	const getOverviewFileExtraCode = ():
+		| {
+				readonly imports: readonly string[];
+				readonly code: string;
+		  }
+		| undefined => {
 		return match<DeliveryEntityType>(config.entityType)
-			.returnType<string>()
-			.with("Workflow", () => {
+			.returnType<
+				| {
+						readonly imports: readonly string[];
+						readonly code: string;
+				  }
+				| undefined
+			>()
+			.with("Workflow", (workflowDeliveryType) => {
 				const workflowStepCodenames: readonly string[] = config.entities
 					.filter((m) => m instanceof WorkflowModels.Workflow)
 					.flatMap((workflow) =>
@@ -140,20 +152,58 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 						nameResolvers: config.deliveryGeneratorConfig.nameResolvers ?? undefined,
 						fileResolvers: config.deliveryGeneratorConfig.fileResolvers ?? undefined,
 					},
-					entityType: "Workflow",
+					entityType: workflowDeliveryType,
 				}).getEntityNames();
 
-				return deliveryUtils.getCodeOfDeliveryEntity({
-					codenames: workflowStepCodenames,
-					names: {
-						codenamesTypeName: worfklowStepNames.allStepsNames.codenamesTypeName,
-						typeGuardFunctionName: worfklowStepNames.allStepsNames.typeguardFunctionName,
-						valuesPropertyName: worfklowStepNames.allStepsNames.valuesPropertyName,
-					},
-					extendedType: "Workflow",
-				});
+				return {
+					imports: [],
+					code: deliveryUtils.getCodeOfDeliveryEntity({
+						codenames: workflowStepCodenames,
+						names: {
+							codenamesTypeName: worfklowStepNames.allStepsNames.codenamesTypeName,
+							typeGuardFunctionName: worfklowStepNames.allStepsNames.typeguardFunctionName,
+							valuesPropertyName: worfklowStepNames.allStepsNames.valuesPropertyName,
+						},
+						extendedType: workflowDeliveryType,
+					}),
+				};
 			})
-			.otherwise(() => "");
+			.with("Type", (contentTypeDeliveryType) => {
+				return {
+					imports: [
+						...config.entities
+							.filter((m) => m instanceof ContentTypeModels.ContentType)
+							.map((type) => {
+								return importer.importType({
+									filePathOrPackage: `../${entityNames.folderName}/${entityNames.getEntityFilename(type, true)}`,
+									importValue: `${entityNames.getEntityName(type)}`,
+								});
+							}),
+						importer.importType({
+							filePathOrPackage: `./${deliveryConfig.mainSystemFilename}.ts`,
+							importValue: [deliveryConfig.coreContentTypeName],
+						}),
+					],
+					code: `
+					${getEntityComment(`Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.'`)}
+					${deliveryUtils.getTypeMapping(
+						contentTypeDeliveryType,
+						config.entities.map((m) => ({
+							codename: m.codename,
+							typeName: entityNames.getEntityName(m),
+						})),
+					)}
+
+					${getEntityComment("Helper type that returns type based on the codename of type.")}
+					${deliveryUtils.getTypeMappingItem({
+						codenamesTypeName: entityNames.codenamesTypeName,
+						defaultTypeName: "CoreType",
+						entityType: contentTypeDeliveryType,
+					})}
+					`,
+				};
+			})
+			.otherwise(() => undefined);
 	};
 
 	const getEntityExtraCode = (entity: DeliveryEntity): GeneratedTypeModel | undefined => {

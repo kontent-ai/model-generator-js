@@ -12,6 +12,10 @@
  * -------------------------------------------------------------------------------
  */
 
+import type { ActorType } from "../types/actor-type.generated.js"
+import type { MovieType } from "../types/movie-type.generated.js"
+import type { CoreType } from "./main.system.generated.js"
+
 /*
  * Array of all type codenames
  */
@@ -28,3 +32,18 @@ export type TypeCodenames = (typeof typeCodenames)[number]
 export function isTypeCodename(value: string | undefined | null): value is TypeCodenames {
 	return typeof value === "string" && (typeCodenames as readonly string[]).includes(value)
 }
+
+/*
+ * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.'
+ */
+export type CodenameTypeMapping = {
+	readonly actor: ActorType
+	readonly movie: MovieType
+}
+
+/*
+ * Helper type that returns type based on the codename of type.
+ */
+export type CodenameTypeMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof CodenameTypeMapping
+	? CodenameTypeMapping[TTypeCodename]
+	: CoreType
