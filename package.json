@@ -12,7 +12,7 @@
 	"author": "richard sustek",
 	"license": "MIT",
 	"engines": {
-		"node": ">= 20"
+		"node": ">= 22"
 	},
 	"keywords": [
 		"Kontent",
