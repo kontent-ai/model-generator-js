@@ -1,4 +1,4 @@
-import type { MigrationItem, MigrationItemSystem, MigrationElements } from "@kontent-ai/migration-toolkit"
+import type { MigrationElements, MigrationItem, MigrationItemSystem } from "@kontent-ai/migration-toolkit"
 import type {
 	CollectionCodenames,
 	ContentTypeCodenames,

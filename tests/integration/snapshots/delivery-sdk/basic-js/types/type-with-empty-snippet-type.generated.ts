@@ -1,6 +1,8 @@
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 
 /*
  * Type representing codename of 'Type with empty snippet' type
@@ -20,10 +22,13 @@ export function isTypeWithEmptySnippetTypeCodename(value: string | undefined | n
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export type TypeWithEmptySnippetType = CoreType<
-	TypeWithEmptySnippetTypeElementCodenames,
+export type TypeWithEmptySnippetType = IContentItem<
 	Record<string, never>,
-	TypeWithEmptySnippetTypeCodename
+	TypeWithEmptySnippetTypeCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

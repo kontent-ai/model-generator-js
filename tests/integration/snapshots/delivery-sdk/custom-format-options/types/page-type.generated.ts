@@ -1,7 +1,10 @@
 
             import type { TypeCodenames } from '../system/types.generated.js';
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/main.system.generated.js';
+import type { CollectionCodenames } from '../system/collections.generated.js';
+import type { CoreType } from '../system/types.generated.js';
+import type { LanguageCodenames } from '../system/languages.generated.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../system/workflows.generated.js';
            
             /*
 * Type representing codename of 'Page' type
@@ -21,8 +24,7 @@ import type { CoreType } from '../system/main.system.generated.js';
     * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
 * Codename: page
     */
-export type PageType = CoreType<
-PageTypeElementCodenames,
+export type PageType = IContentItem<
 {
 /*
     * Title
@@ -73,7 +75,7 @@ PageTypeElementCodenames,
 * Required: false
     */
                 readonly content: Elements.LinkedItemsElement<CoreType>;}, 
-PageTypeCodename>
+PageTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>
 
 /*
 * Type representing all available element codenames for Page

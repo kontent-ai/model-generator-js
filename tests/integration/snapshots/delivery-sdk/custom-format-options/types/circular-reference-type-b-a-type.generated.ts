@@ -2,7 +2,10 @@
             import type { TypeCodenames } from '../system/types.generated.js';
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
 import type { CircularReferenceTypeABType } from '../types/circular-reference-type-a-b-type.generated.js';
-import type { CoreType } from '../system/main.system.generated.js';
+import type { CollectionCodenames } from '../system/collections.generated.js';
+import type { CoreType } from '../system/types.generated.js';
+import type { LanguageCodenames } from '../system/languages.generated.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../system/workflows.generated.js';
            
             /*
 * Type representing codename of 'Circular reference type B -> A' type
@@ -22,8 +25,7 @@ import type { CoreType } from '../system/main.system.generated.js';
     * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
 * Codename: circular_reference_type_b____a
     */
-export type CircularReferenceTypeBAType = CoreType<
-CircularReferenceTypeBATypeElementCodenames,
+export type CircularReferenceTypeBAType = IContentItem<
 {
 /*
     * Items
@@ -35,7 +37,7 @@ CircularReferenceTypeBATypeElementCodenames,
 * Allowed content types: circular_reference_type_a_b
     */
                 readonly items: Elements.LinkedItemsElement<CircularReferenceTypeABType>;}, 
-CircularReferenceTypeBATypeCodename>
+CircularReferenceTypeBATypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>
 
 /*
 * Type representing all available element codenames for Circular reference type B -> A

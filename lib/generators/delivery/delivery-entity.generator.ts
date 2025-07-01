@@ -179,13 +179,15 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 									importValue: `${entityNames.getEntityName(type)}`,
 								});
 							}),
-						importer.importType({
-							filePathOrPackage: `./${deliveryConfig.mainSystemFilename}.ts`,
-							importValue: [deliveryConfig.coreContentTypeName],
-						}),
 					],
 					code: `
-					${getEntityComment(`Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.'`)}
+					 ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}' for increased type safety.`)}
+					 ${deliveryUtils.getCoreContentTypeCode(
+							config.entities.filter((m) => m instanceof ContentTypeModels.ContentType),
+							entityNames as DeliveryEntityNames<"Type">,
+						)}
+
+					${getEntityComment("Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.")}
 					${deliveryUtils.getTypeMapping(
 						contentTypeDeliveryType,
 						config.entities.map((m) => ({

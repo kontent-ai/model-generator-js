@@ -1,7 +1,11 @@
-import type { TaxonomyModels } from "@kontent-ai/management-sdk";
+import type { ContentTypeModels, TaxonomyModels } from "@kontent-ai/management-sdk";
 import { match } from "ts-pattern";
+import { deliveryConfig } from "../../../config.js";
 import { wrapComment } from "../../../core/comment.utils.js";
+import type { ModuleFileExtension } from "../../../core/core.models.js";
+import { getImporter } from "../../../core/importer.js";
 import { resolveCase } from "../../../core/resolvers.js";
+import type { DeliveryEntityNames } from "../delivery-entity-name.generator.js";
 import type { DeliveryEntity, DeliveryEntityType } from "../delivery-entity.generator.js";
 
 export type TypeMappingItem = {
@@ -17,7 +21,50 @@ export function deliveryEntityUtils() {
 		getCodeOfDeliveryEntity,
 		getTaxonomyTermCodenames,
 		getCodenameTypeguardFunctionCode,
+		getCoreContentTypeEntityImports,
+		getCoreContentTypeCode,
 	};
+}
+
+function getCoreContentTypeCode(
+	types: readonly Readonly<ContentTypeModels.ContentType>[],
+	entityNames: DeliveryEntityNames<"Type">,
+): string {
+	return `export type ${deliveryConfig.coreContentTypeName} = ${getCoreContentTypeValue(types, entityNames)}`;
+}
+
+function getCoreContentTypeEntityNames(
+	types: Parameters<typeof getCoreContentTypeCode>[0],
+	entityNames: Parameters<typeof getCoreContentTypeCode>[1],
+): readonly string[] {
+	return types.map((m) => entityNames.getEntityName(m));
+}
+
+function getCoreContentTypeValue(
+	types: Parameters<typeof getCoreContentTypeEntityNames>[0],
+	entityNames: Parameters<typeof getCoreContentTypeEntityNames>[1],
+): string {
+	const typeNames = getCoreContentTypeEntityNames(types, entityNames);
+
+	if (!typeNames.length) {
+		return "never";
+	}
+
+	return typeNames.join(" | ");
+}
+
+function getCoreContentTypeEntityImports(
+	types: Parameters<typeof getCoreContentTypeEntityNames>[0],
+	entityNames: Parameters<typeof getCoreContentTypeEntityNames>[1],
+	moduleFileExtension: ModuleFileExtension,
+): readonly string[] {
+	const importer = getImporter(moduleFileExtension);
+	return types.map((m) =>
+		importer.importType({
+			filePathOrPackage: `../${entityNames.folderName}/${entityNames.getEntityFilename(m, true)}`,
+			importValue: entityNames.getEntityName(m),
+		}),
+	);
 }
 
 function getTypeMappingTypeName(entityType: DeliveryEntityType): string {

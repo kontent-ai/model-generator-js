@@ -1,9 +1,12 @@
 
             import type { TypeCodenames } from '../system/types.generated.js';
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/main.system.generated.js';
+import type { CollectionCodenames } from '../system/collections.generated.js';
+import type { CoreType } from '../system/types.generated.js';
+import type { LanguageCodenames } from '../system/languages.generated.js';
 import type { SnippetASnippet } from '../snippets/snippet-a-snippet.generated.js';
 import type { TaxonomyATaxonomyTermCodenames, TaxonomyATaxonomyCodename } from '../taxonomies/taxonomy-a-taxonomy.generated.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../system/workflows.generated.js';
            
             /*
 * Type representing codename of 'Content type with all elements' type
@@ -23,8 +26,7 @@ import type { TaxonomyATaxonomyTermCodenames, TaxonomyATaxonomyCodename } from '
     * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
 * Codename: content_type_with_all_elements
     */
-export type ContentTypeWithAllElementsType = CoreType<
-ContentTypeWithAllElementsTypeElementCodenames,
+export type ContentTypeWithAllElementsType = IContentItem<
 {
 /*
     * Text element
@@ -128,7 +130,7 @@ ContentTypeWithAllElementsTypeElementCodenames,
 * Taxonomy: taxonomy_a
     */
                 readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATaxonomyTermCodenames, TaxonomyATaxonomyCodename>;} & SnippetASnippet, 
-ContentTypeWithAllElementsTypeCodename>
+ContentTypeWithAllElementsTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>
 
 /*
 * Type representing all available element codenames for Content type with all elements

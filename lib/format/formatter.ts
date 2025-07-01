@@ -13,6 +13,7 @@ export async function formatCodeAsync(code: string, options?: Readonly<Options>)
 			trailingComma: "none",
 			bracketSpacing: true,
 			semi: false,
+			plugins: ["prettier-plugin-organize-imports"],
 		},
 	);
 }

@@ -1,6 +1,8 @@
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 
 /*
  * Type representing codename of 'Content type with guidelines only' type
@@ -25,10 +27,13 @@ export function isContentTypeContentTypeWithGuidelinesOnlyCodename(
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export type ContentTypeContentTypeWithGuidelinesOnly = CoreType<
-	ContentTypeContentTypeWithGuidelinesOnlyElementCodenames,
+export type ContentTypeContentTypeWithGuidelinesOnly = IContentItem<
 	Record<string, never>,
-	ContentTypeContentTypeWithGuidelinesOnlyCodename
+	ContentTypeContentTypeWithGuidelinesOnlyCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

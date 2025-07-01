@@ -14,7 +14,6 @@
 
 import type { ActorType } from "../types/actor-type.generated.js"
 import type { MovieType } from "../types/movie-type.generated.js"
-import type { CoreType } from "./main.system.generated.js"
 
 /*
  * Array of all type codenames
@@ -34,7 +33,12 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 }
 
 /*
- * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.'
+ * Core content type with narrowed types. Use this instead of'IContentItem' for increased type safety.
+ */
+export type CoreType = ActorType | MovieType
+
+/*
+ * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.
  */
 export type CodenameTypeMapping = {
 	readonly actor: ActorType

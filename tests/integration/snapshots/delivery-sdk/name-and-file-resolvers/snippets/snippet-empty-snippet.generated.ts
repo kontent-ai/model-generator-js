@@ -1,5 +1,5 @@
-import type { SnippetCodenames } from "../system/snippets.generated.js"
 import type { Snippet } from "@kontent-ai/delivery-sdk"
+import type { SnippetCodenames } from "../system/snippets.generated.js"
 
 /*
  * Type representing codename of 'Empty snippet' snippet

@@ -1,6 +1,7 @@
 
             import type { SnippetCodenames } from '../system/snippets.generated.js';
 import type { Snippet } from '@kontent-ai/delivery-sdk';
+import type { CoreType } from '../system/types.generated.js';
            
             /*
 * Type representing codename of 'Empty snippet' snippet

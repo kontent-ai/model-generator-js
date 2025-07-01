@@ -1,8 +1,10 @@
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
 import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js"
-import type { TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename } from "../taxonomies/taxonomy-taxonomy-a.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { CoreType, TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
+import type { TaxonomyTaxonomyACodename, TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js"
 
 /*
  * Type representing codename of 'Content type with all elements' type
@@ -24,8 +26,7 @@ export function isContentTypeContentTypeWithAllElementsCodename(
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export type ContentTypeContentTypeWithAllElements = CoreType<
-	ContentTypeContentTypeWithAllElementsElementCodenames,
+export type ContentTypeContentTypeWithAllElements = IContentItem<
 	{
 		/*
 		 * Text element
@@ -130,7 +131,11 @@ export type ContentTypeContentTypeWithAllElements = CoreType<
 		 */
 		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename>
 	} & SnippetSnippetA,
-	ContentTypeContentTypeWithAllElementsCodename
+	ContentTypeContentTypeWithAllElementsCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

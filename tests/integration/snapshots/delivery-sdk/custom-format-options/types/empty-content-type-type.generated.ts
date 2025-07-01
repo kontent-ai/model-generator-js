@@ -1,7 +1,10 @@
 
             import type { TypeCodenames } from '../system/types.generated.js';
 import type { IContentItem } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/main.system.generated.js';
+import type { CollectionCodenames } from '../system/collections.generated.js';
+import type { CoreType } from '../system/types.generated.js';
+import type { LanguageCodenames } from '../system/languages.generated.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../system/workflows.generated.js';
            
             /*
 * Type representing codename of 'Empty content type' type
@@ -21,10 +24,9 @@ import type { CoreType } from '../system/main.system.generated.js';
     * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
 * Codename: empty_content_type
     */
-export type EmptyContentTypeType = CoreType<
-EmptyContentTypeTypeElementCodenames,
+export type EmptyContentTypeType = IContentItem<
 Record<string, never>, 
-EmptyContentTypeTypeCodename>
+EmptyContentTypeTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>
 
 /*
 * Type representing all available element codenames for Empty content type

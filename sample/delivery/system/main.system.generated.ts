@@ -12,22 +12,13 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { IContentItem, IContentItemElements, IDeliveryClient } from "@kontent-ai/delivery-sdk"
+import type { IDeliveryClient } from "@kontent-ai/delivery-sdk"
 import type { CollectionCodenames } from "./collections.generated.js"
-import type { LanguageCodenames } from "./languages.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "./workflows.generated.js"
-import type { TaxonomyCodenames } from "./taxonomies.generated.js"
-import type { TypeCodenames } from "./types.generated.js"
 import type { ElementCodenames } from "./elements.generated.js"
-
-/*
- * Core content type with narrowed types. Use this instead of'IContentItem'
- */
-export type CoreType<
-	TElementCodenames extends string = string,
-	TElements extends IContentItemElements<TElementCodenames> = IContentItemElements<TElementCodenames>,
-	TContentTypeCodename extends TypeCodenames = TypeCodenames
-> = IContentItem<TElements, TContentTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>
+import type { LanguageCodenames } from "./languages.generated.js"
+import type { TaxonomyCodenames } from "./taxonomies.generated.js"
+import type { CoreType, TypeCodenames } from "./types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "./workflows.generated.js"
 
 /*
  * Core types for 'IDeliveryClient'

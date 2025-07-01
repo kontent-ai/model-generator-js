@@ -12,14 +12,16 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { ActorType } from "../types/actor-type.generated.js"
-import type { CoreType } from "../system/main.system.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { CoreType, TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 import type {
-	ReleaseCategoryTaxonomyTermCodenames,
-	ReleaseCategoryTaxonomyCodename
+	ReleaseCategoryTaxonomyCodename,
+	ReleaseCategoryTaxonomyTermCodenames
 } from "../taxonomies/release-category-taxonomy.generated.js"
+import type { ActorType } from "../types/actor-type.generated.js"
 
 /*
  * Type representing codename of 'Movie' type
@@ -39,8 +41,7 @@ export function isMovieTypeCodename(value: string | undefined | null): value is 
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export type MovieType = CoreType<
-	MovieTypeElementCodenames,
+export type MovieType = IContentItem<
 	{
 		/*
 		 * Title
@@ -134,7 +135,11 @@ export type MovieType = CoreType<
 		 */
 		readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTaxonomyTermCodenames, ReleaseCategoryTaxonomyCodename>
 	},
-	MovieTypeCodename
+	MovieTypeCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

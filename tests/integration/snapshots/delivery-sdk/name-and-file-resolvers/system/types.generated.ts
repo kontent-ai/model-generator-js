@@ -1,15 +1,14 @@
-import type { ContentTypeContentTypeWithSnippetOnly } from "../types/content-type-content-type-with-snippet-only.generated.js"
-import type { ContentTypeContentTypeWithSpecialChars } from "../types/content-type-content-type-with-special-chars.generated.js"
 import type { ContentTypeCircularReferenceTypeAB } from "../types/content-type-circular-reference-type-a-b.generated.js"
-import type { ContentTypePage } from "../types/content-type-page.generated.js"
+import type { ContentTypeCircularReferenceTypeBA } from "../types/content-type-circular-reference-type-b-a.generated.js"
 import type { ContentTypeContentTypeWithAllElements } from "../types/content-type-content-type-with-all-elements.generated.js"
 import type { ContentTypeContentTypeWithGuidelinesOnly } from "../types/content-type-content-type-with-guidelines-only.generated.js"
-import type { ContentTypeCircularReferenceTypeBA } from "../types/content-type-circular-reference-type-b-a.generated.js"
+import type { ContentTypeContentTypeWithSnippetOnly } from "../types/content-type-content-type-with-snippet-only.generated.js"
+import type { ContentTypeContentTypeWithSpecialChars } from "../types/content-type-content-type-with-special-chars.generated.js"
 import type { ContentTypeEmptyContentType } from "../types/content-type-empty-content-type.generated.js"
+import type { ContentTypePage } from "../types/content-type-page.generated.js"
+import type { ContentTypeTypeReferencingDeletedType } from "../types/content-type-type-referencing-deleted-type.generated.js"
 import type { ContentTypeTypeWithEmptySnippet } from "../types/content-type-type-with-empty-snippet.generated.js"
 import type { ContentTypeWebSpotlightRoot } from "../types/content-type-web-spotlight-root.generated.js"
-import type { ContentTypeTypeReferencingDeletedType } from "../types/content-type-type-referencing-deleted-type.generated.js"
-import type { CoreType } from "./main.system.generated.js"
 
 /*
  * Array of all type codenames
@@ -41,7 +40,23 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 }
 
 /*
- * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.'
+ * Core content type with narrowed types. Use this instead of'IContentItem' for increased type safety.
+ */
+export type CoreType =
+	| ContentTypeContentTypeWithSnippetOnly
+	| ContentTypeContentTypeWithSpecialChars
+	| ContentTypeCircularReferenceTypeAB
+	| ContentTypePage
+	| ContentTypeContentTypeWithAllElements
+	| ContentTypeContentTypeWithGuidelinesOnly
+	| ContentTypeCircularReferenceTypeBA
+	| ContentTypeEmptyContentType
+	| ContentTypeTypeWithEmptySnippet
+	| ContentTypeWebSpotlightRoot
+	| ContentTypeTypeReferencingDeletedType
+
+/*
+ * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.
  */
 export type CodenameTypeMapping = {
 	readonly content_type_with_snippet_only: ContentTypeContentTypeWithSnippetOnly

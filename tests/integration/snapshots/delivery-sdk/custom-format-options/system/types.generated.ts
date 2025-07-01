@@ -10,7 +10,6 @@ import type { EmptyContentTypeType } from '../types/empty-content-type-type.gene
 import type { TypeWithEmptySnippetType } from '../types/type-with-empty-snippet-type.generated.js';
 import type { WebSpotlightRootType } from '../types/web-spotlight-root-type.generated.js';
 import type { TypeReferencingDeletedTypeType } from '../types/type-referencing-deleted-type-type.generated.js';
-import type { CoreType } from './main.system.generated.js';
 
             /*
 * Array of all type codenames
@@ -29,8 +28,13 @@ import type { CoreType } from './main.system.generated.js';
                 return typeof value === 'string' && (typeCodenames as readonly string[]).includes(value);
             };
 
+					 /*
+* Core content type with narrowed types. Use this instead of'IContentItem' for increased type safety.
+*/
+					 export type CoreType = ContentTypeWithSnippetOnlyType | ContentTypeWithSpecialCharsType | CircularReferenceTypeABType | PageType | ContentTypeWithAllElementsType | ContentTypeWithGuidelinesOnlyType | CircularReferenceTypeBAType | EmptyContentTypeType | TypeWithEmptySnippetType | WebSpotlightRootType | TypeReferencingDeletedTypeType
+
 					/*
-* Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.'
+* Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.
 */
 					export type CodenameTypeMapping = {
 	readonly content_type_with_snippet_only: ContentTypeWithSnippetOnlyType,

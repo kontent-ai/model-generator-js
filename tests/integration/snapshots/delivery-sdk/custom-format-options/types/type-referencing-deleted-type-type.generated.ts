@@ -1,7 +1,10 @@
 
             import type { TypeCodenames } from '../system/types.generated.js';
 import type { Elements, IContentItem } from '@kontent-ai/delivery-sdk';
-import type { CoreType } from '../system/main.system.generated.js';
+import type { CollectionCodenames } from '../system/collections.generated.js';
+import type { CoreType } from '../system/types.generated.js';
+import type { LanguageCodenames } from '../system/languages.generated.js';
+import type { WorkflowCodenames, WorkflowStepCodenames } from '../system/workflows.generated.js';
            
             /*
 * Type representing codename of 'Type referencing deleted type' type
@@ -21,8 +24,7 @@ import type { CoreType } from '../system/main.system.generated.js';
     * Id: f7562083-7230-4c20-9136-620ee7a92534
 * Codename: type_referencing_deleted_type
     */
-export type TypeReferencingDeletedTypeType = CoreType<
-TypeReferencingDeletedTypeTypeElementCodenames,
+export type TypeReferencingDeletedTypeType = IContentItem<
 {
 /*
     * Rich text with invalid type
@@ -43,7 +45,7 @@ TypeReferencingDeletedTypeTypeElementCodenames,
 * Required: false
     */
                 readonly linked_items_with_invalid_type: Elements.LinkedItemsElement<CoreType>;}, 
-TypeReferencingDeletedTypeTypeCodename>
+TypeReferencingDeletedTypeTypeCodename, LanguageCodenames, CollectionCodenames, WorkflowCodenames, WorkflowStepCodenames>
 
 /*
 * Type representing all available element codenames for Type referencing deleted type

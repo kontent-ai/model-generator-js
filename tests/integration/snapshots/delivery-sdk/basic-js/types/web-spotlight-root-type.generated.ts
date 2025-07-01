@@ -1,6 +1,8 @@
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { CoreType, TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 import type { PageType } from "../types/page-type.generated.js"
 
 /*
@@ -21,8 +23,7 @@ export function isWebSpotlightRootTypeCodename(value: string | undefined | null)
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export type WebSpotlightRootType = CoreType<
-	WebSpotlightRootTypeElementCodenames,
+export type WebSpotlightRootType = IContentItem<
 	{
 		/*
 		 * Title
@@ -55,7 +56,11 @@ export type WebSpotlightRootType = CoreType<
 		 */
 		readonly content: Elements.LinkedItemsElement<CoreType>
 	},
-	WebSpotlightRootTypeCodename
+	WebSpotlightRootTypeCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

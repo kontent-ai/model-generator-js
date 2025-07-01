@@ -1,7 +1,9 @@
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 
 /*
  * Type representing codename of 'Content type with snippet only' type
@@ -23,10 +25,13 @@ export function isContentTypeWithSnippetOnlyTypeCodename(
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export type ContentTypeWithSnippetOnlyType = CoreType<
-	ContentTypeWithSnippetOnlyTypeElementCodenames,
+export type ContentTypeWithSnippetOnlyType = IContentItem<
 	Record<string, never> & SnippetASnippet,
-	ContentTypeWithSnippetOnlyTypeCodename
+	ContentTypeWithSnippetOnlyTypeCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

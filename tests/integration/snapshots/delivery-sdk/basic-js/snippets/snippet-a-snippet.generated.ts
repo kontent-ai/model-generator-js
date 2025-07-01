@@ -1,7 +1,7 @@
-import type { SnippetCodenames } from "../system/snippets.generated.js"
 import type { Elements, Snippet } from "@kontent-ai/delivery-sdk"
+import type { SnippetCodenames } from "../system/snippets.generated.js"
+import type { CoreType } from "../system/types.generated.js"
 import type { ContentTypeWithAllElementsType } from "../types/content-type-with-all-elements-type.generated.js"
-import type { CoreType } from "../system/main.system.generated.js"
 
 /*
  * Type representing codename of 'Snippet A' snippet

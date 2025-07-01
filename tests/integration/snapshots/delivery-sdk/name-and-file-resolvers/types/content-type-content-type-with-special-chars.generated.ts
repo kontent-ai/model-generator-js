@@ -1,6 +1,8 @@
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 
 /*
  * Type representing codename of '🐧 Content type with special chars #!_'' type
@@ -25,8 +27,7 @@ export function isContentTypeContentTypeWithSpecialCharsCodename(
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export type ContentTypeContentTypeWithSpecialChars = CoreType<
-	ContentTypeContentTypeWithSpecialCharsElementCodenames,
+export type ContentTypeContentTypeWithSpecialChars = IContentItem<
 	{
 		/*
 		 * 🦜Parrot_emoji
@@ -48,7 +49,11 @@ export type ContentTypeContentTypeWithSpecialChars = CoreType<
 		 */
 		readonly _____numberelem_____________________: Elements.NumberElement
 	},
-	ContentTypeContentTypeWithSpecialCharsCodename
+	ContentTypeContentTypeWithSpecialCharsCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

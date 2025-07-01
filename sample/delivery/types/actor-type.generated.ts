@@ -12,9 +12,11 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { TypeCodenames } from "../system/types.generated.js"
 import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CoreType } from "../system/main.system.generated.js"
+import type { CollectionCodenames } from "../system/collections.generated.js"
+import type { LanguageCodenames } from "../system/languages.generated.js"
+import type { TypeCodenames } from "../system/types.generated.js"
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
 
 /*
  * Type representing codename of 'Actor' type
@@ -34,8 +36,7 @@ export function isActorTypeCodename(value: string | undefined | null): value is 
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export type ActorType = CoreType<
-	ActorTypeElementCodenames,
+export type ActorType = IContentItem<
 	{
 		/*
 		 * Url
@@ -78,7 +79,11 @@ export type ActorType = CoreType<
 		 */
 		readonly photo: Elements.AssetsElement
 	},
-	ActorTypeCodename
+	ActorTypeCodename,
+	LanguageCodenames,
+	CollectionCodenames,
+	WorkflowCodenames,
+	WorkflowStepCodenames
 >
 
 /*

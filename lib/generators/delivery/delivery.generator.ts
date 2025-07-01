@@ -134,15 +134,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 	};
 
 	const getDeliverySystemFile = (): GeneratedFile => {
-		const sdkImports = [
-			deliveryConfig.sdkTypes.contentItem,
-			deliveryConfig.sdkTypes.contentItemElements,
-			deliveryConfig.sdkTypes.deliveryClient,
-		] as const;
-
-		const contentTypeGenericArgName: string = "TContentTypeCodename";
-		const elementsGenericArgName: string = "TElements";
-		const elementCodenamesGenericArgName: string = "TElementCodenames";
+		const sdkImports = [deliveryConfig.sdkTypes.deliveryClient] as const;
 
 		return {
 			filename: `${deliveryConfig.mainSystemFilename}.ts`,
@@ -152,35 +144,22 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 					importValue: `${sdkImports.join(", ")}`,
 				})}
                 ${Object.values(entityGenerators)
-					.filter((generator) => generator.entityType !== "Snippet") // snippets are not needed in the system file
+					.filter((generator) => generator.entityType !== "Snippet")
 					.map((generator) => {
-						const importValues: readonly string[] = [
-							generator.entityNames.codenamesTypeName,
-							...match(generator.entityType)
-								.with("Workflow", () => [entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName])
-								.otherwise(() => []),
-						];
+						const importValues: readonly string[] = match(generator.entityType)
+							.with("Workflow", () => [
+								generator.entityNames.codenamesTypeName,
+								entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName,
+							])
+							.with("Type", () => [generator.entityNames.codenamesTypeName, deliveryConfig.coreContentTypeName])
+							.otherwise(() => [generator.entityNames.codenamesTypeName]);
 
 						return importer.importType({
 							filePathOrPackage: `./${generator.entityNames.overviewFilename}`,
 							importValue: `${importValues.join(", ")}`,
 						});
 					})
-					.join("\n")}
-
-                ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}'`)}
-                export type ${deliveryConfig.coreContentTypeName}<
-                        ${elementCodenamesGenericArgName} extends string = string,
-                        ${elementsGenericArgName} extends ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}> = ${deliveryConfig.sdkTypes.contentItemElements}<${elementCodenamesGenericArgName}>, 
-                        ${contentTypeGenericArgName} extends ${entityGenerators.contentTypes.entityNames.codenamesTypeName} = ${entityGenerators.contentTypes.entityNames.codenamesTypeName}
-                    > = ${deliveryConfig.sdkTypes.contentItem}<
-                    ${elementsGenericArgName},
-                    ${contentTypeGenericArgName},
-                    ${entityGenerators.languages.entityNames.codenamesTypeName},
-                    ${entityGenerators.collections.entityNames.codenamesTypeName},
-                    ${entityGenerators.workflows.entityNames.codenamesTypeName},
-                    ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName}
-                >;
+					.join("\n")}          
 
                 ${wrapComment(`Core types for '${deliveryConfig.sdkTypes.deliveryClient}'`)}
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {

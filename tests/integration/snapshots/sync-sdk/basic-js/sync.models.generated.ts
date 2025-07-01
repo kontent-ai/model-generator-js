@@ -1,4 +1,4 @@
-import type { SyncClientTypes, SyncClient } from "@kontent-ai/sync-sdk"
+import type { SyncClient, SyncClientTypes } from "@kontent-ai/sync-sdk"
 
 /*
  * Use as generic type when creating a sync client for increased type safety

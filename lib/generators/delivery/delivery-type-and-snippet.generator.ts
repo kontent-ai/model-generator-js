@@ -29,6 +29,24 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 		entityType: "Type",
 	}).getEntityNames();
 
+	const languageNames = getDeliveryEntityNamesGenerator({
+		nameResolvers: config.nameResolvers,
+		fileResolvers: config.fileResolvers,
+		entityType: "Language",
+	}).getEntityNames();
+
+	const workflowNames = getDeliveryEntityNamesGenerator({
+		nameResolvers: config.nameResolvers,
+		fileResolvers: config.fileResolvers,
+		entityType: "Workflow",
+	}).getEntityNames();
+
+	const collectionNames = getDeliveryEntityNamesGenerator({
+		nameResolvers: config.nameResolvers,
+		fileResolvers: config.fileResolvers,
+		entityType: "Collection",
+	}).getEntityNames();
+
 	const snippetNames = getDeliveryEntityNamesGenerator({
 		nameResolvers: config.nameResolvers,
 		fileResolvers: config.fileResolvers,
@@ -44,24 +62,27 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 	const getCoreTypeImports = (): readonly string[] => {
 		return [
 			importer.importType({
-				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.mainSystemFilename}.ts`,
-				importValue: [deliveryConfig.coreContentTypeName].join(", "),
+				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${contentTypeNames.overviewFilename}`,
+				importValue: [deliveryConfig.coreContentTypeName],
 			}),
 		];
 	};
 
-	const shouldImportCoreTypeInSnippet = (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>): boolean => {
-		return snippet.elements
-			.map<boolean>((m) =>
-				match(m)
-					.returnType<boolean>()
-					.with(
-						P.union({ type: "modular_content" }, { type: "subpages" }, { type: "rich_text" }),
-						(elementWithAllowedContentTypes) => !((elementWithAllowedContentTypes.allowed_content_types?.length ?? 0) > 0),
-					)
-					.otherwise(() => false),
-			)
-			.some((m) => m);
+	const getContentTypeImports = (): readonly string[] => {
+		return [
+			importer.importType({
+				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${languageNames.overviewFilename}`,
+				importValue: languageNames.codenamesTypeName,
+			}),
+			importer.importType({
+				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${workflowNames.overviewFilename}`,
+				importValue: [workflowNames.codenamesTypeName, workflowNames.allStepsNames.codenamesTypeName],
+			}),
+			importer.importType({
+				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${collectionNames.overviewFilename}`,
+				importValue: collectionNames.codenamesTypeName,
+			}),
+		];
 	};
 
 	const getSnippetImports = (snippets: readonly Readonly<ContentTypeSnippetModels.ContentTypeSnippet>[]): readonly string[] => {
@@ -184,6 +205,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 		return {
 			imports: sortAlphabetically(
 				[
+					...getContentTypeImports(),
 					...getCoreTypeImports(),
 					...getReferencedTypeImports(data.contentType, data.flattenedElements),
 					...getReferencedTaxonomyImports(data.contentType, data.flattenedElements),
@@ -212,7 +234,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 		return {
 			imports: sortAlphabetically(
 				[
-					...(shouldImportCoreTypeInSnippet(data.snippet) ? getCoreTypeImports() : []),
+					...getCoreTypeImports(),
 					...getReferencedTypeImports(data.snippet, data.flattenedElements),
 					...getReferencedTaxonomyImports(data.snippet, data.flattenedElements),
 					...getSnippetImports(snippets),
@@ -331,10 +353,9 @@ ${wrapComment(contentType.name, {
 		},
 	],
 })}
-export type ${importsResult.typeName} = ${deliveryConfig.coreContentTypeName}<
-${nameOfTypeRepresentingAllElementCodenames},
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItem}<
 ${getElementsCode(contentType, flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ""}, 
-${contentTypeNames.getCodenameTypeName(contentType)}>
+${contentTypeNames.getCodenameTypeName(contentType)}, ${languageNames.codenamesTypeName}, ${collectionNames.codenamesTypeName}, ${workflowNames.codenamesTypeName}, ${workflowNames.allStepsNames.codenamesTypeName}>
 
 ${wrapComment(`Type representing all available element codenames for ${contentType.name}`)}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
