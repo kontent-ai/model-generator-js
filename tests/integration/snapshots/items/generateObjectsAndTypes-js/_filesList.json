@@ -1,9 +1,9 @@
 [
-	{ "filename": "items/content_type_with_all_elements.items.generated.ts" },
-	{ "filename": "items/_content_type_with_special_chars____.items.generated.ts" },
-	{ "filename": "items/web_spotlight_root.items.generated.ts" },
-	{ "filename": "codenames/content_type_with_all_elements.codenames.generated.ts" },
 	{ "filename": "codenames/_content_type_with_special_chars____.codenames.generated.ts" },
+	{ "filename": "codenames/content_type_with_all_elements.codenames.generated.ts" },
 	{ "filename": "codenames/web_spotlight_root.codenames.generated.ts" },
-	{ "filename": "index.ts" }
+	{ "filename": "index.ts" },
+	{ "filename": "items/_content_type_with_special_chars____.items.generated.ts" },
+	{ "filename": "items/content_type_with_all_elements.items.generated.ts" },
+	{ "filename": "items/web_spotlight_root.items.generated.ts" }
 ]

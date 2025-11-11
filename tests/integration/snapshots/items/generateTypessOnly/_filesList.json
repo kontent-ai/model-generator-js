@@ -1,6 +1,6 @@
 [
-	{ "filename": "codenames/content_type_with_all_elements.codenames.generated.ts" },
 	{ "filename": "codenames/_content_type_with_special_chars____.codenames.generated.ts" },
+	{ "filename": "codenames/content_type_with_all_elements.codenames.generated.ts" },
 	{ "filename": "codenames/web_spotlight_root.codenames.generated.ts" },
 	{ "filename": "index.ts" }
 ]

@@ -15,7 +15,7 @@ for (const snapshot of [
 	...syncSdkSnapshots,
 ]) {
 	describe(`Integration - ${snapshot.cliAction}`, async () => {
-		const files = await snapshot.getFilesAsync();
+		const files = (await snapshot.getFilesAsync()).toSorted((a, b) => a.filename.localeCompare(b.filename));
 		const getSnapshotRelativePath = (file: GeneratedFile) => `./snapshots/${snapshot.cliAction}/${snapshot.folder}/${file.filename}`;
 
 		it("Number of generated files & names should match", async () => {

@@ -1,202 +1,5 @@
 export const contentTypes = {
 	/*
-	 * Content type with snippet only
-	 */
-	content_type_with_snippet_only: {
-		name: "Content type with snippet only",
-		codename: "content_type_with_snippet_only",
-		id: "7fd86bef-8f30-4a02-a1c3-fb130f65e9b4",
-		externalId: undefined,
-		elements: {
-			/*
-			 * Rich text with all allowed item types
-			 */
-			snippet_a__rich_text_with_all_allowed_item_types: {
-				name: "Rich text with all allowed item types",
-				codename: "snippet_a__rich_text_with_all_allowed_item_types",
-				id: "72cdc4e7-dead-4baf-99bf-91d8fe62351f",
-				externalId: undefined,
-				required: false,
-				type: "rich_text"
-			},
-
-			/*
-			 * Linked items with specific types
-			 */
-			snippet_a__linked_items_with_specific_types: {
-				name: "Linked items with specific types",
-				codename: "snippet_a__linked_items_with_specific_types",
-				id: "140130dc-84c1-455f-99ab-d31579cf90d1",
-				externalId: undefined,
-				required: false,
-				type: "modular_content"
-			},
-
-			/*
-			 * Text
-			 */
-			snippet_a__text: {
-				name: "Text",
-				codename: "snippet_a__text",
-				id: "873e4a7a-e2ea-49a0-b88e-2ff7b6892f60",
-				externalId: undefined,
-				required: true,
-				type: "text"
-			}
-		}
-	},
-
-	/*
-	 * 🐧 Content type with special chars #!_'
-	 */
-	_content_type_with_special_chars____: {
-		name: "🐧 Content type with special chars #!_",
-		codename: "_content_type_with_special_chars____",
-		id: "66bfcb40-edd7-4edf-8176-33517d0d6f80",
-		externalId: undefined,
-		elements: {
-			/*
-			 * 🦜Parrot_emoji
-			 */
-			parrot__: {
-				name: "🦜Parrot_emoji",
-				codename: "parrot__",
-				id: "cafaa776-893d-4e8c-b460-9534ac2fe769",
-				externalId: undefined,
-				required: false,
-				type: "text"
-			},
-
-			/*
-			 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
-			 */
-			_____numberelem_____________________: {
-				name: "!!!_$NumberElem<>-%@&{}()/§`?´=^*#~",
-				codename: "_____numberelem_____________________",
-				id: "3bb33958-71f3-4039-8594-5f0df9378dbb",
-				externalId: undefined,
-				required: false,
-				type: "number"
-			}
-		}
-	},
-
-	/*
-	 * Circular reference type A > B
-	 */
-	circular_reference_type_a_b: {
-		name: "Circular reference type A > B",
-		codename: "circular_reference_type_a_b",
-		id: "a58680f7-0667-4a0e-8dc2-889233bdbf71",
-		externalId: undefined,
-		elements: {
-			/*
-			 * Items
-			 */
-			items: {
-				name: "Items",
-				codename: "items",
-				id: "33ab92dd-e47d-45e2-a060-3b5df0754c24",
-				externalId: undefined,
-				required: false,
-				type: "modular_content"
-			}
-		}
-	},
-
-	/*
-	 * Page
-	 */
-	page: {
-		name: "Page",
-		codename: "page",
-		id: "4db6e2c7-c25b-4896-a05d-d20206234c04",
-		externalId: undefined,
-		elements: {
-			/*
-			 * Title
-			 */
-			title: {
-				name: "Title",
-				codename: "title",
-				id: "e9ad8c8f-6fb0-41d2-8caa-4e4e0ba24719",
-				externalId: undefined,
-				required: false,
-				type: "text"
-			},
-
-			/*
-			 * URL
-			 */
-			url: {
-				name: "URL",
-				codename: "url",
-				id: "e573bfc9-3193-4224-9d2a-9efb83da8849",
-				externalId: undefined,
-				required: false,
-				type: "url_slug"
-			},
-
-			/*
-			 * Show in navigation
-			 */
-			show_in_navigation: {
-				name: "Show in navigation",
-				codename: "show_in_navigation",
-				id: "07889917-fdc5-4285-bc30-4fed2a218c89",
-				externalId: undefined,
-				required: false,
-				type: "multiple_choice",
-				options: {
-					/*
-					 * Yes
-					 */
-					yes: {
-						name: "Yes",
-						id: "0878b011-be8d-4a1e-9fc8-d79c9d9176a2",
-						codename: "yes",
-						externalId: undefined
-					},
-
-					/*
-					 * No
-					 */
-					no: {
-						name: "No",
-						id: "ae8520bf-72b3-4677-99de-fc99d743019b",
-						codename: "no",
-						externalId: undefined
-					}
-				}
-			},
-
-			/*
-			 * Subpages
-			 */
-			subpages: {
-				name: "Subpages",
-				codename: "subpages",
-				id: "b909dc5d-0efe-478a-9257-83e5c90e884d",
-				externalId: undefined,
-				required: false,
-				type: "subpages"
-			},
-
-			/*
-			 * Content
-			 */
-			content: {
-				name: "Content",
-				codename: "content",
-				id: "dfb0d07c-531e-4eaa-8f7d-e62671d4ca36",
-				externalId: undefined,
-				required: false,
-				type: "modular_content"
-			}
-		}
-	},
-
-	/*
 	 * Content type with all elements
 	 */
 	content_type_with_all_elements: {
@@ -387,6 +190,99 @@ export const contentTypes = {
 	},
 
 	/*
+	 * 🐧 Content type with special chars #!_'
+	 */
+	_content_type_with_special_chars____: {
+		name: "🐧 Content type with special chars #!_",
+		codename: "_content_type_with_special_chars____",
+		id: "66bfcb40-edd7-4edf-8176-33517d0d6f80",
+		externalId: undefined,
+		elements: {
+			/*
+			 * 🦜Parrot_emoji
+			 */
+			parrot__: {
+				name: "🦜Parrot_emoji",
+				codename: "parrot__",
+				id: "cafaa776-893d-4e8c-b460-9534ac2fe769",
+				externalId: undefined,
+				required: false,
+				type: "text"
+			},
+
+			/*
+			 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
+			 */
+			_____numberelem_____________________: {
+				name: "!!!_$NumberElem<>-%@&{}()/§`?´=^*#~",
+				codename: "_____numberelem_____________________",
+				id: "3bb33958-71f3-4039-8594-5f0df9378dbb",
+				externalId: undefined,
+				required: false,
+				type: "number"
+			}
+		}
+	},
+
+	/*
+	 * Empty content type
+	 */
+	empty_content_type: {
+		name: "Empty content type",
+		codename: "empty_content_type",
+		id: "4e41e105-6ec5-4a08-9680-b85e9cd8b14e",
+		externalId: undefined,
+		elements: {}
+	},
+
+	/*
+	 * Content type with snippet only
+	 */
+	content_type_with_snippet_only: {
+		name: "Content type with snippet only",
+		codename: "content_type_with_snippet_only",
+		id: "7fd86bef-8f30-4a02-a1c3-fb130f65e9b4",
+		externalId: undefined,
+		elements: {
+			/*
+			 * Rich text with all allowed item types
+			 */
+			snippet_a__rich_text_with_all_allowed_item_types: {
+				name: "Rich text with all allowed item types",
+				codename: "snippet_a__rich_text_with_all_allowed_item_types",
+				id: "72cdc4e7-dead-4baf-99bf-91d8fe62351f",
+				externalId: undefined,
+				required: false,
+				type: "rich_text"
+			},
+
+			/*
+			 * Linked items with specific types
+			 */
+			snippet_a__linked_items_with_specific_types: {
+				name: "Linked items with specific types",
+				codename: "snippet_a__linked_items_with_specific_types",
+				id: "140130dc-84c1-455f-99ab-d31579cf90d1",
+				externalId: undefined,
+				required: false,
+				type: "modular_content"
+			},
+
+			/*
+			 * Text
+			 */
+			snippet_a__text: {
+				name: "Text",
+				codename: "snippet_a__text",
+				id: "873e4a7a-e2ea-49a0-b88e-2ff7b6892f60",
+				externalId: undefined,
+				required: true,
+				type: "text"
+			}
+		}
+	},
+
+	/*
 	 * Content type with guidelines only
 	 */
 	content_type_with_guidelines_only: {
@@ -395,6 +291,29 @@ export const contentTypes = {
 		id: "7e38a995-b4d7-46c9-92a4-4359241fa5ef",
 		externalId: undefined,
 		elements: {}
+	},
+
+	/*
+	 * Circular reference type A > B
+	 */
+	circular_reference_type_a_b: {
+		name: "Circular reference type A > B",
+		codename: "circular_reference_type_a_b",
+		id: "a58680f7-0667-4a0e-8dc2-889233bdbf71",
+		externalId: undefined,
+		elements: {
+			/*
+			 * Items
+			 */
+			items: {
+				name: "Items",
+				codename: "items",
+				id: "33ab92dd-e47d-45e2-a060-3b5df0754c24",
+				externalId: undefined,
+				required: false,
+				type: "modular_content"
+			}
+		}
 	},
 
 	/*
@@ -418,28 +337,6 @@ export const contentTypes = {
 				type: "modular_content"
 			}
 		}
-	},
-
-	/*
-	 * Empty content type
-	 */
-	empty_content_type: {
-		name: "Empty content type",
-		codename: "empty_content_type",
-		id: "4e41e105-6ec5-4a08-9680-b85e9cd8b14e",
-		externalId: undefined,
-		elements: {}
-	},
-
-	/*
-	 * Type with empty snippet
-	 */
-	type_with_empty_snippet: {
-		name: "Type with empty snippet",
-		codename: "type_with_empty_snippet",
-		id: "11039462-1d7d-4673-9aa8-af07fb53985c",
-		externalId: undefined,
-		elements: {}
 	},
 
 	/*
@@ -487,6 +384,109 @@ export const contentTypes = {
 				type: "modular_content"
 			}
 		}
+	},
+
+	/*
+	 * Page
+	 */
+	page: {
+		name: "Page",
+		codename: "page",
+		id: "4db6e2c7-c25b-4896-a05d-d20206234c04",
+		externalId: undefined,
+		elements: {
+			/*
+			 * Title
+			 */
+			title: {
+				name: "Title",
+				codename: "title",
+				id: "e9ad8c8f-6fb0-41d2-8caa-4e4e0ba24719",
+				externalId: undefined,
+				required: false,
+				type: "text"
+			},
+
+			/*
+			 * URL
+			 */
+			url: {
+				name: "URL",
+				codename: "url",
+				id: "e573bfc9-3193-4224-9d2a-9efb83da8849",
+				externalId: undefined,
+				required: false,
+				type: "url_slug"
+			},
+
+			/*
+			 * Show in navigation
+			 */
+			show_in_navigation: {
+				name: "Show in navigation",
+				codename: "show_in_navigation",
+				id: "07889917-fdc5-4285-bc30-4fed2a218c89",
+				externalId: undefined,
+				required: false,
+				type: "multiple_choice",
+				options: {
+					/*
+					 * Yes
+					 */
+					yes: {
+						name: "Yes",
+						id: "0878b011-be8d-4a1e-9fc8-d79c9d9176a2",
+						codename: "yes",
+						externalId: undefined
+					},
+
+					/*
+					 * No
+					 */
+					no: {
+						name: "No",
+						id: "ae8520bf-72b3-4677-99de-fc99d743019b",
+						codename: "no",
+						externalId: undefined
+					}
+				}
+			},
+
+			/*
+			 * Subpages
+			 */
+			subpages: {
+				name: "Subpages",
+				codename: "subpages",
+				id: "b909dc5d-0efe-478a-9257-83e5c90e884d",
+				externalId: undefined,
+				required: false,
+				type: "subpages"
+			},
+
+			/*
+			 * Content
+			 */
+			content: {
+				name: "Content",
+				codename: "content",
+				id: "dfb0d07c-531e-4eaa-8f7d-e62671d4ca36",
+				externalId: undefined,
+				required: false,
+				type: "modular_content"
+			}
+		}
+	},
+
+	/*
+	 * Type with empty snippet
+	 */
+	type_with_empty_snippet: {
+		name: "Type with empty snippet",
+		codename: "type_with_empty_snippet",
+		id: "11039462-1d7d-4673-9aa8-af07fb53985c",
+		externalId: undefined,
+		elements: {}
 	},
 
 	/*

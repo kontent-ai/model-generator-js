@@ -14,16 +14,16 @@ import type { ContentTypeWebSpotlightRoot } from "../types/content-type-web-spot
  * Array of all type codenames
  */
 export const typeCodenames = [
-	"content_type_with_snippet_only",
-	"_content_type_with_special_chars____",
-	"circular_reference_type_a_b",
-	"page",
 	"content_type_with_all_elements",
-	"content_type_with_guidelines_only",
-	"circular_reference_type_b____a",
+	"_content_type_with_special_chars____",
 	"empty_content_type",
-	"type_with_empty_snippet",
+	"content_type_with_snippet_only",
+	"content_type_with_guidelines_only",
+	"circular_reference_type_a_b",
+	"circular_reference_type_b____a",
 	"web_spotlight_root",
+	"page",
+	"type_with_empty_snippet",
 	"type_referencing_deleted_type"
 ] as const
 
@@ -43,32 +43,32 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
  * Core content type with narrowed types. Use this instead of'IContentItem' for increased type safety.
  */
 export type CoreType =
-	| ContentTypeContentTypeWithSnippetOnly
-	| ContentTypeContentTypeWithSpecialChars
-	| ContentTypeCircularReferenceTypeAB
-	| ContentTypePage
 	| ContentTypeContentTypeWithAllElements
-	| ContentTypeContentTypeWithGuidelinesOnly
-	| ContentTypeCircularReferenceTypeBA
+	| ContentTypeContentTypeWithSpecialChars
 	| ContentTypeEmptyContentType
-	| ContentTypeTypeWithEmptySnippet
+	| ContentTypeContentTypeWithSnippetOnly
+	| ContentTypeContentTypeWithGuidelinesOnly
+	| ContentTypeCircularReferenceTypeAB
+	| ContentTypeCircularReferenceTypeBA
 	| ContentTypeWebSpotlightRoot
+	| ContentTypePage
+	| ContentTypeTypeWithEmptySnippet
 	| ContentTypeTypeReferencingDeletedType
 
 /*
  * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.
  */
 export type CodenameTypeMapping = {
-	readonly content_type_with_snippet_only: ContentTypeContentTypeWithSnippetOnly
-	readonly _content_type_with_special_chars____: ContentTypeContentTypeWithSpecialChars
-	readonly circular_reference_type_a_b: ContentTypeCircularReferenceTypeAB
-	readonly page: ContentTypePage
 	readonly content_type_with_all_elements: ContentTypeContentTypeWithAllElements
-	readonly content_type_with_guidelines_only: ContentTypeContentTypeWithGuidelinesOnly
-	readonly circular_reference_type_b____a: ContentTypeCircularReferenceTypeBA
+	readonly _content_type_with_special_chars____: ContentTypeContentTypeWithSpecialChars
 	readonly empty_content_type: ContentTypeEmptyContentType
-	readonly type_with_empty_snippet: ContentTypeTypeWithEmptySnippet
+	readonly content_type_with_snippet_only: ContentTypeContentTypeWithSnippetOnly
+	readonly content_type_with_guidelines_only: ContentTypeContentTypeWithGuidelinesOnly
+	readonly circular_reference_type_a_b: ContentTypeCircularReferenceTypeAB
+	readonly circular_reference_type_b____a: ContentTypeCircularReferenceTypeBA
 	readonly web_spotlight_root: ContentTypeWebSpotlightRoot
+	readonly page: ContentTypePage
+	readonly type_with_empty_snippet: ContentTypeTypeWithEmptySnippet
 	readonly type_referencing_deleted_type: ContentTypeTypeReferencingDeletedType
 }
 
