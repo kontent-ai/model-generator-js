@@ -5,8 +5,8 @@ import { wrapComment } from "../../../core/comment.utils.js";
 import type { ModuleFileExtension } from "../../../core/core.models.js";
 import { getImporter } from "../../../core/importer.js";
 import { resolveCase } from "../../../core/resolvers.js";
-import type { DeliveryEntityNames } from "../delivery-entity-name.generator.js";
 import type { DeliveryEntity, DeliveryEntityType } from "../delivery-entity.generator.js";
+import type { DeliveryEntityNames } from "../delivery-entity-name.generator.js";
 
 export type TypeMappingItem = {
 	readonly codename: string;

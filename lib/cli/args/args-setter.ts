@@ -9,7 +9,10 @@ export function argumentsSetter(): CliArgumentsSetter<CliAction> {
 	return {
 		withCommand(command: Command<CliAction>): CliArgumentsSetter<CliAction> {
 			argv.command(command.name, command.description, (yargs) => {
-				command.examples.forEach((example) => yargs.example(command.name, example));
+				for (const example of command.examples) {
+					yargs.example(command.name, example);
+				}
+
 				command.options.forEach((option) => {
 					yargs.positional(option.name, {
 						alias: option.alias,

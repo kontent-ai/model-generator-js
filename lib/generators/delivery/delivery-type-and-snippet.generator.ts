@@ -1,6 +1,6 @@
 import type { TaxonomyModels } from "@kontent-ai/management-sdk";
 import { ContentTypeModels, ContentTypeSnippetModels } from "@kontent-ai/management-sdk";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../../config.js";
 import { toGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
 import type { FlattenedElement, GeneratedTypeModel, MultipleChoiceOption } from "../../core/core.models.js";
@@ -8,8 +8,8 @@ import { isNotUndefined, sortAlphabetically, uniqueFilter } from "../../core/cor
 import { getFlattenedElements } from "../../core/element.utils.js";
 import { getImporter } from "../../core/importer.js";
 import { resolveCase } from "../../core/resolvers.js";
-import { getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
 import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
+import { getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
 
 type ExtractImportsResult = {
 	readonly typeName: string;

@@ -1,5 +1,5 @@
 import type { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels } from "@kontent-ai/management-sdk";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import type { FlattenedElement, MultipleChoiceOption } from "./core.models.js";
 import { isNotUndefined } from "./core.utils.js";
 

@@ -1,3 +1,4 @@
+import { HttpService } from "coreSdkLegacy";
 import type {
 	AssetFolderModels,
 	CollectionModels,
@@ -16,7 +17,6 @@ import type {
 } from "@kontent-ai/management-sdk";
 import { createManagementClient } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import { HttpService } from "coreSdkLegacy";
 import { coreConfig } from "../config.js";
 import { toSafeComment } from "../core/comment.utils.js";
 import type { GeneratorManagementClient } from "../core/core.models.js";

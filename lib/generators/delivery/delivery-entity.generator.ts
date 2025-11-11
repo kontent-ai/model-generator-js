@@ -1,15 +1,15 @@
 import type { CollectionModels, LanguageModels } from "@kontent-ai/management-sdk";
 import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels, WorkflowModels } from "@kontent-ai/management-sdk";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../../config.js";
 import { wrapComment } from "../../core/comment.utils.js";
 import type { GeneratedFile, GeneratedSet, GeneratedTypeModel, ModuleFileExtension } from "../../core/core.models.js";
 import { isNotUndefined } from "../../core/core.utils.js";
 import { getImporter } from "../../core/importer.js";
+import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
 import type { DeliveryEntityNames } from "./delivery-entity-name.generator.js";
 import { getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
 import { getDeliveryTypeAndSnippetGenerator } from "./delivery-type-and-snippet.generator.js";
-import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
 import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
 export type DeliveryElement = {

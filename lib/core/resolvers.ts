@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { P, match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import type { CaseType, ObjectWithCodename, ObjectWithName } from "./core.models.js";
 
 export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | ((item: T, addExtension: boolean) => string);

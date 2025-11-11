@@ -1,5 +1,5 @@
 import { generateMigrationModelsAsync } from "../../../lib/public_api.js";
-import { type SnapshotModelsTest, integrationEnv } from "../integration-tests.config.js";
+import { integrationEnv, type SnapshotModelsTest } from "../integration-tests.config.js";
 
 export const migrationToolkitSnapshots: readonly SnapshotModelsTest[] = [
 	{

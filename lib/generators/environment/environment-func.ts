@@ -5,13 +5,13 @@ import {
 	type CliAction,
 	type CreateFilesConfig,
 	type EnvironmentEntity,
+	environmentEntities,
 	type GeneratedFile,
 	type GeneratedSet,
 	type ModuleFileExtension,
-	environmentEntities,
 } from "../../core/core.models.js";
 import { uniqueFilter } from "../../core/core.utils.js";
-import { type ManagementKontentFetcher, getManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
+import { getManagementKontentFetcher, type ManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
 import { type EnvironmentEntities, getEnvironmentGenerator } from "./environment.generator.js";
 

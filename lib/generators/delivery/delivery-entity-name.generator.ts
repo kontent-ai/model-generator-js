@@ -1,9 +1,9 @@
 import type { ContentTypeModels, TaxonomyModels, WorkflowModels } from "@kontent-ai/management-sdk";
 import { match } from "ts-pattern";
 import type { ObjectWithCodename } from "../../core/core.models.js";
-import { type FilenameResolver, type NameResolver, mapFilename, mapName, resolveCase } from "../../core/resolvers.js";
-import type { DeliveryEntity, DeliveryEntityType } from "./delivery-entity.generator.js";
+import { type FilenameResolver, mapFilename, mapName, type NameResolver, resolveCase } from "../../core/resolvers.js";
 import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
+import type { DeliveryEntity, DeliveryEntityType } from "./delivery-entity.generator.js";
 import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
 export type DeliveryEntityNames<T extends DeliveryEntityType> = {

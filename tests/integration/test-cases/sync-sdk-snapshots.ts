@@ -1,5 +1,5 @@
 import { generateSyncModelsAsync } from "../../../lib/generators/sync/sync-func.js";
-import { type SnapshotModelsTest, integrationEnv } from "../integration-tests.config.js";
+import { integrationEnv, type SnapshotModelsTest } from "../integration-tests.config.js";
 
 export const syncSdkSnapshots: readonly SnapshotModelsTest[] = [
 	{
