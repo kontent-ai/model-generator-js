@@ -147,7 +147,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					)
 					.map((m) => m.codename);
 
-				const worfklowStepNames = getDeliveryEntityNamesGenerator({
+				const workflowStepNames = getDeliveryEntityNamesGenerator({
 					...{
 						nameResolvers: config.deliveryGeneratorConfig.nameResolvers ?? undefined,
 						fileResolvers: config.deliveryGeneratorConfig.fileResolvers ?? undefined,
@@ -160,9 +160,9 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					code: deliveryUtils.getCodeOfDeliveryEntity({
 						codenames: workflowStepCodenames,
 						names: {
-							codenamesTypeName: worfklowStepNames.allStepsNames.codenamesTypeName,
-							typeGuardFunctionName: worfklowStepNames.allStepsNames.typeguardFunctionName,
-							valuesPropertyName: worfklowStepNames.allStepsNames.valuesPropertyName,
+							codenamesTypeName: workflowStepNames.allStepsNames.codenamesTypeName,
+							typeGuardFunctionName: workflowStepNames.allStepsNames.typeguardFunctionName,
+							valuesPropertyName: workflowStepNames.allStepsNames.valuesPropertyName,
 						},
 						extendedType: workflowDeliveryType,
 					}),
@@ -212,7 +212,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		return match(entity)
 			.returnType<GeneratedTypeModel | undefined>()
 			.with(P.instanceOf(WorkflowModels.Workflow), (workflow) => {
-				const worfklowStepNames = getDeliveryEntityNamesGenerator({
+				const workflowStepNames = getDeliveryEntityNamesGenerator({
 					...{
 						nameResolvers: config.deliveryGeneratorConfig.nameResolvers ?? undefined,
 						fileResolvers: config.deliveryGeneratorConfig.fileResolvers ?? undefined,
@@ -230,9 +230,9 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 							workflow.scheduledStep.codename,
 						].filter(isNotUndefined),
 						names: {
-							codenamesTypeName: worfklowStepNames.stepsNames.codenamesTypeName(workflow),
-							typeGuardFunctionName: worfklowStepNames.stepsNames.typeguardFunctionName(workflow),
-							valuesPropertyName: worfklowStepNames.stepsNames.valuesPropertyName(workflow),
+							codenamesTypeName: workflowStepNames.stepsNames.codenamesTypeName(workflow),
+							typeGuardFunctionName: workflowStepNames.stepsNames.typeguardFunctionName(workflow),
+							valuesPropertyName: workflowStepNames.stepsNames.valuesPropertyName(workflow),
 						},
 						extendedType: "Workflow step",
 					}),
