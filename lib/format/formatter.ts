@@ -2,11 +2,12 @@ import { Biome } from "@biomejs/js-api/nodejs";
 import type { Configuration, ProjectKey } from "@biomejs/wasm-nodejs";
 
 export type FormatOptions = Readonly<Configuration>;
+export type FormatType = "typescript" | "json";
 
-export async function formatCodeAsync(code: string, configuration: FormatOptions | undefined): Promise<string> {
+export async function formatCodeAsync(code: string, formatType: FormatType, configuration: FormatOptions | undefined): Promise<string> {
 	const result = withBiome(configuration, (biome, projectKey) => {
 		const formattedContent = biome.formatContent(projectKey, code, {
-			filePath: "virtual.ts",
+			filePath: formatType === "typescript" ? "virtual.ts" : "virtual.json",
 		});
 
 		if (formattedContent.diagnostics.length > 0) {

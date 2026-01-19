@@ -36,7 +36,10 @@ export function getFileManager(config: {
 	const getFormattedCodeAsync = async (code: string, filePath: string): Promise<string> => {
 		try {
 			if (filePath.endsWith(".ts")) {
-				return await formatCodeAsync(code, config.formatOptions);
+				return await formatCodeAsync(code, "typescript", config.formatOptions);
+			}
+			if (filePath.endsWith(".json")) {
+				return await formatCodeAsync(code, "json", config.formatOptions);
 			}
 			return code;
 		} catch {

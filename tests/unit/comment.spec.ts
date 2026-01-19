@@ -39,6 +39,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
 					},
 					timestampDate: undefined,
 				}),
+				"typescript",
 				undefined,
 			),
 		).toStrictEqual(
@@ -56,6 +57,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
              * 
              * -------------------------------------------------------------------------------
              */`,
+				"typescript",
 				undefined,
 			),
 		);
@@ -78,6 +80,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
 					},
 					timestampDate: date,
 				}),
+				"typescript",
 				undefined,
 			),
 		).toStrictEqual(
@@ -96,6 +99,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
              * 
              * -------------------------------------------------------------------------------
              */`,
+				"typescript",
 				undefined,
 			),
 		);

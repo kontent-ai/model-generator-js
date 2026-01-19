@@ -15,13 +15,14 @@ for (const moduleFileExtension of ["js", "ts", "mjs", "mts", "none"] satisfies M
 		it("Files should be ordered and exported types should be valid", async () => {
 			const inputFiles: readonly string[] = ["./dir/fileC", "./dir/fileB", "./dir/fileA"];
 
-			expect(await formatCodeAsync(importer.getBarrelExportCode(inputFiles), undefined)).toStrictEqual(
+			expect(await formatCodeAsync(importer.getBarrelExportCode(inputFiles), "typescript", undefined)).toStrictEqual(
 				await formatCodeAsync(
 					`
 export * from './dir/fileA${expectedExtension}';
 export * from './dir/fileB${expectedExtension}';
 export * from './dir/fileC${expectedExtension}';
 `,
+					"typescript",
 					undefined,
 				),
 			);

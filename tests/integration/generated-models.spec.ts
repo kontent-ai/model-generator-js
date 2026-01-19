@@ -22,7 +22,11 @@ for (const snapshot of [
 			const filename = `./snapshots/${snapshot.cliAction}/${snapshot.folder}/_filesList.json`;
 
 			await expect(
-				await formatCodeAsync(JSON.stringify(files.map<{ filename: string }>((file) => ({ filename: file.filename }))), undefined),
+				await formatCodeAsync(
+					JSON.stringify(files.map<{ filename: string }>((file) => ({ filename: file.filename }))),
+					"json",
+					undefined,
+				),
 			).toMatchFileSnapshot(filename, `Invalid file '${filename}'`);
 		});
 
@@ -33,7 +37,7 @@ for (const snapshot of [
 			});
 
 			it(`File '${file.filename}' code should format TS code without throwing exception`, async () => {
-				await expect(formatCodeAsync(file.text, undefined)).resolves.toBeTruthy();
+				await expect(formatCodeAsync(file.text, "typescript", undefined)).resolves.toBeTruthy();
 			});
 		}
 	});

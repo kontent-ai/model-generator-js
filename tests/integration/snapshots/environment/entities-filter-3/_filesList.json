@@ -1,6 +1,6 @@
 [
-	{ filename: "index.ts" },
-	{ filename: "structure/contentTypeSnippets.generated.ts" },
-	{ filename: "structure/languages.generated.ts" },
-	{ filename: "structure/workflows.generated.ts" },
-];
+	{ "filename": "index.ts" },
+	{ "filename": "structure/contentTypeSnippets.generated.ts" },
+	{ "filename": "structure/languages.generated.ts" },
+	{ "filename": "structure/workflows.generated.ts" }
+]
