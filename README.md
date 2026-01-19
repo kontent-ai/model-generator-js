@@ -64,6 +64,7 @@ npx @kontent-ai/model-generator@latest delivery-sdk
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -76,6 +77,7 @@ await generateDeliveryModelsAsync({
     managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
+    disableComments: false,
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
 
@@ -95,6 +97,7 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `fileResolvers`       | Can be used to customize the generated filenames                                                                               |
@@ -121,6 +124,7 @@ npx @kontent-ai/model-generator@latest migration-toolkit
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -133,6 +137,7 @@ await generateMigrationModelsAsync({
     managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
+    disableComments: false,
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
 
@@ -150,6 +155,7 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `formatOptions`       | Configuration for formatting generated code                                                                           |
@@ -178,6 +184,7 @@ npx @kontent-ai/model-generator@latest sync-sdk
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -190,6 +197,7 @@ await generateSyncModelsAsync({
     managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
+    disableComments: false,
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
 
@@ -207,6 +215,7 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `formatOptions`       | Configuration for formatting generated code                                                                           |
@@ -236,6 +245,7 @@ npx @kontent-ai/model-generator@latest environment
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -267,6 +277,7 @@ await generateEnvironmentModelsAsync({
     managementApiKey: 'y',
     entities: [], // all entity types are exported by default
     addTimestamp: false,
+    disableComments: false,
     moduleFileExtension: 'js',
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
@@ -285,6 +296,7 @@ Configuration
 | `entities`            | Array of entity types that will be exported                                                                                    |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `formatOptions`       | Configuration for formatting generated code                                                                           |
@@ -319,6 +331,7 @@ npx @kontent-ai/model-generator@latest items
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --filterByTypeCodenames=<codenameA,codenameB>
     --managementBaseUrl=<proxyUrl>
     --deliveryBaseUrl=<proxyUrl>
@@ -333,6 +346,7 @@ await generateItemsAsync({
     managementApiKey: 'y',
     deliveryApiKey: 'z', // only required when secure / api mode is used
     addTimestamp: false,
+    disableComments: false,
     moduleFileExtension: 'js',
     apiMode: 'default',
     filterByTypeCodenames: [],
@@ -356,6 +370,7 @@ Configuration
 | `deliveryApiKey`        | Delivery API key required when the `apiMode` is using preview or secure mode                                                   |
 | `moduleFileExtension`   | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`          | Indicates if models contain timestamp                                                                                          |
+| `disableComments`       | If enabled, no comments will be included in the generated files                                                               |
 | `generateObjects`       | If enabled, javascript objects with codename / id will be generated                                                            |
 | `generateTypes`         | If enabled, typescript type representing codename will be generated                                                            |
 | `filterByTypeCodenames` | Array of content type codenames of which content items will be generated. Useful for narrowing down generated items            |
