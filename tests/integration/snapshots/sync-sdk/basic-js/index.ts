@@ -1,1 +1,1 @@
-export * from "./sync.models.generated.js"
+export * from "./sync.models.generated.js";

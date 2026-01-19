@@ -3,14 +3,14 @@ export const previewUrls = {
 		default_space: {
 			spaceName: "Default space",
 			spaceCodename: "default_space",
-			domain: "https://sample.com/A"
+			domain: "https://sample.com/A",
 		},
 
 		uk_space: {
 			spaceName: "UK Space",
 			spaceCodename: "uk_space",
-			domain: "https://sample.com/B"
-		}
+			domain: "https://sample.com/B",
+		},
 	},
 	previewUrlPatterns: {
 		content_type_with_all_elements: {
@@ -20,15 +20,15 @@ export const previewUrls = {
 				uk_space: {
 					spaceName: "UK Space",
 					spaceCodename: "uk_space",
-					url: "https://sample.com/{codename}"
+					url: "https://sample.com/{codename}",
 				},
 
 				default_space: {
 					spaceName: "Default space",
 					spaceCodename: "default_space",
-					url: "https://sample.com/default/{codename}"
-				}
-			}
-		}
-	}
-} as const
+					url: "https://sample.com/default/{codename}",
+				},
+			},
+		},
+	},
+} as const;

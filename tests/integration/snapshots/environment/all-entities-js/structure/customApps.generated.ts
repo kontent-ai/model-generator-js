@@ -5,7 +5,7 @@ export const customApps = {
 	customApp1: {
 		name: "Custom app 1",
 		codename: "custom_app_1",
-		sourceUrl: "https://kontent.ai"
+		sourceUrl: "https://kontent.ai",
 	},
 
 	/*
@@ -14,6 +14,6 @@ export const customApps = {
 	customApp2: {
 		name: "Custom app 2",
 		codename: "custom_app_2",
-		sourceUrl: "https://sample.com/A"
-	}
-} as const
+		sourceUrl: "https://sample.com/A",
+	},
+} as const;

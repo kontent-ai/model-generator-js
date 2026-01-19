@@ -1,19 +1,19 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { CoreType, TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Page' type
  */
-export type PageTypeCodename = keyof Pick<Record<TypeCodenames, null>, "page">
+export type PageTypeCodename = keyof Pick<Record<TypeCodenames, null>, "page">;
 
 /*
  * Typeguard for codename of 'Page' type
  */
 export function isPageTypeCodename(value: string | undefined | null): value is PageTypeCodename {
-	return typeof value === "string" && value === ("page" satisfies PageTypeCodename)
+	return typeof value === "string" && value === ("page" satisfies PageTypeCodename);
 }
 
 /*
@@ -32,7 +32,7 @@ export type PageType = IContentItem<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: Elements.TextElement
+		readonly title: Elements.TextElement;
 
 		/*
 		 * URL
@@ -42,7 +42,7 @@ export type PageType = IContentItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url: Elements.UrlSlugElement
+		readonly url: Elements.UrlSlugElement;
 
 		/*
 		 * Show in navigation
@@ -52,7 +52,7 @@ export type PageType = IContentItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly show_in_navigation: Elements.MultipleChoiceElement<PageTypeShowInNavigationMultipleChoiceOptions>
+		readonly show_in_navigation: Elements.MultipleChoiceElement<PageTypeShowInNavigationMultipleChoiceOptions>;
 
 		/*
 		 * Subpages
@@ -62,7 +62,7 @@ export type PageType = IContentItem<
 		 * Type: subpages
 		 * Required: false
 		 */
-		readonly subpages: Elements.LinkedItemsElement<CoreType>
+		readonly subpages: Elements.LinkedItemsElement<CoreType>;
 
 		/*
 		 * Content
@@ -72,19 +72,19 @@ export type PageType = IContentItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>
+		readonly content: Elements.LinkedItemsElement<CoreType>;
 	},
 	PageTypeCodename,
 	LanguageCodenames,
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Page
  */
-export type PageTypeElementCodenames = "title" | "url" | "show_in_navigation" | "subpages" | "content"
+export type PageTypeElementCodenames = "title" | "url" | "show_in_navigation" | "subpages" | "content";
 
 /*
  * Type guard for Page
@@ -93,7 +93,7 @@ export type PageTypeElementCodenames = "title" | "url" | "show_in_navigation" | 
  * Codename: page
  */
 export function isPageType(item: IContentItem | undefined | null): item is PageType {
-	return item?.system.type === ("page" satisfies PageTypeCodename)
+	return item?.system.type === ("page" satisfies PageTypeCodename);
 }
 
-export type PageTypeShowInNavigationMultipleChoiceOptions = "yes" | "no"
+export type PageTypeShowInNavigationMultipleChoiceOptions = "yes" | "no";

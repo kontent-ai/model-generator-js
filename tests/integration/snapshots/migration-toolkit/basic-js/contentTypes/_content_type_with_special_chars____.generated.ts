@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
-import type { CoreMigrationItem } from "../migration.generated.js"
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
+import type { CoreMigrationItem } from "../migration.generated.js";
 
 /*
  * 🐧 Content type with special chars #!_'
@@ -18,7 +18,7 @@ export type ContentTypeWithSpecialCharsItem = CoreMigrationItem<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly parrot__: MigrationElementModels.TextElement
+		readonly parrot__: MigrationElementModels.TextElement;
 
 		/*
 		 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
@@ -28,6 +28,6 @@ export type ContentTypeWithSpecialCharsItem = CoreMigrationItem<
 		 * Type: number
 		 * Required: false
 		 */
-		readonly _____numberelem_____________________: MigrationElementModels.NumberElement
+		readonly _____numberelem_____________________: MigrationElementModels.NumberElement;
 	}
->
+>;

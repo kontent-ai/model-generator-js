@@ -46,11 +46,6 @@ export const deliverySdkSnapshots: readonly SnapshotModelsTest[] = [
 				environmentId: integrationEnv.id,
 				managementApiKey: integrationEnv.apiKey,
 				moduleFileExtension: "js",
-				formatOptions: {
-					printWidth: 300,
-					bracketSameLine: true,
-					tabWidth: 8,
-				},
 			}),
 	},
 ];

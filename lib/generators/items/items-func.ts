@@ -1,6 +1,5 @@
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import type {
 	CliAction,
 	CreateFilesConfig,
@@ -13,6 +12,7 @@ import { singleItemToArray } from "../../core/core.utils.js";
 import { getDeliveryKontentFetcher } from "../../fetch/delivery-kontent-fetcher.js";
 import { getManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
+import type { FormatOptions } from "../../format/formatter.js";
 import { getItemsGenerator } from "./items.generator.js";
 
 export type GenerateItemsModelsConfig = {
@@ -28,7 +28,7 @@ export type GenerateItemsModelsConfig = {
 	readonly deliveryApiKey?: string;
 	readonly managementBaseUrl?: string;
 	readonly deliveryBaseUrl?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
 } & CreateFilesConfig;
 
 export async function generateItemsAsync(config: GenerateItemsModelsConfig): Promise<readonly GeneratedFile[]> {

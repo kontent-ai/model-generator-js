@@ -32,7 +32,6 @@ await runScriptAsync(async (config) => {
 			language: undefined,
 			workflow: undefined,
 		},
-		formatOptions: undefined,
 		managementBaseUrl: undefined,
 	});
 });

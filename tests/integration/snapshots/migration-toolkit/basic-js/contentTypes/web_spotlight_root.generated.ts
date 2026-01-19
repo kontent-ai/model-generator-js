@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
-import type { CoreMigrationItem } from "../migration.generated.js"
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
+import type { CoreMigrationItem } from "../migration.generated.js";
 
 /*
  * Web spotlight root
@@ -18,7 +18,7 @@ export type WebSpotlightRootItem = CoreMigrationItem<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: MigrationElementModels.TextElement
+		readonly title: MigrationElementModels.TextElement;
 
 		/*
 		 * Subpages
@@ -29,7 +29,7 @@ export type WebSpotlightRootItem = CoreMigrationItem<
 		 * Required: false
 		 * Allowed content types: page
 		 */
-		readonly subpages: MigrationElementModels.SubpagesElement
+		readonly subpages: MigrationElementModels.SubpagesElement;
 
 		/*
 		 * Content
@@ -39,6 +39,6 @@ export type WebSpotlightRootItem = CoreMigrationItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: MigrationElementModels.LinkedItemsElement
+		readonly content: MigrationElementModels.LinkedItemsElement;
 	}
->
+>;

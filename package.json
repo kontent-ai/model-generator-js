@@ -56,8 +56,8 @@
 		"@kontent-ai/sync-sdk": "1.0.3",
 		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.1",
 		"chalk": "5.6.2",
-		"prettier": "3.8.0",
-		"prettier-plugin-organize-imports": "4.3.0",
+		"@biomejs/js-api": "4.0.0",
+		"@biomejs/wasm-nodejs": "2.3.11",
 		"ts-pattern": "5.9.0",
 		"yargs": "18.0.0"
 	},

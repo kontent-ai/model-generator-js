@@ -21,7 +21,6 @@ await runScriptAsync(async (config) => {
 		outputDir: outputDir,
 		// optional
 		managementBaseUrl: undefined,
-		formatOptions: undefined,
 		deliveryBaseUrl: undefined,
 	});
 });

@@ -9,7 +9,7 @@ export const languages = {
 		isActive: true,
 		isDefault: true,
 		fallbackLanguageId: "00000000-0000-0000-0000-000000000000",
-		externalId: undefined
+		externalId: undefined,
 	},
 
 	/*
@@ -22,7 +22,7 @@ export const languages = {
 		isActive: true,
 		isDefault: false,
 		fallbackLanguageId: "00000000-0000-0000-0000-000000000000",
-		externalId: undefined
+		externalId: undefined,
 	},
 
 	/*
@@ -35,7 +35,7 @@ export const languages = {
 		isActive: true,
 		isDefault: false,
 		fallbackLanguageId: "00000000-0000-0000-0000-000000000000",
-		externalId: undefined
+		externalId: undefined,
 	},
 
 	/*
@@ -48,7 +48,7 @@ export const languages = {
 		isActive: true,
 		isDefault: false,
 		fallbackLanguageId: "00000000-0000-0000-0000-000000000000",
-		externalId: undefined
+		externalId: undefined,
 	},
 
 	/*
@@ -61,6 +61,6 @@ export const languages = {
 		isActive: true,
 		isDefault: false,
 		fallbackLanguageId: "00000000-0000-0000-0000-000000000000",
-		externalId: undefined
-	}
-} as const
+		externalId: undefined,
+	},
+} as const;

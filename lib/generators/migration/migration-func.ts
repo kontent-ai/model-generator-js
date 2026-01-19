@@ -1,9 +1,9 @@
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from "../../core/core.models.js";
 import { getManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
+import type { FormatOptions } from "../../format/formatter.js";
 import { getMigrationGenerator } from "./migration.generator.js";
 
 export type GenerateMigrationModelsConfig = {
@@ -13,7 +13,7 @@ export type GenerateMigrationModelsConfig = {
 	readonly moduleFileExtension: ModuleFileExtension;
 
 	readonly managementBaseUrl?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
 } & CreateFilesConfig;
 
 export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<readonly GeneratedFile[]> {

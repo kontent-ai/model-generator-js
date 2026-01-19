@@ -17,6 +17,5 @@ await runScriptAsync(async (config) => {
 
 		// optional
 		managementBaseUrl: undefined,
-		formatOptions: undefined,
 	});
 });

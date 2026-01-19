@@ -39,6 +39,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
 					},
 					timestampDate: undefined,
 				}),
+				undefined,
 			),
 		).toStrictEqual(
 			await formatCodeAsync(
@@ -55,6 +56,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
              * 
              * -------------------------------------------------------------------------------
              */`,
+				undefined,
 			),
 		);
 	});
@@ -76,6 +78,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
 					},
 					timestampDate: date,
 				}),
+				undefined,
 			),
 		).toStrictEqual(
 			await formatCodeAsync(
@@ -93,6 +96,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
              * 
              * -------------------------------------------------------------------------------
              */`,
+				undefined,
 			),
 		);
 	});

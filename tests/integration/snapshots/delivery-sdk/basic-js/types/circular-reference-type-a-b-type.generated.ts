@@ -1,20 +1,20 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
-import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
 
 /*
  * Type representing codename of 'Circular reference type A > B' type
  */
-export type CircularReferenceTypeABTypeCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_a_b">
+export type CircularReferenceTypeABTypeCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_a_b">;
 
 /*
  * Typeguard for codename of 'Circular reference type A > B' type
  */
 export function isCircularReferenceTypeABTypeCodename(value: string | undefined | null): value is CircularReferenceTypeABTypeCodename {
-	return typeof value === "string" && value === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename)
+	return typeof value === "string" && value === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename);
 }
 
 /*
@@ -34,19 +34,19 @@ export type CircularReferenceTypeABType = IContentItem<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_b____a
 		 */
-		readonly items: Elements.LinkedItemsElement<CircularReferenceTypeBAType>
+		readonly items: Elements.LinkedItemsElement<CircularReferenceTypeBAType>;
 	},
 	CircularReferenceTypeABTypeCodename,
 	LanguageCodenames,
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Circular reference type A > B
  */
-export type CircularReferenceTypeABTypeElementCodenames = "items"
+export type CircularReferenceTypeABTypeElementCodenames = "items";
 
 /*
  * Type guard for Circular reference type A > B
@@ -55,5 +55,5 @@ export type CircularReferenceTypeABTypeElementCodenames = "items"
  * Codename: circular_reference_type_a_b
  */
 export function isCircularReferenceTypeABType(item: IContentItem | undefined | null): item is CircularReferenceTypeABType {
-	return item?.system.type === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename)
+	return item?.system.type === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename);
 }

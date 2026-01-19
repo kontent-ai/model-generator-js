@@ -25,11 +25,11 @@ export const assetFolders = {
 						codename: "folder_d",
 						id: "8e1edcd2-5b53-4228-aadb-2211ee3ea91e",
 						externalId: undefined,
-						folders: {}
-					}
-				}
-			}
-		}
+						folders: {},
+					},
+				},
+			},
+		},
 	},
 
 	/*
@@ -40,6 +40,6 @@ export const assetFolders = {
 		codename: "folder_b",
 		id: "916b6be8-55c3-4a45-80ad-8d860fd7d1f6",
 		externalId: undefined,
-		folders: {}
-	}
-} as const
+		folders: {},
+	},
+} as const;

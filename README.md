@@ -99,7 +99,7 @@ Configuration
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `fileResolvers`       | Can be used to customize the generated filenames                                                                               |
 | `nameResolvers`       | Can be used to customize names of generated types                                                                              |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Migration toolkit models
@@ -152,7 +152,7 @@ Configuration
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sync SDK models
@@ -209,7 +209,7 @@ Configuration
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Environment models
@@ -287,7 +287,7 @@ Configuration
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Item models
@@ -362,7 +362,7 @@ Configuration
 | `apiMode`               | Delivery API mode for fetching content items. By default delivery (public) mode is used                                        |
 | `createFiles`           | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`             | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`         | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`         | Configuration for formatting generated code                                                                           |
 | `baseUrl`               | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models

@@ -1,6 +1,5 @@
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import {
 	type CliAction,
 	type CreateFilesConfig,
@@ -13,6 +12,7 @@ import {
 import { uniqueFilter } from "../../core/core.utils.js";
 import { getManagementKontentFetcher, type ManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
+import type { FormatOptions } from "../../format/formatter.js";
 import { type EnvironmentEntities, getEnvironmentGenerator } from "./environment.generator.js";
 
 export type GenerateEnvironmentModelsConfig = {
@@ -23,7 +23,7 @@ export type GenerateEnvironmentModelsConfig = {
 	readonly entities?: readonly EnvironmentEntity[];
 	readonly moduleFileExtension: ModuleFileExtension;
 	readonly managementBaseUrl?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
 } & CreateFilesConfig;
 
 export async function generateEnvironmentModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<readonly GeneratedFile[]> {

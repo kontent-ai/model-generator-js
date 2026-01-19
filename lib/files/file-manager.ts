@@ -2,18 +2,17 @@ import * as fs from "node:fs";
 import { dirname } from "node:path";
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import { coreConfig } from "../config.js";
 import { getEnvironmentInfoComment } from "../core/comment.utils.js";
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from "../core/core.models.js";
 import { toOutputDirPath } from "../core/core.utils.js";
 import { getImporter } from "../core/importer.js";
-import { formatCodeAsync } from "../format/formatter.js";
+import { type FormatOptions, formatCodeAsync } from "../format/formatter.js";
 
 export function getFileManager(config: {
 	readonly moduleFileExtension: ModuleFileExtension;
 	readonly outputDir?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 	readonly addTimestamp: boolean;
 }) {
@@ -41,7 +40,7 @@ export function getFileManager(config: {
 			}
 			return code;
 		} catch {
-			console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier.`);
+			console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping code formatting.`);
 			return code;
 		}
 	};

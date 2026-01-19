@@ -17,7 +17,7 @@ export const contentTypeSnippets = {
 				id: "72cdc4e7-dead-4baf-99bf-91d8fe62351f",
 				externalId: undefined,
 				required: false,
-				type: "rich_text"
+				type: "rich_text",
 			},
 
 			/*
@@ -29,7 +29,7 @@ export const contentTypeSnippets = {
 				id: "140130dc-84c1-455f-99ab-d31579cf90d1",
 				externalId: undefined,
 				required: false,
-				type: "modular_content"
+				type: "modular_content",
 			},
 
 			/*
@@ -41,9 +41,9 @@ export const contentTypeSnippets = {
 				id: "873e4a7a-e2ea-49a0-b88e-2ff7b6892f60",
 				externalId: undefined,
 				required: true,
-				type: "text"
-			}
-		}
+				type: "text",
+			},
+		},
 	},
 
 	/*
@@ -54,6 +54,6 @@ export const contentTypeSnippets = {
 		codename: "empty_snippet",
 		id: "1d7e3745-3320-4107-996b-2c6b240df7ae",
 		externalId: undefined,
-		elements: {}
-	}
-} as const
+		elements: {},
+	},
+} as const;
