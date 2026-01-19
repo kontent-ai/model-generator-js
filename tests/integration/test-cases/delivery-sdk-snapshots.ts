@@ -16,6 +16,19 @@ export const deliverySdkSnapshots: readonly SnapshotModelsTest[] = [
 	},
 	{
 		cliAction: "delivery-sdk",
+		folder: "no-comments",
+		getFilesAsync: async () =>
+			await generateDeliveryModelsAsync({
+				addTimestamp: false,
+				createFiles: false,
+				environmentId: integrationEnv.id,
+				managementApiKey: integrationEnv.apiKey,
+				moduleFileExtension: "js",
+				disableComments: true,
+			}),
+	},
+	{
+		cliAction: "delivery-sdk",
 		folder: "name-and-file-resolvers",
 		getFilesAsync: async () =>
 			await generateDeliveryModelsAsync({

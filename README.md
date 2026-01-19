@@ -362,7 +362,7 @@ Configuration
 | `apiMode`               | Delivery API mode for fetching content items. By default delivery (public) mode is used                                        |
 | `createFiles`           | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`             | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`         | Configuration for formatting generated code                                                                           |
+| `formatOptions`         | Configuration for formatting generated code                                                                                    |
 | `baseUrl`               | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models

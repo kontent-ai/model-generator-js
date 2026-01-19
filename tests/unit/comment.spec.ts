@@ -1,25 +1,43 @@
 import { describe, expect, it } from "vitest";
-import { getEnvironmentInfoComment, toGuidelinesComment, toSafeComment, wrapComment } from "../../lib/core/comment.utils.js";
+import { formatGuidelinesComment, getEnvironmentInfoComment, toSafeCommentText, wrapComment } from "../../lib/core/comment.utils.js";
 import { formatCodeAsync } from "../../lib/format/formatter.js";
 import { sdkInfo } from "../../lib/sdk-info.js";
 
+describe("Comments - wrapComment - disabled comments", () => {
+	it("Should return empty string", () => {
+		expect(wrapComment("Hello", { disableComments: true })).toStrictEqual("");
+	});
+});
+
 describe("Comments - wrapComment", () => {
 	it("Text should be wrapped in JS comments and correctly spaced", () => {
-		expect(wrapComment("Hello")).toStrictEqual("/*\n* Hello\n*/");
+		expect(wrapComment("Hello", { disableComments: false })).toStrictEqual("/*\n* Hello\n*/");
 	});
 });
 
 describe("Comments - toSafeComment", () => {
 	it("Comment should not include certain special characters that would break the comment", () => {
-		expect(toSafeComment("Hello*/")).toStrictEqual("Hello");
-		expect(toSafeComment("/*Hello")).toStrictEqual("Hello");
-		expect(toSafeComment("/*Hello*/")).toStrictEqual("Hello");
+		expect(toSafeCommentText("Hello*/")).toStrictEqual("Hello");
+		expect(toSafeCommentText("/*Hello")).toStrictEqual("Hello");
+		expect(toSafeCommentText("/*Hello*/")).toStrictEqual("Hello");
 	});
 });
 
 describe("Comments - toGuidelinesComment", () => {
 	it("In guidelines all line endings should be replaced with space", () => {
-		expect(toGuidelinesComment("LineA\nLineB\nLineC")).toStrictEqual("LineA LineB LineC");
+		expect(formatGuidelinesComment("LineA\nLineB\nLineC")).toStrictEqual("LineA LineB LineC");
+	});
+});
+
+describe("Comments - getEnvironmentInfoComment - disabled comments", () => {
+	it("Should return empty string", () => {
+		expect(
+			getEnvironmentInfoComment({
+				environmentInfo: { environment: "dev", id: "123", name: "test" },
+				timestampDate: undefined,
+				disableComments: true,
+			}),
+		).toStrictEqual("");
 	});
 });
 
@@ -38,6 +56,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
 						name: name,
 					},
 					timestampDate: undefined,
+					disableComments: false,
 				}),
 				"typescript",
 				undefined,
@@ -79,6 +98,7 @@ describe("Comments - getEnvironmentInfoComment", () => {
 						name: name,
 					},
 					timestampDate: date,
+					disableComments: false,
 				}),
 				"typescript",
 				undefined,

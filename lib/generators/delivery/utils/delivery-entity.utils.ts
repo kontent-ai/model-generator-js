@@ -124,12 +124,14 @@ function getCodeOfDeliveryEntity({
 	extendedType,
 	codenames,
 	names,
+	disableComments,
 }: {
 	readonly names: {
 		readonly codenamesTypeName: string;
 		readonly valuesPropertyName: string;
 		readonly typeGuardFunctionName: string;
 	};
+	readonly disableComments: boolean;
 	readonly subtype?: "Term" | "Step";
 	readonly extendedType: DeliveryEntityType | "Workflow step" | "Taxonomy term";
 	readonly codenames: readonly string[];
@@ -152,6 +154,7 @@ function getCodeOfDeliveryEntity({
 
 	const getComment = (title: string): string => {
 		return wrapComment(title, {
+			disableComments,
 			lines: [],
 		});
 	};

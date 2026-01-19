@@ -7,6 +7,7 @@ import type { GeneratedSet } from "../../core/core.models.js";
 import { resolveCase } from "../../core/resolvers.js";
 
 export interface ItemGeneratorConfig {
+	readonly disableComments: boolean;
 	readonly environmentData: {
 		readonly items: readonly Readonly<IContentItem>[];
 		readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
@@ -23,7 +24,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 			const isLast = index === items.length - 1;
 
 			return `${code}\n
-                ${wrapComment(item.system.name)}
+                ${wrapComment(item.system.name, { disableComments: config.disableComments })}
                 ${item.system.codename}: {
                     codename: '${item.system.codename}',
                     id: '${item.system.id}'
@@ -62,6 +63,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					return {
 						filename: `${typeCodename}.items.ts`,
 						text: `${wrapComment("Object representing identifiers of available items", {
+							disableComments: config.disableComments,
 							lines: [
 								{
 									name: "Type name",
@@ -95,6 +97,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					return {
 						filename: `${typeCodename}.codenames.ts`,
 						text: `${wrapComment("Type representing available item codenames", {
+							disableComments: config.disableComments,
 							lines: [
 								{
 									name: "Type name",

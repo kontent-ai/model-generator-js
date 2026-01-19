@@ -14,7 +14,8 @@ export type CommandOptionNames =
 	| "deliveryBaseUrl"
 	| "entities"
 	| "generateTypes"
-	| "generateObjects";
+	| "generateObjects"
+	| "disableComments";
 
 export type CommandAlias = "h";
 

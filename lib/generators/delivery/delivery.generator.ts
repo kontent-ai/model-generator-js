@@ -38,6 +38,7 @@ export type DeliveryNameResolvers = {
 
 export interface DeliveryGeneratorConfig {
 	readonly moduleFileExtension: ModuleFileExtension;
+	readonly disableComments: boolean;
 
 	readonly environmentData: {
 		readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -83,6 +84,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 
 	const entityGenerators = {
 		collections: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: config.environmentData.collections,
 			entityType: "Collection",
 			moduleFileExtension: config.moduleFileExtension,
@@ -90,6 +92,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			deliveryGeneratorConfig: config,
 		}),
 		languages: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: config.environmentData.languages,
 			entityType: "Language",
 			moduleFileExtension: config.moduleFileExtension,
@@ -97,6 +100,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			deliveryGeneratorConfig: config,
 		}),
 		workflows: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: config.environmentData.workflows,
 			entityType: "Workflow",
 			moduleFileExtension: config.moduleFileExtension,
@@ -104,6 +108,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			deliveryGeneratorConfig: config,
 		}),
 		taxonomies: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: config.environmentData.taxonomies,
 			entityType: "Taxonomy",
 			moduleFileExtension: config.moduleFileExtension,
@@ -111,6 +116,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			deliveryGeneratorConfig: config,
 		}),
 		contentTypes: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: config.environmentData.types,
 			entityType: "Type",
 			moduleFileExtension: config.moduleFileExtension,
@@ -118,6 +124,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			deliveryGeneratorConfig: config,
 		}),
 		snippets: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: config.environmentData.snippets,
 			entityType: "Snippet",
 			moduleFileExtension: config.moduleFileExtension,
@@ -125,6 +132,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			deliveryGeneratorConfig: config,
 		}),
 		elements: getDeliveryEntityGenerator({
+			disableComments: config.disableComments,
 			entities: getUniqueDeliveryElements(),
 			entityType: "Element",
 			moduleFileExtension: config.moduleFileExtension,
@@ -161,7 +169,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 					})
 					.join("\n")}          
 
-                ${wrapComment(`Core types for '${deliveryConfig.sdkTypes.deliveryClient}'`)}
+                ${wrapComment(`Core types for '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
                 export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
                     readonly collectionCodenames: ${entityGenerators.collections.entityNames.codenamesTypeName};
                     readonly contentItemType: ${deliveryConfig.coreContentTypeName};
@@ -173,7 +181,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                     readonly workflowStepCodenames: ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName};
                 };
 
-                ${wrapComment(`Typed delivery client. Use this instead of '${deliveryConfig.sdkTypes.deliveryClient}'`)}
+                ${wrapComment(`Typed delivery client. Use this instead of '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
                 export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<${deliveryConfig.coreDeliveryClientTypesTypeName}>;
             `,
 		};

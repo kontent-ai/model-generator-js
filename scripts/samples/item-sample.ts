@@ -20,6 +20,7 @@ await runScriptAsync(async (config) => {
 		createFiles: true,
 		outputDir: outputDir,
 		// optional
+		disableComments: false,
 		managementBaseUrl: undefined,
 		deliveryBaseUrl: undefined,
 	});

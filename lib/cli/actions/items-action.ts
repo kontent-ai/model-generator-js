@@ -10,6 +10,7 @@ export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise
 		environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
 		managementApiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
 		// optional
+		disableComments: cliFetcher.getBooleanArgumentValue(commandOptions.disableComments.name, false),
 		generateTypes: cliFetcher.getBooleanArgumentValue(commandOptions.generateTypes.name, false),
 		generateObjects: cliFetcher.getBooleanArgumentValue(commandOptions.generateObjects.name, false),
 		deliveryApiKey: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryApiKey.name),

@@ -14,6 +14,7 @@ export type GenerateMigrationModelsConfig = {
 
 	readonly managementBaseUrl?: string;
 	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -23,6 +24,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 	const { migrationItemFiles, migrationTypeFiles, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -62,6 +64,7 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
 	]);
 
 	const migrationGenerator = getMigrationGenerator({
+		disableComments: config.disableComments ?? false,
 		moduleFileExtension: config.moduleFileExtension,
 		environmentData: {
 			environment: environmentInfo,

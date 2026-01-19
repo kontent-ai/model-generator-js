@@ -9,7 +9,7 @@ import type {
 } from "@kontent-ai/management-sdk";
 import { match } from "ts-pattern";
 import { migrationConfig } from "../../config.js";
-import { toGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
+import { formatGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
 import type { FlattenedElement, GeneratedFile, GeneratedSet, ModuleFileExtension } from "../../core/core.models.js";
 import { getFlattenedElements } from "../../core/element.utils.js";
 import { getImporter } from "../../core/importer.js";
@@ -18,6 +18,7 @@ import { getTypeWithCodenames } from "../shared/type-codename.generator.js";
 
 export interface MigrationGeneratorConfig {
 	readonly moduleFileExtension: ModuleFileExtension;
+	readonly disableComments: boolean;
 
 	readonly environmentData: {
 		readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -60,6 +61,7 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
 				})}
 
             ${wrapComment(type.name, {
+				disableComments: config.disableComments,
 				lines: [
 					{
 						name: "Codename",
@@ -91,6 +93,7 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
 			.map((element, index) => {
 				const isFirstElement = index === 0;
 				return `\n${isFirstElement ? "" : "\n"}${wrapComment(element.title, {
+					disableComments: config.disableComments,
 					lines: [
 						{
 							name: "Codename",
@@ -126,7 +129,7 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
 						},
 						{
 							name: "Guidelines",
-							value: element.guidelines ? toGuidelinesComment(element.guidelines) : "",
+							value: element.guidelines ? formatGuidelinesComment(element.guidelines) : "",
 						},
 					],
 				})}
@@ -145,19 +148,19 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
 					{
 						filename: `${migrationConfig.environmentFilename}.ts`,
 						text: `
-                ${wrapComment("Type representing all languages")}
+                ${wrapComment("Type representing all languages", { disableComments: config.disableComments })}
                 ${getLanguageCodenamesType(config.environmentData.languages)}
 
-                ${wrapComment("Type representing all content types")}
+                ${wrapComment("Type representing all content types", { disableComments: config.disableComments })}
                 ${getContentTypeCodenamesType(config.environmentData.types)}
 
-                ${wrapComment("Type representing all collections")}
+                ${wrapComment("Type representing all collections", { disableComments: config.disableComments })}
                 ${getCollectionCodenamesType(config.environmentData.collections)}
 
-                ${wrapComment("Type representing all workflows")}
+                ${wrapComment("Type representing all workflows", { disableComments: config.disableComments })}
                 ${getWorkflowCodenamesType(config.environmentData.workflows)}
 
-                ${wrapComment("Type representing all worksflow steps across all workflows")}
+                ${wrapComment("Type representing all worksflow steps across all workflows", { disableComments: config.disableComments })}
                 ${getWorkflowStepCodenamesType(config.environmentData.workflows)}
             `,
 					},
@@ -180,10 +183,10 @@ export function getMigrationGenerator(config: MigrationGeneratorConfig) {
 						importValue: `${migrationConfig.collectionCodenames}, ${migrationConfig.contentTypeCodenames}, ${migrationConfig.languageCodenames}, ${migrationConfig.workflowCodenames}, ${migrationConfig.workflowStepCodenames}`,
 					})}
 
-                ${wrapComment("System object shared by all individual content type models")}
+                ${wrapComment("System object shared by all individual content type models", { disableComments: config.disableComments })}
                 ${getSystemType()}
 
-                ${wrapComment("Item object shared by all individual content type models")}
+                ${wrapComment("Item object shared by all individual content type models", { disableComments: config.disableComments })}
                 ${getItemType()}
             `,
 					},

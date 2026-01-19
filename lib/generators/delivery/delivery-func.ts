@@ -17,6 +17,7 @@ export type GenerateDeliveryModelsConfig = {
 
 	readonly fileResolvers?: DeliveryFileResolvers;
 	readonly nameResolvers?: DeliveryNameResolvers;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -26,6 +27,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 	const { environmentInfo, files } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -64,6 +66,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
 
 	const generator = deliveryGenerator({
 		moduleFileExtension: config.moduleFileExtension,
+		disableComments: config.disableComments ?? false,
 		environmentData: {
 			environment: environmentInfo,
 			types,

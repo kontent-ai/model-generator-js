@@ -29,6 +29,7 @@ export type GenerateItemsModelsConfig = {
 	readonly managementBaseUrl?: string;
 	readonly deliveryBaseUrl?: string;
 	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateItemsAsync(config: GenerateItemsModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -38,6 +39,7 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
 	const { itemFiles, environmentInfo, codenameFiles } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -79,6 +81,7 @@ async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
 	]);
 
 	const itemsGenerator = getItemsGenerator({
+		disableComments: config.disableComments ?? false,
 		environmentData: {
 			types: types,
 			items: items,

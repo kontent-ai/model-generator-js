@@ -11,6 +11,7 @@ export async function environmentActionAsync(cliFetcher: CliArgumentsFetcher): P
 		environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
 		managementApiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
 		// optional
+		disableComments: cliFetcher.getBooleanArgumentValue(commandOptions.disableComments.name, false),
 		entities: cliFetcher.getOptionalArgumentArrayValue(commandOptions.entities.name).filter(isEnvironmentEntity),
 		managementBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
 		outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),

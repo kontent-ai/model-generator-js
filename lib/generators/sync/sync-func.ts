@@ -14,6 +14,7 @@ export type GenerateSyncModelsConfig = {
 
 	readonly managementBaseUrl?: string;
 	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateSyncModelsAsync(config: GenerateSyncModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -23,6 +24,7 @@ export async function generateSyncModelsAsync(config: GenerateSyncModelsConfig):
 	const { syncFiles, environmentInfo } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -61,6 +63,7 @@ async function getFilesAsync(config: GenerateSyncModelsConfig): Promise<{
 
 	const syncGenerator = getSyncGenerator({
 		moduleFileExtension: config.moduleFileExtension,
+		disableComments: config.disableComments ?? false,
 		environmentData: {
 			environment: environmentInfo,
 			taxonomies: taxonomies,

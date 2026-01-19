@@ -11,6 +11,7 @@ import { type FormatOptions, formatCodeAsync } from "../format/formatter.js";
 
 export function getFileManager(config: {
 	readonly moduleFileExtension: ModuleFileExtension;
+	readonly disableComments: boolean;
 	readonly outputDir?: string;
 	readonly formatOptions?: FormatOptions;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -25,6 +26,7 @@ export function getFileManager(config: {
 			`${getEnvironmentInfoComment({
 				environmentInfo: config.environmentInfo,
 				timestampDate: config.addTimestamp ? new Date() : undefined,
+				disableComments: config.disableComments,
 			})}\n\n${text}`,
 		);
 

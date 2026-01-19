@@ -31,6 +31,7 @@ export type DeliveryEntityType = "Language" | "Collection" | "Workflow" | "Taxon
 
 export type DeliveryEntityGeneratorConfig<T extends DeliveryEntityType> = {
 	readonly moduleFileExtension: ModuleFileExtension;
+	readonly disableComments: boolean;
 	readonly entityType: T;
 	readonly entities: readonly Readonly<DeliveryEntity>[];
 	readonly generateOnlyOverviewFile: boolean;
@@ -59,6 +60,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 
 	const getEntityComment: (title: string) => string = (title) => {
 		return wrapComment(title, {
+			disableComments: config.disableComments,
 			lines: [],
 		});
 	};
@@ -81,6 +83,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 		return `
             ${imports?.length ? `${imports.join("\n")}\n` : ""}${deliveryUtils.getCodeOfDeliveryEntity({
 				codenames: config.entities.map((m) => m.codename),
+				disableComments: config.disableComments,
 				names: {
 					codenamesTypeName: entityNames.codenamesTypeName,
 					typeGuardFunctionName: entityNames.codenamesTypeguardFunctionName,
@@ -159,6 +162,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					imports: [],
 					code: deliveryUtils.getCodeOfDeliveryEntity({
 						codenames: workflowStepCodenames,
+						disableComments: config.disableComments,
 						names: {
 							codenamesTypeName: workflowStepNames.allStepsNames.codenamesTypeName,
 							typeGuardFunctionName: workflowStepNames.allStepsNames.typeguardFunctionName,
@@ -181,7 +185,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 							}),
 					],
 					code: `
-					 ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}' for increased type safety.`)}
+					 ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}' for increased type safety.`, { disableComments: config.disableComments })}
 					 ${deliveryUtils.getCoreContentTypeCode(
 							config.entities.filter((m) => m instanceof ContentTypeModels.ContentType),
 							entityNames as DeliveryEntityNames<"Type">,
@@ -223,6 +227,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 				return {
 					imports: [],
 					code: deliveryUtils.getCodeOfDeliveryEntity({
+						disableComments: config.disableComments,
 						codenames: [
 							...workflow.steps.map((m) => m.codename),
 							workflow.publishedStep.codename,
@@ -251,6 +256,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					imports: [],
 					code: deliveryUtils.getCodeOfDeliveryEntity({
 						codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
+						disableComments: config.disableComments,
 						names: {
 							codenamesTypeName: termEntityNames.termsNames.codenamesTypeName(taxonomy),
 							typeGuardFunctionName: termEntityNames.termsNames.typeguardFunctionName(taxonomy),

@@ -16,6 +16,7 @@ await runScriptAsync(async (config) => {
 		createFiles: true,
 		outputDir: outputDir, // only required when createFiles is true
 		// optional
+		disableComments: false,
 		managementBaseUrl: undefined,
 	});
 });

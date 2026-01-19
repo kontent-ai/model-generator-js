@@ -24,6 +24,7 @@ export type GenerateEnvironmentModelsConfig = {
 	readonly moduleFileExtension: ModuleFileExtension;
 	readonly managementBaseUrl?: string;
 	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateEnvironmentModelsAsync(config: GenerateEnvironmentModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -33,6 +34,7 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 	const { environmentFiles, environmentInfo } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -73,6 +75,7 @@ async function getFilesAsync(config: GenerateEnvironmentModelsConfig): Promise<{
 			environmentInfo,
 			environmentEntities: entities,
 			entitiesToCreate: entitiesToCreate,
+			disableComments: config.disableComments ?? false,
 		}).generateEnvironmentModels(),
 		moduleFileExtension: config.moduleFileExtension,
 	};
