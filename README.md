@@ -77,7 +77,6 @@ await generateDeliveryModelsAsync({
     managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
-    disableComments: false,
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
 
@@ -85,6 +84,7 @@ await generateDeliveryModelsAsync({
     fileResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet: (snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
     nameResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet:(snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
     formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false,
     baseUrl: undefined
 });
 ```
@@ -137,13 +137,13 @@ await generateMigrationModelsAsync({
     managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
-    disableComments: false,
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
 
     // optional
     baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' }
+    formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false
 });
 ```
 
@@ -197,13 +197,13 @@ await generateSyncModelsAsync({
     managementApiKey: 'y',
     moduleFileExtension: 'js',
     addTimestamp: false,
-    disableComments: false,
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
 
     // optional
     baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' }
+    formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false
 });
 ```
 
@@ -277,13 +277,13 @@ await generateEnvironmentModelsAsync({
     managementApiKey: 'y',
     entities: [], // all entity types are exported by default
     addTimestamp: false,
-    disableComments: false,
     moduleFileExtension: 'js',
     createFiles: true,
     outputDir: '/', // only required when createFiles is true
     // optional
     baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' }
+    formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false
 });
 ```
 
@@ -346,7 +346,6 @@ await generateItemsAsync({
     managementApiKey: 'y',
     deliveryApiKey: 'z', // only required when secure / api mode is used
     addTimestamp: false,
-    disableComments: false,
     moduleFileExtension: 'js',
     apiMode: 'default',
     filterByTypeCodenames: [],
@@ -357,6 +356,7 @@ await generateItemsAsync({
     // optional
     baseUrl: undefined,
     formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false,
     deliveryBaseUrl: undefined
 });
 ```
