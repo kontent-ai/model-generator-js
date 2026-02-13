@@ -50,22 +50,22 @@
 	},
 	"dependencies": {
 		"@kontent-ai/core-sdk": "11.0.2",
-		"@kontent-ai/delivery-sdk": "16.4.0",
-		"@kontent-ai/management-sdk": "8.1.0",
-		"@kontent-ai/migration-toolkit": "3.0.0",
+		"@kontent-ai/delivery-sdk": "16.4.1",
+		"@kontent-ai/management-sdk": "8.3.1",
+		"@kontent-ai/migration-toolkit": "3.0.1",
 		"@kontent-ai/sync-sdk": "1.0.3",
-		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.1",
+		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.3",
 		"chalk": "5.6.2",
 		"@biomejs/js-api": "4.0.0",
-		"@biomejs/wasm-nodejs": "2.3.11",
+		"@biomejs/wasm-nodejs": "2.3.15",
 		"ts-pattern": "5.9.0",
 		"yargs": "18.0.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.11",
+		"@biomejs/biome": "2.3.15",
 		"@kontent-ai/biome-config": "0.7.0",
 		"@kontent-ai/eslint-config": "2.3.0",
-		"@types/node": "25.0.9",
+		"@types/node": "25.2.3",
 		"@types/yargs": "17.0.35",
 		"dotenv-cli": "11.0.0",
 		"eslint": "9.39.2",
@@ -73,6 +73,6 @@
 		"typescript": "5.9.3",
 		"typescript-eslint": "8.53.0",
 		"vite-tsconfig-paths": "6.0.4",
-		"vitest": "4.0.17"
+		"vitest": "4.0.18"
 	}
 }
