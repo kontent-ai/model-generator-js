@@ -1,9 +1,9 @@
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from "../../core/core.models.js";
 import { getManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
+import type { FormatOptions } from "../../format/formatter.js";
 import { type DeliveryFileResolvers, type DeliveryNameResolvers, deliveryGenerator } from "./delivery.generator.js";
 
 export type GenerateDeliveryModelsConfig = {
@@ -13,10 +13,11 @@ export type GenerateDeliveryModelsConfig = {
 	readonly moduleFileExtension: ModuleFileExtension;
 
 	readonly managementBaseUrl?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
 
 	readonly fileResolvers?: DeliveryFileResolvers;
 	readonly nameResolvers?: DeliveryNameResolvers;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -26,6 +27,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 	const { environmentInfo, files } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -64,6 +66,7 @@ async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
 
 	const generator = deliveryGenerator({
 		moduleFileExtension: config.moduleFileExtension,
+		disableComments: config.disableComments ?? false,
 		environmentData: {
 			environment: environmentInfo,
 			types,

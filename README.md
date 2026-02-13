@@ -64,6 +64,7 @@ npx @kontent-ai/model-generator@latest delivery-sdk
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -83,6 +84,7 @@ await generateDeliveryModelsAsync({
     fileResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet: (snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
     nameResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet:(snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
     formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false,
     baseUrl: undefined
 });
 ```
@@ -95,11 +97,12 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `fileResolvers`       | Can be used to customize the generated filenames                                                                               |
 | `nameResolvers`       | Can be used to customize names of generated types                                                                              |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Migration toolkit models
@@ -121,6 +124,7 @@ npx @kontent-ai/model-generator@latest migration-toolkit
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -138,7 +142,8 @@ await generateMigrationModelsAsync({
 
     // optional
     baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' }
+    formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false
 });
 ```
 
@@ -150,9 +155,10 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sync SDK models
@@ -178,6 +184,7 @@ npx @kontent-ai/model-generator@latest sync-sdk
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -195,7 +202,8 @@ await generateSyncModelsAsync({
 
     // optional
     baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' }
+    formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false
 });
 ```
 
@@ -207,9 +215,10 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Environment models
@@ -236,6 +245,7 @@ npx @kontent-ai/model-generator@latest environment
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --managementBaseUrl=<proxyUrl>
 ```
 
@@ -272,7 +282,8 @@ await generateEnvironmentModelsAsync({
     outputDir: '/', // only required when createFiles is true
     // optional
     baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' }
+    formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false
 });
 ```
 
@@ -285,9 +296,10 @@ Configuration
 | `entities`            | Array of entity types that will be exported                                                                                    |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                           |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Item models
@@ -319,6 +331,7 @@ npx @kontent-ai/model-generator@latest items
     --outputDir=<path>
     --moduleFileExtension=<js | ts | none | mts | mjs>
     --addTimestamp=<true, false>
+    --disableComments=<true, false>
     --filterByTypeCodenames=<codenameA,codenameB>
     --managementBaseUrl=<proxyUrl>
     --deliveryBaseUrl=<proxyUrl>
@@ -343,6 +356,7 @@ await generateItemsAsync({
     // optional
     baseUrl: undefined,
     formatOptions: { indentSize: 4, quote: 'single' },
+    disableComments: false,
     deliveryBaseUrl: undefined
 });
 ```
@@ -356,13 +370,14 @@ Configuration
 | `deliveryApiKey`        | Delivery API key required when the `apiMode` is using preview or secure mode                                                   |
 | `moduleFileExtension`   | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`          | Indicates if models contain timestamp                                                                                          |
+| `disableComments`       | If enabled, no comments will be included in the generated files                                                               |
 | `generateObjects`       | If enabled, javascript objects with codename / id will be generated                                                            |
 | `generateTypes`         | If enabled, typescript type representing codename will be generated                                                            |
 | `filterByTypeCodenames` | Array of content type codenames of which content items will be generated. Useful for narrowing down generated items            |
 | `apiMode`               | Delivery API mode for fetching content items. By default delivery (public) mode is used                                        |
 | `createFiles`           | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`             | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`         | Prettier configuration for formatting generated code                                                                           |
+| `formatOptions`         | Configuration for formatting generated code                                                                                    |
 | `baseUrl`               | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models

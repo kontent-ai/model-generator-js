@@ -57,4 +57,5 @@ export const commandOptions: { [key in CommandOptionNames]: CommandOption } = {
 		isRequired: false,
 	},
 	help: { name: "help", description: "Shows help message", type: "boolean", isRequired: false },
+	disableComments: { name: "disableComments", description: "Disables comments in generated files", type: "boolean", isRequired: false },
 };

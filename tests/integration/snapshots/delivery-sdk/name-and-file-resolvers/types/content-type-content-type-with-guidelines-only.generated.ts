@@ -1,24 +1,24 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
+import type { IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Content type with guidelines only' type
  */
-export type ContentTypeContentTypeWithGuidelinesOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_guidelines_only">
+export type ContentTypeContentTypeWithGuidelinesOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_guidelines_only">;
 
 /*
  * Typeguard for codename of 'Content type with guidelines only' type
  */
 export function isContentTypeContentTypeWithGuidelinesOnlyCodename(
-	value: string | undefined | null
+	value: string | undefined | null,
 ): value is ContentTypeContentTypeWithGuidelinesOnlyCodename {
 	return (
 		typeof value === "string" &&
 		value === ("content_type_with_guidelines_only" satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename)
-	)
+	);
 }
 
 /*
@@ -34,12 +34,12 @@ export type ContentTypeContentTypeWithGuidelinesOnly = IContentItem<
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Content type with guidelines only
  */
-export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never
+export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never;
 
 /*
  * Type guard for Content type with guidelines only
@@ -48,7 +48,7 @@ export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never
  * Codename: content_type_with_guidelines_only
  */
 export function isContentTypeContentTypeWithGuidelinesOnly(
-	item: IContentItem | undefined | null
+	item: IContentItem | undefined | null,
 ): item is ContentTypeContentTypeWithGuidelinesOnly {
-	return item?.system.type === ("content_type_with_guidelines_only" satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename)
+	return item?.system.type === ("content_type_with_guidelines_only" satisfies ContentTypeContentTypeWithGuidelinesOnlyCodename);
 }

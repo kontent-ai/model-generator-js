@@ -1,20 +1,20 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { CoreType, TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
-import type { PageType } from "../types/page-type.generated.js"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { PageType } from "../types/page-type.generated.js";
 
 /*
  * Type representing codename of 'Web spotlight root' type
  */
-export type WebSpotlightRootTypeCodename = keyof Pick<Record<TypeCodenames, null>, "web_spotlight_root">
+export type WebSpotlightRootTypeCodename = keyof Pick<Record<TypeCodenames, null>, "web_spotlight_root">;
 
 /*
  * Typeguard for codename of 'Web spotlight root' type
  */
 export function isWebSpotlightRootTypeCodename(value: string | undefined | null): value is WebSpotlightRootTypeCodename {
-	return typeof value === "string" && value === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename)
+	return typeof value === "string" && value === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename);
 }
 
 /*
@@ -33,7 +33,7 @@ export type WebSpotlightRootType = IContentItem<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: Elements.TextElement
+		readonly title: Elements.TextElement;
 
 		/*
 		 * Subpages
@@ -44,7 +44,7 @@ export type WebSpotlightRootType = IContentItem<
 		 * Required: false
 		 * Allowed content types: page
 		 */
-		readonly subpages: Elements.LinkedItemsElement<PageType>
+		readonly subpages: Elements.LinkedItemsElement<PageType>;
 
 		/*
 		 * Content
@@ -54,19 +54,19 @@ export type WebSpotlightRootType = IContentItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>
+		readonly content: Elements.LinkedItemsElement<CoreType>;
 	},
 	WebSpotlightRootTypeCodename,
 	LanguageCodenames,
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Web spotlight root
  */
-export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "content"
+export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "content";
 
 /*
  * Type guard for Web spotlight root
@@ -75,5 +75,5 @@ export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "conte
  * Codename: web_spotlight_root
  */
 export function isWebSpotlightRootType(item: IContentItem | undefined | null): item is WebSpotlightRootType {
-	return item?.system.type === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename)
+	return item?.system.type === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename);
 }

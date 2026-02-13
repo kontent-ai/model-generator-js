@@ -15,7 +15,7 @@ import type {
 	WorkflowModels,
 } from "@kontent-ai/management-sdk";
 import { match } from "ts-pattern";
-import { toGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
+import { formatGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
 import type { EnvironmentEntity, FlattenedElement, GeneratedFile, GeneratedSet, ValidateKeys } from "../../core/core.models.js";
 import { findRequired, getStringOrUndefinedAsPropertyValue, isNotUndefined, toSafePropertyValue } from "../../core/core.utils.js";
 import { getFlattenedElements } from "../../core/element.utils.js";
@@ -46,6 +46,7 @@ export type EnvironmentEntities = ValidateKeys<
 >;
 
 export type EnvironmentGeneratorConfig = {
+	readonly disableComments: boolean;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 	readonly environmentEntities: EnvironmentEntities;
 	readonly entitiesToCreate: readonly EnvironmentEntity[];
@@ -186,7 +187,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === languages.length - 1;
 
 			return `${code}\n
-                ${wrapComment(language.name)}
+                ${wrapComment(language.name, { disableComments: config.disableComments })}
                 ${resolvePropertyName(language.codename)}: {
                     name: '${toSafePropertyValue(language.name)}',
                     codename: '${language.codename}',
@@ -204,7 +205,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === workflows.length - 1;
 
 			return `${code}\n
-                ${wrapComment(workflow.name)}
+                ${wrapComment(workflow.name, { disableComments: config.disableComments })}
                 ${workflow.codename}: {
                     name: '${toSafePropertyValue(workflow.name)}',
                     codename: '${workflow.codename}',
@@ -219,7 +220,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === customApps.length - 1;
 
 			return `${code}\n
-                ${wrapComment(customApp.name)}
+                ${wrapComment(customApp.name, { disableComments: config.disableComments })}
                 ${resolvePropertyName(customApp.codename)}: {
                     name: '${toSafePropertyValue(customApp.name)}',
                     codename: '${customApp.codename}',
@@ -233,7 +234,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === spaces.length - 1;
 
 			return `${code}\n
-                ${wrapComment(space.name)}
+                ${wrapComment(space.name, { disableComments: config.disableComments })}
                 ${resolvePropertyName(space.codename)}: {
                     name: '${toSafePropertyValue(space.name)}',
                     codename: '${space.codename}',
@@ -305,7 +306,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 					const isLast = index === assetFolders.length - 1;
 
 					return `${code}\n
-                ${wrapComment(assetFolder.name)}
+                ${wrapComment(assetFolder.name, { disableComments: config.disableComments })}
                 ${assetFolder.codename}: {
                     name: '${toSafePropertyValue(assetFolder.name)}',
                     codename: '${assetFolder.codename}',
@@ -323,7 +324,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === snippets.length - 1;
 
 			return `${code}\n
-                ${wrapComment(snippet.name)}
+                ${wrapComment(snippet.name, { disableComments: config.disableComments })}
                 ${snippet.codename}: {
                     name: '${toSafePropertyValue(snippet.name)}',
                     codename: '${snippet.codename}',
@@ -339,7 +340,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === contentTypes.length - 1;
 
 			return `${code}\n
-                ${wrapComment(contentType.name)}
+                ${wrapComment(contentType.name, { disableComments: config.disableComments })}
                 ${contentType.codename}: {
                     name: '${toSafePropertyValue(contentType.name)}',
                     codename: '${contentType.codename}',
@@ -374,10 +375,11 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 
 			return `${code}
                 ${wrapComment(element.title, {
+					disableComments: config.disableComments,
 					lines: [
 						{
 							name: "Guidelines",
-							value: element.guidelines ? toGuidelinesComment(element.guidelines) : undefined,
+							value: element.guidelines ? formatGuidelinesComment(element.guidelines) : undefined,
 						},
 					],
 				})}
@@ -400,7 +402,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 				return `${element.options.reduce<string>((code, option, index) => {
 					const isLast = index === element.options.length - 1;
 					return `${code}\n
-                ${wrapComment(option.name)}
+                ${wrapComment(option.name, { disableComments: config.disableComments })}
                 ${option.codename ? option.codename : resolvePropertyName(option.name)}: {
                     name: '${toSafePropertyValue(option.name)}',
                     id: '${option.id}',
@@ -417,7 +419,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === taxonomies.length - 1;
 
 			return `${code}\n
-                 ${wrapComment(taxonomy.name)}
+                 ${wrapComment(taxonomy.name, { disableComments: config.disableComments })}
                  ${taxonomy.codename}: {
                     name: '${toSafePropertyValue(taxonomy.name)}',
                     codename: '${taxonomy.codename}',
@@ -433,7 +435,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === collections.length - 1;
 
 			return `${code}\n
-                ${wrapComment(collection.name)}
+                ${wrapComment(collection.name, { disableComments: config.disableComments })}
                 ${collection.codename}: {
                     name: '${toSafePropertyValue(collection.name)}',
                     codename: '${collection.codename}',
@@ -447,7 +449,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === roles.length - 1;
 
 			return `${code}\n
-                ${wrapComment(role.name)}
+                ${wrapComment(role.name, { disableComments: config.disableComments })}
                 ${resolvePropertyName(role.codename ?? role.name)}: {
                     name: '${toSafePropertyValue(role.name)}',
                     codename: ${getStringOrUndefinedAsPropertyValue(role.codename)},
@@ -461,7 +463,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === webhooks.length - 1;
 
 			return `${code}\n
-                ${wrapComment(webhook.name)}
+                ${wrapComment(webhook.name, { disableComments: config.disableComments })}
                 ${resolvePropertyName(webhook.name)}: {
                     name: '${toSafePropertyValue(webhook.name)}',
                     url: '${webhook.url}',
@@ -475,7 +477,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			const isLast = index === terms.length - 1;
 
 			return `${code}\n
-                    ${wrapComment(term.name)}
+                    ${wrapComment(term.name, { disableComments: config.disableComments })}
                     ${term.codename}: {
                         name: '${toSafePropertyValue(term.name)}',
                         codename: '${term.codename}',

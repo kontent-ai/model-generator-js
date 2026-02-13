@@ -1,6 +1,6 @@
 {
 	"name": "@kontent-ai/model-generator",
-	"version": "9.1.1",
+	"version": "10.0.0-preview.0",
 	"description": "This utility generates strongly-typed models for Delivery JS SDK, Migration toolkit or just general scripting to improve the experience when referencing Kontent.ai related objects.",
 	"bin": {
 		"kontent-generate": "./dist/cli/app.js"
@@ -50,29 +50,29 @@
 	},
 	"dependencies": {
 		"@kontent-ai/core-sdk": "11.0.2",
-		"@kontent-ai/delivery-sdk": "16.4.0",
-		"@kontent-ai/management-sdk": "8.0.0",
-		"@kontent-ai/migration-toolkit": "2.9.1",
-		"@kontent-ai/sync-sdk": "1.0.2",
-		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.1",
+		"@kontent-ai/delivery-sdk": "16.4.1",
+		"@kontent-ai/management-sdk": "8.3.1",
+		"@kontent-ai/migration-toolkit": "3.0.1",
+		"@kontent-ai/sync-sdk": "1.0.3",
+		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.3",
 		"chalk": "5.6.2",
-		"prettier": "3.6.2",
-		"prettier-plugin-organize-imports": "4.3.0",
+		"@biomejs/js-api": "4.0.0",
+		"@biomejs/wasm-nodejs": "2.3.15",
 		"ts-pattern": "5.9.0",
 		"yargs": "18.0.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.5",
-		"@kontent-ai/biome-config": "0.5.1",
-		"@kontent-ai/eslint-config": "2.1.0",
-		"@types/node": "24.10.0",
-		"@types/yargs": "17.0.34",
+		"@biomejs/biome": "2.3.15",
+		"@kontent-ai/biome-config": "0.7.0",
+		"@kontent-ai/eslint-config": "2.3.0",
+		"@types/node": "25.2.3",
+		"@types/yargs": "17.0.35",
 		"dotenv-cli": "11.0.0",
-		"eslint": "9.39.1",
-		"tsx": "4.20.6",
+		"eslint": "9.39.2",
+		"tsx": "4.21.0",
 		"typescript": "5.9.3",
-		"typescript-eslint": "8.46.4",
-		"vite-tsconfig-paths": "5.1.4",
-		"vitest": "4.0.8"
+		"typescript-eslint": "8.53.0",
+		"vite-tsconfig-paths": "6.0.4",
+		"vitest": "4.0.18"
 	}
 }

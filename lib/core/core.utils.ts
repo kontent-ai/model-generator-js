@@ -31,8 +31,6 @@ export function singleItemToArray<T>(item: T | undefined): readonly T[] {
 	return item ? [item] : [];
 }
 
-export function findRequired<T>(array: readonly T[], predicate: (item: T, index: number) => boolean, errorMessage: string): T;
-export function findRequired<T>(array: readonly T[], predicate: (item: T, index: number) => boolean, errorMessage: () => never): T;
 export function findRequired<T>(
 	array: readonly T[],
 	predicate: (item: T, index: number) => boolean,

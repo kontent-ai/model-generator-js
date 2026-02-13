@@ -1,23 +1,25 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { CoreType, TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
-import type { TaxonomyTaxonomyACodename, TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { TaxonomyTaxonomyACodename, TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
 
 /*
  * Type representing codename of 'Content type with all elements' type
  */
-export type ContentTypeContentTypeWithAllElementsCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">
+export type ContentTypeContentTypeWithAllElementsCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
 
 /*
  * Typeguard for codename of 'Content type with all elements' type
  */
 export function isContentTypeContentTypeWithAllElementsCodename(
-	value: string | undefined | null
+	value: string | undefined | null,
 ): value is ContentTypeContentTypeWithAllElementsCodename {
-	return typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename)
+	return (
+		typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename)
+	);
 }
 
 /*
@@ -37,7 +39,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Required: true
 		 * Guidelines: Simple text element guidelines
 		 */
-		readonly text_element: Elements.TextElement
+		readonly text_element: Elements.TextElement;
 
 		/*
 		 * Url slug element
@@ -47,7 +49,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url_slug_element: Elements.UrlSlugElement
+		readonly url_slug_element: Elements.UrlSlugElement;
 
 		/*
 		 * Rich text element
@@ -57,7 +59,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: Elements.RichTextElement<CoreType>
+		readonly rich_text_element: Elements.RichTextElement<CoreType>;
 
 		/*
 		 * Date & time element
@@ -67,7 +69,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: date_time
 		 * Required: false
 		 */
-		readonly date___time_element: Elements.DateTimeElement
+		readonly date___time_element: Elements.DateTimeElement;
 
 		/*
 		 * Custom element
@@ -77,7 +79,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: custom
 		 * Required: false
 		 */
-		readonly custom_element: Elements.CustomElement
+		readonly custom_element: Elements.CustomElement;
 
 		/*
 		 * Linked items element
@@ -88,7 +90,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly linked_items_element: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>
+		readonly linked_items_element: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>;
 
 		/*
 		 * Asset element
@@ -98,7 +100,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: asset
 		 * Required: false
 		 */
-		readonly asset_element: Elements.AssetsElement
+		readonly asset_element: Elements.AssetsElement;
 
 		/*
 		 * Multiple choice element
@@ -108,7 +110,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly multiple_choice_element: Elements.MultipleChoiceElement<ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>
+		readonly multiple_choice_element: Elements.MultipleChoiceElement<ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
 
 		/*
 		 * Number element
@@ -118,7 +120,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: number
 		 * Required: false
 		 */
-		readonly number_element: Elements.NumberElement
+		readonly number_element: Elements.NumberElement;
 
 		/*
 		 * Taxonomy A
@@ -129,14 +131,14 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Required: false
 		 * Taxonomy: taxonomy_a
 		 */
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename>
+		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename>;
 	} & SnippetSnippetA,
 	ContentTypeContentTypeWithAllElementsCodename,
 	LanguageCodenames,
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Content type with all elements
@@ -154,7 +156,7 @@ export type ContentTypeContentTypeWithAllElementsElementCodenames =
 	| "snippet_a__rich_text_with_all_allowed_item_types"
 	| "snippet_a__linked_items_with_specific_types"
 	| "snippet_a__text"
-	| "taxonomy_element"
+	| "taxonomy_element";
 
 /*
  * Type guard for Content type with all elements
@@ -163,9 +165,9 @@ export type ContentTypeContentTypeWithAllElementsElementCodenames =
  * Codename: content_type_with_all_elements
  */
 export function isContentTypeContentTypeWithAllElements(
-	item: IContentItem | undefined | null
+	item: IContentItem | undefined | null,
 ): item is ContentTypeContentTypeWithAllElements {
-	return item?.system.type === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename)
+	return item?.system.type === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename);
 }
 
-export type ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b"
+export type ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";

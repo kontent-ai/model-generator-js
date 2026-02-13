@@ -34,11 +34,11 @@ export const taxonomies = {
 								codename: "nested_term_2",
 								id: "1f511bde-5b82-4d3c-afda-8570c6d19d9d",
 								externalId: undefined,
-								terms: {}
-							}
-						}
-					}
-				}
+								terms: {},
+							},
+						},
+					},
+				},
 			},
 
 			/*
@@ -49,7 +49,7 @@ export const taxonomies = {
 				codename: "term_2",
 				id: "21be3ed9-10b8-435a-9820-09c1df84e6b3",
 				externalId: undefined,
-				terms: {}
+				terms: {},
 			},
 
 			/*
@@ -60,9 +60,9 @@ export const taxonomies = {
 				codename: "term_3",
 				id: "fa1e16a7-e0b1-4ac9-bdcb-9e8f6ef23593",
 				externalId: undefined,
-				terms: {}
-			}
-		}
+				terms: {},
+			},
+		},
 	},
 
 	/*
@@ -73,6 +73,6 @@ export const taxonomies = {
 		codename: "taxonomy_without_terms",
 		externalId: undefined,
 		id: "01878d46-fcbc-4211-a801-676ad4e72cb2",
-		terms: {}
-	}
-} as const
+		terms: {},
+	},
+} as const;

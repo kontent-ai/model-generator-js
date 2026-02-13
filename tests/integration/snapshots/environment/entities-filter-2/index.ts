@@ -1,1 +1,1 @@
-export * from "./structure/contentTypes.generated.js"
+export * from "./structure/contentTypes.generated.js";

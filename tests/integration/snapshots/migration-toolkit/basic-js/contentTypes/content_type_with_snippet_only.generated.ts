@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
-import type { CoreMigrationItem } from "../migration.generated.js"
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
+import type { CoreMigrationItem } from "../migration.generated.js";
 
 /*
  * Content type with snippet only
@@ -19,7 +19,7 @@ export type ContentTypeWithSnippetOnlyItem = CoreMigrationItem<
 		 * Required: false
 		 * From snippet: snippet_a
 		 */
-		readonly snippet_a__rich_text_with_all_allowed_item_types: MigrationElementModels.RichTextElement
+		readonly snippet_a__rich_text_with_all_allowed_item_types: MigrationElementModels.RichTextElement;
 
 		/*
 		 * Linked items with specific types
@@ -31,7 +31,7 @@ export type ContentTypeWithSnippetOnlyItem = CoreMigrationItem<
 		 * From snippet: snippet_a
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly snippet_a__linked_items_with_specific_types: MigrationElementModels.LinkedItemsElement
+		readonly snippet_a__linked_items_with_specific_types: MigrationElementModels.LinkedItemsElement;
 
 		/*
 		 * Text
@@ -42,6 +42,6 @@ export type ContentTypeWithSnippetOnlyItem = CoreMigrationItem<
 		 * Required: true
 		 * From snippet: snippet_a
 		 */
-		readonly snippet_a__text: MigrationElementModels.TextElement
+		readonly snippet_a__text: MigrationElementModels.TextElement;
 	}
->
+>;

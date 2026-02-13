@@ -15,6 +15,7 @@ import { getImporter } from "../../core/importer.js";
 
 export interface SyncGeneratorConfig {
 	readonly moduleFileExtension: ModuleFileExtension;
+	readonly disableComments: boolean;
 
 	readonly environmentData: {
 		readonly environment: Readonly<EnvironmentModels.EnvironmentInformationModel>;
@@ -43,7 +44,7 @@ export function getSyncGenerator(config: SyncGeneratorConfig) {
 					importValue: [syncConfig.sdkTypes.syncClientTypes, syncConfig.sdkTypes.syncClient],
 				})}
 
-                ${wrapComment("Use as generic type when creating a sync client for increased type safety")}
+                ${wrapComment("Use as generic type when creating a sync client for increased type safety", { disableComments: config.disableComments })}
 				export type ${syncConfig.coreClientTypesTypeName} = ${syncConfig.sdkTypes.syncClientTypes} & {
 					readonly languageCodenames: ${getCodenames(config.environmentData.languages)},
 					readonly typeCodenames: ${getCodenames(config.environmentData.types)},
@@ -53,7 +54,7 @@ export function getSyncGenerator(config: SyncGeneratorConfig) {
 					readonly taxonomyCodenames: ${getCodenames(config.environmentData.taxonomies)},
 				};
 
-				${wrapComment("Type safe sync client")}
+				${wrapComment("Type safe sync client", { disableComments: config.disableComments })}
 				export type ${syncConfig.coreClientTypeName} = SyncClient<${syncConfig.coreClientTypesTypeName}>;
 				`,
 					},

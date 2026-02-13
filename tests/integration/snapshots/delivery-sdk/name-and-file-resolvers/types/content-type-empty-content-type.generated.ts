@@ -1,19 +1,19 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
+import type { IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Empty content type' type
  */
-export type ContentTypeEmptyContentTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">
+export type ContentTypeEmptyContentTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">;
 
 /*
  * Typeguard for codename of 'Empty content type' type
  */
 export function isContentTypeEmptyContentTypeCodename(value: string | undefined | null): value is ContentTypeEmptyContentTypeCodename {
-	return typeof value === "string" && value === ("empty_content_type" satisfies ContentTypeEmptyContentTypeCodename)
+	return typeof value === "string" && value === ("empty_content_type" satisfies ContentTypeEmptyContentTypeCodename);
 }
 
 /*
@@ -29,12 +29,12 @@ export type ContentTypeEmptyContentType = IContentItem<
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Empty content type
  */
-export type ContentTypeEmptyContentTypeElementCodenames = never
+export type ContentTypeEmptyContentTypeElementCodenames = never;
 
 /*
  * Type guard for Empty content type
@@ -43,5 +43,5 @@ export type ContentTypeEmptyContentTypeElementCodenames = never
  * Codename: empty_content_type
  */
 export function isContentTypeEmptyContentType(item: IContentItem | undefined | null): item is ContentTypeEmptyContentType {
-	return item?.system.type === ("empty_content_type" satisfies ContentTypeEmptyContentTypeCodename)
+	return item?.system.type === ("empty_content_type" satisfies ContentTypeEmptyContentTypeCodename);
 }

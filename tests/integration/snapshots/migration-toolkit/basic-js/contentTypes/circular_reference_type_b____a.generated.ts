@@ -1,5 +1,5 @@
-import type { MigrationElementModels } from "@kontent-ai/migration-toolkit"
-import type { CoreMigrationItem } from "../migration.generated.js"
+import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
+import type { CoreMigrationItem } from "../migration.generated.js";
 
 /*
  * Circular reference type B -> A
@@ -19,6 +19,6 @@ export type CircularReferenceTypeBAItem = CoreMigrationItem<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_a_b
 		 */
-		readonly items: MigrationElementModels.LinkedItemsElement
+		readonly items: MigrationElementModels.LinkedItemsElement;
 	}
->
+>;

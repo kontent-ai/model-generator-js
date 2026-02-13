@@ -1,22 +1,22 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
-import type { ContentTypeCircularReferenceTypeAB } from "../types/content-type-circular-reference-type-a-b.generated.js"
+import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { ContentTypeCircularReferenceTypeAB } from "../types/content-type-circular-reference-type-a-b.generated.js";
 
 /*
  * Type representing codename of 'Circular reference type B -> A' type
  */
-export type ContentTypeCircularReferenceTypeBACodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_b____a">
+export type ContentTypeCircularReferenceTypeBACodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_b____a">;
 
 /*
  * Typeguard for codename of 'Circular reference type B -> A' type
  */
 export function isContentTypeCircularReferenceTypeBACodename(
-	value: string | undefined | null
+	value: string | undefined | null,
 ): value is ContentTypeCircularReferenceTypeBACodename {
-	return typeof value === "string" && value === ("circular_reference_type_b____a" satisfies ContentTypeCircularReferenceTypeBACodename)
+	return typeof value === "string" && value === ("circular_reference_type_b____a" satisfies ContentTypeCircularReferenceTypeBACodename);
 }
 
 /*
@@ -36,19 +36,19 @@ export type ContentTypeCircularReferenceTypeBA = IContentItem<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_a_b
 		 */
-		readonly items: Elements.LinkedItemsElement<ContentTypeCircularReferenceTypeAB>
+		readonly items: Elements.LinkedItemsElement<ContentTypeCircularReferenceTypeAB>;
 	},
 	ContentTypeCircularReferenceTypeBACodename,
 	LanguageCodenames,
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Circular reference type B -> A
  */
-export type ContentTypeCircularReferenceTypeBAElementCodenames = "items"
+export type ContentTypeCircularReferenceTypeBAElementCodenames = "items";
 
 /*
  * Type guard for Circular reference type B -> A
@@ -57,5 +57,5 @@ export type ContentTypeCircularReferenceTypeBAElementCodenames = "items"
  * Codename: circular_reference_type_b____a
  */
 export function isContentTypeCircularReferenceTypeBA(item: IContentItem | undefined | null): item is ContentTypeCircularReferenceTypeBA {
-	return item?.system.type === ("circular_reference_type_b____a" satisfies ContentTypeCircularReferenceTypeBACodename)
+	return item?.system.type === ("circular_reference_type_b____a" satisfies ContentTypeCircularReferenceTypeBACodename);
 }

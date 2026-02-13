@@ -1,21 +1,21 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk"
-import type { CollectionCodenames } from "../system/collections.generated.js"
-import type { LanguageCodenames } from "../system/languages.generated.js"
-import type { TypeCodenames } from "../system/types.generated.js"
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js"
+import type { IContentItem } from "@kontent-ai/delivery-sdk";
+import type { CollectionCodenames } from "../system/collections.generated.js";
+import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Type with empty snippet' type
  */
-export type ContentTypeTypeWithEmptySnippetCodename = keyof Pick<Record<TypeCodenames, null>, "type_with_empty_snippet">
+export type ContentTypeTypeWithEmptySnippetCodename = keyof Pick<Record<TypeCodenames, null>, "type_with_empty_snippet">;
 
 /*
  * Typeguard for codename of 'Type with empty snippet' type
  */
 export function isContentTypeTypeWithEmptySnippetCodename(
-	value: string | undefined | null
+	value: string | undefined | null,
 ): value is ContentTypeTypeWithEmptySnippetCodename {
-	return typeof value === "string" && value === ("type_with_empty_snippet" satisfies ContentTypeTypeWithEmptySnippetCodename)
+	return typeof value === "string" && value === ("type_with_empty_snippet" satisfies ContentTypeTypeWithEmptySnippetCodename);
 }
 
 /*
@@ -31,12 +31,12 @@ export type ContentTypeTypeWithEmptySnippet = IContentItem<
 	CollectionCodenames,
 	WorkflowCodenames,
 	WorkflowStepCodenames
->
+>;
 
 /*
  * Type representing all available element codenames for Type with empty snippet
  */
-export type ContentTypeTypeWithEmptySnippetElementCodenames = never
+export type ContentTypeTypeWithEmptySnippetElementCodenames = never;
 
 /*
  * Type guard for Type with empty snippet
@@ -45,5 +45,5 @@ export type ContentTypeTypeWithEmptySnippetElementCodenames = never
  * Codename: type_with_empty_snippet
  */
 export function isContentTypeTypeWithEmptySnippet(item: IContentItem | undefined | null): item is ContentTypeTypeWithEmptySnippet {
-	return item?.system.type === ("type_with_empty_snippet" satisfies ContentTypeTypeWithEmptySnippetCodename)
+	return item?.system.type === ("type_with_empty_snippet" satisfies ContentTypeTypeWithEmptySnippetCodename);
 }

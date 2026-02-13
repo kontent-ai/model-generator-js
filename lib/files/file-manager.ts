@@ -2,18 +2,18 @@ import * as fs from "node:fs";
 import { dirname } from "node:path";
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import { coreConfig } from "../config.js";
 import { getEnvironmentInfoComment } from "../core/comment.utils.js";
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from "../core/core.models.js";
 import { toOutputDirPath } from "../core/core.utils.js";
 import { getImporter } from "../core/importer.js";
-import { formatCodeAsync } from "../format/formatter.js";
+import { type FormatOptions, formatCodeAsync } from "../format/formatter.js";
 
 export function getFileManager(config: {
 	readonly moduleFileExtension: ModuleFileExtension;
+	readonly disableComments: boolean;
 	readonly outputDir?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 	readonly addTimestamp: boolean;
 }) {
@@ -26,6 +26,7 @@ export function getFileManager(config: {
 			`${getEnvironmentInfoComment({
 				environmentInfo: config.environmentInfo,
 				timestampDate: config.addTimestamp ? new Date() : undefined,
+				disableComments: config.disableComments,
 			})}\n\n${text}`,
 		);
 
@@ -37,11 +38,14 @@ export function getFileManager(config: {
 	const getFormattedCodeAsync = async (code: string, filePath: string): Promise<string> => {
 		try {
 			if (filePath.endsWith(".ts")) {
-				return await formatCodeAsync(code, config.formatOptions);
+				return await formatCodeAsync(code, "typescript", config.formatOptions);
+			}
+			if (filePath.endsWith(".json")) {
+				return await formatCodeAsync(code, "json", config.formatOptions);
 			}
 			return code;
 		} catch {
-			console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping prettier.`);
+			console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping code formatting.`);
 			return code;
 		}
 	};

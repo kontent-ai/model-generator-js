@@ -16,6 +16,7 @@ await runScriptAsync(async (config) => {
 		outputDir: outputDir, // only required when createFiles is true
 
 		// optional
+		disableComments: false,
 		fileResolvers: {
 			contentType: undefined,
 			snippet: undefined,
@@ -32,7 +33,6 @@ await runScriptAsync(async (config) => {
 			language: undefined,
 			workflow: undefined,
 		},
-		formatOptions: undefined,
 		managementBaseUrl: undefined,
 	});
 });

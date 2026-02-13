@@ -10,6 +10,7 @@ export async function syncActionAsync(cliFetcher: CliArgumentsFetcher): Promise<
 		environmentId: cliFetcher.getRequiredArgumentValue(commandOptions.environmentId.name),
 		managementApiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
 		// optional
+		disableComments: cliFetcher.getBooleanArgumentValue(commandOptions.disableComments.name, false),
 		managementBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
 		outputDir: cliFetcher.getOptionalArgumentValue(commandOptions.outputDir.name),
 		addTimestamp: cliFetcher.getBooleanArgumentValue(commandOptions.addTimestamp.name, false),

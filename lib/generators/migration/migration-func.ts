@@ -1,9 +1,9 @@
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
-import type { Options } from "prettier";
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from "../../core/core.models.js";
 import { getManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
+import type { FormatOptions } from "../../format/formatter.js";
 import { getMigrationGenerator } from "./migration.generator.js";
 
 export type GenerateMigrationModelsConfig = {
@@ -13,7 +13,8 @@ export type GenerateMigrationModelsConfig = {
 	readonly moduleFileExtension: ModuleFileExtension;
 
 	readonly managementBaseUrl?: string;
-	readonly formatOptions?: Readonly<Options>;
+	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
 export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<readonly GeneratedFile[]> {
@@ -23,6 +24,7 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 	const { migrationItemFiles, migrationTypeFiles, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		disableComments: config.disableComments ?? false,
 		...config,
 		environmentInfo,
 	});
@@ -62,6 +64,7 @@ async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
 	]);
 
 	const migrationGenerator = getMigrationGenerator({
+		disableComments: config.disableComments ?? false,
 		moduleFileExtension: config.moduleFileExtension,
 		environmentData: {
 			environment: environmentInfo,

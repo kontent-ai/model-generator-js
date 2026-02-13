@@ -18,7 +18,7 @@ import type {
 import { createManagementClient } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
 import { coreConfig } from "../config.js";
-import { toSafeComment } from "../core/comment.utils.js";
+import { toSafeCommentText } from "../core/comment.utils.js";
 import type { GeneratorManagementClient } from "../core/core.models.js";
 import { extractErrorData } from "../core/error.utils.js";
 
@@ -55,8 +55,8 @@ export function getManagementKontentFetcher(config: {
 	return {
 		async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
 			const projectInformation = (await client.environmentInformation().toPromise()).data;
-			console.log(`Project '${chalk.cyan(toSafeComment(projectInformation.project.name))}'`);
-			console.log(`Environment '${chalk.cyan(toSafeComment(projectInformation.project.environment))}'\n`);
+			console.log(`Project '${chalk.cyan(toSafeCommentText(projectInformation.project.name))}'`);
+			console.log(`Environment '${chalk.cyan(toSafeCommentText(projectInformation.project.environment))}'\n`);
 			return projectInformation.project;
 		},
 		async getItemsAsync(): Promise<readonly Readonly<ContentItemModels.ContentItem>[]> {

@@ -2,7 +2,7 @@ import type { TaxonomyModels } from "@kontent-ai/management-sdk";
 import { ContentTypeModels, ContentTypeSnippetModels } from "@kontent-ai/management-sdk";
 import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../../config.js";
-import { toGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
+import { formatGuidelinesComment, wrapComment } from "../../core/comment.utils.js";
 import type { FlattenedElement, GeneratedTypeModel, MultipleChoiceOption } from "../../core/core.models.js";
 import { isNotUndefined, sortAlphabetically, uniqueFilter } from "../../core/core.utils.js";
 import { getFlattenedElements } from "../../core/element.utils.js";
@@ -291,6 +291,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			],
 			code: `
 ${wrapComment(snippet.name, {
+	disableComments: config.disableComments,
 	lines: [
 		{
 			name: "Id",
@@ -305,7 +306,7 @@ ${wrapComment(snippet.name, {
 export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippet}<${nameOfTypeRepresentingAllElementCodenames},
 ${getElementsCode(snippet, flattenedElements)}>;
 
-${wrapComment(`Type representing all available element codenames for ${snippet.name}`)}
+${wrapComment(`Type representing all available element codenames for ${snippet.name}`, { disableComments: config.disableComments })}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
 
 ${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
@@ -338,6 +339,7 @@ ${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
 			],
 			code: `
 ${wrapComment(contentType.name, {
+	disableComments: config.disableComments,
 	lines: [
 		{
 			name: "Id",
@@ -357,10 +359,11 @@ export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItem}<
 ${getElementsCode(contentType, flattenedElements)}${importsResult.contentTypeExtends ? ` ${importsResult.contentTypeExtends}` : ""}, 
 ${contentTypeNames.getCodenameTypeName(contentType)}, ${languageNames.codenamesTypeName}, ${collectionNames.codenamesTypeName}, ${workflowNames.codenamesTypeName}, ${workflowNames.allStepsNames.codenamesTypeName}>
 
-${wrapComment(`Type representing all available element codenames for ${contentType.name}`)}
+${wrapComment(`Type representing all available element codenames for ${contentType.name}`, { disableComments: config.disableComments })}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
 
 ${wrapComment(`Type guard for ${contentType.name}`, {
+	disableComments: config.disableComments,
 	lines: [
 		{
 			name: "Id",
@@ -440,6 +443,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 			}
 
 			return `${code}\n${isFirstElement ? "" : "\n"}${wrapComment(element.title, {
+				disableComments: config.disableComments,
 				lines: [
 					{
 						name: "Codename",
@@ -475,7 +479,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 					},
 					{
 						name: "Guidelines",
-						value: element.guidelines ? toGuidelinesComment(element.guidelines) : "",
+						value: element.guidelines ? formatGuidelinesComment(element.guidelines) : "",
 					},
 				],
 			})}

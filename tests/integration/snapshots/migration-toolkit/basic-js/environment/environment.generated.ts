@@ -1,7 +1,7 @@
 /*
  * Type representing all languages
  */
-export type LanguageCodenames = "__jp" | "🦉Lang" | "default" | "en-US" | "es-ES"
+export type LanguageCodenames = "__jp" | "🦉Lang" | "default" | "en-US" | "es-ES";
 
 /*
  * Type representing all content types
@@ -17,19 +17,19 @@ export type ContentTypeCodenames =
 	| "page"
 	| "type_referencing_deleted_type"
 	| "type_with_empty_snippet"
-	| "web_spotlight_root"
+	| "web_spotlight_root";
 
 /*
  * Type representing all collections
  */
-export type CollectionCodenames = "default" | "legacy_collection"
+export type CollectionCodenames = "default" | "legacy_collection";
 
 /*
  * Type representing all workflows
  */
-export type WorkflowCodenames = "advanced_workflow" | "default"
+export type WorkflowCodenames = "advanced_workflow" | "default";
 
 /*
  * Type representing all worksflow steps across all workflows
  */
-export type WorkflowStepCodenames = "archived" | "draft_b42a7f1" | "draft" | "published" | "scheduled" | "step_1" | "step_2"
+export type WorkflowStepCodenames = "archived" | "draft_b42a7f1" | "draft" | "published" | "scheduled" | "step_1" | "step_2";

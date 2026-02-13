@@ -24,17 +24,17 @@ export const elementCodenames = [
 	"url",
 	"show_in_navigation",
 	"rich_text_with_invalid_type",
-	"linked_items_with_invalid_type"
-] as const
+	"linked_items_with_invalid_type",
+] as const;
 
 /*
  * Type representing all element codenames
  */
-export type ElementCodenames = (typeof elementCodenames)[number]
+export type ElementCodenames = (typeof elementCodenames)[number];
 
 /*
  * Typeguard for element codename
  */
 export function isElementCodename(value: string | undefined | null): value is ElementCodenames {
-	return typeof value === "string" && (elementCodenames as readonly string[]).includes(value)
+	return typeof value === "string" && (elementCodenames as readonly string[]).includes(value);
 }
