@@ -2,6 +2,11 @@ on:
   release:
     types: [published]
 
+permissions:
+  # Required for OIDC publishing
+  id-token: write
+  contents: read
+
 name: publish-to-npm
 jobs:
   publish:
@@ -14,14 +19,13 @@ jobs:
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
       - run: npm ci
-      
+      - run: npm run build
+      - run: npm run test
+   
       - run: npm publish --access=public
         if: ${{!github.event.release.prerelease}}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_API_KEY }}
-      - run: npm publish --tag prerelease
+      - run: npm publish --tag prerelease --access=public
         if: ${{github.event.release.prerelease}}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_API_KEY }}
