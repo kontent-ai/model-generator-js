@@ -21,7 +21,7 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 
 	return {
 		getCliAction(): CliAction {
-			const command = resolvedArgv._[0]?.toString()?.toLowerCase() as LiteralUnion<CliAction>;
+			const command = resolvedArgv._[0]?.toString().toLowerCase() as LiteralUnion<CliAction>;
 
 			return match(command)
 				.returnType<CliAction>()

@@ -1,31 +1,37 @@
 {
 	"compileOnSave": true,
 	"compilerOptions": {
-		"noEmit": true,
-		"target": "es2022",
-		"moduleResolution": "nodenext",
+		// Language + runtime environment
+		"rootDir": ".",
+		"target": "esnext",
+		"lib": ["esnext"],
+
+		// Modules + resolution
 		"module": "NodeNext",
-		"importHelpers": true,
-		"sourceMap": true,
-		"declaration": true,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"strictNullChecks": true,
-		"strictPropertyInitialization": true,
+		"moduleResolution": "nodenext",
 		"resolveJsonModule": true,
+
+		// Emit behavior (even if `noEmit` is true, these are useful for tooling expectations)
+		"noEmit": true,
+		"declaration": true,
+		"sourceMap": true,
+
+		// Strictness + type safety
+		"strict": true,
+		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"allowUnreachableCode": false,
-		"skipLibCheck": true,
-		"alwaysStrict": true,
-		"forceConsistentCasingInFileNames": true,
-		"noUnusedParameters": false,
 		"noUnusedLocals": true,
-		"strictFunctionTypes": true,
-		"noImplicitAny": true,
-		"typeRoots": ["./node_modules/@types"],
-		"lib": ["esnext"]
+		"noUnusedParameters": true,
+		"forceConsistentCasingInFileNames": true,
+		"exactOptionalPropertyTypes": false,
+		"noUncheckedIndexedAccess": true,
+		"noFallthroughCasesInSwitch": true,
+		"useUnknownInCatchVariables": true,
+		"skipLibCheck": true,
+
+		// Types
+		"types": ["node"]
 	},
 	"include": ["lib/**/*", "tests/**/*", "eslint.config.mjs", "vitest.config.ts", "sample/**/*", "scripts/**/*"],
 	"exclude": ["node_modules"]
