@@ -15,8 +15,7 @@ import { isNotUndefined, uniqueFilter } from "../../core/core.utils.js";
 import { getFlattenedElements } from "../../core/element.utils.js";
 import { getImporter } from "../../core/importer.js";
 import type { FilenameResolver, NameResolver } from "../../core/resolvers.js";
-import type { DeliveryElement } from "./delivery-entity.generator.js";
-import { getDeliveryEntityGenerator } from "./delivery-entity.generator.js";
+import { type DeliveryElement, getDeliveryEntityGenerator } from "./delivery-entity.generator.js";
 
 export type DeliveryFileResolvers = {
 	readonly contentType?: FilenameResolver<ContentTypeModels.ContentType>;

@@ -1,6 +1,5 @@
 import { HttpService } from "coreSdkLegacy";
-import type { ClientTypes, IContentItem, ItemsFeedQuery } from "@kontent-ai/delivery-sdk";
-import { createDeliveryClient } from "@kontent-ai/delivery-sdk";
+import { type ClientTypes, createDeliveryClient, type IContentItem, type ItemsFeedQuery } from "@kontent-ai/delivery-sdk";
 import chalk from "chalk";
 import { coreConfig } from "../config.js";
 import type { DeliveryApiMode, GeneratorDeliveryClient } from "../core/core.models.js";

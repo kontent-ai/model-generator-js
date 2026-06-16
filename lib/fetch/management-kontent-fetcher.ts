@@ -1,21 +1,21 @@
 import { HttpService } from "coreSdkLegacy";
-import type {
-	AssetFolderModels,
-	CollectionModels,
-	ContentItemModels,
-	ContentTypeModels,
-	ContentTypeSnippetModels,
-	CustomAppModels,
-	EnvironmentModels,
-	LanguageModels,
-	PreviewModels,
-	RoleModels,
-	SpaceModels,
-	TaxonomyModels,
-	WebhookModels,
-	WorkflowModels,
+import {
+	type AssetFolderModels,
+	type CollectionModels,
+	type ContentItemModels,
+	type ContentTypeModels,
+	type ContentTypeSnippetModels,
+	type CustomAppModels,
+	createManagementClient,
+	type EnvironmentModels,
+	type LanguageModels,
+	type PreviewModels,
+	type RoleModels,
+	type SpaceModels,
+	type TaxonomyModels,
+	type WebhookModels,
+	type WorkflowModels,
 } from "@kontent-ai/management-sdk";
-import { createManagementClient } from "@kontent-ai/management-sdk";
 import chalk from "chalk";
 import { coreConfig } from "../config.js";
 import { toSafeCommentText } from "../core/comment.utils.js";

@@ -1,8 +1,11 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { loadEnvFile } from "node:process";
+import { fileURLToPath } from "node:url";
 import chalk from "chalk";
-import * as dotenv from "dotenv";
 
 // needed to load .env environment to current process when run via package.json script
-dotenv.config();
+loadEnvironmentVariables();
 
 export function getEnvironmentRequiredValue(variableName: string): string {
 	const value = getEnvironmentOptionalValue(variableName);
@@ -16,4 +19,12 @@ export function getEnvironmentRequiredValue(variableName: string): string {
 
 export function getEnvironmentOptionalValue(variableName: string): string | undefined {
 	return process.env[variableName];
+}
+
+function loadEnvironmentVariables(): void {
+	const envFilePath = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../", ".env");
+
+	if (existsSync(envFilePath)) {
+		loadEnvFile(envFilePath);
+	}
 }

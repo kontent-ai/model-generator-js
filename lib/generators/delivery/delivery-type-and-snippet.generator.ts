@@ -1,5 +1,4 @@
-import type { TaxonomyModels } from "@kontent-ai/management-sdk";
-import { ContentTypeModels, ContentTypeSnippetModels } from "@kontent-ai/management-sdk";
+import { ContentTypeModels, ContentTypeSnippetModels, type TaxonomyModels } from "@kontent-ai/management-sdk";
 import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../../config.js";
 import { formatGuidelinesComment, wrapComment } from "../../core/comment.utils.js";

@@ -104,23 +104,29 @@ async function getEntitiesAsync({
 		spaces,
 		previewUrls,
 	] = await Promise.all([
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("languages"), fetch: () => kontentFetcher.getLanguagesAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("taxonomies"), fetch: () => kontentFetcher.getTaxonomiesAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("contentTypes"), fetch: () => kontentFetcher.getTypesAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("snippets"), fetch: () => kontentFetcher.getSnippetsAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("collections"), fetch: () => kontentFetcher.getCollectionsAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("workflows"), fetch: () => kontentFetcher.getWorkflowsAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("webhooks"), fetch: () => kontentFetcher.getWebhooksAsync() }),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("languages"), fetch: async () => await kontentFetcher.getLanguagesAsync() }),
+		fetchEntity({
+			canFetch: () => entitiesToFetch.includes("taxonomies"),
+			fetch: async () => await kontentFetcher.getTaxonomiesAsync(),
+		}),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("contentTypes"), fetch: async () => await kontentFetcher.getTypesAsync() }),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("snippets"), fetch: async () => await kontentFetcher.getSnippetsAsync() }),
+		fetchEntity({
+			canFetch: () => entitiesToFetch.includes("collections"),
+			fetch: async () => await kontentFetcher.getCollectionsAsync(),
+		}),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("workflows"), fetch: async () => await kontentFetcher.getWorkflowsAsync() }),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("webhooks"), fetch: async () => await kontentFetcher.getWebhooksAsync() }),
 		fetchEntity({
 			canFetch: () => entitiesToFetch.includes("assetFolders"),
-			fetch: () => kontentFetcher.getAssetFoldersAsync(),
+			fetch: async () => await kontentFetcher.getAssetFoldersAsync(),
 		}),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("roles"), fetch: () => kontentFetcher.getRolesAsync() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("customApps"), fetch: () => kontentFetcher.getCustomApps() }),
-		fetchEntity({ canFetch: () => entitiesToFetch.includes("spaces"), fetch: () => kontentFetcher.getSpaces() }),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("roles"), fetch: async () => await kontentFetcher.getRolesAsync() }),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("customApps"), fetch: async () => await kontentFetcher.getCustomApps() }),
+		fetchEntity({ canFetch: () => entitiesToFetch.includes("spaces"), fetch: async () => await kontentFetcher.getSpaces() }),
 		fetchEntity({
 			canFetch: () => entitiesToFetch.includes("previewUrls"),
-			fetch: () => kontentFetcher.getPreviewUrlConfiguration(),
+			fetch: async () => await kontentFetcher.getPreviewUrlConfiguration(),
 		}),
 	]);
 
@@ -155,7 +161,7 @@ function getEntitiesToFetchFromApi(entityTypes: readonly EnvironmentEntity[]): r
 	).filter(uniqueFilter);
 }
 
-function fetchEntity<T>({
+async function fetchEntity<T>({
 	canFetch,
 	fetch,
 }: {
@@ -163,7 +169,7 @@ function fetchEntity<T>({
 	fetch: () => Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined>;
 }): Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined> {
 	if (!canFetch()) {
-		return Promise.resolve(undefined);
+		return undefined;
 	}
-	return fetch();
+	return await fetch();
 }
