@@ -18,8 +18,8 @@ importers:
         specifier: 11.0.2
         version: 11.0.2
       '@kontent-ai/delivery-sdk':
-        specifier: 16.4.3
-        version: 16.4.3
+        specifier: 17.0.0-preview.0
+        version: 17.0.0-preview.0(@kontent-ai/core-sdk@11.0.2)(ts-pattern@5.9.0)(zod@4.4.3)
       '@kontent-ai/management-sdk':
         specifier: 8.5.1
         version: 8.5.1
@@ -412,9 +412,13 @@ packages:
     resolution: {integrity: sha512-rl/6rUruTE4tdj+NV6iR0iMRIyR8XRaBlKxQ5a+UKD6qmwREcSYnqxEGq2dSaC8xj1aw2QLe/6pqJnJLd6YF+w==}
     engines: {node: '>= 22'}
 
-  '@kontent-ai/delivery-sdk@16.4.3':
-    resolution: {integrity: sha512-Bw+whddi/+RZ1KiypiIXBvpxtcVwEQncdGocWubNN9CmPLtmed8FecXcCPydRnQ8cmFFOhuuxOJm5B/BhNOliQ==}
-    engines: {node: '>= 20'}
+  '@kontent-ai/delivery-sdk@17.0.0-preview.0':
+    resolution: {integrity: sha512-plaesOurNf0XCaAXT2u0G8QSgQQZc3IjK73oilfXkA6aMkGqpk3W+UjL5BNBz2yFXlC1YEYEOexzNo7VR4YQ5Q==}
+    engines: {node: '>= 22'}
+    peerDependencies:
+      '@kontent-ai/core-sdk': ^12.0.0-preview.40
+      ts-pattern: ^5
+      zod: ^4
 
   '@kontent-ai/eslint-config@2.4.1':
     resolution: {integrity: sha512-4tIyNDDIxeYaPK17lMN00Ch1kqNbayLmrV+/tcia62XzCejR/cHcXcsWVGhmxS1RjyVpqhstnTWbUrcvmXge2Q==}
@@ -2245,12 +2249,11 @@ snapshots:
 
   '@kontent-ai/core-sdk@11.0.2': {}
 
-  '@kontent-ai/delivery-sdk@16.4.3':
+  '@kontent-ai/delivery-sdk@17.0.0-preview.0(@kontent-ai/core-sdk@11.0.2)(ts-pattern@5.9.0)(zod@4.4.3)':
     dependencies:
-      '@kontent-ai/core-sdk': 10.12.5
-    transitivePeerDependencies:
-      - debug
-      - supports-color
+      '@kontent-ai/core-sdk': 11.0.2
+      ts-pattern: 5.9.0
+      zod: 4.4.3
 
   '@kontent-ai/eslint-config@2.4.1(typescript@6.0.3)':
     dependencies:

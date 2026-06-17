@@ -13,3 +13,4 @@ minimumReleaseAgeExclude:
   - '@typescript-eslint/utils@8.61.1'
   - '@typescript-eslint/visitor-keys@8.61.1'
   - typescript-eslint@8.61.1
+  - '@kontent-ai/delivery-sdk@17.0.0-preview.0'

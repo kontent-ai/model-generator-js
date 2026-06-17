@@ -50,7 +50,7 @@
 	},
 	"dependencies": {
 		"@kontent-ai/core-sdk": "11.0.2",
-		"@kontent-ai/delivery-sdk": "16.4.3",
+		"@kontent-ai/delivery-sdk": "17.0.0-preview.0",
 		"@kontent-ai/management-sdk": "8.5.1",
 		"@kontent-ai/migration-toolkit": "3.1.5",
 		"@kontent-ai/sync-sdk": "1.0.3",
