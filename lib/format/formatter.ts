@@ -21,7 +21,11 @@ export async function formatCodeAsync(code: string, formatType: FormatType, conf
 			fixFileMode: "safeFixes",
 		});
 
-		return lintedContent.content;
+		// Re-format after organizing: 'organizeImports' can merge several same-module imports into a single
+		// statement that exceeds the configured line width, and only the formatter (not the assist) wraps it.
+		return biome.formatContent(projectKey, lintedContent.content, {
+			filePath: "virtual.ts",
+		}).content;
 	});
 
 	return await Promise.resolve(result);

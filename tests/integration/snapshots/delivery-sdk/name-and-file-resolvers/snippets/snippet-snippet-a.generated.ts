@@ -1,7 +1,10 @@
 import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { CoreItem } from "../system/types.generated.js";
-import type { ContentTypeContentTypeWithAllElementsCodename, ContentTypeContentTypeWithAllElementsItem } from "../types/content-type-content-type-with-all-elements.generated.js";
+import type {
+	ContentTypeContentTypeWithAllElementsCodename,
+	ContentTypeContentTypeWithAllElementsItem,
+} from "../types/content-type-content-type-with-all-elements.generated.js";
 import type { ContentTypeContentTypeWithSnippetOnlyCodename } from "../types/content-type-content-type-with-snippet-only.generated.js";
 
 /*
