@@ -12,9 +12,9 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Actor' type

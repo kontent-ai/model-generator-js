@@ -1,7 +1,7 @@
-import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
 
 /*
  * Type representing codename of 'Circular reference type B -> A' type

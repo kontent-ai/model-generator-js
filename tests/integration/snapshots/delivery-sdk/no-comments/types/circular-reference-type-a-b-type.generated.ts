@@ -1,7 +1,7 @@
-import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
+import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
 
 export type CircularReferenceTypeABTypeCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_a_b">;
 

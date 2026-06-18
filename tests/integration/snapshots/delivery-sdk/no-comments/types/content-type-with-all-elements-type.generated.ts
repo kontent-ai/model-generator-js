@@ -1,7 +1,7 @@
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
 
 export type ContentTypeWithAllElementsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;

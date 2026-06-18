@@ -1,6 +1,6 @@
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 
 export type TypeReferencingDeletedTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
 

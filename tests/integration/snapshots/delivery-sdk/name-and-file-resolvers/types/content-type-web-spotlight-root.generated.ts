@@ -1,7 +1,7 @@
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { ContentTypePage } from "../types/content-type-page.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { ContentTypePage } from "../types/content-type-page.generated.js";
 
 /*
  * Type representing codename of 'Web spotlight root' type

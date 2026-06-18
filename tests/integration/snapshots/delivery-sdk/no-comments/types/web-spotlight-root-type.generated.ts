@@ -1,6 +1,6 @@
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { PageType } from "../types/page-type.generated.js";
 
 export type WebSpotlightRootTypeCodename = keyof Pick<Record<TypeCodenames, null>, "web_spotlight_root">;

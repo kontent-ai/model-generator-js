@@ -1,6 +1,6 @@
-import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { ContentItemPayload, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-snippet-type.generated.js";
 
 export type EmptySnippetSnippetCodename = keyof Pick<Record<SnippetCodenames, null>, "empty_snippet">;

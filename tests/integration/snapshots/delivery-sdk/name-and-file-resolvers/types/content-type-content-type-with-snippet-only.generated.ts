@@ -1,7 +1,7 @@
-import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Content type with snippet only' type

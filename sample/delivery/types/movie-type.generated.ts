@@ -12,12 +12,11 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { ActorType } from "../types/actor-type.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType } from "../system/types.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ReleaseCategoryTaxonomyTermCodenames } from "../taxonomies/release-category-taxonomy.generated.js";
+import type { ActorType } from "../types/actor-type.generated.js";
 
 /*
  * Type representing codename of 'Movie' type

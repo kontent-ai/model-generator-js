@@ -10,7 +10,18 @@ export async function formatCodeAsync(code: string, formatType: FormatType, conf
 			filePath: formatType === "typescript" ? "virtual.ts" : "virtual.json",
 		});
 
-		return formattedContent.content;
+		// 'formatContent' only runs the formatter; assist actions such as 'organizeImports' (and safe lint fixes
+		// like removing unused imports) are applied by 'lintContent' with a fix mode. JSON has nothing to organize.
+		if (formatType !== "typescript") {
+			return formattedContent.content;
+		}
+
+		const lintedContent = biome.lintContent(projectKey, formattedContent.content, {
+			filePath: "virtual.ts",
+			fixFileMode: "safeFixes",
+		});
+
+		return lintedContent.content;
 	});
 
 	return await Promise.resolve(result);

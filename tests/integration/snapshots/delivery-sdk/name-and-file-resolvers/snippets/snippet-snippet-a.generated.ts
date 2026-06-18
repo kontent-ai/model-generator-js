@@ -1,12 +1,9 @@
-import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
-import type {
-	ContentTypeContentTypeWithAllElements,
-	ContentTypeContentTypeWithAllElementsCodename,
-} from "../types/content-type-content-type-with-all-elements.generated.js";
-import type { ContentTypeContentTypeWithSnippetOnlyCodename } from "../types/content-type-content-type-with-snippet-only.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { CoreType } from "../system/types.generated.js";
+import type { ContentTypeContentTypeWithAllElements, ContentTypeContentTypeWithAllElementsCodename } from "../types/content-type-content-type-with-all-elements.generated.js";
+import type { ContentTypeContentTypeWithSnippetOnlyCodename } from "../types/content-type-content-type-with-snippet-only.generated.js";
 
 /*
  * Type representing codename of 'Snippet A' snippet

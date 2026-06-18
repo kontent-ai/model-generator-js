@@ -1,7 +1,7 @@
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
 
 /*
