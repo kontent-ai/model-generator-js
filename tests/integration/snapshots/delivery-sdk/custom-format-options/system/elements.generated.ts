@@ -1,7 +1,7 @@
 /*
  * Array of all element codenames
  */
-export const allElementCodenames = [
+export const elementCodenames = [
 	"text_element",
 	"url_slug_element",
 	"rich_text_element",
@@ -30,11 +30,11 @@ export const allElementCodenames = [
 /*
  * Type representing all element codenames
  */
-export type AnyElementCodename = (typeof allElementCodenames)[number];
+export type ElementCodenames = (typeof elementCodenames)[number];
 
 /*
  * Typeguard for element codename
  */
-export function isAnyElementCodename(value: string | undefined | null): value is AnyElementCodename {
-	return typeof value === "string" && (allElementCodenames as readonly string[]).includes(value);
+export function isElementCodename(value: string | undefined | null): value is ElementCodenames {
+	return typeof value === "string" && (elementCodenames as readonly string[]).includes(value);
 }

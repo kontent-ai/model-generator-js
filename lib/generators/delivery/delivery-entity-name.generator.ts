@@ -66,14 +66,10 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				pluralCamelCase: resolveCase(deliveryUtils.getPluralName(config.entityType), "camelCase"),
 			};
 
-			// Elements aren't scoped to a single content type in the overview file, so their codenames represent
-			// 'any' element across the environment and use dedicated names instead of the generic '<Entity>Codenames' pattern.
-			const isElementEntity = config.entityType === "Element";
-
 			const entityNames: DeliveryEntityNames<DeliveryEntityType> = {
-				codenamesTypeName: isElementEntity ? "AnyElementCodename" : `${entityTypeName.pascalCase}Codenames`,
-				codenamesValuePropertyName: isElementEntity ? "allElementCodenames" : `${entityTypeName.camelCase}Codenames`,
-				codenamesTypeguardFunctionName: isElementEntity ? "isAnyElementCodename" : `is${entityTypeName.pascalCase}Codename`,
+				codenamesTypeName: `${entityTypeName.pascalCase}Codenames`,
+				codenamesValuePropertyName: `${entityTypeName.camelCase}Codenames`,
+				codenamesTypeguardFunctionName: `is${entityTypeName.pascalCase}Codename`,
 
 				overviewFilename: mapFilename<ObjectWithCodename>((c) => c.codename)({ codename: entityTypeName.pluralCamelCase }, true),
 				folderName: entityTypeName.pluralCamelCase,
