@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
 
 /*
@@ -18,29 +16,31 @@ export function isCircularReferenceTypeBATypeCodename(value: string | undefined 
 }
 
 /*
- * Circular reference type B -> A
+ * Elements of the 'Circular reference type B -> A' content type
  *
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export type CircularReferenceTypeBAType = IContentItem<
-	{
-		/*
-		 * Items
-		 *
-		 * Codename: items
-		 * Id: 019714f7-8c50-492b-8e5c-f7c3d7e2529b
-		 * Type: modular_content
-		 * Required: false
-		 * Allowed content types: circular_reference_type_a_b
-		 */
-		readonly items: Elements.LinkedItemsElement<CircularReferenceTypeABType>;
-	},
+export type CircularReferenceTypeBATypeElements = {
+	/*
+	 * Items
+	 *
+	 * Codename: items
+	 * Id: 019714f7-8c50-492b-8e5c-f7c3d7e2529b
+	 * Type: modular_content
+	 * Required: false
+	 * Allowed content types: circular_reference_type_a_b
+	 */
+	readonly items: Elements.LinkedItems<CircularReferenceTypeABType>;
+};
+
+/*
+ * Circular reference type B -> A
+ */
+export type CircularReferenceTypeBAType = ContentItemOf<
+	CoreClientSchema,
 	CircularReferenceTypeBATypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+	CircularReferenceTypeBATypeElements
 >;
 
 /*
@@ -54,6 +54,8 @@ export type CircularReferenceTypeBATypeElementCodenames = "items";
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export function isCircularReferenceTypeBAType(item: IContentItem | undefined | null): item is CircularReferenceTypeBAType {
-	return item?.system.type === ("circular_reference_type_b____a" satisfies CircularReferenceTypeBATypeCodename);
+export function isCircularReferenceTypeBAType(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is CircularReferenceTypeBAType {
+	return isCircularReferenceTypeBATypeCodename(item?.system.type);
 }

@@ -15,7 +15,7 @@
 /*
  * Array of all taxonomy codenames
  */
-export const taxonomyCodenames = ["movietype", "releasecategory"] as const;
+export const taxonomyCodenames = ["releasecategory", "movietype"] as const;
 
 /*
  * Type representing all taxonomy codenames

@@ -56,14 +56,15 @@ export const deliveryConfig = {
 	mainSystemFilename: "main.system",
 	coreContentTypeName: "CoreType",
 	coreDeliveryClientTypeName: "CoreDeliveryClient",
-	coreDeliveryClientTypesTypeName: "CoreClientTypes",
+	coreClientSchemaTypeName: "CoreClientSchema",
 
 	sdkTypes: {
-		contentItem: "IContentItem",
-		contentItemElements: "IContentItemElements",
+		contentItemOf: "ContentItemOf",
+		contentItemPayload: "ContentItemPayload",
+		snippetOf: "SnippetOf",
 		elements: "Elements",
-		snippet: "Snippet",
-		deliveryClient: "IDeliveryClient",
+		deliveryClient: "DeliveryClient",
+		deliveryClientSchema: "DeliveryClientSchema",
 	},
 } as const;
 

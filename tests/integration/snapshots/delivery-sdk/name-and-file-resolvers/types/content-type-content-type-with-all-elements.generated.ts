@@ -1,10 +1,8 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { SnippetSnippetAElements } from "../snippets/snippet-snippet-a.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
-import type { TaxonomyTaxonomyACodename, TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
+import type { TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
 
 /*
  * Type representing codename of 'Content type with all elements' type
@@ -23,121 +21,123 @@ export function isContentTypeContentTypeWithAllElementsCodename(
 }
 
 /*
- * Content type with all elements
+ * Elements of the 'Content type with all elements' content type
  *
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export type ContentTypeContentTypeWithAllElements = IContentItem<
-	{
-		/*
-		 * Text element
-		 *
-		 * Codename: text_element
-		 * Id: cf24e550-3bbe-4e9d-aee6-e81b9b490228
-		 * Type: text
-		 * Required: true
-		 * Guidelines: Simple text element guidelines
-		 */
-		readonly text_element: Elements.TextElement;
+export type ContentTypeContentTypeWithAllElementsElements = {
+	/*
+	 * Text element
+	 *
+	 * Codename: text_element
+	 * Id: cf24e550-3bbe-4e9d-aee6-e81b9b490228
+	 * Type: text
+	 * Required: true
+	 * Guidelines: Simple text element guidelines
+	 */
+	readonly text_element: Elements.Text;
 
-		/*
-		 * Url slug element
-		 *
-		 * Codename: url_slug_element
-		 * Id: e117d1ae-d985-4df2-b6c7-b3aa03521a00
-		 * Type: url_slug
-		 * Required: false
-		 */
-		readonly url_slug_element: Elements.UrlSlugElement;
+	/*
+	 * Url slug element
+	 *
+	 * Codename: url_slug_element
+	 * Id: e117d1ae-d985-4df2-b6c7-b3aa03521a00
+	 * Type: url_slug
+	 * Required: false
+	 */
+	readonly url_slug_element: Elements.UrlSlug;
 
-		/*
-		 * Rich text element
-		 *
-		 * Codename: rich_text_element
-		 * Id: 81ee0883-8c1b-49cc-8d11-2fd1dcf75c5c
-		 * Type: rich_text
-		 * Required: false
-		 */
-		readonly rich_text_element: Elements.RichTextElement<CoreType>;
+	/*
+	 * Rich text element
+	 *
+	 * Codename: rich_text_element
+	 * Id: 81ee0883-8c1b-49cc-8d11-2fd1dcf75c5c
+	 * Type: rich_text
+	 * Required: false
+	 */
+	readonly rich_text_element: Elements.RichText<CoreType>;
 
-		/*
-		 * Date & time element
-		 *
-		 * Codename: date___time_element
-		 * Id: 38d5d709-4152-445c-b1ef-333147bd656e
-		 * Type: date_time
-		 * Required: false
-		 */
-		readonly date___time_element: Elements.DateTimeElement;
+	/*
+	 * Date & time element
+	 *
+	 * Codename: date___time_element
+	 * Id: 38d5d709-4152-445c-b1ef-333147bd656e
+	 * Type: date_time
+	 * Required: false
+	 */
+	readonly date___time_element: Elements.DateTime;
 
-		/*
-		 * Custom element
-		 *
-		 * Codename: custom_element
-		 * Id: 768581f2-7b56-4be3-a8a2-a1850dbe493e
-		 * Type: custom
-		 * Required: false
-		 */
-		readonly custom_element: Elements.CustomElement;
+	/*
+	 * Custom element
+	 *
+	 * Codename: custom_element
+	 * Id: 768581f2-7b56-4be3-a8a2-a1850dbe493e
+	 * Type: custom
+	 * Required: false
+	 */
+	readonly custom_element: Elements.Custom;
 
-		/*
-		 * Linked items element
-		 *
-		 * Codename: linked_items_element
-		 * Id: 4631c94d-034c-428a-88bb-cae6d7985ff5
-		 * Type: modular_content
-		 * Required: false
-		 * Allowed content types: content_type_with_all_elements
-		 */
-		readonly linked_items_element: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>;
+	/*
+	 * Linked items element
+	 *
+	 * Codename: linked_items_element
+	 * Id: 4631c94d-034c-428a-88bb-cae6d7985ff5
+	 * Type: modular_content
+	 * Required: false
+	 * Allowed content types: content_type_with_all_elements
+	 */
+	readonly linked_items_element: Elements.LinkedItems<ContentTypeContentTypeWithAllElements>;
 
-		/*
-		 * Asset element
-		 *
-		 * Codename: asset_element
-		 * Id: fc99d625-106b-4f95-b37e-7f7be358d3d1
-		 * Type: asset
-		 * Required: false
-		 */
-		readonly asset_element: Elements.AssetsElement;
+	/*
+	 * Asset element
+	 *
+	 * Codename: asset_element
+	 * Id: fc99d625-106b-4f95-b37e-7f7be358d3d1
+	 * Type: asset
+	 * Required: false
+	 */
+	readonly asset_element: Elements.Asset;
 
-		/*
-		 * Multiple choice element
-		 *
-		 * Codename: multiple_choice_element
-		 * Id: 709148dd-8c3f-4660-95b8-a72f386dd367
-		 * Type: multiple_choice
-		 * Required: false
-		 */
-		readonly multiple_choice_element: Elements.MultipleChoiceElement<ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
+	/*
+	 * Multiple choice element
+	 *
+	 * Codename: multiple_choice_element
+	 * Id: 709148dd-8c3f-4660-95b8-a72f386dd367
+	 * Type: multiple_choice
+	 * Required: false
+	 */
+	readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
 
-		/*
-		 * Number element
-		 *
-		 * Codename: number_element
-		 * Id: 7416ea32-3d33-45bb-bf2a-2226f658e953
-		 * Type: number
-		 * Required: false
-		 */
-		readonly number_element: Elements.NumberElement;
+	/*
+	 * Number element
+	 *
+	 * Codename: number_element
+	 * Id: 7416ea32-3d33-45bb-bf2a-2226f658e953
+	 * Type: number
+	 * Required: false
+	 */
+	readonly number_element: Elements.Number;
 
-		/*
-		 * Taxonomy A
-		 *
-		 * Codename: taxonomy_element
-		 * Id: 6073dec8-2489-479f-9916-abc055126e59
-		 * Type: taxonomy
-		 * Required: false
-		 * Taxonomy: taxonomy_a
-		 */
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename>;
-	} & SnippetSnippetA,
+	/*
+	 * Taxonomy A
+	 *
+	 * Codename: taxonomy_element
+	 * Id: 6073dec8-2489-479f-9916-abc055126e59
+	 * Type: taxonomy
+	 * Required: false
+	 * Taxonomy: taxonomy_a
+	 */
+	readonly taxonomy_element: Elements.Taxonomy<TaxonomyTaxonomyATermCodenames>;
+} & SnippetSnippetAElements;
+
+/*
+ * Content type with all elements
+ */
+export type ContentTypeContentTypeWithAllElements = ContentItemOf<
+	CoreClientSchema,
 	ContentTypeContentTypeWithAllElementsCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+	ContentTypeContentTypeWithAllElementsElements
 >;
 
 /*
@@ -165,9 +165,9 @@ export type ContentTypeContentTypeWithAllElementsElementCodenames =
  * Codename: content_type_with_all_elements
  */
 export function isContentTypeContentTypeWithAllElements(
-	item: IContentItem | undefined | null,
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
 ): item is ContentTypeContentTypeWithAllElements {
-	return item?.system.type === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename);
+	return isContentTypeContentTypeWithAllElementsCodename(item?.system.type);
 }
 
 export type ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";

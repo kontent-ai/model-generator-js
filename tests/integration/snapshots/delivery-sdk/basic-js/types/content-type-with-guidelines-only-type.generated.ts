@@ -1,8 +1,6 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Content type with guidelines only' type
@@ -19,18 +17,20 @@ export function isContentTypeWithGuidelinesOnlyTypeCodename(
 }
 
 /*
- * Content type with guidelines only
+ * Elements of the 'Content type with guidelines only' content type
  *
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export type ContentTypeWithGuidelinesOnlyType = IContentItem<
-	Record<string, never>,
+export type ContentTypeWithGuidelinesOnlyTypeElements = Record<string, never>;
+
+/*
+ * Content type with guidelines only
+ */
+export type ContentTypeWithGuidelinesOnlyType = ContentItemOf<
+	CoreClientSchema,
 	ContentTypeWithGuidelinesOnlyTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+	ContentTypeWithGuidelinesOnlyTypeElements
 >;
 
 /*
@@ -44,6 +44,8 @@ export type ContentTypeWithGuidelinesOnlyTypeElementCodenames = never;
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export function isContentTypeWithGuidelinesOnlyType(item: IContentItem | undefined | null): item is ContentTypeWithGuidelinesOnlyType {
-	return item?.system.type === ("content_type_with_guidelines_only" satisfies ContentTypeWithGuidelinesOnlyTypeCodename);
+export function isContentTypeWithGuidelinesOnlyType(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeWithGuidelinesOnlyType {
+	return isContentTypeWithGuidelinesOnlyTypeCodename(item?.system.type);
 }

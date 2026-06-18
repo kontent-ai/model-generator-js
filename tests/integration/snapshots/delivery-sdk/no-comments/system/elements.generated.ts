@@ -1,4 +1,4 @@
-export const elementCodenames = [
+export const allElementCodenames = [
 	"text_element",
 	"url_slug_element",
 	"rich_text_element",
@@ -24,8 +24,8 @@ export const elementCodenames = [
 	"linked_items_with_invalid_type",
 ] as const;
 
-export type ElementCodenames = (typeof elementCodenames)[number];
+export type AnyElementCodename = (typeof allElementCodenames)[number];
 
-export function isElementCodename(value: string | undefined | null): value is ElementCodenames {
-	return typeof value === "string" && (elementCodenames as readonly string[]).includes(value);
+export function isAnyElementCodename(value: string | undefined | null): value is AnyElementCodename {
+	return typeof value === "string" && (allElementCodenames as readonly string[]).includes(value);
 }

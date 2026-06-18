@@ -33,7 +33,7 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 }
 
 /*
- * Core content type with narrowed types. Use this instead of'IContentItem' for increased type safety.
+ * Core content type with narrowed types. Use this instead of 'ContentItemPayload' for increased type safety.
  */
 export type CoreType = ActorType | MovieType;
 

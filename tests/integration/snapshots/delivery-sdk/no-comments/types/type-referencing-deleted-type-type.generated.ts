@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 export type TypeReferencingDeletedTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
 
@@ -12,21 +10,22 @@ export function isTypeReferencingDeletedTypeTypeCodename(
 	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename);
 }
 
-export type TypeReferencingDeletedTypeType = IContentItem<
-	{
-		readonly rich_text_with_invalid_type: Elements.RichTextElement<CoreType>;
+export type TypeReferencingDeletedTypeTypeElements = {
+	readonly rich_text_with_invalid_type: Elements.RichText<CoreType>;
 
-		readonly linked_items_with_invalid_type: Elements.LinkedItemsElement<CoreType>;
-	},
+	readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreType>;
+};
+
+export type TypeReferencingDeletedTypeType = ContentItemOf<
+	CoreClientSchema,
 	TypeReferencingDeletedTypeTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+	TypeReferencingDeletedTypeTypeElements
 >;
 
 export type TypeReferencingDeletedTypeTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type";
 
-export function isTypeReferencingDeletedTypeType(item: IContentItem | undefined | null): item is TypeReferencingDeletedTypeType {
-	return item?.system.type === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename);
+export function isTypeReferencingDeletedTypeType(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is TypeReferencingDeletedTypeType {
+	return isTypeReferencingDeletedTypeTypeCodename(item?.system.type);
 }

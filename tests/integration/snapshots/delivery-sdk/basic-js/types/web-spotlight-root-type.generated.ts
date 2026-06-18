@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 import type { PageType } from "../types/page-type.generated.js";
 
 /*
@@ -18,50 +16,48 @@ export function isWebSpotlightRootTypeCodename(value: string | undefined | null)
 }
 
 /*
- * Web spotlight root
+ * Elements of the 'Web spotlight root' content type
  *
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export type WebSpotlightRootType = IContentItem<
-	{
-		/*
-		 * Title
-		 *
-		 * Codename: title
-		 * Id: e9d19fa4-4ad3-4b3f-998a-ca392651f7d0
-		 * Type: text
-		 * Required: false
-		 */
-		readonly title: Elements.TextElement;
+export type WebSpotlightRootTypeElements = {
+	/*
+	 * Title
+	 *
+	 * Codename: title
+	 * Id: e9d19fa4-4ad3-4b3f-998a-ca392651f7d0
+	 * Type: text
+	 * Required: false
+	 */
+	readonly title: Elements.Text;
 
-		/*
-		 * Subpages
-		 *
-		 * Codename: subpages
-		 * Id: e6702a6b-35b8-4a12-acca-1b1361fc926b
-		 * Type: subpages
-		 * Required: false
-		 * Allowed content types: page
-		 */
-		readonly subpages: Elements.LinkedItemsElement<PageType>;
+	/*
+	 * Subpages
+	 *
+	 * Codename: subpages
+	 * Id: e6702a6b-35b8-4a12-acca-1b1361fc926b
+	 * Type: subpages
+	 * Required: false
+	 * Allowed content types: page
+	 */
+	readonly subpages: Elements.LinkedItems<PageType>;
 
-		/*
-		 * Content
-		 *
-		 * Codename: content
-		 * Id: ad185ebb-c7ec-4b89-bf89-4b415b5e0ca8
-		 * Type: modular_content
-		 * Required: false
-		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>;
-	},
-	WebSpotlightRootTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
->;
+	/*
+	 * Content
+	 *
+	 * Codename: content
+	 * Id: ad185ebb-c7ec-4b89-bf89-4b415b5e0ca8
+	 * Type: modular_content
+	 * Required: false
+	 */
+	readonly content: Elements.LinkedItems<CoreType>;
+};
+
+/*
+ * Web spotlight root
+ */
+export type WebSpotlightRootType = ContentItemOf<CoreClientSchema, WebSpotlightRootTypeCodename, WebSpotlightRootTypeElements>;
 
 /*
  * Type representing all available element codenames for Web spotlight root
@@ -74,6 +70,6 @@ export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "conte
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export function isWebSpotlightRootType(item: IContentItem | undefined | null): item is WebSpotlightRootType {
-	return item?.system.type === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename);
+export function isWebSpotlightRootType(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is WebSpotlightRootType {
+	return isWebSpotlightRootTypeCodename(item?.system.type);
 }

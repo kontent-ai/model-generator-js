@@ -15,7 +15,7 @@
 /*
  * Array of all element codenames
  */
-export const elementCodenames = [
+export const allElementCodenames = [
 	"url",
 	"first_name",
 	"last_name",
@@ -34,11 +34,11 @@ export const elementCodenames = [
 /*
  * Type representing all element codenames
  */
-export type ElementCodenames = (typeof elementCodenames)[number];
+export type AnyElementCodename = (typeof allElementCodenames)[number];
 
 /*
  * Typeguard for element codename
  */
-export function isElementCodename(value: string | undefined | null): value is ElementCodenames {
-	return typeof value === "string" && (elementCodenames as readonly string[]).includes(value);
+export function isAnyElementCodename(value: string | undefined | null): value is AnyElementCodename {
+	return typeof value === "string" && (allElementCodenames as readonly string[]).includes(value);
 }

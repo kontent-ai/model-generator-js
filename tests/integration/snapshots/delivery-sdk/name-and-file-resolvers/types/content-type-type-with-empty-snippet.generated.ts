@@ -1,8 +1,6 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Type with empty snippet' type
@@ -19,18 +17,20 @@ export function isContentTypeTypeWithEmptySnippetCodename(
 }
 
 /*
- * Type with empty snippet
+ * Elements of the 'Type with empty snippet' content type
  *
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export type ContentTypeTypeWithEmptySnippet = IContentItem<
-	Record<string, never>,
+export type ContentTypeTypeWithEmptySnippetElements = Record<string, never>;
+
+/*
+ * Type with empty snippet
+ */
+export type ContentTypeTypeWithEmptySnippet = ContentItemOf<
+	CoreClientSchema,
 	ContentTypeTypeWithEmptySnippetCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+	ContentTypeTypeWithEmptySnippetElements
 >;
 
 /*
@@ -44,6 +44,8 @@ export type ContentTypeTypeWithEmptySnippetElementCodenames = never;
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export function isContentTypeTypeWithEmptySnippet(item: IContentItem | undefined | null): item is ContentTypeTypeWithEmptySnippet {
-	return item?.system.type === ("type_with_empty_snippet" satisfies ContentTypeTypeWithEmptySnippetCodename);
+export function isContentTypeTypeWithEmptySnippet(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeTypeWithEmptySnippet {
+	return isContentTypeTypeWithEmptySnippetCodename(item?.system.type);
 }

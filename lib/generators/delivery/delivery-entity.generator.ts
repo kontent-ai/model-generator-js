@@ -190,7 +190,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 							}),
 					],
 					code: `
-					 ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}' for increased type safety.`, { disableComments: config.disableComments })}
+					 ${wrapComment(`Core content type with narrowed types. Use this instead of '${deliveryConfig.sdkTypes.contentItemPayload}' for increased type safety.`, { disableComments: config.disableComments })}
 					 ${deliveryUtils.getCoreContentTypeCode(
 							config.entities.filter((m) => m instanceof ContentTypeModels.ContentType),
 							entityNames as DeliveryEntityNames<"Type">,

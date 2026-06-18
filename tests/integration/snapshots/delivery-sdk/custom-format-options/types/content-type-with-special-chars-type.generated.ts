@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of '🐧 Content type with special chars #!_'' type
@@ -21,38 +19,40 @@ export function isContentTypeWithSpecialCharsTypeCodename(
 }
 
 /*
- * 🐧 Content type with special chars #!_'
+ * Elements of the '🐧 Content type with special chars #!_'' content type
  *
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export type ContentTypeWithSpecialCharsType = IContentItem<
-	{
-		/*
-		 * 🦜Parrot_emoji
-		 *
-		 * Codename: parrot__
-		 * Id: cafaa776-893d-4e8c-b460-9534ac2fe769
-		 * Type: text
-		 * Required: false
-		 */
-		readonly parrot__: Elements.TextElement;
+export type ContentTypeWithSpecialCharsTypeElements = {
+	/*
+	 * 🦜Parrot_emoji
+	 *
+	 * Codename: parrot__
+	 * Id: cafaa776-893d-4e8c-b460-9534ac2fe769
+	 * Type: text
+	 * Required: false
+	 */
+	readonly parrot__: Elements.Text;
 
-		/*
-		 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
-		 *
-		 * Codename: _____numberelem_____________________
-		 * Id: 3bb33958-71f3-4039-8594-5f0df9378dbb
-		 * Type: number
-		 * Required: false
-		 */
-		readonly _____numberelem_____________________: Elements.NumberElement;
-	},
+	/*
+	 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
+	 *
+	 * Codename: _____numberelem_____________________
+	 * Id: 3bb33958-71f3-4039-8594-5f0df9378dbb
+	 * Type: number
+	 * Required: false
+	 */
+	readonly _____numberelem_____________________: Elements.Number;
+};
+
+/*
+ * 🐧 Content type with special chars #!_'
+ */
+export type ContentTypeWithSpecialCharsType = ContentItemOf<
+	CoreClientSchema,
 	ContentTypeWithSpecialCharsTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+	ContentTypeWithSpecialCharsTypeElements
 >;
 
 /*
@@ -66,6 +66,8 @@ export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "____
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export function isContentTypeWithSpecialCharsType(item: IContentItem | undefined | null): item is ContentTypeWithSpecialCharsType {
-	return item?.system.type === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename);
+export function isContentTypeWithSpecialCharsType(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeWithSpecialCharsType {
+	return isContentTypeWithSpecialCharsTypeCodename(item?.system.type);
 }

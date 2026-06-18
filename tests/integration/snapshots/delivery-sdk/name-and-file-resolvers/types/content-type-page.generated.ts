@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Page' type
@@ -17,69 +15,67 @@ export function isContentTypePageCodename(value: string | undefined | null): val
 }
 
 /*
- * Page
+ * Elements of the 'Page' content type
  *
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export type ContentTypePage = IContentItem<
-	{
-		/*
-		 * Title
-		 *
-		 * Codename: title
-		 * Id: e9ad8c8f-6fb0-41d2-8caa-4e4e0ba24719
-		 * Type: text
-		 * Required: false
-		 */
-		readonly title: Elements.TextElement;
+export type ContentTypePageElements = {
+	/*
+	 * Title
+	 *
+	 * Codename: title
+	 * Id: e9ad8c8f-6fb0-41d2-8caa-4e4e0ba24719
+	 * Type: text
+	 * Required: false
+	 */
+	readonly title: Elements.Text;
 
-		/*
-		 * URL
-		 *
-		 * Codename: url
-		 * Id: e573bfc9-3193-4224-9d2a-9efb83da8849
-		 * Type: url_slug
-		 * Required: false
-		 */
-		readonly url: Elements.UrlSlugElement;
+	/*
+	 * URL
+	 *
+	 * Codename: url
+	 * Id: e573bfc9-3193-4224-9d2a-9efb83da8849
+	 * Type: url_slug
+	 * Required: false
+	 */
+	readonly url: Elements.UrlSlug;
 
-		/*
-		 * Show in navigation
-		 *
-		 * Codename: show_in_navigation
-		 * Id: 07889917-fdc5-4285-bc30-4fed2a218c89
-		 * Type: multiple_choice
-		 * Required: false
-		 */
-		readonly show_in_navigation: Elements.MultipleChoiceElement<ContentTypePageShowInNavigationMultipleChoiceOptions>;
+	/*
+	 * Show in navigation
+	 *
+	 * Codename: show_in_navigation
+	 * Id: 07889917-fdc5-4285-bc30-4fed2a218c89
+	 * Type: multiple_choice
+	 * Required: false
+	 */
+	readonly show_in_navigation: Elements.MultipleChoice<ContentTypePageShowInNavigationMultipleChoiceOptions>;
 
-		/*
-		 * Subpages
-		 *
-		 * Codename: subpages
-		 * Id: b909dc5d-0efe-478a-9257-83e5c90e884d
-		 * Type: subpages
-		 * Required: false
-		 */
-		readonly subpages: Elements.LinkedItemsElement<CoreType>;
+	/*
+	 * Subpages
+	 *
+	 * Codename: subpages
+	 * Id: b909dc5d-0efe-478a-9257-83e5c90e884d
+	 * Type: subpages
+	 * Required: false
+	 */
+	readonly subpages: Elements.LinkedItems<CoreType>;
 
-		/*
-		 * Content
-		 *
-		 * Codename: content
-		 * Id: dfb0d07c-531e-4eaa-8f7d-e62671d4ca36
-		 * Type: modular_content
-		 * Required: false
-		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>;
-	},
-	ContentTypePageCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
->;
+	/*
+	 * Content
+	 *
+	 * Codename: content
+	 * Id: dfb0d07c-531e-4eaa-8f7d-e62671d4ca36
+	 * Type: modular_content
+	 * Required: false
+	 */
+	readonly content: Elements.LinkedItems<CoreType>;
+};
+
+/*
+ * Page
+ */
+export type ContentTypePage = ContentItemOf<CoreClientSchema, ContentTypePageCodename, ContentTypePageElements>;
 
 /*
  * Type representing all available element codenames for Page
@@ -92,8 +88,8 @@ export type ContentTypePageElementCodenames = "title" | "url" | "show_in_navigat
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isContentTypePage(item: IContentItem | undefined | null): item is ContentTypePage {
-	return item?.system.type === ("page" satisfies ContentTypePageCodename);
+export function isContentTypePage(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ContentTypePage {
+	return isContentTypePageCodename(item?.system.type);
 }
 
 export type ContentTypePageShowInNavigationMultipleChoiceOptions = "yes" | "no";

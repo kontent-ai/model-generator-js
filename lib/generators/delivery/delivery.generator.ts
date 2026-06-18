@@ -7,7 +7,6 @@ import type {
 	TaxonomyModels,
 	WorkflowModels,
 } from "@kontent-ai/management-sdk";
-import { match } from "ts-pattern";
 import { deliveryConfig } from "../../config.js";
 import { wrapComment } from "../../core/comment.utils.js";
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from "../../core/core.models.js";
@@ -16,6 +15,7 @@ import { getFlattenedElements } from "../../core/element.utils.js";
 import { getImporter } from "../../core/importer.js";
 import type { FilenameResolver, NameResolver } from "../../core/resolvers.js";
 import { type DeliveryElement, getDeliveryEntityGenerator } from "./delivery-entity.generator.js";
+import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
 export type DeliveryFileResolvers = {
 	readonly contentType?: FilenameResolver<ContentTypeModels.ContentType>;
@@ -141,47 +141,57 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 	};
 
 	const getDeliverySystemFile = (): GeneratedFile => {
-		const sdkImports = [deliveryConfig.sdkTypes.deliveryClient] as const;
+		const deliveryUtils = deliveryEntityUtils();
+
+		const formatTuple = (codenames: readonly string[]): string =>
+			`readonly [${[...new Set(codenames)].map((codename) => `"${codename}"`).join(", ")}]`;
+
+		const getTypeElementCodenames = (type: Readonly<ContentTypeModels.ContentType>): readonly string[] =>
+			getFlattenedElements({
+				elements: type.elements,
+				snippets: config.environmentData.snippets,
+				taxonomies: config.environmentData.taxonomies,
+				types: config.environmentData.types,
+			}).map((element) => element.codename);
+
+		const workflowStepCodenames: readonly string[] = config.environmentData.workflows
+			.flatMap((workflow) =>
+				[...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep].filter(isNotUndefined),
+			)
+			.map((step) => step.codename);
+
+		const taxonomiesMap: string = config.environmentData.taxonomies
+			.map((taxonomy) => `readonly ${taxonomy.codename}: ${formatTuple(deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms))};`)
+			.join("\n");
+
+		const contentTypesMap: string = config.environmentData.types
+			.map((type) => `readonly ${type.codename}: ${formatTuple(getTypeElementCodenames(type))};`)
+			.join("\n");
 
 		return {
 			filename: `${deliveryConfig.mainSystemFilename}.ts`,
 			text: `
               ${importer.importType({
 					filePathOrPackage: deliveryConfig.npmPackageName,
-					importValue: `${sdkImports.join(", ")}`,
+					importValue: [deliveryConfig.sdkTypes.deliveryClient, deliveryConfig.sdkTypes.deliveryClientSchema],
 				})}
-                ${Object.values(entityGenerators)
-					.filter((generator) => generator.entityType !== "Snippet")
-					.map((generator) => {
-						const importValues: readonly string[] = match(generator.entityType)
-							.with("Workflow", () => [
-								generator.entityNames.codenamesTypeName,
-								entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName,
-							])
-							.with("Type", () => [generator.entityNames.codenamesTypeName, deliveryConfig.coreContentTypeName])
-							.otherwise(() => [generator.entityNames.codenamesTypeName]);
 
-						return importer.importType({
-							filePathOrPackage: `./${generator.entityNames.overviewFilename}`,
-							importValue: `${importValues.join(", ")}`,
-						});
-					})
-					.join("\n")}          
-
-                ${wrapComment(`Core types for '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
-                export type ${deliveryConfig.coreDeliveryClientTypesTypeName} = {
-                    readonly collectionCodenames: ${entityGenerators.collections.entityNames.codenamesTypeName};
-                    readonly contentItemType: ${deliveryConfig.coreContentTypeName};
-                    readonly contentTypeCodenames: ${entityGenerators.contentTypes.entityNames.codenamesTypeName};
-                    readonly elementCodenames: ${entityGenerators.elements.entityNames.codenamesTypeName};
-                    readonly languageCodenames: ${entityGenerators.languages.entityNames.codenamesTypeName};
-                    readonly taxonomyCodenames: ${entityGenerators.taxonomies.entityNames.codenamesTypeName};
-                    readonly workflowCodenames: ${entityGenerators.workflows.entityNames.codenamesTypeName};
-                    readonly workflowStepCodenames: ${entityGenerators.workflows.entityNames.allStepsNames.codenamesTypeName};
-                };
+                ${wrapComment(`Schema describing this environment, used to strongly type '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
+                export type ${deliveryConfig.coreClientSchemaTypeName} = ${deliveryConfig.sdkTypes.deliveryClientSchema}<{
+                    readonly languageCodenames: ${formatTuple(config.environmentData.languages.map((language) => language.codename))};
+                    readonly taxonomies: {
+                        ${taxonomiesMap}
+                    };
+                    readonly contentTypes: {
+                        ${contentTypesMap}
+                    };
+                    readonly collectionCodenames: ${formatTuple(config.environmentData.collections.map((collection) => collection.codename))};
+                    readonly workflowCodenames: ${formatTuple(config.environmentData.workflows.map((workflow) => workflow.codename))};
+                    readonly workflowStepCodenames: ${formatTuple(workflowStepCodenames)};
+                }>;
 
                 ${wrapComment(`Typed delivery client. Use this instead of '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
-                export type ${deliveryConfig.coreDeliveryClientTypeName} = IDeliveryClient<${deliveryConfig.coreDeliveryClientTypesTypeName}>;
+                export type ${deliveryConfig.coreDeliveryClientTypeName} = ${deliveryConfig.sdkTypes.deliveryClient}<${deliveryConfig.coreClientSchemaTypeName}>;
             `,
 		};
 	};

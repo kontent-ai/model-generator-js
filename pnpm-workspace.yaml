@@ -1,16 +1,4 @@
 allowBuilds:
   esbuild: true
 minimumReleaseAgeExclude:
-  - '@kontent-ai/biome-config@0.7.3'
-  - '@typescript-eslint/eslint-plugin@8.61.1'
-  - '@typescript-eslint/parser@8.61.1'
-  - '@typescript-eslint/project-service@8.61.1'
-  - '@typescript-eslint/scope-manager@8.61.1'
-  - '@typescript-eslint/tsconfig-utils@8.61.1'
-  - '@typescript-eslint/type-utils@8.61.1'
-  - '@typescript-eslint/types@8.61.1'
-  - '@typescript-eslint/typescript-estree@8.61.1'
-  - '@typescript-eslint/utils@8.61.1'
-  - '@typescript-eslint/visitor-keys@8.61.1'
-  - typescript-eslint@8.61.1
-  - '@kontent-ai/delivery-sdk@17.0.0-preview.0'
+  - '@kontent-ai/delivery-sdk@17.0.0-preview.2'
