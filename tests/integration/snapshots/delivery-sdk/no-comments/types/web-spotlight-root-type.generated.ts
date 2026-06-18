@@ -1,28 +1,28 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { PageType } from "../types/page-type.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { PageItem } from "../types/page-type.generated.js";
 
-export type WebSpotlightRootTypeCodename = keyof Pick<Record<TypeCodenames, null>, "web_spotlight_root">;
+export type WebSpotlightRootCodename = keyof Pick<Record<TypeCodenames, null>, "web_spotlight_root">;
 
-export function isWebSpotlightRootTypeCodename(value: string | undefined | null): value is WebSpotlightRootTypeCodename {
-	return typeof value === "string" && value === ("web_spotlight_root" satisfies WebSpotlightRootTypeCodename);
+export function isWebSpotlightRootCodename(value: string | undefined | null): value is WebSpotlightRootCodename {
+	return typeof value === "string" && value === ("web_spotlight_root" satisfies WebSpotlightRootCodename);
 }
 
-export type WebSpotlightRootType = ContentItemOf<
+export type WebSpotlightRootItem = ContentItemOf<
 	CoreClientSchema,
-	WebSpotlightRootTypeCodename,
+	WebSpotlightRootCodename,
 	{
 		readonly title: Elements.Text;
 
-		readonly subpages: Elements.LinkedItems<PageType>;
+		readonly subpages: Elements.LinkedItems<PageItem>;
 
-		readonly content: Elements.LinkedItems<CoreType>;
+		readonly content: Elements.LinkedItems<CoreItem>;
 	}
 >;
 
-export type WebSpotlightRootTypeElementCodenames = "title" | "subpages" | "content";
+export type WebSpotlightRootElementCodenames = "title" | "subpages" | "content";
 
-export function isWebSpotlightRootType(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is WebSpotlightRootType {
-	return isWebSpotlightRootTypeCodename(item?.system.type);
+export function isWebSpotlightRootItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is WebSpotlightRootItem {
+	return isWebSpotlightRootCodename(item?.system.type);
 }

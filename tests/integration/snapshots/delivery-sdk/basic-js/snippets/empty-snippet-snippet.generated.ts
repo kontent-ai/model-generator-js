@@ -1,6 +1,6 @@
 import type { ContentItemPayload, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-snippet-type.generated.js";
+import type { TypeWithEmptySnippetCodename } from "../types/type-with-empty-snippet-type.generated.js";
 
 /*
  * Snippet 'Empty snippet' as a partial content item across the content types that use it
@@ -8,7 +8,7 @@ import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-
  * Id: 1d7e3745-3320-4107-996b-2c6b240df7ae
  * Codename: empty_snippet
  */
-export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, Record<string, never>>;
+export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetCodename, Record<string, never>>;
 
 /*
  * Type representing all available element codenames for Empty snippet

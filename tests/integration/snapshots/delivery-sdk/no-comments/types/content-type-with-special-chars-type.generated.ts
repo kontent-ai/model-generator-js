@@ -2,19 +2,15 @@ import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/de
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
-export type ContentTypeWithSpecialCharsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
+export type ContentTypeWithSpecialCharsCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
 
-export function isContentTypeWithSpecialCharsTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithSpecialCharsTypeCodename {
-	return (
-		typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename)
-	);
+export function isContentTypeWithSpecialCharsCodename(value: string | undefined | null): value is ContentTypeWithSpecialCharsCodename {
+	return typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsCodename);
 }
 
-export type ContentTypeWithSpecialCharsType = ContentItemOf<
+export type ContentTypeWithSpecialCharsItem = ContentItemOf<
 	CoreClientSchema,
-	ContentTypeWithSpecialCharsTypeCodename,
+	ContentTypeWithSpecialCharsCodename,
 	{
 		readonly parrot__: Elements.Text;
 
@@ -22,10 +18,10 @@ export type ContentTypeWithSpecialCharsType = ContentItemOf<
 	}
 >;
 
-export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "_____numberelem_____________________";
+export type ContentTypeWithSpecialCharsElementCodenames = "parrot__" | "_____numberelem_____________________";
 
-export function isContentTypeWithSpecialCharsType(
+export function isContentTypeWithSpecialCharsItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeWithSpecialCharsType {
-	return isContentTypeWithSpecialCharsTypeCodename(item?.system.type);
+): item is ContentTypeWithSpecialCharsItem {
+	return isContentTypeWithSpecialCharsCodename(item?.system.type);
 }

@@ -1,6 +1,6 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Page' type
@@ -20,7 +20,7 @@ export function isContentTypePageCodename(value: string | undefined | null): val
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export type ContentTypePage = ContentItemOf<
+export type ContentTypePageItem = ContentItemOf<
 	CoreClientSchema,
 	ContentTypePageCodename,
 	{
@@ -62,7 +62,7 @@ export type ContentTypePage = ContentItemOf<
 		 * Type: subpages
 		 * Required: false
 		 */
-		readonly subpages: Elements.LinkedItems<CoreType>;
+		readonly subpages: Elements.LinkedItems<CoreItem>;
 
 		/*
 		 * Content
@@ -72,7 +72,7 @@ export type ContentTypePage = ContentItemOf<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItems<CoreType>;
+		readonly content: Elements.LinkedItems<CoreItem>;
 	}
 >;
 
@@ -87,7 +87,7 @@ export type ContentTypePageElementCodenames = "title" | "url" | "show_in_navigat
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isContentTypePage(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ContentTypePage {
+export function isContentTypePageItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ContentTypePageItem {
 	return isContentTypePageCodename(item?.system.type);
 }
 

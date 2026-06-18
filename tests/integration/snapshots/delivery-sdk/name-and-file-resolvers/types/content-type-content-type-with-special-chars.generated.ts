@@ -28,7 +28,7 @@ export function isContentTypeContentTypeWithSpecialCharsCodename(
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export type ContentTypeContentTypeWithSpecialChars = ContentItemOf<
+export type ContentTypeContentTypeWithSpecialCharsItem = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeContentTypeWithSpecialCharsCodename,
 	{
@@ -65,8 +65,8 @@ export type ContentTypeContentTypeWithSpecialCharsElementCodenames = "parrot__" 
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export function isContentTypeContentTypeWithSpecialChars(
+export function isContentTypeContentTypeWithSpecialCharsItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeContentTypeWithSpecialChars {
+): item is ContentTypeContentTypeWithSpecialCharsItem {
 	return isContentTypeContentTypeWithSpecialCharsCodename(item?.system.type);
 }

@@ -1,26 +1,26 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
+import type { CircularReferenceTypeABItem } from "../types/circular-reference-type-a-b-type.generated.js";
 
-export type CircularReferenceTypeBATypeCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_b____a">;
+export type CircularReferenceTypeBACodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_b____a">;
 
-export function isCircularReferenceTypeBATypeCodename(value: string | undefined | null): value is CircularReferenceTypeBATypeCodename {
-	return typeof value === "string" && value === ("circular_reference_type_b____a" satisfies CircularReferenceTypeBATypeCodename);
+export function isCircularReferenceTypeBACodename(value: string | undefined | null): value is CircularReferenceTypeBACodename {
+	return typeof value === "string" && value === ("circular_reference_type_b____a" satisfies CircularReferenceTypeBACodename);
 }
 
-export type CircularReferenceTypeBAType = ContentItemOf<
+export type CircularReferenceTypeBAItem = ContentItemOf<
 	CoreClientSchema,
-	CircularReferenceTypeBATypeCodename,
+	CircularReferenceTypeBACodename,
 	{
-		readonly items: Elements.LinkedItems<CircularReferenceTypeABType>;
+		readonly items: Elements.LinkedItems<CircularReferenceTypeABItem>;
 	}
 >;
 
-export type CircularReferenceTypeBATypeElementCodenames = "items";
+export type CircularReferenceTypeBAElementCodenames = "items";
 
-export function isCircularReferenceTypeBAType(
+export function isCircularReferenceTypeBAItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is CircularReferenceTypeBAType {
-	return isCircularReferenceTypeBATypeCodename(item?.system.type);
+): item is CircularReferenceTypeBAItem {
+	return isCircularReferenceTypeBACodename(item?.system.type);
 }

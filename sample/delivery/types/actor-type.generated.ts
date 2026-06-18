@@ -19,13 +19,13 @@ import type { TypeCodenames } from "../system/types.generated.js";
 /*
  * Type representing codename of 'Actor' type
  */
-export type ActorTypeCodename = keyof Pick<Record<TypeCodenames, null>, "actor">;
+export type ActorCodename = keyof Pick<Record<TypeCodenames, null>, "actor">;
 
 /*
  * Typeguard for codename of 'Actor' type
  */
-export function isActorTypeCodename(value: string | undefined | null): value is ActorTypeCodename {
-	return typeof value === "string" && value === ("actor" satisfies ActorTypeCodename);
+export function isActorCodename(value: string | undefined | null): value is ActorCodename {
+	return typeof value === "string" && value === ("actor" satisfies ActorCodename);
 }
 
 /*
@@ -34,9 +34,9 @@ export function isActorTypeCodename(value: string | undefined | null): value is 
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export type ActorType = ContentItemOf<
+export type ActorItem = ContentItemOf<
 	CoreClientSchema,
-	ActorTypeCodename,
+	ActorCodename,
 	{
 		/*
 		 * Url
@@ -84,7 +84,7 @@ export type ActorType = ContentItemOf<
 /*
  * Type representing all available element codenames for Actor
  */
-export type ActorTypeElementCodenames = "url" | "first_name" | "last_name" | "photo";
+export type ActorElementCodenames = "url" | "first_name" | "last_name" | "photo";
 
 /*
  * Type guard for Actor
@@ -92,6 +92,6 @@ export type ActorTypeElementCodenames = "url" | "first_name" | "last_name" | "ph
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export function isActorType(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ActorType {
-	return isActorTypeCodename(item?.system.type);
+export function isActorItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ActorItem {
+	return isActorCodename(item?.system.type);
 }

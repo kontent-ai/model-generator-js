@@ -1,29 +1,27 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 
-export type TypeReferencingDeletedTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
+export type TypeReferencingDeletedTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
 
-export function isTypeReferencingDeletedTypeTypeCodename(
-	value: string | undefined | null,
-): value is TypeReferencingDeletedTypeTypeCodename {
-	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename);
+export function isTypeReferencingDeletedTypeCodename(value: string | undefined | null): value is TypeReferencingDeletedTypeCodename {
+	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeCodename);
 }
 
-export type TypeReferencingDeletedTypeType = ContentItemOf<
+export type TypeReferencingDeletedTypeItem = ContentItemOf<
 	CoreClientSchema,
-	TypeReferencingDeletedTypeTypeCodename,
+	TypeReferencingDeletedTypeCodename,
 	{
-		readonly rich_text_with_invalid_type: Elements.RichText<CoreType>;
+		readonly rich_text_with_invalid_type: Elements.RichText<CoreItem>;
 
-		readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreType>;
+		readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreItem>;
 	}
 >;
 
-export type TypeReferencingDeletedTypeTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type";
+export type TypeReferencingDeletedTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type";
 
-export function isTypeReferencingDeletedTypeType(
+export function isTypeReferencingDeletedTypeItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is TypeReferencingDeletedTypeType {
-	return isTypeReferencingDeletedTypeTypeCodename(item?.system.type);
+): item is TypeReferencingDeletedTypeItem {
+	return isTypeReferencingDeletedTypeCodename(item?.system.type);
 }

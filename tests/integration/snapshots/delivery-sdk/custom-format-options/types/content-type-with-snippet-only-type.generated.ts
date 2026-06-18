@@ -6,15 +6,13 @@ import type { TypeCodenames } from "../system/types.generated.js";
 /*
  * Type representing codename of 'Content type with snippet only' type
  */
-export type ContentTypeWithSnippetOnlyTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_snippet_only">;
+export type ContentTypeWithSnippetOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_snippet_only">;
 
 /*
  * Typeguard for codename of 'Content type with snippet only' type
  */
-export function isContentTypeWithSnippetOnlyTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithSnippetOnlyTypeCodename {
-	return typeof value === "string" && value === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyTypeCodename);
+export function isContentTypeWithSnippetOnlyCodename(value: string | undefined | null): value is ContentTypeWithSnippetOnlyCodename {
+	return typeof value === "string" && value === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyCodename);
 }
 
 /*
@@ -23,16 +21,16 @@ export function isContentTypeWithSnippetOnlyTypeCodename(
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export type ContentTypeWithSnippetOnlyType = ContentItemOf<
+export type ContentTypeWithSnippetOnlyItem = ContentItemOf<
 	CoreClientSchema,
-	ContentTypeWithSnippetOnlyTypeCodename,
+	ContentTypeWithSnippetOnlyCodename,
 	SnippetASnippet["elements"]
 >;
 
 /*
  * Type representing all available element codenames for Content type with snippet only
  */
-export type ContentTypeWithSnippetOnlyTypeElementCodenames =
+export type ContentTypeWithSnippetOnlyElementCodenames =
 	| "snippet_a__rich_text_with_all_allowed_item_types"
 	| "snippet_a__linked_items_with_specific_types"
 	| "snippet_a__text";
@@ -43,8 +41,8 @@ export type ContentTypeWithSnippetOnlyTypeElementCodenames =
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export function isContentTypeWithSnippetOnlyType(
+export function isContentTypeWithSnippetOnlyItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeWithSnippetOnlyType {
-	return isContentTypeWithSnippetOnlyTypeCodename(item?.system.type);
+): item is ContentTypeWithSnippetOnlyItem {
+	return isContentTypeWithSnippetOnlyCodename(item?.system.type);
 }

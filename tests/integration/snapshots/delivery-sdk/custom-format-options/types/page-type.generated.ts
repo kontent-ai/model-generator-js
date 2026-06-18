@@ -1,17 +1,17 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Page' type
  */
-export type PageTypeCodename = keyof Pick<Record<TypeCodenames, null>, "page">;
+export type PageCodename = keyof Pick<Record<TypeCodenames, null>, "page">;
 
 /*
  * Typeguard for codename of 'Page' type
  */
-export function isPageTypeCodename(value: string | undefined | null): value is PageTypeCodename {
-	return typeof value === "string" && value === ("page" satisfies PageTypeCodename);
+export function isPageCodename(value: string | undefined | null): value is PageCodename {
+	return typeof value === "string" && value === ("page" satisfies PageCodename);
 }
 
 /*
@@ -20,9 +20,9 @@ export function isPageTypeCodename(value: string | undefined | null): value is P
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export type PageType = ContentItemOf<
+export type PageItem = ContentItemOf<
 	CoreClientSchema,
-	PageTypeCodename,
+	PageCodename,
 	{
 		/*
 		 * Title
@@ -52,7 +52,7 @@ export type PageType = ContentItemOf<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly show_in_navigation: Elements.MultipleChoice<PageTypeShowInNavigationMultipleChoiceOptions>;
+		readonly show_in_navigation: Elements.MultipleChoice<PageShowInNavigationMultipleChoiceOptions>;
 
 		/*
 		 * Subpages
@@ -62,7 +62,7 @@ export type PageType = ContentItemOf<
 		 * Type: subpages
 		 * Required: false
 		 */
-		readonly subpages: Elements.LinkedItems<CoreType>;
+		readonly subpages: Elements.LinkedItems<CoreItem>;
 
 		/*
 		 * Content
@@ -72,14 +72,14 @@ export type PageType = ContentItemOf<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItems<CoreType>;
+		readonly content: Elements.LinkedItems<CoreItem>;
 	}
 >;
 
 /*
  * Type representing all available element codenames for Page
  */
-export type PageTypeElementCodenames = "title" | "url" | "show_in_navigation" | "subpages" | "content";
+export type PageElementCodenames = "title" | "url" | "show_in_navigation" | "subpages" | "content";
 
 /*
  * Type guard for Page
@@ -87,8 +87,8 @@ export type PageTypeElementCodenames = "title" | "url" | "show_in_navigation" | 
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isPageType(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is PageType {
-	return isPageTypeCodename(item?.system.type);
+export function isPageItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is PageItem {
+	return isPageCodename(item?.system.type);
 }
 
-export type PageTypeShowInNavigationMultipleChoiceOptions = "yes" | "no";
+export type PageShowInNavigationMultipleChoiceOptions = "yes" | "no";

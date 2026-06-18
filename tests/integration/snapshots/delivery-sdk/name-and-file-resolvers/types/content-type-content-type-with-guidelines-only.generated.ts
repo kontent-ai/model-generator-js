@@ -25,7 +25,7 @@ export function isContentTypeContentTypeWithGuidelinesOnlyCodename(
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export type ContentTypeContentTypeWithGuidelinesOnly = ContentItemOf<
+export type ContentTypeContentTypeWithGuidelinesOnlyItem = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeContentTypeWithGuidelinesOnlyCodename,
 	Record<string, never>
@@ -42,8 +42,8 @@ export type ContentTypeContentTypeWithGuidelinesOnlyElementCodenames = never;
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export function isContentTypeContentTypeWithGuidelinesOnly(
+export function isContentTypeContentTypeWithGuidelinesOnlyItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeContentTypeWithGuidelinesOnly {
+): item is ContentTypeContentTypeWithGuidelinesOnlyItem {
 	return isContentTypeContentTypeWithGuidelinesOnlyCodename(item?.system.type);
 }

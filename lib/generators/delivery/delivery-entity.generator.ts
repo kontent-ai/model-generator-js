@@ -216,7 +216,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					${getEntityComment("Helper type that returns type based on the codename of type.")}
 					${deliveryUtils.getTypeMappingItem({
 						codenamesTypeName: entityNames.codenamesTypeName,
-						defaultTypeName: "CoreType",
+						defaultTypeName: deliveryConfig.coreContentTypeName,
 						entityType: contentTypeDeliveryType,
 					})}
 					`,

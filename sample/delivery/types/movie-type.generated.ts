@@ -14,20 +14,20 @@
 
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 import type { ReleaseCategoryTaxonomyTermCodenames } from "../taxonomies/release-category-taxonomy.generated.js";
-import type { ActorType } from "../types/actor-type.generated.js";
+import type { ActorItem } from "../types/actor-type.generated.js";
 
 /*
  * Type representing codename of 'Movie' type
  */
-export type MovieTypeCodename = keyof Pick<Record<TypeCodenames, null>, "movie">;
+export type MovieCodename = keyof Pick<Record<TypeCodenames, null>, "movie">;
 
 /*
  * Typeguard for codename of 'Movie' type
  */
-export function isMovieTypeCodename(value: string | undefined | null): value is MovieTypeCodename {
-	return typeof value === "string" && value === ("movie" satisfies MovieTypeCodename);
+export function isMovieCodename(value: string | undefined | null): value is MovieCodename {
+	return typeof value === "string" && value === ("movie" satisfies MovieCodename);
 }
 
 /*
@@ -36,9 +36,9 @@ export function isMovieTypeCodename(value: string | undefined | null): value is 
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export type MovieType = ContentItemOf<
+export type MovieItem = ContentItemOf<
 	CoreClientSchema,
-	MovieTypeCodename,
+	MovieCodename,
 	{
 		/*
 		 * Title
@@ -58,7 +58,7 @@ export type MovieType = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly plot: Elements.RichText<CoreType>;
+		readonly plot: Elements.RichText<CoreItem>;
 
 		/*
 		 * Released
@@ -98,7 +98,7 @@ export type MovieType = ContentItemOf<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly category: Elements.MultipleChoice<MovieTypeCategoryMultipleChoiceOptions>;
+		readonly category: Elements.MultipleChoice<MovieCategoryMultipleChoiceOptions>;
 
 		/*
 		 * Stars
@@ -109,7 +109,7 @@ export type MovieType = ContentItemOf<
 		 * Required: false
 		 * Allowed content types: actor, movie
 		 */
-		readonly stars: Elements.LinkedItems<ActorType | MovieType>;
+		readonly stars: Elements.LinkedItems<ActorItem | MovieItem>;
 
 		/*
 		 * SeoName
@@ -137,7 +137,7 @@ export type MovieType = ContentItemOf<
 /*
  * Type representing all available element codenames for Movie
  */
-export type MovieTypeElementCodenames =
+export type MovieElementCodenames =
 	| "title"
 	| "plot"
 	| "released"
@@ -154,11 +154,11 @@ export type MovieTypeElementCodenames =
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export function isMovieType(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is MovieType {
-	return isMovieTypeCodename(item?.system.type);
+export function isMovieItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is MovieItem {
+	return isMovieCodename(item?.system.type);
 }
 
-export type MovieTypeCategoryMultipleChoiceOptions =
+export type MovieCategoryMultipleChoiceOptions =
 	| "sci_fi"
 	| "documentary"
 	| "action"

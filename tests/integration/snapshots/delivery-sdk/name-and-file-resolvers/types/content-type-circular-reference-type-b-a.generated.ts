@@ -1,7 +1,7 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { ContentTypeCircularReferenceTypeAB } from "../types/content-type-circular-reference-type-a-b.generated.js";
+import type { ContentTypeCircularReferenceTypeABItem } from "../types/content-type-circular-reference-type-a-b.generated.js";
 
 /*
  * Type representing codename of 'Circular reference type B -> A' type
@@ -23,7 +23,7 @@ export function isContentTypeCircularReferenceTypeBACodename(
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export type ContentTypeCircularReferenceTypeBA = ContentItemOf<
+export type ContentTypeCircularReferenceTypeBAItem = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeCircularReferenceTypeBACodename,
 	{
@@ -36,7 +36,7 @@ export type ContentTypeCircularReferenceTypeBA = ContentItemOf<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_a_b
 		 */
-		readonly items: Elements.LinkedItems<ContentTypeCircularReferenceTypeAB>;
+		readonly items: Elements.LinkedItems<ContentTypeCircularReferenceTypeABItem>;
 	}
 >;
 
@@ -51,8 +51,8 @@ export type ContentTypeCircularReferenceTypeBAElementCodenames = "items";
  * Id: 919bdcad-fe8e-4f56-9a63-346154b6f6e2
  * Codename: circular_reference_type_b____a
  */
-export function isContentTypeCircularReferenceTypeBA(
+export function isContentTypeCircularReferenceTypeBAItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeCircularReferenceTypeBA {
+): item is ContentTypeCircularReferenceTypeBAItem {
 	return isContentTypeCircularReferenceTypeBACodename(item?.system.type);
 }

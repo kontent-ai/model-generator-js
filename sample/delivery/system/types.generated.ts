@@ -12,8 +12,8 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { ActorType } from "../types/actor-type.generated.js";
-import type { MovieType } from "../types/movie-type.generated.js";
+import type { ActorItem } from "../types/actor-type.generated.js";
+import type { MovieItem } from "../types/movie-type.generated.js";
 
 /*
  * Array of all type codenames
@@ -35,19 +35,19 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 /*
  * Core content type with narrowed types. Use this instead of 'ContentItemPayload' for increased type safety.
  */
-export type CoreType = ActorType | MovieType;
+export type CoreItem = ActorItem | MovieItem;
 
 /*
  * Type mapping for codename & type. Can be used for type safe access to type based on the codename of type.
  */
-export type CodenameTypeMapping = {
-	readonly actor: ActorType;
-	readonly movie: MovieType;
+export type TypeCodenameToItemMap = {
+	readonly actor: ActorItem;
+	readonly movie: MovieItem;
 };
 
 /*
  * Helper type that returns type based on the codename of type.
  */
-export type CodenameTypeMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof CodenameTypeMapping
-	? CodenameTypeMapping[TTypeCodename]
-	: CoreType;
+export type TypeCodenameMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof TypeCodenameToItemMap
+	? TypeCodenameToItemMap[TTypeCodename]
+	: CoreItem;

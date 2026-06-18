@@ -52,7 +52,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			importValue: deliveryConfig.coreClientSchemaTypeName,
 		});
 
-	// 'CoreType' is only referenced when a linked-items / rich-text element has no explicitly allowed content types.
+	// 'CoreItem' is only referenced when a linked-items / rich-text element has no explicitly allowed content types.
 	const usesCoreTypeFallback = (flattenedElements: readonly FlattenedElement[]): boolean =>
 		flattenedElements
 			.filter((m) => !m.fromSnippet)
@@ -400,8 +400,8 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 	const getMultipleChoiceTypeName = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): string => {
 		const typeOrSnippetName =
 			typeOrSnippet instanceof ContentTypeModels.ContentType
-				? contentTypeNames.getEntityName(typeOrSnippet)
-				: snippetNames.getEntityName(typeOrSnippet);
+				? contentTypeNames.getEntityBaseName(typeOrSnippet)
+				: snippetNames.getEntityBaseName(typeOrSnippet);
 
 		return `${typeOrSnippetName}${resolveCase(element.title, "pascalCase")}MultipleChoiceOptions`;
 	};
@@ -501,8 +501,8 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 	const getNameOfTypeRepresentingAllElementCodenames = (typeOrSnippet: ContentTypeOrSnippet): string => {
 		return `${
 			typeOrSnippet instanceof ContentTypeModels.ContentType
-				? contentTypeNames.getEntityName(typeOrSnippet)
-				: snippetNames.getEntityName(typeOrSnippet)
+				? contentTypeNames.getEntityBaseName(typeOrSnippet)
+				: snippetNames.getEntityBaseName(typeOrSnippet)
 		}ElementCodenames`;
 	};
 

@@ -5,13 +5,13 @@ import type { TypeCodenames } from "../system/types.generated.js";
 /*
  * Type representing codename of 'Empty content type' type
  */
-export type EmptyContentTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">;
+export type EmptyContentTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">;
 
 /*
  * Typeguard for codename of 'Empty content type' type
  */
-export function isEmptyContentTypeTypeCodename(value: string | undefined | null): value is EmptyContentTypeTypeCodename {
-	return typeof value === "string" && value === ("empty_content_type" satisfies EmptyContentTypeTypeCodename);
+export function isEmptyContentTypeCodename(value: string | undefined | null): value is EmptyContentTypeCodename {
+	return typeof value === "string" && value === ("empty_content_type" satisfies EmptyContentTypeCodename);
 }
 
 /*
@@ -20,12 +20,12 @@ export function isEmptyContentTypeTypeCodename(value: string | undefined | null)
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export type EmptyContentTypeType = ContentItemOf<CoreClientSchema, EmptyContentTypeTypeCodename, Record<string, never>>;
+export type EmptyContentTypeItem = ContentItemOf<CoreClientSchema, EmptyContentTypeCodename, Record<string, never>>;
 
 /*
  * Type representing all available element codenames for Empty content type
  */
-export type EmptyContentTypeTypeElementCodenames = never;
+export type EmptyContentTypeElementCodenames = never;
 
 /*
  * Type guard for Empty content type
@@ -33,6 +33,6 @@ export type EmptyContentTypeTypeElementCodenames = never;
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export function isEmptyContentTypeType(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is EmptyContentTypeType {
-	return isEmptyContentTypeTypeCodename(item?.system.type);
+export function isEmptyContentTypeItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is EmptyContentTypeItem {
+	return isEmptyContentTypeCodename(item?.system.type);
 }

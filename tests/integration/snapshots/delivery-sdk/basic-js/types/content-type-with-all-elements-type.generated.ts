@@ -1,21 +1,19 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 import type { TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
 
 /*
  * Type representing codename of 'Content type with all elements' type
  */
-export type ContentTypeWithAllElementsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
+export type ContentTypeWithAllElementsCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
 
 /*
  * Typeguard for codename of 'Content type with all elements' type
  */
-export function isContentTypeWithAllElementsTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithAllElementsTypeCodename {
-	return typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeWithAllElementsTypeCodename);
+export function isContentTypeWithAllElementsCodename(value: string | undefined | null): value is ContentTypeWithAllElementsCodename {
+	return typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeWithAllElementsCodename);
 }
 
 /*
@@ -24,9 +22,9 @@ export function isContentTypeWithAllElementsTypeCodename(
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export type ContentTypeWithAllElementsType = ContentItemOf<
+export type ContentTypeWithAllElementsItem = ContentItemOf<
 	CoreClientSchema,
-	ContentTypeWithAllElementsTypeCodename,
+	ContentTypeWithAllElementsCodename,
 	{
 		/*
 		 * Text element
@@ -57,7 +55,7 @@ export type ContentTypeWithAllElementsType = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: Elements.RichText<CoreType>;
+		readonly rich_text_element: Elements.RichText<CoreItem>;
 
 		/*
 		 * Date & time element
@@ -88,7 +86,7 @@ export type ContentTypeWithAllElementsType = ContentItemOf<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly linked_items_element: Elements.LinkedItems<ContentTypeWithAllElementsType>;
+		readonly linked_items_element: Elements.LinkedItems<ContentTypeWithAllElementsItem>;
 
 		/*
 		 * Asset element
@@ -108,7 +106,7 @@ export type ContentTypeWithAllElementsType = ContentItemOf<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions>;
+		readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
 
 		/*
 		 * Number element
@@ -136,7 +134,7 @@ export type ContentTypeWithAllElementsType = ContentItemOf<
 /*
  * Type representing all available element codenames for Content type with all elements
  */
-export type ContentTypeWithAllElementsTypeElementCodenames =
+export type ContentTypeWithAllElementsElementCodenames =
 	| "text_element"
 	| "url_slug_element"
 	| "rich_text_element"
@@ -157,10 +155,10 @@ export type ContentTypeWithAllElementsTypeElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeWithAllElementsType(
+export function isContentTypeWithAllElementsItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeWithAllElementsType {
-	return isContentTypeWithAllElementsTypeCodename(item?.system.type);
+): item is ContentTypeWithAllElementsItem {
+	return isContentTypeWithAllElementsCodename(item?.system.type);
 }
 
-export type ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";
+export type ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";

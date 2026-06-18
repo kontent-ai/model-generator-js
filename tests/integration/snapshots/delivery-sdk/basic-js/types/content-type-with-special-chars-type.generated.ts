@@ -5,17 +5,13 @@ import type { TypeCodenames } from "../system/types.generated.js";
 /*
  * Type representing codename of '🐧 Content type with special chars #!_'' type
  */
-export type ContentTypeWithSpecialCharsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
+export type ContentTypeWithSpecialCharsCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
 
 /*
  * Typeguard for codename of '🐧 Content type with special chars #!_'' type
  */
-export function isContentTypeWithSpecialCharsTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithSpecialCharsTypeCodename {
-	return (
-		typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename)
-	);
+export function isContentTypeWithSpecialCharsCodename(value: string | undefined | null): value is ContentTypeWithSpecialCharsCodename {
+	return typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsCodename);
 }
 
 /*
@@ -24,9 +20,9 @@ export function isContentTypeWithSpecialCharsTypeCodename(
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export type ContentTypeWithSpecialCharsType = ContentItemOf<
+export type ContentTypeWithSpecialCharsItem = ContentItemOf<
 	CoreClientSchema,
-	ContentTypeWithSpecialCharsTypeCodename,
+	ContentTypeWithSpecialCharsCodename,
 	{
 		/*
 		 * 🦜Parrot_emoji
@@ -53,7 +49,7 @@ export type ContentTypeWithSpecialCharsType = ContentItemOf<
 /*
  * Type representing all available element codenames for 🐧 Content type with special chars #!_'
  */
-export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "_____numberelem_____________________";
+export type ContentTypeWithSpecialCharsElementCodenames = "parrot__" | "_____numberelem_____________________";
 
 /*
  * Type guard for 🐧 Content type with special chars #!_'
@@ -61,8 +57,8 @@ export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "____
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export function isContentTypeWithSpecialCharsType(
+export function isContentTypeWithSpecialCharsItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeWithSpecialCharsType {
-	return isContentTypeWithSpecialCharsTypeCodename(item?.system.type);
+): item is ContentTypeWithSpecialCharsItem {
+	return isContentTypeWithSpecialCharsCodename(item?.system.type);
 }

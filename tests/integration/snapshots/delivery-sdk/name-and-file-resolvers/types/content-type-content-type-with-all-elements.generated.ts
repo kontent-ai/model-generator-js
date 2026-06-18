@@ -1,7 +1,7 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 import type { TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
 
 /*
@@ -26,7 +26,7 @@ export function isContentTypeContentTypeWithAllElementsCodename(
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export type ContentTypeContentTypeWithAllElements = ContentItemOf<
+export type ContentTypeContentTypeWithAllElementsItem = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeContentTypeWithAllElementsCodename,
 	{
@@ -59,7 +59,7 @@ export type ContentTypeContentTypeWithAllElements = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: Elements.RichText<CoreType>;
+		readonly rich_text_element: Elements.RichText<CoreItem>;
 
 		/*
 		 * Date & time element
@@ -90,7 +90,7 @@ export type ContentTypeContentTypeWithAllElements = ContentItemOf<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly linked_items_element: Elements.LinkedItems<ContentTypeContentTypeWithAllElements>;
+		readonly linked_items_element: Elements.LinkedItems<ContentTypeContentTypeWithAllElementsItem>;
 
 		/*
 		 * Asset element
@@ -159,9 +159,9 @@ export type ContentTypeContentTypeWithAllElementsElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeContentTypeWithAllElements(
+export function isContentTypeContentTypeWithAllElementsItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeContentTypeWithAllElements {
+): item is ContentTypeContentTypeWithAllElementsItem {
 	return isContentTypeContentTypeWithAllElementsCodename(item?.system.type);
 }
 

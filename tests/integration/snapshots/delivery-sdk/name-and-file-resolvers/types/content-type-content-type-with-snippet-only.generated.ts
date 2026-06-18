@@ -25,7 +25,7 @@ export function isContentTypeContentTypeWithSnippetOnlyCodename(
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export type ContentTypeContentTypeWithSnippetOnly = ContentItemOf<
+export type ContentTypeContentTypeWithSnippetOnlyItem = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeContentTypeWithSnippetOnlyCodename,
 	SnippetSnippetA["elements"]
@@ -45,8 +45,8 @@ export type ContentTypeContentTypeWithSnippetOnlyElementCodenames =
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  * Codename: content_type_with_snippet_only
  */
-export function isContentTypeContentTypeWithSnippetOnly(
+export function isContentTypeContentTypeWithSnippetOnlyItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeContentTypeWithSnippetOnly {
+): item is ContentTypeContentTypeWithSnippetOnlyItem {
 	return isContentTypeContentTypeWithSnippetOnlyCodename(item?.system.type);
 }

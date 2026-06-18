@@ -54,7 +54,7 @@ export const deliveryConfig = {
 	npmPackageName: "@kontent-ai/delivery-sdk" satisfies LibraryType,
 	systemTypesFolderName: "system",
 	mainSystemFilename: "main.system",
-	coreContentTypeName: "CoreType",
+	coreContentTypeName: "CoreItem",
 	coreDeliveryClientTypeName: "CoreDeliveryClient",
 	coreClientSchemaTypeName: "CoreClientSchema",
 

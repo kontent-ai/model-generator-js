@@ -3,27 +3,25 @@ import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
-export type ContentTypeWithSnippetOnlyTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_snippet_only">;
+export type ContentTypeWithSnippetOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_snippet_only">;
 
-export function isContentTypeWithSnippetOnlyTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithSnippetOnlyTypeCodename {
-	return typeof value === "string" && value === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyTypeCodename);
+export function isContentTypeWithSnippetOnlyCodename(value: string | undefined | null): value is ContentTypeWithSnippetOnlyCodename {
+	return typeof value === "string" && value === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyCodename);
 }
 
-export type ContentTypeWithSnippetOnlyType = ContentItemOf<
+export type ContentTypeWithSnippetOnlyItem = ContentItemOf<
 	CoreClientSchema,
-	ContentTypeWithSnippetOnlyTypeCodename,
+	ContentTypeWithSnippetOnlyCodename,
 	SnippetASnippet["elements"]
 >;
 
-export type ContentTypeWithSnippetOnlyTypeElementCodenames =
+export type ContentTypeWithSnippetOnlyElementCodenames =
 	| "snippet_a__rich_text_with_all_allowed_item_types"
 	| "snippet_a__linked_items_with_specific_types"
 	| "snippet_a__text";
 
-export function isContentTypeWithSnippetOnlyType(
+export function isContentTypeWithSnippetOnlyItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeWithSnippetOnlyType {
-	return isContentTypeWithSnippetOnlyTypeCodename(item?.system.type);
+): item is ContentTypeWithSnippetOnlyItem {
+	return isContentTypeWithSnippetOnlyCodename(item?.system.type);
 }

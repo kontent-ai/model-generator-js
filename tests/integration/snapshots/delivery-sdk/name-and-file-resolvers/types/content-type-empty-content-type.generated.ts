@@ -20,7 +20,7 @@ export function isContentTypeEmptyContentTypeCodename(value: string | undefined 
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export type ContentTypeEmptyContentType = ContentItemOf<CoreClientSchema, ContentTypeEmptyContentTypeCodename, Record<string, never>>;
+export type ContentTypeEmptyContentTypeItem = ContentItemOf<CoreClientSchema, ContentTypeEmptyContentTypeCodename, Record<string, never>>;
 
 /*
  * Type representing all available element codenames for Empty content type
@@ -33,8 +33,8 @@ export type ContentTypeEmptyContentTypeElementCodenames = never;
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export function isContentTypeEmptyContentType(
+export function isContentTypeEmptyContentTypeItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeEmptyContentType {
+): item is ContentTypeEmptyContentTypeItem {
 	return isContentTypeEmptyContentTypeCodename(item?.system.type);
 }

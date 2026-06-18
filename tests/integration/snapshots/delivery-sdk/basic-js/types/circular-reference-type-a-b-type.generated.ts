@@ -1,18 +1,18 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
+import type { CircularReferenceTypeBAItem } from "../types/circular-reference-type-b-a-type.generated.js";
 
 /*
  * Type representing codename of 'Circular reference type A > B' type
  */
-export type CircularReferenceTypeABTypeCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_a_b">;
+export type CircularReferenceTypeABCodename = keyof Pick<Record<TypeCodenames, null>, "circular_reference_type_a_b">;
 
 /*
  * Typeguard for codename of 'Circular reference type A > B' type
  */
-export function isCircularReferenceTypeABTypeCodename(value: string | undefined | null): value is CircularReferenceTypeABTypeCodename {
-	return typeof value === "string" && value === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABTypeCodename);
+export function isCircularReferenceTypeABCodename(value: string | undefined | null): value is CircularReferenceTypeABCodename {
+	return typeof value === "string" && value === ("circular_reference_type_a_b" satisfies CircularReferenceTypeABCodename);
 }
 
 /*
@@ -21,9 +21,9 @@ export function isCircularReferenceTypeABTypeCodename(value: string | undefined 
  * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
  * Codename: circular_reference_type_a_b
  */
-export type CircularReferenceTypeABType = ContentItemOf<
+export type CircularReferenceTypeABItem = ContentItemOf<
 	CoreClientSchema,
-	CircularReferenceTypeABTypeCodename,
+	CircularReferenceTypeABCodename,
 	{
 		/*
 		 * Items
@@ -34,14 +34,14 @@ export type CircularReferenceTypeABType = ContentItemOf<
 		 * Required: false
 		 * Allowed content types: circular_reference_type_b____a
 		 */
-		readonly items: Elements.LinkedItems<CircularReferenceTypeBAType>;
+		readonly items: Elements.LinkedItems<CircularReferenceTypeBAItem>;
 	}
 >;
 
 /*
  * Type representing all available element codenames for Circular reference type A > B
  */
-export type CircularReferenceTypeABTypeElementCodenames = "items";
+export type CircularReferenceTypeABElementCodenames = "items";
 
 /*
  * Type guard for Circular reference type A > B
@@ -49,8 +49,8 @@ export type CircularReferenceTypeABTypeElementCodenames = "items";
  * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
  * Codename: circular_reference_type_a_b
  */
-export function isCircularReferenceTypeABType(
+export function isCircularReferenceTypeABItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is CircularReferenceTypeABType {
-	return isCircularReferenceTypeABTypeCodename(item?.system.type);
+): item is CircularReferenceTypeABItem {
+	return isCircularReferenceTypeABCodename(item?.system.type);
 }

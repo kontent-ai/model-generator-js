@@ -1,16 +1,16 @@
 import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType } from "../system/types.generated.js";
-import type { ContentTypeWithAllElementsType, ContentTypeWithAllElementsTypeCodename } from "../types/content-type-with-all-elements-type.generated.js";
-import type { ContentTypeWithSnippetOnlyTypeCodename } from "../types/content-type-with-snippet-only-type.generated.js";
+import type { CoreItem } from "../system/types.generated.js";
+import type { ContentTypeWithAllElementsCodename, ContentTypeWithAllElementsItem } from "../types/content-type-with-all-elements-type.generated.js";
+import type { ContentTypeWithSnippetOnlyCodename } from "../types/content-type-with-snippet-only-type.generated.js";
 
 export type SnippetASnippet = SnippetOf<
 	CoreClientSchema,
-	ContentTypeWithAllElementsTypeCodename | ContentTypeWithSnippetOnlyTypeCodename,
+	ContentTypeWithAllElementsCodename | ContentTypeWithSnippetOnlyCodename,
 	{
-		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<CoreType>;
+		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<CoreItem>;
 
-		readonly snippet_a__linked_items_with_specific_types: Elements.LinkedItems<ContentTypeWithAllElementsType>;
+		readonly snippet_a__linked_items_with_specific_types: Elements.LinkedItems<ContentTypeWithAllElementsItem>;
 
 		readonly snippet_a__text: Elements.Text;
 	}

@@ -2,24 +2,22 @@ import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk
 import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
-export type ContentTypeWithGuidelinesOnlyTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_guidelines_only">;
+export type ContentTypeWithGuidelinesOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_guidelines_only">;
 
-export function isContentTypeWithGuidelinesOnlyTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithGuidelinesOnlyTypeCodename {
-	return typeof value === "string" && value === ("content_type_with_guidelines_only" satisfies ContentTypeWithGuidelinesOnlyTypeCodename);
+export function isContentTypeWithGuidelinesOnlyCodename(value: string | undefined | null): value is ContentTypeWithGuidelinesOnlyCodename {
+	return typeof value === "string" && value === ("content_type_with_guidelines_only" satisfies ContentTypeWithGuidelinesOnlyCodename);
 }
 
-export type ContentTypeWithGuidelinesOnlyType = ContentItemOf<
+export type ContentTypeWithGuidelinesOnlyItem = ContentItemOf<
 	CoreClientSchema,
-	ContentTypeWithGuidelinesOnlyTypeCodename,
+	ContentTypeWithGuidelinesOnlyCodename,
 	Record<string, never>
 >;
 
-export type ContentTypeWithGuidelinesOnlyTypeElementCodenames = never;
+export type ContentTypeWithGuidelinesOnlyElementCodenames = never;
 
-export function isContentTypeWithGuidelinesOnlyType(
+export function isContentTypeWithGuidelinesOnlyItem(
 	item: ContentItemPayload<CoreClientSchema> | undefined | null,
-): item is ContentTypeWithGuidelinesOnlyType {
-	return isContentTypeWithGuidelinesOnlyTypeCodename(item?.system.type);
+): item is ContentTypeWithGuidelinesOnlyItem {
+	return isContentTypeWithGuidelinesOnlyCodename(item?.system.type);
 }

@@ -1,8 +1,8 @@
 import type { ContentItemPayload, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-snippet-type.generated.js";
+import type { TypeWithEmptySnippetCodename } from "../types/type-with-empty-snippet-type.generated.js";
 
-export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, Record<string, never>>;
+export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetCodename, Record<string, never>>;
 
 export type EmptySnippetSnippetElementCodenames = never;
 
