@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 import { loadEnvFile } from "node:process";
 import { fileURLToPath } from "node:url";
-import chalk from "chalk";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 
 // needed to load .env environment to current process when run via package.json script
 loadEnvironmentVariables();
@@ -11,7 +11,7 @@ export function getEnvironmentRequiredValue(variableName: string): string {
 	const value = getEnvironmentOptionalValue(variableName);
 
 	if (!value) {
-		throw new Error(`Missing environment variable '${chalk.red(variableName)}'`);
+		throw new Error(`Missing environment variable '${colorize("red", variableName)}'`);
 	}
 
 	return value;

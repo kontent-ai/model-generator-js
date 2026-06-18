@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import { match } from "ts-pattern";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
@@ -30,7 +30,7 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 				.with("environment", () => "environment")
 				.with("items", () => "items")
 				.otherwise(() => {
-					throw new Error(`Unsupported command '${chalk.red(command)}'`);
+					throw new Error(`Unsupported command '${colorize("red", command)}'`);
 				});
 		},
 		getOptionalArgumentValue,
@@ -38,7 +38,7 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 			const value = getOptionalArgumentValue(argName);
 
 			if (!value) {
-				throw new Error(`Missing '${chalk.yellow(argName)}' argument value`);
+				throw new Error(`Missing '${colorize("yellow", argName)}' argument value`);
 			}
 
 			return value;

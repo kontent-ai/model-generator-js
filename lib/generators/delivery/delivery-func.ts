@@ -1,5 +1,5 @@
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
-import chalk from "chalk";
 import type { CliAction, CreateFilesConfig, GeneratedFile, GeneratedSet, ModuleFileExtension } from "../../core/core.models.js";
 import { getManagementKontentFetcher } from "../../fetch/management-kontent-fetcher.js";
 import { getFileManager } from "../../files/file-manager.js";
@@ -21,8 +21,8 @@ export type GenerateDeliveryModelsConfig = {
 } & CreateFilesConfig;
 
 export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<readonly GeneratedFile[]> {
-	console.log(chalk.green("Model generator started \n"));
-	console.log(`Generating '${chalk.yellow("delivery-sdk" satisfies CliAction)}' models\n`);
+	console.log(colorize("green", "Model generator started \n"));
+	console.log(`Generating '${colorize("yellow", "delivery-sdk" satisfies CliAction)}' models\n`);
 
 	const { environmentInfo, files } = await getFilesAsync(config);
 
@@ -38,7 +38,7 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 		fileManager.createFiles(setFiles);
 	}
 
-	console.log(chalk.green("\nCompleted"));
+	console.log(colorize("green", "\nCompleted"));
 
 	return setFiles;
 }

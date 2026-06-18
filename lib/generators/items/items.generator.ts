@@ -1,5 +1,5 @@
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { ContentTypeModels } from "@kontent-ai/management-sdk";
-import Chalk from "chalk";
 import { itemsConfig } from "../../config.js";
 import { wrapComment } from "../../core/comment.utils.js";
 import type { GeneratedSet, GeneratorContentItem } from "../../core/core.models.js";
@@ -56,7 +56,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					const type = config.environmentData.types.find((t) => t.codename.toLowerCase() === typeCodename.toLowerCase());
 
 					if (!type) {
-						throw new Error(`Type with codename '${Chalk.red(typeCodename)}' not found`);
+						throw new Error(`Type with codename '${colorize("red", typeCodename)}' not found`);
 					}
 
 					return {
@@ -90,7 +90,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					const type = config.environmentData.types.find((t) => t.codename.toLowerCase() === typeCodename.toLowerCase());
 
 					if (!type) {
-						throw new Error(`Type with codename '${Chalk.red(typeCodename)}' not found`);
+						throw new Error(`Type with codename '${colorize("red", typeCodename)}' not found`);
 					}
 
 					return {

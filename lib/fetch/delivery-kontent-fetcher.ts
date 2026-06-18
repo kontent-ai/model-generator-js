@@ -1,5 +1,5 @@
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import { createDeliveryClient, type DeliveryClientConfig } from "@kontent-ai/delivery-sdk";
-import chalk from "chalk";
 import { match } from "ts-pattern";
 import { coreConfig } from "../config.js";
 import type { DeliveryApiMode, GeneratorContentItem, GeneratorDeliveryClient } from "../core/core.models.js";
@@ -45,7 +45,7 @@ export function getDeliveryKontentFetcher(config: {
 				(item) => item.system.codename,
 			);
 
-			console.log(`Fetched '${chalk.yellow(items.length.toString())}' content items`);
+			console.log(`Fetched '${colorize("yellow", items.length.toString())}' content items`);
 			return items;
 		},
 	};

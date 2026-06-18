@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import chalk from "chalk";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import { match } from "ts-pattern";
 import { logError } from "../core/error.utils.js";
 import { deliveryActionAsync } from "./actions/delivery-action.js";
@@ -24,7 +24,7 @@ try {
 		.with("items", async () => await itemsActionAsync(argsFetcher))
 		.with("sync-sdk", async () => await syncActionAsync(argsFetcher))
 		.otherwise((action) => {
-			throw new Error(`Invalid action '${chalk.red(action)}'`);
+			throw new Error(`Invalid action '${colorize("red", action)}'`);
 		});
 } catch (error) {
 	logError(error);
