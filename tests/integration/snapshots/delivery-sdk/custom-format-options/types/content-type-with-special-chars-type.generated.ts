@@ -1,6 +1,6 @@
+import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of '🐧 Content type with special chars #!_'' type
@@ -19,40 +19,35 @@ export function isContentTypeWithSpecialCharsTypeCodename(
 }
 
 /*
- * Elements of the '🐧 Content type with special chars #!_'' content type
+ * 🐧 Content type with special chars #!_'
  *
  * Id: 66bfcb40-edd7-4edf-8176-33517d0d6f80
  * Codename: _content_type_with_special_chars____
  */
-export type ContentTypeWithSpecialCharsTypeElements = {
-	/*
-	 * 🦜Parrot_emoji
-	 *
-	 * Codename: parrot__
-	 * Id: cafaa776-893d-4e8c-b460-9534ac2fe769
-	 * Type: text
-	 * Required: false
-	 */
-	readonly parrot__: Elements.Text;
-
-	/*
-	 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
-	 *
-	 * Codename: _____numberelem_____________________
-	 * Id: 3bb33958-71f3-4039-8594-5f0df9378dbb
-	 * Type: number
-	 * Required: false
-	 */
-	readonly _____numberelem_____________________: Elements.Number;
-};
-
-/*
- * 🐧 Content type with special chars #!_'
- */
 export type ContentTypeWithSpecialCharsType = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeWithSpecialCharsTypeCodename,
-	ContentTypeWithSpecialCharsTypeElements
+	{
+		/*
+		 * 🦜Parrot_emoji
+		 *
+		 * Codename: parrot__
+		 * Id: cafaa776-893d-4e8c-b460-9534ac2fe769
+		 * Type: text
+		 * Required: false
+		 */
+		readonly parrot__: Elements.Text;
+
+		/*
+		 * !!!_$NumberElem<>-%@&{}()/§'`?´=^*#~
+		 *
+		 * Codename: _____numberelem_____________________
+		 * Id: 3bb33958-71f3-4039-8594-5f0df9378dbb
+		 * Type: number
+		 * Required: false
+		 */
+		readonly _____numberelem_____________________: Elements.Number;
+	}
 >;
 
 /*

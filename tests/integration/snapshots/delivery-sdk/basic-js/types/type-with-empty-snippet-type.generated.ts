@@ -1,6 +1,6 @@
+import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Type with empty snippet' type
@@ -15,17 +15,12 @@ export function isTypeWithEmptySnippetTypeCodename(value: string | undefined | n
 }
 
 /*
- * Elements of the 'Type with empty snippet' content type
+ * Type with empty snippet
  *
  * Id: 11039462-1d7d-4673-9aa8-af07fb53985c
  * Codename: type_with_empty_snippet
  */
-export type TypeWithEmptySnippetTypeElements = Record<string, never>;
-
-/*
- * Type with empty snippet
- */
-export type TypeWithEmptySnippetType = ContentItemOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, TypeWithEmptySnippetTypeElements>;
+export type TypeWithEmptySnippetType = ContentItemOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, Record<string, never>>;
 
 /*
  * Type representing all available element codenames for Type with empty snippet

@@ -1,14 +1,14 @@
-import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
-import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
 import type { ContentTypeWithAllElementsType } from "../types/content-type-with-all-elements-type.generated.js";
-import type { ContentTypeWithGuidelinesOnlyType } from "../types/content-type-with-guidelines-only-type.generated.js";
-import type { ContentTypeWithSnippetOnlyType } from "../types/content-type-with-snippet-only-type.generated.js";
 import type { ContentTypeWithSpecialCharsType } from "../types/content-type-with-special-chars-type.generated.js";
 import type { EmptyContentTypeType } from "../types/empty-content-type-type.generated.js";
-import type { PageType } from "../types/page-type.generated.js";
-import type { TypeReferencingDeletedTypeType } from "../types/type-referencing-deleted-type-type.generated.js";
-import type { TypeWithEmptySnippetType } from "../types/type-with-empty-snippet-type.generated.js";
+import type { ContentTypeWithSnippetOnlyType } from "../types/content-type-with-snippet-only-type.generated.js";
+import type { ContentTypeWithGuidelinesOnlyType } from "../types/content-type-with-guidelines-only-type.generated.js";
+import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
+import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
 import type { WebSpotlightRootType } from "../types/web-spotlight-root-type.generated.js";
+import type { PageType } from "../types/page-type.generated.js";
+import type { TypeWithEmptySnippetType } from "../types/type-with-empty-snippet-type.generated.js";
+import type { TypeReferencingDeletedTypeType } from "../types/type-referencing-deleted-type-type.generated.js";
 
 /*
  * Array of all type codenames

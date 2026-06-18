@@ -1,6 +1,6 @@
+import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { ContentItemPayload, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-snippet-type.generated.js";
 
 /*
@@ -16,17 +16,12 @@ export function isEmptySnippetSnippetCodename(value: string | undefined | null):
 }
 
 /*
- * Elements of the 'Empty snippet' snippet. Intersect this into the elements of content types that use the snippet.
+ * Snippet 'Empty snippet' as a partial content item across the content types that use it
  *
  * Id: 1d7e3745-3320-4107-996b-2c6b240df7ae
  * Codename: empty_snippet
  */
-export type EmptySnippetSnippetElements = Record<string, never>;
-
-/*
- * Snippet 'Empty snippet' as a partial content item across the content types that use it
- */
-export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, EmptySnippetSnippetElements>;
+export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, Record<string, never>>;
 
 /*
  * Type representing all available element codenames for Empty snippet

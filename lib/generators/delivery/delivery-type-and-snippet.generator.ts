@@ -91,7 +91,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 		return snippets.map((snippet) =>
 			importer.importType({
 				filePathOrPackage: `../${snippetNames.folderName}/${snippetNames.getEntityFilename(snippet, true)}`,
-				importValue: getNameOfElementsShapeType(snippet),
+				importValue: snippetNames.getEntityName(snippet),
 			}),
 		);
 	};
@@ -215,7 +215,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			),
 			contentTypeExtends: snippets.length
 				? `& ${sortAlphabetically(
-						snippets.map((snippet) => getNameOfElementsShapeType(snippet)).filter(uniqueFilter),
+						snippets.map((snippet) => `${snippetNames.getEntityName(snippet)}["elements"]`).filter(uniqueFilter),
 						(snippetName) => snippetName,
 					).join(" & ")}`
 				: undefined,
@@ -279,7 +279,6 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 		});
 
 		const nameOfTypeRepresentingAllElementCodenames = getNameOfTypeRepresentingAllElementCodenames(snippet);
-		const elementsShapeName = getNameOfElementsShapeType(snippet);
 		const usingTypes = getContentTypesUsingSnippet(snippet);
 		const usingTypeCodenamesUnion = usingTypes.length
 			? usingTypes.map((type) => contentTypeNames.getCodenameTypeName(type)).join(" | ")
@@ -294,7 +293,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 				...importsResult.imports,
 			],
 			code: `
-${wrapComment(`Elements of the '${snippet.name}' snippet. Intersect this into the elements of content types that use the snippet.`, {
+${wrapComment(`Snippet '${snippet.name}' as a partial content item across the content types that use it`, {
 	disableComments: config.disableComments,
 	lines: [
 		{
@@ -307,10 +306,7 @@ ${wrapComment(`Elements of the '${snippet.name}' snippet. Intersect this into th
 		},
 	],
 })}
-export type ${elementsShapeName} = ${getElementsCode(snippet, flattenedElements)};
-
-${wrapComment(`Snippet '${snippet.name}' as a partial content item across the content types that use it`, { disableComments: config.disableComments })}
-export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippetOf}<${deliveryConfig.coreClientSchemaTypeName}, ${usingTypeCodenamesUnion}, ${elementsShapeName}>;
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippetOf}<${deliveryConfig.coreClientSchemaTypeName}, ${usingTypeCodenamesUnion}, ${getElementsCode(snippet, flattenedElements)}>;
 
 ${wrapComment(`Type representing all available element codenames for ${snippet.name}`, { disableComments: config.disableComments })}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
@@ -337,10 +333,9 @@ ${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
 		});
 
 		const nameOfTypeRepresentingAllElementCodenames = getNameOfTypeRepresentingAllElementCodenames(contentType);
-		const elementsShapeName = getNameOfElementsShapeType(contentType);
 		const ownElementsCode = getElementsCode(contentType, flattenedElements);
 		const hasOwnElements = ownElementsCode !== "Record<string, never>";
-		// Merge own elements with snippet element shapes; when there are no own elements, the type IS just the snippet intersection.
+		// Merge own elements with the elements of used snippets; when there are no own elements, the type IS just the snippet intersection.
 		const elementsTypeExpression = importsResult.contentTypeExtends
 			? hasOwnElements
 				? `${ownElementsCode} ${importsResult.contentTypeExtends}`
@@ -356,7 +351,7 @@ ${getAllMultipleChoiceTypeCodes(snippet, flattenedElements)}
 				...importsResult.imports,
 			],
 			code: `
-${wrapComment(`Elements of the '${contentType.name}' content type`, {
+${wrapComment(contentType.name, {
 	disableComments: config.disableComments,
 	lines: [
 		{
@@ -373,10 +368,7 @@ ${wrapComment(`Elements of the '${contentType.name}' content type`, {
 		},
 	],
 })}
-export type ${elementsShapeName} = ${elementsTypeExpression};
-
-${wrapComment(contentType.name, { disableComments: config.disableComments })}
-export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItemOf}<${deliveryConfig.coreClientSchemaTypeName}, ${contentTypeNames.getCodenameTypeName(contentType)}, ${elementsShapeName}>;
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItemOf}<${deliveryConfig.coreClientSchemaTypeName}, ${contentTypeNames.getCodenameTypeName(contentType)}, ${elementsTypeExpression}>;
 
 ${wrapComment(`Type representing all available element codenames for ${contentType.name}`, { disableComments: config.disableComments })}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
@@ -512,14 +504,6 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 				? contentTypeNames.getEntityName(typeOrSnippet)
 				: snippetNames.getEntityName(typeOrSnippet)
 		}ElementCodenames`;
-	};
-
-	const getNameOfElementsShapeType = (typeOrSnippet: ContentTypeOrSnippet): string => {
-		return `${
-			typeOrSnippet instanceof ContentTypeModels.ContentType
-				? contentTypeNames.getEntityName(typeOrSnippet)
-				: snippetNames.getEntityName(typeOrSnippet)
-		}Elements`;
 	};
 
 	const getContentTypeElementCodenamesType = (typeName: string, flattenedElements: readonly FlattenedElement[]): string => {

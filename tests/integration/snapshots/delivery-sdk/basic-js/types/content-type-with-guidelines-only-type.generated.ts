@@ -1,6 +1,6 @@
+import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Content type with guidelines only' type
@@ -17,20 +17,15 @@ export function isContentTypeWithGuidelinesOnlyTypeCodename(
 }
 
 /*
- * Elements of the 'Content type with guidelines only' content type
+ * Content type with guidelines only
  *
  * Id: 7e38a995-b4d7-46c9-92a4-4359241fa5ef
  * Codename: content_type_with_guidelines_only
  */
-export type ContentTypeWithGuidelinesOnlyTypeElements = Record<string, never>;
-
-/*
- * Content type with guidelines only
- */
 export type ContentTypeWithGuidelinesOnlyType = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeWithGuidelinesOnlyTypeCodename,
-	ContentTypeWithGuidelinesOnlyTypeElements
+	Record<string, never>
 >;
 
 /*

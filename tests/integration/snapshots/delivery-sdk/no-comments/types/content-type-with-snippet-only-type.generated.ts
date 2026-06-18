@@ -1,7 +1,7 @@
-import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
-import type { SnippetASnippetElements } from "../snippets/snippet-a-snippet.generated.js";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
+import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
 
 export type ContentTypeWithSnippetOnlyTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_snippet_only">;
 
@@ -11,12 +11,10 @@ export function isContentTypeWithSnippetOnlyTypeCodename(
 	return typeof value === "string" && value === ("content_type_with_snippet_only" satisfies ContentTypeWithSnippetOnlyTypeCodename);
 }
 
-export type ContentTypeWithSnippetOnlyTypeElements = SnippetASnippetElements;
-
 export type ContentTypeWithSnippetOnlyType = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeWithSnippetOnlyTypeCodename,
-	ContentTypeWithSnippetOnlyTypeElements
+	SnippetASnippet["elements"]
 >;
 
 export type ContentTypeWithSnippetOnlyTypeElementCodenames =

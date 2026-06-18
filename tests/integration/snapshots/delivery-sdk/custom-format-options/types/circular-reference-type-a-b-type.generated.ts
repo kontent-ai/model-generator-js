@@ -1,7 +1,7 @@
-import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 
 /*
  * Type representing codename of 'Circular reference type A > B' type
@@ -16,31 +16,26 @@ export function isCircularReferenceTypeABTypeCodename(value: string | undefined 
 }
 
 /*
- * Elements of the 'Circular reference type A > B' content type
+ * Circular reference type A > B
  *
  * Id: a58680f7-0667-4a0e-8dc2-889233bdbf71
  * Codename: circular_reference_type_a_b
  */
-export type CircularReferenceTypeABTypeElements = {
-	/*
-	 * Items
-	 *
-	 * Codename: items
-	 * Id: 33ab92dd-e47d-45e2-a060-3b5df0754c24
-	 * Type: modular_content
-	 * Required: false
-	 * Allowed content types: circular_reference_type_b____a
-	 */
-	readonly items: Elements.LinkedItems<CircularReferenceTypeBAType>;
-};
-
-/*
- * Circular reference type A > B
- */
 export type CircularReferenceTypeABType = ContentItemOf<
 	CoreClientSchema,
 	CircularReferenceTypeABTypeCodename,
-	CircularReferenceTypeABTypeElements
+	{
+		/*
+		 * Items
+		 *
+		 * Codename: items
+		 * Id: 33ab92dd-e47d-45e2-a060-3b5df0754c24
+		 * Type: modular_content
+		 * Required: false
+		 * Allowed content types: circular_reference_type_b____a
+		 */
+		readonly items: Elements.LinkedItems<CircularReferenceTypeBAType>;
+	}
 >;
 
 /*

@@ -1,14 +1,14 @@
-import type { ContentTypeCircularReferenceTypeAB } from "../types/content-type-circular-reference-type-a-b.generated.js";
-import type { ContentTypeCircularReferenceTypeBA } from "../types/content-type-circular-reference-type-b-a.generated.js";
 import type { ContentTypeContentTypeWithAllElements } from "../types/content-type-content-type-with-all-elements.generated.js";
-import type { ContentTypeContentTypeWithGuidelinesOnly } from "../types/content-type-content-type-with-guidelines-only.generated.js";
-import type { ContentTypeContentTypeWithSnippetOnly } from "../types/content-type-content-type-with-snippet-only.generated.js";
 import type { ContentTypeContentTypeWithSpecialChars } from "../types/content-type-content-type-with-special-chars.generated.js";
 import type { ContentTypeEmptyContentType } from "../types/content-type-empty-content-type.generated.js";
-import type { ContentTypePage } from "../types/content-type-page.generated.js";
-import type { ContentTypeTypeReferencingDeletedType } from "../types/content-type-type-referencing-deleted-type.generated.js";
-import type { ContentTypeTypeWithEmptySnippet } from "../types/content-type-type-with-empty-snippet.generated.js";
+import type { ContentTypeContentTypeWithSnippetOnly } from "../types/content-type-content-type-with-snippet-only.generated.js";
+import type { ContentTypeContentTypeWithGuidelinesOnly } from "../types/content-type-content-type-with-guidelines-only.generated.js";
+import type { ContentTypeCircularReferenceTypeAB } from "../types/content-type-circular-reference-type-a-b.generated.js";
+import type { ContentTypeCircularReferenceTypeBA } from "../types/content-type-circular-reference-type-b-a.generated.js";
 import type { ContentTypeWebSpotlightRoot } from "../types/content-type-web-spotlight-root.generated.js";
+import type { ContentTypePage } from "../types/content-type-page.generated.js";
+import type { ContentTypeTypeWithEmptySnippet } from "../types/content-type-type-with-empty-snippet.generated.js";
+import type { ContentTypeTypeReferencingDeletedType } from "../types/content-type-type-referencing-deleted-type.generated.js";
 
 /*
  * Array of all type codenames

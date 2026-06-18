@@ -1,6 +1,6 @@
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 
 export type TypeReferencingDeletedTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
 
@@ -10,16 +10,14 @@ export function isTypeReferencingDeletedTypeTypeCodename(
 	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename);
 }
 
-export type TypeReferencingDeletedTypeTypeElements = {
-	readonly rich_text_with_invalid_type: Elements.RichText<CoreType>;
-
-	readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreType>;
-};
-
 export type TypeReferencingDeletedTypeType = ContentItemOf<
 	CoreClientSchema,
 	TypeReferencingDeletedTypeTypeCodename,
-	TypeReferencingDeletedTypeTypeElements
+	{
+		readonly rich_text_with_invalid_type: Elements.RichText<CoreType>;
+
+		readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreType>;
+	}
 >;
 
 export type TypeReferencingDeletedTypeTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type";

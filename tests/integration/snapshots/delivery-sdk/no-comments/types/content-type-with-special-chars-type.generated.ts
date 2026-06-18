@@ -1,6 +1,6 @@
+import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { TypeCodenames } from "../system/types.generated.js";
 
 export type ContentTypeWithSpecialCharsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
 
@@ -12,16 +12,14 @@ export function isContentTypeWithSpecialCharsTypeCodename(
 	);
 }
 
-export type ContentTypeWithSpecialCharsTypeElements = {
-	readonly parrot__: Elements.Text;
-
-	readonly _____numberelem_____________________: Elements.Number;
-};
-
 export type ContentTypeWithSpecialCharsType = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeWithSpecialCharsTypeCodename,
-	ContentTypeWithSpecialCharsTypeElements
+	{
+		readonly parrot__: Elements.Text;
+
+		readonly _____numberelem_____________________: Elements.Number;
+	}
 >;
 
 export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "_____numberelem_____________________";

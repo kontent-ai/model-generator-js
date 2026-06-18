@@ -12,11 +12,12 @@
  * -------------------------------------------------------------------------------
  */
 
+import type { TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { ReleaseCategoryTaxonomyTermCodenames } from "../taxonomies/release-category-taxonomy.generated.js";
 import type { ActorType } from "../types/actor-type.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreType } from "../system/types.generated.js";
+import type { ReleaseCategoryTaxonomyTermCodenames } from "../taxonomies/release-category-taxonomy.generated.js";
 
 /*
  * Type representing codename of 'Movie' type
@@ -31,109 +32,108 @@ export function isMovieTypeCodename(value: string | undefined | null): value is 
 }
 
 /*
- * Elements of the 'Movie' content type
+ * Movie
  *
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export type MovieTypeElements = {
-	/*
-	 * Title
-	 *
-	 * Codename: title
-	 * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
-	 * Type: text
-	 * Required: true
-	 */
-	readonly title: Elements.Text;
+export type MovieType = ContentItemOf<
+	CoreClientSchema,
+	MovieTypeCodename,
+	{
+		/*
+		 * Title
+		 *
+		 * Codename: title
+		 * Id: 3473187e-dc78-eff2-7099-f690f7042d4a
+		 * Type: text
+		 * Required: true
+		 */
+		readonly title: Elements.Text;
 
-	/*
-	 * Plot
-	 *
-	 * Codename: plot
-	 * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
-	 * Type: rich_text
-	 * Required: false
-	 */
-	readonly plot: Elements.RichText<CoreType>;
+		/*
+		 * Plot
+		 *
+		 * Codename: plot
+		 * Id: f7ee4f27-27fd-a19b-3c5c-102aae1c50ce
+		 * Type: rich_text
+		 * Required: false
+		 */
+		readonly plot: Elements.RichText<CoreType>;
 
-	/*
-	 * Released
-	 *
-	 * Codename: released
-	 * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
-	 * Type: date_time
-	 * Required: false
-	 */
-	readonly released: Elements.DateTime;
+		/*
+		 * Released
+		 *
+		 * Codename: released
+		 * Id: 5ccf4644-0d65-5d96-9a32-f4ea21974d51
+		 * Type: date_time
+		 * Required: false
+		 */
+		readonly released: Elements.DateTime;
 
-	/*
-	 * Length
-	 *
-	 * Codename: length
-	 * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
-	 * Type: number
-	 * Required: false
-	 */
-	readonly length: Elements.Number;
+		/*
+		 * Length
+		 *
+		 * Codename: length
+		 * Id: 7e8ecfab-a419-27ee-d8ec-8adb76fd007c
+		 * Type: number
+		 * Required: false
+		 */
+		readonly length: Elements.Number;
 
-	/*
-	 * Poster
-	 *
-	 * Codename: poster
-	 * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
-	 * Type: asset
-	 * Required: false
-	 */
-	readonly poster: Elements.Asset;
+		/*
+		 * Poster
+		 *
+		 * Codename: poster
+		 * Id: a39a7237-9503-a1ae-8431-5b6cdb85ae9d
+		 * Type: asset
+		 * Required: false
+		 */
+		readonly poster: Elements.Asset;
 
-	/*
-	 * Category
-	 *
-	 * Codename: category
-	 * Id: 9821c252-6414-f549-c17f-cc171dd87713
-	 * Type: multiple_choice
-	 * Required: false
-	 */
-	readonly category: Elements.MultipleChoice<MovieTypeCategoryMultipleChoiceOptions>;
+		/*
+		 * Category
+		 *
+		 * Codename: category
+		 * Id: 9821c252-6414-f549-c17f-cc171dd87713
+		 * Type: multiple_choice
+		 * Required: false
+		 */
+		readonly category: Elements.MultipleChoice<MovieTypeCategoryMultipleChoiceOptions>;
 
-	/*
-	 * Stars
-	 *
-	 * Codename: stars
-	 * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
-	 * Type: modular_content
-	 * Required: false
-	 * Allowed content types: actor, movie
-	 */
-	readonly stars: Elements.LinkedItems<ActorType | MovieType>;
+		/*
+		 * Stars
+		 *
+		 * Codename: stars
+		 * Id: aa26a55d-19f8-7501-fea3-b0d9b1eeac71
+		 * Type: modular_content
+		 * Required: false
+		 * Allowed content types: actor, movie
+		 */
+		readonly stars: Elements.LinkedItems<ActorType | MovieType>;
 
-	/*
-	 * SeoName
-	 *
-	 * Codename: seoname
-	 * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
-	 * Type: url_slug
-	 * Required: false
-	 */
-	readonly seoname: Elements.UrlSlug;
+		/*
+		 * SeoName
+		 *
+		 * Codename: seoname
+		 * Id: 756cc91a-a090-60f9-a7f0-f505bfbe046c
+		 * Type: url_slug
+		 * Required: false
+		 */
+		readonly seoname: Elements.UrlSlug;
 
-	/*
-	 * Release Category
-	 *
-	 * Codename: releasecategory
-	 * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
-	 * Type: taxonomy
-	 * Required: false
-	 * Taxonomy: releasecategory
-	 */
-	readonly releasecategory: Elements.Taxonomy<ReleaseCategoryTaxonomyTermCodenames>;
-};
-
-/*
- * Movie
- */
-export type MovieType = ContentItemOf<CoreClientSchema, MovieTypeCodename, MovieTypeElements>;
+		/*
+		 * Release Category
+		 *
+		 * Codename: releasecategory
+		 * Id: 65f2fd44-1856-bc2b-17c2-decb0635e3d2
+		 * Type: taxonomy
+		 * Required: false
+		 * Taxonomy: releasecategory
+		 */
+		readonly releasecategory: Elements.Taxonomy<ReleaseCategoryTaxonomyTermCodenames>;
+	}
+>;
 
 /*
  * Type representing all available element codenames for Movie

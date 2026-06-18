@@ -1,6 +1,6 @@
+import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
 
 export type PageTypeCodename = keyof Pick<Record<TypeCodenames, null>, "page">;
 
@@ -8,19 +8,21 @@ export function isPageTypeCodename(value: string | undefined | null): value is P
 	return typeof value === "string" && value === ("page" satisfies PageTypeCodename);
 }
 
-export type PageTypeElements = {
-	readonly title: Elements.Text;
+export type PageType = ContentItemOf<
+	CoreClientSchema,
+	PageTypeCodename,
+	{
+		readonly title: Elements.Text;
 
-	readonly url: Elements.UrlSlug;
+		readonly url: Elements.UrlSlug;
 
-	readonly show_in_navigation: Elements.MultipleChoice<PageTypeShowInNavigationMultipleChoiceOptions>;
+		readonly show_in_navigation: Elements.MultipleChoice<PageTypeShowInNavigationMultipleChoiceOptions>;
 
-	readonly subpages: Elements.LinkedItems<CoreType>;
+		readonly subpages: Elements.LinkedItems<CoreType>;
 
-	readonly content: Elements.LinkedItems<CoreType>;
-};
-
-export type PageType = ContentItemOf<CoreClientSchema, PageTypeCodename, PageTypeElements>;
+		readonly content: Elements.LinkedItems<CoreType>;
+	}
+>;
 
 export type PageTypeElementCodenames = "title" | "url" | "show_in_navigation" | "subpages" | "content";
 

@@ -1,7 +1,7 @@
-import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { SnippetASnippetElements } from "../snippets/snippet-a-snippet.generated.js";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { CoreType, TypeCodenames } from "../system/types.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
 import type { TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
 
 export type ContentTypeWithAllElementsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
@@ -12,32 +12,30 @@ export function isContentTypeWithAllElementsTypeCodename(
 	return typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeWithAllElementsTypeCodename);
 }
 
-export type ContentTypeWithAllElementsTypeElements = {
-	readonly text_element: Elements.Text;
-
-	readonly url_slug_element: Elements.UrlSlug;
-
-	readonly rich_text_element: Elements.RichText<CoreType>;
-
-	readonly date___time_element: Elements.DateTime;
-
-	readonly custom_element: Elements.Custom;
-
-	readonly linked_items_element: Elements.LinkedItems<ContentTypeWithAllElementsType>;
-
-	readonly asset_element: Elements.Asset;
-
-	readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions>;
-
-	readonly number_element: Elements.Number;
-
-	readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames>;
-} & SnippetASnippetElements;
-
 export type ContentTypeWithAllElementsType = ContentItemOf<
 	CoreClientSchema,
 	ContentTypeWithAllElementsTypeCodename,
-	ContentTypeWithAllElementsTypeElements
+	{
+		readonly text_element: Elements.Text;
+
+		readonly url_slug_element: Elements.UrlSlug;
+
+		readonly rich_text_element: Elements.RichText<CoreType>;
+
+		readonly date___time_element: Elements.DateTime;
+
+		readonly custom_element: Elements.Custom;
+
+		readonly linked_items_element: Elements.LinkedItems<ContentTypeWithAllElementsType>;
+
+		readonly asset_element: Elements.Asset;
+
+		readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions>;
+
+		readonly number_element: Elements.Number;
+
+		readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames>;
+	} & SnippetASnippet["elements"]
 >;
 
 export type ContentTypeWithAllElementsTypeElementCodenames =

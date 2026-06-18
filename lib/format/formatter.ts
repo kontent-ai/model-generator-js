@@ -10,20 +10,7 @@ export async function formatCodeAsync(code: string, formatType: FormatType, conf
 			filePath: formatType === "typescript" ? "virtual.ts" : "virtual.json",
 		});
 
-		if (formattedContent.diagnostics.length > 0) {
-			throw new Error(`Failed to format code: ${formattedContent.diagnostics.map((m) => m.message).join("\n")}`);
-		}
-
-		const lintedContent = biome.lintContent(projectKey, formattedContent.content, {
-			filePath: "virtual.ts",
-			fixFileMode: "safeFixes",
-		});
-
-		if (lintedContent.diagnostics.length > 0) {
-			throw new Error(`Failed to lint code: ${lintedContent.diagnostics.map((m) => m.message).join("\n")}`);
-		}
-
-		return lintedContent.content;
+		return formattedContent.content;
 	});
 
 	return await Promise.resolve(result);

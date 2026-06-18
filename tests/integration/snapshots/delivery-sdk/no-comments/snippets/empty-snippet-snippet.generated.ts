@@ -1,6 +1,6 @@
+import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { ContentItemPayload, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-snippet-type.generated.js";
 
 export type EmptySnippetSnippetCodename = keyof Pick<Record<SnippetCodenames, null>, "empty_snippet">;
@@ -9,9 +9,7 @@ export function isEmptySnippetSnippetCodename(value: string | undefined | null):
 	return typeof value === "string" && value === ("empty_snippet" satisfies EmptySnippetSnippetCodename);
 }
 
-export type EmptySnippetSnippetElements = Record<string, never>;
-
-export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, EmptySnippetSnippetElements>;
+export type EmptySnippetSnippet = SnippetOf<CoreClientSchema, TypeWithEmptySnippetTypeCodename, Record<string, never>>;
 
 export type EmptySnippetSnippetElementCodenames = never;
 
