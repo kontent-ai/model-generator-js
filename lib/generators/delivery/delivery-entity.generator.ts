@@ -101,6 +101,14 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 	const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
 		const extraCode = getEntityExtraCode(entity);
 
+		// Snippets don't need a codename type/typeguard — they aren't queried by their own codename, and their model
+		// (the 'SnippetOf' type, element codenames and typeguard) is self-contained.
+		if (config.entityType === "Snippet") {
+			return `
+            ${extraCode?.imports.length ? `${extraCode.imports.join("\n")}\n` : ""}${extraCode?.code ?? ""}
+            `;
+		}
+
 		const getEntityTypeCode = (): string => {
 			return `export type ${entityNames.getCodenameTypeName(entity)} = keyof Pick<Record<${entityNames.codenamesTypeName}, null>, "${entity.codename}">;`;
 		};
@@ -110,7 +118,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${entityNames.overviewFilename}`,
 				importValue: `${entityNames.codenamesTypeName}`,
 			})}${extraCode?.imports.length ? `\n${extraCode.imports.join("\n")}` : ""}
-           
+
             ${getEntityComment(`Type representing codename of '${entity.name}' ${getEntityTypeNameForComment()}`)}
             ${getEntityTypeCode()}
 

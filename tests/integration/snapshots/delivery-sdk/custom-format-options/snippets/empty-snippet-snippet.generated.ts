@@ -1,19 +1,6 @@
 import type { ContentItemPayload, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { TypeWithEmptySnippetTypeCodename } from "../types/type-with-empty-snippet-type.generated.js";
-
-/*
- * Type representing codename of 'Empty snippet' snippet
- */
-export type EmptySnippetSnippetCodename = keyof Pick<Record<SnippetCodenames, null>, "empty_snippet">;
-
-/*
- * Typeguard for codename of 'Empty snippet' snippet
- */
-export function isEmptySnippetSnippetCodename(value: string | undefined | null): value is EmptySnippetSnippetCodename {
-	return typeof value === "string" && value === ("empty_snippet" satisfies EmptySnippetSnippetCodename);
-}
 
 /*
  * Snippet 'Empty snippet' as a partial content item across the content types that use it

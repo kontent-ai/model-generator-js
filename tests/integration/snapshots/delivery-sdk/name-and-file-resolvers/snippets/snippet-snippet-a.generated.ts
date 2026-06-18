@@ -1,24 +1,8 @@
 import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { SnippetCodenames } from "../system/snippets.generated.js";
 import type { CoreType } from "../system/types.generated.js";
-import type {
-	ContentTypeContentTypeWithAllElements,
-	ContentTypeContentTypeWithAllElementsCodename,
-} from "../types/content-type-content-type-with-all-elements.generated.js";
+import type { ContentTypeContentTypeWithAllElements, ContentTypeContentTypeWithAllElementsCodename } from "../types/content-type-content-type-with-all-elements.generated.js";
 import type { ContentTypeContentTypeWithSnippetOnlyCodename } from "../types/content-type-content-type-with-snippet-only.generated.js";
-
-/*
- * Type representing codename of 'Snippet A' snippet
- */
-export type SnippetSnippetACodename = keyof Pick<Record<SnippetCodenames, null>, "snippet_a">;
-
-/*
- * Typeguard for codename of 'Snippet A' snippet
- */
-export function isSnippetSnippetACodename(value: string | undefined | null): value is SnippetSnippetACodename {
-	return typeof value === "string" && value === ("snippet_a" satisfies SnippetSnippetACodename);
-}
 
 /*
  * Snippet 'Snippet A' as a partial content item across the content types that use it
