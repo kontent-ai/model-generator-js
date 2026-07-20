@@ -55,7 +55,7 @@
 		"@kontent-ai/core-sdk": "12.0.0-preview.42",
 		"@kontent-ai/delivery-sdk": "17.0.0-preview.2",
 		"@kontent-ai/management-sdk": "8.5.4",
-		"@kontent-ai/migration-toolkit": "3.1.5",
+		"@kontent-ai/migration-toolkit": "3.2.1",
 		"@kontent-ai/sync-sdk": "1.0.3",
 		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.8",
 		"ts-pattern": "5.9.0",

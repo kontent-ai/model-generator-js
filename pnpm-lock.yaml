@@ -24,8 +24,8 @@ importers:
         specifier: 8.5.4
         version: 8.5.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       '@kontent-ai/migration-toolkit':
-        specifier: 3.1.5
-        version: 3.1.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        specifier: 3.2.1
+        version: 3.2.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       '@kontent-ai/sync-sdk':
         specifier: 1.0.3
         version: 1.0.3
@@ -389,18 +389,10 @@ packages:
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
 
-  '@kontent-ai-consulting/tools-analytics@0.0.12':
-    resolution: {integrity: sha512-jadglVbfACwbmyfP6TZ8wyDxMmR40YVD5roXo8c5P7xQRNcYQpPi0MN4UvjCTJpv/ifCl3Ty1CSkWMwg+JN99g==}
-    engines: {node: '>=16.0.0'}
-
   '@kontent-ai/biome-config@0.7.3':
     resolution: {integrity: sha512-4Gi29ZkI4+F3e0+haJi4oBY7vy08ajb991LY+wNrBC5D+0Wc4RJheHRRrutrVUt5TfIEj1YG0p2Lc5V40gb1vg==}
     peerDependencies:
       '@biomejs/biome': ^2.5.0
-
-  '@kontent-ai/core-sdk@10.12.5':
-    resolution: {integrity: sha512-+EpX37RhdtORh7aGJuC1FboI8TNi8OUa/ksmJ3LByLsG+UyTcKEKAeTrp2B3rcZICIdYHTJ1Oi0C0v7wNxQB2g==}
-    engines: {node: '>= 20'}
 
   '@kontent-ai/core-sdk@10.12.8':
     resolution: {integrity: sha512-xf0/xFoFETcXk0GLmUng04Nn0UuAWBaR13G5jKrYYHi82tTZ7gRDtPXt+msBxX/HgOQDm10g1KRExd/MiS69Tg==}
@@ -428,16 +420,12 @@ packages:
   '@kontent-ai/eslint-config@2.4.1':
     resolution: {integrity: sha512-4tIyNDDIxeYaPK17lMN00Ch1kqNbayLmrV+/tcia62XzCejR/cHcXcsWVGhmxS1RjyVpqhstnTWbUrcvmXge2Q==}
 
-  '@kontent-ai/management-sdk@8.5.1':
-    resolution: {integrity: sha512-CD1+EnhnFxGS8IClI5/sg9U02TNGOcESnNQoYoO/P3qs0+CM5M5lblzs2s73d2WuHgwNrVkyNCJKuUGg8WpBqg==}
-    engines: {node: '>= 20'}
-
   '@kontent-ai/management-sdk@8.5.4':
     resolution: {integrity: sha512-UzdueRvUs/dhHWgbfyk2WriLfZttdUee2YOHLhIRPgs9+3Mr15jwWO0fnk9Od2FxeTec/ZMiDval6hKR19IKjQ==}
     engines: {node: '>= 20'}
 
-  '@kontent-ai/migration-toolkit@3.1.5':
-    resolution: {integrity: sha512-ihUHkJaSchkr17es6sRKoNfoXR6tlmzxFU28eIQObFb/s19fdBINi7FgIzbCB2wDRZuENhOPlYBr5K6DmwUitQ==}
+  '@kontent-ai/migration-toolkit@3.2.1':
+    resolution: {integrity: sha512-nh9y0ZyCLX9UVVhbUQbp6bABIeZyEPJoSAIGskH7EyRP77FYaD47C9SEJYorGQbPd8yzfS0O6l0UnbGeaEbVRw==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -744,9 +732,6 @@ packages:
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
-
-  axios@1.16.1:
-    resolution: {integrity: sha512-caYkukvroVPO8KrzuJEb50Hm07KwfBZPEC3VeFHTsqWHvKTsy54hjJz9BS/cdaypROE2rH6xvm9mHX4fgWkr3A==}
 
   axios@1.18.1:
     resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
@@ -1544,8 +1529,8 @@ packages:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
 
-  ora@9.4.0:
-    resolution: {integrity: sha512-84cglkRILFxdtA8hAvLNdMrtBpPNBTrQ9/ulg0FA7xLMnD6mifv+enAIeRmvtv+WgdCE+LPGOfQmtJRrVaIVhQ==}
+  ora@9.4.1:
+    resolution: {integrity: sha512-6VlU9MLXbjVQD04AZCMX28hVtA5bUoadvUqO76MUCVA0ilwJbMiHsITRPfyVm6p/BC0Av/BXMujx39WCe1LEqw==}
     engines: {node: '>=20'}
 
   own-keys@1.0.1:
@@ -2238,23 +2223,9 @@ snapshots:
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
 
-  '@kontent-ai-consulting/tools-analytics@0.0.12(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
-    dependencies:
-      '@kontent-ai/core-sdk': 10.12.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - debug
-      - supports-color
-
   '@kontent-ai/biome-config@0.7.3(@biomejs/biome@2.5.0)':
     dependencies:
       '@biomejs/biome': 2.5.0
-
-  '@kontent-ai/core-sdk@10.12.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
-    dependencies:
-      axios: 1.16.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - debug
-      - supports-color
 
   '@kontent-ai/core-sdk@10.12.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
@@ -2287,14 +2258,6 @@ snapshots:
       - supports-color
       - typescript
 
-  '@kontent-ai/management-sdk@8.5.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
-    dependencies:
-      '@kontent-ai/core-sdk': 10.12.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      mime: 3.0.0
-    transitivePeerDependencies:
-      - debug
-      - supports-color
-
   '@kontent-ai/management-sdk@8.5.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
       '@kontent-ai/core-sdk': 10.12.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
@@ -2303,10 +2266,9 @@ snapshots:
       - debug
       - supports-color
 
-  '@kontent-ai/migration-toolkit@3.1.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@kontent-ai/migration-toolkit@3.2.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
-      '@kontent-ai-consulting/tools-analytics': 0.0.12(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-      '@kontent-ai/management-sdk': 8.5.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@kontent-ai/management-sdk': 8.5.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       browser-or-node: 3.0.0
       buffer: 6.0.3
       bytes: 3.1.2
@@ -2315,7 +2277,7 @@ snapshots:
       dotenv: 17.4.2
       jszip: 3.10.1
       mime: 4.1.0
-      ora: 9.4.0
+      ora: 9.4.1
       p-limit: 7.3.0
       prompts: 2.4.2
       ts-pattern: 5.9.0
@@ -2647,16 +2609,6 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
-
-  axios@1.16.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
-    dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3(supports-color@7.2.0))
-      form-data: 4.0.6
-      https-proxy-agent: 5.0.1(supports-color@7.2.0)
-      proxy-from-env: 2.1.0
-    transitivePeerDependencies:
-      - debug
-      - supports-color
 
   axios@1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
@@ -3623,7 +3575,7 @@ snapshots:
       type-check: 0.4.0
       word-wrap: 1.2.5
 
-  ora@9.4.0:
+  ora@9.4.1:
     dependencies:
       chalk: 5.6.2
       cli-cursor: 5.0.0
