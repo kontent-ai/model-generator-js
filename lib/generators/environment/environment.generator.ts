@@ -403,7 +403,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 					const isLast = index === element.options.length - 1;
 					return `${code}\n
                 ${wrapComment(option.name, { disableComments: config.disableComments })}
-                ${option.codename ? option.codename : resolvePropertyName(option.name)}: {
+                ${option.codename ?? resolvePropertyName(option.name)}: {
                     name: '${toSafePropertyValue(option.name)}',
                     id: '${option.id}',
                     codename: ${getStringOrUndefinedAsPropertyValue(option.codename)},

@@ -1,6 +1,6 @@
 {
 	"name": "@kontent-ai/model-generator",
-	"version": "10.1.1",
+	"version": "11.0.0-preview.0",
 	"description": "This utility generates strongly-typed models for Delivery JS SDK, Migration toolkit or just general scripting to improve the experience when referencing Kontent.ai related objects.",
 	"bin": {
 		"kontent-generate": "./dist/cli/app.js"
@@ -14,6 +14,7 @@
 	"engines": {
 		"node": ">= 22"
 	},
+	"packageManager": "pnpm@11.15.0",
 	"keywords": [
 		"Kontent",
 		"Kontent.ai",
@@ -26,10 +27,10 @@
 	"types": "./dist/public_api.d.ts",
 	"type": "module",
 	"scripts": {
-		"prepublishOnly": "npm run build",
-		"build": "npm run biome:check && npm run eslint && npm run build:noemit && npm run clean && tsc --p tsconfig.build.json && npm run update:version",
+		"prepublishOnly": "pnpm run  build",
+		"build": "pnpm run  biome:check && pnpm run  eslint && pnpm run  build:noemit && pnpm run  clean && tsc --p tsconfig.build.json && pnpm run  update:version",
 		"build:noemit": "tsc --p tsconfig.json",
-		"test": "npm run test:unit && npm run test:integration",
+		"test": "pnpm run  test:unit && pnpm run  test:integration",
 		"test:unit": "vitest run --config=vitest-unit.config.ts",
 		"test:integration": "vitest run --config=vitest-integration.config.ts",
 		"update:snapshots": "tsx scripts/clean-snapshots && vitest run --update",
@@ -38,7 +39,7 @@
 		"sample:migration": "tsx scripts/samples/migration-sample",
 		"sample:items": "tsx scripts/samples/item-sample",
 		"sample:sync": "tsx scripts/samples/sync-sample",
-		"sample:all": "npm run sample:delivery && npm run sample:environment && npm run sample:migration && npm run sample:items && npm run sample:sync",
+		"sample:all": "pnpm run  sample:delivery && pnpm run  sample:environment && pnpm run  sample:migration && pnpm run  sample:items && pnpm run  sample:sync",
 		"show:help": "tsx lib/cli/app --help",
 		"show:help:delivery-sdk": "tsx lib/cli/app delivery-sdk --help",
 		"clean": "tsx scripts/clean.ts",
@@ -49,30 +50,26 @@
 		"biome:fix:unsafe": "biome check --write --unsafe"
 	},
 	"dependencies": {
-		"@kontent-ai/core-sdk": "11.0.2",
-		"@kontent-ai/delivery-sdk": "16.4.6",
+		"@biomejs/js-api": "6.0.0",
+		"@biomejs/wasm-nodejs": "2.5.6",
+		"@kontent-ai/core-sdk": "12.0.0-preview.42",
+		"@kontent-ai/delivery-sdk": "17.0.0-preview.2",
 		"@kontent-ai/management-sdk": "8.5.4",
 		"@kontent-ai/migration-toolkit": "3.2.1",
 		"@kontent-ai/sync-sdk": "1.0.3",
-		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.8",
-		"chalk": "5.6.2",
-		"@biomejs/js-api": "6.0.0",
-		"@biomejs/wasm-nodejs": "2.5.2",
+		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.9",
 		"ts-pattern": "5.9.0",
-		"yargs": "18.0.0"
+		"yargs": "18.1.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.5.2",
+		"@biomejs/biome": "2.5.0",
 		"@kontent-ai/biome-config": "0.7.3",
 		"@kontent-ai/eslint-config": "2.4.1",
-		"@types/node": "26.1.0",
+		"@types/node": "25.9.3",
 		"@types/yargs": "17.0.35",
-		"dotenv-cli": "11.0.0",
-		"eslint": "10.6.0",
-		"tsx": "4.22.5",
+		"eslint": "10.5.0",
+		"tsx": "4.23.5",
 		"typescript": "6.0.3",
-		"typescript-eslint": "8.62.1",
-		"vite-tsconfig-paths": "6.1.1",
-		"vitest": "4.1.9"
+		"vitest": "4.1.10"
 	}
 }

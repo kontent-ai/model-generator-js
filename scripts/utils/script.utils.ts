@@ -1,5 +1,5 @@
 import fs, { rmSync } from "node:fs";
-import chalk from "chalk";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import { parseModuleFileExtension } from "../../lib/cli/arg.utils.js";
 import type { ModuleFileExtension } from "../../lib/core/core.models.js";
 import { logError } from "../../lib/core/error.utils.js";
@@ -51,8 +51,8 @@ export function createVersionFile({
 	readonly packageName: string;
 	readonly packageVersion: string;
 }): void {
-	console.log(chalk.cyan(`\nCreating version file at '${filePath}' with prop '${propertyName}'`));
-	console.log(chalk.green(`Updating version ${chalk.yellow(packageVersion)}`));
+	console.log(colorize("cyan", `\nCreating version file at '${filePath}' with prop '${propertyName}'`));
+	console.log(colorize("green", `Updating version ${colorize("yellow", packageVersion)}`));
 
 	const src = `
 export const ${propertyName} = {
@@ -63,16 +63,16 @@ export const ${propertyName} = {
 };
 `;
 
-	console.log(`${chalk.green("Writing version to ")}${chalk.yellow(filePath)}\n`);
+	console.log(`${colorize("green", "Writing version to ")}${colorize("yellow", filePath)}\n`);
 	fs.writeFileSync(filePath, src, { flag: "w" });
 }
 
 export function deleteFolderRecursive(path: string): void {
-	console.log(`Deleting existing folder '${chalk.yellow(path)}'`);
+	console.log(`Deleting existing folder '${colorize("yellow", path)}'`);
 	rmSync(path, {
 		recursive: true,
 		force: true,
 	});
 
-	console.log(`Folder '${chalk.yellow(path)}' deleted successfully`);
+	console.log(`Folder '${colorize("yellow", path)}' deleted successfully`);
 }

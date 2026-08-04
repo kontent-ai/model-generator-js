@@ -1,49 +1,42 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
-import type { TaxonomyATaxonomyCodename, TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
 
-export type ContentTypeWithAllElementsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
+export type ContentTypeWithAllElementsCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
 
-export function isContentTypeWithAllElementsTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithAllElementsTypeCodename {
-	return typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeWithAllElementsTypeCodename);
+export function isContentTypeWithAllElementsCodename(value: string | undefined | null): value is ContentTypeWithAllElementsCodename {
+	return typeof value === "string" && value === ("content_type_with_all_elements" satisfies ContentTypeWithAllElementsCodename);
 }
 
-export type ContentTypeWithAllElementsType = IContentItem<
+export type ContentTypeWithAllElementsItem = ContentItemOf<
+	CoreClientSchema,
+	ContentTypeWithAllElementsCodename,
 	{
-		readonly text_element: Elements.TextElement;
+		readonly text_element: Elements.Text;
 
-		readonly url_slug_element: Elements.UrlSlugElement;
+		readonly url_slug_element: Elements.UrlSlug;
 
-		readonly rich_text_element: Elements.RichTextElement<CoreType>;
+		readonly rich_text_element: Elements.RichText<CoreItem>;
 
-		readonly date___time_element: Elements.DateTimeElement;
+		readonly date___time_element: Elements.DateTime;
 
-		readonly custom_element: Elements.CustomElement;
+		readonly custom_element: Elements.Custom;
 
-		readonly linked_items_element: Elements.LinkedItemsElement<ContentTypeWithAllElementsType>;
+		readonly linked_items_element: Elements.LinkedItems<ContentTypeWithAllElementsItem>;
 
-		readonly asset_element: Elements.AssetsElement;
+		readonly asset_element: Elements.Asset;
 
-		readonly multiple_choice_element: Elements.MultipleChoiceElement<ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions>;
+		readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
 
-		readonly number_element: Elements.NumberElement;
+		readonly number_element: Elements.Number;
 
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyATaxonomyTermCodenames, TaxonomyATaxonomyCodename>;
-	} & SnippetASnippet,
-	ContentTypeWithAllElementsTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames>;
+	} & SnippetASnippet["elements"]
 >;
 
-export type ContentTypeWithAllElementsTypeElementCodenames =
+export type ContentTypeWithAllElementsElementCodenames =
 	| "text_element"
 	| "url_slug_element"
 	| "rich_text_element"
@@ -58,8 +51,10 @@ export type ContentTypeWithAllElementsTypeElementCodenames =
 	| "snippet_a__text"
 	| "taxonomy_element";
 
-export function isContentTypeWithAllElementsType(item: IContentItem | undefined | null): item is ContentTypeWithAllElementsType {
-	return item?.system.type === ("content_type_with_all_elements" satisfies ContentTypeWithAllElementsTypeCodename);
+export function isContentTypeWithAllElementsItem(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeWithAllElementsItem {
+	return isContentTypeWithAllElementsCodename(item?.system.type);
 }
 
-export type ContentTypeWithAllElementsTypeMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";
+export type ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";

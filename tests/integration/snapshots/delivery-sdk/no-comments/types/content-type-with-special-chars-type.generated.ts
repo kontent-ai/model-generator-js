@@ -1,34 +1,27 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
-export type ContentTypeWithSpecialCharsTypeCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
+export type ContentTypeWithSpecialCharsCodename = keyof Pick<Record<TypeCodenames, null>, "_content_type_with_special_chars____">;
 
-export function isContentTypeWithSpecialCharsTypeCodename(
-	value: string | undefined | null,
-): value is ContentTypeWithSpecialCharsTypeCodename {
-	return (
-		typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename)
-	);
+export function isContentTypeWithSpecialCharsCodename(value: string | undefined | null): value is ContentTypeWithSpecialCharsCodename {
+	return typeof value === "string" && value === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsCodename);
 }
 
-export type ContentTypeWithSpecialCharsType = IContentItem<
+export type ContentTypeWithSpecialCharsItem = ContentItemOf<
+	CoreClientSchema,
+	ContentTypeWithSpecialCharsCodename,
 	{
-		readonly parrot__: Elements.TextElement;
+		readonly parrot__: Elements.Text;
 
-		readonly _____numberelem_____________________: Elements.NumberElement;
-	},
-	ContentTypeWithSpecialCharsTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly _____numberelem_____________________: Elements.Number;
+	}
 >;
 
-export type ContentTypeWithSpecialCharsTypeElementCodenames = "parrot__" | "_____numberelem_____________________";
+export type ContentTypeWithSpecialCharsElementCodenames = "parrot__" | "_____numberelem_____________________";
 
-export function isContentTypeWithSpecialCharsType(item: IContentItem | undefined | null): item is ContentTypeWithSpecialCharsType {
-	return item?.system.type === ("_content_type_with_special_chars____" satisfies ContentTypeWithSpecialCharsTypeCodename);
+export function isContentTypeWithSpecialCharsItem(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeWithSpecialCharsItem {
+	return isContentTypeWithSpecialCharsCodename(item?.system.type);
 }

@@ -1,28 +1,21 @@
-import type { Elements, Snippet } from "@kontent-ai/delivery-sdk";
-import type { SnippetCodenames } from "../system/snippets.generated.js";
-import type { CoreType } from "../system/types.generated.js";
-import type { ContentTypeContentTypeWithAllElements } from "../types/content-type-content-type-with-all-elements.generated.js";
+import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem } from "../system/types.generated.js";
+import type {
+	ContentTypeContentTypeWithAllElementsCodename,
+	ContentTypeContentTypeWithAllElementsItem,
+} from "../types/content-type-content-type-with-all-elements.generated.js";
+import type { ContentTypeContentTypeWithSnippetOnlyCodename } from "../types/content-type-content-type-with-snippet-only.generated.js";
 
 /*
- * Type representing codename of 'Snippet A' snippet
- */
-export type SnippetSnippetACodename = keyof Pick<Record<SnippetCodenames, null>, "snippet_a">;
-
-/*
- * Typeguard for codename of 'Snippet A' snippet
- */
-export function isSnippetSnippetACodename(value: string | undefined | null): value is SnippetSnippetACodename {
-	return typeof value === "string" && value === ("snippet_a" satisfies SnippetSnippetACodename);
-}
-
-/*
- * Snippet A
+ * Snippet 'Snippet A' as a partial content item across the content types that use it
  *
  * Id: b74eb5f6-c851-42f2-9fea-e367d0a3fa61
  * Codename: snippet_a
  */
-export type SnippetSnippetA = Snippet<
-	SnippetSnippetAElementCodenames,
+export type SnippetSnippetA = SnippetOf<
+	CoreClientSchema,
+	ContentTypeContentTypeWithAllElementsCodename | ContentTypeContentTypeWithSnippetOnlyCodename,
 	{
 		/*
 		 * Rich text with all allowed item types
@@ -32,7 +25,7 @@ export type SnippetSnippetA = Snippet<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichTextElement<CoreType>;
+		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<CoreItem>;
 
 		/*
 		 * Linked items with specific types
@@ -43,7 +36,7 @@ export type SnippetSnippetA = Snippet<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly snippet_a__linked_items_with_specific_types: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>;
+		readonly snippet_a__linked_items_with_specific_types: Elements.LinkedItems<ContentTypeContentTypeWithAllElementsItem>;
 
 		/*
 		 * Text
@@ -53,7 +46,7 @@ export type SnippetSnippetA = Snippet<
 		 * Type: text
 		 * Required: true
 		 */
-		readonly snippet_a__text: Elements.TextElement;
+		readonly snippet_a__text: Elements.Text;
 	}
 >;
 
@@ -64,3 +57,10 @@ export type SnippetSnippetAElementCodenames =
 	| "snippet_a__rich_text_with_all_allowed_item_types"
 	| "snippet_a__linked_items_with_specific_types"
 	| "snippet_a__text";
+
+/*
+ * Type guard for Snippet A
+ */
+export function isSnippetSnippetA(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is SnippetSnippetA {
+	return !!item && (["content_type_with_all_elements", "content_type_with_snippet_only"] as readonly string[]).includes(item.system.type);
+}

@@ -1,26 +1,17 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
-export type EmptyContentTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">;
+export type EmptyContentTypeCodename = keyof Pick<Record<TypeCodenames, null>, "empty_content_type">;
 
-export function isEmptyContentTypeTypeCodename(value: string | undefined | null): value is EmptyContentTypeTypeCodename {
-	return typeof value === "string" && value === ("empty_content_type" satisfies EmptyContentTypeTypeCodename);
+export function isEmptyContentTypeCodename(value: string | undefined | null): value is EmptyContentTypeCodename {
+	return typeof value === "string" && value === ("empty_content_type" satisfies EmptyContentTypeCodename);
 }
 
-export type EmptyContentTypeType = IContentItem<
-	Record<string, never>,
-	EmptyContentTypeTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
->;
+export type EmptyContentTypeItem = ContentItemOf<CoreClientSchema, EmptyContentTypeCodename, Record<string, never>>;
 
-export type EmptyContentTypeTypeElementCodenames = never;
+export type EmptyContentTypeElementCodenames = never;
 
-export function isEmptyContentTypeType(item: IContentItem | undefined | null): item is EmptyContentTypeType {
-	return item?.system.type === ("empty_content_type" satisfies EmptyContentTypeTypeCodename);
+export function isEmptyContentTypeItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is EmptyContentTypeItem {
+	return isEmptyContentTypeCodename(item?.system.type);
 }

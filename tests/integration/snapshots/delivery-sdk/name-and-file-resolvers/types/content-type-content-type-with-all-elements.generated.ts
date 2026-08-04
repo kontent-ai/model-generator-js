@@ -1,10 +1,8 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { SnippetSnippetA } from "../snippets/snippet-snippet-a.generated.js";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
-import type { TaxonomyTaxonomyACodename, TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { TaxonomyTaxonomyATermCodenames } from "../taxonomies/taxonomy-taxonomy-a.generated.js";
 
 /*
  * Type representing codename of 'Content type with all elements' type
@@ -28,7 +26,9 @@ export function isContentTypeContentTypeWithAllElementsCodename(
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export type ContentTypeContentTypeWithAllElements = IContentItem<
+export type ContentTypeContentTypeWithAllElementsItem = ContentItemOf<
+	CoreClientSchema,
+	ContentTypeContentTypeWithAllElementsCodename,
 	{
 		/*
 		 * Text element
@@ -39,7 +39,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Required: true
 		 * Guidelines: Simple text element guidelines
 		 */
-		readonly text_element: Elements.TextElement;
+		readonly text_element: Elements.Text;
 
 		/*
 		 * Url slug element
@@ -49,7 +49,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url_slug_element: Elements.UrlSlugElement;
+		readonly url_slug_element: Elements.UrlSlug;
 
 		/*
 		 * Rich text element
@@ -59,7 +59,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: Elements.RichTextElement<CoreType>;
+		readonly rich_text_element: Elements.RichText<CoreItem>;
 
 		/*
 		 * Date & time element
@@ -69,7 +69,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: date_time
 		 * Required: false
 		 */
-		readonly date___time_element: Elements.DateTimeElement;
+		readonly date___time_element: Elements.DateTime;
 
 		/*
 		 * Custom element
@@ -79,7 +79,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: custom
 		 * Required: false
 		 */
-		readonly custom_element: Elements.CustomElement;
+		readonly custom_element: Elements.Custom;
 
 		/*
 		 * Linked items element
@@ -90,7 +90,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Required: false
 		 * Allowed content types: content_type_with_all_elements
 		 */
-		readonly linked_items_element: Elements.LinkedItemsElement<ContentTypeContentTypeWithAllElements>;
+		readonly linked_items_element: Elements.LinkedItems<ContentTypeContentTypeWithAllElementsItem>;
 
 		/*
 		 * Asset element
@@ -100,7 +100,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: asset
 		 * Required: false
 		 */
-		readonly asset_element: Elements.AssetsElement;
+		readonly asset_element: Elements.Asset;
 
 		/*
 		 * Multiple choice element
@@ -110,7 +110,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly multiple_choice_element: Elements.MultipleChoiceElement<ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
+		readonly multiple_choice_element: Elements.MultipleChoice<ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions>;
 
 		/*
 		 * Number element
@@ -120,7 +120,7 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Type: number
 		 * Required: false
 		 */
-		readonly number_element: Elements.NumberElement;
+		readonly number_element: Elements.Number;
 
 		/*
 		 * Taxonomy A
@@ -131,13 +131,8 @@ export type ContentTypeContentTypeWithAllElements = IContentItem<
 		 * Required: false
 		 * Taxonomy: taxonomy_a
 		 */
-		readonly taxonomy_element: Elements.TaxonomyElement<TaxonomyTaxonomyATermCodenames, TaxonomyTaxonomyACodename>;
-	} & SnippetSnippetA,
-	ContentTypeContentTypeWithAllElementsCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly taxonomy_element: Elements.Taxonomy<TaxonomyTaxonomyATermCodenames>;
+	} & SnippetSnippetA["elements"]
 >;
 
 /*
@@ -164,10 +159,10 @@ export type ContentTypeContentTypeWithAllElementsElementCodenames =
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  * Codename: content_type_with_all_elements
  */
-export function isContentTypeContentTypeWithAllElements(
-	item: IContentItem | undefined | null,
-): item is ContentTypeContentTypeWithAllElements {
-	return item?.system.type === ("content_type_with_all_elements" satisfies ContentTypeContentTypeWithAllElementsCodename);
+export function isContentTypeContentTypeWithAllElementsItem(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeContentTypeWithAllElementsItem {
+	return isContentTypeContentTypeWithAllElementsCodename(item?.system.type);
 }
 
 export type ContentTypeContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";

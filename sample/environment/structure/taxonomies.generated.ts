@@ -14,6 +14,50 @@
 
 export const taxonomies = {
 	/*
+	 * Release Category
+	 */
+	releasecategory: {
+		name: "Release Category",
+		codename: "releasecategory",
+		externalId: undefined,
+		id: "09b6a348-0f86-7a68-4af3-7cab9a5c60b7",
+		terms: {
+			/*
+			 * Global release
+			 */
+			global_release: {
+				name: "Global release",
+				codename: "global_release",
+				id: "4acaf439-9f3a-f34a-6211-d3fc6ec7152e",
+				externalId: undefined,
+				terms: {},
+			},
+
+			/*
+			 * US only
+			 */
+			us_only: {
+				name: "US only",
+				codename: "us_only",
+				id: "b03d990a-55a9-601e-dd5c-aa2edc8698ca",
+				externalId: undefined,
+				terms: {},
+			},
+
+			/*
+			 * Local release
+			 */
+			local_release: {
+				name: "Local release",
+				codename: "local_release",
+				id: "37e55484-f0dc-14eb-bf2a-b0293a0d1b1f",
+				externalId: undefined,
+				terms: {},
+			},
+		},
+	},
+
+	/*
 	 * Movie Type
 	 */
 	movietype: {
@@ -75,50 +119,6 @@ export const taxonomies = {
 						terms: {},
 					},
 				},
-			},
-		},
-	},
-
-	/*
-	 * Release Category
-	 */
-	releasecategory: {
-		name: "Release Category",
-		codename: "releasecategory",
-		externalId: undefined,
-		id: "09b6a348-0f86-7a68-4af3-7cab9a5c60b7",
-		terms: {
-			/*
-			 * Global release
-			 */
-			global_release: {
-				name: "Global release",
-				codename: "global_release",
-				id: "4acaf439-9f3a-f34a-6211-d3fc6ec7152e",
-				externalId: undefined,
-				terms: {},
-			},
-
-			/*
-			 * US only
-			 */
-			us_only: {
-				name: "US only",
-				codename: "us_only",
-				id: "b03d990a-55a9-601e-dd5c-aa2edc8698ca",
-				externalId: undefined,
-				terms: {},
-			},
-
-			/*
-			 * Local release
-			 */
-			local_release: {
-				name: "Local release",
-				codename: "local_release",
-				id: "37e55484-f0dc-14eb-bf2a-b0293a0d1b1f",
-				externalId: undefined,
-				terms: {},
 			},
 		},
 	},

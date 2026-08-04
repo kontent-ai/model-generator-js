@@ -15,6 +15,7 @@ export type DeliveryEntityNames<T extends DeliveryEntityType> = {
 	readonly folderName: string;
 
 	readonly getEntityName: (entity: Readonly<DeliveryEntity>) => string;
+	readonly getEntityBaseName: (entity: Readonly<DeliveryEntity>) => string;
 	readonly getEntityFilename: (entity: Readonly<DeliveryEntity>, addExtension: boolean) => string;
 	readonly getCodenameTypeName: (entity: Readonly<DeliveryEntity>) => string;
 	readonly getTypeguardFunctionName: (entity: Readonly<DeliveryEntity>) => string;
@@ -74,7 +75,10 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				overviewFilename: mapFilename<ObjectWithCodename>((c) => c.codename)({ codename: entityTypeName.pluralCamelCase }, true),
 				folderName: entityTypeName.pluralCamelCase,
 
-				getEntityName: mapName(nameResolver, "pascalCase"),
+				// Content types name the runtime item type with an 'Item' suffix (e.g. 'MovieItem'); the bare base name
+				// (e.g. 'Movie') is used for codename/element-codename/multiple-choice types.
+				getEntityName: mapName(nameResolver, "pascalCase", config.entityType === "Type" ? { suffix: "Item" } : undefined),
+				getEntityBaseName: mapName(nameResolver, "pascalCase"),
 				getCodenameTypeName: mapName(nameResolver, "pascalCase", { suffix: "Codename" }),
 				getTypeguardFunctionName: mapName(nameResolver, "pascalCase", {
 					prefix: "is",
@@ -108,7 +112,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				typeNames:
 					config.entityType === "Type"
 						? {
-								contentItemTypeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is" }),
+								contentItemTypeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "Item" }),
 							}
 						: undefined,
 			};
@@ -135,9 +139,11 @@ function getNameAndFilenameResolver<T extends DeliveryEntityType>(config: {
 			readonly filenameResolver: NonNullable<FilenameResolver<DeliveryEntity>>;
 		}>()
 		.with("Type", () => ({
+			// Content types use the bare name as the base (e.g. 'Movie'); the 'Item'/'Codename' suffixes are added by
+			// the individual name accessors. The filename keeps the '.Type' suffix (e.g. 'movie-type.generated.ts').
 			nameResolver: config.nameResolvers?.contentType
 				? (config.nameResolvers.contentType as NonNullable<NameResolver<DeliveryEntity>>)
-				: defaultNameResolver,
+				: (item: DeliveryEntity) => item.name,
 			filenameResolver: config.fileResolvers?.contentType
 				? (config.fileResolvers.contentType as NonNullable<FilenameResolver<DeliveryEntity>>)
 				: defaultFilenameResolver,

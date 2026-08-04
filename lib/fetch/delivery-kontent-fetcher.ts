@@ -1,9 +1,8 @@
-import { HttpService } from "coreSdkLegacy";
-import type { ClientTypes, IContentItem, ItemsFeedQuery } from "@kontent-ai/delivery-sdk";
-import { createDeliveryClient } from "@kontent-ai/delivery-sdk";
-import chalk from "chalk";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
+import { createDeliveryClient, type DeliveryClientConfig } from "@kontent-ai/delivery-sdk";
+import { match } from "ts-pattern";
 import { coreConfig } from "../config.js";
-import type { DeliveryApiMode, GeneratorDeliveryClient } from "../core/core.models.js";
+import type { DeliveryApiMode, GeneratorContentItem, GeneratorDeliveryClient } from "../core/core.models.js";
 import { sortAlphabetically } from "../core/core.utils.js";
 
 export function getDeliveryKontentFetcher(config: {
@@ -12,38 +11,50 @@ export function getDeliveryKontentFetcher(config: {
 	readonly baseUrl?: string;
 	readonly apiMode: DeliveryApiMode;
 }) {
-	const client: GeneratorDeliveryClient = createDeliveryClient({
-		environmentId: config.environmentId,
-		defaultQueryConfig: {
-			usePreviewMode: config.apiMode === "preview",
-			useSecuredMode: config.apiMode === "secure",
-			customHeaders: [
-				{
-					header: coreConfig.kontentTrackingHeaderName,
-					value: coreConfig.kontentTrackingHeaderValue,
-				},
-			],
-		},
-		secureApiKey: config.apiMode === "secure" ? config.deliveryApiKey : undefined,
-		previewApiKey: config.apiMode === "preview" ? config.deliveryApiKey : undefined,
-		proxy: {
-			baseUrl: config.baseUrl,
-		},
-		httpService: new HttpService({ logErrorsToConsole: false }),
-	});
+	const client: GeneratorDeliveryClient = createDeliveryClient(getClientConfig());
 
-	const getItemsQuery = (filterByTypeCodenames: readonly string[]): ItemsFeedQuery<ClientTypes> => {
-		return filterByTypeCodenames.length > 0 ? client.itemsFeed().types(filterByTypeCodenames.map((m) => m)) : client.itemsFeed();
-	};
+	function getClientConfig(): DeliveryClientConfig {
+		const baseConfig = {
+			environmentId: config.environmentId,
+			...(config.baseUrl ? { baseUrl: parseBaseUrl(config.baseUrl) } : {}),
+		} as const;
+
+		return match(config.apiMode)
+			.returnType<DeliveryClientConfig>()
+			.with("preview", () => ({ ...baseConfig, apiMode: "preview", deliveryApiKey: config.deliveryApiKey ?? "" }))
+			.with("secure", () => ({ ...baseConfig, apiMode: "secure", deliveryApiKey: config.deliveryApiKey ?? "" }))
+			.with("default", () => ({ ...baseConfig, apiMode: "public" }))
+			.exhaustive();
+	}
 
 	return {
-		async getItemsAsync(filterByTypeCodenames: readonly string[]): Promise<readonly Readonly<IContentItem>[]> {
+		async getItemsAsync(filterByTypeCodenames: readonly string[]): Promise<readonly Readonly<GeneratorContentItem>[]> {
+			const pagedResponse = await client
+				.itemsFeed({
+					config: {
+						customHeaders: [{ name: coreConfig.kontentTrackingHeaderName, value: coreConfig.kontentTrackingHeaderValue }],
+					},
+					...(filterByTypeCodenames.length > 0
+						? { filters: [{ property: "system.type", operator: "in", value: [...filterByTypeCodenames] }] }
+						: {}),
+				})
+				.fetchAllPages();
+
 			const items = sortAlphabetically(
-				(await getItemsQuery(filterByTypeCodenames).toAllPromise()).data.items,
-				(m) => m.system.codename,
+				pagedResponse.responses.flatMap((response) => response.payload.items),
+				(item) => item.system.codename,
 			);
-			console.log(`Fetched '${chalk.yellow(items.length.toString())}' content items`);
+
+			console.log(`Fetched '${colorize("yellow", items.length.toString())}' content items`);
 			return items;
 		},
+	};
+}
+
+function parseBaseUrl(baseUrl: string): { readonly protocol: "https" | "http"; readonly host: string } {
+	const url = new URL(baseUrl);
+	return {
+		protocol: url.protocol.replace(":", "") === "http" ? "http" : "https",
+		host: url.host,
 	};
 }

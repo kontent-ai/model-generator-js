@@ -1,5 +1,11 @@
-import type { CollectionModels, LanguageModels } from "@kontent-ai/management-sdk";
-import { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels, WorkflowModels } from "@kontent-ai/management-sdk";
+import {
+	type CollectionModels,
+	ContentTypeModels,
+	ContentTypeSnippetModels,
+	type LanguageModels,
+	TaxonomyModels,
+	WorkflowModels,
+} from "@kontent-ai/management-sdk";
 import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../../config.js";
 import { wrapComment } from "../../core/comment.utils.js";
@@ -7,8 +13,7 @@ import type { GeneratedFile, GeneratedSet, GeneratedTypeModel, ModuleFileExtensi
 import { isNotUndefined } from "../../core/core.utils.js";
 import { getImporter } from "../../core/importer.js";
 import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
-import type { DeliveryEntityNames } from "./delivery-entity-name.generator.js";
-import { getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
+import { type DeliveryEntityNames, getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
 import { getDeliveryTypeAndSnippetGenerator } from "./delivery-type-and-snippet.generator.js";
 import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
@@ -96,6 +101,14 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 	const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
 		const extraCode = getEntityExtraCode(entity);
 
+		// Snippets don't need a codename type/typeguard — they aren't queried by their own codename, and their model
+		// (the 'SnippetOf' type, element codenames and typeguard) is self-contained.
+		if (config.entityType === "Snippet") {
+			return `
+            ${extraCode?.imports.length ? `${extraCode.imports.join("\n")}\n` : ""}${extraCode?.code ?? ""}
+            `;
+		}
+
 		const getEntityTypeCode = (): string => {
 			return `export type ${entityNames.getCodenameTypeName(entity)} = keyof Pick<Record<${entityNames.codenamesTypeName}, null>, "${entity.codename}">;`;
 		};
@@ -105,7 +118,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 				filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${entityNames.overviewFilename}`,
 				importValue: `${entityNames.codenamesTypeName}`,
 			})}${extraCode?.imports.length ? `\n${extraCode.imports.join("\n")}` : ""}
-           
+
             ${getEntityComment(`Type representing codename of '${entity.name}' ${getEntityTypeNameForComment()}`)}
             ${getEntityTypeCode()}
 
@@ -185,7 +198,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 							}),
 					],
 					code: `
-					 ${wrapComment(`Core content type with narrowed types. Use this instead of'${deliveryConfig.sdkTypes.contentItem}' for increased type safety.`, { disableComments: config.disableComments })}
+					 ${wrapComment(`Core content type with narrowed types. Use this instead of '${deliveryConfig.sdkTypes.contentItemPayload}' for increased type safety.`, { disableComments: config.disableComments })}
 					 ${deliveryUtils.getCoreContentTypeCode(
 							config.entities.filter((m) => m instanceof ContentTypeModels.ContentType),
 							entityNames as DeliveryEntityNames<"Type">,
@@ -203,7 +216,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					${getEntityComment("Helper type that returns type based on the codename of type.")}
 					${deliveryUtils.getTypeMappingItem({
 						codenamesTypeName: entityNames.codenamesTypeName,
-						defaultTypeName: "CoreType",
+						defaultTypeName: deliveryConfig.coreContentTypeName,
 						entityType: contentTypeDeliveryType,
 					})}
 					`,

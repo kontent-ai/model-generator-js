@@ -1,4 +1,4 @@
-import type { IDeliveryClient } from "@kontent-ai/delivery-sdk";
+import type { ContentItemPayload, DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-sdk";
 import type {
 	ContentTypeElements,
 	ContentTypeModels,
@@ -35,7 +35,8 @@ export type EnvironmentEntity = (typeof environmentEntities)[number];
 export type CaseType = "camelCase" | "pascalCase" | "kebabCase";
 export type DeliveryApiMode = "preview" | "secure" | "default";
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
-export type GeneratorDeliveryClient = Readonly<IDeliveryClient>;
+export type GeneratorDeliveryClient = Readonly<DeliveryClient>;
+export type GeneratorContentItem = ContentItemPayload<DeliveryClientSchema>;
 export type LiteralUnion<T extends string | undefined> = T | (string & NonNullable<unknown>);
 export type CreateFilesConfig = { readonly createFiles: true; readonly outputDir?: string } | { readonly createFiles: false };
 
