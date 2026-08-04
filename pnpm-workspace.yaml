@@ -2,6 +2,6 @@ allowBuilds:
   esbuild: true
 minimumReleaseAgeExclude:
   - '@kontent-ai/delivery-sdk@17.0.0-preview.2'
-  - '@kontent-ai/core-sdk@10.12.8'
+  - '@kontent-ai/core-sdk@10.12.8 || 10.12.9'
   - '@kontent-ai/management-sdk@8.5.4'
   - '@kontent-ai/migration-toolkit@3.2.1'
