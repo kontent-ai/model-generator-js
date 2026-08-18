@@ -10,10 +10,10 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 6.0.0
-        version: 6.0.0(@biomejs/wasm-nodejs@2.5.6)
+        version: 6.0.0(@biomejs/wasm-nodejs@2.5.9)
       '@biomejs/wasm-nodejs':
-        specifier: 2.5.6
-        version: 2.5.6
+        specifier: 2.5.9
+        version: 2.5.9
       '@kontent-ai/core-sdk':
         specifier: 12.0.0-preview.42
         version: 12.0.0-preview.42(ts-pattern@5.9.0)(zod@4.4.3)
@@ -21,17 +21,17 @@ importers:
         specifier: 17.0.0-preview.2
         version: 17.0.0-preview.2(@kontent-ai/core-sdk@12.0.0-preview.42(ts-pattern@5.9.0)(zod@4.4.3))(ts-pattern@5.9.0)(zod@4.4.3)
       '@kontent-ai/management-sdk':
-        specifier: 8.5.4
-        version: 8.5.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        specifier: 8.5.5
+        version: 8.5.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       '@kontent-ai/migration-toolkit':
-        specifier: 3.2.1
-        version: 3.2.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+        specifier: 3.2.2
+        version: 3.2.2(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       '@kontent-ai/sync-sdk':
         specifier: 1.0.3
         version: 1.0.3
       coreSdkLegacy:
-        specifier: npm:@kontent-ai/core-sdk@10.12.9
-        version: '@kontent-ai/core-sdk@10.12.9(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)'
+        specifier: npm:@kontent-ai/core-sdk@10.12.10
+        version: '@kontent-ai/core-sdk@10.12.10(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)'
       ts-pattern:
         specifier: 5.9.0
         version: 5.9.0
@@ -140,8 +140,8 @@ packages:
       '@biomejs/wasm-web':
         optional: true
 
-  '@biomejs/wasm-nodejs@2.5.6':
-    resolution: {integrity: sha512-GvLVidpVLu/kLxyAnHvU0ptG2O6ziGkiUmsrqAvdC+DED4Cy5vQelJahCSqNSkypfTlCq15m5+LgoKUrpmOGxw==}
+  '@biomejs/wasm-nodejs@2.5.9':
+    resolution: {integrity: sha512-Q+UqbmmcYGVOquYJr+xiR3LiteoKF5JsZxOLdTT3BJ2JD0JVb/y8xTZ6cjDTLTH8BBdtTkSXl0YizIqjSHqhcQ==}
 
   '@esbuild/aix-ppc64@0.28.1':
     resolution: {integrity: sha512-Svl7tq8k/08+p6CXPpRjQ1fKX+1odH/BQbb48fV6fj3CWHhsoIOoY87w1oHXm0qEpkIK3ZfVgp0hed3XBXzXMQ==}
@@ -385,12 +385,8 @@ packages:
     peerDependencies:
       '@biomejs/biome': ^2.5.0
 
-  '@kontent-ai/core-sdk@10.12.8':
-    resolution: {integrity: sha512-xf0/xFoFETcXk0GLmUng04Nn0UuAWBaR13G5jKrYYHi82tTZ7gRDtPXt+msBxX/HgOQDm10g1KRExd/MiS69Tg==}
-    engines: {node: '>= 20'}
-
-  '@kontent-ai/core-sdk@10.12.9':
-    resolution: {integrity: sha512-F56GLjPMtU61fPiPcuqTR4/iZVcDgG2UC1NOnqYkNZvYvZQkQWeWVapZuYW93tQ41+3S4AbXcTP3JbJEIYNzPA==}
+  '@kontent-ai/core-sdk@10.12.10':
+    resolution: {integrity: sha512-LWTgEusQeS339mAvq+lAam7Ooy4nBiOGsFIMAfNJKDQVkHXKZ7pzY8ToV0Kug0FpxqfeM9VdFnVD1CNQczZ+KQ==}
     engines: {node: '>= 20'}
 
   '@kontent-ai/core-sdk@11.0.2':
@@ -415,12 +411,12 @@ packages:
   '@kontent-ai/eslint-config@2.4.1':
     resolution: {integrity: sha512-4tIyNDDIxeYaPK17lMN00Ch1kqNbayLmrV+/tcia62XzCejR/cHcXcsWVGhmxS1RjyVpqhstnTWbUrcvmXge2Q==}
 
-  '@kontent-ai/management-sdk@8.5.4':
-    resolution: {integrity: sha512-UzdueRvUs/dhHWgbfyk2WriLfZttdUee2YOHLhIRPgs9+3Mr15jwWO0fnk9Od2FxeTec/ZMiDval6hKR19IKjQ==}
+  '@kontent-ai/management-sdk@8.5.5':
+    resolution: {integrity: sha512-EfOlitx5HHGucTF3ZWCaLnh97jqV1esLFtCOesKeHzVslspybJRfZt0fHCgUtkNjpxNvXjw+PI53U6IHGv4Jdg==}
     engines: {node: '>= 20'}
 
-  '@kontent-ai/migration-toolkit@3.2.1':
-    resolution: {integrity: sha512-nh9y0ZyCLX9UVVhbUQbp6bABIeZyEPJoSAIGskH7EyRP77FYaD47C9SEJYorGQbPd8yzfS0O6l0UnbGeaEbVRw==}
+  '@kontent-ai/migration-toolkit@3.2.2':
+    resolution: {integrity: sha512-oB9JfnoVshfrOlphUb4HtrPk+gzI0lrEr1GuyB04X/AQWF5AGEpuH+KcEjWF+nPeDDrF71K1q49A2/H2PDQ14A==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -713,9 +709,6 @@ packages:
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
-
-  axios@1.18.1:
-    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
 
   axios@1.19.0:
     resolution: {integrity: sha512-ht/iuYZXEjFxLH/Hkezgd7m6JKlHHXEUSneaDz8uZe1Gj5QZtCnpyDsckvAiEnT89OEbCLmnte4R4sn7P0EKFw==}
@@ -1525,8 +1518,8 @@ packages:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
     engines: {node: '>=10'}
 
-  p-limit@7.3.0:
-    resolution: {integrity: sha512-7cIXg/Z0M5WZRblrsOla88S4wAK+zOQQWeBYfV3qJuJXMr+LnbYjaadrFaS0JILfEDPVqHyKnZ1Z/1d6J9VVUw==}
+  p-limit@7.3.1:
+    resolution: {integrity: sha512-0trZaiG7Y7kN/Egy9a8j47t9osC0Tch4PaIWd9yGF6bvmlk7muExRvGNYb8sXBwEKMoNKsbNN9P8EefuQekE4Q==}
     engines: {node: '>=20'}
 
   p-locate@5.0.0:
@@ -1953,10 +1946,6 @@ packages:
     resolution: {integrity: sha512-rwu/ClNdSMpkSrUb+d6BRsSkLUq1fmfsY6TOpYzTwvwkg1/NRG85KBy3kq++A8LKQwX6lsu+aWad+2khvuXrqw==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
 
-  yargs@18.0.0:
-    resolution: {integrity: sha512-4UEqdc2RYGHZc7Doyqkrqiln3p9X2DZVxaGbwhn2pi7MrRagKaOcIKe8L3OxYcbhXLgLFUS3zAYuQjKBQgmuNg==}
-    engines: {node: ^20.19.0 || ^22.12.0 || >=23}
-
   yargs@18.1.0:
     resolution: {integrity: sha512-2rAgRKu54VsHkqI0/tYkmluGXHD4KW7yZoycuqDQ15QOTnc2VVfy0nN/1eMhnQLO00A+dwtK20xuCnc1YGeUyg==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=23}
@@ -2016,11 +2005,11 @@ snapshots:
   '@biomejs/cli-win32-x64@2.5.0':
     optional: true
 
-  '@biomejs/js-api@6.0.0(@biomejs/wasm-nodejs@2.5.6)':
+  '@biomejs/js-api@6.0.0(@biomejs/wasm-nodejs@2.5.9)':
     optionalDependencies:
-      '@biomejs/wasm-nodejs': 2.5.6
+      '@biomejs/wasm-nodejs': 2.5.9
 
-  '@biomejs/wasm-nodejs@2.5.6': {}
+  '@biomejs/wasm-nodejs@2.5.9': {}
 
   '@esbuild/aix-ppc64@0.28.1':
     optional: true
@@ -2196,14 +2185,7 @@ snapshots:
     dependencies:
       '@biomejs/biome': 2.5.0
 
-  '@kontent-ai/core-sdk@10.12.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
-    dependencies:
-      axios: 1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
-    transitivePeerDependencies:
-      - debug
-      - supports-color
-
-  '@kontent-ai/core-sdk@10.12.9(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@kontent-ai/core-sdk@10.12.10(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
       axios: 1.19.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
     transitivePeerDependencies:
@@ -2234,17 +2216,17 @@ snapshots:
       - supports-color
       - typescript
 
-  '@kontent-ai/management-sdk@8.5.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@kontent-ai/management-sdk@8.5.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
-      '@kontent-ai/core-sdk': 10.12.8(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@kontent-ai/core-sdk': 10.12.10(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       mime: 3.0.0
     transitivePeerDependencies:
       - debug
       - supports-color
 
-  '@kontent-ai/migration-toolkit@3.2.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
+  '@kontent-ai/migration-toolkit@3.2.2(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)':
     dependencies:
-      '@kontent-ai/management-sdk': 8.5.4(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
+      '@kontent-ai/management-sdk': 8.5.5(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
       browser-or-node: 3.0.0
       buffer: 6.0.3
       bytes: 3.1.2
@@ -2254,10 +2236,10 @@ snapshots:
       jszip: 3.10.1
       mime: 4.1.0
       ora: 9.4.1
-      p-limit: 7.3.0
+      p-limit: 7.3.1
       prompts: 2.4.2
       ts-pattern: 5.9.0
-      yargs: 18.0.0
+      yargs: 18.1.0
       zod: 4.4.3
     transitivePeerDependencies:
       - debug
@@ -2566,16 +2548,6 @@ snapshots:
   available-typed-arrays@1.0.7:
     dependencies:
       possible-typed-array-names: 1.1.0
-
-  axios@1.18.1(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
-    dependencies:
-      follow-redirects: 1.16.0(debug@4.4.3(supports-color@7.2.0))
-      form-data: 4.0.6
-      https-proxy-agent: 5.0.1(supports-color@7.2.0)
-      proxy-from-env: 2.1.0
-    transitivePeerDependencies:
-      - debug
-      - supports-color
 
   axios@1.19.0(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0):
     dependencies:
@@ -3564,7 +3536,7 @@ snapshots:
     dependencies:
       yocto-queue: 0.1.0
 
-  p-limit@7.3.0:
+  p-limit@7.3.1:
     dependencies:
       yocto-queue: 1.2.2
 
@@ -4037,15 +4009,6 @@ snapshots:
   y18n@5.0.8: {}
 
   yargs-parser@22.0.0: {}
-
-  yargs@18.0.0:
-    dependencies:
-      cliui: 9.0.1
-      escalade: 3.2.0
-      get-caller-file: 2.0.5
-      string-width: 7.2.0
-      y18n: 5.0.8
-      yargs-parser: 22.0.0
 
   yargs@18.1.0:
     dependencies:
