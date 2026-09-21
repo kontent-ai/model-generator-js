@@ -51,25 +51,25 @@
 	},
 	"dependencies": {
 		"@biomejs/js-api": "6.0.0",
-		"@biomejs/wasm-nodejs": "2.5.9",
+		"@biomejs/wasm-nodejs": "2.5.14",
 		"@kontent-ai/core-sdk": "12.0.0-preview.42",
 		"@kontent-ai/delivery-sdk": "17.0.0-preview.2",
-		"@kontent-ai/management-sdk": "8.5.5",
-		"@kontent-ai/migration-toolkit": "3.2.2",
+		"@kontent-ai/management-sdk": "8.5.7",
+		"@kontent-ai/migration-toolkit": "3.2.4",
 		"@kontent-ai/sync-sdk": "1.0.3",
-		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.10",
+		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.11",
 		"ts-pattern": "5.9.0",
-		"yargs": "18.1.0"
+		"yargs": "18.2.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.5.0",
+		"@biomejs/biome": "2.5.14",
 		"@kontent-ai/biome-config": "0.7.3",
 		"@kontent-ai/eslint-config": "2.4.1",
-		"@types/node": "25.9.3",
+		"@types/node": "26.6.2",
 		"@types/yargs": "17.0.35",
-		"eslint": "10.5.0",
-		"tsx": "4.23.5",
+		"eslint": "10.11.0",
+		"tsx": "4.23.15",
 		"typescript": "6.0.3",
-		"vitest": "4.1.10"
+		"vitest": "5.0.1"
 	}
 }

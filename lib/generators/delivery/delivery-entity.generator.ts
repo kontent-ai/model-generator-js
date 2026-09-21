@@ -83,7 +83,8 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 	};
 
 	const getOverviewFileCode = (): string => {
-		const { imports, code: extraCode } = getOverviewFileExtraCode() ?? {};
+		const { imports, code } = getOverviewFileExtraCode() ?? {};
+		const extraCode = code ? `\n${code}` : "";
 
 		return `
             ${imports?.length ? `${imports.join("\n")}\n` : ""}${deliveryUtils.getCodeOfDeliveryEntity({
@@ -95,7 +96,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					valuesPropertyName: entityNames.codenamesValuePropertyName,
 				},
 				extendedType: config.entityType,
-			})}${extraCode?.length ? `\n${extraCode}` : ""}`;
+			})}${extraCode}`;
 	};
 
 	const getEntityCode = (entity: Readonly<DeliveryEntity>): string => {
