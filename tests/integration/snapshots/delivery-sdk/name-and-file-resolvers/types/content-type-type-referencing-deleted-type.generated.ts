@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Type referencing deleted type' type
@@ -24,7 +22,9 @@ export function isContentTypeTypeReferencingDeletedTypeCodename(
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  * Codename: type_referencing_deleted_type
  */
-export type ContentTypeTypeReferencingDeletedType = IContentItem<
+export type ContentTypeTypeReferencingDeletedTypeItem = ContentItemOf<
+	CoreClientSchema,
+	ContentTypeTypeReferencingDeletedTypeCodename,
 	{
 		/*
 		 * Rich text with invalid type
@@ -34,7 +34,7 @@ export type ContentTypeTypeReferencingDeletedType = IContentItem<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_with_invalid_type: Elements.RichTextElement<CoreType>;
+		readonly rich_text_with_invalid_type: Elements.RichText<CoreItem>;
 
 		/*
 		 * Linked items with invalid type
@@ -44,13 +44,8 @@ export type ContentTypeTypeReferencingDeletedType = IContentItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly linked_items_with_invalid_type: Elements.LinkedItemsElement<CoreType>;
-	},
-	ContentTypeTypeReferencingDeletedTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreItem>;
+	}
 >;
 
 /*
@@ -64,8 +59,8 @@ export type ContentTypeTypeReferencingDeletedTypeElementCodenames = "rich_text_w
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  * Codename: type_referencing_deleted_type
  */
-export function isContentTypeTypeReferencingDeletedType(
-	item: IContentItem | undefined | null,
-): item is ContentTypeTypeReferencingDeletedType {
-	return item?.system.type === ("type_referencing_deleted_type" satisfies ContentTypeTypeReferencingDeletedTypeCodename);
+export function isContentTypeTypeReferencingDeletedTypeItem(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is ContentTypeTypeReferencingDeletedTypeItem {
+	return isContentTypeTypeReferencingDeletedTypeCodename(item?.system.type);
 }

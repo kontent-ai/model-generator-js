@@ -14,7 +14,7 @@ export function mapFilename<T extends ObjectWithCodename>(
 ): NonNullable<FilenameResolver<T>> {
 	return (item, addExtension) => {
 		return (
-			(options?.prefix ? options.prefix : "") +
+			(options?.prefix ?? "") +
 			addExtensionToFilename(
 				resolveCase(
 					match(resolver)
@@ -22,7 +22,7 @@ export function mapFilename<T extends ObjectWithCodename>(
 						.with(P.instanceOf(Function), (resolver) => resolver(item, addExtension))
 						.otherwise(() => item.codename),
 					"kebabCase",
-				) + (options?.suffix ? options.suffix : ""),
+				) + (options?.suffix ?? ""),
 				addExtension,
 			)
 		);
@@ -38,7 +38,7 @@ export function mapName<T extends ObjectWithName>(
 	},
 ): NonNullable<NameResolver<T>> {
 	return (item) =>
-		(options?.prefix ? options.prefix : "") +
+		(options?.prefix ?? "") +
 		resolveCase(
 			match(resolver)
 				.returnType<string>()
@@ -46,7 +46,7 @@ export function mapName<T extends ObjectWithName>(
 				.otherwise(() => item.name),
 			caseType,
 		) +
-		(options?.suffix ? options.suffix : "");
+		(options?.suffix ?? "");
 }
 
 export function resolveCase(text: string, resolverType: CaseType): string {

@@ -1,7 +1,7 @@
 import * as fs from "node:fs";
 import { dirname } from "node:path";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
-import chalk from "chalk";
 import { coreConfig } from "../config.js";
 import { getEnvironmentInfoComment } from "../core/comment.utils.js";
 import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from "../core/core.models.js";
@@ -32,7 +32,7 @@ export function getFileManager(config: {
 
 		ensureDirectoryExistence(fullFilePath);
 		fs.writeFileSync(`./${fullFilePath}`, fileContent, {});
-		console.log(`Created '${chalk.yellow(fullFilePath)}'`);
+		console.log(`Created '${colorize("yellow", fullFilePath)}'`);
 	};
 
 	const getFormattedCodeAsync = async (code: string, filePath: string): Promise<string> => {
@@ -45,7 +45,7 @@ export function getFileManager(config: {
 			}
 			return code;
 		} catch {
-			console.log(`Failed to format file '${chalk.red(filePath)}'. Skipping code formatting.`);
+			console.log(`Failed to format file '${colorize("red", filePath)}'. Skipping code formatting.`);
 			return code;
 		}
 	};

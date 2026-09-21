@@ -1,32 +1,27 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 
-export type TypeReferencingDeletedTypeTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
+export type TypeReferencingDeletedTypeCodename = keyof Pick<Record<TypeCodenames, null>, "type_referencing_deleted_type">;
 
-export function isTypeReferencingDeletedTypeTypeCodename(
-	value: string | undefined | null,
-): value is TypeReferencingDeletedTypeTypeCodename {
-	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename);
+export function isTypeReferencingDeletedTypeCodename(value: string | undefined | null): value is TypeReferencingDeletedTypeCodename {
+	return typeof value === "string" && value === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeCodename);
 }
 
-export type TypeReferencingDeletedTypeType = IContentItem<
+export type TypeReferencingDeletedTypeItem = ContentItemOf<
+	CoreClientSchema,
+	TypeReferencingDeletedTypeCodename,
 	{
-		readonly rich_text_with_invalid_type: Elements.RichTextElement<CoreType>;
+		readonly rich_text_with_invalid_type: Elements.RichText<CoreItem>;
 
-		readonly linked_items_with_invalid_type: Elements.LinkedItemsElement<CoreType>;
-	},
-	TypeReferencingDeletedTypeTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreItem>;
+	}
 >;
 
-export type TypeReferencingDeletedTypeTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type";
+export type TypeReferencingDeletedTypeElementCodenames = "rich_text_with_invalid_type" | "linked_items_with_invalid_type";
 
-export function isTypeReferencingDeletedTypeType(item: IContentItem | undefined | null): item is TypeReferencingDeletedTypeType {
-	return item?.system.type === ("type_referencing_deleted_type" satisfies TypeReferencingDeletedTypeTypeCodename);
+export function isTypeReferencingDeletedTypeItem(
+	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+): item is TypeReferencingDeletedTypeItem {
+	return isTypeReferencingDeletedTypeCodename(item?.system.type);
 }

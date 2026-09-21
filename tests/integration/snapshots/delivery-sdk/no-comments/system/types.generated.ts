@@ -1,14 +1,14 @@
-import type { CircularReferenceTypeABType } from "../types/circular-reference-type-a-b-type.generated.js";
-import type { CircularReferenceTypeBAType } from "../types/circular-reference-type-b-a-type.generated.js";
-import type { ContentTypeWithAllElementsType } from "../types/content-type-with-all-elements-type.generated.js";
-import type { ContentTypeWithGuidelinesOnlyType } from "../types/content-type-with-guidelines-only-type.generated.js";
-import type { ContentTypeWithSnippetOnlyType } from "../types/content-type-with-snippet-only-type.generated.js";
-import type { ContentTypeWithSpecialCharsType } from "../types/content-type-with-special-chars-type.generated.js";
-import type { EmptyContentTypeType } from "../types/empty-content-type-type.generated.js";
-import type { PageType } from "../types/page-type.generated.js";
-import type { TypeReferencingDeletedTypeType } from "../types/type-referencing-deleted-type-type.generated.js";
-import type { TypeWithEmptySnippetType } from "../types/type-with-empty-snippet-type.generated.js";
-import type { WebSpotlightRootType } from "../types/web-spotlight-root-type.generated.js";
+import type { CircularReferenceTypeABItem } from "../types/circular-reference-type-a-b-type.generated.js";
+import type { CircularReferenceTypeBAItem } from "../types/circular-reference-type-b-a-type.generated.js";
+import type { ContentTypeWithAllElementsItem } from "../types/content-type-with-all-elements-type.generated.js";
+import type { ContentTypeWithGuidelinesOnlyItem } from "../types/content-type-with-guidelines-only-type.generated.js";
+import type { ContentTypeWithSnippetOnlyItem } from "../types/content-type-with-snippet-only-type.generated.js";
+import type { ContentTypeWithSpecialCharsItem } from "../types/content-type-with-special-chars-type.generated.js";
+import type { EmptyContentTypeItem } from "../types/empty-content-type-type.generated.js";
+import type { PageItem } from "../types/page-type.generated.js";
+import type { TypeReferencingDeletedTypeItem } from "../types/type-referencing-deleted-type-type.generated.js";
+import type { TypeWithEmptySnippetItem } from "../types/type-with-empty-snippet-type.generated.js";
+import type { WebSpotlightRootItem } from "../types/web-spotlight-root-type.generated.js";
 
 export const typeCodenames = [
 	"content_type_with_all_elements",
@@ -30,33 +30,33 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 	return typeof value === "string" && (typeCodenames as readonly string[]).includes(value);
 }
 
-export type CoreType =
-	| ContentTypeWithAllElementsType
-	| ContentTypeWithSpecialCharsType
-	| EmptyContentTypeType
-	| ContentTypeWithSnippetOnlyType
-	| ContentTypeWithGuidelinesOnlyType
-	| CircularReferenceTypeABType
-	| CircularReferenceTypeBAType
-	| WebSpotlightRootType
-	| PageType
-	| TypeWithEmptySnippetType
-	| TypeReferencingDeletedTypeType;
+export type CoreItem =
+	| ContentTypeWithAllElementsItem
+	| ContentTypeWithSpecialCharsItem
+	| EmptyContentTypeItem
+	| ContentTypeWithSnippetOnlyItem
+	| ContentTypeWithGuidelinesOnlyItem
+	| CircularReferenceTypeABItem
+	| CircularReferenceTypeBAItem
+	| WebSpotlightRootItem
+	| PageItem
+	| TypeWithEmptySnippetItem
+	| TypeReferencingDeletedTypeItem;
 
-export type CodenameTypeMapping = {
-	readonly content_type_with_all_elements: ContentTypeWithAllElementsType;
-	readonly _content_type_with_special_chars____: ContentTypeWithSpecialCharsType;
-	readonly empty_content_type: EmptyContentTypeType;
-	readonly content_type_with_snippet_only: ContentTypeWithSnippetOnlyType;
-	readonly content_type_with_guidelines_only: ContentTypeWithGuidelinesOnlyType;
-	readonly circular_reference_type_a_b: CircularReferenceTypeABType;
-	readonly circular_reference_type_b____a: CircularReferenceTypeBAType;
-	readonly web_spotlight_root: WebSpotlightRootType;
-	readonly page: PageType;
-	readonly type_with_empty_snippet: TypeWithEmptySnippetType;
-	readonly type_referencing_deleted_type: TypeReferencingDeletedTypeType;
+export type TypeCodenameToItemMap = {
+	readonly content_type_with_all_elements: ContentTypeWithAllElementsItem;
+	readonly _content_type_with_special_chars____: ContentTypeWithSpecialCharsItem;
+	readonly empty_content_type: EmptyContentTypeItem;
+	readonly content_type_with_snippet_only: ContentTypeWithSnippetOnlyItem;
+	readonly content_type_with_guidelines_only: ContentTypeWithGuidelinesOnlyItem;
+	readonly circular_reference_type_a_b: CircularReferenceTypeABItem;
+	readonly circular_reference_type_b____a: CircularReferenceTypeBAItem;
+	readonly web_spotlight_root: WebSpotlightRootItem;
+	readonly page: PageItem;
+	readonly type_with_empty_snippet: TypeWithEmptySnippetItem;
+	readonly type_referencing_deleted_type: TypeReferencingDeletedTypeItem;
 };
 
-export type CodenameTypeMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof CodenameTypeMapping
-	? CodenameTypeMapping[TTypeCodename]
-	: CoreType;
+export type TypeCodenameMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof TypeCodenameToItemMap
+	? TypeCodenameToItemMap[TTypeCodename]
+	: CoreItem;

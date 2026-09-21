@@ -10,8 +10,10 @@ export async function formatCodeAsync(code: string, formatType: FormatType, conf
 			filePath: formatType === "typescript" ? "virtual.ts" : "virtual.json",
 		});
 
-		if (formattedContent.diagnostics.length > 0) {
-			throw new Error(`Failed to format code: ${formattedContent.diagnostics.map((m) => m.message).join("\n")}`);
+		// 'formatContent' only runs the formatter; assist actions such as 'organizeImports' (and safe lint fixes
+		// like removing unused imports) are applied by 'lintContent' with a fix mode. JSON has nothing to organize.
+		if (formatType !== "typescript") {
+			return formattedContent.content;
 		}
 
 		const lintedContent = biome.lintContent(projectKey, formattedContent.content, {
@@ -19,11 +21,11 @@ export async function formatCodeAsync(code: string, formatType: FormatType, conf
 			fixFileMode: "safeFixes",
 		});
 
-		if (lintedContent.diagnostics.length > 0) {
-			throw new Error(`Failed to lint code: ${lintedContent.diagnostics.map((m) => m.message).join("\n")}`);
-		}
-
-		return lintedContent.content;
+		// Re-format after organizing: 'organizeImports' can merge several same-module imports into a single
+		// statement that exceeds the configured line width, and only the formatter (not the assist) wraps it.
+		return biome.formatContent(projectKey, lintedContent.content, {
+			filePath: "virtual.ts",
+		}).content;
 	});
 
 	return await Promise.resolve(result);

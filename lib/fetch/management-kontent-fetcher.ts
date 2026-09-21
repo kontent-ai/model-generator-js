@@ -1,22 +1,22 @@
 import { HttpService } from "coreSdkLegacy";
-import type {
-	AssetFolderModels,
-	CollectionModels,
-	ContentItemModels,
-	ContentTypeModels,
-	ContentTypeSnippetModels,
-	CustomAppModels,
-	EnvironmentModels,
-	LanguageModels,
-	PreviewModels,
-	RoleModels,
-	SpaceModels,
-	TaxonomyModels,
-	WebhookModels,
-	WorkflowModels,
+import { colorize } from "@kontent-ai/core-sdk/devkit";
+import {
+	type AssetFolderModels,
+	type CollectionModels,
+	type ContentItemModels,
+	type ContentTypeModels,
+	type ContentTypeSnippetModels,
+	type CustomAppModels,
+	createManagementClient,
+	type EnvironmentModels,
+	type LanguageModels,
+	type PreviewModels,
+	type RoleModels,
+	type SpaceModels,
+	type TaxonomyModels,
+	type WebhookModels,
+	type WorkflowModels,
 } from "@kontent-ai/management-sdk";
-import { createManagementClient } from "@kontent-ai/management-sdk";
-import chalk from "chalk";
 import { coreConfig } from "../config.js";
 import { toSafeCommentText } from "../core/comment.utils.js";
 import type { GeneratorManagementClient } from "../core/core.models.js";
@@ -55,8 +55,8 @@ export function getManagementKontentFetcher(config: {
 	return {
 		async getEnvironmentInfoAsync(): Promise<Readonly<EnvironmentModels.EnvironmentInformationModel>> {
 			const projectInformation = (await client.environmentInformation().toPromise()).data;
-			console.log(`Project '${chalk.cyan(toSafeCommentText(projectInformation.project.name))}'`);
-			console.log(`Environment '${chalk.cyan(toSafeCommentText(projectInformation.project.environment))}'\n`);
+			console.log(`Project '${colorize("cyan", toSafeCommentText(projectInformation.project.name))}'`);
+			console.log(`Environment '${colorize("cyan", toSafeCommentText(projectInformation.project.environment))}'\n`);
 			return projectInformation.project;
 		},
 		async getItemsAsync(): Promise<readonly Readonly<ContentItemModels.ContentItem>[]> {
@@ -67,7 +67,7 @@ export function getManagementKontentFetcher(config: {
 							.listContentItems()
 							.withListQueryConfig({
 								responseFetched: (response) => {
-									console.log(`Fetched '${chalk.yellow(response.data.items.length.toString())}' content items`);
+									console.log(`Fetched '${colorize("yellow", response.data.items.length.toString())}' content items`);
 								},
 							})
 							.toAllPromise()
@@ -172,7 +172,7 @@ async function fetchItemsAsync<T>({
 }): Promise<T[]> {
 	try {
 		const data = await fetch();
-		console.log(`Fetched '${chalk.yellow(data.length.toString())}' ${itemType}`);
+		console.log(`Fetched '${colorize("yellow", data.length.toString())}' ${itemType}`);
 		return data;
 	} catch (error) {
 		if (!returnEmptyArrayOnMapiError) {
@@ -182,7 +182,7 @@ async function fetchItemsAsync<T>({
 		const errorData = extractErrorData(error);
 
 		if (errorData.isMapiError) {
-			console.warn(`${chalk.red(`Skip fetching ${itemType}`)}: ${errorData.message}`);
+			console.warn(`${colorize("red", `Skip fetching ${itemType}`)}: ${errorData.message}`);
 			return [];
 		}
 

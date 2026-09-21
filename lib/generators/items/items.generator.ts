@@ -1,25 +1,24 @@
-import type { IContentItem } from "@kontent-ai/delivery-sdk";
+import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { ContentTypeModels } from "@kontent-ai/management-sdk";
-import Chalk from "chalk";
 import { itemsConfig } from "../../config.js";
 import { wrapComment } from "../../core/comment.utils.js";
-import type { GeneratedSet } from "../../core/core.models.js";
+import type { GeneratedSet, GeneratorContentItem } from "../../core/core.models.js";
 import { resolveCase } from "../../core/resolvers.js";
 
 export interface ItemGeneratorConfig {
 	readonly disableComments: boolean;
 	readonly environmentData: {
-		readonly items: readonly Readonly<IContentItem>[];
+		readonly items: readonly Readonly<GeneratorContentItem>[];
 		readonly types: readonly Readonly<ContentTypeModels.ContentType>[];
 	};
 }
 
 export function getItemsGenerator(config: ItemGeneratorConfig) {
-	const getItemCodenameType = (typeCodename: string, items: readonly Readonly<IContentItem>[]): string => {
+	const getItemCodenameType = (typeCodename: string, items: readonly Readonly<GeneratorContentItem>[]): string => {
 		return `export type ${resolveCase(typeCodename, "pascalCase")}Codenames = ${items.map((item) => `'${item.system.codename}'`).join(" | ")};`;
 	};
 
-	const getItemCodenamesProp = (typeCodename: string, items: readonly Readonly<IContentItem>[]): string => {
+	const getItemCodenamesProp = (typeCodename: string, items: readonly Readonly<GeneratorContentItem>[]): string => {
 		const values = items.reduce((code, item, index) => {
 			const isLast = index === items.length - 1;
 
@@ -36,8 +35,8 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
                 } as const;`;
 	};
 
-	const groupItemsByType = (items: readonly Readonly<IContentItem>[]): Map<string, readonly Readonly<IContentItem>[]> => {
-		return items.reduce<Map<string, readonly Readonly<IContentItem>[]>>((itemsByType, item) => {
+	const groupItemsByType = (items: readonly Readonly<GeneratorContentItem>[]): Map<string, readonly Readonly<GeneratorContentItem>[]> => {
+		return items.reduce<Map<string, readonly Readonly<GeneratorContentItem>[]>>((itemsByType, item) => {
 			const existingGroupItems = itemsByType.get(item.system.type);
 			if (existingGroupItems) {
 				itemsByType.set(item.system.type, [...existingGroupItems, item]);
@@ -46,7 +45,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 			}
 
 			return itemsByType;
-		}, new Map<string, readonly Readonly<IContentItem>[]>());
+		}, new Map<string, readonly Readonly<GeneratorContentItem>[]>());
 	};
 
 	return {
@@ -57,7 +56,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					const type = config.environmentData.types.find((t) => t.codename.toLowerCase() === typeCodename.toLowerCase());
 
 					if (!type) {
-						throw new Error(`Type with codename '${Chalk.red(typeCodename)}' not found`);
+						throw new Error(`Type with codename '${colorize("red", typeCodename)}' not found`);
 					}
 
 					return {
@@ -91,7 +90,7 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					const type = config.environmentData.types.find((t) => t.codename.toLowerCase() === typeCodename.toLowerCase());
 
 					if (!type) {
-						throw new Error(`Type with codename '${Chalk.red(typeCodename)}' not found`);
+						throw new Error(`Type with codename '${colorize("red", typeCodename)}' not found`);
 					}
 
 					return {

@@ -12,22 +12,20 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
 
 /*
  * Type representing codename of 'Actor' type
  */
-export type ActorTypeCodename = keyof Pick<Record<TypeCodenames, null>, "actor">;
+export type ActorCodename = keyof Pick<Record<TypeCodenames, null>, "actor">;
 
 /*
  * Typeguard for codename of 'Actor' type
  */
-export function isActorTypeCodename(value: string | undefined | null): value is ActorTypeCodename {
-	return typeof value === "string" && value === ("actor" satisfies ActorTypeCodename);
+export function isActorCodename(value: string | undefined | null): value is ActorCodename {
+	return typeof value === "string" && value === ("actor" satisfies ActorCodename);
 }
 
 /*
@@ -36,7 +34,9 @@ export function isActorTypeCodename(value: string | undefined | null): value is 
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export type ActorType = IContentItem<
+export type ActorItem = ContentItemOf<
+	CoreClientSchema,
+	ActorCodename,
 	{
 		/*
 		 * Url
@@ -46,7 +46,7 @@ export type ActorType = IContentItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url: Elements.UrlSlugElement;
+		readonly url: Elements.UrlSlug;
 
 		/*
 		 * First name
@@ -57,7 +57,7 @@ export type ActorType = IContentItem<
 		 * Required: true
 		 * Guidelines: This is the first name of the actor
 		 */
-		readonly first_name: Elements.TextElement;
+		readonly first_name: Elements.Text;
 
 		/*
 		 * Last name
@@ -67,7 +67,7 @@ export type ActorType = IContentItem<
 		 * Type: text
 		 * Required: true
 		 */
-		readonly last_name: Elements.TextElement;
+		readonly last_name: Elements.Text;
 
 		/*
 		 * Photo
@@ -77,19 +77,14 @@ export type ActorType = IContentItem<
 		 * Type: asset
 		 * Required: false
 		 */
-		readonly photo: Elements.AssetsElement;
-	},
-	ActorTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly photo: Elements.Asset;
+	}
 >;
 
 /*
  * Type representing all available element codenames for Actor
  */
-export type ActorTypeElementCodenames = "url" | "first_name" | "last_name" | "photo";
+export type ActorElementCodenames = "url" | "first_name" | "last_name" | "photo";
 
 /*
  * Type guard for Actor
@@ -97,6 +92,6 @@ export type ActorTypeElementCodenames = "url" | "first_name" | "last_name" | "ph
  * Id: 58099989-319f-495f-aa36-cb3710854e36
  * Codename: actor
  */
-export function isActorType(item: IContentItem | undefined | null): item is ActorType {
-	return item?.system.type === ("actor" satisfies ActorTypeCodename);
+export function isActorItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ActorItem {
+	return isActorCodename(item?.system.type);
 }

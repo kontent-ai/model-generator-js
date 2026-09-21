@@ -12,29 +12,27 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { IDeliveryClient } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "./collections.generated.js";
-import type { ElementCodenames } from "./elements.generated.js";
-import type { LanguageCodenames } from "./languages.generated.js";
-import type { TaxonomyCodenames } from "./taxonomies.generated.js";
-import type { CoreType, TypeCodenames } from "./types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "./workflows.generated.js";
+import type { DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-sdk";
 
 /*
- * Core types for 'IDeliveryClient'
+ * Schema describing this environment, used to strongly type 'DeliveryClient'
  */
-export type CoreClientTypes = {
-	readonly collectionCodenames: CollectionCodenames;
-	readonly contentItemType: CoreType;
-	readonly contentTypeCodenames: TypeCodenames;
-	readonly elementCodenames: ElementCodenames;
-	readonly languageCodenames: LanguageCodenames;
-	readonly taxonomyCodenames: TaxonomyCodenames;
-	readonly workflowCodenames: WorkflowCodenames;
-	readonly workflowStepCodenames: WorkflowStepCodenames;
-};
+export type CoreClientSchema = DeliveryClientSchema<{
+	readonly languageCodenames: readonly ["en", "cz", "German"];
+	readonly taxonomies: {
+		readonly releasecategory: readonly ["global_release", "us_only", "local_release"];
+		readonly movietype: readonly ["student", "tv", "blockbuster", "cinema_only", "film"];
+	};
+	readonly contentTypes: {
+		readonly actor: readonly ["url", "first_name", "last_name", "photo"];
+		readonly movie: readonly ["title", "plot", "released", "length", "poster", "category", "stars", "seoname", "releasecategory"];
+	};
+	readonly collectionCodenames: readonly ["default"];
+	readonly workflowCodenames: readonly ["default"];
+	readonly workflowStepCodenames: readonly ["draft", "review", "ready_to_publish", "published", "archived", "scheduled"];
+}>;
 
 /*
- * Typed delivery client. Use this instead of 'IDeliveryClient'
+ * Typed delivery client. Use this instead of 'DeliveryClient'
  */
-export type CoreDeliveryClient = IDeliveryClient<CoreClientTypes>;
+export type CoreDeliveryClient = DeliveryClient<CoreClientSchema>;

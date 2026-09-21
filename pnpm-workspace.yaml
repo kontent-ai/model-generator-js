@@ -1,0 +1,9 @@
+allowBuilds:
+  esbuild: true
+minimumReleaseAgeExclude:
+  - '@kontent-ai/delivery-sdk@17.0.0-preview.2'
+  - '@kontent-ai/core-sdk@10.12.8 || 10.12.9 || 10.12.10 || 10.12.11'
+  - '@kontent-ai/management-sdk@8.5.4 || 8.5.5 || 8.5.6 || 8.5.7'
+  - '@kontent-ai/migration-toolkit@3.2.1 || 3.2.2 || 3.2.4'
+  - '@biomejs/wasm-nodejs@2.5.9'
+  - yargs@18.2.0

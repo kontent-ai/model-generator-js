@@ -12,27 +12,22 @@
  * -------------------------------------------------------------------------------
  */
 
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
-import type {
-	ReleaseCategoryTaxonomyCodename,
-	ReleaseCategoryTaxonomyTermCodenames,
-} from "../taxonomies/release-category-taxonomy.generated.js";
-import type { ActorType } from "../types/actor-type.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { ReleaseCategoryTaxonomyTermCodenames } from "../taxonomies/release-category-taxonomy.generated.js";
+import type { ActorItem } from "../types/actor-type.generated.js";
 
 /*
  * Type representing codename of 'Movie' type
  */
-export type MovieTypeCodename = keyof Pick<Record<TypeCodenames, null>, "movie">;
+export type MovieCodename = keyof Pick<Record<TypeCodenames, null>, "movie">;
 
 /*
  * Typeguard for codename of 'Movie' type
  */
-export function isMovieTypeCodename(value: string | undefined | null): value is MovieTypeCodename {
-	return typeof value === "string" && value === ("movie" satisfies MovieTypeCodename);
+export function isMovieCodename(value: string | undefined | null): value is MovieCodename {
+	return typeof value === "string" && value === ("movie" satisfies MovieCodename);
 }
 
 /*
@@ -41,7 +36,9 @@ export function isMovieTypeCodename(value: string | undefined | null): value is 
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export type MovieType = IContentItem<
+export type MovieItem = ContentItemOf<
+	CoreClientSchema,
+	MovieCodename,
 	{
 		/*
 		 * Title
@@ -51,7 +48,7 @@ export type MovieType = IContentItem<
 		 * Type: text
 		 * Required: true
 		 */
-		readonly title: Elements.TextElement;
+		readonly title: Elements.Text;
 
 		/*
 		 * Plot
@@ -61,7 +58,7 @@ export type MovieType = IContentItem<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly plot: Elements.RichTextElement<CoreType>;
+		readonly plot: Elements.RichText<CoreItem>;
 
 		/*
 		 * Released
@@ -71,7 +68,7 @@ export type MovieType = IContentItem<
 		 * Type: date_time
 		 * Required: false
 		 */
-		readonly released: Elements.DateTimeElement;
+		readonly released: Elements.DateTime;
 
 		/*
 		 * Length
@@ -81,7 +78,7 @@ export type MovieType = IContentItem<
 		 * Type: number
 		 * Required: false
 		 */
-		readonly length: Elements.NumberElement;
+		readonly length: Elements.Number;
 
 		/*
 		 * Poster
@@ -91,7 +88,7 @@ export type MovieType = IContentItem<
 		 * Type: asset
 		 * Required: false
 		 */
-		readonly poster: Elements.AssetsElement;
+		readonly poster: Elements.Asset;
 
 		/*
 		 * Category
@@ -101,7 +98,7 @@ export type MovieType = IContentItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly category: Elements.MultipleChoiceElement<MovieTypeCategoryMultipleChoiceOptions>;
+		readonly category: Elements.MultipleChoice<MovieCategoryMultipleChoiceOptions>;
 
 		/*
 		 * Stars
@@ -112,7 +109,7 @@ export type MovieType = IContentItem<
 		 * Required: false
 		 * Allowed content types: actor, movie
 		 */
-		readonly stars: Elements.LinkedItemsElement<ActorType | MovieType>;
+		readonly stars: Elements.LinkedItems<ActorItem | MovieItem>;
 
 		/*
 		 * SeoName
@@ -122,7 +119,7 @@ export type MovieType = IContentItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly seoname: Elements.UrlSlugElement;
+		readonly seoname: Elements.UrlSlug;
 
 		/*
 		 * Release Category
@@ -133,19 +130,14 @@ export type MovieType = IContentItem<
 		 * Required: false
 		 * Taxonomy: releasecategory
 		 */
-		readonly releasecategory: Elements.TaxonomyElement<ReleaseCategoryTaxonomyTermCodenames, ReleaseCategoryTaxonomyCodename>;
-	},
-	MovieTypeCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly releasecategory: Elements.Taxonomy<ReleaseCategoryTaxonomyTermCodenames>;
+	}
 >;
 
 /*
  * Type representing all available element codenames for Movie
  */
-export type MovieTypeElementCodenames =
+export type MovieElementCodenames =
 	| "title"
 	| "plot"
 	| "released"
@@ -162,11 +154,11 @@ export type MovieTypeElementCodenames =
  * Id: b0c0f9c2-ffb6-4e62-bac9-34e14172dd8c
  * Codename: movie
  */
-export function isMovieType(item: IContentItem | undefined | null): item is MovieType {
-	return item?.system.type === ("movie" satisfies MovieTypeCodename);
+export function isMovieItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is MovieItem {
+	return isMovieCodename(item?.system.type);
 }
 
-export type MovieTypeCategoryMultipleChoiceOptions =
+export type MovieCategoryMultipleChoiceOptions =
 	| "sci_fi"
 	| "documentary"
 	| "action"

@@ -68,7 +68,7 @@ function getCoreContentTypeEntityImports(
 }
 
 function getTypeMappingTypeName(entityType: DeliveryEntityType): string {
-	return `Codename${resolveCase(entityType, "pascalCase")}Mapping`;
+	return `${resolveCase(entityType, "pascalCase")}CodenameToItemMap`;
 }
 
 function getTypeMapping(entityType: DeliveryEntityType, items: readonly TypeMappingItem[]): string {
@@ -87,7 +87,7 @@ function getTypeMappingItem({
 	readonly defaultTypeName: string;
 }): string {
 	const codenameGenericName = `T${resolveCase(entityType, "pascalCase")}Codename`;
-	const typedItemTypeName = `Codename${resolveCase(entityType, "pascalCase")}Mapper`;
+	const typedItemTypeName = `${resolveCase(entityType, "pascalCase")}CodenameMapper`;
 	return `export type ${typedItemTypeName}<${codenameGenericName} extends ${codenamesTypeName}> = ${codenameGenericName} extends keyof ${getTypeMappingTypeName(entityType)} ? ${getTypeMappingTypeName(entityType)}[${codenameGenericName}] : ${defaultTypeName};`;
 }
 

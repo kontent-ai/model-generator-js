@@ -8,13 +8,13 @@
 
 The Kontent.ai Model Generator is a developer tool that streamlines working with Kontent.ai by generating strongly typed objects and TypeScript models. It supports the generation of five distinct model types, each tailored to specific use cases:
 
-| Model type                                     | Description                                                                                                                                                                                                                                                    | Compatibility                                                      |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     | `@kontent-ai/delivery-sdk` version `16.0.0` or higher              |
-| [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       | `@kontent-ai/migration-toolkit` version `2.6.0` or higher          |
-| [sync-sdk](#sync-sdk-models)                   | Generates TypeScript models for the [Sync SDK](https://www.npmjs.com/package/@kontent-ai/sync-sdk). These models provide type-safe access to environment metadata including languages, content types, workflows, collections, and taxonomies.                  | `@kontent-ai/sync-sdk` version `1.0.0` or higher                   |
-| [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 | Can be used in any project. No external dependencies are required. |
-| [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. | Can be used in any project. No external dependencies are required. |
+| Model type                                     | Description                                                                                                                                                                                                                                                    | Overview                                    |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [delivery-sdk](#delivery-sdk-models)           | Generates TypeScript models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). These models include content types, taxonomies, and codename-based types representing elements such as workflow steps, languages, and more.     | [Compatibility](#delivery-sdk-models)       |
+| [migration-toolkit](#migration-toolkit-models) | Creates TypeScript models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit). These models help simplify and standardize the process of writing migration scripts.                                                       | [Compatibility](#migration-toolkit-models)  |
+| [sync-sdk](#sync-sdk-models)                   | Generates TypeScript models for the [Sync SDK](https://www.npmjs.com/package/@kontent-ai/sync-sdk). These models provide type-safe access to environment metadata including languages, content types, workflows, collections, and taxonomies.                  | [Compatibility](#sync-sdk-models)           |
+| [environment](#environment-models)             | Generates JavaScript objects (not TypeScript types) representing the entire structure of your environment — including content types, workflows, languages, and taxonomies. These objects provide comprehensive access to environment metadata.                 | [Compatibility](#environment-models)        |
+| [items](#item-models)                          | Produces TypeScript types for all item codenames, along with objects containing the id and codename of each item. This is particularly useful when referencing a set of items in your code, enabling type-safe access instead of relying on hardcoded strings. | [Compatibility](#item-models)               |
 
 ## Installation
 
@@ -46,6 +46,18 @@ npx @kontent-ai/model-generator@latest delivery-sdk --help
 > [!TIP]
 > Recommended: Using these models is highly encouraged when working with the JavaScript Delivery SDK, as they provide robust type
 > safety and streamline development.
+
+### Compatibility
+
+The generated `delivery-sdk` models target a specific major version of [`@kontent-ai/delivery-sdk`](https://www.npmjs.com/package/@kontent-ai/delivery-sdk). Use the model generator version that matches the Delivery SDK version in your project:
+
+| Model generator (`@kontent-ai/model-generator`) | Delivery SDK (`@kontent-ai/delivery-sdk`) |
+| ----------------------------------------------- | ----------------------------------------- |
+| `11.x.y`                                        | `17.x.y`                                  |
+| `10.x.y`                                        | `16.x.y`                                  |
+
+> [!NOTE]
+> The generated `delivery-sdk` models are not cross-compatible across these major versions — e.g. models generated by `11.x.y` will not compile against `@kontent-ai/delivery-sdk@16`.
 
 Basic usage
 
@@ -107,6 +119,12 @@ Configuration
 
 ## Migration toolkit models
 
+### Compatibility
+
+| Dependency                                                                                       | Compatible version    |
+| ------------------------------------------------------------------------------------------------ | --------------------- |
+| [`@kontent-ai/migration-toolkit`](https://www.npmjs.com/package/@kontent-ai/migration-toolkit)   | version `2.6.0` or higher |
+
 Basic usage
 
 ```bash
@@ -167,6 +185,12 @@ Configuration
 > Recommended: Using these models is highly encouraged when working with the Sync SDK, as they provide robust type
 > safety and streamline development.
 
+### Compatibility
+
+| Dependency                                                                   | Compatible version        |
+| ---------------------------------------------------------------------------- | ------------------------- |
+| [`@kontent-ai/sync-sdk`](https://www.npmjs.com/package/@kontent-ai/sync-sdk) | version `1.0.0` or higher |
+
 Basic usage
 
 ```bash
@@ -226,6 +250,10 @@ Configuration
 > [!WARNING]
 > Due to their potentially large size, these objects are intended for use in backend/server-side code only. Avoid including them in
 > client-side applications to prevent unnecessary bundle size and exposure of sensitive data.
+
+### Compatibility
+
+Can be used in any project. No external dependencies are required.
 
 Basic usage
 
@@ -307,6 +335,10 @@ Configuration
 > [!TIP]
 > This option is not recommended for environments with a large volume of content items, as it may lead to performance or scalability
 > issues during code generation.
+
+### Compatibility
+
+Can be used in any project. No external dependencies are required.
 
 Basic usage
 

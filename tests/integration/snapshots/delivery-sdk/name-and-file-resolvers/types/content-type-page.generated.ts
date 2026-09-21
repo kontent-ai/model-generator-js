@@ -1,8 +1,6 @@
-import type { Elements, IContentItem } from "@kontent-ai/delivery-sdk";
-import type { CollectionCodenames } from "../system/collections.generated.js";
-import type { LanguageCodenames } from "../system/languages.generated.js";
-import type { CoreType, TypeCodenames } from "../system/types.generated.js";
-import type { WorkflowCodenames, WorkflowStepCodenames } from "../system/workflows.generated.js";
+import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Page' type
@@ -22,7 +20,9 @@ export function isContentTypePageCodename(value: string | undefined | null): val
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export type ContentTypePage = IContentItem<
+export type ContentTypePageItem = ContentItemOf<
+	CoreClientSchema,
+	ContentTypePageCodename,
 	{
 		/*
 		 * Title
@@ -32,7 +32,7 @@ export type ContentTypePage = IContentItem<
 		 * Type: text
 		 * Required: false
 		 */
-		readonly title: Elements.TextElement;
+		readonly title: Elements.Text;
 
 		/*
 		 * URL
@@ -42,7 +42,7 @@ export type ContentTypePage = IContentItem<
 		 * Type: url_slug
 		 * Required: false
 		 */
-		readonly url: Elements.UrlSlugElement;
+		readonly url: Elements.UrlSlug;
 
 		/*
 		 * Show in navigation
@@ -52,7 +52,7 @@ export type ContentTypePage = IContentItem<
 		 * Type: multiple_choice
 		 * Required: false
 		 */
-		readonly show_in_navigation: Elements.MultipleChoiceElement<ContentTypePageShowInNavigationMultipleChoiceOptions>;
+		readonly show_in_navigation: Elements.MultipleChoice<ContentTypePageShowInNavigationMultipleChoiceOptions>;
 
 		/*
 		 * Subpages
@@ -62,7 +62,7 @@ export type ContentTypePage = IContentItem<
 		 * Type: subpages
 		 * Required: false
 		 */
-		readonly subpages: Elements.LinkedItemsElement<CoreType>;
+		readonly subpages: Elements.LinkedItems<CoreItem>;
 
 		/*
 		 * Content
@@ -72,13 +72,8 @@ export type ContentTypePage = IContentItem<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItemsElement<CoreType>;
-	},
-	ContentTypePageCodename,
-	LanguageCodenames,
-	CollectionCodenames,
-	WorkflowCodenames,
-	WorkflowStepCodenames
+		readonly content: Elements.LinkedItems<CoreItem>;
+	}
 >;
 
 /*
@@ -92,8 +87,8 @@ export type ContentTypePageElementCodenames = "title" | "url" | "show_in_navigat
  * Id: 4db6e2c7-c25b-4896-a05d-d20206234c04
  * Codename: page
  */
-export function isContentTypePage(item: IContentItem | undefined | null): item is ContentTypePage {
-	return item?.system.type === ("page" satisfies ContentTypePageCodename);
+export function isContentTypePageItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is ContentTypePageItem {
+	return isContentTypePageCodename(item?.system.type);
 }
 
 export type ContentTypePageShowInNavigationMultipleChoiceOptions = "yes" | "no";
