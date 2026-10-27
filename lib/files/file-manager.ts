@@ -4,7 +4,7 @@ import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import { coreConfig } from "../config.js";
 import { getEnvironmentInfoComment } from "../core/comment.utils.js";
-import type { GeneratedFile, GeneratedSet, ModuleFileExtension } from "../core/core.models.js";
+import type { GeneratedFile, GeneratedSet, ModuleFileExtension, PackageInfo } from "../core/core.models.js";
 import { toOutputDirPath } from "../core/core.utils.js";
 import { getImporter } from "../core/importer.js";
 import { type FormatOptions, formatCodeAsync } from "../format/formatter.js";
@@ -16,6 +16,7 @@ export function getFileManager(config: {
 	readonly formatOptions?: FormatOptions;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 	readonly addTimestamp: boolean;
+	readonly packageInfo: PackageInfo;
 }) {
 	const fixedOutputDir = toOutputDirPath(config.outputDir);
 	const importer = getImporter(config.moduleFileExtension);
@@ -27,6 +28,7 @@ export function getFileManager(config: {
 				environmentInfo: config.environmentInfo,
 				timestampDate: config.addTimestamp ? new Date() : undefined,
 				disableComments: config.disableComments,
+				packageInfo: config.packageInfo,
 			})}\n\n${text}`,
 		);
 

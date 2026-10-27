@@ -1,0 +1,72 @@
+{
+	"name": "@kontent-ai/model-generator",
+	"version": "11.0.0-preview.0",
+	"description": "Generates strongly typed models representing objects in your Kontent.ai environment (environment structure & content items) for use in custom tools and scripts.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kontent-ai/model-generator-js",
+		"directory": "packages/model-generator"
+	},
+	"author": "richard sustek",
+	"license": "MIT",
+	"engines": {
+		"node": ">= 22"
+	},
+	"keywords": [
+		"Kontent",
+		"Kontent.ai",
+		"Kontent.ai typings",
+		"Kontent.ai models",
+		"Kontent Model Generator",
+		"Kontent.ai strongly typed models",
+		"Kontent.ai environment models",
+		"Kontent.ai items"
+	],
+	"type": "module",
+	"bin": {
+		"kontent-generate": "./dist/cli/app.js"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE.md"
+	],
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"scripts": {
+		"build": "tsdown",
+		"typecheck": "tsc -p tsconfig.json",
+		"test:integration": "vitest run",
+		"update:snapshots": "vitest run --update",
+		"lint": "eslint .",
+		"biome:check": "biome check .",
+		"clean": "rm -rf dist",
+		"show:help": "tsx src/cli/app.ts --help",
+		"sample": "pnpm run sample:environment && pnpm run sample:items",
+		"sample:environment": "tsx scripts/environment-sample.ts",
+		"sample:items": "tsx scripts/items-sample.ts",
+		"prepublishOnly": "pnpm run build"
+	},
+	"dependencies": {
+		"@biomejs/js-api": "6.0.0",
+		"@biomejs/wasm-nodejs": "2.5.14",
+		"@kontent-ai/core-sdk": "12.0.0-preview.49",
+		"@kontent-ai/delivery-sdk": "17.0.0-preview.3",
+		"@kontent-ai/management-sdk": "8.5.7",
+		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.11",
+		"ts-pattern": "5.9.0",
+		"yargs": "18.2.0"
+	},
+	"devDependencies": {
+		"@kontent-ai/model-generator-shared": "workspace:*"
+	}
+}

@@ -1,0 +1,31 @@
+{
+	"name": "@kontent-ai/model-generator-shared",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Internal code shared by Kontent.ai model generator packages. Bundled into each published package, never published on its own.",
+	"license": "MIT",
+	"type": "module",
+	"exports": {
+		".": "./index.ts",
+		"./dev": "./dev/index.ts",
+		"./testing": "./testing/index.ts"
+	},
+	"scripts": {
+		"typecheck": "tsc -p tsconfig.json",
+		"test:unit": "vitest run",
+		"lint": "eslint .",
+		"biome:check": "biome check ."
+	},
+	"dependencies": {
+		"@biomejs/js-api": "6.0.0",
+		"@biomejs/wasm-nodejs": "2.5.14",
+		"@kontent-ai/core-sdk": "12.0.0-preview.49",
+		"@kontent-ai/management-sdk": "8.5.7",
+		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.11",
+		"ts-pattern": "5.9.0",
+		"yargs": "18.2.0"
+	},
+	"devDependencies": {
+		"@types/yargs": "17.0.35"
+	}
+}

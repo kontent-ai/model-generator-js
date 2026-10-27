@@ -18,3 +18,22 @@
 # Tooling
 
 - After making code changes, run `pnpm run biome:fix` to auto-format and fix lint issues
+
+# Monorepo
+
+- pnpm workspace orchestrated by Turborepo; releases are managed with Changesets
+- `lib/` is the private `@kontent-ai/model-generator-shared` package: code shared by all generators. It is never published, each package bundles it via tsdown (`deps.alwaysBundle`)
+- `packages/*` contain only code specific to that package (generator, config, CLI entry, integration tests, samples). Import shared code from `@kontent-ai/model-generator-shared`, never via relative paths into `lib/`
+- Any third-party dependency used by shared code at runtime must also be listed in `dependencies` of each package that reaches it, otherwise tsdown bundles it
+- Package identity (generated-file header, tracking header) comes from each package's `src/sdk-info.ts`, which reads its own `package.json`
+
+## Commands
+
+- `pnpm build`, `pnpm typecheck`, `pnpm test:unit`, `pnpm test:integration`, `pnpm lint`, `pnpm ci:check`
+- Single package: `pnpm --filter <package-name> <script>`
+
+## Publishing
+
+- Add a changeset (`pnpm changeset`) for every user-facing change, listing all affected packages (a change in `lib/` affects every package that uses it)
+- The major version of an SDK generator package must match the major version of the SDK it targets; bump it together with the SDK dependency
+- Do not bump versions or publish manually unless asked

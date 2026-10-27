@@ -1,5 +1,3 @@
-import type { CliAction } from "../core/core.models.js";
-
 export type CommandOptionNames =
 	| "environmentId"
 	| "help"
@@ -19,11 +17,14 @@ export type CommandOptionNames =
 
 export type CommandAlias = "h";
 
-export interface Command<TAction extends string> {
-	readonly name: TAction;
+export interface DefaultCommand {
 	readonly description: string;
 	readonly options: readonly CommandOption[];
 	readonly examples: readonly string[];
+}
+
+export interface Command<TAction extends string> extends DefaultCommand {
+	readonly name: TAction;
 }
 
 export interface CommandOption {
@@ -36,12 +37,13 @@ export interface CommandOption {
 
 export type CliArgumentsSetter<TAction extends string> = {
 	withCommand(command: Command<TAction>): CliArgumentsSetter<TAction>;
+	withDefaultCommand(command: DefaultCommand): CliArgumentsSetter<TAction>;
 	withOption(option: CommandOption): CliArgumentsSetter<TAction>;
 	registerCommands(): void;
 };
 
 export type CliArgumentsFetcher = {
-	getCliAction(): CliAction;
+	getCommand(): string | undefined;
 	getOptionalArgumentValue(argName: CommandOptionNames): string | undefined;
 	getRequiredArgumentValue(argName: CommandOptionNames): string;
 	getBooleanArgumentValue(argName: CommandOptionNames, defaultValue: boolean): boolean;

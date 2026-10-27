@@ -1,6 +1,6 @@
 import { parse } from "node:path";
 import { coreConfig } from "../config.js";
-import type { LibraryType, LiteralUnion, ModuleFileExtension } from "./core.models.js";
+import type { ModuleFileExtension } from "./core.models.js";
 import { getFileNameWithoutExtension, sortAlphabetically } from "./core.utils.js";
 
 export function getImporter(moduleFileExtension: ModuleFileExtension) {
@@ -25,10 +25,7 @@ export function getImporter(moduleFileExtension: ModuleFileExtension) {
 
 	return {
 		getGeneratedFilename,
-		importType: (data: {
-			readonly filePathOrPackage: LiteralUnion<LibraryType>;
-			readonly importValue: string | readonly string[];
-		}): string => {
+		importType: (data: { readonly filePathOrPackage: string; readonly importValue: string | readonly string[] }): string => {
 			if (!data.importValue.length) {
 				return "";
 			}

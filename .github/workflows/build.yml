@@ -1,13 +1,17 @@
-name: Lint & Build
+name: Lint, Build & Unit Tests
 
 on:
     push:
-        branches: [main]
+        branches: [master]
     pull_request:
+
+permissions: {}
 
 jobs:
     build:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
         steps:
             - uses: actions/checkout@v4
               with:
@@ -20,4 +24,4 @@ jobs:
                   node-version-file: '.nvmrc'
                   cache: 'pnpm'
             - run: pnpm install --frozen-lockfile
-            - run: pnpm run build
+            - run: pnpm ci:check

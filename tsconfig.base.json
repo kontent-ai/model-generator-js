@@ -1,0 +1,35 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		// Language + runtime environment
+		"target": "esnext",
+		"lib": ["esnext"],
+
+		// Modules + resolution
+		"module": "NodeNext",
+		"moduleResolution": "nodenext",
+		"resolveJsonModule": true,
+
+		// Emit behavior (even if `noEmit` is true, these are useful for tooling expectations)
+		"noEmit": true,
+		"declaration": true,
+		"sourceMap": true,
+
+		// Strictness + type safety
+		"strict": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"allowUnreachableCode": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"forceConsistentCasingInFileNames": true,
+		"exactOptionalPropertyTypes": false,
+		"noUncheckedIndexedAccess": true,
+		"noFallthroughCasesInSwitch": true,
+		"useUnknownInCatchVariables": true,
+		"skipLibCheck": true,
+
+		// Types
+		"types": ["node"]
+	}
+}

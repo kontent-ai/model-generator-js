@@ -1,0 +1,98 @@
+import { colorize } from "@kontent-ai/core-sdk/devkit";
+import type { EnvironmentModels } from "@kontent-ai/management-sdk";
+import {
+	type CreateFilesConfig,
+	type DeliveryApiMode,
+	type FormatOptions,
+	type GeneratedFile,
+	type GeneratedSet,
+	getFileManager,
+	getManagementKontentFetcher,
+	type ModuleFileExtension,
+	singleItemToArray,
+} from "@kontent-ai/model-generator-shared";
+import { getDeliveryKontentFetcher } from "../../fetch/delivery-kontent-fetcher.js";
+import { sdkInfo } from "../../sdk-info.js";
+import { getItemsGenerator } from "./items.generator.js";
+
+export type GenerateItemsModelsConfig = {
+	readonly environmentId: string;
+	readonly addTimestamp: boolean;
+	readonly managementApiKey: string;
+	readonly moduleFileExtension: ModuleFileExtension;
+	readonly apiMode: DeliveryApiMode;
+	readonly filterByTypeCodenames: readonly string[];
+	readonly generateTypes: boolean;
+	readonly generateObjects: boolean;
+
+	readonly deliveryApiKey?: string;
+	readonly managementBaseUrl?: string;
+	readonly deliveryBaseUrl?: string;
+	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
+} & CreateFilesConfig;
+
+export async function generateItemsAsync(config: GenerateItemsModelsConfig): Promise<readonly GeneratedFile[]> {
+	console.log(colorize("green", "Model generator started \n"));
+	console.log(`Generating '${colorize("yellow", "items")}' models\n`);
+
+	const { itemFiles, environmentInfo, codenameFiles } = await getFilesAsync(config);
+
+	const fileManager = getFileManager({
+		packageInfo: sdkInfo,
+		disableComments: config.disableComments ?? false,
+		...config,
+		environmentInfo,
+	});
+
+	const setFiles = await fileManager.getSetFilesAsync([...singleItemToArray(itemFiles), ...singleItemToArray(codenameFiles)]);
+
+	if (config.createFiles) {
+		fileManager.createFiles(setFiles);
+	}
+
+	console.log(colorize("green", "\nCompleted"));
+
+	return setFiles;
+}
+
+async function getFilesAsync(config: GenerateItemsModelsConfig): Promise<{
+	readonly itemFiles: GeneratedSet | undefined;
+	readonly codenameFiles: GeneratedSet | undefined;
+	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+}> {
+	const deliveryKontentFetcher = getDeliveryKontentFetcher({
+		environmentId: config.environmentId,
+		apiMode: config.apiMode,
+		deliveryApiKey: config.deliveryApiKey,
+		baseUrl: config.deliveryBaseUrl,
+	});
+
+	const managementKontentFetcher = getManagementKontentFetcher({
+		packageInfo: sdkInfo,
+		environmentId: config.environmentId,
+		managementApiKey: config.managementApiKey,
+		baseUrl: config.managementBaseUrl,
+	});
+
+	const environmentInfo = await managementKontentFetcher.getEnvironmentInfoAsync();
+
+	const [items, types] = await Promise.all([
+		deliveryKontentFetcher.getItemsAsync(config.filterByTypeCodenames),
+		managementKontentFetcher.getTypesAsync(),
+	]);
+
+	const itemsGenerator = getItemsGenerator({
+		disableComments: config.disableComments ?? false,
+		environmentData: {
+			types: types,
+			items: items,
+		},
+	});
+
+	return {
+		itemFiles: config.generateObjects ? itemsGenerator.getItemFiles() : undefined,
+		codenameFiles: config.generateTypes ? itemsGenerator.getCodenameFiles() : undefined,
+		environmentInfo,
+	};
+}

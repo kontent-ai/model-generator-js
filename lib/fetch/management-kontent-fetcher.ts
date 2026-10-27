@@ -17,9 +17,9 @@ import {
 	type WebhookModels,
 	type WorkflowModels,
 } from "@kontent-ai/management-sdk";
-import { coreConfig } from "../config.js";
+import { coreConfig, getTrackingHeaderValue } from "../config.js";
 import { toSafeCommentText } from "../core/comment.utils.js";
-import type { GeneratorManagementClient } from "../core/core.models.js";
+import type { GeneratorManagementClient, PackageInfo } from "../core/core.models.js";
 import { extractErrorData } from "../core/error.utils.js";
 
 export type ManagementKontentFetcher = {
@@ -43,13 +43,14 @@ export function getManagementKontentFetcher(config: {
 	readonly environmentId: string;
 	readonly managementApiKey: string;
 	readonly baseUrl?: string;
+	readonly packageInfo: PackageInfo;
 }): ManagementKontentFetcher {
 	const client: GeneratorManagementClient = createManagementClient({
 		environmentId: config.environmentId,
 		apiKey: config.managementApiKey,
 		baseUrl: config.baseUrl,
 		httpService: new HttpService({ logErrorsToConsole: false }),
-		headers: [{ header: coreConfig.kontentTrackingHeaderName, value: coreConfig.kontentTrackingHeaderValue }],
+		headers: [{ header: coreConfig.kontentTrackingHeaderName, value: getTrackingHeaderValue(config.packageInfo) }],
 	});
 
 	return {

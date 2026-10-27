@@ -1,0 +1,29 @@
+{
+	"$schema": "https://turborepo.com/schema.json",
+	"globalDependencies": ["tsconfig.base.json", "biome.json", "eslint.config.mjs"],
+	"tasks": {
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist/**"]
+		},
+		"typecheck": {
+			"dependsOn": ["^typecheck"]
+		},
+		"test:unit": {},
+		"test:integration": {
+			"cache": false,
+			"env": ["INTEGRATION_ENVIRONMENT_ID", "INTEGRATION_MANAGEMENT_API_KEY"]
+		},
+		"update:snapshots": {
+			"cache": false
+		},
+		"lint": {},
+		"biome:check": {},
+		"sample": {
+			"cache": false
+		},
+		"clean": {
+			"cache": false
+		}
+	}
+}

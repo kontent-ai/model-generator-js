@@ -1,8 +1,6 @@
 import { colorize } from "@kontent-ai/core-sdk/devkit";
-import { match } from "ts-pattern";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import type { CliAction, LiteralUnion } from "../../core/core.models.js";
 import type { CliArgumentsFetcher } from "../cli.models.js";
 
 type ArgvResult = {
@@ -20,18 +18,8 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 	};
 
 	return {
-		getCliAction(): CliAction {
-			const command = resolvedArgv._[0]?.toString().toLowerCase() as LiteralUnion<CliAction>;
-
-			return match(command)
-				.returnType<CliAction>()
-				.with("delivery-sdk", () => "delivery-sdk")
-				.with("migration-toolkit", () => "migration-toolkit")
-				.with("environment", () => "environment")
-				.with("items", () => "items")
-				.otherwise(() => {
-					throw new Error(`Unsupported command '${colorize("red", command)}'`);
-				});
+		getCommand(): string | undefined {
+			return resolvedArgv._[0]?.toString().toLowerCase();
 		},
 		getOptionalArgumentValue,
 		getRequiredArgumentValue(argName: string): string {

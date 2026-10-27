@@ -1,4 +1,3 @@
-import type { ContentItemPayload, DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-sdk";
 import type {
 	ContentTypeElements,
 	ContentTypeModels,
@@ -8,8 +7,10 @@ import type {
 	TaxonomyModels,
 } from "@kontent-ai/management-sdk";
 
-export type CliAction = "delivery-sdk" | "migration-toolkit" | "environment" | "items" | "sync-sdk";
-export type LibraryType = "@kontent-ai/migration-toolkit" | "@kontent-ai/delivery-sdk" | "@kontent-ai/sync-sdk";
+export type PackageInfo = {
+	readonly name: string;
+	readonly version: string;
+};
 
 export const moduleFileExtensions = ["js", "ts", "mjs", "mts", "none"] as const;
 
@@ -35,8 +36,6 @@ export type EnvironmentEntity = (typeof environmentEntities)[number];
 export type CaseType = "camelCase" | "pascalCase" | "kebabCase";
 export type DeliveryApiMode = "preview" | "secure" | "default";
 export type GeneratorManagementClient = Readonly<IManagementClient<unknown>>;
-export type GeneratorDeliveryClient = Readonly<DeliveryClient>;
-export type GeneratorContentItem = ContentItemPayload<DeliveryClientSchema>;
 export type LiteralUnion<T extends string | undefined> = T | (string & NonNullable<unknown>);
 export type CreateFilesConfig = { readonly createFiles: true; readonly outputDir?: string } | { readonly createFiles: false };
 

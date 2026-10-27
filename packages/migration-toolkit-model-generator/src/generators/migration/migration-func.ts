@@ -1,0 +1,94 @@
+import { colorize } from "@kontent-ai/core-sdk/devkit";
+import type { EnvironmentModels } from "@kontent-ai/management-sdk";
+import {
+	type CreateFilesConfig,
+	type FormatOptions,
+	type GeneratedFile,
+	type GeneratedSet,
+	getFileManager,
+	getManagementKontentFetcher,
+	type ModuleFileExtension,
+} from "@kontent-ai/model-generator-shared";
+import { sdkInfo } from "../../sdk-info.js";
+import { getMigrationGenerator } from "./migration.generator.js";
+
+export type GenerateMigrationModelsConfig = {
+	readonly environmentId: string;
+	readonly addTimestamp: boolean;
+	readonly managementApiKey: string;
+	readonly moduleFileExtension: ModuleFileExtension;
+
+	readonly managementBaseUrl?: string;
+	readonly formatOptions?: FormatOptions;
+	readonly disableComments?: boolean;
+} & CreateFilesConfig;
+
+export async function generateMigrationModelsAsync(config: GenerateMigrationModelsConfig): Promise<readonly GeneratedFile[]> {
+	console.log(colorize("green", "Model generator started \n"));
+	console.log(`Generating '${colorize("yellow", "migration-toolkit")}' models\n`);
+
+	const { migrationItemFiles, migrationTypeFiles, environmentInfo, environmentFiles } = await getFilesAsync(config);
+
+	const fileManager = getFileManager({
+		packageInfo: sdkInfo,
+		disableComments: config.disableComments ?? false,
+		...config,
+		environmentInfo,
+	});
+
+	const setFiles = await fileManager.getSetFilesAsync([migrationItemFiles, migrationTypeFiles, environmentFiles]);
+
+	if (config.createFiles) {
+		fileManager.createFiles(setFiles);
+	}
+
+	console.log(colorize("green", "\nCompleted"));
+
+	return setFiles;
+}
+
+async function getFilesAsync(config: GenerateMigrationModelsConfig): Promise<{
+	readonly migrationTypeFiles: GeneratedSet;
+	readonly migrationItemFiles: GeneratedSet;
+	readonly environmentFiles: GeneratedSet;
+	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
+}> {
+	const kontentFetcher = getManagementKontentFetcher({
+		packageInfo: sdkInfo,
+		environmentId: config.environmentId,
+		managementApiKey: config.managementApiKey,
+		baseUrl: config.managementBaseUrl,
+	});
+
+	const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
+
+	const [languages, taxonomies, types, snippets, collections, workflows] = await Promise.all([
+		kontentFetcher.getLanguagesAsync(),
+		kontentFetcher.getTaxonomiesAsync(),
+		kontentFetcher.getTypesAsync(),
+		kontentFetcher.getSnippetsAsync(),
+		kontentFetcher.getCollectionsAsync(),
+		kontentFetcher.getWorkflowsAsync(),
+	]);
+
+	const migrationGenerator = getMigrationGenerator({
+		disableComments: config.disableComments ?? false,
+		moduleFileExtension: config.moduleFileExtension,
+		environmentData: {
+			environment: environmentInfo,
+			taxonomies: taxonomies,
+			languages: languages,
+			workflows: workflows,
+			types: types,
+			snippets: snippets,
+			collections: collections,
+		},
+	});
+
+	return {
+		migrationTypeFiles: migrationGenerator.getMigrationTypeFiles(),
+		migrationItemFiles: migrationGenerator.getMigrationItemFiles(),
+		environmentFiles: migrationGenerator.getEnvironmentFiles(),
+		environmentInfo,
+	};
+}
