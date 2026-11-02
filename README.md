@@ -35,7 +35,7 @@ pnpm build              # build all packages
 pnpm typecheck          # type check all workspaces
 pnpm test:unit          # unit tests (shared code)
 pnpm test:integration   # snapshot tests against a live environment (requires .env, see .env.template)
-pnpm lint               # eslint
+pnpm lint               # oxlint
 pnpm biome:fix          # format & fix lint issues
 pnpm ci:check           # everything CI runs on pull requests
 

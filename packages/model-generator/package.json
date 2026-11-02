@@ -47,7 +47,7 @@
 		"typecheck": "tsc -p tsconfig.json",
 		"test:integration": "vitest run",
 		"update:snapshots": "vitest run --update",
-		"lint": "eslint .",
+		"lint": "oxlint --type-aware --type-check",
 		"biome:check": "biome check .",
 		"clean": "rm -rf dist",
 		"show:help": "tsx src/cli/app.ts --help",

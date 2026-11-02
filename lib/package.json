@@ -13,7 +13,7 @@
 	"scripts": {
 		"typecheck": "tsc -p tsconfig.json",
 		"test:unit": "vitest run",
-		"lint": "eslint .",
+		"lint": "oxlint --type-aware --type-check",
 		"biome:check": "biome check ."
 	},
 	"dependencies": {
