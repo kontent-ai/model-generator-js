@@ -1,0 +1,7 @@
+{
+	// Used only by tsdown's dts step (tsgo). It lives at the repo root so tsgo's rootDir covers
+	// all packages and the bundled shared `lib/`, which must be a root file to get emitted.
+	"extends": "./tsconfig.base.json",
+	"include": ["lib/**/*.ts", "packages/*/src/**/*.ts"],
+	"exclude": ["**/node_modules", "**/dist"]
+}

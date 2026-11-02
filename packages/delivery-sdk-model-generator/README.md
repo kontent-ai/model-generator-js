@@ -62,23 +62,31 @@ npx @kontent-ai/delivery-sdk-model-generator@latest
 ```
 
 ```typescript
-import { generateDeliveryModelsAsync } from '@kontent-ai/delivery-sdk-model-generator';
+import { generateDeliveryModelsAsync } from "@kontent-ai/delivery-sdk-model-generator";
 
 await generateDeliveryModelsAsync({
-    // required
-    environmentId: 'x',
-    managementApiKey: 'y',
-    moduleFileExtension: 'js',
-    addTimestamp: false,
-    createFiles: true,
-    outputDir: '/', // only required when createFiles is true
+	// required
+	environmentId: "x",
+	managementApiKey: "y",
+	moduleFileExtension: "js",
+	addTimestamp: false,
+	createFiles: true,
+	outputDir: "/", // only required when createFiles is true
 
-    // optional
-    fileResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet: (snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
-    nameResolvers: { contentType: (type) => `Custom_${type.codename}`, snippet:(snippet) => `Custom_${snippet.codename}`, taxonomy: (taxonomy) => `Custom_${taxonomy.codename}` },
-    formatOptions: { indentSize: 4, quote: 'single' },
-    disableComments: false,
-    baseUrl: undefined
+	// optional
+	fileResolvers: {
+		contentType: (type) => `Custom_${type.codename}`,
+		snippet: (snippet) => `Custom_${snippet.codename}`,
+		taxonomy: (taxonomy) => `Custom_${taxonomy.codename}`,
+	},
+	nameResolvers: {
+		contentType: (type) => `Custom_${type.codename}`,
+		snippet: (snippet) => `Custom_${snippet.codename}`,
+		taxonomy: (taxonomy) => `Custom_${taxonomy.codename}`,
+	},
+	formatOptions: { indentSize: 4, quote: "single" },
+	disableComments: false,
+	baseUrl: undefined,
 });
 ```
 
@@ -90,12 +98,12 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
-| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                                |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
 | `fileResolvers`       | Can be used to customize the generated filenames                                                                               |
 | `nameResolvers`       | Can be used to customize names of generated types                                                                              |
-| `formatOptions`       | Configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                                    |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models

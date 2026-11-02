@@ -26,8 +26,8 @@ npx @kontent-ai/sync-sdk-model-generator@latest --help
 
 The major version of this generator matches the major version of the Sync SDK it targets:
 
-| Model generator                                 | Sync SDK ([`@kontent-ai/sync-sdk`](https://www.npmjs.com/package/@kontent-ai/sync-sdk)) |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Model generator                                | Sync SDK ([`@kontent-ai/sync-sdk`](https://www.npmjs.com/package/@kontent-ai/sync-sdk)) |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `@kontent-ai/sync-sdk-model-generator` `1.x.y` | `1.x.y`                                                                                 |
 
 ## Usage
@@ -35,7 +35,7 @@ The major version of this generator matches the major version of the Sync SDK it
 > [!TIP]
 > Recommended: Using these models is highly encouraged when working with the Sync SDK, as they provide robust type
 > safety and streamline development.
-Basic usage
+> Basic usage
 
 ```bash
 npx @kontent-ai/sync-sdk-model-generator@latest
@@ -57,21 +57,21 @@ npx @kontent-ai/sync-sdk-model-generator@latest
 ```
 
 ```typescript
-import { generateSyncModelsAsync } from '@kontent-ai/sync-sdk-model-generator';
+import { generateSyncModelsAsync } from "@kontent-ai/sync-sdk-model-generator";
 
 await generateSyncModelsAsync({
-    // required
-    environmentId: 'x',
-    managementApiKey: 'y',
-    moduleFileExtension: 'js',
-    addTimestamp: false,
-    createFiles: true,
-    outputDir: '/', // only required when createFiles is true
+	// required
+	environmentId: "x",
+	managementApiKey: "y",
+	moduleFileExtension: "js",
+	addTimestamp: false,
+	createFiles: true,
+	outputDir: "/", // only required when createFiles is true
 
-    // optional
-    baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' },
-    disableComments: false
+	// optional
+	baseUrl: undefined,
+	formatOptions: { indentSize: 4, quote: "single" },
+	disableComments: false,
 });
 ```
 
@@ -83,10 +83,10 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
-| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                                |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                                    |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models

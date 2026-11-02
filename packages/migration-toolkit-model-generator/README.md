@@ -26,9 +26,9 @@ npx @kontent-ai/migration-toolkit-model-generator@latest --help
 
 The major version of this generator matches the major version of the Migration Toolkit it targets:
 
-| Model generator                                          | Migration Toolkit ([`@kontent-ai/migration-toolkit`](https://www.npmjs.com/package/@kontent-ai/migration-toolkit)) |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `@kontent-ai/migration-toolkit-model-generator` `3.x.y` | `3.x.y`                                                                                                             |
+| Model generator                                         | Migration Toolkit ([`@kontent-ai/migration-toolkit`](https://www.npmjs.com/package/@kontent-ai/migration-toolkit)) |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `@kontent-ai/migration-toolkit-model-generator` `3.x.y` | `3.x.y`                                                                                                            |
 
 ## Usage
 
@@ -54,21 +54,21 @@ npx @kontent-ai/migration-toolkit-model-generator@latest
 ```
 
 ```typescript
-import { generateMigrationModelsAsync } from '@kontent-ai/migration-toolkit-model-generator';
+import { generateMigrationModelsAsync } from "@kontent-ai/migration-toolkit-model-generator";
 
 await generateMigrationModelsAsync({
-    // required
-    environmentId: 'x',
-    managementApiKey: 'y',
-    moduleFileExtension: 'js',
-    addTimestamp: false,
-    createFiles: true,
-    outputDir: '/', // only required when createFiles is true
+	// required
+	environmentId: "x",
+	managementApiKey: "y",
+	moduleFileExtension: "js",
+	addTimestamp: false,
+	createFiles: true,
+	outputDir: "/", // only required when createFiles is true
 
-    // optional
-    baseUrl: undefined,
-    formatOptions: { indentSize: 4, quote: 'single' },
-    disableComments: false
+	// optional
+	baseUrl: undefined,
+	formatOptions: { indentSize: 4, quote: "single" },
+	disableComments: false,
 });
 ```
 
@@ -80,10 +80,10 @@ Configuration
 | `managementApiKey`    | Management API key                                                                                                             |
 | `moduleFileExtension` | Extension used for imports in generated models.                                                                                |
 | `addTimestamp`        | Indicates if models contain timestamp                                                                                          |
-| `disableComments`     | If enabled, no comments will be included in the generated files                                                               |
+| `disableComments`     | If enabled, no comments will be included in the generated files                                                                |
 | `createFiles`         | If enabled, files will be created on FileSystem. When disabled you may iterate over the result and process the files yourself. |
 | `outputDir`           | Output directory path for files. Only available when `createFiles` is set to `true`                                            |
-| `formatOptions`       | Configuration for formatting generated code                                                                           |
+| `formatOptions`       | Configuration for formatting generated code                                                                                    |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
 ## Sample models

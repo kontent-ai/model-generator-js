@@ -6,11 +6,11 @@
 
 Developer tools that streamline working with Kontent.ai by generating strongly typed objects and TypeScript models. Each generator is published as its own npm package and is versioned independently.
 
-| Package                                                                                       | CLI                          | Description                                                                                                   |
-| --------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| [`@kontent-ai/delivery-sdk-model-generator`](./packages/delivery-sdk-model-generator)           | `kontent-generate-delivery`  | Models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk)                       |
-| [`@kontent-ai/migration-toolkit-model-generator`](./packages/migration-toolkit-model-generator) | `kontent-generate-migration` | Models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit)                |
-| [`@kontent-ai/sync-sdk-model-generator`](./packages/sync-sdk-model-generator)                   | `kontent-generate-sync`      | Models for the [Sync SDK](https://www.npmjs.com/package/@kontent-ai/sync-sdk)                                  |
+| Package                                                                                         | CLI                          | Description                                                                                                   |
+| ----------------------------------------------------------------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| [`@kontent-ai/delivery-sdk-model-generator`](./packages/delivery-sdk-model-generator)           | `kontent-generate-delivery`  | Models for the [JS Delivery SDK](https://www.npmjs.com/package/@kontent-ai/delivery-sdk)                      |
+| [`@kontent-ai/migration-toolkit-model-generator`](./packages/migration-toolkit-model-generator) | `kontent-generate-migration` | Models for the [Migration Toolkit](https://www.npmjs.com/package/@kontent-ai/migration-toolkit)               |
+| [`@kontent-ai/sync-sdk-model-generator`](./packages/sync-sdk-model-generator)                   | `kontent-generate-sync`      | Models for the [Sync SDK](https://www.npmjs.com/package/@kontent-ai/sync-sdk)                                 |
 | [`@kontent-ai/model-generator`](./packages/model-generator)                                     | `kontent-generate`           | SDK independent models: `environment` (structure of the environment) and `items` (content item codenames/ids) |
 
 SDK specific generators share the major version of the SDK they target (e.g. `@kontent-ai/delivery-sdk-model-generator@17` generates models for `@kontent-ai/delivery-sdk@17`). See the README of each package for installation, compatibility and usage.
