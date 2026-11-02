@@ -1,5 +1,5 @@
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
@@ -23,7 +23,7 @@ export function isContentTypeTypeWithEmptySnippetCodename(
  * Codename: type_with_empty_snippet
  */
 export type ContentTypeTypeWithEmptySnippetItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeTypeWithEmptySnippetCodename,
 	Record<string, never>
 >;
@@ -40,7 +40,7 @@ export type ContentTypeTypeWithEmptySnippetElementCodenames = never;
  * Codename: type_with_empty_snippet
  */
 export function isContentTypeTypeWithEmptySnippetItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeTypeWithEmptySnippetItem {
 	return isContentTypeTypeWithEmptySnippetCodename(item?.system.type);
 }

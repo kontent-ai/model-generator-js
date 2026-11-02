@@ -1,7 +1,7 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames, TypedItem } from "../system/types.generated.js";
 import type { TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
 
 /*
@@ -23,7 +23,7 @@ export function isContentTypeWithAllElementsCodename(value: string | undefined |
  * Codename: content_type_with_all_elements
  */
 export type ContentTypeWithAllElementsItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeWithAllElementsCodename,
 	{
 		/*
@@ -55,7 +55,7 @@ export type ContentTypeWithAllElementsItem = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: Elements.RichText<CoreItem>;
+		readonly rich_text_element: Elements.RichText<TypedItem>;
 
 		/*
 		 * Date & time element
@@ -156,7 +156,7 @@ export type ContentTypeWithAllElementsElementCodenames =
  * Codename: content_type_with_all_elements
  */
 export function isContentTypeWithAllElementsItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeWithAllElementsItem {
 	return isContentTypeWithAllElementsCodename(item?.system.type);
 }

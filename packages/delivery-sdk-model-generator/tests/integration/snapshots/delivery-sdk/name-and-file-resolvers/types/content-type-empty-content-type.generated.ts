@@ -1,5 +1,5 @@
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
@@ -20,7 +20,7 @@ export function isContentTypeEmptyContentTypeCodename(value: string | undefined 
  * Id: 4e41e105-6ec5-4a08-9680-b85e9cd8b14e
  * Codename: empty_content_type
  */
-export type ContentTypeEmptyContentTypeItem = ContentItemOf<CoreClientSchema, ContentTypeEmptyContentTypeCodename, Record<string, never>>;
+export type ContentTypeEmptyContentTypeItem = ContentItemOf<TypedClientSchema, ContentTypeEmptyContentTypeCodename, Record<string, never>>;
 
 /*
  * Type representing all available element codenames for Empty content type
@@ -34,7 +34,7 @@ export type ContentTypeEmptyContentTypeElementCodenames = never;
  * Codename: empty_content_type
  */
 export function isContentTypeEmptyContentTypeItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeEmptyContentTypeItem {
 	return isContentTypeEmptyContentTypeCodename(item?.system.type);
 }

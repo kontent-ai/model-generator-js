@@ -1,8 +1,8 @@
 export const syncConfig = {
 	npmPackageName: "@kontent-ai/sync-sdk",
 	coreTypesFilename: "sync.models",
-	coreClientTypesTypeName: "CoreSyncClientTypes",
-	coreClientTypeName: "CoreSyncClient",
+	typedClientTypesTypeName: "TypedSyncClientTypes",
+	typedClientTypeName: "TypedSyncClient",
 	sdkTypes: {
 		syncClientTypes: "SyncClientTypes",
 		syncClient: "SyncClient",

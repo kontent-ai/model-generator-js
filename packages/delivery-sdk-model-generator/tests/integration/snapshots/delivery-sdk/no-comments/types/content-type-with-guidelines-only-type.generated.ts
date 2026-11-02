@@ -1,5 +1,5 @@
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
 export type ContentTypeWithGuidelinesOnlyCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_guidelines_only">;
@@ -9,7 +9,7 @@ export function isContentTypeWithGuidelinesOnlyCodename(value: string | undefine
 }
 
 export type ContentTypeWithGuidelinesOnlyItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeWithGuidelinesOnlyCodename,
 	Record<string, never>
 >;
@@ -17,7 +17,7 @@ export type ContentTypeWithGuidelinesOnlyItem = ContentItemOf<
 export type ContentTypeWithGuidelinesOnlyElementCodenames = never;
 
 export function isContentTypeWithGuidelinesOnlyItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeWithGuidelinesOnlyItem {
 	return isContentTypeWithGuidelinesOnlyCodename(item?.system.type);
 }

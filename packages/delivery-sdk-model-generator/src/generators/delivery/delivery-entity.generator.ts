@@ -202,8 +202,8 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 							}),
 					],
 					code: `
-					 ${wrapComment(`Core content type with narrowed types. Use this instead of '${deliveryConfig.sdkTypes.contentItemPayload}' for increased type safety.`, { disableComments: config.disableComments })}
-					 ${deliveryUtils.getCoreContentTypeCode(
+					 ${wrapComment(`Union of all content items with narrowed types. Use this instead of '${deliveryConfig.sdkTypes.contentItemPayload}' for increased type safety.`, { disableComments: config.disableComments })}
+					 ${deliveryUtils.getTypedItemCode(
 							config.entities.filter((m) => m instanceof ContentTypeModels.ContentType),
 							entityNames as DeliveryEntityNames<"Type">,
 						)}
@@ -220,7 +220,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					${getEntityComment("Helper type that returns type based on the codename of type.")}
 					${deliveryUtils.getTypeMappingItem({
 						codenamesTypeName: entityNames.codenamesTypeName,
-						defaultTypeName: deliveryConfig.coreContentTypeName,
+						defaultTypeName: deliveryConfig.typedItemTypeName,
 						entityType: contentTypeDeliveryType,
 					})}
 					`,

@@ -50,7 +50,7 @@ export function getSyncGenerator(config: SyncGeneratorConfig) {
 				})}
 
                 ${wrapComment("Use as generic type when creating a sync client for increased type safety", { disableComments: config.disableComments })}
-				export type ${syncConfig.coreClientTypesTypeName} = ${syncConfig.sdkTypes.syncClientTypes} & {
+				export type ${syncConfig.typedClientTypesTypeName} = ${syncConfig.sdkTypes.syncClientTypes} & {
 					readonly languageCodenames: ${getCodenames(config.environmentData.languages)},
 					readonly typeCodenames: ${getCodenames(config.environmentData.types)},
 					readonly workflowCodenames: ${getCodenames(config.environmentData.workflows)},
@@ -60,7 +60,7 @@ export function getSyncGenerator(config: SyncGeneratorConfig) {
 				};
 
 				${wrapComment("Type safe sync client", { disableComments: config.disableComments })}
-				export type ${syncConfig.coreClientTypeName} = SyncClient<${syncConfig.coreClientTypesTypeName}>;
+				export type ${syncConfig.typedClientTypeName} = SyncClient<${syncConfig.typedClientTypesTypeName}>;
 				`,
 					},
 				],

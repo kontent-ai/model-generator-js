@@ -1,5 +1,5 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 import type { CircularReferenceTypeABItem } from "../types/circular-reference-type-a-b-type.generated.js";
 
@@ -22,7 +22,7 @@ export function isCircularReferenceTypeBACodename(value: string | undefined | nu
  * Codename: circular_reference_type_b____a
  */
 export type CircularReferenceTypeBAItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	CircularReferenceTypeBACodename,
 	{
 		/*
@@ -50,7 +50,7 @@ export type CircularReferenceTypeBAElementCodenames = "items";
  * Codename: circular_reference_type_b____a
  */
 export function isCircularReferenceTypeBAItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is CircularReferenceTypeBAItem {
 	return isCircularReferenceTypeBACodename(item?.system.type);
 }

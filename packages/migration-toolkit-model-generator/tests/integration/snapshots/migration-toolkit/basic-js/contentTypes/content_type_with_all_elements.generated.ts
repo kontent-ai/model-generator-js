@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
-import type { CoreMigrationItem } from "../migration.generated.js";
+import type { TypedMigrationItem } from "../migration.generated.js";
 
 /*
  * Content type with all elements
@@ -7,7 +7,7 @@ import type { CoreMigrationItem } from "../migration.generated.js";
  * Codename: content_type_with_all_elements
  * Id: 071c7591-e7f0-41ac-984f-7a3db35f97e8
  */
-export type ContentTypeWithAllElementsItem = CoreMigrationItem<
+export type ContentTypeWithAllElementsItem = TypedMigrationItem<
 	"content_type_with_all_elements",
 	{
 		/*

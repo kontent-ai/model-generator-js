@@ -3,7 +3,7 @@ import type { SyncClient, SyncClientTypes } from "@kontent-ai/sync-sdk";
 /*
  * Use as generic type when creating a sync client for increased type safety
  */
-export type CoreSyncClientTypes = SyncClientTypes & {
+export type TypedSyncClientTypes = SyncClientTypes & {
 	readonly languageCodenames: "__jp" | "🦉Lang" | "default" | "en-US" | "es-ES";
 	readonly typeCodenames:
 		| "_content_type_with_special_chars____"
@@ -26,4 +26,4 @@ export type CoreSyncClientTypes = SyncClientTypes & {
 /*
  * Type safe sync client
  */
-export type CoreSyncClient = SyncClient<CoreSyncClientTypes>;
+export type TypedSyncClient = SyncClient<TypedSyncClientTypes>;

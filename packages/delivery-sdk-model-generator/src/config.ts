@@ -2,9 +2,9 @@ export const deliveryConfig = {
 	npmPackageName: "@kontent-ai/delivery-sdk",
 	systemTypesFolderName: "system",
 	mainSystemFilename: "main.system",
-	coreContentTypeName: "CoreItem",
-	coreDeliveryClientTypeName: "CoreDeliveryClient",
-	coreClientSchemaTypeName: "CoreClientSchema",
+	typedItemTypeName: "TypedItem",
+	typedDeliveryClientTypeName: "TypedDeliveryClient",
+	typedClientSchemaTypeName: "TypedClientSchema",
 
 	sdkTypes: {
 		contentItemOf: "ContentItemOf",

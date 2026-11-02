@@ -1,6 +1,6 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames, TypedItem } from "../system/types.generated.js";
 import type { PageItem } from "../types/page-type.generated.js";
 
 /*
@@ -22,7 +22,7 @@ export function isWebSpotlightRootCodename(value: string | undefined | null): va
  * Codename: web_spotlight_root
  */
 export type WebSpotlightRootItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	WebSpotlightRootCodename,
 	{
 		/*
@@ -54,7 +54,7 @@ export type WebSpotlightRootItem = ContentItemOf<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly content: Elements.LinkedItems<CoreItem>;
+		readonly content: Elements.LinkedItems<TypedItem>;
 	}
 >;
 
@@ -69,6 +69,6 @@ export type WebSpotlightRootElementCodenames = "title" | "subpages" | "content";
  * Id: 7e8ca9f3-7f06-44d6-b9db-ae4905531365
  * Codename: web_spotlight_root
  */
-export function isWebSpotlightRootItem(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is WebSpotlightRootItem {
+export function isWebSpotlightRootItem(item: ContentItemPayload<TypedClientSchema> | undefined | null): item is WebSpotlightRootItem {
 	return isWebSpotlightRootCodename(item?.system.type);
 }

@@ -1,5 +1,5 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
@@ -21,7 +21,7 @@ export function isContentTypeWithSpecialCharsCodename(value: string | undefined 
  * Codename: _content_type_with_special_chars____
  */
 export type ContentTypeWithSpecialCharsItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeWithSpecialCharsCodename,
 	{
 		/*
@@ -58,7 +58,7 @@ export type ContentTypeWithSpecialCharsElementCodenames = "parrot__" | "_____num
  * Codename: _content_type_with_special_chars____
  */
 export function isContentTypeWithSpecialCharsItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeWithSpecialCharsItem {
 	return isContentTypeWithSpecialCharsCodename(item?.system.type);
 }

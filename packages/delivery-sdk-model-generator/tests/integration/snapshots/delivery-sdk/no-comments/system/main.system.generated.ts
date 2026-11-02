@@ -1,6 +1,6 @@
 import type { DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-sdk";
 
-export type CoreClientSchema = DeliveryClientSchema<{
+export type TypedClientSchema = DeliveryClientSchema<{
 	readonly languageCodenames: readonly ["default", "en-US", "es-ES", "__jp", "🦉Lang"];
 	readonly taxonomies: {
 		readonly taxonomy_a: readonly ["nested_term_2", "nested_term_1", "term_1", "term_2", "term_3"];
@@ -42,4 +42,4 @@ export type CoreClientSchema = DeliveryClientSchema<{
 	readonly workflowStepCodenames: readonly ["draft", "published", "archived", "scheduled", "draft_b42a7f1", "step_1", "step_2"];
 }>;
 
-export type CoreDeliveryClient = DeliveryClient<CoreClientSchema>;
+export type TypedDeliveryClient = DeliveryClient<TypedClientSchema>;

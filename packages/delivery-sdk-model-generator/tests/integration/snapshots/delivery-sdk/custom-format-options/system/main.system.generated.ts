@@ -3,7 +3,7 @@ import type { DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-
 /*
  * Schema describing this environment, used to strongly type 'DeliveryClient'
  */
-export type CoreClientSchema = DeliveryClientSchema<{
+export type TypedClientSchema = DeliveryClientSchema<{
 	readonly languageCodenames: readonly ["default", "en-US", "es-ES", "__jp", "🦉Lang"];
 	readonly taxonomies: {
 		readonly taxonomy_a: readonly ["nested_term_2", "nested_term_1", "term_1", "term_2", "term_3"];
@@ -48,4 +48,4 @@ export type CoreClientSchema = DeliveryClientSchema<{
 /*
  * Typed delivery client. Use this instead of 'DeliveryClient'
  */
-export type CoreDeliveryClient = DeliveryClient<CoreClientSchema>;
+export type TypedDeliveryClient = DeliveryClient<TypedClientSchema>;

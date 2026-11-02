@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
-import type { CoreMigrationItem } from "../migration.generated.js";
+import type { TypedMigrationItem } from "../migration.generated.js";
 
 /*
  * Type referencing deleted type
@@ -7,7 +7,7 @@ import type { CoreMigrationItem } from "../migration.generated.js";
  * Codename: type_referencing_deleted_type
  * Id: f7562083-7230-4c20-9136-620ee7a92534
  */
-export type TypeReferencingDeletedTypeItem = CoreMigrationItem<
+export type TypeReferencingDeletedTypeItem = TypedMigrationItem<
 	"type_referencing_deleted_type",
 	{
 		/*

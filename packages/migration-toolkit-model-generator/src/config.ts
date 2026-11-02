@@ -20,8 +20,8 @@ export const migrationConfig = {
 	},
 
 	localTypeNames: {
-		system: "CoreMigrationItemSystem",
-		item: "CoreMigrationItem",
+		system: "TypedMigrationItemSystem",
+		item: "TypedMigrationItem",
 		codename: "TCodename",
 		elements: "TElements",
 	},

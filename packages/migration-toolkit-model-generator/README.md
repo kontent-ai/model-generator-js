@@ -30,6 +30,8 @@ The major version of this generator matches the major version of the Migration T
 | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `@kontent-ai/migration-toolkit-model-generator` `3.x.y` | `3.x.y`                                                                                                            |
 
+Upgrading from `@kontent-ai/model-generator@10`? See the [upgrade guide](https://github.com/kontent-ai/model-generator-js/blob/master/upgrade.md).
+
 ## Usage
 
 Basic usage

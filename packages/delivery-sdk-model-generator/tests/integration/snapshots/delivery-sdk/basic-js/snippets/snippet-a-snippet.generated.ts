@@ -1,6 +1,6 @@
 import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreItem } from "../system/types.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
+import type { TypedItem } from "../system/types.generated.js";
 import type {
 	ContentTypeWithAllElementsCodename,
 	ContentTypeWithAllElementsItem,
@@ -14,7 +14,7 @@ import type { ContentTypeWithSnippetOnlyCodename } from "../types/content-type-w
  * Codename: snippet_a
  */
 export type SnippetASnippet = SnippetOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeWithAllElementsCodename | ContentTypeWithSnippetOnlyCodename,
 	{
 		/*
@@ -25,7 +25,7 @@ export type SnippetASnippet = SnippetOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<CoreItem>;
+		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<TypedItem>;
 
 		/*
 		 * Linked items with specific types
@@ -61,6 +61,6 @@ export type SnippetASnippetElementCodenames =
 /*
  * Type guard for Snippet A
  */
-export function isSnippetASnippet(item: ContentItemPayload<CoreClientSchema> | undefined | null): item is SnippetASnippet {
+export function isSnippetASnippet(item: ContentItemPayload<TypedClientSchema> | undefined | null): item is SnippetASnippet {
 	return !!item && (["content_type_with_all_elements", "content_type_with_snippet_only"] as readonly string[]).includes(item.system.type);
 }

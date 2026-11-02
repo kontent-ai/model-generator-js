@@ -15,6 +15,9 @@ Developer tools that streamline working with Kontent.ai by generating strongly t
 
 SDK specific generators share the major version of the SDK they target (e.g. `@kontent-ai/delivery-sdk-model-generator@17` generates models for `@kontent-ai/delivery-sdk@17`). See the README of each package for installation, compatibility and usage.
 
+> [!TIP]
+> Upgrading from `@kontent-ai/model-generator@10`? See the [upgrade guide](./upgrade.md) for why the generator was split, how to migrate, and what changed in the generated models.
+
 ## Repository structure
 
 ```

@@ -47,20 +47,20 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 		entityType: "Taxonomy",
 	}).getEntityNames();
 
-	const getCoreTypeImport = (): string =>
+	const getTypedItemImport = (): string =>
 		importer.importType({
 			filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${contentTypeNames.overviewFilename}`,
-			importValue: [deliveryConfig.coreContentTypeName],
+			importValue: [deliveryConfig.typedItemTypeName],
 		});
 
 	const getSchemaImport = (): string =>
 		importer.importType({
 			filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.mainSystemFilename}.ts`,
-			importValue: deliveryConfig.coreClientSchemaTypeName,
+			importValue: deliveryConfig.typedClientSchemaTypeName,
 		});
 
-	// 'CoreItem' is only referenced when a linked-items / rich-text element has no explicitly allowed content types.
-	const usesCoreTypeFallback = (flattenedElements: readonly FlattenedElement[]): boolean =>
+	// 'TypedItem' is only referenced when a linked-items / rich-text element has no explicitly allowed content types.
+	const usesTypedItemFallback = (flattenedElements: readonly FlattenedElement[]): boolean =>
 		flattenedElements
 			.filter((m) => !m.fromSnippet)
 			.some((element) =>
@@ -211,7 +211,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			imports: sortAlphabetically(
 				[
 					getSchemaImport(),
-					...(usesCoreTypeFallback(data.flattenedElements) ? [getCoreTypeImport()] : []),
+					...(usesTypedItemFallback(data.flattenedElements) ? [getTypedItemImport()] : []),
 					...getReferencedTypeImports(data.contentType, data.flattenedElements),
 					...getReferencedTaxonomyImports(data.contentType, data.flattenedElements),
 					...getSnippetImports(snippets),
@@ -238,7 +238,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			imports: sortAlphabetically(
 				[
 					getSchemaImport(),
-					...(usesCoreTypeFallback(data.flattenedElements) ? [getCoreTypeImport()] : []),
+					...(usesTypedItemFallback(data.flattenedElements) ? [getTypedItemImport()] : []),
 					...getReferencedTypeImports(data.snippet, data.flattenedElements),
 					...getReferencedTaxonomyImports(data.snippet, data.flattenedElements),
 					...getSnippetUsingTypeImports(data.snippet),
@@ -313,7 +313,7 @@ ${wrapComment(`Snippet '${snippet.name}' as a partial content item across the co
 		},
 	],
 })}
-export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippetOf}<${deliveryConfig.coreClientSchemaTypeName}, ${usingTypeCodenamesUnion}, ${getElementsCode(snippet, flattenedElements)}>;
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.snippetOf}<${deliveryConfig.typedClientSchemaTypeName}, ${usingTypeCodenamesUnion}, ${getElementsCode(snippet, flattenedElements)}>;
 
 ${wrapComment(`Type representing all available element codenames for ${snippet.name}`, { disableComments: config.disableComments })}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)}
@@ -375,7 +375,7 @@ ${wrapComment(contentType.name, {
 		},
 	],
 })}
-export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItemOf}<${deliveryConfig.coreClientSchemaTypeName}, ${contentTypeNames.getCodenameTypeName(contentType)}, ${elementsTypeExpression}>;
+export type ${importsResult.typeName} = ${deliveryConfig.sdkTypes.contentItemOf}<${deliveryConfig.typedClientSchemaTypeName}, ${contentTypeNames.getCodenameTypeName(contentType)}, ${elementsTypeExpression}>;
 
 ${wrapComment(`Type representing all available element codenames for ${contentType.name}`, { disableComments: config.disableComments })}
 ${getContentTypeElementCodenamesType(nameOfTypeRepresentingAllElementCodenames, flattenedElements)};
@@ -529,14 +529,14 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 				return `LinkedItems<${
 					linkedItemsElement.allowedContentTypes?.length
 						? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(" | ")
-						: deliveryConfig.coreContentTypeName
+						: deliveryConfig.typedItemTypeName
 				}>`;
 			})
 			.with({ type: "subpages" }, (linkedItemsElement) => {
 				return `LinkedItems<${
 					linkedItemsElement.allowedContentTypes?.length
 						? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(" | ")
-						: deliveryConfig.coreContentTypeName
+						: deliveryConfig.typedItemTypeName
 				}>`;
 			})
 			.with({ type: "asset" }, () => "Asset")
@@ -545,7 +545,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 				return `RichText<${
 					richTextElement.allowedContentTypes?.length
 						? getLinkedItemsAllowedTypes(richTextElement.allowedContentTypes).join(" | ")
-						: deliveryConfig.coreContentTypeName
+						: deliveryConfig.typedItemTypeName
 				}>`;
 			})
 			.with({ type: "multiple_choice" }, (multipleChoiceElement) => {
@@ -568,7 +568,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 
 	const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {
 		if (!types.length) {
-			return [deliveryConfig.coreContentTypeName];
+			return [deliveryConfig.typedItemTypeName];
 		}
 
 		return types.map((type) => contentTypeNames.getEntityName(type));
@@ -579,7 +579,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 		const typeGuardFunctionName = contentTypeNames.typeNames.contentItemTypeguardFunctionName(contentType);
 		const codenameTypeGuardFunctionName = contentTypeNames.getTypeguardFunctionName(contentType);
 
-		return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.coreClientSchemaTypeName}> | undefined | null): item is ${contentItemTypeName} {
+		return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.typedClientSchemaTypeName}> | undefined | null): item is ${contentItemTypeName} {
                 return ${codenameTypeGuardFunctionName}(item?.system.type);
             }`;
 	};
@@ -591,7 +591,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 		const snippetTypeName = snippetNames.getEntityName(snippet);
 		const usingCodenames = usingTypes.map((type) => `'${type.codename}'`).join(", ");
 
-		return `export function is${snippetTypeName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.coreClientSchemaTypeName}> | undefined | null): item is ${snippetTypeName} {
+		return `export function is${snippetTypeName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.typedClientSchemaTypeName}> | undefined | null): item is ${snippetTypeName} {
                 return !!item && ([${usingCodenames}] as readonly string[]).includes(item.system.type);
             }`;
 	};

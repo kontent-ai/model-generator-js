@@ -18,30 +18,27 @@ export function deliveryEntityUtils() {
 		getCodeOfDeliveryEntity,
 		getTaxonomyTermCodenames,
 		getCodenameTypeguardFunctionCode,
-		getCoreContentTypeEntityImports,
-		getCoreContentTypeCode,
+		getTypedItemEntityImports,
+		getTypedItemCode,
 	};
 }
 
-function getCoreContentTypeCode(
-	types: readonly Readonly<ContentTypeModels.ContentType>[],
-	entityNames: DeliveryEntityNames<"Type">,
-): string {
-	return `export type ${deliveryConfig.coreContentTypeName} = ${getCoreContentTypeValue(types, entityNames)}`;
+function getTypedItemCode(types: readonly Readonly<ContentTypeModels.ContentType>[], entityNames: DeliveryEntityNames<"Type">): string {
+	return `export type ${deliveryConfig.typedItemTypeName} = ${getTypedItemValue(types, entityNames)}`;
 }
 
-function getCoreContentTypeEntityNames(
-	types: Parameters<typeof getCoreContentTypeCode>[0],
-	entityNames: Parameters<typeof getCoreContentTypeCode>[1],
+function getTypedItemEntityNames(
+	types: Parameters<typeof getTypedItemCode>[0],
+	entityNames: Parameters<typeof getTypedItemCode>[1],
 ): readonly string[] {
 	return types.map((m) => entityNames.getEntityName(m));
 }
 
-function getCoreContentTypeValue(
-	types: Parameters<typeof getCoreContentTypeEntityNames>[0],
-	entityNames: Parameters<typeof getCoreContentTypeEntityNames>[1],
+function getTypedItemValue(
+	types: Parameters<typeof getTypedItemEntityNames>[0],
+	entityNames: Parameters<typeof getTypedItemEntityNames>[1],
 ): string {
-	const typeNames = getCoreContentTypeEntityNames(types, entityNames);
+	const typeNames = getTypedItemEntityNames(types, entityNames);
 
 	if (!typeNames.length) {
 		return "never";
@@ -50,9 +47,9 @@ function getCoreContentTypeValue(
 	return typeNames.join(" | ");
 }
 
-function getCoreContentTypeEntityImports(
-	types: Parameters<typeof getCoreContentTypeEntityNames>[0],
-	entityNames: Parameters<typeof getCoreContentTypeEntityNames>[1],
+function getTypedItemEntityImports(
+	types: Parameters<typeof getTypedItemEntityNames>[0],
+	entityNames: Parameters<typeof getTypedItemEntityNames>[1],
 	moduleFileExtension: ModuleFileExtension,
 ): readonly string[] {
 	const importer = getImporter(moduleFileExtension);

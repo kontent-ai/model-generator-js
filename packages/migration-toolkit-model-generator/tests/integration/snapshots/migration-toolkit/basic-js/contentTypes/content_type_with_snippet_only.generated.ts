@@ -1,5 +1,5 @@
 import type { MigrationElementModels } from "@kontent-ai/migration-toolkit";
-import type { CoreMigrationItem } from "../migration.generated.js";
+import type { TypedMigrationItem } from "../migration.generated.js";
 
 /*
  * Content type with snippet only
@@ -7,7 +7,7 @@ import type { CoreMigrationItem } from "../migration.generated.js";
  * Codename: content_type_with_snippet_only
  * Id: 7fd86bef-8f30-4a02-a1c3-fb130f65e9b4
  */
-export type ContentTypeWithSnippetOnlyItem = CoreMigrationItem<
+export type ContentTypeWithSnippetOnlyItem = TypedMigrationItem<
 	"content_type_with_snippet_only",
 	{
 		/*

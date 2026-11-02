@@ -1,6 +1,6 @@
 import type { ContentItemOf, ContentItemPayload } from "@kontent-ai/delivery-sdk";
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames } from "../system/types.generated.js";
 
 /*
@@ -22,7 +22,7 @@ export function isContentTypeWithSnippetOnlyCodename(value: string | undefined |
  * Codename: content_type_with_snippet_only
  */
 export type ContentTypeWithSnippetOnlyItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeWithSnippetOnlyCodename,
 	SnippetASnippet["elements"]
 >;
@@ -42,7 +42,7 @@ export type ContentTypeWithSnippetOnlyElementCodenames =
  * Codename: content_type_with_snippet_only
  */
 export function isContentTypeWithSnippetOnlyItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeWithSnippetOnlyItem {
 	return isContentTypeWithSnippetOnlyCodename(item?.system.type);
 }

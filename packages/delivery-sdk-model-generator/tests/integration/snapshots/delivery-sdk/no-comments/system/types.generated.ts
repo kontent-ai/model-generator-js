@@ -30,7 +30,7 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 	return typeof value === "string" && (typeCodenames as readonly string[]).includes(value);
 }
 
-export type CoreItem =
+export type TypedItem =
 	| ContentTypeWithAllElementsItem
 	| ContentTypeWithSpecialCharsItem
 	| EmptyContentTypeItem
@@ -59,4 +59,4 @@ export type TypeCodenameToItemMap = {
 
 export type TypeCodenameMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof TypeCodenameToItemMap
 	? TypeCodenameToItemMap[TTypeCodename]
-	: CoreItem;
+	: TypedItem;

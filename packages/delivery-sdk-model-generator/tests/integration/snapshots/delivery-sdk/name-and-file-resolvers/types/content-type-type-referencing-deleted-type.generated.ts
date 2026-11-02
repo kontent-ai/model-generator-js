@@ -1,6 +1,6 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames, TypedItem } from "../system/types.generated.js";
 
 /*
  * Type representing codename of 'Type referencing deleted type' type
@@ -23,7 +23,7 @@ export function isContentTypeTypeReferencingDeletedTypeCodename(
  * Codename: type_referencing_deleted_type
  */
 export type ContentTypeTypeReferencingDeletedTypeItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeTypeReferencingDeletedTypeCodename,
 	{
 		/*
@@ -34,7 +34,7 @@ export type ContentTypeTypeReferencingDeletedTypeItem = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_with_invalid_type: Elements.RichText<CoreItem>;
+		readonly rich_text_with_invalid_type: Elements.RichText<TypedItem>;
 
 		/*
 		 * Linked items with invalid type
@@ -44,7 +44,7 @@ export type ContentTypeTypeReferencingDeletedTypeItem = ContentItemOf<
 		 * Type: modular_content
 		 * Required: false
 		 */
-		readonly linked_items_with_invalid_type: Elements.LinkedItems<CoreItem>;
+		readonly linked_items_with_invalid_type: Elements.LinkedItems<TypedItem>;
 	}
 >;
 
@@ -60,7 +60,7 @@ export type ContentTypeTypeReferencingDeletedTypeElementCodenames = "rich_text_w
  * Codename: type_referencing_deleted_type
  */
 export function isContentTypeTypeReferencingDeletedTypeItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeTypeReferencingDeletedTypeItem {
 	return isContentTypeTypeReferencingDeletedTypeCodename(item?.system.type);
 }

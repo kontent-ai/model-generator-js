@@ -183,7 +183,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 				})}
 
                 ${wrapComment(`Schema describing this environment, used to strongly type '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
-                export type ${deliveryConfig.coreClientSchemaTypeName} = ${deliveryConfig.sdkTypes.deliveryClientSchema}<{
+                export type ${deliveryConfig.typedClientSchemaTypeName} = ${deliveryConfig.sdkTypes.deliveryClientSchema}<{
                     readonly languageCodenames: ${formatTuple(config.environmentData.languages.map((language) => language.codename))};
                     readonly taxonomies: {
                         ${taxonomiesMap}
@@ -197,7 +197,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
                 }>;
 
                 ${wrapComment(`Typed delivery client. Use this instead of '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
-                export type ${deliveryConfig.coreDeliveryClientTypeName} = ${deliveryConfig.sdkTypes.deliveryClient}<${deliveryConfig.coreClientSchemaTypeName}>;
+                export type ${deliveryConfig.typedDeliveryClientTypeName} = ${deliveryConfig.sdkTypes.deliveryClient}<${deliveryConfig.typedClientSchemaTypeName}>;
             `,
 		};
 	};

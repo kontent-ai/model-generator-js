@@ -40,9 +40,9 @@ export function isTypeCodename(value: string | undefined | null): value is TypeC
 }
 
 /*
- * Core content type with narrowed types. Use this instead of 'ContentItemPayload' for increased type safety.
+ * Union of all content items with narrowed types. Use this instead of 'ContentItemPayload' for increased type safety.
  */
-export type CoreItem =
+export type TypedItem =
 	| ContentTypeWithAllElementsItem
 	| ContentTypeWithSpecialCharsItem
 	| EmptyContentTypeItem
@@ -77,4 +77,4 @@ export type TypeCodenameToItemMap = {
  */
 export type TypeCodenameMapper<TTypeCodename extends TypeCodenames> = TTypeCodename extends keyof TypeCodenameToItemMap
 	? TypeCodenameToItemMap[TTypeCodename]
-	: CoreItem;
+	: TypedItem;

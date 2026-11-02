@@ -10,7 +10,7 @@ import type {
 /*
  * System object shared by all individual content type models
  */
-export type CoreMigrationItemSystem<TCodename extends ContentTypeCodenames> = MigrationItemSystem<
+export type TypedMigrationItemSystem<TCodename extends ContentTypeCodenames> = MigrationItemSystem<
 	TCodename,
 	LanguageCodenames,
 	CollectionCodenames,
@@ -20,7 +20,7 @@ export type CoreMigrationItemSystem<TCodename extends ContentTypeCodenames> = Mi
 /*
  * Item object shared by all individual content type models
  */
-export type CoreMigrationItem<
+export type TypedMigrationItem<
 	TCodename extends ContentTypeCodenames,
 	TElements extends MigrationElements = MigrationElements,
-> = MigrationItem<TElements, CoreMigrationItemSystem<TCodename>, WorkflowStepCodenames>;
+> = MigrationItem<TElements, TypedMigrationItemSystem<TCodename>, WorkflowStepCodenames>;

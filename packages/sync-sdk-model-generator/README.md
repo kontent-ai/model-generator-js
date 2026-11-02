@@ -30,6 +30,8 @@ The major version of this generator matches the major version of the Sync SDK it
 | ---------------------------------------------- | --------------------------------------------------------------------------------------- |
 | `@kontent-ai/sync-sdk-model-generator` `1.x.y` | `1.x.y`                                                                                 |
 
+Upgrading from `@kontent-ai/model-generator@10`? See the [upgrade guide](https://github.com/kontent-ai/model-generator-js/blob/master/upgrade.md).
+
 ## Usage
 
 > [!TIP]

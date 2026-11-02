@@ -1,7 +1,7 @@
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
 import type { SnippetASnippet } from "../snippets/snippet-a-snippet.generated.js";
-import type { CoreClientSchema } from "../system/main.system.generated.js";
-import type { CoreItem, TypeCodenames } from "../system/types.generated.js";
+import type { TypedClientSchema } from "../system/main.system.generated.js";
+import type { TypeCodenames, TypedItem } from "../system/types.generated.js";
 import type { TaxonomyATaxonomyTermCodenames } from "../taxonomies/taxonomy-a-taxonomy.generated.js";
 
 export type ContentTypeWithAllElementsCodename = keyof Pick<Record<TypeCodenames, null>, "content_type_with_all_elements">;
@@ -11,14 +11,14 @@ export function isContentTypeWithAllElementsCodename(value: string | undefined |
 }
 
 export type ContentTypeWithAllElementsItem = ContentItemOf<
-	CoreClientSchema,
+	TypedClientSchema,
 	ContentTypeWithAllElementsCodename,
 	{
 		readonly text_element: Elements.Text;
 
 		readonly url_slug_element: Elements.UrlSlug;
 
-		readonly rich_text_element: Elements.RichText<CoreItem>;
+		readonly rich_text_element: Elements.RichText<TypedItem>;
 
 		readonly date___time_element: Elements.DateTime;
 
@@ -52,7 +52,7 @@ export type ContentTypeWithAllElementsElementCodenames =
 	| "taxonomy_element";
 
 export function isContentTypeWithAllElementsItem(
-	item: ContentItemPayload<CoreClientSchema> | undefined | null,
+	item: ContentItemPayload<TypedClientSchema> | undefined | null,
 ): item is ContentTypeWithAllElementsItem {
 	return isContentTypeWithAllElementsCodename(item?.system.type);
 }
