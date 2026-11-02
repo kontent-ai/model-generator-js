@@ -52,6 +52,16 @@ Versioning and publishing is handled by [Changesets](https://github.com/changese
 2. After merging to `master`, the release workflow opens (or updates) a `changeset: update versions` pull request that bumps package versions and updates changelogs.
 3. Merging that pull request publishes every package whose new version is not on npm yet.
 
+### Releasing directly from `master`
+
+When there are no pending changesets, every push to `master` publishes packages whose version is not on npm yet. To release a specific package without the version pull request:
+
+1. Run `pnpm changeset` and select only the package you want to release.
+2. Run `pnpm changeset:version` to bump its version and update its changelog.
+3. Commit and push to `master`. The release workflow publishes the package (publishing uses npm OIDC, so it must run in the workflow, not locally).
+
+`changeset version` consumes all pending changesets, so any other pending changes are released as well. Use this only when no other changesets are pending.
+
 ## Contribution & Feedback
 
 Contributions are welcomed. Simply make a pull request.
