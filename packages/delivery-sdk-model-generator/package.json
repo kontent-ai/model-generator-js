@@ -54,16 +54,16 @@
 		"prepublishOnly": "pnpm run build"
 	},
 	"dependencies": {
-		"@biomejs/js-api": "6.0.0",
-		"@biomejs/wasm-nodejs": "2.5.14",
-		"@kontent-ai/core-sdk": "12.0.0-preview.49",
-		"@kontent-ai/management-sdk": "8.5.7",
-		"coreSdkLegacy": "npm:@kontent-ai/core-sdk@10.12.11",
-		"ts-pattern": "5.9.0",
-		"yargs": "18.2.0"
+		"@biomejs/js-api": "catalog:",
+		"@biomejs/wasm-nodejs": "catalog:",
+		"@kontent-ai/core-sdk": "catalog:",
+		"@kontent-ai/management-sdk": "catalog:",
+		"coreSdkLegacy": "catalog:",
+		"ts-pattern": "catalog:",
+		"yargs": "catalog:"
 	},
 	"devDependencies": {
-		"@kontent-ai/delivery-sdk": "17.0.0-preview.3",
+		"@kontent-ai/delivery-sdk": "catalog:",
 		"@kontent-ai/model-generator-shared": "workspace:*"
 	}
 }

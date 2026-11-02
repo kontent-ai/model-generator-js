@@ -24,7 +24,7 @@
 - pnpm workspace orchestrated by Turborepo; releases are managed with Changesets
 - `lib/` is the private `@kontent-ai/model-generator-shared` package: code shared by all generators. It is never published, each package bundles it via tsdown (`deps.alwaysBundle`)
 - `packages/*` contain only code specific to that package (generator, config, CLI entry, integration tests, samples). Import shared code from `@kontent-ai/model-generator-shared`, never via relative paths into `lib/`
-- Any third-party dependency used by shared code at runtime must also be listed in `dependencies` of each package that reaches it, otherwise tsdown bundles it
+- Any third-party dependency used by shared code at runtime must also be listed in `dependencies` of each package that reaches it, otherwise tsdown bundles it. Reference it as `"catalog:"` and define its version once in the `catalog` of `pnpm-workspace.yaml`
 - Package identity (generated-file header, tracking header) comes from each package's `src/sdk-info.ts`, which reads its own `package.json`
 
 ## Commands
