@@ -158,13 +158,16 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 				snippets: config.environmentData.snippets,
 				taxonomies: config.environmentData.taxonomies,
 				types: config.environmentData.types,
-			}).map((element) => element.codename);
+			})
+				.map((element) => element.codename)
+				.filter(uniqueFilter);
 
 		const workflowStepCodenames: readonly string[] = config.environmentData.workflows
 			.flatMap((workflow) =>
 				[...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep].filter(isNotUndefined),
 			)
-			.map((step) => step.codename);
+			.map((step) => step.codename)
+			.filter(uniqueFilter);
 
 		const taxonomiesMap: string = config.environmentData.taxonomies
 			.map((taxonomy) => `readonly ${taxonomy.codename}: ${formatTuple(deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms))};`)

@@ -576,7 +576,7 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 
 	const getContentItemTypeGuardFunction = (contentType: Readonly<ContentTypeModels.ContentType>): string => {
 		const contentItemTypeName = contentTypeNames.getEntityName(contentType);
-		const typeGuardFunctionName = contentTypeNames.typeNames.contentItemTypeguardFunctionName(contentType);
+		const typeGuardFunctionName = contentTypeNames.typeNames.typeguardFunctionName(contentType);
 		const codenameTypeGuardFunctionName = contentTypeNames.getTypeguardFunctionName(contentType);
 
 		return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.typedClientSchemaTypeName}> | undefined | null): item is ${contentItemTypeName} {
@@ -589,9 +589,10 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 		usingTypes: readonly Readonly<ContentTypeModels.ContentType>[],
 	): string => {
 		const snippetTypeName = snippetNames.getEntityName(snippet);
+		const typeGuardFunctionName = snippetNames.snippetItemNames.typeguardFunctionName(snippet);
 		const usingCodenames = usingTypes.map((type) => `'${type.codename}'`).join(", ");
 
-		return `export function is${snippetTypeName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.typedClientSchemaTypeName}> | undefined | null): item is ${snippetTypeName} {
+		return `export function ${typeGuardFunctionName}(item: ${deliveryConfig.sdkTypes.contentItemPayload}<${deliveryConfig.typedClientSchemaTypeName}> | undefined | null): item is ${snippetTypeName} {
                 return !!item && ([${usingCodenames}] as readonly string[]).includes(item.system.type);
             }`;
 	};

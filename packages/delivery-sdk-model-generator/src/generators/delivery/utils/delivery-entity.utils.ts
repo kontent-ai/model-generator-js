@@ -1,5 +1,5 @@
 import type { ContentTypeModels, TaxonomyModels } from "@kontent-ai/management-sdk";
-import { getImporter, type ModuleFileExtension, resolveCase, wrapComment } from "@kontent-ai/model-generator-shared";
+import { getImporter, type ModuleFileExtension, resolveCase, uniqueFilter, wrapComment } from "@kontent-ai/model-generator-shared";
 import { match } from "ts-pattern";
 import { deliveryConfig } from "../../../config.js";
 import type { DeliveryEntity, DeliveryEntityType } from "../delivery-entity.generator.js";
@@ -101,7 +101,7 @@ function getCodenameTypeguardFunctionCode({
 
 function getTaxonomyTermCodenames(taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] {
 	const termCodenames = taxonomyTerms.reduce<readonly string[]>((codenames, taxonomyTerm) => {
-		return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename);
+		return codenames.concat(getTaxonomyTermCodenames(taxonomyTerm.terms), taxonomyTerm.codename).filter(uniqueFilter);
 	}, []);
 
 	return [...new Set(termCodenames)];
@@ -158,7 +158,7 @@ function getCodeOfDeliveryEntity({
 	return `
             ${getComment(`Array of all ${getEntityTypeNameForComments()} codenames`)}
             ${getValuesCode()};
-           
+
             ${getComment(`Type representing all ${getEntityTypeNameForComments()} codenames`)}
             ${getCodenamesTypeCode()};
 

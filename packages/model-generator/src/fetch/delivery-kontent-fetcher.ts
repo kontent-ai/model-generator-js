@@ -7,7 +7,7 @@ import {
 	type DeliveryClientSchema,
 } from "@kontent-ai/delivery-sdk";
 import { coreConfig, type DeliveryApiMode, getTrackingHeaderValue, sortAlphabetically } from "@kontent-ai/model-generator-shared";
-import { match } from "ts-pattern";
+import { match, P } from "ts-pattern";
 import { sdkInfo } from "../sdk-info.js";
 
 export type GeneratorDeliveryClient = Readonly<DeliveryClient>;
@@ -29,8 +29,7 @@ export function getDeliveryKontentFetcher(config: {
 
 		return match(config.apiMode)
 			.returnType<DeliveryClientConfig>()
-			.with("preview", () => ({ ...baseConfig, apiMode: "preview", deliveryApiKey: config.deliveryApiKey ?? "" }))
-			.with("secure", () => ({ ...baseConfig, apiMode: "secure", deliveryApiKey: config.deliveryApiKey ?? "" }))
+			.with(P.union("preview", "secure"), () => ({ ...baseConfig, apiMode: "preview", deliveryApiKey: config.deliveryApiKey ?? "" }))
 			.with("default", () => ({ ...baseConfig, apiMode: "public" }))
 			.exhaustive();
 	}

@@ -1,4 +1,4 @@
-import type { ContentTypeModels, TaxonomyModels, WorkflowModels } from "@kontent-ai/management-sdk";
+import type { ContentTypeModels, ContentTypeSnippetModels, TaxonomyModels, WorkflowModels } from "@kontent-ai/management-sdk";
 import {
 	type FilenameResolver,
 	mapFilename,
@@ -51,10 +51,16 @@ export type AdditionalEntityNames<T> = T extends "Taxonomy"
 		: T extends "Type"
 			? {
 					readonly typeNames: {
-						readonly contentItemTypeguardFunctionName: (type: Readonly<ContentTypeModels.ContentType>) => string;
+						readonly typeguardFunctionName: (type: Readonly<ContentTypeModels.ContentType>) => string;
 					};
 				}
-			: NonNullable<unknown>;
+			: T extends "Snippet"
+				? {
+						readonly snippetItemNames: {
+							readonly typeguardFunctionName: (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>) => string;
+						};
+					}
+				: NonNullable<unknown>;
 
 export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(config: {
 	readonly nameResolvers: Pick<DeliveryGeneratorConfig, "nameResolvers">["nameResolvers"];
@@ -118,7 +124,13 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				typeNames:
 					config.entityType === "Type"
 						? {
-								contentItemTypeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "Item" }),
+								typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "Item" }),
+							}
+						: undefined,
+				snippetItemNames:
+					config.entityType === "Snippet"
+						? {
+								typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is" }),
 							}
 						: undefined,
 			};
