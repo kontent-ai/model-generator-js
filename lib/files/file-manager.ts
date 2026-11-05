@@ -1,5 +1,5 @@
 import * as fs from "node:fs";
-import { dirname } from "node:path";
+import path, { dirname } from "node:path";
 import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { EnvironmentModels } from "@kontent-ai/management-sdk";
 import { coreConfig } from "../config.js";
@@ -22,7 +22,7 @@ export function getFileManager(config: {
 	const importer = getImporter(config.moduleFileExtension);
 
 	const createFileOnFs = (text: string, filePath: string): void => {
-		const fullFilePath = `${fixedOutputDir.endsWith("/") ? fixedOutputDir : `${fixedOutputDir}/`}${filePath}`;
+		const fullFilePath = path.resolve(fixedOutputDir, filePath);
 		const fileContent = removeFirstEmptyLine(
 			`${getEnvironmentInfoComment({
 				environmentInfo: config.environmentInfo,
@@ -33,7 +33,7 @@ export function getFileManager(config: {
 		);
 
 		ensureDirectoryExistence(fullFilePath);
-		fs.writeFileSync(`./${fullFilePath}`, fileContent, {});
+		fs.writeFileSync(fullFilePath, fileContent, {});
 		console.log(`Created '${colorize("yellow", fullFilePath)}'`);
 	};
 
