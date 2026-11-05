@@ -7,5 +7,6 @@ export async function runCliAsync(action: (cliFetcher: CliArgumentsFetcher) => P
 		await action(await argumentsFetcherAsync());
 	} catch (error) {
 		logError(error);
+		process.exitCode = 1;
 	}
 }
