@@ -14,8 +14,8 @@ export async function itemsActionAsync(cliFetcher: CliArgumentsFetcher): Promise
 		managementApiKey: cliFetcher.getRequiredArgumentValue(commandOptions.managementApiKey.name),
 		// optional
 		disableComments: cliFetcher.getBooleanArgumentValue(commandOptions.disableComments.name, false),
-		generateTypes: cliFetcher.getBooleanArgumentValue(commandOptions.generateTypes.name, false),
-		generateObjects: cliFetcher.getBooleanArgumentValue(commandOptions.generateObjects.name, false),
+		generateTypes: cliFetcher.getBooleanArgumentValue(commandOptions.generateTypes.name, true),
+		generateObjects: cliFetcher.getBooleanArgumentValue(commandOptions.generateObjects.name, true),
 		deliveryApiKey: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryApiKey.name),
 		managementBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.managementBaseUrl.name),
 		deliveryBaseUrl: cliFetcher.getOptionalArgumentValue(commandOptions.deliveryBaseUrl.name),
