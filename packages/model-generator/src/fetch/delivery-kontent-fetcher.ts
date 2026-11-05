@@ -29,7 +29,11 @@ export function getDeliveryKontentFetcher(config: {
 
 		return match(config.apiMode)
 			.returnType<DeliveryClientConfig>()
-			.with(P.union("preview", "secure"), () => ({ ...baseConfig, apiMode: "preview", deliveryApiKey: config.deliveryApiKey ?? "" }))
+			.with(P.union("preview", "secure"), (apiMode) => ({
+				...baseConfig,
+				apiMode,
+				deliveryApiKey: config.deliveryApiKey ?? "",
+			}))
 			.with("default", () => ({ ...baseConfig, apiMode: "public" }))
 			.exhaustive();
 	}
