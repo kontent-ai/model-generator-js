@@ -9,6 +9,7 @@ import {
 	type GeneratedSet,
 	getFileManager,
 	getManagementKontentFetcher,
+	isArrayWithNonZeroItems,
 	type ManagementKontentFetcher,
 	type ModuleFileExtension,
 	uniqueFilter,
@@ -64,7 +65,7 @@ async function getFilesAsync(config: GenerateEnvironmentModelsConfig): Promise<{
 		baseUrl: config.managementBaseUrl,
 	});
 
-	const entitiesToCreate: readonly EnvironmentEntity[] = config.entities ?? environmentEntities; // default to all entities export
+	const entitiesToCreate: readonly EnvironmentEntity[] = isArrayWithNonZeroItems(config.entities) ? config.entities : environmentEntities; // default to all entities export
 
 	const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 	const entities = await getEntitiesAsync({

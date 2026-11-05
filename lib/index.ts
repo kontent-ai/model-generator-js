@@ -5,6 +5,7 @@ export * from "./cli/cli.models.js";
 export * from "./cli/command.options.js";
 export * from "./cli/run-cli.js";
 export * from "./config.js";
+export * from "./core/array.utils.js";
 export * from "./core/comment.utils.js";
 export * from "./core/core.models.js";
 export * from "./core/core.utils.js";
