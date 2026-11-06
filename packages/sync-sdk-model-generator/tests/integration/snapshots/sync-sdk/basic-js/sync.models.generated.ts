@@ -18,7 +18,7 @@ export type TypedSyncClientTypes = SyncClientTypes & {
 		| "type_with_empty_snippet"
 		| "web_spotlight_root";
 	readonly workflowCodenames: "advanced_workflow" | "default";
-	readonly workflowStepCodenames: "draft_b42a7f1" | "draft" | "step_1" | "step_2";
+	readonly workflowStepCodenames: "archived" | "draft_b42a7f1" | "draft" | "published" | "scheduled" | "step_1" | "step_2";
 	readonly collectionCodenames: "default" | "legacy_collection";
 	readonly taxonomyCodenames: "taxonomy_a" | "taxonomy_without_terms";
 };

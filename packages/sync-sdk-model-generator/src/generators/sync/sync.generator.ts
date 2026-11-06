@@ -54,7 +54,11 @@ export function getSyncGenerator(config: SyncGeneratorConfig) {
 					readonly languageCodenames: ${getCodenames(config.environmentData.languages)},
 					readonly typeCodenames: ${getCodenames(config.environmentData.types)},
 					readonly workflowCodenames: ${getCodenames(config.environmentData.workflows)},
-					readonly workflowStepCodenames: ${getCodenames(config.environmentData.workflows.flatMap((workflow) => workflow.steps))},
+					readonly workflowStepCodenames: ${getCodenames(
+						config.environmentData.workflows.flatMap((workflow) => {
+							return [...workflow.steps, workflow.archivedStep, workflow.publishedStep, workflow.scheduledStep];
+						}),
+					)},
 					readonly collectionCodenames: ${getCodenames(config.environmentData.collections)},
 					readonly taxonomyCodenames: ${getCodenames(config.environmentData.taxonomies)},
 				};

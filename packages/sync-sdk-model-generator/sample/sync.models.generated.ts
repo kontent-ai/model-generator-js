@@ -21,7 +21,7 @@ export type TypedSyncClientTypes = SyncClientTypes & {
 	readonly languageCodenames: "cz" | "en" | "German";
 	readonly typeCodenames: "actor" | "movie";
 	readonly workflowCodenames: "default";
-	readonly workflowStepCodenames: "draft" | "ready_to_publish" | "review";
+	readonly workflowStepCodenames: "archived" | "draft" | "published" | "ready_to_publish" | "review" | "scheduled";
 	readonly collectionCodenames: "default";
 	readonly taxonomyCodenames: "movietype" | "releasecategory";
 };
