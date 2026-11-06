@@ -78,13 +78,18 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			.filter(isNotUndefined)
 			.filter(uniqueFilter);
 
-		return flattenedElements
-			.filter((element) => uniqueElementCodenames.includes(element.codename))
-			.map<DeliveryElement>((m) => ({
-				codename: m.codename,
-				name: m.title,
-				externalId: m.externalId,
-			}));
+		return uniqueElementCodenames
+			.map((codename) => {
+				return flattenedElements.find((m) => m.codename === codename);
+			})
+			.filter(isNotUndefined)
+			.map<Readonly<DeliveryElement>>((flattenedElement) => {
+				return {
+					codename: flattenedElement.codename,
+					externalId: flattenedElement.externalId,
+					name: flattenedElement.title,
+				};
+			});
 	};
 
 	const entityGenerators = {
