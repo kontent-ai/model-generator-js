@@ -33,43 +33,48 @@ export async function formatCodeAsync(code: string, formatType: FormatType, conf
 
 function withBiome(configuration: FormatOptions | undefined, callback: (biome: Biome, projectKey: ProjectKey) => string): string {
 	const biome = new Biome();
-	const { projectKey } = biome.openProject();
-	biome.applyConfiguration(
-		projectKey,
-		configuration ?? {
-			extends: ["@kontent-ai/biome-config/base"],
-			formatter: {
-				indentWidth: 4,
-				indentStyle: "tab",
-				lineWidth: 140,
-			},
-			assist: {
-				enabled: true,
-				actions: {
-					source: {
-						organizeImports: "on",
+
+	try {
+		const { projectKey } = biome.openProject();
+		biome.applyConfiguration(
+			projectKey,
+			configuration ?? {
+				extends: ["@kontent-ai/biome-config/base"],
+				formatter: {
+					indentWidth: 4,
+					indentStyle: "tab",
+					lineWidth: 140,
+				},
+				assist: {
+					enabled: true,
+					actions: {
+						source: {
+							organizeImports: "on",
+						},
 					},
 				},
-			},
-			linter: {
-				rules: {
-					performance: {
-						noBarrelFile: "off",
-					},
-					correctness: {
-						noUnusedImports: {
-							fix: "safe",
-							level: "error",
+				linter: {
+					rules: {
+						performance: {
+							noBarrelFile: "off",
+						},
+						correctness: {
+							noUnusedImports: {
+								fix: "safe",
+								level: "error",
+							},
 						},
 					},
 				},
 			},
-		},
-	);
+		);
 
-	const result = callback(biome, projectKey);
+		const result = callback(biome, projectKey);
 
-	biome.shutdown();
+		biome.shutdown();
 
-	return result;
+		return result;
+	} finally {
+		biome.shutdown();
+	}
 }
