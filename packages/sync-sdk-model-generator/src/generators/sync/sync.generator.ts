@@ -9,6 +9,7 @@ import type {
 } from "@kontent-ai/management-sdk";
 import {
 	type GeneratedSet,
+	getAllWorkflowSteps,
 	getImporter,
 	type ModuleFileExtension,
 	type ObjectWithCodename,
@@ -54,11 +55,7 @@ export function getSyncGenerator(config: SyncGeneratorConfig) {
 					readonly languageCodenames: ${getCodenames(config.environmentData.languages)},
 					readonly typeCodenames: ${getCodenames(config.environmentData.types)},
 					readonly workflowCodenames: ${getCodenames(config.environmentData.workflows)},
-					readonly workflowStepCodenames: ${getCodenames(
-						config.environmentData.workflows.flatMap((workflow) => {
-							return [...workflow.steps, workflow.archivedStep, workflow.publishedStep, workflow.scheduledStep];
-						}),
-					)},
+					readonly workflowStepCodenames: ${getCodenames(getAllWorkflowSteps(config.environmentData.workflows))},
 					readonly collectionCodenames: ${getCodenames(config.environmentData.collections)},
 					readonly taxonomyCodenames: ${getCodenames(config.environmentData.taxonomies)},
 				};

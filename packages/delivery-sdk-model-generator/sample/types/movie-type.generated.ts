@@ -13,6 +13,7 @@
  */
 
 import type { ContentItemOf, ContentItemPayload, Elements } from "@kontent-ai/delivery-sdk";
+import type { SEOMetadataSnippet } from "../snippets/seo-metadata-snippet.generated.js";
 import type { TypedClientSchema } from "../system/main.system.generated.js";
 import type { TypeCodenames, TypedItem } from "../system/types.generated.js";
 import type { ReleaseCategoryTaxonomyTermCodenames } from "../taxonomies/release-category-taxonomy.generated.js";
@@ -131,7 +132,7 @@ export type MovieItem = ContentItemOf<
 		 * Taxonomy: releasecategory
 		 */
 		readonly releasecategory: Elements.Taxonomy<ReleaseCategoryTaxonomyTermCodenames>;
-	}
+	} & SEOMetadataSnippet["elements"]
 >;
 
 /*
@@ -146,7 +147,9 @@ export type MovieElementCodenames =
 	| "category"
 	| "stars"
 	| "seoname"
-	| "releasecategory";
+	| "releasecategory"
+	| "seo_metadata__meta_title"
+	| "seo_metadata__meta_description";
 
 /*
  * Type guard for Movie

@@ -23,6 +23,7 @@ import {
 	type GeneratedSet,
 	getFlattenedElements,
 	getStringOrUndefinedAsPropertyValue,
+	getWorkflowSteps,
 	isNotUndefined,
 	resolvePropertyName,
 	toSafePropertyValue,
@@ -30,12 +31,6 @@ import {
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
 import { match } from "ts-pattern";
-
-type WorkflowStep = {
-	readonly name: string;
-	readonly codename: string;
-	readonly id: string;
-};
 
 export type EnvironmentEntities = ValidateKeys<
 	EnvironmentEntity,
@@ -220,7 +215,7 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
                     name: '${toSafePropertyValue(workflow.name)}',
                     codename: '${workflow.codename}',
                     id: '${workflow.id}',
-                    steps: ${getWorkflowSteps(workflow)}
+                    steps: ${getWorkflowStepsCode(workflow)}
                 }${!isLast ? ",\n" : ""}`;
 		}, "");
 	};
@@ -498,11 +493,8 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 		}, "terms: {")}}`;
 	};
 
-	const getWorkflowSteps = (workflow: Readonly<WorkflowModels.Workflow>): string => {
-		// The order of these steps should reflect the order in which they appear in the Kontent UI
-		const steps: readonly WorkflowStep[] = [...workflow.steps, workflow.scheduledStep, workflow.publishedStep, workflow.archivedStep];
-
-		return `{${steps.reduce((code, step) => {
+	const getWorkflowStepsCode = (workflow: Readonly<WorkflowModels.Workflow>): string => {
+		return `{${getWorkflowSteps(workflow).reduce((code, step) => {
 			return `${code}
                 ${step.codename}: {
                     name: '${toSafePropertyValue(step.name)}',

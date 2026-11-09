@@ -32,7 +32,7 @@ export function isWorkflowCodename(value: string | undefined | null): value is W
 /*
  * Array of all workflow codenames
  */
-export const workflowStepCodenames = ["draft", "review", "ready_to_publish", "published", "archived", "scheduled"] as const;
+export const workflowStepCodenames = ["draft", "review", "ready_to_publish", "scheduled", "published", "archived"] as const;
 
 /*
  * Type representing all workflow codenames

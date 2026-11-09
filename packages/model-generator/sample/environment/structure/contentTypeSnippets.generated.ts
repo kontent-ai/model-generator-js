@@ -12,4 +12,43 @@
  * -------------------------------------------------------------------------------
  */
 
-export const contentTypeSnippets = {} as const;
+export const contentTypeSnippets = {
+	/*
+	 * SEO metadata
+	 */
+	seo_metadata: {
+		name: "SEO metadata",
+		codename: "seo_metadata",
+		id: "fc6bf7eb-a2a3-4cbc-8e35-e222f1b42656",
+		externalId: undefined,
+		elements: {
+			/*
+			 * Meta title
+			 *
+			 * Guidelines: Title shown in search results. Keep it under 60 characters.
+			 */
+			seo_metadata__meta_title: {
+				name: "Meta title",
+				codename: "seo_metadata__meta_title",
+				id: "5acea29d-ddf6-4ca4-9dec-8720d3a89f11",
+				externalId: undefined,
+				required: false,
+				type: "text",
+			},
+
+			/*
+			 * Meta description
+			 *
+			 * Guidelines: Short summary shown in search results. Keep it under 160 characters.
+			 */
+			seo_metadata__meta_description: {
+				name: "Meta description",
+				codename: "seo_metadata__meta_description",
+				id: "43c30a33-4ea6-4154-a46b-e4fe464d7404",
+				externalId: undefined,
+				required: false,
+				type: "text",
+			},
+		},
+	},
+} as const;

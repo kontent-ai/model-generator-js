@@ -14,6 +14,7 @@ export * from "./core/error.utils.js";
 export * from "./core/importer.js";
 export * from "./core/resolvers.js";
 export * from "./core/type-guards.js";
+export * from "./core/workflow.utils.js";
 export * from "./fetch/management-kontent-fetcher.js";
 export * from "./files/file-manager.js";
 export * from "./format/formatter.js";

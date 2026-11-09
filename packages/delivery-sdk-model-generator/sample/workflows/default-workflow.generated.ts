@@ -29,7 +29,7 @@ export function isDefaultWorkflowCodename(value: string | undefined | null): val
 /*
  * Array of all workflow step codenames
  */
-export const defaultWorkflowStepCodenames = ["draft", "review", "ready_to_publish", "published", "archived", "scheduled"] as const;
+export const defaultWorkflowStepCodenames = ["draft", "review", "ready_to_publish", "scheduled", "published", "archived"] as const;
 
 /*
  * Type representing all workflow step codenames

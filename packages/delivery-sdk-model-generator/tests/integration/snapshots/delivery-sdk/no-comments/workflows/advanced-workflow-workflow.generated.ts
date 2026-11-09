@@ -6,7 +6,7 @@ export function isAdvancedWorkflowWorkflowCodename(value: string | undefined | n
 	return typeof value === "string" && value === ("advanced_workflow" satisfies AdvancedWorkflowWorkflowCodename);
 }
 
-export const advancedWorkflowWorkflowStepCodenames = ["draft_b42a7f1", "step_1", "step_2", "published", "archived", "scheduled"] as const;
+export const advancedWorkflowWorkflowStepCodenames = ["draft_b42a7f1", "step_1", "step_2", "scheduled", "published", "archived"] as const;
 
 export type AdvancedWorkflowWorkflowStepCodenames = (typeof advancedWorkflowWorkflowStepCodenames)[number];
 

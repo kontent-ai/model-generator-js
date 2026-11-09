@@ -10,8 +10,9 @@ import {
 	type GeneratedFile,
 	type GeneratedSet,
 	type GeneratedTypeModel,
+	getAllWorkflowSteps,
 	getImporter,
-	isNotUndefined,
+	getWorkflowSteps,
 	type ModuleFileExtension,
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
@@ -160,12 +161,9 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 				| undefined
 			>()
 			.with("Workflow", (workflowDeliveryType) => {
-				const workflowStepCodenames: readonly string[] = config.entities
-					.filter((m) => m instanceof WorkflowModels.Workflow)
-					.flatMap((workflow) =>
-						[...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep].filter(isNotUndefined),
-					)
-					.map((m) => m.codename);
+				const workflowStepCodenames: readonly string[] = getAllWorkflowSteps(
+					config.entities.filter((m) => m instanceof WorkflowModels.Workflow),
+				).map((m) => m.codename);
 
 				const workflowStepNames = getDeliveryEntityNamesGenerator({
 					...{
@@ -245,12 +243,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 					imports: [],
 					code: deliveryUtils.getCodeOfDeliveryEntity({
 						disableComments: config.disableComments,
-						codenames: [
-							...workflow.steps.map((m) => m.codename),
-							workflow.publishedStep.codename,
-							workflow.archivedStep.codename,
-							workflow.scheduledStep.codename,
-						].filter(isNotUndefined),
+						codenames: getWorkflowSteps(workflow).map((m) => m.codename),
 						names: {
 							codenamesTypeName: workflowStepNames.stepsNames.codenamesTypeName(workflow),
 							typeGuardFunctionName: workflowStepNames.stepsNames.typeguardFunctionName(workflow),

@@ -12,6 +12,7 @@ import {
 	formatGuidelinesComment,
 	type GeneratedFile,
 	type GeneratedSet,
+	getAllWorkflowSteps,
 	getFlattenedElements,
 	getImporter,
 	getTypeWithCodenames,
@@ -264,8 +265,5 @@ function getCollectionCodenamesType(collections: readonly Readonly<CollectionMod
 }
 
 export function getWorkflowStepCodenamesType(workflows: readonly Readonly<WorkflowModels.Workflow>[]): string {
-	return getTypeWithCodenames(
-		migrationConfig.workflowStepCodenames,
-		workflows.flatMap((workflow) => [...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep]),
-	);
+	return getTypeWithCodenames(migrationConfig.workflowStepCodenames, getAllWorkflowSteps(workflows));
 }

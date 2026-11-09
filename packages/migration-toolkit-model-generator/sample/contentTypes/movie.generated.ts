@@ -115,5 +115,29 @@ export type MovieItem = TypedMigrationItem<
 		 * Taxonomy: releasecategory
 		 */
 		readonly releasecategory: MigrationElementModels.TaxonomyElement;
+
+		/*
+		 * Meta title
+		 *
+		 * Codename: seo_metadata__meta_title
+		 * Id: 5acea29d-ddf6-4ca4-9dec-8720d3a89f11
+		 * Type: text
+		 * Required: false
+		 * From snippet: seo_metadata
+		 * Guidelines: Title shown in search results. Keep it under 60 characters.
+		 */
+		readonly seo_metadata__meta_title: MigrationElementModels.TextElement;
+
+		/*
+		 * Meta description
+		 *
+		 * Codename: seo_metadata__meta_description
+		 * Id: 43c30a33-4ea6-4154-a46b-e4fe464d7404
+		 * Type: text
+		 * Required: false
+		 * From snippet: seo_metadata
+		 * Guidelines: Short summary shown in search results. Keep it under 160 characters.
+		 */
+		readonly seo_metadata__meta_description: MigrationElementModels.TextElement;
 	}
 >;

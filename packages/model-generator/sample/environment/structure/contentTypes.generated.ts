@@ -271,6 +271,34 @@ export const contentTypes = {
 				required: false,
 				type: "taxonomy",
 			},
+
+			/*
+			 * Meta title
+			 *
+			 * Guidelines: Title shown in search results. Keep it under 60 characters.
+			 */
+			seo_metadata__meta_title: {
+				name: "Meta title",
+				codename: "seo_metadata__meta_title",
+				id: "5acea29d-ddf6-4ca4-9dec-8720d3a89f11",
+				externalId: undefined,
+				required: false,
+				type: "text",
+			},
+
+			/*
+			 * Meta description
+			 *
+			 * Guidelines: Short summary shown in search results. Keep it under 160 characters.
+			 */
+			seo_metadata__meta_description: {
+				name: "Meta description",
+				codename: "seo_metadata__meta_description",
+				id: "43c30a33-4ea6-4154-a46b-e4fe464d7404",
+				externalId: undefined,
+				required: false,
+				type: "text",
+			},
 		},
 	},
 } as const;

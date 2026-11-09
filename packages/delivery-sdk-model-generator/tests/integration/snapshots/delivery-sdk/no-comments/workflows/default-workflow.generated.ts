@@ -6,7 +6,7 @@ export function isDefaultWorkflowCodename(value: string | undefined | null): val
 	return typeof value === "string" && value === ("default" satisfies DefaultWorkflowCodename);
 }
 
-export const defaultWorkflowStepCodenames = ["draft", "published", "archived", "scheduled"] as const;
+export const defaultWorkflowStepCodenames = ["draft", "scheduled", "published", "archived"] as const;
 
 export type DefaultWorkflowStepCodenames = (typeof defaultWorkflowStepCodenames)[number];
 

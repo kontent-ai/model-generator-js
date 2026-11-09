@@ -25,11 +25,23 @@ export type TypedClientSchema = DeliveryClientSchema<{
 	};
 	readonly contentTypes: {
 		readonly actor: readonly ["url", "first_name", "last_name", "photo"];
-		readonly movie: readonly ["title", "plot", "released", "length", "poster", "category", "stars", "seoname", "releasecategory"];
+		readonly movie: readonly [
+			"title",
+			"plot",
+			"released",
+			"length",
+			"poster",
+			"category",
+			"stars",
+			"seoname",
+			"releasecategory",
+			"seo_metadata__meta_title",
+			"seo_metadata__meta_description",
+		];
 	};
 	readonly collectionCodenames: readonly ["default"];
 	readonly workflowCodenames: readonly ["default"];
-	readonly workflowStepCodenames: readonly ["draft", "review", "ready_to_publish", "published", "archived", "scheduled"];
+	readonly workflowStepCodenames: readonly ["draft", "review", "ready_to_publish", "scheduled", "published", "archived"];
 }>;
 
 /*

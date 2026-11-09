@@ -15,7 +15,7 @@ export function isAdvancedWorkflowWorkflowCodename(value: string | undefined | n
 /*
  * Array of all workflow step codenames
  */
-export const advancedWorkflowWorkflowStepCodenames = ["draft_b42a7f1", "step_1", "step_2", "published", "archived", "scheduled"] as const;
+export const advancedWorkflowWorkflowStepCodenames = ["draft_b42a7f1", "step_1", "step_2", "scheduled", "published", "archived"] as const;
 
 /*
  * Type representing all workflow step codenames

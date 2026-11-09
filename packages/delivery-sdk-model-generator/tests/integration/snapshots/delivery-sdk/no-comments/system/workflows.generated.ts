@@ -6,7 +6,7 @@ export function isWorkflowCodename(value: string | undefined | null): value is W
 	return typeof value === "string" && (workflowCodenames as readonly string[]).includes(value);
 }
 
-export const workflowStepCodenames = ["draft", "published", "archived", "scheduled", "draft_b42a7f1", "step_1", "step_2"] as const;
+export const workflowStepCodenames = ["draft", "scheduled", "published", "archived", "draft_b42a7f1", "step_1", "step_2"] as const;
 
 export type WorkflowStepCodenames = (typeof workflowStepCodenames)[number];
 

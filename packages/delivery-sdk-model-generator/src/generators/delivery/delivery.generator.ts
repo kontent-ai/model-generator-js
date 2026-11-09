@@ -11,6 +11,7 @@ import {
 	type FilenameResolver,
 	type GeneratedFile,
 	type GeneratedSet,
+	getAllWorkflowSteps,
 	getFlattenedElements,
 	getImporter,
 	isNotUndefined,
@@ -167,10 +168,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 				.map((element) => element.codename)
 				.filter(uniqueFilter);
 
-		const workflowStepCodenames: readonly string[] = config.environmentData.workflows
-			.flatMap((workflow) =>
-				[...workflow.steps, workflow.publishedStep, workflow.archivedStep, workflow.scheduledStep].filter(isNotUndefined),
-			)
+		const workflowStepCodenames: readonly string[] = getAllWorkflowSteps(config.environmentData.workflows)
 			.map((step) => step.codename)
 			.filter(uniqueFilter);
 

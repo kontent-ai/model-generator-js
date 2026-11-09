@@ -42,7 +42,7 @@ export type TypedClientSchema = DeliveryClientSchema<{
 	};
 	readonly collectionCodenames: readonly ["legacy_collection", "default"];
 	readonly workflowCodenames: readonly ["default", "advanced_workflow"];
-	readonly workflowStepCodenames: readonly ["draft", "published", "archived", "scheduled", "draft_b42a7f1", "step_1", "step_2"];
+	readonly workflowStepCodenames: readonly ["draft", "scheduled", "published", "archived", "draft_b42a7f1", "step_1", "step_2"];
 }>;
 
 /*

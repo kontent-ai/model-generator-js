@@ -15,7 +15,7 @@
 /*
  * Array of all snippet codenames
  */
-export const snippetCodenames = [] as const;
+export const snippetCodenames = ["seo_metadata"] as const;
 
 /*
  * Type representing all snippet codenames

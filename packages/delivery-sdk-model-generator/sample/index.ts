@@ -16,6 +16,7 @@ export * from "./collections/default-collection.generated.js";
 export * from "./languages/cz-language.generated.js";
 export * from "./languages/english-language.generated.js";
 export * from "./languages/german-language.generated.js";
+export * from "./snippets/seo-metadata-snippet.generated.js";
 export * from "./system/collections.generated.js";
 export * from "./system/elements.generated.js";
 export * from "./system/languages.generated.js";

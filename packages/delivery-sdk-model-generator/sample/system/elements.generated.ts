@@ -29,6 +29,8 @@ export const elementCodenames = [
 	"stars",
 	"seoname",
 	"releasecategory",
+	"seo_metadata__meta_title",
+	"seo_metadata__meta_description",
 ] as const;
 
 /*
