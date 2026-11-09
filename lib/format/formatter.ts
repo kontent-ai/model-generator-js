@@ -71,8 +71,6 @@ function withBiome(configuration: FormatOptions | undefined, callback: (biome: B
 
 		const result = callback(biome, projectKey);
 
-		biome.shutdown();
-
 		return result;
 	} finally {
 		biome.shutdown();
