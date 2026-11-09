@@ -89,8 +89,8 @@ async function getEntitiesAsync({
 	kontentFetcher,
 	entitiesConfig,
 }: {
-	kontentFetcher: ManagementKontentFetcher;
-	entitiesConfig: readonly EnvironmentEntity[];
+	readonly kontentFetcher: ManagementKontentFetcher;
+	readonly entitiesConfig: readonly EnvironmentEntity[];
 }): Promise<EnvironmentEntities> {
 	const entitiesToFetch = getEntitiesToFetchFromApi(entitiesConfig);
 
@@ -169,8 +169,8 @@ async function fetchEntity<T>({
 	canFetch,
 	fetch,
 }: {
-	canFetch: () => boolean;
-	fetch: () => Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined>;
+	readonly canFetch: () => boolean;
+	readonly fetch: () => Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined>;
 }): Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined> {
 	if (!canFetch()) {
 		return undefined;

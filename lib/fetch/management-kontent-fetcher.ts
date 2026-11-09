@@ -170,7 +170,7 @@ async function fetchItemsAsync<T>({
 		| "asset folders"
 		| "workflows"
 		| "total content items";
-}): Promise<T[]> {
+}): Promise<readonly T[]> {
 	try {
 		const data = await fetch();
 		console.log(`Fetched '${colorize("yellow", data.length.toString())}' ${itemType}`);
