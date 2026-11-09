@@ -1,25 +1,17 @@
 import { colorize } from "@kontent-ai/core-sdk/devkit";
-import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import { parseCliArgsAsync } from "../arg.utils.js";
 import type { CliArgumentsFetcher } from "../cli.models.js";
 
-type ArgvResult = {
-	readonly [x: string]: unknown;
-	readonly _: readonly (string | number)[];
-	readonly $0: string;
-};
-
 export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
-	const argv = yargs(hideBin(process.argv));
-	const resolvedArgv: ArgvResult = await argv.argv;
+	const parsedArgs = await parseCliArgsAsync();
 
 	const getOptionalArgumentValue = (argName: string) => {
-		return resolvedArgv[argName]?.toString();
+		return parsedArgs[argName]?.toString();
 	};
 
 	return {
 		getCommand(): string | undefined {
-			return resolvedArgv._[0]?.toString().toLowerCase();
+			return parsedArgs._[0]?.toString().toLowerCase();
 		},
 		getOptionalArgumentValue,
 		getRequiredArgumentValue(argName: string): string {

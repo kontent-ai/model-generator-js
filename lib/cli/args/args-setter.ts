@@ -1,14 +1,14 @@
-import yargs, { type Argv } from "yargs";
-import { hideBin } from "yargs/helpers";
+import type { Argv } from "yargs";
+import { getCliArgs } from "../arg.utils.js";
 import type { CliArgumentsSetter, Command, CommandOption, DefaultCommand } from "../cli.models.js";
 
 const defaultCommandName = "$0";
 
 export function argumentsSetter<TAction extends string>(): CliArgumentsSetter<TAction> {
-	const argv = yargs(hideBin(process.argv));
+	const cliArgs = getCliArgs();
 
 	const registerCommand = (name: string, command: DefaultCommand): void => {
-		argv.command(name, command.description, (commandArgv) => configureCommand(commandArgv, name, command));
+		cliArgs.command(name, command.description, (commandArgv) => configureCommand(commandArgv, name, command));
 	};
 
 	return {
@@ -21,7 +21,7 @@ export function argumentsSetter<TAction extends string>(): CliArgumentsSetter<TA
 			return this;
 		},
 		withOption(option: CommandOption): CliArgumentsSetter<TAction> {
-			argv.option(option.name, {
+			cliArgs.option(option.name, {
 				alias: option.alias,
 				description: option.description,
 				type: option.type,
@@ -31,7 +31,7 @@ export function argumentsSetter<TAction extends string>(): CliArgumentsSetter<TA
 			return this;
 		},
 		registerCommands(): void {
-			argv.parseSync();
+			cliArgs.parseSync();
 		},
 	};
 }
