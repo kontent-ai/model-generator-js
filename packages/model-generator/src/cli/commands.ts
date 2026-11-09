@@ -38,6 +38,7 @@ export const cliArgs = argumentsSetter<CliAction>()
 			commandOptions.deliveryBaseUrl,
 			commandOptions.generateTypes,
 			commandOptions.generateObjects,
+			commandOptions.disableComments,
 		],
 	})
 	.withOption(commandOptions.help);

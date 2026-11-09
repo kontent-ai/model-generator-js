@@ -15,6 +15,7 @@ argumentsSetter()
 			commandOptions.moduleFileExtension,
 			commandOptions.outputDir,
 			commandOptions.managementBaseUrl,
+			commandOptions.disableComments,
 		],
 	})
 	.withOption(commandOptions.help)
