@@ -426,21 +426,30 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 	};
 
 	const getAllMultipleChoiceTypeCodes = (typeOrSnippet: ContentTypeOrSnippet, flattenedElements: readonly FlattenedElement[]): string => {
-		return flattenedElements
-			.map((element) => {
-				return match(element)
-					.returnType<string | undefined>()
-					.with({ type: "multiple_choice" }, (multipleChoiceElement) => {
-						// optionless multiple-choice elements map to a bare 'Elements.MultipleChoice' with no options type
-						if (!multipleChoiceElement.multipleChoiceOptions?.length) {
-							return undefined;
-						}
-						return getMultipleChoiceTypeCode(typeOrSnippet, multipleChoiceElement, multipleChoiceElement.multipleChoiceOptions);
-					})
-					.otherwise(() => undefined);
-			})
-			.filter(isNotUndefined)
-			.join("\n\n");
+		return (
+			flattenedElements
+				// we only get code for elements that are defined within the content type as to not duplicate multiple choice code
+				// which is generated in snippets
+				.filter((m) => !m.fromSnippet)
+				.map((element) => {
+					return match(element)
+						.returnType<string | undefined>()
+						.with({ type: "multiple_choice" }, (multipleChoiceElement) => {
+							// optionless multiple-choice elements map to a bare 'Elements.MultipleChoice' with no options type
+							if (!multipleChoiceElement.multipleChoiceOptions?.length) {
+								return undefined;
+							}
+							return getMultipleChoiceTypeCode(
+								typeOrSnippet,
+								multipleChoiceElement,
+								multipleChoiceElement.multipleChoiceOptions,
+							);
+						})
+						.otherwise(() => undefined);
+				})
+				.filter(isNotUndefined)
+				.join("\n\n")
+		);
 	};
 
 	const getElementsCode = (typeOrSnippet: ContentTypeOrSnippet, flattenedElements: readonly FlattenedElement[]): string => {
