@@ -34,9 +34,9 @@ export async function generateDeliveryModelsAsync(config: GenerateDeliveryModels
 	const { environmentInfo, files } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		...config,
 		packageInfo: sdkInfo,
 		disableComments: config.disableComments ?? false,
-		...config,
 		environmentInfo,
 	});
 

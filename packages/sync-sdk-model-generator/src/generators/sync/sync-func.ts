@@ -30,9 +30,9 @@ export async function generateSyncModelsAsync(config: GenerateSyncModelsConfig):
 	const { syncFiles, environmentInfo } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		...config,
 		packageInfo: sdkInfo,
 		disableComments: config.disableComments ?? false,
-		...config,
 		environmentInfo,
 	});
 

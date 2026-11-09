@@ -39,9 +39,9 @@ export async function generateItemsAsync(config: GenerateItemsModelsConfig): Pro
 	const { itemFiles, environmentInfo, codenameFiles } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		...config,
 		packageInfo: sdkInfo,
 		disableComments: config.disableComments ?? false,
-		...config,
 		environmentInfo,
 	});
 

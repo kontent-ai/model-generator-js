@@ -30,9 +30,9 @@ export async function generateMigrationModelsAsync(config: GenerateMigrationMode
 	const { migrationItemFiles, migrationTypeFiles, environmentInfo, environmentFiles } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
+		...config,
 		packageInfo: sdkInfo,
 		disableComments: config.disableComments ?? false,
-		...config,
 		environmentInfo,
 	});
 
