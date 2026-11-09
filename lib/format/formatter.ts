@@ -4,75 +4,80 @@ import type { Configuration, ProjectKey } from "@biomejs/wasm-nodejs";
 export type FormatOptions = Readonly<Configuration>;
 export type FormatType = "typescript" | "json";
 
-export async function formatCodeAsync(code: string, formatType: FormatType, configuration: FormatOptions | undefined): Promise<string> {
-	const result = withBiome(configuration, (biome, projectKey) => {
-		const formattedContent = biome.formatContent(projectKey, code, {
-			filePath: formatType === "typescript" ? "virtual.ts" : "virtual.json",
-		});
-
-		// 'formatContent' only runs the formatter; assist actions such as 'organizeImports' (and safe lint fixes
-		// like removing unused imports) are applied by 'lintContent' with a fix mode. JSON has nothing to organize.
-		if (formatType !== "typescript") {
-			return formattedContent.content;
-		}
-
-		const lintedContent = biome.lintContent(projectKey, formattedContent.content, {
-			filePath: "virtual.ts",
-			fixFileMode: "safeFixes",
-		});
-
-		// Re-format after organizing: 'organizeImports' can merge several same-module imports into a single
-		// statement that exceeds the configured line width, and only the formatter (not the assist) wraps it.
-		return biome.formatContent(projectKey, lintedContent.content, {
-			filePath: "virtual.ts",
-		}).content;
-	});
-
-	return await Promise.resolve(result);
+function getBiome(): Biome {
+	return new Biome();
 }
 
-function withBiome(configuration: FormatOptions | undefined, callback: (biome: Biome, projectKey: ProjectKey) => string): string {
-	const biome = new Biome();
-
+export async function formatCodeAsync(code: string, formatType: FormatType, configuration: FormatOptions | undefined): Promise<string> {
+	const biome = getBiome();
 	try {
-		const { projectKey } = biome.openProject();
-		biome.applyConfiguration(
-			projectKey,
-			configuration ?? {
-				extends: ["@kontent-ai/biome-config/base"],
-				formatter: {
-					indentWidth: 4,
-					indentStyle: "tab",
-					lineWidth: 140,
-				},
-				assist: {
-					enabled: true,
-					actions: {
-						source: {
-							organizeImports: "on",
-						},
+		const result = withBiome(biome, configuration, (biome, projectKey) => {
+			const formattedContent = biome.formatContent(projectKey, code, {
+				filePath: formatType === "typescript" ? "virtual.ts" : "virtual.json",
+			});
+
+			// 'formatContent' only runs the formatter; assist actions such as 'organizeImports' (and safe lint fixes
+			// like removing unused imports) are applied by 'lintContent' with a fix mode. JSON has nothing to organize.
+			if (formatType !== "typescript") {
+				return formattedContent.content;
+			}
+
+			const lintedContent = biome.lintContent(projectKey, formattedContent.content, {
+				filePath: "virtual.ts",
+				fixFileMode: "safeFixes",
+			});
+
+			// Re-format after organizing: 'organizeImports' can merge several same-module imports into a single
+			// statement that exceeds the configured line width, and only the formatter (not the assist) wraps it.
+			return biome.formatContent(projectKey, lintedContent.content, {
+				filePath: "virtual.ts",
+			}).content;
+		});
+
+		return await Promise.resolve(result);
+	} finally {
+		biome.shutdown();
+	}
+}
+
+function withBiome(
+	biome: Biome,
+	configuration: FormatOptions | undefined,
+	callback: (biome: Biome, projectKey: ProjectKey) => string,
+): string {
+	const { projectKey } = biome.openProject();
+	biome.applyConfiguration(
+		projectKey,
+		configuration ?? {
+			extends: ["@kontent-ai/biome-config/base"],
+			formatter: {
+				indentWidth: 4,
+				indentStyle: "tab",
+				lineWidth: 140,
+			},
+			assist: {
+				enabled: true,
+				actions: {
+					source: {
+						organizeImports: "on",
 					},
 				},
-				linter: {
-					rules: {
-						performance: {
-							noBarrelFile: "off",
-						},
-						correctness: {
-							noUnusedImports: {
-								fix: "safe",
-								level: "error",
-							},
+			},
+			linter: {
+				rules: {
+					performance: {
+						noBarrelFile: "off",
+					},
+					correctness: {
+						noUnusedImports: {
+							fix: "safe",
+							level: "error",
 						},
 					},
 				},
 			},
-		);
+		},
+	);
 
-		const result = callback(biome, projectKey);
-
-		return result;
-	} finally {
-		biome.shutdown();
-	}
+	return callback(biome, projectKey);
 }
