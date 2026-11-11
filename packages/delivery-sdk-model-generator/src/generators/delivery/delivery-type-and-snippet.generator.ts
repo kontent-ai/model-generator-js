@@ -493,10 +493,6 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 						value: element.isRequired ? "true" : "false",
 					},
 					{
-						name: "From snippet",
-						value: element.fromSnippet ? element.fromSnippet.codename : undefined,
-					},
-					{
 						name: "Taxonomy",
 						value: element.assignedTaxonomy ? element.assignedTaxonomy.codename : undefined,
 					},
