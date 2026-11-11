@@ -1,5 +1,4 @@
 ---
-
 "@kontent-ai/delivery-sdk-model-generator": major
 "@kontent-ai/migration-toolkit-model-generator": major
 "@kontent-ai/sync-sdk-model-generator": major

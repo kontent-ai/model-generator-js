@@ -1,6 +1,9 @@
 {
 	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
 	"extends": ["@kontent-ai/biome-config/base"],
+	"files": {
+		"includes": ["!**/node_modules", "!**/dist", "!**/build", "!.changeset"]
+	},
 	"formatter": {
 		"indentWidth": 4,
 		"indentStyle": "tab",
