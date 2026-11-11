@@ -55,7 +55,6 @@ export async function generateEnvironmentModelsAsync(config: GenerateEnvironment
 
 async function getFilesAsync(config: GenerateEnvironmentModelsConfig): Promise<{
 	readonly environmentFiles: GeneratedSet;
-	readonly moduleFileExtension: ModuleFileExtension;
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
 	const kontentFetcher = getManagementKontentFetcher({
@@ -81,7 +80,6 @@ async function getFilesAsync(config: GenerateEnvironmentModelsConfig): Promise<{
 			entitiesToCreate: entitiesToCreate,
 			disableComments: config.disableComments ?? false,
 		}).generateEnvironmentModels(),
-		moduleFileExtension: config.moduleFileExtension,
 	};
 }
 
