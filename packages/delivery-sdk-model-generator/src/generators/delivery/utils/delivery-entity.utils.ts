@@ -142,7 +142,6 @@ function getCodeOfDeliveryEntity({
 		readonly typeGuardFunctionName: string;
 	};
 	readonly disableComments: boolean;
-	readonly subtype?: "Term" | "Step";
 	readonly extendedType: DeliveryEntityType | "Workflow step" | "Taxonomy term";
 	readonly codenames: readonly string[];
 }): string {
