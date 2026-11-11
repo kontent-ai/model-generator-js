@@ -20,8 +20,8 @@ import type { DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-
 export type TypedClientSchema = DeliveryClientSchema<{
 	readonly languageCodenames: readonly ["en", "cz", "German"];
 	readonly taxonomies: {
-		readonly releasecategory: readonly ["global_release", "us_only", "local_release"];
-		readonly movietype: readonly ["student", "tv", "blockbuster", "cinema_only", "film"];
+		readonly releasecategory: readonly ["global_release", "local_release", "us_only"];
+		readonly movietype: readonly ["blockbuster", "cinema_only", "film", "student", "tv"];
 	};
 	readonly contentTypes: {
 		readonly actor: readonly ["url", "first_name", "last_name", "photo"];

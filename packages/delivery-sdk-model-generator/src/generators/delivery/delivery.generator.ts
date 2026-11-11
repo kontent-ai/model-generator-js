@@ -173,7 +173,7 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			.filter(uniqueFilter);
 
 		const taxonomiesMap: string = config.environmentData.taxonomies
-			.map((taxonomy) => `readonly ${taxonomy.codename}: ${formatTuple(deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms))};`)
+			.map((taxonomy) => `readonly ${taxonomy.codename}: ${formatTuple(deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms, []))};`)
 			.join("\n");
 
 		const contentTypesMap: string = config.environmentData.types

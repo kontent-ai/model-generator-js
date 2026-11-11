@@ -29,7 +29,7 @@ export function isMovieTypeTaxonomyCodename(value: string | undefined | null): v
 /*
  * Array of all taxonomy term codenames
  */
-export const movieTypeTaxonomyTermCodenames = ["student", "tv", "blockbuster", "cinema_only", "film"] as const;
+export const movieTypeTaxonomyTermCodenames = ["blockbuster", "cinema_only", "film", "student", "tv"] as const;
 
 /*
  * Type representing all taxonomy term codenames

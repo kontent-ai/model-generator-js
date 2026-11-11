@@ -170,8 +170,8 @@ async function fetchEntity<T>({
 	fetch,
 }: {
 	readonly canFetch: () => boolean;
-	readonly fetch: () => Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined>;
-}): Promise<(T extends Array<T> ? readonly Array<T>[] : T) | undefined> {
+	readonly fetch: () => Promise<T | undefined>;
+}): Promise<T | undefined> {
 	if (!canFetch()) {
 		return undefined;
 	}

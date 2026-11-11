@@ -29,7 +29,7 @@ export function isReleaseCategoryTaxonomyCodename(value: string | undefined | nu
 /*
  * Array of all taxonomy term codenames
  */
-export const releaseCategoryTaxonomyTermCodenames = ["global_release", "us_only", "local_release"] as const;
+export const releaseCategoryTaxonomyTermCodenames = ["global_release", "local_release", "us_only"] as const;
 
 /*
  * Type representing all taxonomy term codenames
