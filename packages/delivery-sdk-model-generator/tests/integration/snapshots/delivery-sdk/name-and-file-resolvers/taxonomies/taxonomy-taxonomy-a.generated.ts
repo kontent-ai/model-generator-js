@@ -15,7 +15,7 @@ export function isTaxonomyTaxonomyACodename(value: string | undefined | null): v
 /*
  * Array of all taxonomy term codenames
  */
-export const taxonomyTaxonomyATermCodenames = ["nested_term_2", "nested_term_1", "term_1", "term_2", "term_3"] as const;
+export const taxonomyTaxonomyATermCodenames = ["nested_term_1", "nested_term_2", "term_1", "term_2", "term_3"] as const;
 
 /*
  * Type representing all taxonomy term codenames

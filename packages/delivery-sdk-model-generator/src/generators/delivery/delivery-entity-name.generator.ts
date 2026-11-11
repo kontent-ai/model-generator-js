@@ -7,12 +7,11 @@ import {
 	type ObjectWithCodename,
 	resolveCase,
 } from "@kontent-ai/model-generator-shared";
-import { match } from "ts-pattern";
-import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
+import type { DeliveryGeneratorConfig, DeliveryNameResolvers } from "./delivery.generator.js";
 import type { DeliveryEntity, DeliveryEntityType } from "./delivery-entity.generator.js";
 import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
-export type DeliveryEntityNames<T extends DeliveryEntityType> = {
+type DeliveryEntityBaseNames = {
 	readonly codenamesValuePropertyName: string;
 	readonly codenamesTypeName: string;
 	readonly codenamesTypeguardFunctionName: string;
@@ -25,42 +24,62 @@ export type DeliveryEntityNames<T extends DeliveryEntityType> = {
 	readonly getEntityFilename: (entity: Readonly<DeliveryEntity>, addExtension: boolean) => string;
 	readonly getCodenameTypeName: (entity: Readonly<DeliveryEntity>) => string;
 	readonly getTypeguardFunctionName: (entity: Readonly<DeliveryEntity>) => string;
-} & AdditionalEntityNames<T>;
+};
 
-export type AdditionalEntityNames<T> = T extends "Taxonomy"
-	? {
-			readonly termsNames: {
-				readonly valuesPropertyName: (taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string;
-				readonly codenamesTypeName: (taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string;
-				readonly typeguardFunctionName: (taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string;
-			};
-		}
-	: T extends "Workflow"
-		? {
-				readonly allStepsNames: {
-					readonly valuesPropertyName: string;
-					readonly codenamesTypeName: string;
-					readonly typeguardFunctionName: string;
-				};
-				readonly stepsNames: {
-					readonly valuesPropertyName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
-					readonly codenamesTypeName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
-					readonly typeguardFunctionName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
-				};
-			}
-		: T extends "Type"
-			? {
-					readonly typeNames: {
-						readonly typeguardFunctionName: (type: Readonly<ContentTypeModels.ContentType>) => string;
-					};
-				}
-			: T extends "Snippet"
-				? {
-						readonly snippetItemNames: {
-							readonly typeguardFunctionName: (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>) => string;
-						};
-					}
-				: NonNullable<unknown>;
+type AdditionalEntityNamesMap = {
+	readonly Taxonomy: {
+		readonly termsNames: {
+			readonly valuesPropertyName: (taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string;
+			readonly codenamesTypeName: (taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string;
+			readonly typeguardFunctionName: (taxonomy: Readonly<TaxonomyModels.Taxonomy>) => string;
+		};
+	};
+	readonly Workflow: {
+		readonly allStepsNames: {
+			readonly valuesPropertyName: string;
+			readonly codenamesTypeName: string;
+			readonly typeguardFunctionName: string;
+		};
+		readonly stepsNames: {
+			readonly valuesPropertyName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
+			readonly codenamesTypeName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
+			readonly typeguardFunctionName: (workflow: Readonly<WorkflowModels.Workflow>) => string;
+		};
+	};
+	readonly Type: {
+		readonly typeNames: {
+			readonly typeguardFunctionName: (type: Readonly<ContentTypeModels.ContentType>) => string;
+		};
+	};
+	readonly Snippet: {
+		readonly snippetItemNames: {
+			readonly typeguardFunctionName: (snippet: Readonly<ContentTypeSnippetModels.ContentTypeSnippet>) => string;
+		};
+	};
+	readonly Language: NonNullable<unknown>;
+	readonly Collection: NonNullable<unknown>;
+	readonly Element: NonNullable<unknown>;
+};
+
+export type AdditionalEntityNames<T extends DeliveryEntityType> = AdditionalEntityNamesMap[T];
+
+export type DeliveryEntityNames<T extends DeliveryEntityType> = DeliveryEntityBaseNames & AdditionalEntityNames<T>;
+
+type EntityResolvers = {
+	readonly nameResolver: NonNullable<NameResolver<DeliveryEntity>>;
+	readonly filenameResolver: NonNullable<FilenameResolver<DeliveryEntity>>;
+};
+
+// Key of the user-provided resolver (in both 'nameResolvers' and 'fileResolvers') for each entity type
+const resolverKeys = {
+	Type: "contentType",
+	Snippet: "snippet",
+	Taxonomy: "taxonomy",
+	Language: "language",
+	Workflow: "workflow",
+	Collection: "collection",
+	Element: undefined,
+} as const satisfies Record<DeliveryEntityType, keyof DeliveryNameResolvers | undefined>;
 
 export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(config: {
 	readonly nameResolvers: Pick<DeliveryGeneratorConfig, "nameResolvers">["nameResolvers"];
@@ -79,7 +98,7 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 				pluralCamelCase: resolveCase(deliveryUtils.getPluralName(config.entityType), "camelCase"),
 			};
 
-			const entityNames: DeliveryEntityNames<DeliveryEntityType> = {
+			const baseNames: DeliveryEntityBaseNames = {
 				codenamesTypeName: `${entityTypeName.pascalCase}Codenames`,
 				codenamesValuePropertyName: `${entityTypeName.camelCase}Codenames`,
 				codenamesTypeguardFunctionName: `is${entityTypeName.pascalCase}Codename`,
@@ -97,118 +116,82 @@ export function getDeliveryEntityNamesGenerator<T extends DeliveryEntityType>(co
 					suffix: "Codename",
 				}),
 				getEntityFilename: mapFilename(filenameResolver, {}),
-				termsNames:
-					config.entityType === "Taxonomy"
-						? {
-								valuesPropertyName: mapName(nameResolver, "camelCase", { suffix: "TermCodenames" }),
-								codenamesTypeName: mapName(nameResolver, "pascalCase", { suffix: "TermCodenames" }),
-								typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "TermCodename" }),
-							}
-						: undefined,
-				stepsNames:
-					config.entityType === "Workflow"
-						? {
-								valuesPropertyName: mapName(nameResolver, "camelCase", { suffix: "StepCodenames" }),
-								codenamesTypeName: mapName(nameResolver, "pascalCase", { suffix: "StepCodenames" }),
-								typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "StepCodename" }),
-							}
-						: undefined,
-				allStepsNames:
-					config.entityType === "Workflow"
-						? {
-								valuesPropertyName: resolveCase("workflowStepCodenames", "camelCase"),
-								codenamesTypeName: resolveCase("workflowStepCodenames", "pascalCase"),
-								typeguardFunctionName: resolveCase("isWorkflowStepCodename", "camelCase"),
-							}
-						: undefined,
-				typeNames:
-					config.entityType === "Type"
-						? {
-								typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "Item" }),
-							}
-						: undefined,
-				snippetItemNames:
-					config.entityType === "Snippet"
-						? {
-								typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is" }),
-							}
-						: undefined,
 			};
 
-			return entityNames as DeliveryEntityNames<T>;
+			return {
+				...baseNames,
+				...getAdditionalEntityNames(config.entityType, nameResolver),
+			};
 		},
 	};
 }
 
-function getNameAndFilenameResolver<T extends DeliveryEntityType>(config: {
+function getAdditionalEntityNames<T extends DeliveryEntityType>(
+	entityType: T,
+	nameResolver: NonNullable<NameResolver<DeliveryEntity>>,
+): AdditionalEntityNames<T> {
+	const additionalNames: { readonly [K in DeliveryEntityType]: () => AdditionalEntityNamesMap[K] } = {
+		Taxonomy: () => ({
+			termsNames: {
+				valuesPropertyName: mapName(nameResolver, "camelCase", { suffix: "TermCodenames" }),
+				codenamesTypeName: mapName(nameResolver, "pascalCase", { suffix: "TermCodenames" }),
+				typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "TermCodename" }),
+			},
+		}),
+		Workflow: () => ({
+			stepsNames: {
+				valuesPropertyName: mapName(nameResolver, "camelCase", { suffix: "StepCodenames" }),
+				codenamesTypeName: mapName(nameResolver, "pascalCase", { suffix: "StepCodenames" }),
+				typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "StepCodename" }),
+			},
+			allStepsNames: {
+				valuesPropertyName: resolveCase("workflowStepCodenames", "camelCase"),
+				codenamesTypeName: resolveCase("workflowStepCodenames", "pascalCase"),
+				typeguardFunctionName: resolveCase("isWorkflowStepCodename", "camelCase"),
+			},
+		}),
+		Type: () => ({
+			typeNames: {
+				typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is", suffix: "Item" }),
+			},
+		}),
+		Snippet: () => ({
+			snippetItemNames: {
+				typeguardFunctionName: mapName(nameResolver, "pascalCase", { prefix: "is" }),
+			},
+		}),
+		Language: () => ({}),
+		Collection: () => ({}),
+		Element: () => ({}),
+	};
+
+	return additionalNames[entityType]();
+}
+
+function getNameAndFilenameResolver(config: {
 	readonly nameResolvers: Pick<DeliveryGeneratorConfig, "nameResolvers">["nameResolvers"];
 	readonly fileResolvers: Pick<DeliveryGeneratorConfig, "fileResolvers">["fileResolvers"];
-	readonly entityType: T;
-}): {
-	readonly nameResolver: NonNullable<NameResolver<DeliveryEntity>>;
-	readonly filenameResolver: NonNullable<FilenameResolver<DeliveryEntity>>;
-} {
-	const defaultNameResolver = (item: DeliveryEntity) => `${item.name}${config.entityType}`;
-	const defaultFilenameResolver = (item: DeliveryEntity) => `${item.name}.${config.entityType}`;
+	readonly entityType: DeliveryEntityType;
+}): EntityResolvers {
+	const resolverKey = resolverKeys[config.entityType];
 
-	return match<DeliveryEntityType>(config.entityType)
-		.returnType<{
-			readonly nameResolver: NonNullable<NameResolver<DeliveryEntity>>;
-			readonly filenameResolver: NonNullable<FilenameResolver<DeliveryEntity>>;
-		}>()
-		.with("Type", () => ({
-			// Content types use the bare name as the base (e.g. 'Movie'); the 'Item'/'Codename' suffixes are added by
-			// the individual name accessors. The filename keeps the '.Type' suffix (e.g. 'movie-type.generated.ts').
-			nameResolver: config.nameResolvers?.contentType
-				? (config.nameResolvers.contentType as NonNullable<NameResolver<DeliveryEntity>>)
-				: (item: DeliveryEntity) => item.name,
-			filenameResolver: config.fileResolvers?.contentType
-				? (config.fileResolvers.contentType as NonNullable<FilenameResolver<DeliveryEntity>>)
-				: defaultFilenameResolver,
-		}))
-		.with("Snippet", () => ({
-			nameResolver: config.nameResolvers?.snippet
-				? (config.nameResolvers.snippet as NonNullable<NameResolver<DeliveryEntity>>)
-				: defaultNameResolver,
-			filenameResolver: config.fileResolvers?.snippet
-				? (config.fileResolvers.snippet as NonNullable<FilenameResolver<DeliveryEntity>>)
-				: defaultFilenameResolver,
-		}))
-		.with("Taxonomy", () => ({
-			nameResolver: config.nameResolvers?.taxonomy
-				? (config.nameResolvers.taxonomy as NonNullable<NameResolver<DeliveryEntity>>)
-				: defaultNameResolver,
-			filenameResolver: config.fileResolvers?.taxonomy
-				? (config.fileResolvers.taxonomy as NonNullable<FilenameResolver<DeliveryEntity>>)
-				: defaultFilenameResolver,
-		}))
-		.with("Language", () => ({
-			nameResolver: config.nameResolvers?.language
-				? (config.nameResolvers.language as NonNullable<NameResolver<DeliveryEntity>>)
-				: defaultNameResolver,
-			filenameResolver: config.fileResolvers?.language
-				? (config.fileResolvers.language as NonNullable<FilenameResolver<DeliveryEntity>>)
-				: defaultFilenameResolver,
-		}))
-		.with("Workflow", () => ({
-			nameResolver: config.nameResolvers?.workflow
-				? (config.nameResolvers.workflow as NonNullable<NameResolver<DeliveryEntity>>)
-				: defaultNameResolver,
-			filenameResolver: config.fileResolvers?.workflow
-				? (config.fileResolvers.workflow as NonNullable<FilenameResolver<DeliveryEntity>>)
-				: defaultFilenameResolver,
-		}))
-		.with("Collection", () => ({
-			nameResolver: config.nameResolvers?.collection
-				? (config.nameResolvers.collection as NonNullable<NameResolver<DeliveryEntity>>)
-				: defaultNameResolver,
-			filenameResolver: config.fileResolvers?.collection
-				? (config.fileResolvers.collection as NonNullable<FilenameResolver<DeliveryEntity>>)
-				: defaultFilenameResolver,
-		}))
-		.with("Element", () => ({
+	if (!resolverKey) {
+		// elements are always named by their codename
+		return {
 			nameResolver: (item) => item.codename,
 			filenameResolver: (item) => item.codename,
-		}))
-		.exhaustive();
+		};
+	}
+
+	// User resolvers are typed for a single entity model (e.g. 'ContentType'), but are only ever called with entities of that type
+	const customNameResolver = config.nameResolvers?.[resolverKey] as NameResolver<DeliveryEntity>;
+	const customFilenameResolver = config.fileResolvers?.[resolverKey] as FilenameResolver<DeliveryEntity>;
+
+	return {
+		// Content types use the bare name as the base (e.g. 'Movie'); the 'Item'/'Codename' suffixes are added by
+		// the individual name accessors. The filename keeps the '.Type' suffix (e.g. 'movie-type.generated.ts').
+		nameResolver:
+			customNameResolver ?? (config.entityType === "Type" ? (item) => item.name : (item) => `${item.name}${config.entityType}`),
+		filenameResolver: customFilenameResolver ?? ((item) => `${item.name}.${config.entityType}`),
+	};
 }

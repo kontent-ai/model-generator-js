@@ -6,7 +6,7 @@ import type { DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-
 export type TypedClientSchema = DeliveryClientSchema<{
 	readonly languageCodenames: readonly ["default", "en-US", "es-ES", "__jp", "🦉Lang"];
 	readonly taxonomies: {
-		readonly taxonomy_a: readonly ["nested_term_2", "nested_term_1", "term_1", "term_2", "term_3"];
+		readonly taxonomy_a: readonly ["nested_term_1", "nested_term_2", "term_1", "term_2", "term_3"];
 		readonly taxonomy_without_terms: readonly [];
 	};
 	readonly contentTypes: {

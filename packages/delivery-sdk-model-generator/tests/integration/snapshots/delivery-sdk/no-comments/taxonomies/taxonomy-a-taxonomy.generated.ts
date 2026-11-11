@@ -6,7 +6,7 @@ export function isTaxonomyATaxonomyCodename(value: string | undefined | null): v
 	return typeof value === "string" && value === ("taxonomy_a" satisfies TaxonomyATaxonomyCodename);
 }
 
-export const taxonomyATaxonomyTermCodenames = ["nested_term_2", "nested_term_1", "term_1", "term_2", "term_3"] as const;
+export const taxonomyATaxonomyTermCodenames = ["nested_term_1", "nested_term_2", "term_1", "term_2", "term_3"] as const;
 
 export type TaxonomyATaxonomyTermCodenames = (typeof taxonomyATaxonomyTermCodenames)[number];
 
