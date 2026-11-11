@@ -1,9 +1,9 @@
 import { colorize } from "@kontent-ai/core-sdk/devkit";
-import { parseCliArgsAsync } from "../arg.utils.js";
+import { getCliArgs, parseCliArgsAsync } from "../arg.utils.js";
 import type { CliArgumentsFetcher } from "../cli.models.js";
 
 export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
-	const parsedArgs = await parseCliArgsAsync();
+	const parsedArgs = await parseCliArgsAsync(getCliArgs());
 
 	const getOptionalArgumentValue = (argName: string) => {
 		return parsedArgs[argName]?.toString();

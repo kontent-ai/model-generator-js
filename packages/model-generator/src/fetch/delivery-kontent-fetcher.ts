@@ -29,11 +29,17 @@ export function getDeliveryKontentFetcher(config: {
 
 		return match(config.apiMode)
 			.returnType<DeliveryClientConfig>()
-			.with(P.union("preview", "secure"), (apiMode) => ({
-				...baseConfig,
-				apiMode,
-				deliveryApiKey: config.deliveryApiKey ?? "",
-			}))
+			.with(P.union("preview", "secure"), (apiMode) => {
+				if (!config.deliveryApiKey) {
+					throw new Error("Delivery API Key is required when preview or secure mode is enabled");
+				}
+
+				return {
+					...baseConfig,
+					apiMode,
+					deliveryApiKey: config.deliveryApiKey,
+				};
+			})
 			.with("default", () => ({ ...baseConfig, apiMode: "public" }))
 			.exhaustive();
 	}

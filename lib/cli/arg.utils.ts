@@ -13,8 +13,8 @@ export function getCliArgs(): Argv {
 	return yargs(hideBin(process.argv));
 }
 
-export async function parseCliArgsAsync(args?: Argv): Promise<ArgvResult> {
-	const resolvedArgv: ArgvResult = await (args ?? getCliArgs()).argv;
+export async function parseCliArgsAsync(args: Argv): Promise<ArgvResult> {
+	const resolvedArgv: ArgvResult = await args.argv;
 	return resolvedArgv;
 }
 
