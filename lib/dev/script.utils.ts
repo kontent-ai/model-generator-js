@@ -21,20 +21,32 @@ export async function runScriptAsync(
 	}) => Promise<void>,
 ): Promise<void> {
 	try {
+		// environment values are resolved on access so that a script only requires the variables it actually uses
 		await func({
 			sampleEnv: {
-				deliveryApiKey: getEnvironmentRequiredValue("SAMPLE_DELIVERY_API_KEY"),
-				environmentId: getEnvironmentRequiredValue("SAMPLE_ENVIRONMENT_ID"),
-				managementApiKey: getEnvironmentRequiredValue("SAMPLE_MANAGEMENT_API_KEY"),
+				get deliveryApiKey() {
+					return getEnvironmentRequiredValue("SAMPLE_DELIVERY_API_KEY");
+				},
+				get environmentId() {
+					return getEnvironmentRequiredValue("SAMPLE_ENVIRONMENT_ID");
+				},
+				get managementApiKey() {
+					return getEnvironmentRequiredValue("SAMPLE_MANAGEMENT_API_KEY");
+				},
 			},
 			integrationEnv: {
-				environmentId: getEnvironmentRequiredValue("INTEGRATION_ENVIRONMENT_ID"),
-				managementApiKey: getEnvironmentRequiredValue("INTEGRATION_MANAGEMENT_API_KEY"),
+				get environmentId() {
+					return getEnvironmentRequiredValue("INTEGRATION_ENVIRONMENT_ID");
+				},
+				get managementApiKey() {
+					return getEnvironmentRequiredValue("INTEGRATION_MANAGEMENT_API_KEY");
+				},
 			},
 			moduleFileExtension: parseModuleFileExtension(getEnvironmentRequiredValue("MODULE_EXTENSION")),
 		});
 	} catch (error) {
 		logError(error);
+		process.exitCode = 1;
 	}
 }
 

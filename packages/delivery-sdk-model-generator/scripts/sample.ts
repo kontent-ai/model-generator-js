@@ -6,8 +6,6 @@ loadMonorepoEnvFile();
 const outputDir: string = "./sample";
 
 await runScriptAsync(async (config) => {
-	console.log(config);
-
 	deleteFolderRecursive(outputDir);
 
 	await generateDeliveryModelsAsync({
