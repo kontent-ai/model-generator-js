@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { colorize } from "@kontent-ai/core-sdk/devkit";
-import { runCliAsync } from "@kontent-ai/model-generator-shared";
+import { ModelGeneratorError, runCliAsync } from "@kontent-ai/model-generator-shared";
 import { match } from "ts-pattern";
 import { cliArgs } from "./commands.js";
 import { environmentActionAsync } from "./environment-action.js";
@@ -17,6 +17,10 @@ await runCliAsync(async (argsFetcher) => {
 		.with("environment", async () => await environmentActionAsync(argsFetcher))
 		.with("items", async () => await itemsActionAsync(argsFetcher))
 		.otherwise(() => {
-			throw new Error(`Unsupported command '${colorize("red", command ?? "")}'`);
+			throw new ModelGeneratorError({
+				message: `Unsupported command '${colorize("red", command ?? "")}'`,
+				reason: "unsupportedCommand",
+				details: { command, supportedCommands: ["environment", "items"] },
+			});
 		});
 });

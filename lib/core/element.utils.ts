@@ -2,6 +2,7 @@ import type { ContentTypeElements, ContentTypeModels, ContentTypeSnippetModels, 
 import { match, P } from "ts-pattern";
 import type { FlattenedElement, MultipleChoiceOption } from "./core.models.js";
 import { isNotUndefined } from "./core.utils.js";
+import { ModelGeneratorError } from "./model-generator.error.js";
 
 interface ElementWrapper {
 	readonly element: Readonly<ContentTypeElements.ContentTypeElementModel>;
@@ -22,7 +23,15 @@ export function getFlattenedElements(data: {
 					const snippet = data.snippets.find((snippet) => snippet.id === snippetElement.snippet.id);
 
 					if (!snippet) {
-						throw new Error(`Could not find snippet with id '${snippetElement.snippet.id}'`);
+						throw new ModelGeneratorError({
+							message: `Could not find snippet with id '${snippetElement.snippet.id}'`,
+							reason: "entityNotFound",
+							details: {
+								entityType: "snippet",
+								snippetId: snippetElement.snippet.id,
+								snippetElementCodename: snippetElement.codename,
+							},
+						});
 					}
 
 					return snippet.elements.map((snippetElement) => {

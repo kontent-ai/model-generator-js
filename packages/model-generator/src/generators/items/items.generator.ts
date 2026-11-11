@@ -1,6 +1,6 @@
 import { colorize } from "@kontent-ai/core-sdk/devkit";
 import type { ContentTypeModels } from "@kontent-ai/management-sdk";
-import { type GeneratedSet, resolveCase, wrapComment } from "@kontent-ai/model-generator-shared";
+import { type GeneratedSet, ModelGeneratorError, resolveCase, wrapComment } from "@kontent-ai/model-generator-shared";
 import { itemsConfig } from "../../config.js";
 import type { GeneratorContentItem } from "../../fetch/delivery-kontent-fetcher.js";
 
@@ -55,7 +55,11 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					const type = config.environmentData.types.find((t) => t.codename.toLowerCase() === typeCodename.toLowerCase());
 
 					if (!type) {
-						throw new Error(`Type with codename '${colorize("red", typeCodename)}' not found`);
+						throw new ModelGeneratorError({
+							message: `Type with codename '${colorize("red", typeCodename)}' not found`,
+							reason: "entityNotFound",
+							details: { entityType: "contentType", typeCodename, itemsCount: items.length },
+						});
 					}
 
 					return {
@@ -89,7 +93,11 @@ export function getItemsGenerator(config: ItemGeneratorConfig) {
 					const type = config.environmentData.types.find((t) => t.codename.toLowerCase() === typeCodename.toLowerCase());
 
 					if (!type) {
-						throw new Error(`Type with codename '${colorize("red", typeCodename)}' not found`);
+						throw new ModelGeneratorError({
+							message: `Type with codename '${colorize("red", typeCodename)}' not found`,
+							reason: "entityNotFound",
+							details: { entityType: "contentType", typeCodename, itemsCount: items.length },
+						});
 					}
 
 					return {

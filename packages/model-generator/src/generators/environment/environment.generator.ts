@@ -25,6 +25,7 @@ import {
 	getStringOrUndefinedAsPropertyValue,
 	getWorkflowSteps,
 	isNotUndefined,
+	ModelGeneratorError,
 	resolvePropertyName,
 	toSafePropertyValue,
 	type ValidateKeys,
@@ -253,21 +254,28 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 		const contentTypes = config.environmentEntities.contentTypes;
 
 		if (!spaces) {
-			throw new Error("Spaces are expected to be present in the environment entities.");
+			throw new ModelGeneratorError({
+				message: "Spaces are expected to be present in the environment entities.",
+				reason: "missingEnvironmentEntities",
+				details: { entity: "spaces" },
+			});
 		}
 
 		if (!contentTypes) {
-			throw new Error("Content types are expected to be present in the environment entities.");
+			throw new ModelGeneratorError({
+				message: "Content types are expected to be present in the environment entities.",
+				reason: "missingEnvironmentEntities",
+				details: { entity: "contentTypes" },
+			});
 		}
 
 		return `
             spaceDomains: { ${previewConfiguration.spaceDomains.reduce((code, spaceDomain, index) => {
 				const isLast = index === previewConfiguration.spaceDomains.length - 1;
-				const space = findRequired(
-					spaces,
-					(m) => m.id === spaceDomain.space.id,
-					`Space with id '${spaceDomain.space.id}' not found.`,
-				);
+				const space = findRequired(spaces, (m) => m.id === spaceDomain.space.id, {
+					message: `Space with id '${spaceDomain.space.id}' not found.`,
+					details: { entityType: "space", spaceId: spaceDomain.space.id, previewConfigurationDomain: spaceDomain.domain },
+				});
 
 				return `${code}\n
                 ${space.codename}: {
@@ -278,11 +286,10 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 			}, "")} },
               previewUrlPatterns: { ${previewConfiguration.previewUrlPatterns.reduce((code, previewUrlPattern, index) => {
 					const isLast = index === previewConfiguration.previewUrlPatterns.length - 1;
-					const contentType = findRequired(
-						contentTypes,
-						(m) => m.id === previewUrlPattern.contentType.id,
-						`Content type with id '${previewUrlPattern.contentType.id}' not found.`,
-					);
+					const contentType = findRequired(contentTypes, (m) => m.id === previewUrlPattern.contentType.id, {
+						message: `Content type with id '${previewUrlPattern.contentType.id}' not found.`,
+						details: { entityType: "contentType", contentTypeId: previewUrlPattern.contentType.id },
+					});
 
 					return `${code}\n
                 ${contentType.codename}: {
@@ -358,13 +365,25 @@ export function getEnvironmentGenerator(config: EnvironmentGeneratorConfig) {
 
 	const getContentTypeElements = (elements: readonly Readonly<ContentTypeElements.ContentTypeElementModel>[]): string => {
 		if (!config.environmentEntities.snippets) {
-			throw new Error("Snippets are expected to be present in the environment entities.");
+			throw new ModelGeneratorError({
+				message: "Snippets are expected to be present in the environment entities.",
+				reason: "missingEnvironmentEntities",
+				details: { entity: "snippets" },
+			});
 		}
 		if (!config.environmentEntities.taxonomies) {
-			throw new Error("Taxonomies are expected to be present in the environment entities.");
+			throw new ModelGeneratorError({
+				message: "Taxonomies are expected to be present in the environment entities.",
+				reason: "missingEnvironmentEntities",
+				details: { entity: "taxonomies" },
+			});
 		}
 		if (!config.environmentEntities.contentTypes) {
-			throw new Error("Content types are expected to be present in the environment entities.");
+			throw new ModelGeneratorError({
+				message: "Content types are expected to be present in the environment entities.",
+				reason: "missingEnvironmentEntities",
+				details: { entity: "contentTypes" },
+			});
 		}
 
 		const flattenedElements = getFlattenedElements({

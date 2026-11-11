@@ -2,6 +2,7 @@ import { parse } from "node:path";
 import { coreConfig } from "../config.js";
 import type { ModuleFileExtension } from "./core.models.js";
 import { getFileNameWithoutExtension, sortAlphabetically } from "./core.utils.js";
+import { ModelGeneratorError } from "./model-generator.error.js";
 
 export function getImporter(moduleFileExtension: ModuleFileExtension) {
 	const importExtension = moduleFileExtension === "none" ? "" : `.${moduleFileExtension}`;
@@ -9,7 +10,7 @@ export function getImporter(moduleFileExtension: ModuleFileExtension) {
 	const getFilenameAndExtension = (filename: string): { readonly filenameWithoutExtension: string; readonly extension: string } => {
 		const extension = filename.split(".").pop();
 		if (!extension) {
-			throw new Error(`File ${filename} has no extension`);
+			throw new ModelGeneratorError({ message: `File ${filename} has no extension`, reason: "invalidInput", details: { filename } });
 		}
 		return { filenameWithoutExtension: filename.slice(0, -extension.length - 1), extension };
 	};

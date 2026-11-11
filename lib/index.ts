@@ -12,6 +12,7 @@ export * from "./core/core.utils.js";
 export * from "./core/element.utils.js";
 export * from "./core/error.utils.js";
 export * from "./core/importer.js";
+export * from "./core/model-generator.error.js";
 export * from "./core/resolvers.js";
 export * from "./core/type-guards.js";
 export * from "./core/workflow.utils.js";

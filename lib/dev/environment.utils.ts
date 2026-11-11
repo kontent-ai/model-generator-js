@@ -3,12 +3,17 @@ import path from "node:path";
 import { loadEnvFile } from "node:process";
 import { fileURLToPath } from "node:url";
 import { colorize } from "@kontent-ai/core-sdk/devkit";
+import { ModelGeneratorError } from "../core/model-generator.error.js";
 
 export function getEnvironmentRequiredValue(variableName: string): string {
 	const value = getEnvironmentOptionalValue(variableName);
 
 	if (!value) {
-		throw new Error(`Missing environment variable '${colorize("red", variableName)}'`);
+		throw new ModelGeneratorError({
+			message: `Missing environment variable '${colorize("red", variableName)}'`,
+			reason: "missingEnvironmentVariable",
+			details: { variableName },
+		});
 	}
 
 	return value;

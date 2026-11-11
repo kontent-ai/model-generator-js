@@ -1,3 +1,5 @@
+import { ModelGeneratorError, type ModelGeneratorErrorData } from "./model-generator.error.js";
+
 export function uniqueFilter<T extends string>(value: T, index: number, self: readonly T[]): boolean {
 	return self.indexOf(value) === index;
 }
@@ -34,7 +36,7 @@ export function singleItemToArray<T>(item: T | undefined): readonly T[] {
 export function findRequired<T>(
 	array: readonly T[],
 	predicate: (item: T, index: number) => boolean,
-	errorMessage: string | (() => never),
+	notFoundError: Omit<ModelGeneratorErrorData, "reason"> & { readonly reason?: ModelGeneratorErrorData["reason"] },
 ): T {
 	const item = array.find(predicate);
 
@@ -42,8 +44,5 @@ export function findRequired<T>(
 		return item;
 	}
 
-	if (typeof errorMessage === "string" || errorMessage instanceof String) {
-		throw new Error(errorMessage.toString());
-	}
-	return errorMessage();
+	throw new ModelGeneratorError({ reason: "entityNotFound", ...notFoundError });
 }

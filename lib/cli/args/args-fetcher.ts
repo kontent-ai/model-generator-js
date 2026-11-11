@@ -1,4 +1,5 @@
 import { colorize } from "@kontent-ai/core-sdk/devkit";
+import { ModelGeneratorError } from "../../core/model-generator.error.js";
 import { getCliArgs, parseCliArgsAsync } from "../arg.utils.js";
 import type { CliArgumentsFetcher } from "../cli.models.js";
 
@@ -18,7 +19,11 @@ export async function argumentsFetcherAsync(): Promise<CliArgumentsFetcher> {
 			const value = getOptionalArgumentValue(argName);
 
 			if (!value) {
-				throw new Error(`Missing '${colorize("yellow", argName)}' argument value`);
+				throw new ModelGeneratorError({
+					message: `Missing '${colorize("yellow", argName)}' argument value`,
+					reason: "missingArgument",
+					details: { argumentName: argName },
+				});
 			}
 
 			return value;

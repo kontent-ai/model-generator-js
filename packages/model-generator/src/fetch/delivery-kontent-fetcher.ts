@@ -6,7 +6,13 @@ import {
 	type DeliveryClientConfig,
 	type DeliveryClientSchema,
 } from "@kontent-ai/delivery-sdk";
-import { coreConfig, type DeliveryApiMode, getTrackingHeaderValue, sortAlphabetically } from "@kontent-ai/model-generator-shared";
+import {
+	coreConfig,
+	type DeliveryApiMode,
+	getTrackingHeaderValue,
+	ModelGeneratorError,
+	sortAlphabetically,
+} from "@kontent-ai/model-generator-shared";
 import { match, P } from "ts-pattern";
 import { sdkInfo } from "../sdk-info.js";
 
@@ -31,7 +37,11 @@ export function getDeliveryKontentFetcher(config: {
 			.returnType<DeliveryClientConfig>()
 			.with(P.union("preview", "secure"), (apiMode) => {
 				if (!config.deliveryApiKey) {
-					throw new Error("Delivery API Key is required when preview or secure mode is enabled");
+					throw new ModelGeneratorError({
+						message: "Delivery API Key is required when preview or secure mode is enabled",
+						reason: "invalidConfig",
+						details: { apiMode, environmentId: config.environmentId },
+					});
 				}
 
 				return {

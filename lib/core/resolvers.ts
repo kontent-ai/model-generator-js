@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { match, P } from "ts-pattern";
 import type { CaseType, ObjectWithCodename, ObjectWithName } from "./core.models.js";
+import { ModelGeneratorError } from "./model-generator.error.js";
 
 export type FilenameResolver<T extends Readonly<ObjectWithCodename>> = undefined | ((item: T, addExtension: boolean) => string);
 export type NameResolver<T extends Readonly<ObjectWithName>> = undefined | ((item: T) => string);
@@ -89,7 +90,11 @@ function toKebabCase(text: string): string {
 	const matchResult = text.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
 
 	if (!matchResult) {
-		throw new Error(`Failed to convert text to kebab case: ${text}`);
+		throw new ModelGeneratorError({
+			message: `Failed to convert text to kebab case: ${text}`,
+			reason: "invalidInput",
+			details: { text },
+		});
 	}
 
 	return matchResult.join("-").toLowerCase();

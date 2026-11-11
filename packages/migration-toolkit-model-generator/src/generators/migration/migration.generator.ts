@@ -16,6 +16,7 @@ import {
 	getFlattenedElements,
 	getImporter,
 	getTypeWithCodenames,
+	ModelGeneratorError,
 	type ModuleFileExtension,
 	resolveCase,
 	wrapComment,
@@ -224,10 +225,18 @@ function getElementPropType(element: Readonly<FlattenedElement>): string {
 		.with("url_slug", () => `${migrationConfig.sdkTypeNames.elementModels}.UrlSlugElement`)
 		.with("modular_content", () => `${migrationConfig.sdkTypeNames.elementModels}.LinkedItemsElement`)
 		.with("guidelines", () => {
-			throw new Error("Guidelines are not supported");
+			throw new ModelGeneratorError({
+				message: "Guidelines are not supported",
+				reason: "unsupportedElementType",
+				details: { elementType: "guidelines", elementCodename: element.codename },
+			});
 		})
 		.with("snippet", () => {
-			throw new Error("Snippets are not supported");
+			throw new ModelGeneratorError({
+				message: "Snippets are not supported",
+				reason: "unsupportedElementType",
+				details: { elementType: "snippet", elementCodename: element.codename },
+			});
 		})
 		.exhaustive();
 }

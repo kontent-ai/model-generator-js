@@ -6,6 +6,7 @@ import type {
 	IManagementClient,
 	TaxonomyModels,
 } from "@kontent-ai/management-sdk";
+import type { ModelGeneratorErrorDetails, ModelGeneratorErrorReason } from "./model-generator.error.js";
 
 export type PackageInfo = {
 	readonly name: string;
@@ -51,6 +52,10 @@ export interface ErrorData {
 	readonly requestData?: string;
 	readonly requestUrl?: string;
 	readonly isUnknownError: boolean;
+
+	readonly reason?: ModelGeneratorErrorReason;
+	readonly details?: ModelGeneratorErrorDetails;
+	readonly cause?: unknown;
 }
 
 export interface OriginalManagementError {
