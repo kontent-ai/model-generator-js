@@ -265,7 +265,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 				return {
 					imports: [],
 					code: deliveryUtils.getCodeOfDeliveryEntity({
-						codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms, []),
+						codenames: deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms),
 						disableComments: config.disableComments,
 						names: {
 							codenamesTypeName: termEntityNames.termsNames.codenamesTypeName(taxonomy),

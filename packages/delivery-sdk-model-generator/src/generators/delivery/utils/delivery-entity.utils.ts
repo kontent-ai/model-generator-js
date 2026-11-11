@@ -1,12 +1,5 @@
 import type { ContentTypeModels, TaxonomyModels } from "@kontent-ai/management-sdk";
-import {
-	getImporter,
-	type ModuleFileExtension,
-	resolveCase,
-	sortAlphabetically,
-	uniqueFilter,
-	wrapComment,
-} from "@kontent-ai/model-generator-shared";
+import { getImporter, type ModuleFileExtension, resolveCase, sortAlphabetically, wrapComment } from "@kontent-ai/model-generator-shared";
 import { match } from "ts-pattern";
 import { deliveryConfig } from "../../../config.js";
 import type { DeliveryEntity, DeliveryEntityType } from "../delivery-entity.generator.js";
@@ -106,21 +99,13 @@ function getCodenameTypeguardFunctionCode({
             }`;
 }
 
-function getTaxonomyTermCodenames(
-	taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[],
-	codenames: readonly string[],
-): readonly string[] {
-	const nestedTerms: readonly Readonly<TaxonomyModels.Taxonomy>[] = taxonomyTerms.flatMap((m) => m.terms);
-	const resolvedCodenames: readonly string[] = [...taxonomyTerms.map((m) => m.codename), ...codenames];
+function getTaxonomyTermCodenames(taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] {
+	const uniqueCodenames: readonly string[] = [...new Set(getNestedTaxonomyTermCodenames(taxonomyTerms))];
+	return sortAlphabetically(uniqueCodenames, (m) => m);
+}
 
-	if (nestedTerms.length) {
-		return sortAlphabetically(
-			[...resolvedCodenames, ...getTaxonomyTermCodenames(nestedTerms, codenames)].filter(uniqueFilter),
-			(m) => m,
-		);
-	}
-
-	return sortAlphabetically(resolvedCodenames.filter(uniqueFilter), (m) => m);
+function getNestedTaxonomyTermCodenames(taxonomyTerms: readonly Readonly<TaxonomyModels.Taxonomy>[]): readonly string[] {
+	return taxonomyTerms.flatMap((term) => [term.codename, ...getNestedTaxonomyTermCodenames(term.terms)]);
 }
 
 function getPluralName(entityType: DeliveryEntityType): string {
