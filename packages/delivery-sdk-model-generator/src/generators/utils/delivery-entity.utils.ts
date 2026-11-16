@@ -1,7 +1,7 @@
 import type { ContentTypeModels, TaxonomyModels } from "@kontent-ai/management-sdk";
 import { getImporter, type ModuleFileExtension, resolveCase, sortAlphabetically, wrapComment } from "@kontent-ai/model-generator-shared";
 import { match } from "ts-pattern";
-import { deliveryConfig } from "../../../config.js";
+import { deliveryConfig } from "../../config.js";
 import type { DeliveryEntity, DeliveryEntityType } from "../delivery-entity.generator.js";
 import type { DeliveryEntityNames } from "../delivery-entity-name.generator.js";
 

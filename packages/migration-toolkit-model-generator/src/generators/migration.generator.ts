@@ -22,7 +22,7 @@ import {
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
 import { match } from "ts-pattern";
-import { migrationConfig } from "../../config.js";
+import { migrationConfig } from "../config.js";
 
 export interface MigrationGeneratorConfig {
 	readonly moduleFileExtension: ModuleFileExtension;

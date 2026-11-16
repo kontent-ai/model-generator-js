@@ -1,6 +1,6 @@
 import { commandOptions, defineCommand, type ExhaustiveConfig } from "@kontent-ai/model-generator-shared";
 import { syncConfig } from "../config.js";
-import { type GenerateSyncModelsConfig, generateSyncModelsAsync } from "../generators/sync/sync-func.js";
+import { type GenerateSyncModelsConfig, generateSyncModelsAsync } from "../generators/sync-func.js";
 
 export const syncCommand = defineCommand({
 	description: `Generates models for '${syncConfig.npmPackageName}' library`,

@@ -1,6 +1,6 @@
 import { commandOptions, defineCommand, type ExhaustiveConfig } from "@kontent-ai/model-generator-shared";
 import { migrationConfig } from "../config.js";
-import { type GenerateMigrationModelsConfig, generateMigrationModelsAsync } from "../generators/migration/migration-func.js";
+import { type GenerateMigrationModelsConfig, generateMigrationModelsAsync } from "../generators/migration-func.js";
 
 export const migrateCommand = defineCommand({
 	description: `Generates models for '${migrationConfig.npmPackageName}' library`,

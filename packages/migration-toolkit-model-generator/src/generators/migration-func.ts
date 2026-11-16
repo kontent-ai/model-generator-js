@@ -9,7 +9,7 @@ import {
 	getManagementKontentFetcher,
 	type ModuleFileExtension,
 } from "@kontent-ai/model-generator-shared";
-import { sdkInfo } from "../../sdk-info.js";
+import { sdkInfo } from "../sdk-info.js";
 import { getMigrationGenerator } from "./migration.generator.js";
 
 export type GenerateMigrationModelsConfig = {

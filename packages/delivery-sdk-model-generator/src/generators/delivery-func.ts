@@ -9,10 +9,11 @@ import {
 	getManagementKontentFetcher,
 	type ModuleFileExtension,
 } from "@kontent-ai/model-generator-shared";
-import { sdkInfo } from "../../sdk-info.js";
-import { getSyncGenerator } from "./sync.generator.js";
+import { deliveryConfig } from "../config.js";
+import { sdkInfo } from "../sdk-info.js";
+import { type DeliveryFileResolvers, type DeliveryNameResolvers, deliveryGenerator } from "./delivery.generator.js";
 
-export type GenerateSyncModelsConfig = {
+export type GenerateDeliveryModelsConfig = {
 	readonly environmentId: string;
 	readonly addTimestamp: boolean;
 	readonly managementApiKey: string;
@@ -20,14 +21,17 @@ export type GenerateSyncModelsConfig = {
 
 	readonly managementBaseUrl?: string;
 	readonly formatOptions?: FormatOptions;
+
+	readonly fileResolvers?: DeliveryFileResolvers;
+	readonly nameResolvers?: DeliveryNameResolvers;
 	readonly disableComments?: boolean;
 } & CreateFilesConfig;
 
-export async function generateSyncModelsAsync(config: GenerateSyncModelsConfig): Promise<readonly GeneratedFile[]> {
+export async function generateDeliveryModelsAsync(config: GenerateDeliveryModelsConfig): Promise<readonly GeneratedFile[]> {
 	console.log(colorize("green", "Model generator started \n"));
-	console.log(`Generating '${colorize("yellow", "sync-sdk")}' models\n`);
+	console.log(`Generating '${colorize("yellow", deliveryConfig.npmPackageName)}' models\n`);
 
-	const { syncFiles, environmentInfo } = await getFilesAsync(config);
+	const { environmentInfo, files } = await getFilesAsync(config);
 
 	const fileManager = getFileManager({
 		...config,
@@ -36,7 +40,7 @@ export async function generateSyncModelsAsync(config: GenerateSyncModelsConfig):
 		environmentInfo,
 	});
 
-	const setFiles = await fileManager.getSetFilesAsync([syncFiles]);
+	const setFiles = await fileManager.getSetFilesAsync(files);
 
 	if (config.createFiles) {
 		fileManager.createFiles(setFiles);
@@ -47,8 +51,8 @@ export async function generateSyncModelsAsync(config: GenerateSyncModelsConfig):
 	return setFiles;
 }
 
-async function getFilesAsync(config: GenerateSyncModelsConfig): Promise<{
-	readonly syncFiles: GeneratedSet;
+async function getFilesAsync(config: GenerateDeliveryModelsConfig): Promise<{
+	readonly files: readonly GeneratedSet[];
 	readonly environmentInfo: Readonly<EnvironmentModels.EnvironmentInformationModel>;
 }> {
 	const kontentFetcher = getManagementKontentFetcher({
@@ -60,31 +64,33 @@ async function getFilesAsync(config: GenerateSyncModelsConfig): Promise<{
 
 	const environmentInfo = await kontentFetcher.getEnvironmentInfoAsync();
 
-	const [languages, taxonomies, types, snippets, collections, workflows] = await Promise.all([
-		kontentFetcher.getLanguagesAsync(),
+	const [taxonomies, types, snippets, languages, collections, workflows] = await Promise.all([
 		kontentFetcher.getTaxonomiesAsync(),
 		kontentFetcher.getTypesAsync(),
 		kontentFetcher.getSnippetsAsync(),
+		kontentFetcher.getLanguagesAsync(),
 		kontentFetcher.getCollectionsAsync(),
 		kontentFetcher.getWorkflowsAsync(),
 	]);
 
-	const syncGenerator = getSyncGenerator({
+	const generator = deliveryGenerator({
 		moduleFileExtension: config.moduleFileExtension,
 		disableComments: config.disableComments ?? false,
 		environmentData: {
 			environment: environmentInfo,
-			taxonomies: taxonomies,
-			languages: languages,
-			workflows: workflows,
-			types: types,
-			snippets: snippets,
-			collections: collections,
+			types,
+			snippets,
+			taxonomies,
+			languages,
+			collections,
+			workflows,
 		},
+		fileResolvers: config.fileResolvers,
+		nameResolvers: config.nameResolvers,
 	});
 
 	return {
-		syncFiles: syncGenerator.getSyncFiles(),
+		files: [...generator.getTypeFiles(), generator.getSystemFiles()],
 		environmentInfo,
 	};
 }

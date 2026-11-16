@@ -5,4 +5,4 @@ export {
 	type ModelGeneratorErrorReason,
 	resolveCase,
 } from "@kontent-ai/model-generator-shared";
-export { type GenerateMigrationModelsConfig, generateMigrationModelsAsync } from "./generators/migration/migration-func.js";
+export { type GenerateMigrationModelsConfig, generateMigrationModelsAsync } from "./generators/migration-func.js";

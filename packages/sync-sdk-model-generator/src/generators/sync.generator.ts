@@ -17,7 +17,7 @@ import {
 	uniqueFilter,
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
-import { syncConfig } from "../../config.js";
+import { syncConfig } from "../config.js";
 
 export interface SyncGeneratorConfig {
 	readonly moduleFileExtension: ModuleFileExtension;

@@ -5,4 +5,4 @@ export {
 	type ModelGeneratorErrorReason,
 	resolveCase,
 } from "@kontent-ai/model-generator-shared";
-export { type GenerateDeliveryModelsConfig, generateDeliveryModelsAsync } from "./generators/delivery/delivery-func.js";
+export { type GenerateDeliveryModelsConfig, generateDeliveryModelsAsync } from "./generators/delivery-func.js";

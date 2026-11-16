@@ -17,7 +17,7 @@ import {
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
 import { match, P } from "ts-pattern";
-import { deliveryConfig } from "../../config.js";
+import { deliveryConfig } from "../config.js";
 import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
 import { type DeliveryEntityNames, getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
 import { getDeliveryTypeAndSnippetGenerator } from "./delivery-type-and-snippet.generator.js";

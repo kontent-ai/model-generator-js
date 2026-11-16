@@ -1,6 +1,6 @@
 import { commandOptions, defineCommand, type ExhaustiveConfig } from "@kontent-ai/model-generator-shared";
 import { deliveryConfig } from "../config.js";
-import { type GenerateDeliveryModelsConfig, generateDeliveryModelsAsync } from "../generators/delivery/delivery-func.js";
+import { type GenerateDeliveryModelsConfig, generateDeliveryModelsAsync } from "../generators/delivery-func.js";
 
 export const deliveryCommand = defineCommand({
 	description: `Generates models for '${deliveryConfig.npmPackageName}' library`,

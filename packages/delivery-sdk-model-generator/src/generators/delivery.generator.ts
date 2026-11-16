@@ -20,7 +20,7 @@ import {
 	uniqueFilter,
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
-import { deliveryConfig } from "../../config.js";
+import { deliveryConfig } from "../config.js";
 import { type DeliveryElement, getDeliveryEntityGenerator } from "./delivery-entity.generator.js";
 import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
