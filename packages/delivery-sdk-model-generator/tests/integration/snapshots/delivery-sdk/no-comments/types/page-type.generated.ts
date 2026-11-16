@@ -30,4 +30,12 @@ export function isPageItem(item: ContentItemPayload<TypedClientSchema> | undefin
 	return isPageCodename(item?.system.type);
 }
 
-export type PageShowInNavigationMultipleChoiceOptions = "yes" | "no";
+export const pageShowInNavigationMultipleChoiceOptions = ["yes", "no"] as const;
+
+export type PageShowInNavigationMultipleChoiceOptions = (typeof pageShowInNavigationMultipleChoiceOptions)[number];
+
+export function isPageShowInNavigationMultipleChoiceOption(
+	value: string | undefined | null,
+): value is PageShowInNavigationMultipleChoiceOptions {
+	return typeof value === "string" && (pageShowInNavigationMultipleChoiceOptions as readonly string[]).includes(value);
+}

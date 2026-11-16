@@ -18,7 +18,7 @@ export type ContentTypeWithAllElementsItem = ContentItemOf<
 
 		readonly url_slug_element: Elements.UrlSlug;
 
-		readonly rich_text_element: Elements.RichText<TypedItem>;
+		readonly rich_text_element: Elements.RichText<TypedItem, TypeCodenames>;
 
 		readonly date___time_element: Elements.DateTime;
 
@@ -32,7 +32,7 @@ export type ContentTypeWithAllElementsItem = ContentItemOf<
 
 		readonly number_element: Elements.Number;
 
-		readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames>;
+		readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames, "taxonomy_a">;
 	} & SnippetASnippet["elements"]
 >;
 
@@ -57,4 +57,16 @@ export function isContentTypeWithAllElementsItem(
 	return isContentTypeWithAllElementsCodename(item?.system.type);
 }
 
-export type ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";
+export const contentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = ["option_a", "option_b"] as const;
+
+export type ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions =
+	(typeof contentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions)[number];
+
+export function isContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOption(
+	value: string | undefined | null,
+): value is ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions {
+	return (
+		typeof value === "string" &&
+		(contentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions as readonly string[]).includes(value)
+	);
+}

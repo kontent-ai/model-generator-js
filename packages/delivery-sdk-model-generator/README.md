@@ -108,6 +108,31 @@ Configuration
 | `formatOptions`       | Configuration for formatting generated code                                                                                    |
 | `baseUrl`             | Can be used to override default Kontent.ai URLs                                                                                |
 
+## Using the generated models
+
+Pass the generated schema and item union to `createDeliveryClient`. Codenames, element values, filters and responses are then
+checked against your environment:
+
+```typescript
+import { createDeliveryClient, isContentItemOfType } from "@kontent-ai/delivery-sdk";
+import type { MovieItem, TypedClientSchema, TypedItem } from "./models/index.js";
+
+const client = createDeliveryClient<TypedClientSchema, TypedItem>({ apiMode: "public", environmentId: "<id>" });
+
+// `contentTypes` filters by content type and narrows the returned items
+const { payload } = await client.listContentItems({ contentTypes: ["movie"] }).fetchPage();
+const movies: readonly MovieItem[] = payload.items;
+
+// items of mixed types are narrowed with a guard
+const item = (await client.fetchContentItem({ codename: "warrior" }).fetch()).payload.item;
+if (isContentItemOfType(item, "movie")) {
+	item.elements.title.value;
+}
+```
+
+Besides the item models, the generator emits codename constants, unions and type guards for content types, elements,
+taxonomy terms, multiple choice options, languages, collections and workflow steps.
+
 ## Sample models
 
 See the [sample generated models](https://github.com/kontent-ai/model-generator-js/tree/master/packages/delivery-sdk-model-generator/sample).

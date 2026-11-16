@@ -9,19 +9,22 @@ import type {
 } from "@kontent-ai/management-sdk";
 import {
 	type FilenameResolver,
+	type FlattenedElement,
 	type GeneratedFile,
 	type GeneratedSet,
-	getAllWorkflowSteps,
 	getFlattenedElements,
 	getImporter,
+	getWorkflowSteps,
 	isNotUndefined,
 	type ModuleFileExtension,
 	type NameResolver,
 	uniqueFilter,
 	wrapComment,
 } from "@kontent-ai/model-generator-shared";
+import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../config.js";
 import { type DeliveryElement, getDeliveryEntityGenerator } from "./delivery-entity.generator.js";
+import { getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
 import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
 export type DeliveryFileResolvers = {
@@ -158,26 +161,69 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 		const formatTuple = (codenames: readonly string[]): string =>
 			`readonly [${[...new Set(codenames)].map((codename) => `"${codename}"`).join(", ")}]`;
 
-		const getTypeElementCodenames = (type: Readonly<ContentTypeModels.ContentType>): readonly string[] =>
+		const typeOverviewFilename = getDeliveryEntityNamesGenerator({
+			nameResolvers: config.nameResolvers,
+			fileResolvers: config.fileResolvers,
+			entityType: "Type",
+		}).getEntityNames().overviewFilename;
+
+		const getElementSchemaCode = (element: FlattenedElement): string | undefined => {
+			const elementSchema = match(element)
+				.returnType<string | undefined>()
+				.with({ type: "multiple_choice" }, (multipleChoiceElement) => {
+					const options = (multipleChoiceElement.multipleChoiceOptions ?? [])
+						.map((option) => option.codename)
+						.filter((codename): codename is string => !!codename);
+
+					return `{ readonly type: "multiple_choice"; readonly options: ${options.length ? formatTuple(options) : "readonly string[]"} }`;
+				})
+				.with({ type: "taxonomy" }, (taxonomyElement) => {
+					return `{ readonly type: "taxonomy"; readonly taxonomyGroup: ${taxonomyElement.assignedTaxonomy ? `"${taxonomyElement.assignedTaxonomy.codename}"` : "string"} }`;
+				})
+				// subpages are delivered as linked items
+				.with({ type: "subpages" }, () => `{ readonly type: "modular_content" }`)
+				.with(
+					{ type: P.union("text", "number", "rich_text", "date_time", "asset", "url_slug", "custom", "modular_content") },
+					(simpleElement) => `{ readonly type: "${simpleElement.type}" }`,
+				)
+				.otherwise(() => undefined);
+
+			return elementSchema ? `readonly ${element.codename}: ${elementSchema};` : undefined;
+		};
+
+		const getTypeElements = (type: Readonly<ContentTypeModels.ContentType>): readonly FlattenedElement[] =>
 			getFlattenedElements({
 				elements: type.elements,
 				snippets: config.environmentData.snippets,
 				taxonomies: config.environmentData.taxonomies,
 				types: config.environmentData.types,
-			})
-				.map((element) => element.codename)
-				.filter(uniqueFilter);
+			}).filter((element, index, elements) => elements.findIndex((m) => m.codename === element.codename) === index);
 
-		const workflowStepCodenames: readonly string[] = getAllWorkflowSteps(config.environmentData.workflows)
-			.map((step) => step.codename)
-			.filter(uniqueFilter);
+		const workflowsMap: string = config.environmentData.workflows
+			.map(
+				(workflow) =>
+					`readonly ${workflow.codename}: ${formatTuple(
+						getWorkflowSteps(workflow)
+							.map((step) => step.codename)
+							.filter(uniqueFilter),
+					)};`,
+			)
+			.join("\n");
 
 		const taxonomiesMap: string = config.environmentData.taxonomies
 			.map((taxonomy) => `readonly ${taxonomy.codename}: ${formatTuple(deliveryUtils.getTaxonomyTermCodenames(taxonomy.terms))};`)
 			.join("\n");
 
+		const getElementsSchemaCode = (type: Readonly<ContentTypeModels.ContentType>): string => {
+			const elementsCode = getTypeElements(type)
+				.map((element) => getElementSchemaCode(element))
+				.filter(isNotUndefined);
+
+			return elementsCode.length ? `{\n${elementsCode.join("\n")}\n}` : "Record<string, never>";
+		};
+
 		const contentTypesMap: string = config.environmentData.types
-			.map((type) => `readonly ${type.codename}: ${formatTuple(getTypeElementCodenames(type))};`)
+			.map((type) => `readonly ${type.codename}: ${getElementsSchemaCode(type)};`)
 			.join("\n");
 
 		return {
@@ -187,23 +233,28 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 					filePathOrPackage: deliveryConfig.npmPackageName,
 					importValue: [deliveryConfig.sdkTypes.deliveryClient, deliveryConfig.sdkTypes.deliveryClientSchema],
 				})}
+              ${importer.importType({
+					filePathOrPackage: `./${typeOverviewFilename}`,
+					importValue: [deliveryConfig.typedItemTypeName],
+				})}
 
                 ${wrapComment(`Schema describing this environment, used to strongly type '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
                 export type ${deliveryConfig.typedClientSchemaTypeName} = ${deliveryConfig.sdkTypes.deliveryClientSchema}<{
                     readonly languageCodenames: ${formatTuple(config.environmentData.languages.map((language) => language.codename))};
+                    readonly collectionCodenames: ${formatTuple(config.environmentData.collections.map((collection) => collection.codename))};
                     readonly taxonomies: {
                         ${taxonomiesMap}
+                    };
+                    readonly workflows: {
+                        ${workflowsMap}
                     };
                     readonly contentTypes: {
                         ${contentTypesMap}
                     };
-                    readonly collectionCodenames: ${formatTuple(config.environmentData.collections.map((collection) => collection.codename))};
-                    readonly workflowCodenames: ${formatTuple(config.environmentData.workflows.map((workflow) => workflow.codename))};
-                    readonly workflowStepCodenames: ${formatTuple(workflowStepCodenames)};
                 }>;
 
-                ${wrapComment(`Typed delivery client. Use this instead of '${deliveryConfig.sdkTypes.deliveryClient}'`, { disableComments: config.disableComments })}
-                export type ${deliveryConfig.typedDeliveryClientTypeName} = ${deliveryConfig.sdkTypes.deliveryClient}<${deliveryConfig.typedClientSchemaTypeName}>;
+                ${wrapComment(`Typed delivery client. Responses are typed with '${deliveryConfig.typedItemTypeName}'. Create it with 'createDeliveryClient<${deliveryConfig.typedClientSchemaTypeName}, ${deliveryConfig.typedItemTypeName}>(...)'`, { disableComments: config.disableComments })}
+                export type ${deliveryConfig.typedDeliveryClientTypeName} = ${deliveryConfig.sdkTypes.deliveryClient}<${deliveryConfig.typedClientSchemaTypeName}, ${deliveryConfig.typedItemTypeName}>;
             `,
 		};
 	};

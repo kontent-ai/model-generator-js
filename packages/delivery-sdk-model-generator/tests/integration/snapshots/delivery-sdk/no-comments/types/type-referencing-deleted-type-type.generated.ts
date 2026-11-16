@@ -12,7 +12,7 @@ export type TypeReferencingDeletedTypeItem = ContentItemOf<
 	TypedClientSchema,
 	TypeReferencingDeletedTypeCodename,
 	{
-		readonly rich_text_with_invalid_type: Elements.RichText<TypedItem>;
+		readonly rich_text_with_invalid_type: Elements.RichText<TypedItem, TypeCodenames>;
 
 		readonly linked_items_with_invalid_type: Elements.LinkedItems<TypedItem>;
 	}

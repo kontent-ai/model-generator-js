@@ -127,7 +127,7 @@ function getCodeOfDeliveryEntity({
 		readonly typeGuardFunctionName: string;
 	};
 	readonly disableComments: boolean;
-	readonly extendedType: DeliveryEntityType | "Workflow step" | "Taxonomy term";
+	readonly extendedType: DeliveryEntityType | "Workflow step" | "Taxonomy term" | "Multiple choice option";
 	readonly codenames: readonly string[];
 }): string {
 	const uniqueCodenames: readonly string[] = [...new Set(codenames)];

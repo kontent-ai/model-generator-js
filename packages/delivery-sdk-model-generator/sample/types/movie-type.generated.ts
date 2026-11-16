@@ -59,7 +59,7 @@ export type MovieItem = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly plot: Elements.RichText<TypedItem>;
+		readonly plot: Elements.RichText<TypedItem, TypeCodenames>;
 
 		/*
 		 * Released
@@ -131,7 +131,7 @@ export type MovieItem = ContentItemOf<
 		 * Required: false
 		 * Taxonomy: releasecategory
 		 */
-		readonly releasecategory: Elements.Taxonomy<ReleaseCategoryTaxonomyTermCodenames>;
+		readonly releasecategory: Elements.Taxonomy<ReleaseCategoryTaxonomyTermCodenames, "releasecategory">;
 	} & SEOMetadataSnippet["elements"]
 >;
 
@@ -161,12 +161,28 @@ export function isMovieItem(item: ContentItemPayload<TypedClientSchema> | undefi
 	return isMovieCodename(item?.system.type);
 }
 
-export type MovieCategoryMultipleChoiceOptions =
-	| "sci_fi"
-	| "documentary"
-	| "action"
-	| "romance"
-	| "animation"
-	| "comedy"
-	| "adventure"
-	| "drama";
+/*
+ * Array of all multiple choice option codenames
+ */
+export const movieCategoryMultipleChoiceOptions = [
+	"sci_fi",
+	"documentary",
+	"action",
+	"romance",
+	"animation",
+	"comedy",
+	"adventure",
+	"drama",
+] as const;
+
+/*
+ * Type representing all multiple choice option codenames
+ */
+export type MovieCategoryMultipleChoiceOptions = (typeof movieCategoryMultipleChoiceOptions)[number];
+
+/*
+ * Typeguard for multiple choice option codename
+ */
+export function isMovieCategoryMultipleChoiceOption(value: string | undefined | null): value is MovieCategoryMultipleChoiceOptions {
+	return typeof value === "string" && (movieCategoryMultipleChoiceOptions as readonly string[]).includes(value);
+}

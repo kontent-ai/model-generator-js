@@ -183,7 +183,7 @@ export function getDeliveryEntityGenerator<T extends DeliveryEntityType>(
 							typeGuardFunctionName: workflowStepNames.allStepsNames.typeguardFunctionName,
 							valuesPropertyName: workflowStepNames.allStepsNames.valuesPropertyName,
 						},
-						extendedType: workflowDeliveryType,
+						extendedType: "Workflow step",
 					}),
 				};
 			})

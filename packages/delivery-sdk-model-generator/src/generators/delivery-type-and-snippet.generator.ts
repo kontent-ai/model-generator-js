@@ -16,6 +16,7 @@ import { match, P } from "ts-pattern";
 import { deliveryConfig } from "../config.js";
 import type { DeliveryGeneratorConfig } from "./delivery.generator.js";
 import { getDeliveryEntityNamesGenerator } from "./delivery-entity-name.generator.js";
+import { deliveryEntityUtils } from "./utils/delivery-entity.utils.js";
 
 type ExtractImportsResult = {
 	readonly typeName: string;
@@ -29,6 +30,7 @@ export type DeliveryTypeAndSnippetGeneratorConfig = DeliveryGeneratorConfig;
 
 export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippetGeneratorConfig) {
 	const importer = getImporter(config.moduleFileExtension);
+	const deliveryUtils = deliveryEntityUtils();
 	const contentTypeNames = getDeliveryEntityNamesGenerator({
 		nameResolvers: config.nameResolvers,
 		fileResolvers: config.fileResolvers,
@@ -53,6 +55,23 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			importValue: [deliveryConfig.typedItemTypeName],
 		});
 
+	const getTypeCodenamesImport = (): string =>
+		importer.importType({
+			filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${contentTypeNames.overviewFilename}`,
+			importValue: [contentTypeNames.codenamesTypeName],
+		});
+
+	// 'TypeCodenames' is referenced by rich text elements that allow links to items of any content type.
+	const usesTypeCodenamesForLinks = (flattenedElements: readonly FlattenedElement[]): boolean =>
+		flattenedElements
+			.filter((m) => !m.fromSnippet)
+			.some((element) =>
+				match(element)
+					.returnType<boolean>()
+					.with({ type: "rich_text" }, (el) => !getRichTextLinkTypes(el).length)
+					.otherwise(() => false),
+			);
+
 	const getSchemaImport = (): string =>
 		importer.importType({
 			filePathOrPackage: `../${deliveryConfig.systemTypesFolderName}/${deliveryConfig.mainSystemFilename}.ts`,
@@ -66,7 +85,8 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 			.some((element) =>
 				match(element)
 					.returnType<boolean>()
-					.with({ type: P.union("modular_content", "subpages", "rich_text") }, (el) => !el.allowedContentTypes?.length)
+					.with({ type: P.union("modular_content", "subpages") }, (el) => !el.allowedContentTypes?.length)
+					.with({ type: "rich_text" }, (el) => richTextAllowsItems(el) && !el.allowedContentTypes?.length)
 					.otherwise(() => false),
 			);
 
@@ -212,6 +232,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 				[
 					getSchemaImport(),
 					...(usesTypedItemFallback(data.flattenedElements) ? [getTypedItemImport()] : []),
+					...(usesTypeCodenamesForLinks(data.flattenedElements) ? [getTypeCodenamesImport()] : []),
 					...getReferencedTypeImports(data.contentType, data.flattenedElements),
 					...getReferencedTaxonomyImports(data.contentType, data.flattenedElements),
 					...getSnippetImports(snippets),
@@ -239,6 +260,7 @@ export function getDeliveryTypeAndSnippetGenerator(config: DeliveryTypeAndSnippe
 				[
 					getSchemaImport(),
 					...(usesTypedItemFallback(data.flattenedElements) ? [getTypedItemImport()] : []),
+					...(usesTypeCodenamesForLinks(data.flattenedElements) ? [getTypeCodenamesImport()] : []),
 					...getReferencedTypeImports(data.snippet, data.flattenedElements),
 					...getReferencedTaxonomyImports(data.snippet, data.flattenedElements),
 					...getSnippetUsingTypeImports(data.snippet),
@@ -404,25 +426,39 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 		};
 	};
 
-	const getMultipleChoiceTypeName = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): string => {
+	const getMultipleChoiceBaseName = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): string => {
 		const typeOrSnippetName =
 			typeOrSnippet instanceof ContentTypeModels.ContentType
 				? contentTypeNames.getEntityBaseName(typeOrSnippet)
 				: snippetNames.getEntityBaseName(typeOrSnippet);
 
-		return `${typeOrSnippetName}${resolveCase(element.title, "pascalCase")}MultipleChoiceOptions`;
+		// the element codename (unlike its title) is unique within the type and stable across renames
+		return `${typeOrSnippetName}${resolveCase(element.codename, "pascalCase")}`;
 	};
+
+	const getMultipleChoiceTypeName = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): string =>
+		`${getMultipleChoiceBaseName(typeOrSnippet, element)}MultipleChoiceOptions`;
+
+	const getMultipleChoiceOptionCodenames = (options: readonly MultipleChoiceOption[]): readonly string[] =>
+		options.map((option) => option.codename).filter((codename): codename is string => !!codename);
 
 	const getMultipleChoiceTypeCode = (
 		typeOrSnippet: ContentTypeOrSnippet,
 		flattenedElement: FlattenedElement,
 		options: readonly MultipleChoiceOption[],
 	): string => {
-		return `export type ${getMultipleChoiceTypeName(typeOrSnippet, flattenedElement)} = ${options
-			.map((option) => option.codename)
-			.filter(isNotUndefined)
-			.map((codename) => `'${codename}'`)
-			.join(" | ")}`;
+		const baseName = getMultipleChoiceBaseName(typeOrSnippet, flattenedElement);
+
+		return deliveryUtils.getCodeOfDeliveryEntity({
+			codenames: getMultipleChoiceOptionCodenames(options),
+			disableComments: config.disableComments,
+			extendedType: "Multiple choice option",
+			names: {
+				codenamesTypeName: getMultipleChoiceTypeName(typeOrSnippet, flattenedElement),
+				valuesPropertyName: `${resolveCase(baseName, "camelCase")}MultipleChoiceOptions`,
+				typeGuardFunctionName: `is${baseName}MultipleChoiceOption`,
+			},
+		});
 	};
 
 	const getAllMultipleChoiceTypeCodes = (typeOrSnippet: ContentTypeOrSnippet, flattenedElements: readonly FlattenedElement[]): string => {
@@ -436,13 +472,13 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 						.returnType<string | undefined>()
 						.with({ type: "multiple_choice" }, (multipleChoiceElement) => {
 							// optionless multiple-choice elements map to a bare 'Elements.MultipleChoice' with no options type
-							if (!multipleChoiceElement.multipleChoiceOptions?.length) {
+							if (!getMultipleChoiceOptionCodenames(multipleChoiceElement.multipleChoiceOptions ?? []).length) {
 								return undefined;
 							}
 							return getMultipleChoiceTypeCode(
 								typeOrSnippet,
 								multipleChoiceElement,
-								multipleChoiceElement.multipleChoiceOptions,
+								multipleChoiceElement.multipleChoiceOptions ?? [],
 							);
 						})
 						.otherwise(() => undefined);
@@ -530,31 +566,21 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 			.returnType<string | undefined>()
 			.with({ type: "text" }, () => "Text")
 			.with({ type: "number" }, () => "Number")
-			.with({ type: "modular_content" }, (linkedItemsElement) => {
-				return `LinkedItems<${
-					linkedItemsElement.allowedContentTypes?.length
-						? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(" | ")
-						: deliveryConfig.typedItemTypeName
-				}>`;
-			})
-			.with({ type: "subpages" }, (linkedItemsElement) => {
-				return `LinkedItems<${
-					linkedItemsElement.allowedContentTypes?.length
-						? getLinkedItemsAllowedTypes(linkedItemsElement.allowedContentTypes).join(" | ")
-						: deliveryConfig.typedItemTypeName
-				}>`;
+			.with({ type: P.union("modular_content", "subpages") }, (linkedItemsElement) => {
+				warnOnMissingAllowedTypes(typeOrSnippet, linkedItemsElement);
+				return `LinkedItems<${getAllowedItemsType(linkedItemsElement)}>`;
 			})
 			.with({ type: "asset" }, () => "Asset")
 			.with({ type: "date_time" }, () => "DateTime")
 			.with({ type: "rich_text" }, (richTextElement) => {
-				return `RichText<${
-					richTextElement.allowedContentTypes?.length
-						? getLinkedItemsAllowedTypes(richTextElement.allowedContentTypes).join(" | ")
-						: deliveryConfig.typedItemTypeName
-				}>`;
+				warnOnMissingAllowedTypes(typeOrSnippet, richTextElement);
+				const itemsType = richTextAllowsItems(richTextElement) ? getAllowedItemsType(richTextElement) : "never";
+				const linkTypes = getRichTextLinkTypes(richTextElement);
+
+				return `RichText<${itemsType}, ${linkTypes.length ? linkTypes.map((codename) => `'${codename}'`).join(" | ") : contentTypeNames.codenamesTypeName}>`;
 			})
 			.with({ type: "multiple_choice" }, (multipleChoiceElement) => {
-				if (!multipleChoiceElement.multipleChoiceOptions?.length) {
+				if (!getMultipleChoiceOptionCodenames(multipleChoiceElement.multipleChoiceOptions ?? []).length) {
 					return "MultipleChoice";
 				}
 				return `MultipleChoice<${getMultipleChoiceTypeName(typeOrSnippet, multipleChoiceElement)}>`;
@@ -565,10 +591,45 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 					return "Taxonomy";
 				}
 
-				return `Taxonomy<${getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy)}>`;
+				return `Taxonomy<${getTaxonomyTermCodenamesTypeName(taxonomyElement.assignedTaxonomy)}, '${taxonomyElement.assignedTaxonomy.codename}'>`;
 			})
 			.with({ type: "custom" }, () => "Custom")
 			.otherwise(() => undefined);
+	};
+
+	/**
+	 * Codenames of content types that rich text links may point to (empty when any type is allowed).
+	 */
+	const getRichTextLinkTypes = (element: FlattenedElement): readonly string[] =>
+		match(element.originalElement)
+			.returnType<readonly string[]>()
+			.with({ type: "rich_text" }, (richTextElement) =>
+				(richTextElement.allowed_item_link_types ?? [])
+					.map((reference) => config.environmentData.types.find((type) => type.id === reference.id)?.codename)
+					.filter(isNotUndefined),
+			)
+			.otherwise(() => []);
+
+	const getAllowedItemsType = (element: FlattenedElement): string =>
+		element.allowedContentTypes?.length
+			? getLinkedItemsAllowedTypes(element.allowedContentTypes).join(" | ")
+			: deliveryConfig.typedItemTypeName;
+
+	const warnOnMissingAllowedTypes = (typeOrSnippet: ContentTypeOrSnippet, element: FlattenedElement): void => {
+		const referencedTypesCount = match(element.originalElement)
+			.returnType<number>()
+			.with({ type: P.union("modular_content", "subpages", "rich_text") }, (el) => el.allowed_content_types?.length ?? 0)
+			.otherwise(() => 0);
+
+		if (referencedTypesCount > (element.allowedContentTypes?.length ?? 0)) {
+			console.warn(
+				`Element '${element.codename}' in '${typeOrSnippet.codename}' references allowed content types that no longer exist. ${
+					element.allowedContentTypes?.length
+						? "Only the existing types are used."
+						: `Falling back to '${deliveryConfig.typedItemTypeName}'.`
+				} This reference has to be fixed in your Kontent project.`,
+			);
+		}
 	};
 
 	const getLinkedItemsAllowedTypes = (types: readonly Readonly<ContentTypeModels.ContentType>[]): readonly string[] => {
@@ -610,4 +671,17 @@ ${getAllMultipleChoiceTypeCodes(contentType, flattenedElements)}
 			return getSnippetCode(snippet);
 		},
 	};
+}
+
+/**
+ * Rich text can contain linked items and components unless its allowed blocks are limited and exclude them.
+ */
+function richTextAllowsItems(element: FlattenedElement): boolean {
+	return match(element.originalElement)
+		.returnType<boolean>()
+		.with({ type: "rich_text" }, (richTextElement) => {
+			const allowedBlocks = richTextElement.allowed_blocks ?? [];
+			return !allowedBlocks.length || allowedBlocks.includes("components-and-items");
+		})
+		.otherwise(() => true);
 }

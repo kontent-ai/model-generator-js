@@ -16,17 +16,17 @@ export function isWorkflowCodename(value: string | undefined | null): value is W
 }
 
 /*
- * Array of all workflow codenames
+ * Array of all workflow step codenames
  */
 export const workflowStepCodenames = ["draft", "scheduled", "published", "archived", "draft_b42a7f1", "step_1", "step_2"] as const;
 
 /*
- * Type representing all workflow codenames
+ * Type representing all workflow step codenames
  */
 export type WorkflowStepCodenames = (typeof workflowStepCodenames)[number];
 
 /*
- * Typeguard for workflow codename
+ * Typeguard for workflow step codename
  */
 export function isWorkflowStepCodename(value: string | undefined | null): value is WorkflowStepCodenames {
 	return typeof value === "string" && (workflowStepCodenames as readonly string[]).includes(value);

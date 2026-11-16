@@ -91,4 +91,21 @@ export function isContentTypePageItem(item: ContentItemPayload<TypedClientSchema
 	return isContentTypePageCodename(item?.system.type);
 }
 
-export type ContentTypePageShowInNavigationMultipleChoiceOptions = "yes" | "no";
+/*
+ * Array of all multiple choice option codenames
+ */
+export const contentTypePageShowInNavigationMultipleChoiceOptions = ["yes", "no"] as const;
+
+/*
+ * Type representing all multiple choice option codenames
+ */
+export type ContentTypePageShowInNavigationMultipleChoiceOptions = (typeof contentTypePageShowInNavigationMultipleChoiceOptions)[number];
+
+/*
+ * Typeguard for multiple choice option codename
+ */
+export function isContentTypePageShowInNavigationMultipleChoiceOption(
+	value: string | undefined | null,
+): value is ContentTypePageShowInNavigationMultipleChoiceOptions {
+	return typeof value === "string" && (contentTypePageShowInNavigationMultipleChoiceOptions as readonly string[]).includes(value);
+}

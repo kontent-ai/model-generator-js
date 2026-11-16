@@ -55,7 +55,7 @@ export type ContentTypeWithAllElementsItem = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_element: Elements.RichText<TypedItem>;
+		readonly rich_text_element: Elements.RichText<TypedItem, TypeCodenames>;
 
 		/*
 		 * Date & time element
@@ -127,7 +127,7 @@ export type ContentTypeWithAllElementsItem = ContentItemOf<
 		 * Required: false
 		 * Taxonomy: taxonomy_a
 		 */
-		readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames>;
+		readonly taxonomy_element: Elements.Taxonomy<TaxonomyATaxonomyTermCodenames, "taxonomy_a">;
 	} & SnippetASnippet["elements"]
 >;
 
@@ -161,4 +161,25 @@ export function isContentTypeWithAllElementsItem(
 	return isContentTypeWithAllElementsCodename(item?.system.type);
 }
 
-export type ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = "option_a" | "option_b";
+/*
+ * Array of all multiple choice option codenames
+ */
+export const contentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions = ["option_a", "option_b"] as const;
+
+/*
+ * Type representing all multiple choice option codenames
+ */
+export type ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions =
+	(typeof contentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions)[number];
+
+/*
+ * Typeguard for multiple choice option codename
+ */
+export function isContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOption(
+	value: string | undefined | null,
+): value is ContentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions {
+	return (
+		typeof value === "string" &&
+		(contentTypeWithAllElementsMultipleChoiceElementMultipleChoiceOptions as readonly string[]).includes(value)
+	);
+}

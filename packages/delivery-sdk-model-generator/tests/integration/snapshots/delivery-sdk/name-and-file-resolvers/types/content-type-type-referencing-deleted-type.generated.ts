@@ -34,7 +34,7 @@ export type ContentTypeTypeReferencingDeletedTypeItem = ContentItemOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly rich_text_with_invalid_type: Elements.RichText<TypedItem>;
+		readonly rich_text_with_invalid_type: Elements.RichText<TypedItem, TypeCodenames>;
 
 		/*
 		 * Linked items with invalid type

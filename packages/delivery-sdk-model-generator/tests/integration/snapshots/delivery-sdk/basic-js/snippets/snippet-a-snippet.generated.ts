@@ -1,6 +1,6 @@
 import type { ContentItemPayload, Elements, SnippetOf } from "@kontent-ai/delivery-sdk";
 import type { TypedClientSchema } from "../system/main.system.generated.js";
-import type { TypedItem } from "../system/types.generated.js";
+import type { TypeCodenames, TypedItem } from "../system/types.generated.js";
 import type {
 	ContentTypeWithAllElementsCodename,
 	ContentTypeWithAllElementsItem,
@@ -25,7 +25,7 @@ export type SnippetASnippet = SnippetOf<
 		 * Type: rich_text
 		 * Required: false
 		 */
-		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<TypedItem>;
+		readonly snippet_a__rich_text_with_all_allowed_item_types: Elements.RichText<TypedItem, TypeCodenames>;
 
 		/*
 		 * Linked items with specific types

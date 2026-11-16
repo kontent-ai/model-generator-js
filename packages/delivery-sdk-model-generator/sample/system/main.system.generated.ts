@@ -13,38 +13,48 @@
  */
 
 import type { DeliveryClient, DeliveryClientSchema } from "@kontent-ai/delivery-sdk";
+import type { TypedItem } from "./types.generated.js";
 
 /*
  * Schema describing this environment, used to strongly type 'DeliveryClient'
  */
 export type TypedClientSchema = DeliveryClientSchema<{
 	readonly languageCodenames: readonly ["en", "cz", "German"];
+	readonly collectionCodenames: readonly ["default"];
 	readonly taxonomies: {
 		readonly releasecategory: readonly ["global_release", "local_release", "us_only"];
 		readonly movietype: readonly ["blockbuster", "cinema_only", "film", "student", "tv"];
 	};
-	readonly contentTypes: {
-		readonly actor: readonly ["url", "first_name", "last_name", "photo"];
-		readonly movie: readonly [
-			"title",
-			"plot",
-			"released",
-			"length",
-			"poster",
-			"category",
-			"stars",
-			"seoname",
-			"releasecategory",
-			"seo_metadata__meta_title",
-			"seo_metadata__meta_description",
-		];
+	readonly workflows: {
+		readonly default: readonly ["draft", "review", "ready_to_publish", "scheduled", "published", "archived"];
 	};
-	readonly collectionCodenames: readonly ["default"];
-	readonly workflowCodenames: readonly ["default"];
-	readonly workflowStepCodenames: readonly ["draft", "review", "ready_to_publish", "scheduled", "published", "archived"];
+	readonly contentTypes: {
+		readonly actor: {
+			readonly url: { readonly type: "url_slug" };
+			readonly first_name: { readonly type: "text" };
+			readonly last_name: { readonly type: "text" };
+			readonly photo: { readonly type: "asset" };
+		};
+		readonly movie: {
+			readonly title: { readonly type: "text" };
+			readonly plot: { readonly type: "rich_text" };
+			readonly released: { readonly type: "date_time" };
+			readonly length: { readonly type: "number" };
+			readonly poster: { readonly type: "asset" };
+			readonly category: {
+				readonly type: "multiple_choice";
+				readonly options: readonly ["sci_fi", "documentary", "action", "romance", "animation", "comedy", "adventure", "drama"];
+			};
+			readonly stars: { readonly type: "modular_content" };
+			readonly seoname: { readonly type: "url_slug" };
+			readonly releasecategory: { readonly type: "taxonomy"; readonly taxonomyGroup: "releasecategory" };
+			readonly seo_metadata__meta_title: { readonly type: "text" };
+			readonly seo_metadata__meta_description: { readonly type: "text" };
+		};
+	};
 }>;
 
 /*
- * Typed delivery client. Use this instead of 'DeliveryClient'
+ * Typed delivery client. Responses are typed with 'TypedItem'. Create it with 'createDeliveryClient<TypedClientSchema, TypedItem>(...)'
  */
-export type TypedDeliveryClient = DeliveryClient<TypedClientSchema>;
+export type TypedDeliveryClient = DeliveryClient<TypedClientSchema, TypedItem>;

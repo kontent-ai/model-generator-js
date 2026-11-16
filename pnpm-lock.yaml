@@ -10,14 +10,14 @@ catalogs:
       specifier: 6.1.0
       version: 6.1.0
     '@biomejs/wasm-nodejs':
-      specifier: 2.6.4
-      version: 2.6.4
+      specifier: 2.6.8
+      version: 2.6.8
     '@kontent-ai/core-sdk':
       specifier: 12.0.0-preview.49
       version: 12.0.0-preview.49
     '@kontent-ai/delivery-sdk':
-      specifier: 17.0.0-preview.3
-      version: 17.0.0-preview.3
+      specifier: 17.0.0-preview.4
+      version: 17.0.0-preview.4
     '@kontent-ai/management-sdk':
       specifier: 8.5.7
       version: 8.5.7
@@ -79,10 +79,10 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 'catalog:'
-        version: 6.1.0(@biomejs/wasm-nodejs@2.6.4)
+        version: 6.1.0(@biomejs/wasm-nodejs@2.6.8)
       '@biomejs/wasm-nodejs':
         specifier: 'catalog:'
-        version: 2.6.4
+        version: 2.6.8
       '@kontent-ai/core-sdk':
         specifier: 'catalog:'
         version: 12.0.0-preview.49(@standard-schema/spec@1.1.0)(@zod/mini@4.6.7(zod@4.6.7))(ts-pattern@5.9.2)(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
@@ -107,10 +107,10 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 'catalog:'
-        version: 6.1.0(@biomejs/wasm-nodejs@2.6.4)
+        version: 6.1.0(@biomejs/wasm-nodejs@2.6.8)
       '@biomejs/wasm-nodejs':
         specifier: 'catalog:'
-        version: 2.6.4
+        version: 2.6.8
       '@kontent-ai/core-sdk':
         specifier: 'catalog:'
         version: 12.0.0-preview.49(@standard-schema/spec@1.1.0)(@zod/mini@4.6.7(zod@4.6.7))(ts-pattern@5.9.2)(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
@@ -129,7 +129,7 @@ importers:
     devDependencies:
       '@kontent-ai/delivery-sdk':
         specifier: 'catalog:'
-        version: 17.0.0-preview.3(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))(zod@4.6.7)
+        version: 17.0.0-preview.4(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))(zod@4.6.7)
       '@kontent-ai/model-generator-shared':
         specifier: workspace:*
         version: link:../../lib
@@ -138,10 +138,10 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 'catalog:'
-        version: 6.1.0(@biomejs/wasm-nodejs@2.6.4)
+        version: 6.1.0(@biomejs/wasm-nodejs@2.6.8)
       '@biomejs/wasm-nodejs':
         specifier: 'catalog:'
-        version: 2.6.4
+        version: 2.6.8
       '@kontent-ai/core-sdk':
         specifier: 'catalog:'
         version: 12.0.0-preview.49(@standard-schema/spec@1.1.0)(@zod/mini@4.6.7(zod@4.6.7))(ts-pattern@5.9.2)(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
@@ -169,16 +169,16 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 'catalog:'
-        version: 6.1.0(@biomejs/wasm-nodejs@2.6.4)
+        version: 6.1.0(@biomejs/wasm-nodejs@2.6.8)
       '@biomejs/wasm-nodejs':
         specifier: 'catalog:'
-        version: 2.6.4
+        version: 2.6.8
       '@kontent-ai/core-sdk':
         specifier: 'catalog:'
         version: 12.0.0-preview.49(@standard-schema/spec@1.1.0)(@zod/mini@4.6.7(zod@4.6.7))(ts-pattern@5.9.2)(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
       '@kontent-ai/delivery-sdk':
         specifier: 'catalog:'
-        version: 17.0.0-preview.3(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))(zod@4.6.7)
+        version: 17.0.0-preview.4(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))(zod@4.6.7)
       '@kontent-ai/management-sdk':
         specifier: 'catalog:'
         version: 8.5.7(debug@4.4.3(supports-color@7.2.0))(supports-color@7.2.0)
@@ -200,10 +200,10 @@ importers:
     dependencies:
       '@biomejs/js-api':
         specifier: 'catalog:'
-        version: 6.1.0(@biomejs/wasm-nodejs@2.6.4)
+        version: 6.1.0(@biomejs/wasm-nodejs@2.6.8)
       '@biomejs/wasm-nodejs':
         specifier: 'catalog:'
-        version: 2.6.4
+        version: 2.6.8
       '@kontent-ai/core-sdk':
         specifier: 'catalog:'
         version: 12.0.0-preview.49(@standard-schema/spec@1.1.0)(@zod/mini@4.6.7(zod@4.6.7))(ts-pattern@5.9.2)(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
@@ -312,8 +312,8 @@ packages:
       '@biomejs/wasm-web':
         optional: true
 
-  '@biomejs/wasm-nodejs@2.6.4':
-    resolution: {integrity: sha512-Mm/tlBKGyrG4znIxNhwVP9qiaYGKyGcOmlnYe/y2gQdO3HIThWMnW5+G4pATZTbIKxfy82gSy9ryO1Q2LZ4cGw==}
+  '@biomejs/wasm-nodejs@2.6.8':
+    resolution: {integrity: sha512-wb7ox/FIg7Wlb6yFYVG1rLkw0uxQi7P5pfWDAy+jVRABZuuUTznxBkn7U2LF64HvRAQf3F3/xTJ7+DCysvbfsw==}
 
   '@changesets/apply-release-plan@8.1.1':
     resolution: {integrity: sha512-nk2Hbq3M9NeHMdaIRBDvawKrQJzXB9sGyBUE5yWnIKtvdcNCPj75zBekJYr0gTT2ecJH3eFeTrc8eisPImcv0Q==}
@@ -577,8 +577,8 @@ packages:
       vitest:
         optional: true
 
-  '@kontent-ai/delivery-sdk@17.0.0-preview.3':
-    resolution: {integrity: sha512-cCOP2xCAEKEhxtQiuDM0GyQpZIuPCsif8i6NiXcY625sH00ccbf9lbhqTxD4yg8JqdjAHGUevf60NsIg6xYOlg==}
+  '@kontent-ai/delivery-sdk@17.0.0-preview.4':
+    resolution: {integrity: sha512-pyfMO7p/w4qHhgaz6Qxr/GdPSNGDu/4xwbmn/xV6usHfCkFsG8coZZyhd924maETaRd/BtYls2p64TCOcoOKhw==}
     engines: {node: '>= 24'}
 
   '@kontent-ai/management-sdk@8.5.7':
@@ -2145,11 +2145,11 @@ snapshots:
   '@biomejs/cli-win32-x64@2.6.4':
     optional: true
 
-  '@biomejs/js-api@6.1.0(@biomejs/wasm-nodejs@2.6.4)':
+  '@biomejs/js-api@6.1.0(@biomejs/wasm-nodejs@2.6.8)':
     optionalDependencies:
-      '@biomejs/wasm-nodejs': 2.6.4
+      '@biomejs/wasm-nodejs': 2.6.8
 
-  '@biomejs/wasm-nodejs@2.6.4': {}
+  '@biomejs/wasm-nodejs@2.6.8': {}
 
   '@changesets/apply-release-plan@8.1.1':
     dependencies:
@@ -2375,7 +2375,7 @@ snapshots:
       '@zod/mini': 4.6.7(zod@4.6.7)
       vitest: 5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
 
-  '@kontent-ai/delivery-sdk@17.0.0-preview.3(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))(zod@4.6.7)':
+  '@kontent-ai/delivery-sdk@17.0.0-preview.4(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))(zod@4.6.7)':
     dependencies:
       '@kontent-ai/core-sdk': 12.0.0-preview.49(@standard-schema/spec@1.1.0)(@zod/mini@4.6.7(zod@4.6.7))(ts-pattern@5.9.2)(vitest@5.0.5(@types/node@26.6.6)(vite@8.3.5(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1)))
       '@standard-schema/spec': 1.1.0
