@@ -19,12 +19,18 @@ export type TypedClientSchema = DeliveryClientSchema<{
 			readonly rich_text_element: { readonly type: "rich_text" };
 			readonly date___time_element: { readonly type: "date_time" };
 			readonly custom_element: { readonly type: "custom" };
-			readonly linked_items_element: { readonly type: "modular_content" };
+			readonly linked_items_element: {
+				readonly type: "modular_content";
+				readonly allowedContentTypes: readonly ["content_type_with_all_elements"];
+			};
 			readonly asset_element: { readonly type: "asset" };
 			readonly multiple_choice_element: { readonly type: "multiple_choice"; readonly options: readonly ["option_a", "option_b"] };
 			readonly number_element: { readonly type: "number" };
 			readonly snippet_a__rich_text_with_all_allowed_item_types: { readonly type: "rich_text" };
-			readonly snippet_a__linked_items_with_specific_types: { readonly type: "modular_content" };
+			readonly snippet_a__linked_items_with_specific_types: {
+				readonly type: "modular_content";
+				readonly allowedContentTypes: readonly ["content_type_with_all_elements"];
+			};
 			readonly snippet_a__text: { readonly type: "text" };
 			readonly taxonomy_element: { readonly type: "taxonomy"; readonly taxonomyGroup: "taxonomy_a" };
 		};
@@ -35,19 +41,22 @@ export type TypedClientSchema = DeliveryClientSchema<{
 		readonly empty_content_type: Record<string, never>;
 		readonly content_type_with_snippet_only: {
 			readonly snippet_a__rich_text_with_all_allowed_item_types: { readonly type: "rich_text" };
-			readonly snippet_a__linked_items_with_specific_types: { readonly type: "modular_content" };
+			readonly snippet_a__linked_items_with_specific_types: {
+				readonly type: "modular_content";
+				readonly allowedContentTypes: readonly ["content_type_with_all_elements"];
+			};
 			readonly snippet_a__text: { readonly type: "text" };
 		};
 		readonly content_type_with_guidelines_only: Record<string, never>;
 		readonly circular_reference_type_a_b: {
-			readonly items: { readonly type: "modular_content" };
+			readonly items: { readonly type: "modular_content"; readonly allowedContentTypes: readonly ["circular_reference_type_b____a"] };
 		};
 		readonly circular_reference_type_b____a: {
-			readonly items: { readonly type: "modular_content" };
+			readonly items: { readonly type: "modular_content"; readonly allowedContentTypes: readonly ["circular_reference_type_a_b"] };
 		};
 		readonly web_spotlight_root: {
 			readonly title: { readonly type: "text" };
-			readonly subpages: { readonly type: "modular_content" };
+			readonly subpages: { readonly type: "modular_content"; readonly allowedContentTypes: readonly ["page"] };
 			readonly content: { readonly type: "modular_content" };
 		};
 		readonly page: {

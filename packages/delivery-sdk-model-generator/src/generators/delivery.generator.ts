@@ -167,6 +167,17 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 			entityType: "Type",
 		}).getEntityNames().overviewFilename;
 
+		/**
+		 * Lists the allowed content types of linked items and rich text elements. Omitted when any type is allowed.
+		 */
+		const getElementWithAllowedTypesSchemaCode = (type: "modular_content" | "rich_text", element: FlattenedElement): string => {
+			const allowedContentTypes = (element.allowedContentTypes ?? []).map((contentType) => contentType.codename);
+
+			return allowedContentTypes.length
+				? `{ readonly type: "${type}"; readonly allowedContentTypes: ${formatTuple(allowedContentTypes)} }`
+				: `{ readonly type: "${type}" }`;
+		};
+
 		const getElementSchemaCode = (element: FlattenedElement): string | undefined => {
 			const elementSchema = match(element)
 				.returnType<string | undefined>()
@@ -181,9 +192,12 @@ export function deliveryGenerator(config: DeliveryGeneratorConfig) {
 					return `{ readonly type: "taxonomy"; readonly taxonomyGroup: ${taxonomyElement.assignedTaxonomy ? `"${taxonomyElement.assignedTaxonomy.codename}"` : "string"} }`;
 				})
 				// subpages are delivered as linked items
-				.with({ type: "subpages" }, () => `{ readonly type: "modular_content" }`)
+				.with({ type: P.union("modular_content", "subpages") }, (linkedItemsElement) =>
+					getElementWithAllowedTypesSchemaCode("modular_content", linkedItemsElement),
+				)
+				.with({ type: "rich_text" }, (richTextElement) => getElementWithAllowedTypesSchemaCode("rich_text", richTextElement))
 				.with(
-					{ type: P.union("text", "number", "rich_text", "date_time", "asset", "url_slug", "custom", "modular_content") },
+					{ type: P.union("text", "number", "date_time", "asset", "url_slug", "custom") },
 					(simpleElement) => `{ readonly type: "${simpleElement.type}" }`,
 				)
 				.otherwise(() => undefined);

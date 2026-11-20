@@ -45,7 +45,7 @@ export type TypedClientSchema = DeliveryClientSchema<{
 				readonly type: "multiple_choice";
 				readonly options: readonly ["sci_fi", "documentary", "action", "romance", "animation", "comedy", "adventure", "drama"];
 			};
-			readonly stars: { readonly type: "modular_content" };
+			readonly stars: { readonly type: "modular_content"; readonly allowedContentTypes: readonly ["actor", "movie"] };
 			readonly seoname: { readonly type: "url_slug" };
 			readonly releasecategory: { readonly type: "taxonomy"; readonly taxonomyGroup: "releasecategory" };
 			readonly seo_metadata__meta_title: { readonly type: "text" };
